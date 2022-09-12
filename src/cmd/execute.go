@@ -7,10 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/defenseunicorns/bigbang-oscal-component-generator/internal/types"
-	"gopkg.in/yaml.v2"
-
 	"github.com/go-git/go-billy/v5/memfs"
+	"github.com/kyverno/kyverno/api/kyverno/v1"
 	"github.com/kyverno/kyverno/api/kyverno/v1beta1"
 	"github.com/kyverno/kyverno/cmd/cli/kubectl-kyverno/utils/common"
 	sanitizederror "github.com/kyverno/kyverno/cmd/cli/kubectl-kyverno/utils/sanitizedError"
@@ -66,7 +64,8 @@ var executeCmd = &cobra.Command{
 func conductExecute(controlPaths []string) error {
 	// unmarshall all documents to types.OscalComponentDocument into a slice of component documents
 	// Declare empty slice of oscalComponentDocuments
-	oscalComponentFromPaths(controlPaths)
+
+	ocd := oscalComponentFromPaths(controlPaths)
 
 	// with an array/slice of oscalComponentDocuments, search each implemented requirement for a props.name/value (harcoded and specific value for now)
 	// copy struct to slice of implementedRequirements
