@@ -3,7 +3,7 @@ package oscal
 import (
 	"fmt"
 
-	"github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-1"
+	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-1"
 	"github.com/defenseunicorns/lula/src/types"
 	"gopkg.in/yaml.v3"
 )
@@ -23,11 +23,11 @@ func NewOscalComponentDefinition(data []byte) (oscalTypes.ComponentDefinition, e
 }
 
 // Map an array of resources to a map of UUID to validation object
-func BackMatterToMap(backMatter oscalTypes.BackMatter) map[string]types.Validation {
+func BackMatterToMap(backMatter oscalTypes.BackMatter, resourceTitle string) map[string]types.Validation {
 	resourceMap := make(map[string]types.Validation)
 
 	for _, resource := range backMatter.Resources {
-		if resource.Title == "Lula Validation" {
+		if resource.Title == resourceTitle {
 			var lulaSelector map[string]interface{}
 
 			err := yaml.Unmarshal([]byte(resource.Description), &lulaSelector)

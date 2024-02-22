@@ -9,12 +9,14 @@ type Validation struct {
 
 // native type for conversion to targeted report format
 type Result struct {
-	UUID        string `json:"uuid" yaml:"uuid"`
-	ControlId   string `json:"control-id" yaml:"control-id"`
-	Description string `json:"description" yaml:"description"`
-	Passing     int    `json:"passing" yaml:"passing"`
-	Failing     int    `json:"failing" yaml:"failing"`
-	State       string `json:"state" yaml:"state"`
+	UUID        string   `json:"uuid" yaml:"uuid"`
+	ControlId   string   `json:"control-id" yaml:"control-id"`
+	Description string   `json:"description" yaml:"description"`
+	Passing     int      `json:"passing" yaml:"passing"`
+	PassingList []string `json:"passing-list" yaml:"passing-list"`
+	Failing     int      `json:"failing" yaml:"failing"`
+	FailingList []string `json:"failing-list" yaml:"failing-list"`
+	State       string   `json:"state" yaml:"state"`
 }
 
 // Current placeholder for all requisite data in the payload

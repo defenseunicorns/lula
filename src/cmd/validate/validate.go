@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/defenseunicorns/go-oscal/src/pkg/uuid"
-	"github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-1"
+	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-1"
 	"github.com/defenseunicorns/lula/src/pkg/common/oscal"
 	"github.com/defenseunicorns/lula/src/pkg/message"
 	"github.com/defenseunicorns/lula/src/pkg/providers/opa"
@@ -127,7 +127,7 @@ func ValidateOnPath(path string) (findingMap map[string]oscalTypes.Finding, obse
 func ValidateOnCompDef(compDef oscalTypes.ComponentDefinition) (map[string]oscalTypes.Finding, []oscalTypes.Observation, error) {
 
 	// Populate a map[uuid]Validation into the validations
-	validations := oscal.BackMatterToMap(compDef.BackMatter)
+	validations := oscal.BackMatterToMap(compDef.BackMatter, "Lula Validation")
 
 	// TODO: Is there a better location for context?
 	ctx := context.Background()
@@ -181,7 +181,7 @@ func ValidateOnCompDef(compDef oscalTypes.ComponentDefinition) (map[string]oscal
 							if val.Evaluated {
 								result = val.Result
 							} else {
-								result, err = ValidateOnTarget(ctx, id, val.Description)
+								result, err = ValidateOnTarget(ctx, id, val.Description, compDef.BackMatter)
 								if err != nil {
 									return map[string]oscalTypes.Finding{}, []oscalTypes.Observation{}, err
 								}
@@ -213,6 +213,9 @@ func ValidateOnCompDef(compDef oscalTypes.ComponentDefinition) (map[string]oscal
 
 						pass += result.Passing
 						fail += result.Failing
+
+						message.Debug(fmt.Sprintf("Passing List: %s", strings.Join(result.PassingList, ", ")))
+						message.Debug(fmt.Sprintf("Failing List: %s", strings.Join(result.FailingList, ", ")))
 
 						// Coalesce slices and objects
 						relatedObservations = append(relatedObservations, relatedObservation)
@@ -256,11 +259,15 @@ func ValidateOnCompDef(compDef oscalTypes.ComponentDefinition) (map[string]oscal
 
 // ValidateOnTarget takes a map[string]interface{}
 // It will return a single Result
-func ValidateOnTarget(ctx context.Context, id string, target map[string]interface{}) (types.Result, error) {
+func ValidateOnTarget(ctx context.Context, id string, target map[string]interface{}, backmatter oscalTypes.BackMatter) (types.Result, error) {
 	// simple conditional until more providers are introduced
 	if provider, ok := target["provider"].(string); ok && provider == "opa" {
 		message.Debugf("OPA provider validating %s", id)
-		results, err := opa.Validate(ctx, target["domain"].(string), target["payload"].(map[string]interface{}))
+
+		// Getting the OPA Common modules, if defined
+		opaCommon := oscal.BackMatterToMap(backmatter, "Lula OPA Module")
+
+		results, err := opa.Validate(ctx, target["domain"].(string), target["payload"].(map[string]interface{}), opaCommon)
 		if err != nil {
 			return types.Result{}, err
 		}
