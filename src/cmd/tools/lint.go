@@ -36,7 +36,7 @@ func init() {
 			validator, err := validate.ValidateCommand(opts.InputFile)
 			if err != nil {
 				fmt.Println(err)
-				message.Fatalf(err, "Failed to lint %s", opts.InputFile)
+				message.FatalWrapper(err, "Failed to lint %s", opts.InputFile)
 			}
 			message.Infof("Successfully validated %s is valid OSCAL version %s %s\n", opts.InputFile, validator.GetSchemaVersion(), validator.GetModelType())
 			spinner.Success()

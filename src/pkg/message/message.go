@@ -348,3 +348,20 @@ func debugPrinter(offset int, a ...any) {
 func errorPrinter(offset int) *pterm.PrefixPrinter {
 	return pterm.Error.WithShowLineNumber(logLevel > 2).WithLineNumberOffset(offset)
 }
+
+// TestMode indicates whether the message package is being used in test mode.
+var TestMode bool = false
+
+// FatalWrapper checks if the application is in test mode and decides how to handle fatal errors.
+func FatalWrapper(err error, format string, args ...interface{}) {
+	if TestMode {
+		// Handle the error in a way suitable for tests, such as logging without exiting.
+		// Utilizing the LogWriter to catch everything sent to the buffer
+		fmt.Fprintf(LogWriter, "Test Mode Error Encountered: %v\n", err)
+
+		// Potentially log the stack trace or error details as needed.
+	} else {
+		// Proceed with the standard fatal error handling if not in test mode.
+		Fatalf(err, format, args...)
+	}
+}

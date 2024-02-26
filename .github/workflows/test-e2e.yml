@@ -21,7 +21,15 @@ jobs:
 
     - name: Display Go version
       run: go version
+
+    - name: Build CLI
+      run: |
+        make build
+    
+    - name: Make lula executable
+      run: |
+        chmod +x bin/lula
       
     - name: e2e Tests
-      run: | 
+      run: |
         make test

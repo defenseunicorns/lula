@@ -67,3 +67,8 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&LogLevelCLI, "log-level", "l", "info", "Log level when running Lula. Valid options are: warn, info, debug, trace")
 }
+
+// GetRootCmd returns a pointer to the root command of the application.
+func GetRootCmd() *cobra.Command {
+    return rootCmd
+}
