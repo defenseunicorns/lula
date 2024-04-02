@@ -23,9 +23,16 @@ jobs:
       - name: Setup golang
         uses: ./.github/actions/golang
 
+      - name: Install tools
+        uses: ./.github/actions/install-tools
+
       - name: Build CLI
         run: |
           make build
+
+      - name: Sign Artifacts
+        run: |
+          cosign sign-blob --key awskms:///${{ secrets.COSIGN_AWS_KMS_KEY }} bin/lula
 
       # Upload the contents of the build directory for later stages to use
       - name: Upload build artifacts
