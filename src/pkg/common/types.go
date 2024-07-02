@@ -8,6 +8,7 @@ import (
 	"github.com/defenseunicorns/go-oscal/src/pkg/uuid"
 	oscalTypes_1_1_2 "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-2"
 	"github.com/defenseunicorns/lula/src/config"
+	"github.com/defenseunicorns/lula/src/pkg/common/schemas"
 	"github.com/defenseunicorns/lula/src/pkg/domains/api"
 	kube "github.com/defenseunicorns/lula/src/pkg/domains/kubernetes"
 	"github.com/defenseunicorns/lula/src/pkg/providers/kyverno"
@@ -26,6 +27,10 @@ type Validation struct {
 
 // UnmarshalYaml is a convenience method to unmarshal a Validation object from a YAML byte array
 func (v *Validation) UnmarshalYaml(data []byte) error {
+	err := schemas.Validate("validation", data)
+	if err != nil {
+		return err
+	}
 	return yaml.Unmarshal(data, v)
 }
 
@@ -57,10 +62,14 @@ type Metadata struct {
 	UUID string `json:"uuid,omitempty" yaml:"uuid,omitempty"`
 }
 
+// Domain is a structure that contains the domain type and the corresponding spec
 type Domain struct {
-	Type           string               `json:"type" yaml:"type"`
+	// Type is the type of domain: enum: kubernetes, api
+	Type string `json:"type" yaml:"type"`
+	// KubernetesSpec is the specification for a Kubernetes domain, required if type is kubernetes
 	KubernetesSpec *kube.KubernetesSpec `json:"kubernetes-spec,omitempty" yaml:"kubernetes-spec,omitempty"`
-	ApiSpec        *api.ApiSpec         `json:"api-spec,omitempty" yaml:"api-spec,omitempty"`
+	// ApiSpec is the specification for an API domain, required if type is api
+	ApiSpec *api.ApiSpec `json:"api-spec,omitempty" yaml:"api-spec,omitempty"`
 }
 
 type Provider struct {
