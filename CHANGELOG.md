@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.4.6](https://github.com/defenseunicorns/lula/compare/v0.4.5...v0.4.6) (2024-08-09)
+
+
+### Bug Fixes
+
+* **generate:** component generation from catalog error handling ([#573](https://github.com/defenseunicorns/lula/issues/573)) ([371d54d](https://github.com/defenseunicorns/lula/commit/371d54d91e9f8dc4561cf161ad7a7ff4a7efb5f3))
+* **generate:** proposed transition of generation annotation to props ([#574](https://github.com/defenseunicorns/lula/issues/574)) ([b7a936d](https://github.com/defenseunicorns/lula/commit/b7a936df536fc8ccf9c22af8bafcd1e4e05e19d9))
+
+
+### Miscellaneous
+
+* **deps:** update actions/upload-artifact action to v4.3.6 ([#575](https://github.com/defenseunicorns/lula/issues/575)) ([27b2e8a](https://github.com/defenseunicorns/lula/commit/27b2e8a41827dea765db134e4cb9e462e8f3c19a))
+* **deps:** update github/codeql-action action to v3.26.0 ([#582](https://github.com/defenseunicorns/lula/issues/582)) ([8a92a8c](https://github.com/defenseunicorns/lula/commit/8a92a8c225d31e0e14e0d1578c5bb0acff18014d))
+* **deps:** update module github.com/open-policy-agent/opa to v0.67.1 ([#577](https://github.com/defenseunicorns/lula/issues/577)) ([563e893](https://github.com/defenseunicorns/lula/commit/563e893fb82eac803bc19404d65dba278b508760))
+
 ## [0.4.5](https://github.com/defenseunicorns/lula/compare/v0.4.4...v0.4.5) (2024-08-02)
 
 
