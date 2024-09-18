@@ -1,6 +1,10 @@
 package inject_test
 
 import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"os"
 	"testing"
 
 	"github.com/defenseunicorns/lula/src/internal/inject"
@@ -56,28 +60,7 @@ metadata:
 `),
 		},
 		{
-			name: "test-merge-at-root",
-			path: "",
-			target: []byte(`
-name: target
-some-information: some-data
-some-map:
-  test-key: test-value
-`),
-			subset: []byte(`
-more-information: more-data
-some-map:
-  test-key: subset-value
-`),
-			expected: []byte(`
-name: target
-more-information: more-data
-some-information: some-data
-some-map:
-  test-key: subset-value
-`),
-		},
-		{
+			// TODO: Should we extend the functionaly to allow for non-existent paths?
 			name: "test-merge-at-non-existant-path",
 			path: "metadata.test",
 			target: []byte(`
@@ -91,10 +74,158 @@ more-metdata: here
 			expected: []byte(`
 name: target
 some-information: some-data
-metadata:
-  test:
-    name: some-name
-    more-metdata: here
+`),
+		},
+		{
+			name: "test-inject-at-index",
+			path: "foo.subset.[uuid=123]",
+			target: []byte(`
+foo:
+  subset:
+    - uuid: 321
+      test: some data
+    - uuid: 123
+      test: some data to be replaced
+`),
+			subset: []byte(`
+test: just a string to inject
+`),
+			expected: []byte(`
+foo:
+  subset:
+    - uuid: 321
+      test: some data
+    - uuid: 123
+      test: just a string to inject
+`),
+		},
+		{
+			name: "test-inject-at-double-index",
+			path: "foo.subset.[uuid=xyz].subsubset.[uuid=123]",
+			target: []byte(`
+foo:
+  subset:
+  - uuid: abc
+    subsubset:
+    - uuid: 321
+      test: some data
+    - uuid: 123
+      test: just some data at 123
+  - uuid: xyz
+    subsubset:
+      - uuid: 321
+        test: more data
+      - uuid: 123
+        test: some data to be replaced
+`),
+			subset: []byte(`
+test: just a string to inject
+`),
+			expected: []byte(`
+foo:
+  subset:
+  - uuid: abc
+    subsubset:
+    - uuid: 321
+      test: some data
+    - uuid: 123
+      test: just some data at 123
+  - uuid: xyz
+    subsubset:
+      - uuid: 321
+        test: more data
+      - uuid: 123
+        test: just a string to inject
+`),
+		},
+		{
+			name: "test-inject-at-double-filter",
+			path: "pods.[metadata.namespace=foo,metadata.name=bar].metadata.labels",
+			target: []byte(`
+pods:
+  - metadata:
+      name: bar
+      namespace: foo
+      labels:
+        app: replace-me
+  - metadata:
+      name: baz
+      namespace: foo
+    labels:
+        app: dont-replace-me
+`),
+			subset: []byte(`
+app: new-app
+`),
+			expected: []byte(`
+pods:
+  - metadata:
+      name: bar
+      namespace: foo
+      labels:
+        app: new-app
+  - metadata:
+      name: baz
+      namespace: foo
+    labels:
+        app: dont-replace-me
+`),
+		},
+		{
+			name: "test-inject-at-nested-double-filter",
+			path: "pods.[metadata.namespace=foo,metadata.name=bar].spec.containers.[name=istio-proxy]",
+			target: []byte(`
+pods:
+  - metadata:
+      name: bar
+      namespace: foo
+      labels:
+        app: my-foo-app
+    spec:
+      containers:
+        - name: istio-proxy
+          image: replace-me
+        - name: foo-app
+          image: foo-app:v1
+  - metadata:
+      name: baz
+      namespace: foo
+      labels:
+        app: my-foo-app
+    spec:
+      containers:
+        - name: istio-proxy
+          image: proxyv2
+        - name: foo-app
+          image: foo-app:v1
+`),
+			subset: []byte(`
+image: new-image
+`),
+			expected: []byte(`
+pods:
+  - metadata:
+      name: bar
+      namespace: foo
+      labels:
+        app: my-foo-app
+    spec:
+      containers:
+        - name: istio-proxy
+          image: new-image
+        - name: foo-app
+          image: foo-app:v1
+  - metadata:
+      name: baz
+      namespace: foo
+      labels:
+        app: my-foo-app
+    spec:
+      containers:
+        - name: istio-proxy
+          image: proxyv2
+        - name: foo-app
+          image: foo-app:v1
 `),
 		},
 	}
@@ -105,7 +236,7 @@ metadata:
 			if err != nil {
 				t.Errorf("InjectMapData() error = %v", err)
 			}
-			assert.Equal(t, result, convertBytesToMap(t, tt.expected), "The maps should be equal")
+			assert.Equal(t, convertBytesToMap(t, tt.expected), result, "The maps should be equal")
 		})
 	}
 }
@@ -118,3 +249,34 @@ func convertBytesToMap(t *testing.T, data []byte) map[string]interface{} {
 	}
 	return dataMap
 }
+
+// Things to do:
+// 1. update a single value in a map (could need to be identified by target, e.g., if you're pulling something in a sequence)
+// 2. delete a single key in a map (could need to be identified by target, e.g., if you're pulling something in a sequence)
+// 3.
+
+func TestGetRNode(t *testing.T) {
+	// open json file converts to map[string]interface{}
+	jsonFile, err := os.Open("../../test/unit/types/resources-all-pods.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer jsonFile.Close()
+
+	byteValue, _ := io.ReadAll(jsonFile)
+	var data map[string]interface{}
+	json.Unmarshal(byteValue, &data)
+
+	path := "pods.[metadata.namespace=keycloak,metadata.name=keycloak-0].spec.containers.[name=istio-proxy]"
+	subsetMap := map[string]interface{}{
+		"image": "boo",
+	}
+	// rnode, err := inject.GetRNode(data, path)
+	result, err := inject.InjectMapData(data, subsetMap, path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(result)
+}
+
+// Path must resolve to a single node
