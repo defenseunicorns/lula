@@ -13,8 +13,8 @@ import (
 	oscalTypes_1_1_2 "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-2"
 	"github.com/defenseunicorns/lula/src/internal/tui/common"
 	pkgcommon "github.com/defenseunicorns/lula/src/pkg/common"
+	"github.com/defenseunicorns/lula/src/pkg/common/composition"
 	"github.com/defenseunicorns/lula/src/pkg/common/oscal"
-	validationstore "github.com/defenseunicorns/lula/src/pkg/common/validation-store"
 )
 
 const (
@@ -38,10 +38,8 @@ func NewComponentDefinitionModel(oscalComponent *oscalTypes_1_1_2.ComponentDefin
 	frameworks := make([]framework, 0)
 
 	if oscalComponent != nil {
-		validationStore := validationstore.NewValidationStore()
-		if oscalComponent.BackMatter != nil {
-			validationStore = validationstore.NewValidationStoreFromBackMatter(*oscalComponent.BackMatter)
-		}
+		// TODO: Run composition?
+		resourceStore := composition.NewResourceStoreFromBackMatter(oscalComponent.BackMatter)
 
 		if oscalComponent.Components != nil {
 			for cIdx, c := range *oscalComponent.Components {
@@ -57,15 +55,28 @@ func NewComponentDefinitionModel(oscalComponent *oscalTypes_1_1_2.ComponentDefin
 							if implementedRequirement.Links != nil {
 								for _, link := range *implementedRequirement.Links {
 									if pkgcommon.IsLulaLink(link) {
-										validation, err := validationStore.GetLulaValidation(link.Href)
-										if err == nil {
-											// add the lula validation to the validations array
-											validationLinks = append(validationLinks, validationLink{
-												oscalLink:  &link, //&(*(*c.ControlImplementations)[ctrlImpIdx].ImplementedRequirements[reqIdx].Links)[linkIdx],
-												text:       link.Text,
-												validation: validation,
-											})
+										var validation pkgcommon.Validation
+										name := "Lula Validation"
+										resource, found := resourceStore.Get(pkgcommon.TrimIdPrefix(link.Href)) //pkgcommon.TrimIdPrefix(link.Href)
+										if found {
+											err := validation.UnmarshalYaml([]byte(resource.Description))
+											if err != nil {
+												common.PrintToLog("error unmarshalling validation: %v", err)
+											}
 										}
+										if validation.Metadata != nil {
+											if validation.Metadata.Name != "" {
+												name = validation.Metadata.Name
+											}
+										}
+										// add the lula validation to the validationsLinks array
+										validationLinks = append(validationLinks, validationLink{
+											oscalLink:  &link, //&(*(*c.ControlImplementations)[ctrlImpIdx].ImplementedRequirements[reqIdx].Links)[linkIdx],
+											text:       link.Text,
+											name:       name,
+											validation: validation,
+										})
+
 									}
 								}
 							}
@@ -202,6 +213,7 @@ func NewComponentDefinitionModel(oscalComponent *oscalTypes_1_1_2.ComponentDefin
 		descriptionEditor: descriptionEditor,
 		validationPicker:  validationPicker,
 		validations:       v,
+		detailView:        common.NewDetailModel(),
 	}
 }
 
@@ -234,7 +246,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.help.ShowAll = !m.help.ShowAll
 
 			case common.ContainsKey(k, m.keys.NavigateLeft.Keys()):
-				if !m.componentPicker.Open && !m.frameworkPicker.Open {
+				if !m.componentPicker.Open && !m.frameworkPicker.Open && !m.detailView.Open {
 					if m.focus == 0 {
 						m.focus = maxFocus
 					} else {
@@ -244,7 +256,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				}
 
 			case common.ContainsKey(k, m.keys.NavigateRight.Keys()):
-				if !m.componentPicker.Open && !m.frameworkPicker.Open {
+				if !m.componentPicker.Open && !m.frameworkPicker.Open && !m.detailView.Open {
 					m.focus = (m.focus + 1) % (maxFocus + 1)
 					m.updateKeyBindings()
 				}
@@ -327,6 +339,22 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					}
 				}
 
+			case common.ContainsKey(k, m.keys.Detail.Keys()):
+				switch m.focus {
+				case focusValidations:
+					// TODO: update the key locks
+					if selectedItem := m.validations.SelectedItem(); selectedItem != nil {
+						valLink := selectedItem.(validationLink)
+						return m, func() tea.Msg {
+							return common.DetailOpenMsg{
+								Content:      getValidationText(valLink),
+								WindowHeight: (m.height + common.TabOffset),
+								WindowWidth:  m.width,
+							}
+						}
+					}
+				}
+
 			case common.ContainsKey(k, m.keys.Cancel.Keys()):
 				if m.selectedControl.oscalControl != nil {
 					switch m.focus {
@@ -394,6 +422,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	m.frameworkPicker = mdl.(common.PickerModel)
 	cmds = append(cmds, cmd)
 
+	mdl, cmd = m.detailView.Update(msg)
+	m.detailView = mdl.(common.DetailModel)
+	cmds = append(cmds, cmd)
+
 	m.remarks, cmd = m.remarks.Update(msg)
 	cmds = append(cmds, cmd)
 
@@ -415,6 +447,9 @@ func (m Model) View() string {
 	}
 	if m.frameworkPicker.Open {
 		return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, m.frameworkPicker.View(), lipgloss.WithWhitespaceChars(" "))
+	}
+	if m.detailView.Open {
+		return lipgloss.Place(m.width, m.height, lipgloss.Center, lipgloss.Center, m.detailView.View(), lipgloss.WithWhitespaceChars(" "))
 	}
 	return m.mainView()
 }
@@ -513,4 +548,62 @@ func getFrameworkText(framework framework) string {
 		return "No Frameworks"
 	}
 	return framework.name
+}
+
+func getValidationText(validationLink validationLink) string {
+	var text strings.Builder
+	validation := validationLink.validation
+
+	important := lipgloss.NewStyle().Bold(true).
+		Foreground(common.Special)
+
+	if validation.Metadata != nil {
+		text.WriteString(fmt.Sprintf("%s - %s\n", important.Render(validationLink.name), validation.Metadata.UUID))
+	} else {
+		text.WriteString(fmt.Sprintf("%s\n", important.Render(validationLink.name)))
+	}
+	text.WriteString("\n\n")
+
+	if validation.Domain != nil {
+		text.WriteString(fmt.Sprintf("Domain: %s\n", important.Render(validation.Domain.Type)))
+		switch validation.Domain.Type {
+		case "kubernetes":
+			kubeSpec, err := common.ToYamlString(validation.Domain.KubernetesSpec)
+			if err != nil {
+				common.PrintToLog("error converting kubeSpec to yaml: %v", err)
+				kubeSpec = ""
+			}
+			text.WriteString(kubeSpec)
+		case "api":
+			apiSpec, err := common.ToYamlString(validation.Domain.ApiSpec)
+			if err != nil {
+				common.PrintToLog("error converting apiSpec to yaml: %v", err)
+				apiSpec = ""
+			}
+			text.WriteString(apiSpec)
+		}
+		text.WriteString("\n\n")
+	}
+
+	if validation.Provider != nil {
+		text.WriteString(fmt.Sprintf("Provider: %s\n", important.Render(validation.Provider.Type)))
+		switch validation.Provider.Type {
+		case "opa":
+			opaSpec, err := common.ToYamlString(validation.Provider.OpaSpec)
+			if err != nil {
+				common.PrintToLog("error converting opaSpec to yaml: %v", err)
+				opaSpec = ""
+			}
+			text.WriteString(opaSpec)
+		case "kyverno":
+			kyvernoSpec, err := common.ToYamlString(validation.Provider.KyvernoSpec)
+			if err != nil {
+				common.PrintToLog("error converting kyvernoSpec to yaml: %v", err)
+				kyvernoSpec = ""
+			}
+			text.WriteString(kyvernoSpec)
+		}
+	}
+
+	return text.String()
 }

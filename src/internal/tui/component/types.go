@@ -7,7 +7,7 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	oscalTypes_1_1_2 "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-2"
 	"github.com/defenseunicorns/lula/src/internal/tui/common"
-	"github.com/defenseunicorns/lula/src/types"
+	pkgcommon "github.com/defenseunicorns/lula/src/pkg/common"
 )
 
 type Model struct {
@@ -32,6 +32,7 @@ type Model struct {
 	validationPicker   viewport.Model
 	validations        blist.Model
 	selectedValidation validationLink
+	detailView         common.DetailModel
 	width              int
 	height             int
 }
@@ -75,12 +76,13 @@ func (i control) FilterValue() string { return i.title }
 type validationLink struct {
 	oscalLink  *oscalTypes_1_1_2.Link
 	text       string
-	validation *types.LulaValidation
+	name       string
+	validation pkgcommon.Validation
 }
 
-func (i validationLink) Title() string       { return i.validation.Name }
+func (i validationLink) Title() string       { return i.name }
 func (i validationLink) Description() string { return i.text }
-func (i validationLink) FilterValue() string { return i.validation.Name }
+func (i validationLink) FilterValue() string { return i.name }
 
 func (m *Model) Close() {
 	m.open = false
@@ -286,77 +288,12 @@ func (m *Model) updateFocusHelpKeys() {
 			m.help.FullHelp = fullHelpEditableDialogBox
 		}
 	case focusValidations:
-		m.help.ShortHelp = common.ShortHelpList
-		m.help.FullHelpOneLine = common.FullHelpListOneLine
-		m.help.FullHelp = common.FullHelpList
+		m.help.ShortHelp = shortHelpValidations
+		m.help.FullHelpOneLine = fullHelpValidationsOneLine
+		m.help.FullHelp = fullHelpValidations
 	default:
 		m.help.ShortHelp = shortHelpNoFocus
 		m.help.FullHelpOneLine = fullHelpNoFocusOneLine
 		m.help.FullHelp = fullHelpNoFocus
 	}
 }
-
-// func (m *Model) setNoFocusHelpKeys() {
-// 	m.help.ShortHelp = []key.Binding{
-// 		componentKeys.Navigation, componentKeys.SwitchModels, componentKeys.Help,
-// 	}
-// 	m.help.FullHelpOneLine = []key.Binding{
-// 		componentKeys.Save, componentKeys.Navigation, componentKeys.SwitchModels, componentKeys.Help, componentKeys.Quit,
-// 	}
-// 	// This is currently unused - TODO: help overlay?
-// 	m.help.FullHelp = [][]key.Binding{
-// 		{componentKeys.SwitchModels}, {componentKeys.Navigation}, {componentKeys.Help}, {componentKeys.Quit},
-// 	}
-// }
-
-// func (m *Model) setDialogBoxHelpKeys() {
-// 	m.help.ShortHelp = []key.Binding{
-// 		componentKeys.Select, componentKeys.Navigation, componentKeys.SwitchModels, componentKeys.Help,
-// 	}
-// 	m.help.FullHelpOneLine = []key.Binding{
-// 		componentKeys.Select, componentKeys.Save, componentKeys.Navigation, componentKeys.SwitchModels, componentKeys.Help, componentKeys.Quit,
-// 	}
-// 	// This is currently unused - TODO: help overlay?
-// 	m.help.FullHelp = [][]key.Binding{
-// 		{componentKeys.SwitchModels}, {componentKeys.Navigation}, {componentKeys.Help}, {componentKeys.Quit},
-// 	}
-// }
-
-// func (m *Model) setEditableDialogBoxHelpKeys() {
-// 	m.help.ShortHelp = []key.Binding{
-// 		componentKeys.Edit, componentKeys.Save, componentKeys.Navigation, componentKeys.SwitchModels, componentKeys.Help,
-// 	}
-// 	m.help.FullHelpOneLine = []key.Binding{
-// 		componentKeys.Edit, componentKeys.Save, componentKeys.Navigation, componentKeys.SwitchModels, componentKeys.Help, componentKeys.Quit,
-// 	}
-// 	// This is currently unused - TODO: help overlay?
-// 	m.help.FullHelp = [][]key.Binding{
-// 		{componentKeys.Edit}, {componentKeys.Navigation}, {componentKeys.Help}, {componentKeys.Quit},
-// 	}
-// }
-
-// func (m *Model) setEditingDialogBoxHelpKeys() {
-// 	m.help.ShortHelp = []key.Binding{
-// 		componentKeys.Confirm, componentKeys.Newline, componentKeys.Cancel,
-// 	}
-// 	m.help.FullHelpOneLine = []key.Binding{
-// 		componentKeys.Confirm, componentKeys.Newline, componentKeys.Cancel, componentKeys.Save, componentKeys.Help, componentKeys.Quit,
-// 	}
-// 	// This is currently unused - TODO: help overlay?
-// 	m.help.FullHelp = [][]key.Binding{
-// 		{componentKeys.Confirm}, {componentKeys.Newline}, {componentKeys.Cancel}, {componentKeys.Quit},
-// 	}
-// }
-
-// func (m *Model) setListHelpKeys() {
-// 	m.help.ShortHelp = []key.Binding{
-// 		componentKeys.Select, componentKeys.Up, componentKeys.Down, common.CommonKeys.Filter, componentKeys.Help,
-// 	}
-// 	m.help.FullHelpOneLine = []key.Binding{
-// 		componentKeys.Select, componentKeys.Up, componentKeys.Down, common.CommonKeys.Filter, componentKeys.Cancel, componentKeys.Help, componentKeys.Quit,
-// 	}
-// 	// This is currently unused - TODO: help overlay?
-// 	m.help.FullHelp = [][]key.Binding{
-// 		{componentKeys.Edit}, {componentKeys.Navigation}, {componentKeys.Help}, {componentKeys.Quit},
-// 	}
-// }

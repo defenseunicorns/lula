@@ -3,13 +3,16 @@ package common
 import (
 	"fmt"
 	"os"
+	"reflect"
 
 	"github.com/charmbracelet/bubbles/key"
 	blist "github.com/charmbracelet/bubbles/list"
 	"github.com/charmbracelet/bubbles/textarea"
 	"github.com/charmbracelet/bubbles/viewport"
 	"github.com/davecgh/go-spew/spew"
+	"github.com/evertras/bubble-table/table"
 	"github.com/mattn/go-runewidth"
+	"gopkg.in/yaml.v2"
 )
 
 const (
@@ -93,6 +96,26 @@ func UnfocusedPanelKeyMap() viewport.KeyMap {
 	return km
 }
 
+func FocusedTableKeyMap() table.KeyMap {
+	km := table.DefaultKeyMap()
+	km.PageUp = key.NewBinding(
+		key.WithKeys("pgup"),
+		key.WithHelp("pgup", "page up"),
+	)
+	km.PageDown = key.NewBinding(
+		key.WithKeys("pgdown"),
+		key.WithHelp("pgdown", "page down"),
+	)
+
+	return km
+}
+
+func UnfocusedTableKeyMap() table.KeyMap {
+	km := table.KeyMap{}
+
+	return km
+}
+
 func FocusedTextAreaKeyMap() textarea.KeyMap {
 	km := textarea.DefaultKeyMap
 
@@ -121,4 +144,36 @@ func DumpToLog(msg ...any) {
 	if DumpFile != nil {
 		spew.Fdump(DumpFile, msg)
 	}
+}
+
+func ToYamlString(input interface{}) (string, error) {
+	result := make(map[string]interface{})
+	v := reflect.ValueOf(input)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+	if v.Kind() != reflect.Struct {
+		return "", fmt.Errorf("input must be a struct")
+	}
+
+	t := v.Type()
+	for i := 0; i < v.NumField(); i++ {
+		field := v.Field(i)
+		fieldType := t.Field(i)
+
+		// Skip unexported fields
+		if !field.CanInterface() {
+			continue
+		}
+
+		fieldName := fieldType.Name
+		result[fieldName] = field.Interface()
+	}
+
+	yamlData, err := yaml.Marshal(result)
+	if err != nil {
+		return "", err
+	}
+	return string(yamlData), nil
+
 }
