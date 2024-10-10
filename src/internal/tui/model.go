@@ -78,7 +78,7 @@ func NewOSCALModel(oscalModel *oscalTypes_1_1_2.OscalCompleteSchema, oscalFilePa
 		writtenOscalModel:         writtenOscalModel,
 		closeModel:                closeModel,
 		saveModel:                 saveModel,
-		componentModel:            component.NewComponentDefinitionModel(oscalModel.ComponentDefinition),
+		componentModel:            component.InitialModel(oscalModel.ComponentDefinition),
 		assessmentResultsModel:    ar.NewAssessmentResultsModel(oscalModel.AssessmentResults),
 		systemSecurityPlanModel:   common.NewTbdModal("System Security Plan"),
 		catalogModel:              common.NewTbdModal("Catalog"),
