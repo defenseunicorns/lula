@@ -7,6 +7,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
+	oscalTypes_1_1_2 "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-2"
 	"github.com/defenseunicorns/lula/src/internal/testhelpers"
 	"github.com/defenseunicorns/lula/src/internal/tui"
 	"github.com/defenseunicorns/lula/src/internal/tui/common"
@@ -24,13 +25,22 @@ func init() {
 	lipgloss.SetColorProfile(termenv.Ascii)
 }
 
-// TestNewOSCALModel tests that the NewOSCALModel creates the expected model from component definition file
+// TestNewOSCALModel tests that the NewOSCALModel creates the expected model from the provided map of OSCAL models
 func TestNewOSCALModel(t *testing.T) {
 	tempLog := testhelpers.CreateTempFile(t, "log")
 	defer os.Remove(tempLog.Name())
 
-	oscalModel := testhelpers.OscalFromPath(t, "../../test/unit/common/oscal/valid-component.yaml")
-	model := tui.NewOSCALModel(oscalModel, "", tempLog)
+	oscalComponent := testhelpers.OscalFromPath(t, "../../test/unit/common/oscal/valid-component.yaml")
+	oscalAssessment := testhelpers.OscalFromPath(t, "../../test/unit/common/oscal/valid-assessment-results.yaml")
+	model := tui.NewOSCALModel(
+		map[string]*oscalTypes_1_1_2.OscalCompleteSchema{
+			"component":          oscalComponent,
+			"assessment-results": oscalAssessment,
+		},
+		map[string]string{
+			"component":          "component.yaml",
+			"assessment-results": "assessment-results.yaml",
+		}, tempLog)
 
 	msgs := []tea.Msg{}
 
@@ -39,3 +49,5 @@ func TestNewOSCALModel(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// Add test for component model save?
