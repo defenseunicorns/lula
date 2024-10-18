@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.10.0](https://github.com/defenseunicorns/lula/compare/v0.9.1...v0.10.0) (2024-10-18)
+
+
+### Features
+
+* **console:** add support for multiple input files ([#729](https://github.com/defenseunicorns/lula/issues/729)) ([103ca0d](https://github.com/defenseunicorns/lula/commit/103ca0deabbb5db7fc90512c82817cb91bdd4c3f))
+* **console:** lula validation view ([#727](https://github.com/defenseunicorns/lula/issues/727)) ([481648f](https://github.com/defenseunicorns/lula/commit/481648fb366da9abf19441d39b81173935424704))
+* **generate:** support for profile model and basic generation ([#694](https://github.com/defenseunicorns/lula/issues/694)) ([cb4fc6f](https://github.com/defenseunicorns/lula/commit/cb4fc6f2282547352c0a3a88ddd135c5a86e58eb))
+
+
+### Miscellaneous
+
+* address linter report - swallowed errors and minor test cleanup of nil checks ([#740](https://github.com/defenseunicorns/lula/issues/740)) ([05a7f6e](https://github.com/defenseunicorns/lula/commit/05a7f6e075adafeb2b3c635803cc12083f12c01d))
+* **build:** add golangci-lint to the pipeline as a non-blocking step ([#742](https://github.com/defenseunicorns/lula/issues/742)) ([fedb0c9](https://github.com/defenseunicorns/lula/commit/fedb0c9731656941b24c9d2cf6fb85bdc4604002))
+* **deps:** update anchore/sbom-action action to v0.17.4 ([#731](https://github.com/defenseunicorns/lula/issues/731)) ([36ef42a](https://github.com/defenseunicorns/lula/commit/36ef42aefb9fa5d48997a7f4b7d342c6a0d92cd3))
+* **deps:** update github/codeql-action action to v3.26.13 ([#737](https://github.com/defenseunicorns/lula/issues/737)) ([86c9376](https://github.com/defenseunicorns/lula/commit/86c93762fcfc9eb819989dd0e376a798a6add4b2))
+* **lint:** appease the linter ([#746](https://github.com/defenseunicorns/lula/issues/746)) ([bcb2ab0](https://github.com/defenseunicorns/lula/commit/bcb2ab0b7d150e2d908fe2a9d674663f3c040489))
+* **scanning:** create gosec integration in pipelines ([#739](https://github.com/defenseunicorns/lula/issues/739)) ([41bce03](https://github.com/defenseunicorns/lula/commit/41bce03649ce3cbb578c0bcb2d223884348c86d5))
+
 ## [0.9.1](https://github.com/defenseunicorns/lula/compare/v0.9.0...v0.9.1) (2024-10-12)
 
 
