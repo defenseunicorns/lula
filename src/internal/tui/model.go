@@ -1,7 +1,6 @@
 package tui
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 	"reflect"
@@ -17,6 +16,11 @@ import (
 	"github.com/defenseunicorns/lula/src/internal/tui/component"
 	"github.com/defenseunicorns/lula/src/pkg/common/oscal"
 )
+
+type SwitchTabMsg struct {
+	FromTab int
+	ToTab   int
+}
 
 type model struct {
 	keys                      common.Keys
@@ -63,7 +67,7 @@ func NewOSCALModel(modelMap map[string]*oscalTypes_1_1_2.OscalCompleteSchema, fi
 		switch k {
 		case "component":
 			componentModel = component.NewComponentDefinitionModel(v.ComponentDefinition)
-			err := DeepCopy(v.ComponentDefinition, writtenComponentModel)
+			err := common.DeepCopy(v.ComponentDefinition, writtenComponentModel)
 			if err != nil {
 				common.PrintToLog("error creating deep copy of component model: %v", err)
 			}
@@ -118,7 +122,7 @@ func (m *model) writeOscalModel() tea.Msg {
 	}
 	common.PrintToLog("model saved")
 
-	_ = DeepCopy(m.componentModel.GetComponentDefinition(), m.writtenComponentModel) // G104
+	_ = common.DeepCopy(m.componentModel.GetComponentDefinition(), m.writtenComponentModel)
 	return common.SaveSuccessMsg{}
 }
 
@@ -129,6 +133,7 @@ func (m model) Init() tea.Cmd {
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 	var cmd tea.Cmd
+	fromTab := m.activeTab
 
 	common.DumpToLog(msg)
 
@@ -143,12 +148,24 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch k {
 		case common.ContainsKey(k, m.keys.ModelRight.Keys()):
 			m.activeTab = (m.activeTab + 1) % len(m.tabs)
+			return m, func() tea.Msg {
+				return SwitchTabMsg{
+					FromTab: fromTab,
+					ToTab:   m.activeTab,
+				}
+			}
 
 		case common.ContainsKey(k, m.keys.ModelLeft.Keys()):
 			if m.activeTab == 0 {
 				m.activeTab = len(m.tabs) - 1
 			} else {
 				m.activeTab = m.activeTab - 1
+			}
+			return m, func() tea.Msg {
+				return SwitchTabMsg{
+					FromTab: fromTab,
+					ToTab:   m.activeTab,
+				}
 			}
 
 		case common.ContainsKey(k, m.keys.Confirm.Keys()):
@@ -217,20 +234,24 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			cmds = append(cmds, tea.Quit)
 		}
 		return m, tea.Sequence(cmds...)
+
+	case SwitchTabMsg:
+		return m, m.openTab(msg.ToTab)
 	}
 
 	mdl, cmd := m.saveModel.Update(msg)
 	m.saveModel = mdl.(common.SaveModel)
 	cmds = append(cmds, cmd)
 
-	tabModel, cmd := m.loadTabModel(msg)
-	if tabModel != nil {
-		switch m.tabs[m.activeTab] {
-		case "ComponentDefinition":
-			m.componentModel = tabModel.(component.Model)
-		case "AssessmentResults":
-			m.assessmentResultsModel = tabModel.(assessmentresults.Model)
-		}
+	// Only run update methods on active tab
+	switch m.tabs[m.activeTab] {
+	case "ComponentDefinition":
+		mdl, cmd = m.componentModel.Update(msg)
+		m.componentModel = mdl.(component.Model)
+		cmds = append(cmds, cmd)
+	case "AssessmentResults":
+		mdl, cmd = m.assessmentResultsModel.Update(msg)
+		m.assessmentResultsModel = mdl.(assessmentresults.Model)
 		cmds = append(cmds, cmd)
 	}
 
@@ -261,57 +282,46 @@ func (m model) mainView() string {
 	gap := common.TabGap.Render(strings.Repeat(" ", max(0, m.width-lipgloss.Width(row)-2)))
 	row = lipgloss.JoinHorizontal(lipgloss.Bottom, row, gap)
 
-	tabModel, _ := m.loadTabModel(nil)
-	if tabModel != nil {
-		body := lipgloss.NewStyle().PaddingTop(0).PaddingLeft(2).Render(tabModel.View())
-		return fmt.Sprintf("%s\n%s", row, body)
-	}
-
-	return row
-}
-
-func (m model) closeAllTabs() {
-	m.catalogModel.Close()
-	m.profileModel.Close()
-	m.componentModel.Close()
-	m.systemSecurityPlanModel.Close()
-	m.assessmentPlanModel.Close()
-	m.assessmentResultsModel.Close()
-	m.planOfActionAndMilestones.Close()
-}
-
-func (m model) loadTabModel(msg tea.Msg) (tea.Model, tea.Cmd) {
-	m.closeAllTabs()
+	content := ""
 	switch m.tabs[m.activeTab] {
 	case "ComponentDefinition":
-		m.componentModel.Open(m.height-common.TabOffset, m.width)
-		return m.componentModel.Update(msg)
+		content = m.componentModel.View()
 	case "AssessmentResults":
-		m.assessmentResultsModel.Open(m.height-common.TabOffset, m.width)
-		return m.assessmentResultsModel.Update(msg)
-	case "Catalog":
-		m.catalogModel.Open()
-		return m.catalogModel, nil
-	case "Profile":
-		m.profileModel.Open()
-		return m.profileModel, nil
+		content = m.assessmentResultsModel.View()
 	case "SystemSecurityPlan":
-		m.systemSecurityPlanModel.Open()
-		return m.systemSecurityPlanModel, nil
+		content = m.systemSecurityPlanModel.View()
 	case "AssessmentPlan":
-		m.assessmentPlanModel.Open()
-		return m.assessmentPlanModel, nil
+		content = m.assessmentPlanModel.View()
 	case "PlanOfActionAndMilestones":
-		m.planOfActionAndMilestones.Open()
-		return m.planOfActionAndMilestones, nil
+		content = m.planOfActionAndMilestones.View()
+	case "Catalog":
+		content = m.catalogModel.View()
+	case "Profile":
+		content = m.profileModel.View()
 	}
-	return nil, nil
+
+	body := lipgloss.NewStyle().PaddingTop(0).PaddingLeft(2).Render(content)
+	return fmt.Sprintf("%s\n%s", row, body)
 }
 
-func DeepCopy(src, dst interface{}) error {
-	data, err := json.Marshal(src)
-	if err != nil {
-		return err
+func (m *model) openTab(tab int) func() tea.Msg {
+	switch m.tabs[tab] {
+	case "ComponentDefinition":
+		return func() tea.Msg {
+			return component.ModelOpenMsg{
+				Height: m.height - common.TabOffset,
+				Width:  m.width,
+			}
+		}
+	case "AssessmentResults":
+		return func() tea.Msg {
+			return assessmentresults.ModelOpenMsg{
+				Height: m.height - common.TabOffset,
+				Width:  m.width,
+			}
+		}
 	}
-	return json.Unmarshal(data, dst)
+	return func() tea.Msg {
+		return nil
+	}
 }
