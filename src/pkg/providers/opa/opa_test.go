@@ -36,7 +36,7 @@ func TestOpaModules(t *testing.T) {
 			name: "invalid module",
 			spec: &opa.OpaSpec{
 				Rego:    "package validate\n\nvalidate = true if true",
-				Modules: map[string]string{"empty": "testdata/empty.rego"},
+				Modules: map[string]string{"empty": "testdata/invalid.rego"},
 			},
 			wantErr: opa.ErrCompileRego,
 		},
