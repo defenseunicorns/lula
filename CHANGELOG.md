@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.14.0](https://github.com/defenseunicorns/lula/compare/v0.13.0...v0.14.0) (2024-12-12)
+
+
+### Features
+
+* **opa:** allow importing custom OPA modules in OPA policies ([#826](https://github.com/defenseunicorns/lula/issues/826)) ([d3a8690](https://github.com/defenseunicorns/lula/commit/d3a869049c70a7237440651c6ce24bbde32f3ad4))
+
+
+### Miscellaneous
+
+* add fuzz tests and daily fuzz workflow ([#832](https://github.com/defenseunicorns/lula/issues/832)) ([377ed80](https://github.com/defenseunicorns/lula/commit/377ed80ae4c98809f8f82b52dd972926327c091c))
+* **deps:** update actions/setup-go action to v5.2.0 ([#844](https://github.com/defenseunicorns/lula/issues/844)) ([5e9d87a](https://github.com/defenseunicorns/lula/commit/5e9d87ac91cf6e4f813acb650599334c02783198))
+
 ## [0.13.0](https://github.com/defenseunicorns/lula/compare/v0.12.0...v0.13.0) (2024-12-06)
 
 
