@@ -48,7 +48,12 @@ func (a ApiDomain) makeRequests(ctx context.Context) (types.DomainResources, err
 		for i, request := range a.Spec.Requests {
 			if i > 0 { // the first request cannot use outputs
 				if a.Spec.outputs != nil {
-					executeTpls(request, a.Spec.outputs)
+					var err error
+					request, err = executeTpls(request, a.Spec.outputs)
+					if err != nil {
+						/// TODO: better error
+						return collection, err
+					}
 				}
 			}
 
@@ -80,7 +85,6 @@ func (a ApiDomain) makeRequests(ctx context.Context) (types.DomainResources, err
 				}
 
 				if request.Outputs != nil {
-					// get the value from the dr, it's already closer to yaml-shaped
 					node, err := yaml.ConvertJSONToYamlNode(string(response.Raw))
 					if err != nil {
 						errs = errors.Join(errs, err)
@@ -115,6 +119,7 @@ func executeTpls(req Request, vars map[string]map[string]interface{}) (Request, 
 		reqUrl, err := url.Parse(urlstr)
 		if err != nil {
 			// TODO: error types! this is a copy!
+			// TODO: we should attempt each template step and return a wrapped error
 			return modifiedReq, errors.New("invalid request url")
 		}
 		modifiedReq.reqURL = reqUrl

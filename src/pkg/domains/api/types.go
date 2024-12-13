@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"net/http"
 	"net/url"
 	"time"
 
@@ -60,7 +61,7 @@ type Request struct {
 	Method     string            `json:"method,omitempty" yaml:"method,omitempty"`
 	Body       string            `json:"body,omitempty" yaml:"body,omitempty"`
 	Executable bool              `json:"executable,omitempty" yaml:"executable,omitempty"`
-	Outputs    []*Outputs        `json:"output,omitempty" yaml:"output,omitempty"`
+	Outputs    []*Output         `json:"output,omitempty" yaml:"output,omitempty"`
 	// ApiOpts specific to this request. If ApiOpts is present, values in the
 	// ApiSpec-level Options are ignored for this request.
 	Options *ApiOpts `json:"options,omitempty" yaml:"options,omitempty"`
@@ -79,30 +80,46 @@ func (r Request) DeepCopy() Request {
 		Name:       r.Name,
 		URL:        r.URL,
 		Method:     r.Method,
+		Body:       r.Body,
 		Executable: r.Executable,
-		Options:    r.Options.DeepCopy(),
 		URLTpl:     r.URLTpl,
+		reqURL:     copyUrl(r.reqURL),
+	}
+
+	if r.Options != nil {
+		copy.Options = r.Options.DeepCopy()
 	}
 
 	// params, params template
-	params := make(map[string]string, len(r.Params))
-	for k, v := range r.Params {
-		params[k] = v
+	if r.Params != nil {
+		params := make(map[string]string, len(r.Params))
+		for k, v := range r.Params {
+			params[k] = v
+		}
+		copy.Params = params
 	}
-	copy.Params = params
 
-	paramTpls := make(map[string]string, len(r.ParamsTpl))
-	for k, v := range r.ParamsTpl {
-		paramTpls[k] = v
+	if r.ParamsTpl != nil {
+		paramTpls := make(map[string]string, len(r.ParamsTpl))
+		for k, v := range r.ParamsTpl {
+			paramTpls[k] = v
+		}
+		copy.ParamsTpl = paramTpls
 	}
-	copy.Params = paramTpls
 
 	// outputs
-	outputs := make([]*Outputs, len(r.Outputs))
-	for i := range r.Outputs {
-		outputs[i] = r.Outputs[i]
+	if r.Outputs != nil {
+		outputs := make([]*Output, len(r.Outputs))
+		for i := range r.Outputs {
+			outputs[i] = r.Outputs[i]
+		}
+		copy.Outputs = outputs
 	}
-	copy.Outputs = outputs
+
+	if r.reqParameters != nil {
+		copy.reqParameters = copyUrlValues(r.reqParameters)
+	}
+
 	return copy
 }
 
@@ -121,7 +138,7 @@ type ApiOpts struct {
 	proxyURL *url.URL
 }
 
-type Outputs struct {
+type Output struct {
 	Name string `json:"name" yaml:"name"` // the output will be addressed by RequestName.OutputName
 	Path string `json:"path" yaml:"path"` // not really sure what to call this - just go all in with jq? jqpath? jsonpath?
 }
@@ -142,4 +159,28 @@ func (a ApiOpts) DeepCopy() *ApiOpts {
 	}
 
 	return copy
+}
+
+// Copied from net/http to avoid the hall of shame: https://go.dev/src/net/http/clone.go
+func copyUrlValues(v url.Values) url.Values {
+	if v == nil {
+		return nil
+	}
+	// http.Header and url.Values have the same representation, so temporarily
+	// treat it like http.Header, which does have a clone:
+	return url.Values(http.Header(v).Clone())
+}
+
+// Copied from net/http to avoid the hall of shame: https://go.dev/src/net/http/clone.go
+func copyUrl(u *url.URL) *url.URL {
+	if u == nil {
+		return nil
+	}
+	u2 := new(url.URL)
+	*u2 = *u
+	if u.User != nil {
+		u2.User = new(url.Userinfo)
+		*u2.User = *u.User
+	}
+	return u2
 }
