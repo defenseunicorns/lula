@@ -141,7 +141,7 @@ func executeTpls(req Request, vars map[string]map[string]interface{}) (Request, 
 	// params
 	if req.ParamsTpl != nil {
 		params := make(map[string]string)
-		for k, v := range req.Options.HeadersTpl {
+		for k, v := range req.ParamsTpl {
 			h, err := executeTpl(v, vars)
 			if err != nil {
 				return modifiedReq, err

@@ -1,6 +1,7 @@
 package api
 
 import (
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -33,7 +34,7 @@ func TestExecuteTpl(t *testing.T) {
 			want:      "hello, batcat!",
 			expectErr: false,
 		},
-		//TODO: we should catch this, possibly at an earlier stage (validation schema)
+		//TODO: we should catch this at an earlier stage (validation schema)
 		"invalid tplStr, not an error": {
 			tplStr: `hello, {{.login.username]]!`,
 			vars: map[string]map[string]interface{}{
@@ -44,6 +45,7 @@ func TestExecuteTpl(t *testing.T) {
 			want:      "",
 			expectErr: false,
 		},
+		// i dunno what makes for an error, since the above example didn't do it
 	}
 
 	for name, test := range tests {
@@ -57,5 +59,43 @@ func TestExecuteTpl(t *testing.T) {
 			}
 		})
 	}
+}
 
+func TestExecuteTpls(t *testing.T) {
+	input := Request{
+		ParamsTpl: map[string]string{
+			"param1": `[[.input.value1]]`,
+			"param2": `[[.input.value2]]`,
+		},
+		URLTpl: `http:example.com/[[.admin.realm]]/foo`,
+		Options: &ApiOpts{
+			HeadersTpl: map[string]string{
+				"token": `[[.auth.token]]`,
+			},
+		},
+	}
+	vars := map[string]map[string]interface{}{
+		"auth": {
+			"token": "s00p3rs3kr3t",
+		},
+		"input": {
+			"value1": "foo",
+			"value2": 3,
+		},
+		"admin": {
+			"realm": "uds",
+		},
+	}
+	request, err := executeTpls(input, vars)
+	require.NoError(t, err)
+	wantUrl, err := url.Parse("http:example.com/uds/foo")
+	require.NoError(t, err)
+	require.Equal(t, wantUrl, request.reqURL)
+	require.Equal(t, map[string]string{
+		"param1": "foo",
+		"param2": "3",
+	}, request.Params)
+	require.Equal(t, map[string]string{
+		"token": "s00p3rs3kr3t",
+	}, request.Options.Headers)
 }
