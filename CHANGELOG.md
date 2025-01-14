@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.1](https://github.com/defenseunicorns/lula/compare/v0.14.0...v0.14.1) (2025-01-14)
+
+
+### Miscellaneous
+
+* add debug-level logging to doHTTPReq ([#869](https://github.com/defenseunicorns/lula/issues/869)) ([376f686](https://github.com/defenseunicorns/lula/commit/376f68648ff6ce6210506b20b67146bbf6e946dd))
+* **deps:** update actions/upload-artifact action to v4.6.0 ([#871](https://github.com/defenseunicorns/lula/issues/871)) ([35dfae7](https://github.com/defenseunicorns/lula/commit/35dfae7d39d9f70d49212db3f0d45b5e62bd14f4))
+
 ## [0.14.0](https://github.com/defenseunicorns/lula/compare/v0.13.0...v0.14.0) (2024-12-20)
 
 
