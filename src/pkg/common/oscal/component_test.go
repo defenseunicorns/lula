@@ -653,3 +653,24 @@ func TestRewritePaths(t *testing.T) {
 	// Compare the expected and actual component definitions
 	require.Equal(t, expectedComponent, *component.GetCompleteModel())
 }
+
+func TestImportComponentDefinitions(t *testing.T) {
+	componentWithImportsRel := "../../../test/unit/common/oscal/valid-component-with-imports.yaml"
+
+	// Calculate the absolute paths
+	componentDirAbs, err := filepath.Abs(componentWithImportsRel)
+	require.NoError(t, err)
+	componentDirAbs = filepath.Dir(componentDirAbs)
+
+	componentBytes := loadTestData(t, componentWithImportsRel)
+
+	var component oscal.ComponentDefinition
+	err = component.NewModel(componentBytes)
+	require.NoError(t, err)
+
+	err = component.ImportComponentDefinitions(componentDirAbs)
+	require.NoError(t, err)
+
+	// Check the component is expected...
+	oscal.WriteOscalModelNew("test.yaml", &component)
+}

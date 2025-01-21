@@ -103,6 +103,7 @@ func (c *ComponentDefinition) HandleExisting(path string) error {
 }
 
 // RewritePaths finds all the paths in the component definition relative to the baseDir and updates them to be relative to the newDir
+// baseDir and newDir must be absolute paths
 func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) error {
 	if c.Model == nil {
 		return fmt.Errorf("cannot remap paths, model is nil")
@@ -147,6 +148,65 @@ func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) error 
 	return nil
 }
 
+// ImportComponentDefinitions is a function that imports component definitions into the current component
+// definition and re-writes any paths in the component definition to be relative to the component's directory
+// componentDir must be absolute paths
+// TODO: should componentDir be an attribute of the component definition?
+func (c *ComponentDefinition) ImportComponentDefinitions(componentDir string) error {
+	if c.Model == nil {
+		return fmt.Errorf("cannot import component definitions, model is nil")
+	}
+
+	if len(*c.Model.ImportComponentDefinitions) == 0 {
+		return nil
+	}
+
+	// Add data from each to the current component definition
+	for _, importCompDef := range *c.Model.ImportComponentDefinitions {
+		// Create a new component definition from the imported component definition Href
+		importCompDefHrefAbs, err := filepath.Abs(filepath.Join(componentDir, importCompDef.Href))
+		if err != nil {
+			return err
+		}
+
+		data, err := os.ReadFile(importCompDefHrefAbs)
+		if err != nil {
+			return err
+		}
+
+		importedComponent := NewComponentDefinition()
+		err = importedComponent.NewModel(data)
+		if err != nil {
+			return err
+		}
+
+		// Remap paths in the imported component definition to be relative to the working directory
+		err = importedComponent.RewritePaths(filepath.Dir(importCompDefHrefAbs), componentDir)
+		if err != nil {
+			return err
+		}
+
+		// Merge the imported component definition into the current component definition
+		newComponent, err := MergeComponentDefinitions(c.Model, importedComponent.Model)
+		if err != nil {
+			return err
+		}
+
+		c.Model = newComponent
+
+		// Recursively import any component definitions
+		err = c.ImportComponentDefinitions(componentDir)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Remove file list from import-component-definitions
+	c.Model.ImportComponentDefinitions = nil
+
+	return nil
+}
+
 // MergeVariadicComponentDefinition merges multiple variadic component definitions into a single component definition
 func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinition) (mergedCompDef *oscalTypes.ComponentDefinition, err error) {
 	for _, compDef := range compDefs {
@@ -167,11 +227,11 @@ func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest 
 
 	originalMap := make(map[string]oscalTypes.DefinedComponent)
 
-	if original.Components == nil {
+	if original == nil {
 		return original, fmt.Errorf("original component-definition is nil")
 	}
 
-	if latest.Components == nil {
+	if latest == nil {
 		return original, fmt.Errorf("latest component-definition is nil")
 	}
 
