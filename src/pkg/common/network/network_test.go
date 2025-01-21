@@ -274,6 +274,18 @@ func TestGetLocalFileDir(t *testing.T) {
 			baseDir:     "/root",
 			expectedDir: "",
 		},
+		{
+			name:        "Opaque absolute Path",
+			inputFile:   "file:/root/path/to/file.txt",
+			baseDir:     "/root",
+			expectedDir: "",
+		},
+		{
+			name:        "Opaque relative Path",
+			inputFile:   "file:to/file.txt",
+			baseDir:     "/root/path",
+			expectedDir: "/root/path/to",
+		},
 	}
 
 	for _, tt := range tests {

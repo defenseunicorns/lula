@@ -229,8 +229,8 @@ func RemapPath(path string, baseDir string, newDir string) (string, error) {
 		return path, nil
 	}
 
-	// Trim file://, if present
-	path = strings.TrimPrefix(path, "file://")
+	// Trim file:// or file:, if present
+	path = strings.TrimPrefix(strings.TrimPrefix(path, "file://"), "file:")
 
 	// Find the relative path from newDir to baseDir
 	relativePath, err := filepath.Rel(newDir, baseDir)

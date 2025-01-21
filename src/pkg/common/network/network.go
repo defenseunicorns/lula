@@ -157,8 +157,10 @@ func FetchLocalFile(url *url.URL, config *fetchOpts) ([]byte, error) {
 }
 
 // GetLocalFileDir returns the directory of a local file
+// See URL for reference: https://pkg.go.dev/net/url#URL
 // Intent of check is to handle different specifications of file paths:
 // - file:///path/to/file
+// - file:my-file.txt
 // - ./path/to/file
 // - /path/to/file
 // - https://example.com/path/to/file
@@ -169,10 +171,12 @@ func GetLocalFileDir(inputURL, baseDir string) string {
 		return ""
 	}
 
-	requestUri := url.RequestURI()
-
 	if url.Scheme == "file" {
-		// If the scheme is file, check if the path is absolute (if host is "", it's absolute)
+		// If the scheme is file, check if the path is absolute
+		// To check absolute path, check both the host and the opaque fields
+		if url.Opaque != "" {
+			return handlePath(url.Opaque, baseDir)
+		}
 		if url.Host == "" {
 			return ""
 		}
@@ -180,12 +184,16 @@ func GetLocalFileDir(inputURL, baseDir string) string {
 		return ""
 	}
 
-	// If the path is not absolute, join it with the baseDir
-	if filepath.IsAbs(filepath.Join(url.Host, requestUri)) {
+	return handlePath(filepath.Join(url.Host, url.RequestURI()), baseDir)
+}
+
+func handlePath(path, baseDir string) string {
+	if filepath.IsAbs(path) {
 		return ""
 	}
 
-	fullPath := filepath.Join(baseDir, url.Host, requestUri)
+	fullPath := filepath.Join(baseDir, path)
+
 	return filepath.Dir(fullPath)
 }
 

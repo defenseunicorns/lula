@@ -581,6 +581,14 @@ func TestRemapPath(t *testing.T) {
 			expectedError: false,
 		},
 		{
+			name:          "Relative Path with file:",
+			path:          "file:file.txt",
+			baseDir:       "/app",
+			newDir:        "/app2",
+			expectedPath:  "../app/file.txt",
+			expectedError: false,
+		},
+		{
 			name:          "Absolute Path with file://",
 			path:          "file:///path/to/file.txt",
 			baseDir:       "/path/to",
