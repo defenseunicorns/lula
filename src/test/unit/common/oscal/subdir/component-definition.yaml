@@ -17,9 +17,9 @@ component-definition:
   components:
     - uuid: ea343aeb-1a59-441b-9877-e7c7839446e5
       type: software
-      title: lula
+      title: Component 1
       description: |
-        Defense Unicorns lula
+        Component 1
       purpose: Validate compliance controls
       responsible-roles:
         - role-id: provider
