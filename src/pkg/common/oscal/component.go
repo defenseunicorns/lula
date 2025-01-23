@@ -421,16 +421,11 @@ func (c *ComponentDefinition) ImportComponentDefinitions(componentDir string) er
 		}
 
 		// Merge the imported component definition into the current component definition
-		newComponent, err := MergeComponentDefinitions(c.Model, importedComponent.Model)
+		err = MergeComponentDefinitions(c.Model, importedComponent.Model)
 		if err != nil {
 			return err
 		}
-
-		c.Model = newComponent
 	}
-
-	// Remove file list from import-component-definitions
-	c.Model.ImportComponentDefinitions = nil
 
 	return nil
 }
