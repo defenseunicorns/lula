@@ -22,6 +22,8 @@ component-definition:
       title: Test Component
       description: Some test component
       purpose: Validate compliance controls
+      links:
+        - href: ../../../../../README.md
       responsible-roles:
         - role-id: provider
           party-uuids:
