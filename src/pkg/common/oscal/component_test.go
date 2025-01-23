@@ -331,7 +331,7 @@ func TestMergeComponentDefinitions(t *testing.T) {
 				(*generated.Model.Components)[0].UUID = (*validComponent.Components)[0].UUID
 			}
 
-			merged, err := oscal.MergeComponentDefinitions(validComponent, generated.Model)
+			err = oscal.MergeComponentDefinitions(validComponent, generated.Model)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("MergeComponentDefinitions() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -342,9 +342,9 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			}
 
 			// Perform checks on quantities
-			components := (*merged.Components)
+			components := (*validComponent.Components)
 			if len(components) != tt.expectedComponents {
-				t.Errorf("MergeComponentDefinitions() expected %v components, got %v", tt.expectedComponents, len((*merged.Components)))
+				t.Errorf("MergeComponentDefinitions() expected %v components, got %v", tt.expectedComponents, len((*validComponent.Components)))
 			}
 			controlImplementations := make([]oscalTypes.ControlImplementationSet, 0)
 			var targetComponent oscalTypes.DefinedComponent
