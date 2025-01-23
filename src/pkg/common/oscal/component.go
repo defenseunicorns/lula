@@ -375,66 +375,6 @@ func rewritePathsControlImplementations(controlImplementations *[]oscalTypes.Con
 	return nil
 }
 
-// ImportComponentDefinitions is a function that imports component definitions into the current component
-// definition and re-writes any paths in the component definition to be relative to the component's directory
-// componentDir must be absolute paths
-// TODO: should componentDir be an attribute of the component definition?
-// TODO: Add templating
-func (c *ComponentDefinition) ImportComponentDefinitions(componentDir string) error {
-	if c.Model == nil {
-		return fmt.Errorf("cannot import component definitions, model is nil")
-	}
-
-	if c.Model.ImportComponentDefinitions == nil {
-		return nil
-	}
-
-	// Add data from each to the current component definition
-	for _, importCompDef := range *c.Model.ImportComponentDefinitions {
-		// Create a new component definition from the imported component definition Href
-		importCompDefHrefAbs, err := filepath.Abs(filepath.Join(componentDir, importCompDef.Href))
-		if err != nil {
-			return err
-		}
-
-		data, err := os.ReadFile(importCompDefHrefAbs)
-		if err != nil {
-			return err
-		}
-
-		importedComponent := NewComponentDefinition()
-		err = importedComponent.NewModel(data)
-		if err != nil {
-			return err
-		}
-
-		// Remap paths in the imported component definition to be relative to the working directory
-		err = importedComponent.RewritePaths(filepath.Dir(importCompDefHrefAbs), componentDir)
-		if err != nil {
-			return err
-		}
-
-		// Recursively import any component definitions
-		err = importedComponent.ImportComponentDefinitions(componentDir)
-		if err != nil {
-			return err
-		}
-
-		// Merge the imported component definition into the current component definition
-		newComponent, err := MergeComponentDefinitions(c.Model, importedComponent.Model)
-		if err != nil {
-			return err
-		}
-
-		c.Model = newComponent
-	}
-
-	// Remove file list from import-component-definitions
-	c.Model.ImportComponentDefinitions = nil
-
-	return nil
-}
-
 // MergeVariadicComponentDefinition merges multiple variadic component definitions into a single component definition
 func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinition) (mergedCompDef *oscalTypes.ComponentDefinition, err error) {
 	for _, compDef := range compDefs {
@@ -452,50 +392,25 @@ func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinitio
 
 // This function should perform a merge of two component-definitions where maintaining the original component-definition is the primary concern.
 func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest *oscalTypes.ComponentDefinition) (*oscalTypes.ComponentDefinition, error) {
-	// Nil check on original and latest
-	if original == nil {
+
+	originalMap := make(map[string]oscalTypes.DefinedComponent)
+
+	if original.Components == nil {
 		return original, fmt.Errorf("original component-definition is nil")
 	}
 
-	if latest == nil {
+	if latest.Components == nil {
 		return original, fmt.Errorf("latest component-definition is nil")
 	}
 
-	// merge the component-definition.components
-	if original.Components != nil && latest.Components != nil {
-		original.Components = mergeDefinedComponents(original.Components, latest.Components)
-	} else if original.Components == nil && latest.Components != nil {
-		original.Components = latest.Components
-	}
-
-	// merge the component-definition.back-matter resources
-	if original.BackMatter != nil && latest.BackMatter != nil {
-		original.BackMatter = &oscalTypes.BackMatter{
-			Resources: mergeResources(original.BackMatter.Resources, latest.BackMatter.Resources),
-		}
-	} else if original.BackMatter == nil && latest.BackMatter != nil {
-		original.BackMatter = latest.BackMatter
-	}
-
-	// Artifact will be modified - need to update the timestamp and UUID
-	original.Metadata.LastModified = time.Now()
-	original.UUID = uuid.NewUUID()
-
-	return original, nil
-
-}
-
-func mergeDefinedComponents(original *[]oscalTypes.DefinedComponent, latest *[]oscalTypes.DefinedComponent) *[]oscalTypes.DefinedComponent {
-	originalMap := make(map[string]oscalTypes.DefinedComponent)
-
-	for _, component := range *original {
-		originalMap[component.UUID] = component
+	for _, component := range *original.Components {
+		originalMap[component.Title] = component
 	}
 
 	latestMap := make(map[string]oscalTypes.DefinedComponent)
 
-	for _, component := range *latest {
-		latestMap[component.UUID] = component
+	for _, component := range *latest.Components {
+		latestMap[component.Title] = component
 	}
 
 	tempItems := make([]oscalTypes.DefinedComponent, 0)
@@ -515,7 +430,23 @@ func mergeDefinedComponents(original *[]oscalTypes.DefinedComponent, latest *[]o
 		tempItems = append(tempItems, item)
 	}
 
-	return &tempItems
+	// merge the back-matter resources
+	if original.BackMatter != nil && latest.BackMatter != nil {
+		original.BackMatter = &oscalTypes.BackMatter{
+			Resources: mergeResources(original.BackMatter.Resources, latest.BackMatter.Resources),
+		}
+	} else if original.BackMatter == nil && latest.BackMatter != nil {
+		original.BackMatter = latest.BackMatter
+	}
+
+	original.Components = &tempItems
+	original.Metadata.LastModified = time.Now()
+
+	// Artifact will be modified - need to update the UUID
+	original.UUID = uuid.NewUUID()
+
+	return original, nil
+
 }
 
 func mergeComponents(original *oscalTypes.DefinedComponent, latest *oscalTypes.DefinedComponent) *oscalTypes.DefinedComponent {
