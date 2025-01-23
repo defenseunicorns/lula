@@ -152,7 +152,7 @@ func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) error 
 // definition and re-writes any paths in the component definition to be relative to the component's directory
 // componentDir must be absolute paths
 // TODO: should componentDir be an attribute of the component definition?
-// TODO: Add templating? Should this be another attribute on ComponentDefinition?
+// TODO: Add templating
 func (c *ComponentDefinition) ImportComponentDefinitions(componentDir string) error {
 	if c.Model == nil {
 		return fmt.Errorf("cannot import component definitions, model is nil")

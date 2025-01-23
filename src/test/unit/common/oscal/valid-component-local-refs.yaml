@@ -40,7 +40,7 @@ component-definition:
               description: >-
                 Here is a description
               links:
-                - href: "#88AB3470-B96B-4D7C-BC36-02BF9563C46C"
+                - href: "#a414c932-1fc9-4698-9e39-18cb8abe4851"
                   rel: lula
                 - href: "../validation/validation.opa.yaml"
                   rel: lula
@@ -48,7 +48,7 @@ component-definition:
                   rel: lula
   back-matter:
     resources:
-      - uuid: 88AB3470-B96B-4D7C-BC36-02BF9563C46C
+      - uuid: a414c932-1fc9-4698-9e39-18cb8abe4851
         description: Sample back-matter resource
         rlinks:
           - href: catalog.yaml

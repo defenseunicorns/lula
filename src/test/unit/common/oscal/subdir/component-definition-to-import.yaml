@@ -1,5 +1,5 @@
 component-definition:
-  uuid: 4312ef1b-2b4a-43ea-8844-47b408aad959
+  uuid: 0be102c6-6c6b-4832-aeea-09aecb91c490
   metadata:
     title: Test File
     last-modified: "2025-01-21T12:00:00Z"
@@ -12,25 +12,23 @@ component-definition:
         links:
           - href: https://github.com/defenseunicorns/lula
             rel: website
-  import-component-definitions:
-    - href: component-definition-to-import.yaml
   components:
-    - uuid: ea343aeb-1a59-441b-9877-e7c7839446e5
+    - uuid: 5337ed95-cb72-4b66-848f-2e725a6ed9fc
       type: software
-      title: Component 1
+      title: Component 2
       description: |
-        Component 1
+        Component 2
       purpose: Validate compliance controls
       responsible-roles:
         - role-id: provider
           party-uuids:
             - C18F4A9F-A402-415B-8D13-B51739D689FF # matches parties entry for Defense Unicorns
       control-implementations:
-        - uuid: 40325fd1-a0ea-4b63-8362-0c445191973f
+        - uuid: 1e3320a1-7197-4cac-b667-48680c73734f
           source: basic-profile.yaml
           description: Validate generic security requirements
           implemented-requirements:
-            - uuid: 592e7cb5-24c7-4e31-845b-14aa6b9f284d
+            - uuid: 2fa6fcd6-0161-43d4-9e4f-281973d406ae
               control-id: ID-1
               remarks: >-
                 Here are some remarks about this control.
@@ -38,6 +36,3 @@ component-definition:
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, 
                 quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum 
                 dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              links:
-                - href: validation.yaml
-                  rel: lula
