@@ -25,40 +25,28 @@ func (a ApiDomain) makeRequests(ctx context.Context) (types.DomainResources, err
 	default:
 		collection := make(map[string]interface{}, 0)
 
-		// defaultOpts apply to all requests, but may be overridden by adding an
-		// options block to an individual request.
-		var defaultOpts *ApiOpts
-		if a.Spec.Options == nil {
-			// This isn't likely to be nil in real usage, since CreateApiDomain
-			// parses and mutates specs.
-			defaultOpts = new(ApiOpts)
-			defaultOpts.timeout = &defaultTimeout
-		} else {
-			defaultOpts = a.Spec.Options
-		}
-
 		// configure the default HTTP client using any top-level Options. Individual
 		// requests with overrides (in request.Options.Headers) will get bespoke clients.
-		defaultClient := clientFromOpts(defaultOpts)
+		defaultClient := clientFromOpts(a.defaults)
 		var errs error
-		for _, request := range a.Spec.Requests {
+		for _, request := range a.requests {
 			var r io.Reader
-			if request.Body != "" {
-				r = bytes.NewBufferString(request.Body)
+			if request.body != "" {
+				r = bytes.NewBufferString(request.body)
 			}
 
 			var headers map[string]string
 			var client http.Client
 
-			if request.Options == nil {
-				headers = defaultOpts.Headers
+			if request.opts == nil {
+				headers = a.defaults.headers
 				client = defaultClient
 			} else {
-				headers = request.Options.Headers
-				client = clientFromOpts(request.Options)
+				headers = request.opts.headers
+				client = clientFromOpts(request.opts)
 			}
 
-			response, err := doHTTPReq(ctx, client, request.Method, *request.reqURL, r, headers, request.reqParameters)
+			response, err := doHTTPReq(ctx, client, request.method, *request.reqURL, r, headers, request.reqParameters)
 			if err != nil {
 				errs = errors.Join(errs, err)
 			}
@@ -69,10 +57,10 @@ func (a ApiDomain) makeRequests(ctx context.Context) (types.DomainResources, err
 					"raw":        response.Raw,
 					"response":   response.Response,
 				}
-				collection[request.Name] = dr
+				collection[request.name] = dr
 			} else {
 				// If the entire response is empty, return a validly empty resource
-				collection[request.Name] = types.DomainResources{"status": 0}
+				collection[request.name] = types.DomainResources{"status": 0}
 			}
 		}
 		return collection, errs

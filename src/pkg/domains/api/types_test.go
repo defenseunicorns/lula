@@ -9,6 +9,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/defenseunicorns/lula/src/pkg/common/schemas"
 	"github.com/defenseunicorns/lula/src/types"
 )
 
@@ -16,22 +17,22 @@ func TestCreateApiDomain(t *testing.T) {
 	t.Parallel()
 
 	tests := map[string]struct {
-		spec        *ApiSpec
+		spec        *schemas.ApiSpec
 		expectedErr bool
 	}{
 		"nil spec": {
 			spec:        nil,
 			expectedErr: true,
 		},
-		"empty requests": {
-			spec: &ApiSpec{
-				Requests: []Request{},
+		"empty schemas.Requests": {
+			spec: &schemas.ApiSpec{
+				Requests: []schemas.Request{},
 			},
 			expectedErr: true,
 		},
-		"invalid request - no name": {
-			spec: &ApiSpec{
-				Requests: []Request{
+		"invalid schemas.Request - no name": {
+			spec: &schemas.ApiSpec{
+				Requests: []schemas.Request{
 					{
 						URL: "test",
 					},
@@ -39,9 +40,9 @@ func TestCreateApiDomain(t *testing.T) {
 			},
 			expectedErr: true,
 		},
-		"invalid request - no url": {
-			spec: &ApiSpec{
-				Requests: []Request{
+		"invalid schemas.Request - no url": {
+			spec: &schemas.ApiSpec{
+				Requests: []schemas.Request{
 					{
 						Name: "test",
 					},
@@ -49,9 +50,9 @@ func TestCreateApiDomain(t *testing.T) {
 			},
 			expectedErr: true,
 		},
-		"valid request": {
-			spec: &ApiSpec{
-				Requests: []Request{
+		"valid schemas.Request": {
+			spec: &schemas.ApiSpec{
+				Requests: []schemas.Request{
 					{
 						Name: "test",
 						URL:  "test",
@@ -97,13 +98,13 @@ func TestGetResources(t *testing.T) {
 	defer svr.Close()
 
 	t.Run("pass", func(t *testing.T) {
-		api, err := CreateApiDomain(&ApiSpec{
-			Requests: []Request{
+		api, err := CreateApiDomain(&schemas.ApiSpec{
+			Requests: []schemas.Request{
 				{
 					Name:   apiReqName,
 					URL:    svr.URL,
 					Params: map[string]string{"label": "test"},
-					Options: &ApiOpts{
+					Options: &schemas.ApiOpts{
 						Headers: map[string]string{"Accept": "application/json"},
 					},
 				},
@@ -128,8 +129,8 @@ func TestGetResources(t *testing.T) {
 	})
 
 	t.Run("fail", func(t *testing.T) {
-		api, err := CreateApiDomain(&ApiSpec{
-			Requests: []Request{
+		api, err := CreateApiDomain(&schemas.ApiSpec{
+			Requests: []schemas.Request{
 				{
 					Name: apiReqName,
 					URL:  svr.URL,

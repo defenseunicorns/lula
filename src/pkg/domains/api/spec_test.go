@@ -7,6 +7,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
+
+	"github.com/defenseunicorns/lula/src/pkg/common/schemas"
 )
 
 func TestValidateAndMutateOptions(t *testing.T) {
@@ -14,31 +16,28 @@ func TestValidateAndMutateOptions(t *testing.T) {
 	var zeroTimeout = 0 * time.Second
 
 	tests := map[string]struct {
-		input, want *ApiOpts
-		expectErrs  int
+		input      *schemas.ApiOpts
+		want       *opts
+		expectErrs int
 	}{
-		"error: nil input": {
+		"nil input, defaults are populated": {
 			nil,
-			nil,
-			1,
+			&opts{timeout: &defaultTimeout},
+			0,
 		},
 		"empty input, defaults are populated": {
-			&ApiOpts{},
-			&ApiOpts{
-				timeout: &defaultTimeout,
-			},
+			&schemas.ApiOpts{},
+			&opts{timeout: &defaultTimeout},
 			0,
 		},
 		"valid input, internal fields populated": {
-			&ApiOpts{
+			&schemas.ApiOpts{
 				Timeout: "10s",
 				Proxy:   "https://my.proxy",
 				Headers: map[string]string{"cache": "no-cache"},
 			},
-			&ApiOpts{
-				Timeout: "10s",
-				Proxy:   "https://my.proxy",
-				Headers: map[string]string{"cache": "no-cache"},
+			&opts{
+				headers: map[string]string{"cache": "no-cache"},
 				timeout: &testTimeout,
 				proxyURL: &url.URL{
 					Scheme: "https",
@@ -48,13 +47,11 @@ func TestValidateAndMutateOptions(t *testing.T) {
 			0,
 		},
 		"several errors": {
-			&ApiOpts{
+			&schemas.ApiOpts{
 				Proxy:   "close//butinvalid\n\r",
 				Timeout: "more nonsense",
 			},
-			&ApiOpts{
-				Proxy:   "close//butinvalid\n\r",
-				Timeout: "more nonsense",
+			&opts{
 				timeout: &zeroTimeout, // there was an error, so this is set to zero value
 			},
 			2,
@@ -63,7 +60,7 @@ func TestValidateAndMutateOptions(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			err := validateAndMutateOptions(test.input)
+			got, err := validateAndMutateOptions(test.input)
 			if err != nil {
 				if test.expectErrs == 0 {
 					t.Fatalf("expected success, got error(s) %s", err)
@@ -81,7 +78,7 @@ func TestValidateAndMutateOptions(t *testing.T) {
 				}
 			}
 
-			if diff := cmp.Diff(test.want, test.input, cmp.AllowUnexported(ApiOpts{})); diff != "" {
+			if diff := cmp.Diff(test.want, got, cmp.AllowUnexported(opts{})); diff != "" {
 				t.Fatalf("wrong result(-got +want):\n%s\n", diff)
 			}
 		})
@@ -95,29 +92,30 @@ func TestValidateAndMutateSpec(t *testing.T) {
 	testParams.Add("key", "value")
 
 	tests := map[string]struct {
-		input, want *ApiSpec
-		expectErrs  int
+		input      *schemas.ApiSpec
+		want       ApiDomain
+		expectErrs int
 	}{
 		"error: nil input": {
-			nil, nil, 1,
+			nil, ApiDomain{}, 1,
 		},
 		"error: empty input, nil options": {
-			&ApiSpec{},
-			&ApiSpec{
-				Options: &ApiOpts{timeout: &defaultTimeout},
+			&schemas.ApiSpec{},
+			ApiDomain{
+				defaults: &opts{timeout: &defaultTimeout},
 			},
 			1,
 		},
 		"success (get with params)": {
-			&ApiSpec{
-				Requests: []Request{
+			&schemas.ApiSpec{
+				Requests: []schemas.Request{
 					{
 						Name: "healthcheck",
 						URL:  "http://example.com/health",
 						Params: map[string]string{
 							"key": "value",
 						},
-						Options: &ApiOpts{
+						Options: &schemas.ApiOpts{
 							Headers: map[string]string{
 								"cache-control": "no-hit",
 							},
@@ -125,37 +123,33 @@ func TestValidateAndMutateSpec(t *testing.T) {
 					},
 				},
 			},
-			&ApiSpec{
-				Requests: []Request{
+			ApiDomain{
+				requests: []request{
 					{
-						Name: "healthcheck",
-						URL:  "http://example.com/health",
-						Params: map[string]string{
-							"key": "value",
-						},
+						name:          "healthcheck",
 						reqURL:        healthcheckUrl,
 						reqParameters: testParams,
-						Options: &ApiOpts{
-							Headers: map[string]string{
+						opts: &opts{
+							headers: map[string]string{
 								"cache-control": "no-hit",
 							},
 							timeout: &defaultTimeout,
 						},
-						Method: "GET",
+						method: "GET",
 					},
 				},
-				Options: &ApiOpts{timeout: &defaultTimeout},
+				defaults: &opts{timeout: &defaultTimeout},
 			},
 			0,
 		},
 		"success (post with body)": {
-			&ApiSpec{
-				Requests: []Request{
+			&schemas.ApiSpec{
+				Requests: []schemas.Request{
 					{
 						Name: "healthcheck",
 						URL:  "http://example.com/health",
 						Body: `{"some":"thing"}`,
-						Options: &ApiOpts{
+						Options: &schemas.ApiOpts{
 							Headers: map[string]string{
 								"cache-control": "no-hit",
 							},
@@ -164,23 +158,22 @@ func TestValidateAndMutateSpec(t *testing.T) {
 					},
 				},
 			},
-			&ApiSpec{
-				Requests: []Request{
+			ApiDomain{
+				requests: []request{
 					{
-						Name:   "healthcheck",
-						URL:    "http://example.com/health",
-						Body:   `{"some":"thing"}`,
+						name:   "healthcheck",
+						body:   `{"some":"thing"}`,
 						reqURL: healthcheckUrl,
-						Options: &ApiOpts{
-							Headers: map[string]string{
+						opts: &opts{
+							headers: map[string]string{
 								"cache-control": "no-hit",
 							},
 							timeout: &defaultTimeout,
 						},
-						Method: "POST",
+						method: "POST",
 					},
 				},
-				Options: &ApiOpts{timeout: &defaultTimeout},
+				defaults: &opts{timeout: &defaultTimeout},
 			},
 			0,
 		},
@@ -188,7 +181,7 @@ func TestValidateAndMutateSpec(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			err := validateAndMutateSpec(test.input)
+			got, err := validateAndMutateSpec(test.input)
 			if err != nil {
 				if test.expectErrs == 0 {
 					t.Fatalf("expected success, got error(s) %s", err)
@@ -206,7 +199,7 @@ func TestValidateAndMutateSpec(t *testing.T) {
 				}
 			}
 
-			if diff := cmp.Diff(test.want, test.input, cmp.AllowUnexported(ApiSpec{}, ApiOpts{}, Request{})); diff != "" {
+			if diff := cmp.Diff(test.want, got, cmp.AllowUnexported(ApiDomain{}, opts{}, request{})); diff != "" {
 				t.Fatalf("wrong result(-got +want):\n%s\n", diff)
 			}
 		})
