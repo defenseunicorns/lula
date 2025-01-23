@@ -8,7 +8,6 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"reflect"
 	"regexp"
 	"strings"
 
@@ -248,63 +247,4 @@ func RemapPath(path string, baseDir string, newDir string) (string, error) {
 func isUUIDReference(path string) bool {
 	path = strings.TrimPrefix(path, UUID_PREFIX)
 	return checkValidUuid(path)
-}
-
-// TraverseAndUpdatePaths uses reflection to traverse the obj based on the path and update file path references
-func TraverseAndUpdatePaths(obj interface{}, path string, baseDir string, newDir string) error {
-	// Split the path into components
-	components := splitPath(path)
-
-	// Start reflection traversal
-	return reflectTraverseAndUpdate(reflect.ValueOf(obj), components, baseDir, newDir)
-}
-
-func reflectTraverseAndUpdate(val reflect.Value, components []string, baseDir string, newDir string) error {
-	if val.Kind() == reflect.Ptr {
-		val = val.Elem() // Dereference pointer
-	}
-
-	if val.Kind() == reflect.Slice || val.Kind() == reflect.Array {
-		// Handle slices/arrays
-		for i := 0; i < val.Len(); i++ {
-			err := reflectTraverseAndUpdate(val.Index(i), components, baseDir, newDir)
-			if err != nil {
-				return err
-			}
-		}
-		return nil
-	}
-
-	if val.Kind() == reflect.Struct && len(components) > 0 {
-		// Handle structs
-		field := val.FieldByName(components[0])
-		if !field.IsValid() {
-			return fmt.Errorf("field %s not found", components[0])
-		}
-		return reflectTraverseAndUpdate(field, components[1:], baseDir, newDir)
-	}
-
-	if len(components) == 0 {
-		if val.Kind() == reflect.String {
-			// Update the final field (assumed to be a string)
-			newValue, err := RemapPath(val.String(), baseDir, newDir)
-			if err != nil {
-				return fmt.Errorf("error remapping path %s: %v", val.String(), err)
-			}
-			if val.CanSet() {
-				val.SetString(newValue)
-				return nil
-			}
-			return fmt.Errorf("unable to set string value")
-		}
-		// if val.Kind() is not a string, we can't update it
-		return fmt.Errorf("cannot update type %s", val.Kind())
-	}
-
-	return nil
-}
-
-func splitPath(path string) []string {
-	components := strings.Split(path, ".")
-	return components
 }

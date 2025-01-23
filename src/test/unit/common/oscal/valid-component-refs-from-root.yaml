@@ -1,16 +1,15 @@
 # add the descriptions inline
 component-definition:
-  uuid: E6A291A4-2BC8-43A0-B4B2-FD67CAAE1F8F
+  uuid: e1267126-af15-4708-81b3-ead124442dec
   metadata:
     title: OSCAL Demo Tool
-    last-modified: "2022-09-13T12:00:00Z"
-    version: "20220913"
+    last-modified: "2025-01-21T12:00:00Z"
+    version: "20250121"
     oscal-version: 1.1.1
     links:
       - href: src/test/unit/common/oscal/subdir/basic-profile.yaml
         rel: profile
     parties:
-      # Should be consistent across all of the packages, but where is ground truth?
       - uuid: C18F4A9F-A402-415B-8D13-B51739D689FF
         type: organization
         name: Defense Unicorns
@@ -18,12 +17,13 @@ component-definition:
           - href: https://github.com/defenseunicorns/lula
             rel: website
   components:
-    - uuid: A9D5204C-7E5B-4C43-BD49-34DF759B9F04
+    - uuid: 7a8f8801-8e85-4e3c-8784-1a73f2f5be96
       type: software
-      title: lula
-      description: |
-        Defense Unicorns lula
+      title: Test Component
+      description: Some test component
       purpose: Validate compliance controls
+      links:
+        - href: README.md
       responsible-roles:
         - role-id: provider
           party-uuids:
@@ -31,18 +31,18 @@ component-definition:
           links:
             - href: README.md
       control-implementations:
-        - uuid: A584FEDC-8CEA-4B0C-9F07-85C2C4AE751A
+        - uuid: 60c4021d-9bc7-4377-bd2c-da0076e1ded2
           source: src/test/unit/common/oscal/valid-profile.yaml
           description: Validate generic security requirements
           implemented-requirements:
-            - uuid: 42C2FFDC-5F05-44DF-A67F-EEC8660AEFFD
+            - uuid: b3d49a20-84c8-4ff8-a266-ee0810ce7779
               control-id: ID-1
               remarks: >-
                 Here are some remarks about this control.
               description: >-
                 Here is a description
               links:
-                - href: "#88AB3470-B96B-4D7C-BC36-02BF9563C46C"
+                - href: "#a414c932-1fc9-4698-9e39-18cb8abe4851"
                   rel: lula
                 - href: "src/test/unit/common/validation/validation.opa.yaml"
                   rel: lula
@@ -50,7 +50,7 @@ component-definition:
                   rel: lula
   back-matter:
     resources:
-      - uuid: 88AB3470-B96B-4D7C-BC36-02BF9563C46C
+      - uuid: a414c932-1fc9-4698-9e39-18cb8abe4851
         description: Sample back-matter resource
         rlinks:
           - href: src/test/unit/common/oscal/catalog.yaml

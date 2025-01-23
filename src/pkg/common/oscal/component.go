@@ -103,46 +103,334 @@ func (c *ComponentDefinition) HandleExisting(path string) error {
 }
 
 // RewritePaths finds all the paths in the component definition relative to the baseDir and updates them to be relative to the newDir
-func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) error {
+// baseDir and newDir must be absolute paths
+func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) (err error) {
 	if c.Model == nil {
 		return fmt.Errorf("cannot remap paths, model is nil")
 	}
 
-	// Find all the paths in the component definition
-	pathsToRemap := []string{
-		"BackMatter.Resources.Rlinks.Href",
-		"Metadata.Links.Href",
-		"Metadata.Revisions.Links.Href",
-		"Metadata.Roles.Links.Href",
-		"Metadata.Locations.Links.Href",
-		"Metadata.Parties.Links.Href",
-		"Metadata.ResponsibleParties.Links.Href",
-		"Metadata.Actions.Links.Href",
-		"ImportComponentDefinitions.Href",
-		"Components.Links.Href",
-		"Components.ResponsibleRoles.Links.Href",
-		"Components.ControlImplementations.Links.Href",
-		"Components.ControlImplementations.Source",
-		"Components.ControlImplementations.ImplementedRequirements.Links.Href",
-		"Components.ControlImplementations.ImplementedRequirements.ResponsibleRoles.Links.Href",
-		"Components.ControlImplementations.ImplementedRequirements.Statements.Links.Href",
-		"Components.ControlImplementations.ImplementedRequirements.Statements.ResponsibleRoles.Links.Href",
-		"Capabilities.Links.Href",
-		"Capabilities.ControlImplementations.Links.Href",
-		"Capabilities.ControlImplementations.Source",
-		"Capabilities.ControlImplementations.ImplementedRequirements.Links.Href",
-		"Capabilities.ControlImplementations.ImplementedRequirements.ResponsibleRoles.Links.Href",
-		"Capabilities.ControlImplementations.ImplementedRequirements.Statements.Links.Href",
-		"Capabilities.ControlImplementations.ImplementedRequirements.Statements.ResponsibleRoles.Links.Href",
+	// BackMatter.Resources.Rlinks.Href
+	if c.Model.BackMatter != nil && c.Model.BackMatter.Resources != nil {
+		for _, resource := range *c.Model.BackMatter.Resources {
+			if resource.Rlinks != nil {
+				for i, rlink := range *resource.Rlinks {
+					rlink.Href, err = common.RemapPath(rlink.Href, baseDir, newDir)
+					if err != nil {
+						return fmt.Errorf("error remapping path %s: %v", rlink.Href, err)
+					}
+					(*resource.Rlinks)[i] = rlink
+				}
+			}
+		}
 	}
 
-	// For pathsToRemap, find all paths in the component defintion and run common.RemapPath on them
-	for _, path := range pathsToRemap {
-		err := common.TraverseAndUpdatePaths(c.Model, path, baseDir, newDir)
+	// Metadata.Links.Href
+	if c.Model.Metadata.Links != nil {
+		for i, link := range *c.Model.Metadata.Links {
+			link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+			if err != nil {
+				return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+			}
+			(*c.Model.Metadata.Links)[i] = link
+		}
+	}
+
+	// Metadata.Revisions.Links.Href
+	if c.Model.Metadata.Revisions != nil {
+		for _, revision := range *c.Model.Metadata.Revisions {
+			if revision.Links != nil {
+				for i, link := range *revision.Links {
+					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+					if err != nil {
+						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+					}
+					(*revision.Links)[i] = link
+				}
+			}
+		}
+	}
+
+	// Metadata.Roles.Links.Href
+	if c.Model.Metadata.Roles != nil {
+		for _, role := range *c.Model.Metadata.Roles {
+			if role.Links != nil {
+				for i, link := range *role.Links {
+					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+					if err != nil {
+						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+					}
+					(*role.Links)[i] = link
+				}
+			}
+		}
+	}
+
+	// Metadata.Locations.Links.Href
+	if c.Model.Metadata.Locations != nil {
+		for _, location := range *c.Model.Metadata.Locations {
+			if location.Links != nil {
+				for i, link := range *location.Links {
+					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+					if err != nil {
+						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+					}
+					(*location.Links)[i] = link
+				}
+			}
+		}
+	}
+
+	// Metadata.Parties.Links.Href
+	if c.Model.Metadata.Parties != nil {
+		for _, party := range *c.Model.Metadata.Parties {
+			if party.Links != nil {
+				for i, link := range *party.Links {
+					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+					if err != nil {
+						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+					}
+					(*party.Links)[i] = link
+				}
+			}
+		}
+	}
+
+	// Metadata.ResponsibleParties.Links.Href
+	if c.Model.Metadata.ResponsibleParties != nil {
+		for _, responsibleParty := range *c.Model.Metadata.ResponsibleParties {
+			if responsibleParty.Links != nil {
+				for i, link := range *responsibleParty.Links {
+					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+					if err != nil {
+						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+					}
+					(*responsibleParty.Links)[i] = link
+				}
+			}
+		}
+	}
+
+	// Metadata.Actions.Links.Href
+	if c.Model.Metadata.Actions != nil {
+		for _, action := range *c.Model.Metadata.Actions {
+			if action.Links != nil {
+				for i, link := range *action.Links {
+					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+					if err != nil {
+						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+					}
+					(*action.Links)[i] = link
+				}
+			}
+		}
+	}
+
+	// ImportComponentDefinitions.Href
+	if c.Model.ImportComponentDefinitions != nil {
+		for i, importCompDef := range *c.Model.ImportComponentDefinitions {
+			importCompDef.Href, err = common.RemapPath(importCompDef.Href, baseDir, newDir)
+			if err != nil {
+				return fmt.Errorf("error remapping path %s: %v", importCompDef.Href, err)
+			}
+			(*c.Model.ImportComponentDefinitions)[i] = importCompDef
+		}
+	}
+
+	// DefinedComponent Links and Component's ImplementedRequirements
+	if c.Model.Components != nil {
+		for _, component := range *c.Model.Components {
+			if component.Links != nil {
+				for i, link := range *component.Links {
+					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+					if err != nil {
+						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+					}
+					(*component.Links)[i] = link
+				}
+			}
+
+			if component.ResponsibleRoles != nil {
+				for _, role := range *component.ResponsibleRoles {
+					if role.Links != nil {
+						for i, link := range *role.Links {
+							link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+							if err != nil {
+								return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+							}
+							(*role.Links)[i] = link
+						}
+					}
+				}
+			}
+
+			err = rewritePathsControlImplementations(component.ControlImplementations, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	// Capability Links and Capability's ImplementedRequirements
+	if c.Model.Capabilities != nil {
+		for _, capability := range *c.Model.Capabilities {
+			if capability.Links != nil {
+				for i, link := range *capability.Links {
+					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+					if err != nil {
+						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+					}
+					(*capability.Links)[i] = link
+				}
+			}
+			err = rewritePathsControlImplementations(capability.ControlImplementations, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+func rewritePathsControlImplementations(controlImplementations *[]oscalTypes.ControlImplementationSet, baseDir string, newDir string) (err error) {
+	if controlImplementations == nil {
+		return
+	}
+
+	for idx, impl := range *controlImplementations {
+		if impl.Links != nil {
+			for i, link := range *impl.Links {
+				link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+				if err != nil {
+					return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+				}
+				(*impl.Links)[i] = link
+			}
+		}
+
+		if impl.Source != "" {
+			source, err := common.RemapPath(impl.Source, baseDir, newDir)
+			if err != nil {
+				return fmt.Errorf("error remapping path %s: %v", impl.Source, err)
+			}
+			(*controlImplementations)[idx].Source = source
+		}
+
+		if impl.ImplementedRequirements != nil {
+			for _, req := range impl.ImplementedRequirements {
+				if req.Links != nil {
+					for i, link := range *req.Links {
+						link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+						if err != nil {
+							return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+						}
+						(*req.Links)[i] = link
+					}
+				}
+
+				if req.ResponsibleRoles != nil {
+					for _, role := range *req.ResponsibleRoles {
+						if role.Links != nil {
+							for i, link := range *role.Links {
+								link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+								if err != nil {
+									return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+								}
+								(*role.Links)[i] = link
+							}
+						}
+					}
+				}
+
+				if req.Statements != nil {
+					for _, statement := range *req.Statements {
+						if statement.Links != nil {
+							for i, link := range *statement.Links {
+								link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+								if err != nil {
+									return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+								}
+								(*statement.Links)[i] = link
+							}
+						}
+
+						if statement.ResponsibleRoles != nil {
+							for _, role := range *statement.ResponsibleRoles {
+								if role.Links != nil {
+									for i, link := range *role.Links {
+										link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+										if err != nil {
+											return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+										}
+										(*role.Links)[i] = link
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return nil
+}
+
+// ImportComponentDefinitions is a function that imports component definitions into the current component
+// definition and re-writes any paths in the component definition to be relative to the component's directory
+// componentDir must be absolute paths
+// TODO: should componentDir be an attribute of the component definition?
+// TODO: Add templating
+func (c *ComponentDefinition) ImportComponentDefinitions(componentDir string) error {
+	if c.Model == nil {
+		return fmt.Errorf("cannot import component definitions, model is nil")
+	}
+
+	if c.Model.ImportComponentDefinitions == nil {
+		return nil
+	}
+
+	// Add data from each to the current component definition
+	for _, importCompDef := range *c.Model.ImportComponentDefinitions {
+		// Create a new component definition from the imported component definition Href
+		importCompDefHrefAbs, err := filepath.Abs(filepath.Join(componentDir, importCompDef.Href))
 		if err != nil {
 			return err
 		}
+
+		data, err := os.ReadFile(importCompDefHrefAbs)
+		if err != nil {
+			return err
+		}
+
+		importedComponent := NewComponentDefinition()
+		err = importedComponent.NewModel(data)
+		if err != nil {
+			return err
+		}
+
+		// Remap paths in the imported component definition to be relative to the working directory
+		err = importedComponent.RewritePaths(filepath.Dir(importCompDefHrefAbs), componentDir)
+		if err != nil {
+			return err
+		}
+
+		// Recursively import any component definitions
+		err = importedComponent.ImportComponentDefinitions(componentDir)
+		if err != nil {
+			return err
+		}
+
+		// Merge the imported component definition into the current component definition
+		newComponent, err := MergeComponentDefinitions(c.Model, importedComponent.Model)
+		if err != nil {
+			return err
+		}
+
+		c.Model = newComponent
 	}
+
+	// Remove file list from import-component-definitions
+	c.Model.ImportComponentDefinitions = nil
 
 	return nil
 }
@@ -164,25 +452,50 @@ func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinitio
 
 // This function should perform a merge of two component-definitions where maintaining the original component-definition is the primary concern.
 func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest *oscalTypes.ComponentDefinition) (*oscalTypes.ComponentDefinition, error) {
-
-	originalMap := make(map[string]oscalTypes.DefinedComponent)
-
-	if original.Components == nil {
+	// Nil check on original and latest
+	if original == nil {
 		return original, fmt.Errorf("original component-definition is nil")
 	}
 
-	if latest.Components == nil {
+	if latest == nil {
 		return original, fmt.Errorf("latest component-definition is nil")
 	}
 
-	for _, component := range *original.Components {
-		originalMap[component.Title] = component
+	// merge the component-definition.components
+	if original.Components != nil && latest.Components != nil {
+		original.Components = mergeDefinedComponents(original.Components, latest.Components)
+	} else if original.Components == nil && latest.Components != nil {
+		original.Components = latest.Components
+	}
+
+	// merge the component-definition.back-matter resources
+	if original.BackMatter != nil && latest.BackMatter != nil {
+		original.BackMatter = &oscalTypes.BackMatter{
+			Resources: mergeResources(original.BackMatter.Resources, latest.BackMatter.Resources),
+		}
+	} else if original.BackMatter == nil && latest.BackMatter != nil {
+		original.BackMatter = latest.BackMatter
+	}
+
+	// Artifact will be modified - need to update the timestamp and UUID
+	original.Metadata.LastModified = time.Now()
+	original.UUID = uuid.NewUUID()
+
+	return original, nil
+
+}
+
+func mergeDefinedComponents(original *[]oscalTypes.DefinedComponent, latest *[]oscalTypes.DefinedComponent) *[]oscalTypes.DefinedComponent {
+	originalMap := make(map[string]oscalTypes.DefinedComponent)
+
+	for _, component := range *original {
+		originalMap[component.UUID] = component
 	}
 
 	latestMap := make(map[string]oscalTypes.DefinedComponent)
 
-	for _, component := range *latest.Components {
-		latestMap[component.Title] = component
+	for _, component := range *latest {
+		latestMap[component.UUID] = component
 	}
 
 	tempItems := make([]oscalTypes.DefinedComponent, 0)
@@ -202,23 +515,7 @@ func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest 
 		tempItems = append(tempItems, item)
 	}
 
-	// merge the back-matter resources
-	if original.BackMatter != nil && latest.BackMatter != nil {
-		original.BackMatter = &oscalTypes.BackMatter{
-			Resources: mergeResources(original.BackMatter.Resources, latest.BackMatter.Resources),
-		}
-	} else if original.BackMatter == nil && latest.BackMatter != nil {
-		original.BackMatter = latest.BackMatter
-	}
-
-	original.Components = &tempItems
-	original.Metadata.LastModified = time.Now()
-
-	// Artifact will be modified - need to update the UUID
-	original.UUID = uuid.NewUUID()
-
-	return original, nil
-
+	return &tempItems
 }
 
 func mergeComponents(original *oscalTypes.DefinedComponent, latest *oscalTypes.DefinedComponent) *oscalTypes.DefinedComponent {
