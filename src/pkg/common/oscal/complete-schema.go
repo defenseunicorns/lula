@@ -216,12 +216,10 @@ func MergeOscalModels(existingModel *oscalTypes.OscalModels, newModel *oscalType
 			return newModel, nil
 		}
 
-		merged, err := MergeComponentDefinitions(existingModel.ComponentDefinition, newModel.ComponentDefinition)
+		err := MergeComponentDefinitions(existingModel.ComponentDefinition, newModel.ComponentDefinition)
 		if err != nil {
 			return nil, err
 		}
-		// Re-assign after processing errors
-		existingModel.ComponentDefinition = merged
 	}
 
 	// Assessment Results

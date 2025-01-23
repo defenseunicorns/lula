@@ -93,11 +93,11 @@ func (c *ComponentDefinition) HandleExisting(path string) error {
 		if err != nil {
 			return err
 		}
-		model, err := MergeComponentDefinitions(compDef.Model, c.Model)
+		err = MergeComponentDefinitions(compDef.Model, c.Model)
 		if err != nil {
 			return err
 		}
-		c.Model = model
+		c.Model = compDef.Model
 	}
 	return nil
 }
@@ -441,7 +441,7 @@ func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinitio
 		if mergedCompDef == nil {
 			mergedCompDef = compDef
 		} else {
-			mergedCompDef, err = MergeComponentDefinitions(mergedCompDef, compDef)
+			err = MergeComponentDefinitions(mergedCompDef, compDef)
 			if err != nil {
 				return nil, err
 			}
@@ -451,14 +451,14 @@ func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinitio
 }
 
 // This function should perform a merge of two component-definitions where maintaining the original component-definition is the primary concern.
-func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest *oscalTypes.ComponentDefinition) (*oscalTypes.ComponentDefinition, error) {
+func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest *oscalTypes.ComponentDefinition) error {
 	// Nil check on original and latest
 	if original == nil {
-		return original, fmt.Errorf("original component-definition is nil")
+		return fmt.Errorf("original component-definition is nil")
 	}
 
 	if latest == nil {
-		return original, fmt.Errorf("latest component-definition is nil")
+		return fmt.Errorf("latest component-definition is nil")
 	}
 
 	// merge the component-definition.components
@@ -481,7 +481,7 @@ func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest 
 	original.Metadata.LastModified = time.Now()
 	original.UUID = uuid.NewUUID()
 
-	return original, nil
+	return nil
 
 }
 
