@@ -249,7 +249,6 @@ func TestMergeComponentDefinitions(t *testing.T) {
 		expectedImplementedRequirements       int
 		expectedTargetControlImplementations  int
 		expectedTargetImplementedRequirements int
-		uniqueComponent                       bool
 		wantErr                               bool
 	}{
 		{
@@ -263,7 +262,6 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			expectedImplementedRequirements:       4,
 			expectedTargetControlImplementations:  1,
 			expectedTargetImplementedRequirements: 4,
-			uniqueComponent:                       false,
 			wantErr:                               false,
 		},
 		{
@@ -277,7 +275,6 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			expectedImplementedRequirements:       6,
 			expectedTargetControlImplementations:  1,
 			expectedTargetImplementedRequirements: 6,
-			uniqueComponent:                       false,
 			wantErr:                               false,
 		},
 		{
@@ -291,7 +288,6 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			expectedControlImplementations:        2,
 			expectedTargetImplementedRequirements: 4,
 			expectedTargetControlImplementations:  1,
-			uniqueComponent:                       true,
 			wantErr:                               false,
 		},
 		{
@@ -324,11 +320,6 @@ func TestMergeComponentDefinitions(t *testing.T) {
 					return
 				}
 				t.Errorf("ComponentFromCatalog() generated should not be nil")
-			}
-
-			// Check if component is supposed to be unique - override UUID if not
-			if !tt.uniqueComponent {
-				(*generated.Model.Components)[0].UUID = (*validComponent.Components)[0].UUID
 			}
 
 			merged, err := oscal.MergeComponentDefinitions(validComponent, generated.Model)
