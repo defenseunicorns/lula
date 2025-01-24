@@ -11,12 +11,13 @@ import (
 	"github.com/defenseunicorns/go-oscal/src/pkg/uuid"
 	"github.com/defenseunicorns/go-oscal/src/pkg/versioning"
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
+	k8syaml "k8s.io/apimachinery/pkg/util/yaml"
+
 	"github.com/defenseunicorns/lula/src/internal/template"
 	"github.com/defenseunicorns/lula/src/pkg/common"
 	"github.com/defenseunicorns/lula/src/pkg/common/network"
 	"github.com/defenseunicorns/lula/src/pkg/common/oscal"
 	"github.com/defenseunicorns/lula/src/pkg/message"
-	k8syaml "k8s.io/apimachinery/pkg/util/yaml"
 )
 
 type RenderedContent string
@@ -124,7 +125,7 @@ func (c *Composer) ComposeComponentDefinitions(ctx context.Context, compDef *osc
 				}
 
 				// Merge the component definitions
-				compDef, err = oscal.MergeComponentDefinitions(compDef, importDef)
+				err = oscal.MergeComponentDefinitions(compDef, importDef)
 				if err != nil {
 					return err
 				}

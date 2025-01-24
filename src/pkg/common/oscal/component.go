@@ -93,11 +93,11 @@ func (c *ComponentDefinition) HandleExisting(path string) error {
 		if err != nil {
 			return err
 		}
-		model, err := MergeComponentDefinitions(compDef.Model, c.Model)
+		err = MergeComponentDefinitions(compDef.Model, c.Model)
 		if err != nil {
 			return err
 		}
-		c.Model = model
+		c.Model = compDef.Model
 	}
 	return nil
 }
@@ -108,7 +108,7 @@ func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinitio
 		if mergedCompDef == nil {
 			mergedCompDef = compDef
 		} else {
-			mergedCompDef, err = MergeComponentDefinitions(mergedCompDef, compDef)
+			err = MergeComponentDefinitions(mergedCompDef, compDef)
 			if err != nil {
 				return nil, err
 			}
@@ -118,26 +118,51 @@ func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinitio
 }
 
 // This function should perform a merge of two component-definitions where maintaining the original component-definition is the primary concern.
-func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest *oscalTypes.ComponentDefinition) (*oscalTypes.ComponentDefinition, error) {
+func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest *oscalTypes.ComponentDefinition) error {
+	// Nil check on original and latest
+	if original == nil {
+		return fmt.Errorf("original component-definition is nil")
+	}
 
+	if latest == nil {
+		return fmt.Errorf("latest component-definition is nil")
+	}
+
+	// merge the component-definition.components
+	if original.Components != nil && latest.Components != nil {
+		original.Components = mergeDefinedComponents(original.Components, latest.Components)
+	} else if original.Components == nil && latest.Components != nil {
+		original.Components = latest.Components
+	}
+
+	// merge the component-definition.back-matter resources
+	if original.BackMatter != nil && latest.BackMatter != nil {
+		original.BackMatter = &oscalTypes.BackMatter{
+			Resources: mergeResources(original.BackMatter.Resources, latest.BackMatter.Resources),
+		}
+	} else if original.BackMatter == nil && latest.BackMatter != nil {
+		original.BackMatter = latest.BackMatter
+	}
+
+	// Artifact will be modified - need to update the timestamp and UUID
+	original.Metadata.LastModified = time.Now()
+	original.UUID = uuid.NewUUID()
+
+	return nil
+
+}
+
+func mergeDefinedComponents(original *[]oscalTypes.DefinedComponent, latest *[]oscalTypes.DefinedComponent) *[]oscalTypes.DefinedComponent {
 	originalMap := make(map[string]oscalTypes.DefinedComponent)
 
-	if original.Components == nil {
-		return original, fmt.Errorf("original component-definition is nil")
-	}
-
-	if latest.Components == nil {
-		return original, fmt.Errorf("latest component-definition is nil")
-	}
-
-	for _, component := range *original.Components {
-		originalMap[component.Title] = component
+	for _, component := range *original {
+		originalMap[component.UUID] = component
 	}
 
 	latestMap := make(map[string]oscalTypes.DefinedComponent)
 
-	for _, component := range *latest.Components {
-		latestMap[component.Title] = component
+	for _, component := range *latest {
+		latestMap[component.UUID] = component
 	}
 
 	tempItems := make([]oscalTypes.DefinedComponent, 0)
@@ -157,23 +182,7 @@ func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest 
 		tempItems = append(tempItems, item)
 	}
 
-	// merge the back-matter resources
-	if original.BackMatter != nil && latest.BackMatter != nil {
-		original.BackMatter = &oscalTypes.BackMatter{
-			Resources: mergeResources(original.BackMatter.Resources, latest.BackMatter.Resources),
-		}
-	} else if original.BackMatter == nil && latest.BackMatter != nil {
-		original.BackMatter = latest.BackMatter
-	}
-
-	original.Components = &tempItems
-	original.Metadata.LastModified = time.Now()
-
-	// Artifact will be modified - need to update the UUID
-	original.UUID = uuid.NewUUID()
-
-	return original, nil
-
+	return &tempItems
 }
 
 func mergeComponents(original *oscalTypes.DefinedComponent, latest *oscalTypes.DefinedComponent) *oscalTypes.DefinedComponent {
