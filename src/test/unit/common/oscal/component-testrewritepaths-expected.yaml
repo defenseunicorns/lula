@@ -1,0 +1,87 @@
+# add the descriptions inline
+component-definition:
+  uuid: e1267126-af15-4708-81b3-ead124442dec
+  metadata:
+    title: TestRewritePaths
+    last-modified: "2025-01-21T12:00:00Z"
+    version: "20250121"
+    oscal-version: 1.1.3
+    links:
+      - href: ../app/profile.yaml
+        rel: profile
+    parties:
+      - uuid: C18F4A9F-A402-415B-8D13-B51739D689FF
+        type: organization
+        name: Defense Unicorns
+        links:
+          - href: https://github.com/defenseunicorns/lula
+            rel: website
+  import-component-definitions:
+    - href: ../app/component.yaml
+  components:
+    - uuid: 7a8f8801-8e85-4e3c-8784-1a73f2f5be96
+      type: software
+      title: Test Component 1
+      description: Some test component
+      purpose: Validate compliance controls
+      links:
+        - href: ../app/component-readme.md
+      control-implementations:
+        - uuid: 60c4021d-9bc7-4377-bd2c-da0076e1ded2
+          source: ../app/catalog.yaml
+          description: Validate generic security requirements
+          implemented-requirements:
+            - uuid: b3d49a20-84c8-4ff8-a266-ee0810ce7779
+              control-id: ID-1
+              remarks: Here are some remarks about this control.
+              description: Here is a description
+              links:
+                - href: "#a414c932-1fc9-4698-9e39-18cb8abe4851"
+                  rel: lula
+                - href: "../app/validation.yaml"
+                  rel: lula
+    - uuid: 103118f6-6b65-4be9-bb89-1db91c22a526
+      type: software
+      title: Test Component 2
+      description: Another test component
+      responsible-roles:
+        - role-id: provider
+          party-uuids:
+            - C18F4A9F-A402-415B-8D13-B51739D689FF # matches parties entry for Defense Unicorns
+          links:
+            - href: ../app/role-readme.md
+  capabilities:
+    - uuid: babfb1c7-7d15-4a5a-a51c-dbef8a8e49c2
+      name: Test Capability 1
+      description: Some test capability
+      links:
+        - href: ../app/capability-readme.md
+      control-implementations:
+        - uuid: c2719ebc-2204-441b-937c-f5bbe8ba72bb
+          source: ../app/catalog.yaml
+          description: Validate generic security requirements
+          implemented-requirements:
+            - uuid: a9f9f07a-5779-4e08-8ba5-e261cd1f1dfc
+              control-id: ID-2
+              remarks: Here are some remarks about this control.
+              description: Here is a description
+              links:
+                - href: "#a414c932-1fc9-4698-9e39-18cb8abe4851"
+                  rel: lula
+                - href: "../app/validation.yaml"
+                  rel: lula
+    - uuid: 1f524690-37c2-4557-a3c9-f5fdbfefc499
+      name: Test Capability 2
+      description: Another test capability
+      links:
+        - href: ../app/capability2-readme.md
+  back-matter:
+    resources:
+      - uuid: a414c932-1fc9-4698-9e39-18cb8abe4851
+        description: Sample back-matter relative resource
+        rlinks:
+          - href: ../app/catalog.yaml
+      - uuid: 819291c3-1e74-4cde-ab10-be1e950efcbe
+        description: Sample back-matter absolute resource
+        rlinks:
+          - href: /app/catalog.yaml

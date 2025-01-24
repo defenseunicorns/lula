@@ -109,123 +109,19 @@ func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) (err e
 		return fmt.Errorf("cannot remap paths, model is nil")
 	}
 
-	// BackMatter.Resources.Rlinks.Href
-	if c.Model.BackMatter != nil && c.Model.BackMatter.Resources != nil {
-		for _, resource := range *c.Model.BackMatter.Resources {
-			if resource.Rlinks != nil {
-				for i, rlink := range *resource.Rlinks {
-					rlink.Href, err = common.RemapPath(rlink.Href, baseDir, newDir)
-					if err != nil {
-						return fmt.Errorf("error remapping path %s: %v", rlink.Href, err)
-					}
-					(*resource.Rlinks)[i] = rlink
-				}
-			}
-		}
+	// Rewrite BackMatter paths
+	err = RewritePathsBackMatter(c.Model.BackMatter, baseDir, newDir)
+	if err != nil {
+		return err
 	}
 
-	// Metadata.Links.Href
-	if c.Model.Metadata.Links != nil {
-		for i, link := range *c.Model.Metadata.Links {
-			link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-			if err != nil {
-				return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-			}
-			(*c.Model.Metadata.Links)[i] = link
-		}
+	// Rewrite Metadata paths
+	err = RewritePathsMetadata(&c.Model.Metadata, baseDir, newDir)
+	if err != nil {
+		return err
 	}
 
-	// Metadata.Revisions.Links.Href
-	if c.Model.Metadata.Revisions != nil {
-		for _, revision := range *c.Model.Metadata.Revisions {
-			if revision.Links != nil {
-				for i, link := range *revision.Links {
-					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-					if err != nil {
-						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-					}
-					(*revision.Links)[i] = link
-				}
-			}
-		}
-	}
-
-	// Metadata.Roles.Links.Href
-	if c.Model.Metadata.Roles != nil {
-		for _, role := range *c.Model.Metadata.Roles {
-			if role.Links != nil {
-				for i, link := range *role.Links {
-					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-					if err != nil {
-						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-					}
-					(*role.Links)[i] = link
-				}
-			}
-		}
-	}
-
-	// Metadata.Locations.Links.Href
-	if c.Model.Metadata.Locations != nil {
-		for _, location := range *c.Model.Metadata.Locations {
-			if location.Links != nil {
-				for i, link := range *location.Links {
-					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-					if err != nil {
-						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-					}
-					(*location.Links)[i] = link
-				}
-			}
-		}
-	}
-
-	// Metadata.Parties.Links.Href
-	if c.Model.Metadata.Parties != nil {
-		for _, party := range *c.Model.Metadata.Parties {
-			if party.Links != nil {
-				for i, link := range *party.Links {
-					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-					if err != nil {
-						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-					}
-					(*party.Links)[i] = link
-				}
-			}
-		}
-	}
-
-	// Metadata.ResponsibleParties.Links.Href
-	if c.Model.Metadata.ResponsibleParties != nil {
-		for _, responsibleParty := range *c.Model.Metadata.ResponsibleParties {
-			if responsibleParty.Links != nil {
-				for i, link := range *responsibleParty.Links {
-					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-					if err != nil {
-						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-					}
-					(*responsibleParty.Links)[i] = link
-				}
-			}
-		}
-	}
-
-	// Metadata.Actions.Links.Href
-	if c.Model.Metadata.Actions != nil {
-		for _, action := range *c.Model.Metadata.Actions {
-			if action.Links != nil {
-				for i, link := range *action.Links {
-					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-					if err != nil {
-						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-					}
-					(*action.Links)[i] = link
-				}
-			}
-		}
-	}
-
-	// ImportComponentDefinitions.Href
+	// Rewrite ImportComponentDefinitions paths
 	if c.Model.ImportComponentDefinitions != nil {
 		for i, importCompDef := range *c.Model.ImportComponentDefinitions {
 			importCompDef.Href, err = common.RemapPath(importCompDef.Href, baseDir, newDir)
@@ -236,142 +132,41 @@ func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) (err e
 		}
 	}
 
-	// DefinedComponent Links and Component's ImplementedRequirements
+	// Rewrite DefinedComponent paths
 	if c.Model.Components != nil {
 		for _, component := range *c.Model.Components {
-			if component.Links != nil {
-				for i, link := range *component.Links {
-					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-					if err != nil {
-						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-					}
-					(*component.Links)[i] = link
-				}
+			err = RewritePathsLinks(component.Links, baseDir, newDir)
+			if err != nil {
+				return err
 			}
 
-			if component.ResponsibleRoles != nil {
-				for _, role := range *component.ResponsibleRoles {
-					if role.Links != nil {
-						for i, link := range *role.Links {
-							link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-							if err != nil {
-								return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-							}
-							(*role.Links)[i] = link
-						}
-					}
-				}
+			err = RewritePathsResponsibleRoles(component.ResponsibleRoles, baseDir, newDir)
+			if err != nil {
+				return err
 			}
 
-			err = rewritePathsControlImplementations(component.ControlImplementations, baseDir, newDir)
+			err = RewritePathsControlImplementationSet(component.ControlImplementations, baseDir, newDir)
 			if err != nil {
 				return err
 			}
 		}
 	}
 
-	// Capability Links and Capability's ImplementedRequirements
+	// Rewrite Capability paths
 	if c.Model.Capabilities != nil {
 		for _, capability := range *c.Model.Capabilities {
-			if capability.Links != nil {
-				for i, link := range *capability.Links {
-					link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-					if err != nil {
-						return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-					}
-					(*capability.Links)[i] = link
-				}
+			err = RewritePathsLinks(capability.Links, baseDir, newDir)
+			if err != nil {
+				return err
 			}
-			err = rewritePathsControlImplementations(capability.ControlImplementations, baseDir, newDir)
+
+			err = RewritePathsControlImplementationSet(capability.ControlImplementations, baseDir, newDir)
 			if err != nil {
 				return err
 			}
 		}
 	}
 
-	return nil
-}
-
-func rewritePathsControlImplementations(controlImplementations *[]oscalTypes.ControlImplementationSet, baseDir string, newDir string) (err error) {
-	if controlImplementations == nil {
-		return
-	}
-
-	for idx, impl := range *controlImplementations {
-		if impl.Links != nil {
-			for i, link := range *impl.Links {
-				link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-				if err != nil {
-					return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-				}
-				(*impl.Links)[i] = link
-			}
-		}
-
-		if impl.Source != "" {
-			source, err := common.RemapPath(impl.Source, baseDir, newDir)
-			if err != nil {
-				return fmt.Errorf("error remapping path %s: %v", impl.Source, err)
-			}
-			(*controlImplementations)[idx].Source = source
-		}
-
-		if impl.ImplementedRequirements != nil {
-			for _, req := range impl.ImplementedRequirements {
-				if req.Links != nil {
-					for i, link := range *req.Links {
-						link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-						if err != nil {
-							return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-						}
-						(*req.Links)[i] = link
-					}
-				}
-
-				if req.ResponsibleRoles != nil {
-					for _, role := range *req.ResponsibleRoles {
-						if role.Links != nil {
-							for i, link := range *role.Links {
-								link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-								if err != nil {
-									return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-								}
-								(*role.Links)[i] = link
-							}
-						}
-					}
-				}
-
-				if req.Statements != nil {
-					for _, statement := range *req.Statements {
-						if statement.Links != nil {
-							for i, link := range *statement.Links {
-								link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-								if err != nil {
-									return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-								}
-								(*statement.Links)[i] = link
-							}
-						}
-
-						if statement.ResponsibleRoles != nil {
-							for _, role := range *statement.ResponsibleRoles {
-								if role.Links != nil {
-									for i, link := range *role.Links {
-										link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
-										if err != nil {
-											return fmt.Errorf("error remapping path %s: %v", link.Href, err)
-										}
-										(*role.Links)[i] = link
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
 	return nil
 }
 

@@ -1,11 +1,14 @@
 package oscal
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
 	"strings"
 
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
+
+	"github.com/defenseunicorns/lula/src/pkg/common"
 )
 
 const (
@@ -158,4 +161,230 @@ func compareNistFormat(a, b string) bool {
 	}
 
 	return false
+}
+
+// RewritePathsBackMatter rewrites the paths found in oscalTypes.BackMatter (originally relative to baseDir) to be relative to newDir
+func RewritePathsBackMatter(backMatter *oscalTypes.BackMatter, baseDir string, newDir string) (err error) {
+	if backMatter == nil {
+		return nil
+	}
+
+	// BackMatter.Resources.Rlinks.Href
+	if backMatter.Resources != nil {
+		for _, resource := range *backMatter.Resources {
+			if resource.Rlinks != nil {
+				for i, rlink := range *resource.Rlinks {
+					rlink.Href, err = common.RemapPath(rlink.Href, baseDir, newDir)
+					if err != nil {
+						return fmt.Errorf("error remapping path %s: %v", rlink.Href, err)
+					}
+					(*resource.Rlinks)[i] = rlink
+				}
+			}
+		}
+	}
+
+	return nil
+}
+
+// RewritePathsMetadata rewrites the paths found in oscalTypes.Metadata (originally relative to baseDir) to be relative to newDir
+func RewritePathsMetadata(metadata *oscalTypes.Metadata, baseDir string, newDir string) (err error) {
+	if metadata == nil {
+		return nil
+	}
+
+	// Metadata.Links.Href
+	if metadata.Links != nil {
+		err = RewritePathsLinks(metadata.Links, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Metadata.Revisions.Links.Href
+	if metadata.Revisions != nil {
+		for _, revision := range *metadata.Revisions {
+			err = RewritePathsLinks(revision.Links, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	// Metadata.Roles.Links.Href
+	if metadata.Roles != nil {
+		for i, role := range *metadata.Roles {
+			err = RewritePathsLinks(role.Links, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+			(*metadata.Roles)[i] = role
+		}
+	}
+
+	// Metadata.Locations.Links.Href
+	if metadata.Locations != nil {
+		for i, location := range *metadata.Locations {
+			err = RewritePathsLinks(location.Links, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+			(*metadata.Locations)[i] = location
+		}
+	}
+
+	// Metadata.Parties.Links.Href
+	if metadata.Parties != nil {
+		for i, party := range *metadata.Parties {
+			err = RewritePathsLinks(party.Links, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+			(*metadata.Parties)[i] = party
+		}
+	}
+
+	// Metadata.ResponsibleParties.Links.Href
+	if metadata.ResponsibleParties != nil {
+		err = RewritePathsResponsibleParties(metadata.ResponsibleParties, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Metadata.Actions.Links.Href
+	if metadata.Actions != nil {
+		for i, action := range *metadata.Actions {
+			err = RewritePathsLinks(action.Links, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+			(*metadata.Actions)[i] = action
+		}
+	}
+
+	return nil
+}
+
+// RewritePathsLinks rewrites the paths found in oscalTypes.Link (originally relative to baseDir) to be relative to newDir
+func RewritePathsLinks(links *[]oscalTypes.Link, baseDir string, newDir string) (err error) {
+	if links == nil {
+		return nil
+	}
+
+	for i, link := range *links {
+		link.Href, err = common.RemapPath(link.Href, baseDir, newDir)
+		if err != nil {
+			return fmt.Errorf("error remapping path %s: %v", link.Href, err)
+		}
+		(*links)[i] = link
+	}
+	return nil
+}
+
+// RewritePathsResponsibleParties rewrites the paths found in oscalTypes.ResponsibleParty (originally relative to baseDir) to be relative to newDir
+func RewritePathsResponsibleParties(responsibleParties *[]oscalTypes.ResponsibleParty, baseDir string, newDir string) (err error) {
+	if responsibleParties == nil {
+		return nil
+	}
+
+	for i, responsibleParty := range *responsibleParties {
+		err = RewritePathsLinks(responsibleParty.Links, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+		(*responsibleParties)[i] = responsibleParty
+	}
+	return nil
+}
+
+// RewritePathsResponsibleRoles rewrites the paths found in oscalTypes.ResponsibleRole (originally relative to baseDir) to be relative to newDir
+func RewritePathsResponsibleRoles(responsibleRoles *[]oscalTypes.ResponsibleRole, baseDir string, newDir string) (err error) {
+	if responsibleRoles == nil {
+		return nil
+	}
+
+	for i, responsibleRole := range *responsibleRoles {
+		err = RewritePathsLinks(responsibleRole.Links, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+		(*responsibleRoles)[i] = responsibleRole
+	}
+	return nil
+}
+
+// RewritePathsControlImplementationSet rewrites the paths found in oscalTypes.ControlImplementationSet (originally relative to baseDir) to be relative to newDir
+func RewritePathsControlImplementationSet(controlImplementationSet *[]oscalTypes.ControlImplementationSet, baseDir string, newDir string) (err error) {
+	if controlImplementationSet == nil {
+		return nil
+	}
+
+	for idx, impl := range *controlImplementationSet {
+		err = RewritePathsLinks(impl.Links, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+
+		if impl.Source != "" {
+			source, err := common.RemapPath(impl.Source, baseDir, newDir)
+			if err != nil {
+				return fmt.Errorf("error remapping path %s: %v", impl.Source, err)
+			}
+			(*controlImplementationSet)[idx].Source = source
+		}
+
+		err = RewritePathsImplementedRequirementControlImplementation(&impl.ImplementedRequirements, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// RewritePathsImplementedRequirementControlImplementation rewrites the paths found in oscalTypes.ImplementedRequirementControlImplementation (originally relative to baseDir) to be relative to newDir
+func RewritePathsImplementedRequirementControlImplementation(implementedRequirementControlImplementation *[]oscalTypes.ImplementedRequirementControlImplementation, baseDir string, newDir string) (err error) {
+	if implementedRequirementControlImplementation == nil {
+		return nil
+	}
+
+	for _, req := range *implementedRequirementControlImplementation {
+		err = RewritePathsLinks(req.Links, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+
+		err = RewritePathsResponsibleRoles(req.ResponsibleRoles, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+
+		err = RewritePathsControlStatementImplementation(req.Statements, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// RewritePathsControlStatementImplementation rewrites the paths found in oscalTypes.ControlStatementImplementation (originally relative to baseDir) to be relative to newDir
+func RewritePathsControlStatementImplementation(statements *[]oscalTypes.ControlStatementImplementation, baseDir string, newDir string) (err error) {
+	if statements == nil {
+		return nil
+	}
+
+	for _, statement := range *statements {
+		err = RewritePathsLinks(statement.Links, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+
+		err = RewritePathsResponsibleRoles(statement.ResponsibleRoles, baseDir, newDir)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

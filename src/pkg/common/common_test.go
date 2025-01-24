@@ -656,3 +656,11 @@ func FuzzReadValidationsFromYaml(f *testing.F) {
 		common.ReadValidationsFromYaml(a)
 	})
 }
+
+func FuzzRemapPath(f *testing.F) {
+	f.Add("foo", "bar", "baz")
+
+	f.Fuzz(func(t *testing.T, a string, b string, c string) {
+		common.RemapPath(a, b, c)
+	})
+}
