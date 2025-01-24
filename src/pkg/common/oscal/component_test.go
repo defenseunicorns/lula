@@ -249,6 +249,7 @@ func TestMergeComponentDefinitions(t *testing.T) {
 		expectedImplementedRequirements       int
 		expectedTargetControlImplementations  int
 		expectedTargetImplementedRequirements int
+		uniqueComponent                       bool
 		wantErr                               bool
 	}{
 		{
@@ -262,6 +263,7 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			expectedImplementedRequirements:       4,
 			expectedTargetControlImplementations:  1,
 			expectedTargetImplementedRequirements: 4,
+			uniqueComponent:                       false,
 			wantErr:                               false,
 		},
 		{
@@ -275,6 +277,7 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			expectedImplementedRequirements:       6,
 			expectedTargetControlImplementations:  1,
 			expectedTargetImplementedRequirements: 6,
+			uniqueComponent:                       false,
 			wantErr:                               false,
 		},
 		{
@@ -288,6 +291,7 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			expectedControlImplementations:        2,
 			expectedTargetImplementedRequirements: 4,
 			expectedTargetControlImplementations:  1,
+			uniqueComponent:                       true,
 			wantErr:                               false,
 		},
 		{
@@ -322,7 +326,12 @@ func TestMergeComponentDefinitions(t *testing.T) {
 				t.Errorf("ComponentFromCatalog() generated should not be nil")
 			}
 
-			merged, err := oscal.MergeComponentDefinitions(validComponent, generated.Model)
+			// Check if component is supposed to be unique - override UUID if not
+			if !tt.uniqueComponent {
+				(*generated.Model.Components)[0].UUID = (*validComponent.Components)[0].UUID
+			}
+
+			err = oscal.MergeComponentDefinitions(validComponent, generated.Model)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("MergeComponentDefinitions() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -333,9 +342,9 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			}
 
 			// Perform checks on quantities
-			components := (*merged.Components)
+			components := (*validComponent.Components)
 			if len(components) != tt.expectedComponents {
-				t.Errorf("MergeComponentDefinitions() expected %v components, got %v", tt.expectedComponents, len((*merged.Components)))
+				t.Errorf("MergeComponentDefinitions() expected %v components, got %v", tt.expectedComponents, len((*validComponent.Components)))
 			}
 			controlImplementations := make([]oscalTypes.ControlImplementationSet, 0)
 			var targetComponent oscalTypes.DefinedComponent
