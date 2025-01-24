@@ -680,6 +680,13 @@ func TestImportComponentDefinitions(t *testing.T) {
 	err = component.ImportComponentDefinitions(componentDirAbs)
 	require.NoError(t, err)
 
-	// Check the component is expected...
-	oscal.WriteOscalModelNew("test.yaml", &component)
+	// Check the component has all expected imports and path re-maps
+	expectedComponentBytes := loadTestData(t, "../../../test/unit/common/oscal/valid-component-imports-resolved.yaml")
+
+	var expectedComponent oscalTypes.OscalCompleteSchema
+	err = yaml.Unmarshal(expectedComponentBytes, &expectedComponent)
+	require.NoError(t, err)
+
+	// Compare the expected and actual component definitions
+	require.Equal(t, expectedComponent, *component.GetCompleteModel())
 }
