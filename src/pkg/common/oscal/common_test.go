@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
+	"github.com/stretchr/testify/require"
 
 	"github.com/defenseunicorns/lula/src/pkg/common/oscal"
 )
@@ -290,6 +291,552 @@ func TestSortControls(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestRewritePathsBackMatter(t *testing.T) {
+	t.Run("Rewrite paths in back matter", func(t *testing.T) {
+		backMatter := &oscalTypes.BackMatter{
+			Resources: &[]oscalTypes.Resource{
+				{
+					Rlinks: &[]oscalTypes.ResourceLink{
+						{
+							Href:      "link-text.yaml",
+							MediaType: "text/yaml",
+						},
+					},
+				},
+				{
+					Rlinks: &[]oscalTypes.ResourceLink{
+						{
+							Href:      "link-text2.yaml",
+							MediaType: "text/yaml",
+						},
+					},
+				},
+			},
+		}
+		expectedBackMatter := &oscalTypes.BackMatter{
+			Resources: &[]oscalTypes.Resource{
+				{
+					Rlinks: &[]oscalTypes.ResourceLink{
+						{
+							Href:      "../app/link-text.yaml",
+							MediaType: "text/yaml",
+						},
+					},
+				},
+				{
+					Rlinks: &[]oscalTypes.ResourceLink{
+						{
+							Href:      "../app/link-text2.yaml",
+							MediaType: "text/yaml",
+						},
+					},
+				},
+			},
+		}
+
+		err := oscal.RewritePathsBackMatter(backMatter, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedBackMatter, backMatter)
+	})
+
+	t.Run("Rewrite paths in empty back matter", func(t *testing.T) {
+		backMatter := &oscalTypes.BackMatter{}
+		expectedBackMatter := &oscalTypes.BackMatter{}
+
+		err := oscal.RewritePathsBackMatter(backMatter, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedBackMatter, backMatter)
+	})
+}
+
+func TestRewritePathsMetadata(t *testing.T) {
+	t.Run("Rewrite paths in full metadata", func(t *testing.T) {
+		metadata := oscalTypes.Metadata{
+			Links: &[]oscalTypes.Link{
+				{
+					Href: "link-text.yaml",
+					Rel:  "some link",
+				},
+			},
+			Locations: &[]oscalTypes.Location{
+				{
+					Title: "sample location",
+					Links: &[]oscalTypes.Link{
+						{
+							Href: "link-text.yaml",
+							Rel:  "some location link",
+						},
+					},
+				},
+			},
+			Parties: &[]oscalTypes.Party{
+				{
+					Name: "sample party",
+					Links: &[]oscalTypes.Link{
+						{
+							Href: "link-text.yaml",
+							Rel:  "some party link",
+						},
+					},
+				},
+			},
+			ResponsibleParties: &[]oscalTypes.ResponsibleParty{
+				{
+					Remarks: "sample responsible party",
+					Links: &[]oscalTypes.Link{
+						{
+							Href: "link-text.yaml",
+							Rel:  "some responsible party link",
+						},
+					},
+				},
+			},
+			Revisions: &[]oscalTypes.RevisionHistoryEntry{
+				{
+					Title: "sample revision",
+					Links: &[]oscalTypes.Link{
+						{
+							Href: "link-text.yaml",
+							Rel:  "some revision link",
+						},
+					},
+				},
+			},
+			Roles: &[]oscalTypes.Role{
+				{
+					ID: "sample-role",
+					Links: &[]oscalTypes.Link{
+						{
+							Href: "link-text.yaml",
+							Rel:  "some role link",
+						},
+					},
+				},
+			},
+		}
+		expectedMetadata := oscalTypes.Metadata{
+			Links: &[]oscalTypes.Link{
+				{
+					Href: "../app/link-text.yaml",
+					Rel:  "some link",
+				},
+			},
+			Locations: &[]oscalTypes.Location{
+				{
+					Title: "sample location",
+					Links: &[]oscalTypes.Link{
+						{
+							Href: "../app/link-text.yaml",
+							Rel:  "some location link",
+						},
+					},
+				},
+			},
+			Parties: &[]oscalTypes.Party{
+				{
+					Name: "sample party",
+					Links: &[]oscalTypes.Link{
+						{
+							Href: "../app/link-text.yaml",
+							Rel:  "some party link",
+						},
+					},
+				},
+			},
+			ResponsibleParties: &[]oscalTypes.ResponsibleParty{
+				{
+					Remarks: "sample responsible party",
+					Links: &[]oscalTypes.Link{
+						{
+							Href: "../app/link-text.yaml",
+							Rel:  "some responsible party link",
+						},
+					},
+				},
+			},
+			Revisions: &[]oscalTypes.RevisionHistoryEntry{
+				{
+					Title: "sample revision",
+					Links: &[]oscalTypes.Link{
+						{
+							Href: "../app/link-text.yaml",
+							Rel:  "some revision link",
+						},
+					},
+				},
+			},
+			Roles: &[]oscalTypes.Role{
+				{
+					ID: "sample-role",
+					Links: &[]oscalTypes.Link{
+						{
+							Href: "../app/link-text.yaml",
+							Rel:  "some role link",
+						},
+					},
+				},
+			},
+		}
+
+		err := oscal.RewritePathsMetadata(&metadata, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedMetadata, metadata)
+	})
+
+	t.Run("Rewrite paths in partial metadata", func(t *testing.T) {
+		metadata := oscalTypes.Metadata{
+			Links: &[]oscalTypes.Link{
+				{
+					Href: "link-text.yaml",
+					Rel:  "some link",
+				},
+			},
+		}
+		expectedMetadata := oscalTypes.Metadata{
+			Links: &[]oscalTypes.Link{
+				{
+					Href: "../app/link-text.yaml",
+					Rel:  "some link",
+				},
+			},
+		}
+
+		err := oscal.RewritePathsMetadata(&metadata, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedMetadata, metadata)
+	})
+
+	t.Run("Rewrite paths in empty metadata", func(t *testing.T) {
+		metadata := oscalTypes.Metadata{}
+		expectedMetadata := oscalTypes.Metadata{}
+
+		err := oscal.RewritePathsMetadata(&metadata, "/app", "/newapp")
+		require.NoError(t, err)
+
+		require.Equal(t, expectedMetadata, metadata)
+	})
+
+}
+
+func TestRewritePathsLinks(t *testing.T) {
+	t.Run("Rewrite paths in links", func(t *testing.T) {
+		links := &[]oscalTypes.Link{
+			{
+				Href: "link-text.yaml",
+				Rel:  "some link",
+			},
+			{
+				Href: "link-text2.yaml",
+				Rel:  "some link2",
+			},
+		}
+		expectedLinks := &[]oscalTypes.Link{
+			{
+				Href: "../app/link-text.yaml",
+				Rel:  "some link",
+			},
+			{
+				Href: "../app/link-text2.yaml",
+				Rel:  "some link2",
+			},
+		}
+
+		err := oscal.RewritePathsLinks(links, "/app", "/newapp")
+		require.NoError(t, err)
+
+		require.Equal(t, expectedLinks, links)
+	})
+
+	t.Run("Rewrite paths in empty links", func(t *testing.T) {
+		links := &[]oscalTypes.Link{}
+		expectedLinks := &[]oscalTypes.Link{}
+
+		err := oscal.RewritePathsLinks(links, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedLinks, links)
+	})
+}
+
+func TestRewritePathsResponsibleParties(t *testing.T) {
+	t.Run("Rewrite paths in responsible parties", func(t *testing.T) {
+		responsibleParties := &[]oscalTypes.ResponsibleParty{
+			{
+				Remarks: "sample responsible party",
+				Links: &[]oscalTypes.Link{
+					{
+						Href: "link-text.yaml",
+						Rel:  "some party link",
+					},
+				},
+			},
+		}
+		expectedResponsibleParties := &[]oscalTypes.ResponsibleParty{
+			{
+				Remarks: "sample responsible party",
+				Links: &[]oscalTypes.Link{
+					{
+						Href: "../app/link-text.yaml",
+						Rel:  "some party link",
+					},
+				},
+			},
+		}
+
+		err := oscal.RewritePathsResponsibleParties(responsibleParties, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedResponsibleParties, responsibleParties)
+	})
+
+	t.Run("Rewrite paths in empty responsible parties", func(t *testing.T) {
+		responsibleParties := &[]oscalTypes.ResponsibleParty{}
+		expectedResponsibleParties := &[]oscalTypes.ResponsibleParty{}
+
+		err := oscal.RewritePathsResponsibleParties(responsibleParties, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedResponsibleParties, responsibleParties)
+	})
+}
+
+func TestRewritePathsResponsibleRoles(t *testing.T) {
+	t.Run("Rewrite paths in responsible roles", func(t *testing.T) {
+		responsibleRoles := &[]oscalTypes.ResponsibleRole{
+			{
+				Remarks: "some role",
+				Links: &[]oscalTypes.Link{
+					{
+						Href: "link-text.yaml",
+						Rel:  "some role link",
+					},
+				},
+			},
+		}
+		expectedResponsibleRoles := &[]oscalTypes.ResponsibleRole{
+			{
+				Remarks: "some role",
+				Links: &[]oscalTypes.Link{
+					{
+						Href: "../app/link-text.yaml",
+						Rel:  "some role link",
+					},
+				},
+			},
+		}
+
+		err := oscal.RewritePathsResponsibleRoles(responsibleRoles, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedResponsibleRoles, responsibleRoles)
+	})
+
+	t.Run("Rewrite paths in empty responsible roles", func(t *testing.T) {
+		responsibleRoles := &[]oscalTypes.ResponsibleRole{}
+		expectedResponsibleRoles := &[]oscalTypes.ResponsibleRole{}
+
+		err := oscal.RewritePathsResponsibleRoles(responsibleRoles, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedResponsibleRoles, responsibleRoles)
+	})
+}
+
+func TestRewritePathsControlImplementationSet(t *testing.T) {
+	t.Run("Rewrite paths in control implementation set", func(t *testing.T) {
+		controlImplementationSet := &[]oscalTypes.ControlImplementationSet{
+			{
+				Links: &[]oscalTypes.Link{
+					{
+						Href: "link-text.yaml",
+						Rel:  "some link",
+					},
+				},
+				Source: "link-text.yaml",
+				ImplementedRequirements: []oscalTypes.ImplementedRequirementControlImplementation{
+					{
+						Links: &[]oscalTypes.Link{
+							{
+								Href: "link-text.yaml",
+								Rel:  "some link",
+							},
+						},
+					},
+				},
+			},
+		}
+		expectedControlImplementationSet := &[]oscalTypes.ControlImplementationSet{
+			{
+				Links: &[]oscalTypes.Link{
+					{
+						Href: "../app/link-text.yaml",
+						Rel:  "some link",
+					},
+				},
+				Source: "../app/link-text.yaml",
+				ImplementedRequirements: []oscalTypes.ImplementedRequirementControlImplementation{
+					{
+						Links: &[]oscalTypes.Link{
+							{
+								Href: "../app/link-text.yaml",
+								Rel:  "some link",
+							},
+						},
+					},
+				},
+			},
+		}
+
+		err := oscal.RewritePathsControlImplementationSet(controlImplementationSet, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedControlImplementationSet, controlImplementationSet)
+	})
+
+	t.Run("Rewrite paths in empty control implementation set", func(t *testing.T) {
+		controlImplementationSet := &[]oscalTypes.ControlImplementationSet{}
+		expectedControlImplementationSet := &[]oscalTypes.ControlImplementationSet{}
+
+		err := oscal.RewritePathsControlImplementationSet(controlImplementationSet, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedControlImplementationSet, controlImplementationSet)
+	})
+}
+
+func TestRewritePathsImplementedRequirementControlImplementation(t *testing.T) {
+	t.Run("Rewrite paths in implemented requirement control implementation", func(t *testing.T) {
+		implementedRequirementControlImplementation := []oscalTypes.ImplementedRequirementControlImplementation{
+			{
+				Links: &[]oscalTypes.Link{
+					{
+						Href: "link-text.yaml",
+						Rel:  "some link",
+					},
+				},
+				ResponsibleRoles: &[]oscalTypes.ResponsibleRole{
+					{
+						Remarks: "some role",
+						Links: &[]oscalTypes.Link{
+							{
+								Href: "link-text.yaml",
+								Rel:  "some link",
+							},
+						},
+					},
+				},
+				Statements: &[]oscalTypes.ControlStatementImplementation{
+					{
+						Links: &[]oscalTypes.Link{
+							{
+								Href: "link-text.yaml",
+								Rel:  "some statement link",
+							},
+						},
+					},
+				},
+			},
+		}
+		expectedImplementedRequirementControlImplementation := []oscalTypes.ImplementedRequirementControlImplementation{
+			{
+				Links: &[]oscalTypes.Link{
+					{
+						Href: "../app/link-text.yaml",
+						Rel:  "some link",
+					},
+				},
+				ResponsibleRoles: &[]oscalTypes.ResponsibleRole{
+					{
+						Remarks: "some role",
+						Links: &[]oscalTypes.Link{
+							{
+								Href: "../app/link-text.yaml",
+								Rel:  "some link",
+							},
+						},
+					},
+				},
+				Statements: &[]oscalTypes.ControlStatementImplementation{
+					{
+						Links: &[]oscalTypes.Link{
+							{
+								Href: "../app/link-text.yaml",
+								Rel:  "some statement link",
+							},
+						},
+					},
+				},
+			},
+		}
+
+		err := oscal.RewritePathsImplementedRequirementControlImplementation(&implementedRequirementControlImplementation, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedImplementedRequirementControlImplementation, implementedRequirementControlImplementation)
+	})
+
+	t.Run("Rewrite paths in empty implemented requirement control implementation", func(t *testing.T) {
+		implementedRequirementControlImplementation := []oscalTypes.ImplementedRequirementControlImplementation{}
+		expectedImplementedRequirementControlImplementation := []oscalTypes.ImplementedRequirementControlImplementation{}
+
+		err := oscal.RewritePathsImplementedRequirementControlImplementation(&implementedRequirementControlImplementation, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedImplementedRequirementControlImplementation, implementedRequirementControlImplementation)
+	})
+}
+
+func TestRewritePathsControlStatementImplementation(t *testing.T) {
+	t.Run("Rewrite paths in control statement implementation", func(t *testing.T) {
+		controlStatementImplementation := []oscalTypes.ControlStatementImplementation{
+			{
+				Links: &[]oscalTypes.Link{
+					{
+						Href: "link-text.yaml",
+						Rel:  "some link",
+					},
+				},
+				ResponsibleRoles: &[]oscalTypes.ResponsibleRole{
+					{
+						Remarks: "some role",
+						Links: &[]oscalTypes.Link{
+							{
+								Href: "link-text.yaml",
+								Rel:  "some link",
+							},
+						},
+					},
+				},
+			},
+		}
+		expectedControlStatementImplementation := []oscalTypes.ControlStatementImplementation{
+			{
+				Links: &[]oscalTypes.Link{
+					{
+						Href: "../app/link-text.yaml",
+						Rel:  "some link",
+					},
+				},
+				ResponsibleRoles: &[]oscalTypes.ResponsibleRole{
+					{
+						Remarks: "some role",
+						Links: &[]oscalTypes.Link{
+							{
+								Href: "../app/link-text.yaml",
+								Rel:  "some link",
+							},
+						},
+					},
+				},
+			},
+		}
+
+		err := oscal.RewritePathsControlStatementImplementation(&controlStatementImplementation, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedControlStatementImplementation, controlStatementImplementation)
+	})
+
+	t.Run("Rewrite paths in empty control statement implementation", func(t *testing.T) {
+		controlStatementImplementation := []oscalTypes.ControlStatementImplementation{}
+		expectedControlStatementImplementation := []oscalTypes.ControlStatementImplementation{}
+
+		err := oscal.RewritePathsControlStatementImplementation(&controlStatementImplementation, "/app", "/newapp")
+		require.NoError(t, err)
+		require.Equal(t, expectedControlStatementImplementation, controlStatementImplementation)
+	})
 }
 
 func FuzzCompareControls(f *testing.F) {
