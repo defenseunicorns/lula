@@ -651,7 +651,7 @@ func TestRewritePaths(t *testing.T) {
 }
 
 func TestImportComponentDefinitions(t *testing.T) {
-	componentWithImportsRel := "../../../test/unit/common/oscal/valid-component-with-imports.yaml"
+	componentWithImportsRel := "../../../test/unit/common/oscal/component-with-imports.yaml"
 
 	// Calculate the absolute paths
 	componentDirAbs, err := filepath.Abs(componentWithImportsRel)
@@ -667,13 +667,21 @@ func TestImportComponentDefinitions(t *testing.T) {
 	err = component.ImportComponentDefinitions(componentDirAbs)
 	require.NoError(t, err)
 
+	// Make deterministic to ensure same ordering of components
+	err = component.MakeDeterministic()
+	require.NoError(t, err)
+
 	// Check the component has all expected imports and path re-maps
-	expectedComponentBytes := loadTestData(t, "../../../test/unit/common/oscal/valid-component-imports-resolved.yaml")
+	expectedComponentBytes := loadTestData(t, "../../../test/unit/common/oscal/component-with-imports-resolved.yaml")
 
 	var expectedComponent oscalTypes.OscalCompleteSchema
 	err = yaml.Unmarshal(expectedComponentBytes, &expectedComponent)
 	require.NoError(t, err)
 
 	// Compare the expected and actual component definitions
+	// equate the UUIDs and timestamp since those are changed on merge
+	expectedComponent.ComponentDefinition.UUID = component.GetCompleteModel().ComponentDefinition.UUID
+	expectedComponent.ComponentDefinition.Metadata.LastModified = component.GetCompleteModel().ComponentDefinition.Metadata.LastModified
+
 	require.Equal(t, expectedComponent, *component.GetCompleteModel())
 }

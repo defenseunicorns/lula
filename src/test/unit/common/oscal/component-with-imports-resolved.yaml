@@ -127,7 +127,7 @@ component-definition:
       type: software
       uuid: A9D5204C-7E5B-4C43-BD49-34DF759B9F04
   metadata:
-    last-modified: 2025-01-22T16:11:22.712695-05:00
+    last-modified: "2025-01-21T12:00:00Z"
     oscal-version: 1.1.3
     parties:
       - links:
@@ -136,6 +136,6 @@ component-definition:
         name: Lula Development
         type: organization
         uuid: C18F4A9F-A402-415B-8D13-B51739D689FF
-    title: Test File
+    title: Test ComponentDefinition ImportComponentDefinitions
     version: "20250121"
-  uuid: 149d2bd2-de34-40c2-bc80-0569048f8282
+  uuid: 6785f823-f1d1-477b-bfd3-fdb55e33e0dd

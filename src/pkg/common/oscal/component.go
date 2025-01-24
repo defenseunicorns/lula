@@ -222,6 +222,9 @@ func (c *ComponentDefinition) ImportComponentDefinitions(componentDir string) er
 		}
 	}
 
+	// Clear the imported component definitions
+	c.Model.ImportComponentDefinitions = nil
+
 	return nil
 }
 
