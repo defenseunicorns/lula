@@ -563,6 +563,14 @@ func TestRemapPath(t *testing.T) {
 			expectedError: false,
 		},
 		{
+			name:          "Reverse Relative Path",
+			path:          "path/to/file.txt",
+			baseDir:       "/app",
+			newDir:        "/app/sub-path",
+			expectedPath:  "../path/to/file.txt",
+			expectedError: false,
+		},
+		{
 			name:          "Relative Path with deep nesting",
 			path:          "../../file.txt",
 			baseDir:       "/app/path/to/caller",
@@ -605,11 +613,12 @@ func TestRemapPath(t *testing.T) {
 		{
 			// This doesn't error because there's no check in the function to validate the path
 			// I think this is ok, because the old path wouldn't work anyway, so the new path not working doesn't matter(?)
+			// This is maybe more of a test to document the behavior of the function
 			name:          "Invalid path remap",
 			path:          "../../path/to/file.txt",
 			baseDir:       "/app",
 			newDir:        "/app2",
-			expectedPath:  "../../path/to/file.txt",
+			expectedPath:  "../path/to/file.txt",
 			expectedError: false,
 		},
 		{
@@ -658,9 +667,18 @@ func FuzzReadValidationsFromYaml(f *testing.F) {
 }
 
 func FuzzRemapPath(f *testing.F) {
-	f.Add("foo", "bar", "baz")
+	f.Add("foo.txt", "/app", "/newapp")
 
 	f.Fuzz(func(t *testing.T, a string, b string, c string) {
-		common.RemapPath(a, b, c)
+		// Forward mapping
+		gotPath, _ := common.RemapPath(a, b, c)
+
+		// Reverse mapping
+		reversePath, _ := common.RemapPath(gotPath, c, b)
+
+		// Assert that the reverse mapping equals the original `a`
+		if reversePath != a {
+			t.Errorf("Round-trip failed: gotPath=%q, reversePath=%q, original=%q", gotPath, reversePath, a)
+		}
 	})
 }
