@@ -175,13 +175,13 @@ func TestGetResourcesTextHTML(t *testing.T) {
 	defer svr.Close()
 
 	t.Run("pass", func(t *testing.T) {
-		api, err := CreateApiDomain(&ApiSpec{
-			Requests: []Request{
+		api, err := CreateApiDomain(&schemas.ApiSpec{
+			Requests: []schemas.Request{
 				{
 					Name:   apiReqName,
 					URL:    svr.URL,
 					Params: map[string]string{"label": "test"},
-					Options: &ApiOpts{
+					Options: &schemas.ApiOpts{
 						Headers: map[string]string{"Accept": "text/html"},
 					},
 				},
@@ -205,8 +205,8 @@ func TestGetResourcesTextHTML(t *testing.T) {
 	})
 
 	t.Run("fail", func(t *testing.T) {
-		api, err := CreateApiDomain(&ApiSpec{
-			Requests: []Request{
+		api, err := CreateApiDomain(&schemas.ApiSpec{
+			Requests: []schemas.Request{
 				{
 					Name: apiReqName,
 					URL:  svr.URL,
