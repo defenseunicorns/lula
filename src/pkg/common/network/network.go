@@ -176,7 +176,7 @@ func GetLocalFileDir(inputURL, baseDir string) string {
 		// If the scheme is file, check if the path is absolute
 		// To check absolute path, check both the host and the opaque fields
 		if url.Opaque != "" {
-			return returnFullPathIfRelative(url.Opaque, baseDir)
+			return returnDirIfRelative(url.Opaque, baseDir)
 		}
 		if url.Host == "" {
 			return ""
@@ -185,12 +185,12 @@ func GetLocalFileDir(inputURL, baseDir string) string {
 		return ""
 	}
 
-	return returnFullPathIfRelative(filepath.Join(url.Host, url.RequestURI()), baseDir)
+	return returnDirIfRelative(filepath.Join(url.Host, url.RequestURI()), baseDir)
 }
 
-// returnFullPathIfRelative returns the full path if the path provided is relative
+// returnDirIfRelative returns the directory of the path provided if it is relative
 // if the path is absolute this function returns an empty string to comply with the parent function
-func returnFullPathIfRelative(path, baseDir string) string {
+func returnDirIfRelative(path, baseDir string) string {
 	if filepath.IsAbs(path) {
 		return ""
 	}
