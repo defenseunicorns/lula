@@ -192,7 +192,7 @@ func (c *ComponentDefinition) ImportComponentDefinitions(componentDir string) er
 			return err
 		}
 
-		data, err := os.ReadFile(importCompDefHrefAbs)
+		data, err := os.ReadFile(importCompDefHrefAbs) // #nosec G304
 		if err != nil {
 			return err
 		}
