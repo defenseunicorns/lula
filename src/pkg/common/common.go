@@ -237,9 +237,15 @@ func RemapPath(path string, baseDir string, newDir string) (string, error) {
 		return "", err
 	}
 
-	// Append the original relative path to the computed relative path
-	remappedPath := filepath.Join(relativePath, path)
-	remappedPath = filepath.Clean(remappedPath)
+	// Create new absolute path
+	newAbsPath := filepath.Join(newDir, relativePath, path)
+	newAbsPath = filepath.Clean(newAbsPath)
+
+	// Find new relative path
+	remappedPath, err := filepath.Rel(newDir, newAbsPath)
+	if err != nil {
+		return "", err
+	}
 
 	return remappedPath, nil
 }

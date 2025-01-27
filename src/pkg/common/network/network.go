@@ -157,6 +157,7 @@ func FetchLocalFile(url *url.URL, config *fetchOpts) ([]byte, error) {
 }
 
 // GetLocalFileDir returns the directory of a local file
+// An empty string indicates to the caller that the URL is not a relative path
 // See URL for reference: https://pkg.go.dev/net/url#URL
 // Intent of check is to handle different specifications of file paths:
 // - file:///path/to/file
@@ -175,7 +176,7 @@ func GetLocalFileDir(inputURL, baseDir string) string {
 		// If the scheme is file, check if the path is absolute
 		// To check absolute path, check both the host and the opaque fields
 		if url.Opaque != "" {
-			return handlePath(url.Opaque, baseDir)
+			return returnFullPathIfRelative(url.Opaque, baseDir)
 		}
 		if url.Host == "" {
 			return ""
@@ -184,10 +185,12 @@ func GetLocalFileDir(inputURL, baseDir string) string {
 		return ""
 	}
 
-	return handlePath(filepath.Join(url.Host, url.RequestURI()), baseDir)
+	return returnFullPathIfRelative(filepath.Join(url.Host, url.RequestURI()), baseDir)
 }
 
-func handlePath(path, baseDir string) string {
+// returnFullPathIfRelative returns the full path if the path provided is relative
+// if the path is absolute this function returns an empty string to comply with the parent function
+func returnFullPathIfRelative(path, baseDir string) string {
 	if filepath.IsAbs(path) {
 		return ""
 	}
