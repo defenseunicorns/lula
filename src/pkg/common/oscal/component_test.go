@@ -664,7 +664,7 @@ func TestImportComponentDefinitions(t *testing.T) {
 	err = component.NewModel(componentBytes)
 	require.NoError(t, err)
 
-	err = component.ImportComponentDefinitions(componentDirAbs)
+	err = component.ResolveImportComponentDefinitions(componentDirAbs)
 	require.NoError(t, err)
 
 	// Make deterministic to ensure same ordering of components

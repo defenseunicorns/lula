@@ -170,12 +170,12 @@ func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) (err e
 	return nil
 }
 
-// ImportComponentDefinitions is a function that imports component definitions into the current component
-// definition and re-writes any paths in the component definition to be relative to the component's directory
+// ResolveImportComponentDefinitions is a function that resolves the import-component-definitions  by adding them into the current
+// component definition and re-writes any paths in the component definition to be relative to the component's directory
 // componentDir must be absolute paths
 // TODO: should componentDir be an attribute of the component definition?
 // TODO: Add templating
-func (c *ComponentDefinition) ImportComponentDefinitions(componentDir string) error {
+func (c *ComponentDefinition) ResolveImportComponentDefinitions(componentDir string) error {
 	if c.Model == nil {
 		return fmt.Errorf("cannot import component definitions, model is nil")
 	}
@@ -192,7 +192,9 @@ func (c *ComponentDefinition) ImportComponentDefinitions(componentDir string) er
 			return err
 		}
 
-		data, err := os.ReadFile(importCompDefHrefAbs) // #nosec G304
+		importCompDefHrefAbs = filepath.Clean(importCompDefHrefAbs)
+
+		data, err := os.ReadFile(importCompDefHrefAbs)
 		if err != nil {
 			return err
 		}
@@ -210,7 +212,7 @@ func (c *ComponentDefinition) ImportComponentDefinitions(componentDir string) er
 		}
 
 		// Recursively import any component definitions
-		err = importedComponent.ImportComponentDefinitions(componentDir)
+		err = importedComponent.ResolveImportComponentDefinitions(componentDir)
 		if err != nil {
 			return err
 		}
