@@ -7,8 +7,6 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/require"
-
-	"github.com/defenseunicorns/lula/src/pkg/common/schemas"
 )
 
 func TestValidateAndMutateOptions(t *testing.T) {
@@ -16,7 +14,7 @@ func TestValidateAndMutateOptions(t *testing.T) {
 	var zeroTimeout = 0 * time.Second
 
 	tests := map[string]struct {
-		input      *schemas.ApiOpts
+		input      *ApiOpts
 		want       *opts
 		expectErrs int
 	}{
@@ -26,12 +24,12 @@ func TestValidateAndMutateOptions(t *testing.T) {
 			0,
 		},
 		"empty input, defaults are populated": {
-			&schemas.ApiOpts{},
+			&ApiOpts{},
 			&opts{timeout: &defaultTimeout},
 			0,
 		},
 		"valid input, internal fields populated": {
-			&schemas.ApiOpts{
+			&ApiOpts{
 				Timeout: "10s",
 				Proxy:   "https://my.proxy",
 				Headers: map[string]string{"cache": "no-cache"},
@@ -47,7 +45,7 @@ func TestValidateAndMutateOptions(t *testing.T) {
 			0,
 		},
 		"several errors": {
-			&schemas.ApiOpts{
+			&ApiOpts{
 				Proxy:   "close//butinvalid\n\r",
 				Timeout: "more nonsense",
 			},
@@ -92,7 +90,7 @@ func TestValidateAndMutateSpec(t *testing.T) {
 	testParams.Add("key", "value")
 
 	tests := map[string]struct {
-		input      *schemas.ApiSpec
+		input      *ApiSpec
 		want       ApiDomain
 		expectErrs int
 	}{
@@ -100,22 +98,22 @@ func TestValidateAndMutateSpec(t *testing.T) {
 			nil, ApiDomain{}, 1,
 		},
 		"error: empty input, nil options": {
-			&schemas.ApiSpec{},
+			&ApiSpec{},
 			ApiDomain{
 				defaults: &opts{timeout: &defaultTimeout},
 			},
 			1,
 		},
 		"success (get with params)": {
-			&schemas.ApiSpec{
-				Requests: []schemas.Request{
+			&ApiSpec{
+				Requests: []Request{
 					{
 						Name: "healthcheck",
 						URL:  "http://example.com/health",
 						Params: map[string]string{
 							"key": "value",
 						},
-						Options: &schemas.ApiOpts{
+						Options: &ApiOpts{
 							Headers: map[string]string{
 								"cache-control": "no-hit",
 							},
@@ -143,13 +141,13 @@ func TestValidateAndMutateSpec(t *testing.T) {
 			0,
 		},
 		"success (post with body)": {
-			&schemas.ApiSpec{
-				Requests: []schemas.Request{
+			&ApiSpec{
+				Requests: []Request{
 					{
 						Name: "healthcheck",
 						URL:  "http://example.com/health",
 						Body: `{"some":"thing"}`,
-						Options: &schemas.ApiOpts{
+						Options: &ApiOpts{
 							Headers: map[string]string{
 								"cache-control": "no-hit",
 							},

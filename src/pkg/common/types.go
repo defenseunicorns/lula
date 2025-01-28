@@ -14,6 +14,7 @@ import (
 
 	"github.com/defenseunicorns/lula/src/config"
 	"github.com/defenseunicorns/lula/src/pkg/common/schemas"
+	"github.com/defenseunicorns/lula/src/pkg/domains/api"
 	"github.com/defenseunicorns/lula/src/pkg/domains/files"
 	kube "github.com/defenseunicorns/lula/src/pkg/domains/kubernetes"
 	"github.com/defenseunicorns/lula/src/pkg/providers/kyverno"
@@ -100,7 +101,7 @@ type Domain struct {
 	// KubernetesSpec is the specification for a Kubernetes domain, required if type is kubernetes
 	KubernetesSpec *kube.KubernetesSpec `json:"kubernetes-spec,omitempty" yaml:"kubernetes-spec,omitempty"`
 	// ApiSpec is the specification for an API domain, required if type is api
-	ApiSpec *schemas.ApiSpec `json:"api-spec,omitempty" yaml:"api-spec,omitempty"`
+	ApiSpec *api.ApiSpec `json:"api-spec,omitempty" yaml:"api-spec,omitempty"`
 	// FileSpec is the specification for a File domain, required if type is file
 	FileSpec *files.Spec `json:"file-spec,omitempty" yaml:"file-spec,omitempty"`
 }

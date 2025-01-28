@@ -9,7 +9,6 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/defenseunicorns/lula/src/pkg/common/schemas"
 	"github.com/defenseunicorns/lula/src/types"
 )
 
@@ -17,22 +16,22 @@ func TestCreateApiDomain(t *testing.T) {
 	t.Parallel()
 
 	tests := map[string]struct {
-		spec        *schemas.ApiSpec
+		spec        *ApiSpec
 		expectedErr bool
 	}{
 		"nil spec": {
 			spec:        nil,
 			expectedErr: true,
 		},
-		"empty schemas.Requests": {
-			spec: &schemas.ApiSpec{
-				Requests: []schemas.Request{},
+		"empty Requests": {
+			spec: &ApiSpec{
+				Requests: []Request{},
 			},
 			expectedErr: true,
 		},
-		"invalid schemas.Request - no name": {
-			spec: &schemas.ApiSpec{
-				Requests: []schemas.Request{
+		"invalid Request - no name": {
+			spec: &ApiSpec{
+				Requests: []Request{
 					{
 						URL: "test",
 					},
@@ -40,9 +39,9 @@ func TestCreateApiDomain(t *testing.T) {
 			},
 			expectedErr: true,
 		},
-		"invalid schemas.Request - no url": {
-			spec: &schemas.ApiSpec{
-				Requests: []schemas.Request{
+		"invalid Request - no url": {
+			spec: &ApiSpec{
+				Requests: []Request{
 					{
 						Name: "test",
 					},
@@ -50,9 +49,9 @@ func TestCreateApiDomain(t *testing.T) {
 			},
 			expectedErr: true,
 		},
-		"valid schemas.Request": {
-			spec: &schemas.ApiSpec{
-				Requests: []schemas.Request{
+		"valid Request": {
+			spec: &ApiSpec{
+				Requests: []Request{
 					{
 						Name: "test",
 						URL:  "test",
@@ -98,13 +97,13 @@ func TestGetResources(t *testing.T) {
 	defer svr.Close()
 
 	t.Run("pass", func(t *testing.T) {
-		api, err := CreateApiDomain(&schemas.ApiSpec{
-			Requests: []schemas.Request{
+		api, err := CreateApiDomain(&ApiSpec{
+			Requests: []Request{
 				{
 					Name:   apiReqName,
 					URL:    svr.URL,
 					Params: map[string]string{"label": "test"},
-					Options: &schemas.ApiOpts{
+					Options: &ApiOpts{
 						Headers: map[string]string{"Accept": "application/json"},
 					},
 				},
@@ -129,8 +128,8 @@ func TestGetResources(t *testing.T) {
 	})
 
 	t.Run("fail", func(t *testing.T) {
-		api, err := CreateApiDomain(&schemas.ApiSpec{
-			Requests: []schemas.Request{
+		api, err := CreateApiDomain(&ApiSpec{
+			Requests: []Request{
 				{
 					Name: apiReqName,
 					URL:  svr.URL,
@@ -175,13 +174,13 @@ func TestGetResourcesTextHTML(t *testing.T) {
 	defer svr.Close()
 
 	t.Run("pass", func(t *testing.T) {
-		api, err := CreateApiDomain(&schemas.ApiSpec{
-			Requests: []schemas.Request{
+		api, err := CreateApiDomain(&ApiSpec{
+			Requests: []Request{
 				{
 					Name:   apiReqName,
 					URL:    svr.URL,
 					Params: map[string]string{"label": "test"},
-					Options: &schemas.ApiOpts{
+					Options: &ApiOpts{
 						Headers: map[string]string{"Accept": "text/html"},
 					},
 				},
@@ -205,8 +204,8 @@ func TestGetResourcesTextHTML(t *testing.T) {
 	})
 
 	t.Run("fail", func(t *testing.T) {
-		api, err := CreateApiDomain(&schemas.ApiSpec{
-			Requests: []schemas.Request{
+		api, err := CreateApiDomain(&ApiSpec{
+			Requests: []Request{
 				{
 					Name: apiReqName,
 					URL:  svr.URL,

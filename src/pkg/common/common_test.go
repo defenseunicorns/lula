@@ -12,7 +12,6 @@ import (
 	"sigs.k8s.io/yaml"
 
 	"github.com/defenseunicorns/lula/src/pkg/common"
-	"github.com/defenseunicorns/lula/src/pkg/common/schemas"
 	"github.com/defenseunicorns/lula/src/pkg/domains/api"
 	kube "github.com/defenseunicorns/lula/src/pkg/domains/kubernetes"
 	"github.com/defenseunicorns/lula/src/pkg/providers/kyverno"
@@ -84,8 +83,8 @@ func TestGetDomain(t *testing.T) {
 			name: "valid api domain",
 			domain: common.Domain{
 				Type: "api",
-				ApiSpec: &schemas.ApiSpec{
-					Requests: []schemas.Request{
+				ApiSpec: &api.ApiSpec{
+					Requests: []api.Request{
 						{
 							Name: "local",
 							URL:  "http://localhost",
@@ -100,8 +99,8 @@ func TestGetDomain(t *testing.T) {
 			name: "invalid api domain",
 			domain: common.Domain{
 				Type: "api",
-				ApiSpec: &schemas.ApiSpec{
-					Requests: []schemas.Request{
+				ApiSpec: &api.ApiSpec{
+					Requests: []api.Request{
 						{
 							Name: "local",
 						},

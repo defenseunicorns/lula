@@ -6,8 +6,6 @@ import (
 	"net/url"
 	"strings"
 	"time"
-
-	"github.com/defenseunicorns/lula/src/pkg/common/schemas"
 )
 
 var defaultTimeout = 30 * time.Second
@@ -21,7 +19,7 @@ const (
 // other mutations or normalizations necessary. The original values are not modified.
 // validateAndMutateSpec will validate the entire object and may return multiple
 // errors.
-func validateAndMutateSpec(spec *schemas.ApiSpec) (api ApiDomain, errs error) {
+func validateAndMutateSpec(spec *ApiSpec) (api ApiDomain, errs error) {
 	if spec == nil {
 		return api, errors.New("spec is required")
 	}
@@ -92,7 +90,7 @@ func validateAndMutateSpec(spec *schemas.ApiSpec) (api ApiDomain, errs error) {
 	return api, errs
 }
 
-func validateAndMutateOptions(apiOpts *schemas.ApiOpts) (*opts, error) {
+func validateAndMutateOptions(apiOpts *ApiOpts) (*opts, error) {
 	if apiOpts == nil {
 		return &opts{timeout: &defaultTimeout}, nil
 	}
