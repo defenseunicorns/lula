@@ -110,13 +110,15 @@ func TestNewModel(t *testing.T) {
 			data:    []byte{},
 			wantErr: true,
 		},
-		// Additional test cases can be added here
+		// TODO: test newmodel that's formatted as a template w nil templatedata
+		// TODO: test newmodel with proper templated output(?)
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			model := oscal.NewComponentDefinition()
-			err := model.NewModel(tt.data)
+			model, err := oscal.NewComponentDefinition()
+			require.NoError(t, err)
+			err = model.NewModel(tt.data)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("NewComponentDefinition() error = %v, wantErr %v", err, tt.wantErr)
 				return

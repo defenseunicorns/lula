@@ -68,7 +68,7 @@ func TestGenerateSystemSecurityPlan(t *testing.T) {
 	t.Run("Simple generation of SSP - no components", func(t *testing.T) {
 		validProfile := getProfile(t, validProfileLocalCatalog)
 
-		ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileLocalCatalog, []string{"statement"}, validProfile)
+		ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileLocalCatalog, []string{"statement"}, validProfile, nil)
 		require.NoError(t, err)
 		require.NotNil(t, ssp.Model)
 
@@ -88,8 +88,14 @@ func TestGenerateSystemSecurityPlan(t *testing.T) {
 	t.Run("Simple generation of SSP - with component defn", func(t *testing.T) {
 		validProfile := getProfile(t, validProfileRemoteRev4)
 		validComponentDefn := getComponentDefinition(t, compdefValidMultiComponent)
+		componentDefn := oscal.ComponentDefinition{
+			Model: validComponentDefn,
+		}
+		componentDefnMap := map[string]*oscal.ComponentDefinition{
+			compdefValidMultiComponent: &componentDefn,
+		}
 
-		ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileRemoteRev4, []string{"statement"}, validProfile, validComponentDefn)
+		ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileRemoteRev4, []string{"statement"}, validProfile, componentDefnMap)
 		require.NoError(t, err)
 		require.NotNil(t, ssp.Model)
 
@@ -121,7 +127,7 @@ func TestGenerateSystemSecurityPlan(t *testing.T) {
 	t.Run("Generation of SSP using a profile with no controls", func(t *testing.T) {
 		validProfile := getProfile(t, validProfileNoControls)
 
-		_, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileNoControls, []string{"statement"}, validProfile)
+		_, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileNoControls, []string{"statement"}, validProfile, nil)
 		require.Error(t, err)
 	})
 }

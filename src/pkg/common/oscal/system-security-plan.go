@@ -113,12 +113,28 @@ func (ssp *SystemSecurityPlan) NewModel(data []byte) error {
 // Profile is the profile model that should be used to populate the SSP.
 // Compdefs are all component definitions that should be merged into the SSP.
 // This will return an error if the profile does not contain any controls.
-func GenerateSystemSecurityPlan(command, source string, targetRemarks []string, profile *oscalTypes.Profile, compdefs ...*oscalTypes.ComponentDefinition) (*SystemSecurityPlan, error) {
-	compdef, err := MergeVariadicComponentDefinition(compdefs...)
+func GenerateSystemSecurityPlan(command, source string, targetRemarks []string, profile *oscalTypes.Profile, compDefs map[string]*ComponentDefinition) (*SystemSecurityPlan, error) {
+	// Execute ImportComponentDefinitions for all component definitions provided
+	compDefSlice := make([]*ComponentDefinition, 0, len(compDefs))
+	for path, compDef := range compDefs {
+		err := compDef.ImportComponentDefinitions(path)
+		if err != nil {
+			return nil, err
+		}
+		compDefSlice = append(compDefSlice, compDef)
+	}
+
+	// Merge all component definitions into a single component definition
+	mergedCompDef, err := NewComponentDefinition()
 	if err != nil {
 		return nil, err
 	}
-	componentsMap := ComponentsToMap(compdef)
+
+	err = mergedCompDef.MergeVariadicComponentDefinition(compDefSlice...)
+	if err != nil {
+		return nil, err
+	}
+	componentsMap := ComponentsToMap(mergedCompDef.Model)
 
 	// Create the OSCAL SSP model for use and later assignment to the oscal.SystemSecurityPlan implementation
 	var model oscalTypes.SystemSecurityPlan
@@ -152,8 +168,8 @@ func GenerateSystemSecurityPlan(command, source string, targetRemarks []string, 
 
 	// Update parties from component definition if not nil
 	// TODO: Handle parties on component definition merge op
-	if compdef != nil {
-		model.Metadata.Parties = compdef.Metadata.Parties
+	if mergedCompDef.Model != nil {
+		model.Metadata.Parties = mergedCompDef.Model.Metadata.Parties
 	}
 
 	// Update the import-profile
@@ -208,7 +224,7 @@ func GenerateSystemSecurityPlan(command, source string, targetRemarks []string, 
 	}
 
 	// Get all source/target-mapped control-ids -> by-components
-	componentControlMap := CreateSourceControlsMap(compdef)
+	componentControlMap := CreateSourceControlsMap(mergedCompDef.Model)
 
 	// This will most likely remove all "target" keys, since those will not be resolvable links
 	componentControlMapUUIDs := RemapSourceToUUID(componentControlMap)

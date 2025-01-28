@@ -2,13 +2,13 @@ package generate
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
-	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
 	"github.com/spf13/cobra"
 
 	"github.com/defenseunicorns/lula/src/cmd/common"
-	"github.com/defenseunicorns/lula/src/pkg/common/composition"
+	"github.com/defenseunicorns/lula/src/internal/template"
 	"github.com/defenseunicorns/lula/src/pkg/common/oscal"
 	"github.com/defenseunicorns/lula/src/pkg/message"
 )
@@ -62,33 +62,37 @@ func GenerateSSPCommand() *cobra.Command {
 			command := fmt.Sprintf("%s --profile %s --remarks %s", cmd.CommandPath(), profile, strings.Join(remarks, ","))
 
 			// Get component definitions from file(s)
-			componentDefs := make([]*oscalTypes.ComponentDefinition, 0, len(components))
+			componentDefs := make(map[string]*oscal.ComponentDefinition, len(components))
 			for _, componentPath := range components {
-				// Compose component definition
-				// TODO: Partial Compose (just imported component-definitions) and remap links (validation links + source links)
-				opts := []composition.Option{
-					composition.WithModelFromLocalPath(componentPath),
-					composition.WithRenderSettings("all", false),
-					composition.WithTemplateRenderer("all", common.TemplateConstants, common.TemplateVariables, []string{}),
-				}
-
-				// Compose the OSCAL model
-				composer, err := composition.New(opts...)
+				data, err := os.ReadFile(componentPath)
 				if err != nil {
-					return fmt.Errorf("error creating new composer: %v", err)
+					return fmt.Errorf("error reading file: %v", err)
 				}
 
-				model, err := composer.ComposeFromPath(cmd.Context(), componentPath)
+				templateData, err := template.CollectTemplatingData(common.TemplateConstants, common.TemplateVariables, nil)
 				if err != nil {
-					return fmt.Errorf("error composing model from path: %v", err)
+					return fmt.Errorf("error collecting templating data: %v", err)
 				}
 
-				componentDefs = append(componentDefs, model.ComponentDefinition)
+				// Create a new component definition from the component definition file
+				componentDef, err := oscal.NewComponentDefinition(
+					oscal.ComponentWithTemplateData(templateData),
+					oscal.ComponentWithRenderType(template.ALL),
+				)
+				if err != nil {
+					return err
+				}
+				err = componentDef.NewModel(data)
+				if err != nil {
+					return err
+				}
+
+				componentDefs[componentPath] = componentDef
 				command += fmt.Sprintf(" --components %s", componentPath)
 			}
 
 			// Generate the system security plan
-			ssp, err := oscal.GenerateSystemSecurityPlan(command, profile, remarks, profileModel.Profile, componentDefs...)
+			ssp, err := oscal.GenerateSystemSecurityPlan(command, profile, remarks, profileModel.Profile, componentDefs)
 			if err != nil {
 				return err
 			}
