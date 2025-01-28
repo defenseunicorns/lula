@@ -170,10 +170,10 @@ func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) (err e
 	return nil
 }
 
-// ResolveImportComponentDefinitions is a function that resolves the import-component-definitions  by adding them into the current
-// component definition and re-writes any paths in the component definition to be relative to the component's directory
+// ResolveImportComponentDefinitions is a function that resolves the import-component-definitions by adding the referenced
+// component defintitions into the current component definition and re-writing any paths in the component definition to
+// be relative to the importing component's directory
 // componentDir must be absolute paths
-// TODO: should componentDir be an attribute of the component definition?
 // TODO: Add templating
 func (c *ComponentDefinition) ResolveImportComponentDefinitions(componentDir string) error {
 	if c.Model == nil {
