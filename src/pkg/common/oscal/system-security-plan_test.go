@@ -16,7 +16,6 @@ import (
 var (
 	compdefValidMultiComponent           = "../../../test/unit/common/oscal/valid-multi-component.yaml"
 	compdefValidMultiComponentPerControl = "../../../test/unit/common/oscal/valid-multi-component-per-control.yaml"
-	compdefValidLocalPaths               = "../../../test/unit/common/oscal/component-testrewritepaths.yaml"
 	source                               = "https://raw.githubusercontent.com/usnistgov/oscal-content/main/nist.gov/SP800-53/rev5/yaml/NIST_SP-800-53_rev5_HIGH-baseline-resolved-profile_catalog.yaml"
 	validProfileLocalCatalog             = "../../../test/unit/common/oscal/valid-profile.yaml"
 	validProfileRemoteRev4               = "../../../test/unit/common/oscal/valid-profile-remote-rev4.yaml"
@@ -127,55 +126,6 @@ func TestGenerateSystemSecurityPlan(t *testing.T) {
 		// All controls should be in the expectedControls list
 		assert.ElementsMatch(t, expectedControls, foundControls)
 	})
-
-	// t.Run("Generation of SSP with components and remapped paths", func(t *testing.T) {
-	// 	validProfile := getProfile(t, validProfileLocalCatalog)
-	// 	validComponentDefn := getComponentDefinition(t, compdefValidLocalPaths)
-	// 	componentDefn := oscal.ComponentDefinition{
-	// 		Model: validComponentDefn,
-	// 	}
-	// 	componentDefnMap := map[string]*oscal.ComponentDefinition{
-	// 		compdefValidLocalPaths: &componentDefn,
-	// 	}
-
-	// 	// Assume output to root directory
-	// 	outputPath := "../../../../ssp.yaml"
-	// 	outputPathAbs, err := filepath.Abs(outputPath)
-	// 	require.NoError(t, err)
-	// 	outputDir := filepath.Dir(outputPathAbs)
-
-	// 	profileAbs, err := filepath.Abs(validProfileLocalCatalog)
-	// 	require.NoError(t, err)
-
-	// 	ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", profileAbs, []string{"statement"}, validProfile, outputDir, componentDefnMap)
-	// 	require.NoError(t, err)
-	// 	require.NotNil(t, ssp.Model)
-
-	// 	validateSSP(t, ssp)
-	// 	oscal.WriteOscalModelNew(filepath.Join(outputDir, "ssp.yaml"), ssp)
-
-	// 	// Check the control-implementation.implemented-requirements and system-implementation.components links
-	// 	expectedControls := []string{"ac-1", "ac-2", "ac-3"}
-	// 	foundControls := make([]string, 0)
-	// 	systemComponentMap := createSystemComponentMap(t, ssp)
-	// 	for _, ir := range ssp.Model.ControlImplementation.ImplementedRequirements {
-	// 		foundControls = append(foundControls, ir.ControlId)
-	// 		// All controls should have 1 component linked
-	// 		require.NotNil(t, ir.ByComponents)
-	// 		assert.Len(t, *ir.ByComponents, 1)
-	// 		for _, byComponent := range *ir.ByComponents {
-	// 			// Check that the component exists in the system-implementation.components
-	// 			_, ok := systemComponentMap[byComponent.ComponentUuid]
-	// 			assert.True(t, ok)
-	// 		}
-	// 	}
-
-	// 	// Check that only one component is specified in system-implementation.components
-	// 	require.Equal(t, 1, len(ssp.Model.SystemImplementation.Components))
-
-	// 	// All controls should be in the expectedControls list
-	// 	assert.ElementsMatch(t, expectedControls, foundControls)
-	// })
 
 	t.Run("Generation of SSP using a profile with no controls", func(t *testing.T) {
 		tempDir := t.TempDir()
