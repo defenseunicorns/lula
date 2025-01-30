@@ -681,8 +681,6 @@ func TestResolveImportComponentDefinitions(t *testing.T) {
 		err = yaml.Unmarshal(expectedComponentBytes, &expectedComponent)
 		require.NoError(t, err)
 
-		// oscal.WriteOscalModelNew("test.yaml", &component)
-
 		// Compare the expected and actual component definitions
 		// equate the UUIDs and timestamp since those are changed on merge
 		expectedComponent.ComponentDefinition.UUID = component.GetCompleteModel().ComponentDefinition.UUID

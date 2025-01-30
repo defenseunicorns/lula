@@ -27,6 +27,12 @@ func TestGenerateSSPCommand(t *testing.T) {
 		return runCmdTestWithGolden(t, "generate/", goldenFileName, rootCmd, args...)
 	}
 
+	testAgainstOutputFile := func(t *testing.T, goldenFileName string, args ...string) error {
+		rootCmd := generate.GenerateSSPCommand()
+
+		return runCmdTestWithOutputFile(t, "generate/", goldenFileName, "yaml", rootCmd, args...)
+	}
+
 	t.Run("Generate SSP", func(t *testing.T) {
 		tempDir := t.TempDir()
 		outputFile := filepath.Join(tempDir, "output.yaml")
@@ -123,22 +129,31 @@ func TestGenerateSSPCommand(t *testing.T) {
 
 	t.Run("Generate SSP with components and remapped paths", func(t *testing.T) {
 		outputFile := "output.yaml" // Skipping tempDir here to more easily perform golden file comparison of path redirects
+		defer os.Remove(outputFile)
 
 		args := []string{
-			"--profile", "https://raw.githubusercontent.com/defenseunicorns/lula/refs/heads/main/src/test/unit/common/oscal/valid-profile-remote-rev4.yaml",
+			"--profile", "../../unit/common/oscal/valid-profile.yaml",
 			"-o", outputFile,
 			"--components", "../../unit/common/oscal/component-testrewritepaths.yaml",
 		}
 
-		err := testAgainstGolden(t, "ssp-with-components-and-remapped-paths", args...)
+		err := testAgainstOutputFile(t, "ssp-with-components-and-remapped-paths", args...)
 		require.NoError(t, err, "executing lula generate ssp %v resulted in an error\n", args)
-
-		// Check that the output file is valid OSCAL
 	})
 
-	// t.Run("Generate SSP with template component definitions", func(t *testing.T) {
+	t.Run("Generate SSP using template component definition", func(t *testing.T) {
+		tempDir := t.TempDir()
+		outputFile := filepath.Join(tempDir, "output.yaml")
 
-	// })
+		args := []string{
+			"--profile", "../../unit/common/oscal/valid-profile.yaml",
+			"-o", outputFile,
+			"--components", "../../unit/common/oscal/component-rev4-template.yaml",
+		}
+
+		err := testAgainstOutputFile(t, "ssp-using-component-template", args...)
+		require.NoError(t, err, "executing lula generate ssp %v resulted in an error\n", args)
+	})
 
 	t.Run("Generate SSP on existing SSP", func(t *testing.T) {
 		tempDir := t.TempDir()

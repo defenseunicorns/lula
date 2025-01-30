@@ -70,7 +70,7 @@ func TestGenerateSystemSecurityPlan(t *testing.T) {
 		tempDir := t.TempDir()
 		validProfile := getProfile(t, validProfileLocalCatalog)
 
-		ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileLocalCatalog, tempDir, []string{"statement"}, validProfile, nil)
+		ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileLocalCatalog, tempDir, []string{"statement"}, validProfile)
 		require.NoError(t, err)
 		require.NotNil(t, ssp.Model)
 
@@ -181,7 +181,7 @@ func TestGenerateSystemSecurityPlan(t *testing.T) {
 		tempDir := t.TempDir()
 		validProfile := getProfile(t, validProfileNoControls)
 
-		_, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileNoControls, tempDir, []string{"statement"}, validProfile, nil)
+		_, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileNoControls, tempDir, []string{"statement"}, validProfile)
 		require.Error(t, err)
 	})
 }

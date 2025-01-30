@@ -2,7 +2,8 @@ constants:
   type: software
   title: lula
   templated_comp_def: component-definition-template.yaml
-
+  validation_prefix: "subdir"
+  
   get_resources:
     file:
       name: pod

@@ -165,8 +165,13 @@ func GenerateSystemSecurityPlan(command, source, outputDir string, targetRemarks
 	}
 
 	// Update the import-profile
+	sourceRel, err := filepath.Rel(outputDir, source)
+	if err != nil {
+		// indicates that the source can't be made relative, so just use the original source
+		sourceRel = source
+	}
 	model.ImportProfile = oscalTypes.ImportProfile{
-		Href: source,
+		Href: sourceRel,
 	}
 
 	// Add placeholder system characteristics
