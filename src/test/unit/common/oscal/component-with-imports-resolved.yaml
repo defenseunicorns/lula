@@ -1,0 +1,141 @@
+component-definition:
+  back-matter:
+    resources:
+      - description: |-
+          metadata:
+            name: Validate pods with label foo=bar
+            uuid: 88AB3470-B96B-4D7C-BC36-02BF9563C46C
+          domain:
+            type: kubernetes
+            kubernetes-spec:
+              resources:
+                - name: jsoncm
+                  resource-rule:
+                    name: configmap-json
+                    version: v1
+                    resource: configmaps
+                    namespaces: [validation-test]
+                    field:
+                      jsonpath: .data.person.json
+                      type: yaml
+                - name: yamlcm
+                  resource-rule:
+                    name: configmap-yaml
+                    version: v1
+                    resource: configmaps
+                    namespaces: [validation-test]
+                    field:
+                      jsonpath: .data.app-config.yaml
+                      type: yaml
+                - name: secret
+                  resource-rule:
+                    name: example-secret
+                    version: v1
+                    resource: secrets
+                    namespaces: [validation-test]
+                    field:
+                      jsonpath: .data.auth
+                      type: yaml
+                      base64: true
+                - name: pod
+                  resource-rule:
+                    name: example-pod
+                    version: v1
+                    resource: pods
+                    namespaces: [validation-test]
+                    field:
+                      jsonpath: .metadata.annotations.annotation.io/simple
+                      type: json
+          provider:
+            type: opa
+            opa-spec:
+              rego: |
+                package validate
+
+                import future.keywords.every
+
+                validate {
+                  input.jsoncm.name == "bob"
+                  input.yamlcm.logging.level == "INFO"
+                  input.secret.username == "username"
+                  "item1" in input.pod.items
+                }
+        remarks: Get data for all resources fields specified
+        uuid: 88AB3470-B96B-4D7C-BC36-02BF9563C46C
+  components:
+    - control-implementations:
+        - description: Validate generic security requirements
+          implemented-requirements:
+            - control-id: ID-1
+              description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              links:
+                - href: subdir/validation.yaml
+                  rel: lula
+              remarks: Here are some remarks about this control.
+              uuid: 592e7cb5-24c7-4e31-845b-14aa6b9f284d
+          source: subdir/basic-profile.yaml
+          uuid: 40325fd1-a0ea-4b63-8362-0c445191973f
+      description: |
+        Component 1
+      purpose: Validate compliance controls
+      responsible-roles:
+        - party-uuids:
+            - C18F4A9F-A402-415B-8D13-B51739D689FF
+          role-id: provider
+      title: Component 1
+      type: software
+      uuid: ea343aeb-1a59-441b-9877-e7c7839446e5
+    - control-implementations:
+        - description: Validate generic security requirements
+          implemented-requirements:
+            - control-id: ID-1
+              description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              remarks: Here are some remarks about this control.
+              uuid: 2fa6fcd6-0161-43d4-9e4f-281973d406ae
+          source: subdir/basic-profile.yaml
+          uuid: 1e3320a1-7197-4cac-b667-48680c73734f
+      description: |
+        Component 2
+      purpose: Validate compliance controls
+      responsible-roles:
+        - party-uuids:
+            - C18F4A9F-A402-415B-8D13-B51739D689FF
+          role-id: provider
+      title: Component 2
+      type: software
+      uuid: 5337ed95-cb72-4b66-848f-2e725a6ed9fc
+    - control-implementations:
+        - description: Validate generic security requirements
+          implemented-requirements:
+            - control-id: ID-1
+              description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,  quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum  dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              links:
+                - href: '#88AB3470-B96B-4D7C-BC36-02BF9563C46C'
+                  rel: lula
+              remarks: Here are some remarks about this control.
+              uuid: 42C2FFDC-5F05-44DF-A67F-EEC8660AEFFD
+          source: https://github.com/defenseunicorns/lula
+          uuid: A584FEDC-8CEA-4B0C-9F07-85C2C4AE751A
+      description: |
+        Defense Unicorns lula
+      purpose: Validate compliance controls
+      responsible-roles:
+        - party-uuids:
+            - C18F4A9F-A402-415B-8D13-B51739D689FF
+          role-id: provider
+      title: lula
+      type: software
+      uuid: A9D5204C-7E5B-4C43-BD49-34DF759B9F04
+  metadata:
+    last-modified: "2025-01-21T12:00:00Z"
+    oscal-version: 1.1.3
+    parties:
+      - links:
+          - href: https://github.com/defenseunicorns/lula
+            rel: website
+        name: Lula Development
+        type: organization
+        uuid: C18F4A9F-A402-415B-8D13-B51739D689FF
+    title: Test ComponentDefinition ImportComponentDefinitions
+    version: "20250121"
+  uuid: 6785f823-f1d1-477b-bfd3-fdb55e33e0dd
