@@ -18,9 +18,9 @@ To alleviate the rigidity of the current design, parts of the Lula library will 
 
 The primary outcome of this will be exposed functionality that can be thought of in following categories:
 
-* Validation retrieval from source - Encapsulates extracting Lula Validations from source and loading the validations and associated requirements into the `ValidationStore`
+* Validation and Requirement collection from source - Encapsulates extracting Lula Validations and associated Requirements from the given source and loading the validations and requirements into the `ValidationStore` and `RequirementStore`, respectively.
 * Execution of validations - Running the Validation Engine against `ValidationStore` validations
-* Reporting to output - Realizing the results of the validation (i.e., the policy outputs) along with the requirements into the desired output format
+* Reporting on results - Outputting the results of the validation (i.e., the policy results) in the context of the requirements, as determined by the desired output format
 
 ## Consequences
 
@@ -32,8 +32,8 @@ The following interfaces are proposed:
 // A Validation Producer interface defines the requirements, how to meet them, and associated validations
 type ValidationProducer interface {
 	// Populate populates the validation store with the validations from the producer
-	// as well as the associated requirements, as defined by the producer
-	Populate(store *ValidationStore) error
+	// and adds the defined requirements to the requirement store
+	Populate(validationStore *ValidationStore, requirementStore *RequirementStore) error
 }
 
 // Requirement is an interface that defines the requirements for validation
@@ -54,33 +54,37 @@ type Requirement interface {
 	GetValidations() []*types.LulaValidation
 }
 
-// ResultConsumer is the interface that must be implemented by any consumer of the validation
-// store and results. It is responsible for evaluating the results and generating the output
-// speific to the consumer.
+// ResultConsumer is the interface that must be implemented by any consumer of the requirements
+// It is responsible for evaluating the results and generating the output speific to the consumer.
 type ResultConsumer interface {
-	// Evaluate Results are the custom implementation for the consumer, which should take the
-	// requirements, as specified by the producer, plus the data in the validation store
-	// and evaluate them + generate the output
-	EvaluateResults(store *ValidationStore) error
-
-	// Generate Output is the custom implementation for the consumer that should create
-	// a custom output
-	GenerateOutput() error
+	// The GenerateResults method should take the requirements, as specified by the producer,
+	// and generate the results in the consumer-specific custom format
+	GenerateResults(store *RequirementStore) error
 }
 ```
 
-The `ValidationStore` would be redefined to be non-specific to a Component Definition/Back-Matter data storage, but instead be a more generic store of the validations and requirements.
+The `ValidationStore` would be redefined to be non-specific to a Component Definition/Back-Matter data storage, but instead be a more generic store of the validations:
 
 ```go
-// Contains the store for the validations (their results, once executed) and associated requirements
+// Contains the store for the validations and their results, once executed
 type ValidationStore struct {
 	validationMap map[string]*types.LulaValidation
-	requirements  []Requirement
 }
 ```
 
-The validation store would allow for adding validations and requirements, as well as executing the validations and retrieving the results.
+The purpose of the `ValidationStore` is to provide the anchor point to store the validations and execute them, using the Lula-specific validation engine, which operates on the `LulaValidation` objects.
+
+The `RequirementStore` is a separate entity used to store the requirements, are different from the validations:
+
+```go
+// Contains the store for the requirements
+type RequirementStore struct {
+	requirementMap map[string]Requirement
+}
+```
+
+The purpose of the `RequirementStore` is to simplify the consumer's evaluation of the requirements.
 
 ### Example Implementation
 
-An example implementation of the above interfaces is on the `test-lib-refactor` branch of the lula repo. Specifically, this explores implementing a Component Definition as a `ValidationProducer` and the Assessment Results as a `ResultConsumer`. As well as re-defining the `ValidationStore` to be a more generic store of validations and requirements.
+An example implementation of the above interfaces is on the `test-lib-refactor` branch of the lula repo. Specifically, this explores implementing a Component Definition as a `ValidationProducer` and the Assessment Results as a `ResultConsumer`. As well as re-defining the `ValidationStore` and `RequirementStore` to be a more generic stores of validations and requirements. Each of these have sample methods laid out, but this is subject to change as the refactor progresses.
