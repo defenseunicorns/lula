@@ -630,6 +630,20 @@ func TestRemapPath(t *testing.T) {
 			expectedPath:  "../app/inv@1*d pa#h",
 			expectedError: false,
 		},
+		{
+			name:          "No new directory",
+			path:          "file.txt",
+			baseDir:       "/app",
+			newDir:        "",
+			expectedError: true,
+		},
+		{
+			name:          "No base directory",
+			path:          "file.txt",
+			baseDir:       "",
+			newDir:        "/app",
+			expectedError: true,
+		},
 	}
 
 	for _, tt := range tests {

@@ -228,3 +228,13 @@ func ValidateChecksum(data []byte, expectedChecksum string) error {
 
 	return nil
 }
+
+// GetAbsolutePath returns the absolute path for a given URL
+func GetAbsolutePath(inputURL, baseDir string) string {
+	localDir := GetLocalFileDir(inputURL, baseDir)
+	if localDir == "" {
+		return inputURL
+	}
+	joinedPath := filepath.Join(localDir, filepath.Base(inputURL))
+	return filepath.Clean(joinedPath)
+}

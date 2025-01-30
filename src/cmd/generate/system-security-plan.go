@@ -3,12 +3,14 @@ package generate
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/defenseunicorns/lula/src/cmd/common"
 	"github.com/defenseunicorns/lula/src/internal/template"
+	"github.com/defenseunicorns/lula/src/pkg/common/network"
 	"github.com/defenseunicorns/lula/src/pkg/common/oscal"
 	"github.com/defenseunicorns/lula/src/pkg/message"
 )
@@ -50,6 +52,13 @@ func GenerateSSPCommand() *cobra.Command {
 				return fmt.Errorf("invalid OSCAL model at output: %v", err)
 			}
 
+			// Get output directory
+			outputFileAbsPath, err := filepath.Abs(outputFile)
+			if err != nil {
+				return fmt.Errorf("error getting absolute path of output file: %v", err)
+			}
+			outputDirAbs := filepath.Dir(outputFileAbsPath)
+
 			// Get profile model from file
 			profileModel, modelType, err := oscal.FetchOSCALModel(profile, "")
 			if err != nil {
@@ -61,17 +70,28 @@ func GenerateSSPCommand() *cobra.Command {
 
 			command := fmt.Sprintf("%s --profile %s --remarks %s", cmd.CommandPath(), profile, strings.Join(remarks, ","))
 
+			// Get absolute path of profile
+			wd, err := os.Getwd()
+			if err != nil {
+				return fmt.Errorf("error getting working directory: %v", err)
+			}
+			profileAbsPath := network.GetAbsolutePath(profile, wd)
+
+			// Set up template data
+			// TODO: incorporate overrides, more specific templating flags
+			templateData, err := template.CollectTemplatingData(common.TemplateConstants, common.TemplateVariables, nil)
+			if err != nil {
+				return fmt.Errorf("error collecting templating data: %v", err)
+			}
+
 			// Get component definitions from file(s)
-			componentDefs := make(map[string]*oscal.ComponentDefinition, len(components))
+			componentDefs := make([]*oscal.ComponentDefinition, 0, len(components))
 			for _, componentPath := range components {
-				data, err := os.ReadFile(componentPath)
+				componentPathAbs := network.GetAbsolutePath(componentPath, wd)
+
+				data, err := network.Fetch(componentPathAbs)
 				if err != nil {
 					return fmt.Errorf("error reading file: %v", err)
-				}
-
-				templateData, err := template.CollectTemplatingData(common.TemplateConstants, common.TemplateVariables, nil)
-				if err != nil {
-					return fmt.Errorf("error collecting templating data: %v", err)
 				}
 
 				// Create a new component definition from the component definition file
@@ -82,17 +102,32 @@ func GenerateSSPCommand() *cobra.Command {
 				if err != nil {
 					return err
 				}
+
 				err = componentDef.NewModel(data)
 				if err != nil {
 					return err
 				}
 
-				componentDefs[componentPath] = componentDef
+				// Resolve any component definition imports
+				componentDirAbs := filepath.Dir(componentPathAbs)
+
+				err = componentDef.ResolveImportComponentDefinitions(componentDirAbs)
+				if err != nil {
+					return err
+				}
+
+				// Rewrite paths to be relative to the outputDir
+				err = componentDef.RewritePaths(componentDirAbs, outputDirAbs)
+				if err != nil {
+					return err
+				}
+
+				componentDefs = append(componentDefs, componentDef)
 				command += fmt.Sprintf(" --components %s", componentPath)
 			}
 
 			// Generate the system security plan
-			ssp, err := oscal.GenerateSystemSecurityPlan(command, profile, remarks, profileModel.Profile, componentDefs)
+			ssp, err := oscal.GenerateSystemSecurityPlan(command, profileAbsPath, outputDirAbs, remarks, profileModel.Profile, componentDefs...)
 			if err != nil {
 				return err
 			}

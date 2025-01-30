@@ -17,7 +17,7 @@ component-definition:
           - href: https://github.com/defenseunicorns/lula
             rel: website
   import-component-definitions:
-    - href: ../app/component.yaml
+    - href: ../app/valid-component.yaml
   components:
     - uuid: 7a8f8801-8e85-4e3c-8784-1a73f2f5be96
       type: software
@@ -32,7 +32,7 @@ component-definition:
           description: Validate generic security requirements
           implemented-requirements:
             - uuid: b3d49a20-84c8-4ff8-a266-ee0810ce7779
-              control-id: ID-1
+              control-id: ac-1
               remarks: Here are some remarks about this control.
               description: Here is a description
               links:
@@ -62,7 +62,7 @@ component-definition:
           description: Validate generic security requirements
           implemented-requirements:
             - uuid: a9f9f07a-5779-4e08-8ba5-e261cd1f1dfc
-              control-id: ID-2
+              control-id: ac-2
               remarks: Here are some remarks about this control.
               description: Here is a description
               links:

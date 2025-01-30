@@ -12,6 +12,7 @@ import (
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
 
 	"github.com/defenseunicorns/lula/src/pkg/common"
+	"github.com/defenseunicorns/lula/src/pkg/common/network"
 )
 
 type SystemSecurityPlan struct {
@@ -109,28 +110,19 @@ func (ssp *SystemSecurityPlan) NewModel(data []byte) error {
 
 // GenerateSystemSecurityPlan generates an OSCALModel System Security Plan.
 // Command is the command that was used to generate the SSP.
-// Source is the profile source url that should be used to pull implemented-requirements from the component definition. "Target" not currently supported.
+// Source is the profile source absolute path that should be used to pull implemented-requirements from the component definition. "Target" not currently supported.
+// OutputDir is the absolute path to the directory where the SSP will be written
 // Profile is the profile model that should be used to populate the SSP.
-// Compdefs are all component definitions that should be merged into the SSP.
+// compDefs is a slice of component definitions that should be merged into the SSP.
 // This will return an error if the profile does not contain any controls.
-func GenerateSystemSecurityPlan(command, source string, targetRemarks []string, profile *oscalTypes.Profile, compDefs map[string]*ComponentDefinition) (*SystemSecurityPlan, error) {
-	// Execute ImportComponentDefinitions for all component definitions provided
-	compDefSlice := make([]*ComponentDefinition, 0, len(compDefs))
-	for path, compDef := range compDefs {
-		err := compDef.ImportComponentDefinitions(path)
-		if err != nil {
-			return nil, err
-		}
-		compDefSlice = append(compDefSlice, compDef)
-	}
-
+func GenerateSystemSecurityPlan(command, source, outputDir string, targetRemarks []string, profile *oscalTypes.Profile, compDefs ...*ComponentDefinition) (*SystemSecurityPlan, error) {
 	// Merge all component definitions into a single component definition
 	mergedCompDef, err := NewComponentDefinition()
 	if err != nil {
 		return nil, err
 	}
 
-	err = mergedCompDef.MergeVariadicComponentDefinition(compDefSlice...)
+	err = mergedCompDef.MergeVariadicComponentDefinition(compDefs...)
 	if err != nil {
 		return nil, err
 	}
@@ -223,10 +215,10 @@ func GenerateSystemSecurityPlan(command, source string, targetRemarks []string, 
 		},
 	}
 
-	// Get all source/target-mapped control-ids -> by-components
-	componentControlMap := CreateSourceControlsMap(mergedCompDef.Model)
+	// Get all source-mapped control-ids -> by-components
+	componentControlMap := CreateSourceControlsMap(mergedCompDef.Model, outputDir)
 
-	// This will most likely remove all "target" keys, since those will not be resolvable links
+	// Remap keys to UUIDs to resolve with profile
 	componentControlMapUUIDs := RemapSourceToUUID(componentControlMap)
 
 	// Get all controls from profile -> implemented-requirements
@@ -362,9 +354,10 @@ func MergeSystemSecurityPlanModels(original *oscalTypes.SystemSecurityPlan, late
 
 type ByComponentsMap map[string][]oscalTypes.ByComponent
 
-// CreateSourceControlsMap maps the source/framework -> control-id -> []by-component
-func CreateSourceControlsMap(compdef *oscalTypes.ComponentDefinition) map[string]ByComponentsMap {
-	// Map that groups all sources/frameworks -> control-id -> by-component
+// CreateSourceControlsMap maps the source -> control-id -> []by-component
+// refDir is the absolute path to the directory where the source is referenced from
+func CreateSourceControlsMap(compdef *oscalTypes.ComponentDefinition, refDir string) map[string]ByComponentsMap {
+	// Map that groups all sources -> control-id -> by-component
 	sourceControlsMap := make(map[string]ByComponentsMap)
 
 	// Sort components by framework
@@ -373,26 +366,25 @@ func CreateSourceControlsMap(compdef *oscalTypes.ComponentDefinition) map[string
 			if component.ControlImplementations != nil {
 				for _, controlImplementation := range *component.ControlImplementations {
 					// update list of frameworks in a given control-implementation
-					frameworks := []string{controlImplementation.Source}
-					status, value := GetProp("framework", LULA_NAMESPACE, controlImplementation.Props)
-					if status {
-						frameworks = append(frameworks, value)
-					}
+					sources := []string{controlImplementation.Source}
 
-					for _, framework := range frameworks {
+					for _, source := range sources {
+						// Get the absolute path of the source
+						sourceAbsPath := network.GetAbsolutePath(source, refDir)
+
 						// Initialize the map for the source and framework if it doesn't exist
-						_, ok := sourceControlsMap[framework]
+						_, ok := sourceControlsMap[sourceAbsPath]
 						if !ok {
-							sourceControlsMap[framework] = make(map[string][]oscalTypes.ByComponent)
+							sourceControlsMap[sourceAbsPath] = make(map[string][]oscalTypes.ByComponent)
 						}
 
 						// For each implemented requirement, add it to the map
 						for _, implementedRequirement := range controlImplementation.ImplementedRequirements {
-							_, ok := sourceControlsMap[framework][implementedRequirement.ControlId]
+							_, ok := sourceControlsMap[sourceAbsPath][implementedRequirement.ControlId]
 							if ok {
 								// If found, update the existing implemented requirement
 								// TODO: add other "ByComponents" fields?
-								sourceControlsMap[framework][implementedRequirement.ControlId] = append(sourceControlsMap[framework][implementedRequirement.ControlId], oscalTypes.ByComponent{
+								sourceControlsMap[sourceAbsPath][implementedRequirement.ControlId] = append(sourceControlsMap[sourceAbsPath][implementedRequirement.ControlId], oscalTypes.ByComponent{
 									ComponentUuid: component.UUID,
 									UUID:          uuid.NewUUID(),
 									Description:   implementedRequirement.Description,
@@ -400,7 +392,7 @@ func CreateSourceControlsMap(compdef *oscalTypes.ComponentDefinition) map[string
 								})
 							} else {
 								// Otherwise create a new by-components slice
-								sourceControlsMap[framework][implementedRequirement.ControlId] = []oscalTypes.ByComponent{
+								sourceControlsMap[sourceAbsPath][implementedRequirement.ControlId] = []oscalTypes.ByComponent{
 									{
 										ComponentUuid: component.UUID,
 										UUID:          uuid.NewUUID(),

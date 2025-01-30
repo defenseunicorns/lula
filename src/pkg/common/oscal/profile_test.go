@@ -1,6 +1,7 @@
 package oscal_test
 
 import (
+	"os"
 	"testing"
 
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
@@ -150,7 +151,10 @@ func TestResolveProfileControls(t *testing.T) {
 
 		require.NotNil(t, validProfile.Profile)
 
-		sourceControlMap, err := oscal.ResolveProfileControls(validProfile.Profile, profilePath, "", include, exclude)
+		wd, err := os.Getwd()
+		require.NoError(t, err)
+
+		sourceControlMap, err := oscal.ResolveProfileControls(validProfile.Profile, profilePath, wd, include, exclude)
 		require.NoError(t, err)
 
 		foundMap := make(map[string][]string)
