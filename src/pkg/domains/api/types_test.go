@@ -23,13 +23,13 @@ func TestCreateApiDomain(t *testing.T) {
 			spec:        nil,
 			expectedErr: true,
 		},
-		"empty requests": {
+		"empty Requests": {
 			spec: &ApiSpec{
 				Requests: []Request{},
 			},
 			expectedErr: true,
 		},
-		"invalid request - no name": {
+		"invalid Request - no name": {
 			spec: &ApiSpec{
 				Requests: []Request{
 					{
@@ -39,7 +39,7 @@ func TestCreateApiDomain(t *testing.T) {
 			},
 			expectedErr: true,
 		},
-		"invalid request - no url": {
+		"invalid Request - no url": {
 			spec: &ApiSpec{
 				Requests: []Request{
 					{
@@ -49,7 +49,7 @@ func TestCreateApiDomain(t *testing.T) {
 			},
 			expectedErr: true,
 		},
-		"valid request": {
+		"valid Request": {
 			spec: &ApiSpec{
 				Requests: []Request{
 					{
