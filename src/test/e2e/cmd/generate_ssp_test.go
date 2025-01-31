@@ -27,12 +27,46 @@ func TestGenerateSSPCommand(t *testing.T) {
 		return runCmdTestWithGolden(t, "generate/", goldenFileName, rootCmd, args...)
 	}
 
+	testAgainstOutputFile := func(t *testing.T, goldenFileName string, args ...string) error {
+		rootCmd := generate.GenerateSSPCommand()
+
+		return runCmdTestWithOutputFile(t, "generate/", goldenFileName, "yaml", rootCmd, args...)
+	}
+
 	t.Run("Generate SSP", func(t *testing.T) {
 		tempDir := t.TempDir()
 		outputFile := filepath.Join(tempDir, "output.yaml")
 
 		args := []string{
 			"--profile", "../../unit/common/oscal/valid-profile.yaml",
+			"-o", outputFile,
+		}
+		err := test(t, args...)
+		require.NoError(t, err, "executing lula generate ssp %v resulted in an error\n", args)
+
+		// Check that the output file is valid OSCAL
+		compiledBytes, err := os.ReadFile(outputFile)
+		require.NoError(t, err, "error reading generated ssp")
+
+		ssp := oscal.NewSystemSecurityPlan()
+
+		// Create the new ssp object
+		err = ssp.NewModel(compiledBytes)
+		require.NoError(t, err, "error creating oscal model from ssp artifact")
+
+		complete := ssp.GetCompleteModel()
+		sspModel := complete.SystemSecurityPlan
+
+		require.NotNil(t, sspModel, "expected the SystemSecurityPlan model to be non-nil")
+		assert.Equal(t, 3, len(sspModel.ControlImplementation.ImplementedRequirements), "expected 3 controls")
+	})
+
+	t.Run("Generate SSP with remote profile", func(t *testing.T) {
+		tempDir := t.TempDir()
+		outputFile := filepath.Join(tempDir, "output.yaml")
+
+		args := []string{
+			"--profile", "https://raw.githubusercontent.com/defenseunicorns/lula/refs/heads/main/src/test/unit/common/oscal/valid-profile-remote-rev4.yaml",
 			"-o", outputFile,
 		}
 		err := test(t, args...)
@@ -91,6 +125,34 @@ func TestGenerateSSPCommand(t *testing.T) {
 		}
 
 		assert.Equal(t, "7c02500a-6e33-44e0-82ee-fba0f5ea0cae", sspModel.SystemImplementation.Components[0].UUID)
+	})
+
+	t.Run("Generate SSP with components and remapped paths", func(t *testing.T) {
+		outputFile := "output.yaml" // Skipping tempDir here to more easily perform golden file comparison of path redirects
+		defer os.Remove(outputFile)
+
+		args := []string{
+			"--profile", "../../unit/common/oscal/valid-profile.yaml",
+			"-o", outputFile,
+			"--components", "../../unit/common/oscal/component-testrewritepaths.yaml",
+		}
+
+		err := testAgainstOutputFile(t, "ssp-with-components-and-remapped-paths", args...)
+		require.NoError(t, err, "executing lula generate ssp %v resulted in an error\n", args)
+	})
+
+	t.Run("Generate SSP using template component definition", func(t *testing.T) {
+		tempDir := t.TempDir()
+		outputFile := filepath.Join(tempDir, "output.yaml")
+
+		args := []string{
+			"--profile", "../../unit/common/oscal/valid-profile.yaml",
+			"-o", outputFile,
+			"--components", "../../unit/common/oscal/component-rev4-template.yaml",
+		}
+
+		err := testAgainstOutputFile(t, "ssp-using-component-template", args...)
+		require.NoError(t, err, "executing lula generate ssp %v resulted in an error\n", args)
 	})
 
 	t.Run("Generate SSP on existing SSP", func(t *testing.T) {

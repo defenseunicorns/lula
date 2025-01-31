@@ -12,6 +12,7 @@ import (
 	"github.com/defenseunicorns/go-oscal/src/pkg/uuid"
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
 
+	"github.com/defenseunicorns/lula/src/internal/template"
 	"github.com/defenseunicorns/lula/src/pkg/common"
 	"github.com/defenseunicorns/lula/src/pkg/message"
 )
@@ -32,18 +33,59 @@ type parameter struct {
 	Select *selection
 }
 
-type ComponentDefinition struct {
-	Model *oscalTypes.ComponentDefinition
+// Add options to the component definition
+type ComponentDefinitionOption func(*ComponentDefinition) error
+
+func ComponentWithTemplateData(templateData *template.TemplateData) ComponentDefinitionOption {
+	return func(c *ComponentDefinition) error {
+		c.templateData = templateData
+		return nil
+	}
 }
 
-func NewComponentDefinition() *ComponentDefinition {
+func ComponentWithRenderType(renderType template.RenderType) ComponentDefinitionOption {
+	return func(c *ComponentDefinition) error {
+		c.renderType = renderType
+		return nil
+	}
+}
+
+type ComponentDefinition struct {
+	Model *oscalTypes.ComponentDefinition
+
+	// templating params
+	templateData *template.TemplateData
+	renderType   template.RenderType
+}
+
+func NewComponentDefinition(opts ...ComponentDefinitionOption) (*ComponentDefinition, error) {
 	var compDef ComponentDefinition
+
+	for _, opt := range opts {
+		if err := opt(&compDef); err != nil {
+			return nil, err
+		}
+	}
+
 	compDef.Model = nil
-	return &compDef
+
+	return &compDef, nil
 }
 
 // Create a new ComponentDefinition from a byte array
+// Attempts to render data if identified as a template
 func (c *ComponentDefinition) NewModel(data []byte) error {
+	var err error
+	isTemplate := template.IsTemplate(string(data))
+
+	if isTemplate {
+		templateRenderer := template.NewTemplateRenderer(c.templateData)
+		data, err = templateRenderer.Render(string(data), c.renderType)
+		if err != nil {
+			return fmt.Errorf("error rendering template: %v", err)
+		}
+	}
+
 	model, err := NewOscalModel(data)
 	if err != nil {
 		return err
@@ -88,11 +130,17 @@ func (c *ComponentDefinition) HandleExisting(path string) error {
 		if err != nil {
 			return fmt.Errorf("error reading file: %v", err)
 		}
-		compDef := NewComponentDefinition()
+
+		compDef, err := NewComponentDefinition()
+		if err != nil {
+			return err
+		}
+
 		err = compDef.NewModel(existingFileBytes)
 		if err != nil {
 			return err
 		}
+
 		err = MergeComponentDefinitions(compDef.Model, c.Model)
 		if err != nil {
 			return err
@@ -174,7 +222,6 @@ func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) (err e
 // component defintitions into the current component definition and re-writing any paths in the component definition to
 // be relative to the importing component's directory
 // componentDir must be absolute paths
-// TODO: Add templating
 func (c *ComponentDefinition) ResolveImportComponentDefinitions(componentDir string) error {
 	if c.Model == nil {
 		return fmt.Errorf("cannot import component definitions, model is nil")
@@ -199,7 +246,12 @@ func (c *ComponentDefinition) ResolveImportComponentDefinitions(componentDir str
 			return err
 		}
 
-		importedComponent := NewComponentDefinition()
+		// TODO: Could imported components have different templating data?
+		importedComponent, err := NewComponentDefinition(ComponentWithTemplateData(c.templateData), ComponentWithRenderType(c.renderType))
+		if err != nil {
+			return err
+		}
+
 		err = importedComponent.NewModel(data)
 		if err != nil {
 			return err
@@ -231,18 +283,18 @@ func (c *ComponentDefinition) ResolveImportComponentDefinitions(componentDir str
 }
 
 // MergeVariadicComponentDefinition merges multiple variadic component definitions into a single component definition
-func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinition) (mergedCompDef *oscalTypes.ComponentDefinition, err error) {
+func (c *ComponentDefinition) MergeVariadicComponentDefinition(compDefs ...*ComponentDefinition) (err error) {
 	for _, compDef := range compDefs {
-		if mergedCompDef == nil {
-			mergedCompDef = compDef
+		if c.Model == nil {
+			c.Model = compDef.Model
 		} else {
-			err = MergeComponentDefinitions(mergedCompDef, compDef)
+			err = MergeComponentDefinitions(c.Model, compDef.Model)
 			if err != nil {
-				return nil, err
+				return err
 			}
 		}
 	}
-	return mergedCompDef, nil
+	return nil
 }
 
 // This function should perform a merge of two component-definitions where maintaining the original component-definition is the primary concern.
