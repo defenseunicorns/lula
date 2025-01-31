@@ -171,7 +171,7 @@ func TestCreateSourceControlsMap(t *testing.T) {
 		refDir := filepath.Dir(compDefAbsPath)
 
 		sourceControlsMap := oscal.CreateSourceControlsMap(validComponentDefn, refDir)
-		assert.Len(t, sourceControlsMap, 4) // Should return 4 frameworks
+		assert.Len(t, sourceControlsMap, 2) // Should return 2 sources
 
 		// Check source values
 		controlMap, ok := sourceControlsMap[source]
