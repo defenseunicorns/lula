@@ -170,6 +170,66 @@ func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) (err e
 	return nil
 }
 
+// ResolveImportComponentDefinitions is a function that resolves the import-component-definitions by adding the referenced
+// component defintitions into the current component definition and re-writing any paths in the component definition to
+// be relative to the importing component's directory
+// componentDir must be absolute paths
+// TODO: Add templating
+func (c *ComponentDefinition) ResolveImportComponentDefinitions(componentDir string) error {
+	if c.Model == nil {
+		return fmt.Errorf("cannot import component definitions, model is nil")
+	}
+
+	if c.Model.ImportComponentDefinitions == nil {
+		return nil
+	}
+
+	// Add data from each to the current component definition
+	for _, importCompDef := range *c.Model.ImportComponentDefinitions {
+		// Create a new component definition from the imported component definition Href
+		importCompDefHrefAbs, err := filepath.Abs(filepath.Join(componentDir, importCompDef.Href))
+		if err != nil {
+			return err
+		}
+
+		importCompDefHrefAbs = filepath.Clean(importCompDefHrefAbs)
+
+		data, err := os.ReadFile(importCompDefHrefAbs)
+		if err != nil {
+			return err
+		}
+
+		importedComponent := NewComponentDefinition()
+		err = importedComponent.NewModel(data)
+		if err != nil {
+			return err
+		}
+
+		// Remap paths in the imported component definition to be relative to the working directory
+		err = importedComponent.RewritePaths(filepath.Dir(importCompDefHrefAbs), componentDir)
+		if err != nil {
+			return err
+		}
+
+		// Recursively import any component definitions
+		err = importedComponent.ResolveImportComponentDefinitions(componentDir)
+		if err != nil {
+			return err
+		}
+
+		// Merge the imported component definition into the current component definition
+		err = MergeComponentDefinitions(c.Model, importedComponent.Model)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Clear the imported component definitions
+	c.Model.ImportComponentDefinitions = nil
+
+	return nil
+}
+
 // MergeVariadicComponentDefinition merges multiple variadic component definitions into a single component definition
 func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinition) (mergedCompDef *oscalTypes.ComponentDefinition, err error) {
 	for _, compDef := range compDefs {
