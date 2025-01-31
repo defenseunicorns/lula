@@ -1,4 +1,31 @@
 # Roadmap
+
+## 2025 Annual
+
+### Q1 - API Domain, Library Improvements, Output Formats:
+
+* API Domain: Improve capabilities of the API domain to support basic multi-request workflows
+* Validation: Library improvements
+* OSCAL: System Security Plan improvements
+* Formats: Mapping OSCAL data to other consumable artifacts
+
+### Q2 - Assessments, Library, Packaging
+
+* OSCAL: Support for generating Assessment Plan OSCAL model artifacts & POAM model artifacts
+* Assess: Performing the assessment of a system of many components
+* Library: Improve library utilization across project
+* Package: Collection and packaging of deliverable artifacts
+
+### Q3 - Reporting, Console, Tutorials
+
+* Report: Enhance reporting coverage across models
+* Console: Establish console parity with CLI
+* Tutorials: Creation of tutorials to enhance consumer understanding of capabilities
+
+### Q4 - TBD
+
+* Benchmarks: Ability to perform Lula validations against various benchmarks (CIS etc)
+
 ## 2024 Annual
 
 ### Q1 - Foundations & Discovery:
@@ -24,9 +51,3 @@
 * OSCAL Model Coverage: Increase support of processable OSCAL models to include assessment-plan and plan-of-actions-and-milestones (POAM).
 * API Domain: Mature the API Domain into a more extensible option for validations.
 * Data Collection: Increase domain data collection methods by 1 to enable greater compliance mapping capabilities 
-
-## 2025 Annual (WIP)
-
-### Q1 - Benchmarks
-
-* Benchmark: Provide component definition artifacts for various benchmarks/best-practices (CIS etc)
