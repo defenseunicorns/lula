@@ -15,6 +15,7 @@ import (
 	goversion "github.com/hashicorp/go-version"
 	"k8s.io/apimachinery/pkg/util/yaml"
 
+	"github.com/defenseunicorns/lula/src/pkg/common/network"
 	"github.com/defenseunicorns/lula/src/pkg/domains/api"
 	"github.com/defenseunicorns/lula/src/pkg/domains/files"
 	kube "github.com/defenseunicorns/lula/src/pkg/domains/kubernetes"
@@ -210,4 +211,46 @@ func CleanMultilineString(str string) string {
 	re := regexp.MustCompile(`[ \t]+\r?\n`)
 	formatted := re.ReplaceAllString(str, "\n")
 	return formatted
+}
+
+// RemapPath takes an input path, relative to the baseDir, and remaps it to be relative to the newDir
+// Example: path = "folder/file.txt", baseDir = "/home/user/dir", newDir = "/home/user/newDir"
+// output path = "../dir/folder/file.txt"
+func RemapPath(path string, baseDir string, newDir string) (string, error) {
+	// Do nothing if the path is a UUID reference
+	if isUUIDReference(path) {
+		return path, nil
+	}
+
+	// Return if the path is a URL or absolute link
+	localDir := network.GetLocalFileDir(path, baseDir)
+	if localDir == "" {
+		return path, nil
+	}
+
+	// Trim file:// or file:, if present
+	path = strings.TrimPrefix(strings.TrimPrefix(path, "file://"), "file:")
+
+	// Find the relative path from newDir to baseDir
+	relativePath, err := filepath.Rel(newDir, baseDir)
+	if err != nil {
+		return "", err
+	}
+
+	// Create new absolute path
+	newAbsPath := filepath.Join(newDir, relativePath, path)
+	newAbsPath = filepath.Clean(newAbsPath)
+
+	// Find new relative path
+	remappedPath, err := filepath.Rel(newDir, newAbsPath)
+	if err != nil {
+		return "", err
+	}
+
+	return remappedPath, nil
+}
+
+func isUUIDReference(path string) bool {
+	path = strings.TrimPrefix(path, UUID_PREFIX)
+	return checkValidUuid(path)
 }

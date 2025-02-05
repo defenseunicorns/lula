@@ -2,17 +2,20 @@ package oscal_test
 
 import (
 	"os"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
 
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
+	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
 	"github.com/defenseunicorns/lula/src/pkg/common/oscal"
 )
 
 const validComponentPath = "../../../test/unit/common/oscal/valid-component.yaml"
+const validGeneratedComponentPath = "../../../test/unit/common/oscal/valid-generated-component.yaml"
 const catalogPath = "../../../test/unit/common/oscal/catalog.yaml"
 
 // Helper function to load test data
@@ -66,7 +69,7 @@ func TestBackMatterToMap(t *testing.T) {
 	}
 }
 
-func TestNewOscalComponentDefinition(t *testing.T) {
+func TestNewModel(t *testing.T) {
 	validBytes := loadTestData(t, validComponentPath)
 
 	var validWantSchema oscalTypes.OscalCompleteSchema
@@ -112,13 +115,14 @@ func TestNewOscalComponentDefinition(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := oscal.NewOscalComponentDefinition(tt.data)
+			model := oscal.NewComponentDefinition()
+			err := model.NewModel(tt.data)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("NewOscalComponentDefinition() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("NewComponentDefinition() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) && !tt.wantErr {
-				t.Errorf("NewOscalComponentDefinition() got = %v, want %v", got, tt.want)
+			if !reflect.DeepEqual(model.Model, tt.want) && !tt.wantErr {
+				t.Errorf("NewComponentDefinition() got = %v, want %v", model.Model, tt.want)
 			}
 		})
 	}
@@ -198,7 +202,7 @@ func TestComponentFromCatalog(t *testing.T) {
 			}
 
 			// DeepEqual will be difficult with time/uuid generation
-			component := (*got.Components)[0]
+			component := (*got.Model.Components)[0]
 			if component.Title != tt.title {
 				t.Errorf("ComponentFromCatalog() title = %v, want %v", component.Title, tt.title)
 			}
@@ -245,6 +249,7 @@ func TestMergeComponentDefinitions(t *testing.T) {
 		expectedImplementedRequirements       int
 		expectedTargetControlImplementations  int
 		expectedTargetImplementedRequirements int
+		uniqueComponent                       bool
 		wantErr                               bool
 	}{
 		{
@@ -258,6 +263,7 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			expectedImplementedRequirements:       4,
 			expectedTargetControlImplementations:  1,
 			expectedTargetImplementedRequirements: 4,
+			uniqueComponent:                       false,
 			wantErr:                               false,
 		},
 		{
@@ -271,6 +277,7 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			expectedImplementedRequirements:       6,
 			expectedTargetControlImplementations:  1,
 			expectedTargetImplementedRequirements: 6,
+			uniqueComponent:                       false,
 			wantErr:                               false,
 		},
 		{
@@ -284,6 +291,7 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			expectedControlImplementations:        2,
 			expectedTargetImplementedRequirements: 4,
 			expectedTargetControlImplementations:  1,
+			uniqueComponent:                       true,
 			wantErr:                               false,
 		},
 		{
@@ -294,7 +302,12 @@ func TestMergeComponentDefinitions(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			validComponent, _ := oscal.NewOscalComponentDefinition(validBytes)
+			var component oscal.ComponentDefinition
+			err := component.NewModel(validBytes)
+			require.NoError(t, err)
+
+			validComponent := component.Model
+			require.NotNil(t, validComponent)
 
 			// Get the implemented requirements from existing for comparison
 			existingComponent := (*validComponent.Components)[0]
@@ -306,7 +319,19 @@ func TestMergeComponentDefinitions(t *testing.T) {
 
 			generated, _ := oscal.ComponentFromCatalog("Mock Command", tt.source, catalog, tt.title, tt.requirements, tt.remarks, "impact")
 
-			merged, err := oscal.MergeComponentDefinitions(validComponent, generated)
+			if generated == nil {
+				if tt.wantErr {
+					return
+				}
+				t.Errorf("ComponentFromCatalog() generated should not be nil")
+			}
+
+			// Check if component is supposed to be unique - override UUID if not
+			if !tt.uniqueComponent {
+				(*generated.Model.Components)[0].UUID = (*validComponent.Components)[0].UUID
+			}
+
+			err = oscal.MergeComponentDefinitions(validComponent, generated.Model)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("MergeComponentDefinitions() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -317,9 +342,9 @@ func TestMergeComponentDefinitions(t *testing.T) {
 			}
 
 			// Perform checks on quantities
-			components := (*merged.Components)
+			components := (*validComponent.Components)
 			if len(components) != tt.expectedComponents {
-				t.Errorf("MergeComponentDefinitions() expected %v components, got %v", tt.expectedComponents, len((*merged.Components)))
+				t.Errorf("MergeComponentDefinitions() expected %v components, got %v", tt.expectedComponents, len((*validComponent.Components)))
 			}
 			controlImplementations := make([]oscalTypes.ControlImplementationSet, 0)
 			var targetComponent oscalTypes.DefinedComponent
@@ -503,12 +528,14 @@ func TestControlImplementationsToRequirementsMap(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			data := loadTestData(t, tt.filepath)
-			compdef, err := oscal.NewOscalComponentDefinition(data)
+			var component oscal.ComponentDefinition
 
-			if err != nil {
-				t.Errorf("Expected NewOscalComponentDefinition to execute")
-			}
+			data := loadTestData(t, tt.filepath)
+			err := component.NewModel(data)
+			require.NoError(t, err)
+
+			compdef := component.Model
+			require.NotNil(t, compdef)
 
 			controlMap := oscal.FilterControlImplementations(compdef)
 			var count int
@@ -547,12 +574,14 @@ func TestFilterControlImplementations(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			data := loadTestData(t, tt.filepath)
-			compdef, err := oscal.NewOscalComponentDefinition(data)
+			var component oscal.ComponentDefinition
 
-			if err != nil {
-				t.Errorf("Expected NewOscalComponentDefinition to execute")
-			}
+			data := loadTestData(t, tt.filepath)
+			err := component.NewModel(data)
+			require.NoError(t, err)
+
+			compdef := component.Model
+			require.NotNil(t, compdef)
 
 			controlMap := oscal.FilterControlImplementations(compdef)
 			// Now validate the existence of items in the controlMap
@@ -563,4 +592,96 @@ func TestFilterControlImplementations(t *testing.T) {
 
 		})
 	}
+}
+
+func TestHandleExistingComponent(t *testing.T) {
+	validComponentBytes := loadTestData(t, validComponentPath)
+
+	var validComponent oscalTypes.OscalCompleteSchema
+	err := yaml.Unmarshal(validComponentBytes, &validComponent)
+	require.NoError(t, err)
+
+	t.Run("Handle Existing with no existing data", func(t *testing.T) {
+		var component oscal.ComponentDefinition
+		component.NewModel(validComponentBytes)
+
+		tmpDir := t.TempDir()
+		tmpFilePath := filepath.Join(tmpDir, "component.yaml")
+
+		err := component.HandleExisting(tmpFilePath)
+		require.NoError(t, err)
+
+		// Check length of components are the same
+		require.Equal(t, len(*validComponent.ComponentDefinition.Components), len(*component.Model.Components))
+	})
+
+	t.Run("Handle Existing with existing data", func(t *testing.T) {
+		var component oscal.ComponentDefinition
+		component.NewModel(validComponentBytes)
+
+		err := component.HandleExisting(validGeneratedComponentPath)
+		require.NoError(t, err)
+
+		// Check length of components is 2
+		require.Equal(t, 2, len(*component.Model.Components))
+	})
+}
+
+func TestRewritePaths(t *testing.T) {
+	// Get test data
+	componentBytes := loadTestData(t, "../../../test/unit/common/oscal/component-testrewritepaths.yaml")
+	expectedComponentBytes := loadTestData(t, "../../../test/unit/common/oscal/component-testrewritepaths-expected.yaml")
+
+	var expectedComponent oscalTypes.OscalCompleteSchema
+	err := yaml.Unmarshal(expectedComponentBytes, &expectedComponent)
+	require.NoError(t, err)
+
+	var component oscal.ComponentDefinition
+	err = component.NewModel(componentBytes)
+	require.NoError(t, err)
+
+	// Simulate moving the the component definition from "/app" -> "/newapp"
+	// This should imply all paths in the component definition should be rewritten to be relative to "/newapp"
+	// since this operation assumes the referenced files are NOT relocated
+	err = component.RewritePaths("/app", "/newapp")
+	require.NoError(t, err)
+
+	// Compare the expected and actual component definitions
+	require.Equal(t, expectedComponent, *component.GetCompleteModel())
+}
+
+func TestImportComponentDefinitions(t *testing.T) {
+	componentWithImportsRel := "../../../test/unit/common/oscal/component-with-imports.yaml"
+
+	// Calculate the absolute paths
+	componentDirAbs, err := filepath.Abs(componentWithImportsRel)
+	require.NoError(t, err)
+	componentDirAbs = filepath.Dir(componentDirAbs)
+
+	componentBytes := loadTestData(t, componentWithImportsRel)
+
+	var component oscal.ComponentDefinition
+	err = component.NewModel(componentBytes)
+	require.NoError(t, err)
+
+	err = component.ResolveImportComponentDefinitions(componentDirAbs)
+	require.NoError(t, err)
+
+	// Make deterministic to ensure same ordering of components
+	err = component.MakeDeterministic()
+	require.NoError(t, err)
+
+	// Check the component has all expected imports and path re-maps
+	expectedComponentBytes := loadTestData(t, "../../../test/unit/common/oscal/component-with-imports-resolved.yaml")
+
+	var expectedComponent oscalTypes.OscalCompleteSchema
+	err = yaml.Unmarshal(expectedComponentBytes, &expectedComponent)
+	require.NoError(t, err)
+
+	// Compare the expected and actual component definitions
+	// equate the UUIDs and timestamp since those are changed on merge
+	expectedComponent.ComponentDefinition.UUID = component.GetCompleteModel().ComponentDefinition.UUID
+	expectedComponent.ComponentDefinition.Metadata.LastModified = component.GetCompleteModel().ComponentDefinition.Metadata.LastModified
+
+	require.Equal(t, expectedComponent, *component.GetCompleteModel())
 }

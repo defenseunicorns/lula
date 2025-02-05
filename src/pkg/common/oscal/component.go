@@ -2,6 +2,8 @@ package oscal
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -9,8 +11,8 @@ import (
 
 	"github.com/defenseunicorns/go-oscal/src/pkg/uuid"
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
-	"sigs.k8s.io/yaml"
 
+	"github.com/defenseunicorns/lula/src/pkg/common"
 	"github.com/defenseunicorns/lula/src/pkg/message"
 )
 
@@ -30,31 +32,211 @@ type parameter struct {
 	Select *selection
 }
 
-// NewOscalComponentDefinition consumes a byte array and returns a new single OscalComponentDefinitionModel object
-// Standard use is to read a file from the filesystem and pass the []byte to this function
-func NewOscalComponentDefinition(data []byte) (componentDefinition *oscalTypes.ComponentDefinition, err error) {
-	var oscalModels oscalTypes.OscalModels
+type ComponentDefinition struct {
+	Model *oscalTypes.ComponentDefinition
+}
 
-	// validate the data
-	err = multiModelValidate(data)
+func NewComponentDefinition() *ComponentDefinition {
+	var compDef ComponentDefinition
+	compDef.Model = nil
+	return &compDef
+}
+
+// Create a new ComponentDefinition from a byte array
+func (c *ComponentDefinition) NewModel(data []byte) error {
+	model, err := NewOscalModel(data)
 	if err != nil {
-		return componentDefinition, err
+		return err
 	}
 
-	err = yaml.Unmarshal(data, &oscalModels)
-	if err != nil {
-		return componentDefinition, err
+	c.Model = model.ComponentDefinition
+
+	return nil
+}
+
+// Return the type of the component definition
+func (*ComponentDefinition) GetType() string {
+	return OSCAL_COMPONENT
+}
+
+// Returns the complete OSCAL model with component definition
+func (c *ComponentDefinition) GetCompleteModel() *oscalTypes.OscalModels {
+	return &oscalTypes.OscalModels{
+		ComponentDefinition: c.Model,
 	}
-	return oscalModels.ComponentDefinition, nil
+}
+
+// MakeDeterministic ensures the relevant elements of the Component Definition are sorted deterministically
+func (c *ComponentDefinition) MakeDeterministic() error {
+	if c.Model == nil {
+		return fmt.Errorf("cannot make nil model deterministic")
+	}
+
+	MakeComponentDeterminstic(c.Model)
+	return nil
+}
+
+// HandleExisting updates the existing Component Defintion if a file is provided
+func (c *ComponentDefinition) HandleExisting(path string) error {
+	exists, err := common.CheckFileExists(path)
+	if err != nil {
+		return err
+	}
+	if exists {
+		path = filepath.Clean(path)
+		existingFileBytes, err := os.ReadFile(path)
+		if err != nil {
+			return fmt.Errorf("error reading file: %v", err)
+		}
+		compDef := NewComponentDefinition()
+		err = compDef.NewModel(existingFileBytes)
+		if err != nil {
+			return err
+		}
+		err = MergeComponentDefinitions(compDef.Model, c.Model)
+		if err != nil {
+			return err
+		}
+		c.Model = compDef.Model
+	}
+	return nil
+}
+
+// RewritePaths finds all the paths in the component definition relative to the baseDir and updates them to be relative to the newDir
+// baseDir and newDir must be absolute paths
+func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) (err error) {
+	if c.Model == nil {
+		return fmt.Errorf("cannot remap paths, model is nil")
+	}
+
+	// Rewrite BackMatter paths
+	err = RewritePathsBackMatter(c.Model.BackMatter, baseDir, newDir)
+	if err != nil {
+		return err
+	}
+
+	// Rewrite Metadata paths
+	err = RewritePathsMetadata(&c.Model.Metadata, baseDir, newDir)
+	if err != nil {
+		return err
+	}
+
+	// Rewrite ImportComponentDefinitions paths
+	if c.Model.ImportComponentDefinitions != nil {
+		for i, importCompDef := range *c.Model.ImportComponentDefinitions {
+			importCompDef.Href, err = common.RemapPath(importCompDef.Href, baseDir, newDir)
+			if err != nil {
+				return fmt.Errorf("error remapping path %s: %v", importCompDef.Href, err)
+			}
+			(*c.Model.ImportComponentDefinitions)[i] = importCompDef
+		}
+	}
+
+	// Rewrite DefinedComponent paths
+	if c.Model.Components != nil {
+		for _, component := range *c.Model.Components {
+			err = RewritePathsLinks(component.Links, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+
+			err = RewritePathsResponsibleRoles(component.ResponsibleRoles, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+
+			err = RewritePathsControlImplementationSet(component.ControlImplementations, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	// Rewrite Capability paths
+	if c.Model.Capabilities != nil {
+		for _, capability := range *c.Model.Capabilities {
+			err = RewritePathsLinks(capability.Links, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+
+			err = RewritePathsControlImplementationSet(capability.ControlImplementations, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// ResolveImportComponentDefinitions is a function that resolves the import-component-definitions by adding the referenced
+// component defintitions into the current component definition and re-writing any paths in the component definition to
+// be relative to the importing component's directory
+// componentDir must be absolute paths
+// TODO: Add templating
+func (c *ComponentDefinition) ResolveImportComponentDefinitions(componentDir string) error {
+	if c.Model == nil {
+		return fmt.Errorf("cannot import component definitions, model is nil")
+	}
+
+	if c.Model.ImportComponentDefinitions == nil {
+		return nil
+	}
+
+	// Add data from each to the current component definition
+	for _, importCompDef := range *c.Model.ImportComponentDefinitions {
+		// Create a new component definition from the imported component definition Href
+		importCompDefHrefAbs, err := filepath.Abs(filepath.Join(componentDir, importCompDef.Href))
+		if err != nil {
+			return err
+		}
+
+		importCompDefHrefAbs = filepath.Clean(importCompDefHrefAbs)
+
+		data, err := os.ReadFile(importCompDefHrefAbs)
+		if err != nil {
+			return err
+		}
+
+		importedComponent := NewComponentDefinition()
+		err = importedComponent.NewModel(data)
+		if err != nil {
+			return err
+		}
+
+		// Remap paths in the imported component definition to be relative to the working directory
+		err = importedComponent.RewritePaths(filepath.Dir(importCompDefHrefAbs), componentDir)
+		if err != nil {
+			return err
+		}
+
+		// Recursively import any component definitions
+		err = importedComponent.ResolveImportComponentDefinitions(componentDir)
+		if err != nil {
+			return err
+		}
+
+		// Merge the imported component definition into the current component definition
+		err = MergeComponentDefinitions(c.Model, importedComponent.Model)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Clear the imported component definitions
+	c.Model.ImportComponentDefinitions = nil
+
+	return nil
 }
 
 // MergeVariadicComponentDefinition merges multiple variadic component definitions into a single component definition
-func MergeVariadicComponentDefinition(compdefs ...*oscalTypes.ComponentDefinition) (mergedCompDef *oscalTypes.ComponentDefinition, err error) {
-	for _, compdef := range compdefs {
+func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinition) (mergedCompDef *oscalTypes.ComponentDefinition, err error) {
+	for _, compDef := range compDefs {
 		if mergedCompDef == nil {
-			mergedCompDef = compdef
+			mergedCompDef = compDef
 		} else {
-			mergedCompDef, err = MergeComponentDefinitions(mergedCompDef, compdef)
+			err = MergeComponentDefinitions(mergedCompDef, compDef)
 			if err != nil {
 				return nil, err
 			}
@@ -64,26 +246,51 @@ func MergeVariadicComponentDefinition(compdefs ...*oscalTypes.ComponentDefinitio
 }
 
 // This function should perform a merge of two component-definitions where maintaining the original component-definition is the primary concern.
-func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest *oscalTypes.ComponentDefinition) (*oscalTypes.ComponentDefinition, error) {
+func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest *oscalTypes.ComponentDefinition) error {
+	// Nil check on original and latest
+	if original == nil {
+		return fmt.Errorf("original component-definition is nil")
+	}
 
+	if latest == nil {
+		return fmt.Errorf("latest component-definition is nil")
+	}
+
+	// merge the component-definition.components
+	if original.Components != nil && latest.Components != nil {
+		original.Components = mergeDefinedComponents(original.Components, latest.Components)
+	} else if original.Components == nil && latest.Components != nil {
+		original.Components = latest.Components
+	}
+
+	// merge the component-definition.back-matter resources
+	if original.BackMatter != nil && latest.BackMatter != nil {
+		original.BackMatter = &oscalTypes.BackMatter{
+			Resources: mergeResources(original.BackMatter.Resources, latest.BackMatter.Resources),
+		}
+	} else if original.BackMatter == nil && latest.BackMatter != nil {
+		original.BackMatter = latest.BackMatter
+	}
+
+	// Artifact will be modified - need to update the timestamp and UUID
+	original.Metadata.LastModified = time.Now()
+	original.UUID = uuid.NewUUID()
+
+	return nil
+
+}
+
+func mergeDefinedComponents(original *[]oscalTypes.DefinedComponent, latest *[]oscalTypes.DefinedComponent) *[]oscalTypes.DefinedComponent {
 	originalMap := make(map[string]oscalTypes.DefinedComponent)
 
-	if original.Components == nil {
-		return original, fmt.Errorf("original component-definition is nil")
-	}
-
-	if latest.Components == nil {
-		return original, fmt.Errorf("latest component-definition is nil")
-	}
-
-	for _, component := range *original.Components {
-		originalMap[component.Title] = component
+	for _, component := range *original {
+		originalMap[component.UUID] = component
 	}
 
 	latestMap := make(map[string]oscalTypes.DefinedComponent)
 
-	for _, component := range *latest.Components {
-		latestMap[component.Title] = component
+	for _, component := range *latest {
+		latestMap[component.UUID] = component
 	}
 
 	tempItems := make([]oscalTypes.DefinedComponent, 0)
@@ -103,23 +310,7 @@ func MergeComponentDefinitions(original *oscalTypes.ComponentDefinition, latest 
 		tempItems = append(tempItems, item)
 	}
 
-	// merge the back-matter resources
-	if original.BackMatter != nil && latest.BackMatter != nil {
-		original.BackMatter = &oscalTypes.BackMatter{
-			Resources: mergeResources(original.BackMatter.Resources, latest.BackMatter.Resources),
-		}
-	} else if original.BackMatter == nil && latest.BackMatter != nil {
-		original.BackMatter = latest.BackMatter
-	}
-
-	original.Components = &tempItems
-	original.Metadata.LastModified = time.Now()
-
-	// Artifact will be modified - need to update the UUID
-	original.UUID = uuid.NewUUID()
-
-	return original, nil
-
+	return &tempItems
 }
 
 func mergeComponents(original *oscalTypes.DefinedComponent, latest *oscalTypes.DefinedComponent) *oscalTypes.DefinedComponent {
@@ -251,28 +442,28 @@ func mergeLinks(orig []oscalTypes.Link, latest []oscalTypes.Link) *[]oscalTypes.
 }
 
 // Creates a component-definition from a catalog and identified (or all) controls. Allows for specification of what the content of the remarks section should contain.
-func ComponentFromCatalog(command string, source string, catalog *oscalTypes.Catalog, componentTitle string, targetControls []string, targetRemarks []string, framework string) (*oscalTypes.ComponentDefinition, error) {
+func ComponentFromCatalog(command string, source string, catalog *oscalTypes.Catalog, componentTitle string, targetControls []string, targetRemarks []string, framework string) (*ComponentDefinition, error) {
 	// store all of the implemented requirements
 	implementedRequirements := make([]oscalTypes.ImplementedRequirementControlImplementation, 0)
 	var componentDefinition = &oscalTypes.ComponentDefinition{}
 
 	if len(targetControls) == 0 {
-		return componentDefinition, fmt.Errorf("no controls identified for generation")
+		return nil, fmt.Errorf("no controls identified for generation")
 	}
 
 	controlsToImplement, err := ResolveCatalogControls(catalog, targetControls, nil)
 	if err != nil {
-		return componentDefinition, err
+		return nil, err
 	}
 
 	if len(controlsToImplement) == 0 {
-		return componentDefinition, fmt.Errorf("no controls were identified in the catalog from the requirements list: %v\n", targetControls)
+		return nil, fmt.Errorf("no controls were identified in the catalog from the requirements list: %v\n", targetControls)
 	}
 
 	for _, control := range controlsToImplement {
 		ir, err := ControlToImplementedRequirement(&control, targetRemarks)
 		if err != nil {
-			return componentDefinition, fmt.Errorf("error creating implemented requirement: %v", err)
+			return nil, fmt.Errorf("error creating implemented requirement: %v", err)
 		}
 		implementedRequirements = append(implementedRequirements, ir)
 	}
@@ -330,7 +521,10 @@ func ComponentFromCatalog(command string, source string, catalog *oscalTypes.Cat
 		Version:      "0.0.1",
 	}
 
-	return componentDefinition, nil
+	var compDef ComponentDefinition
+	compDef.Model = componentDefinition
+
+	return &compDef, nil
 
 }
 

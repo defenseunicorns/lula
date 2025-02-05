@@ -18,6 +18,16 @@ import (
 	"github.com/defenseunicorns/lula/src/pkg/message"
 )
 
+const (
+	OSCAL_COMPONENT            = "component"
+	OSCAL_ASSESSMENT_RESULTS   = "assessment-results"
+	OSCAL_SYSTEM_SECURITY_PLAN = "system-security-plan"
+	OSCAL_PROFILE              = "profile"
+	OSCAL_CATALOG              = "catalog"
+	OSCAL_POAM                 = "poam"
+	OSCAL_ASSESSMENT_PLAN      = "assessment-plan"
+)
+
 type OSCALModel interface {
 	GetType() string
 	GetCompleteModel() *oscalTypes.OscalModels
@@ -206,12 +216,10 @@ func MergeOscalModels(existingModel *oscalTypes.OscalModels, newModel *oscalType
 			return newModel, nil
 		}
 
-		merged, err := MergeComponentDefinitions(existingModel.ComponentDefinition, newModel.ComponentDefinition)
+		err := MergeComponentDefinitions(existingModel.ComponentDefinition, newModel.ComponentDefinition)
 		if err != nil {
 			return nil, err
 		}
-		// Re-assign after processing errors
-		existingModel.ComponentDefinition = merged
 	}
 
 	// Assessment Results

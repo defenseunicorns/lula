@@ -529,6 +529,122 @@ func TestIsVersionValid(t *testing.T) {
 	}
 }
 
+func TestRemapPath(t *testing.T) {
+	tests := []struct {
+		name          string
+		path          string
+		baseDir       string
+		newDir        string
+		expectedPath  string
+		expectedError bool
+	}{
+		{
+			name:          "Absolute Path",
+			path:          "/path/to/file.txt",
+			baseDir:       "/path/to",
+			newDir:        "/new/path",
+			expectedPath:  "/path/to/file.txt",
+			expectedError: false,
+		},
+		{
+			name:          "Relative Path",
+			path:          "path/to/file.txt",
+			baseDir:       "/app",
+			newDir:        "/app2",
+			expectedPath:  "../app/path/to/file.txt",
+			expectedError: false,
+		},
+		{
+			name:          "Relative Path with ..",
+			path:          "../path/to/file.txt",
+			baseDir:       "/app/sub-path",
+			newDir:        "/app",
+			expectedPath:  "path/to/file.txt",
+			expectedError: false,
+		},
+		{
+			name:          "Reverse Relative Path",
+			path:          "path/to/file.txt",
+			baseDir:       "/app",
+			newDir:        "/app/sub-path",
+			expectedPath:  "../path/to/file.txt",
+			expectedError: false,
+		},
+		{
+			name:          "Relative Path with deep nesting",
+			path:          "../../file.txt",
+			baseDir:       "/app/path/to/caller",
+			newDir:        "/app",
+			expectedPath:  "path/file.txt",
+			expectedError: false,
+		},
+		{
+			name:          "Relative Path with file://",
+			path:          "file://path/to/file.txt",
+			baseDir:       "/app",
+			newDir:        "/app2",
+			expectedPath:  "../app/path/to/file.txt",
+			expectedError: false,
+		},
+		{
+			name:          "Relative Path with file:",
+			path:          "file:file.txt",
+			baseDir:       "/app",
+			newDir:        "/app2",
+			expectedPath:  "../app/file.txt",
+			expectedError: false,
+		},
+		{
+			name:          "Absolute Path with file://",
+			path:          "file:///path/to/file.txt",
+			baseDir:       "/path/to",
+			newDir:        "/new/path",
+			expectedPath:  "file:///path/to/file.txt",
+			expectedError: false,
+		},
+		{
+			name:          "UUID",
+			path:          "#0a2b9722-06ce-446f-85e5-cdfe2fe70975",
+			baseDir:       "/path/to",
+			newDir:        "/new/path",
+			expectedPath:  "#0a2b9722-06ce-446f-85e5-cdfe2fe70975",
+			expectedError: false,
+		},
+		{
+			// This doesn't error because there's no check in the function to validate the path
+			// I think this is ok, because the old path wouldn't work anyway, so the new path not working doesn't matter(?)
+			// This is maybe more of a test to document the behavior of the function
+			name:          "Invalid path remap",
+			path:          "../../path/to/file.txt",
+			baseDir:       "/app",
+			newDir:        "/app2",
+			expectedPath:  "../path/to/file.txt",
+			expectedError: false,
+		},
+		{
+			// Similar logic to previous case: This doesn't error because there's no check in the function to validate the path
+			name:          "Invalid path name",
+			path:          "inv@1*d pa#h",
+			baseDir:       "/app",
+			newDir:        "/app2",
+			expectedPath:  "../app/inv@1*d pa#h",
+			expectedError: false,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotPath, err := common.RemapPath(tt.path, tt.baseDir, tt.newDir)
+			if (err != nil) != tt.expectedError {
+				t.Errorf("RemapPath() error = %v, wantErr %v", err, tt.expectedError)
+				return
+			}
+			require.Equal(t, tt.expectedPath, gotPath)
+		})
+	}
+
+}
+
 func FuzzPrefix(f *testing.F) {
 	f.Add("uuid")
 	f.Add("149f0049-7a3c-4e4d-8431-bec3a55f31d9")
@@ -547,5 +663,22 @@ func FuzzReadValidationsFromYaml(f *testing.F) {
 
 	f.Fuzz(func(t *testing.T, a []byte) {
 		common.ReadValidationsFromYaml(a)
+	})
+}
+
+func FuzzRemapPath(f *testing.F) {
+	f.Add("foo.txt", "/app", "/newapp")
+
+	f.Fuzz(func(t *testing.T, a string, b string, c string) {
+		// Forward mapping
+		gotPath, _ := common.RemapPath(a, b, c)
+
+		// Reverse mapping
+		reversePath, _ := common.RemapPath(gotPath, c, b)
+
+		// Assert that the reverse mapping equals the original `a`
+		if reversePath != a {
+			t.Errorf("Round-trip failed: gotPath=%q, reversePath=%q, original=%q", gotPath, reversePath, a)
+		}
 	})
 }

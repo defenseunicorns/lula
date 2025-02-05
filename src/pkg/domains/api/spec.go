@@ -19,26 +19,28 @@ const (
 // other mutations or normalizations necessary. The original values are not modified.
 // validateAndMutateSpec will validate the entire object and may return multiple
 // errors.
-func validateAndMutateSpec(spec *ApiSpec) (errs error) {
+func validateAndMutateSpec(spec *ApiSpec) (api ApiDomain, errs error) {
 	if spec == nil {
-		return errors.New("spec is required")
+		return api, errors.New("spec is required")
 	}
 	if len(spec.Requests) == 0 {
 		errs = errors.Join(errs, errors.New("some requests must be specified"))
 	}
 
-	if spec.Options == nil {
-		spec.Options = &ApiOpts{}
-	}
-	err := validateAndMutateOptions(spec.Options)
+	defaults, err := validateAndMutateOptions(spec.Options)
 	if err != nil {
 		errs = errors.Join(errs, err)
 	}
+	api.defaults = defaults
 
+	reqs := make([]request, len(spec.Requests))
 	for i := range spec.Requests {
 		if spec.Requests[i].Name == "" {
 			errs = errors.Join(errs, errors.New("request name cannot be empty"))
+		} else {
+			reqs[i].name = spec.Requests[i].Name
 		}
+
 		if spec.Requests[i].URL == "" {
 			errs = errors.Join(errs, errors.New("request url cannot be empty"))
 		}
@@ -46,65 +48,78 @@ func validateAndMutateSpec(spec *ApiSpec) (errs error) {
 		if err != nil {
 			errs = errors.Join(errs, errors.New("invalid request url"))
 		} else {
-			spec.Requests[i].reqURL = reqUrl
+			reqs[i].reqURL = reqUrl
 		}
+
 		if spec.Requests[i].Params != nil {
 			queryParameters := url.Values{}
 			for k, v := range spec.Requests[i].Params {
 				queryParameters.Add(k, v)
 			}
-			spec.Requests[i].reqParameters = queryParameters
+			reqs[i].reqParameters = queryParameters
 		}
+
+		reqs[i].body = spec.Requests[i].Body
+
 		if spec.Requests[i].Options != nil {
-			err = validateAndMutateOptions(spec.Requests[i].Options)
+			opts, err := validateAndMutateOptions(spec.Requests[i].Options)
 			if err != nil {
 				errs = errors.Join(errs, err)
 			}
+			reqs[i].opts = opts
 		}
 
 		switch m := spec.Requests[i].Method; strings.ToLower(m) {
 		case "post":
-			spec.Requests[i].Method = HTTPMethodPost
+			reqs[i].method = HTTPMethodPost
 		case "get", "":
 			fallthrough
 		default:
-			spec.Requests[i].Method = HTTPMethodGet
+			reqs[i].method = HTTPMethodGet
 		}
 
-		if !spec.executable { // we only need to set this once
+		if !api.executable { // we only need to set this once
 			if spec.Requests[i].Executable {
-				spec.executable = true
+				api.executable = true
 			}
 		}
 	}
-
-	return errs
+	if len(reqs) > 0 {
+		api.requests = reqs
+	}
+	return api, errs
 }
 
-func validateAndMutateOptions(opts *ApiOpts) (errs error) {
-	if opts == nil {
-		return errors.New("opts cannot be nil")
+func validateAndMutateOptions(apiOpts *ApiOpts) (*opts, error) {
+	if apiOpts == nil {
+		return &opts{timeout: &defaultTimeout}, nil
 	}
+	options := &opts{}
+	var errs error
 
-	if opts.Timeout != "" {
-		duration, err := time.ParseDuration(opts.Timeout)
+	if apiOpts.Timeout != "" {
+		duration, err := time.ParseDuration(apiOpts.Timeout)
 		if err != nil {
-			errs = errors.Join(errs, fmt.Errorf("invalid wait timeout string: %s", opts.Timeout))
+			errs = errors.Join(errs, fmt.Errorf("invalid wait timeout string: %s", apiOpts.Timeout))
 		}
-		opts.timeout = &duration
+		options.timeout = &duration
 	}
 
-	if opts.timeout == nil {
-		opts.timeout = &defaultTimeout
+	if options.timeout == nil {
+		options.timeout = &defaultTimeout
 	}
 
-	if opts.Proxy != "" {
-		proxyURL, err := url.Parse(opts.Proxy)
+	if apiOpts.Proxy != "" {
+		proxyURL, err := url.Parse(apiOpts.Proxy)
 		if err != nil {
 			errs = errors.Join(errs, fmt.Errorf("invalid proxy string %s", proxyURL.Redacted()))
 		}
-		opts.proxyURL = proxyURL
+		options.proxyURL = proxyURL
 	}
 
-	return errs
+	if apiOpts.Headers != nil {
+		options.headers = apiOpts.Headers
+	}
+
+	return options, errs
 }

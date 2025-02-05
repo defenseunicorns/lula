@@ -156,25 +156,48 @@ func FetchLocalFile(url *url.URL, config *fetchOpts) ([]byte, error) {
 	return bytes, err
 }
 
+// GetLocalFileDir returns the directory of a local file
+// An empty string indicates to the caller that the URL is not a relative path
+// See URL for reference: https://pkg.go.dev/net/url#URL
+// Intent of check is to handle different specifications of file paths:
+// - file:///path/to/file
+// - file:my-file.txt
+// - ./path/to/file
+// - /path/to/file
+// - https://example.com/path/to/file
+// ** This will not work for Windows file paths, but Lula doesn't run on Windows for now
 func GetLocalFileDir(inputURL, baseDir string) string {
 	url, err := url.Parse(inputURL)
 	if err != nil {
 		return ""
 	}
-	requestUri := url.RequestURI()
 
-	// Intent of check is to handle different specifications of file paths:
-	// - file:///path/to/file
-	// - ./path/to/file
-	// - /path/to/file
-	// - https://example.com/path/to/file
-	if url.Scheme == "file" || !url.IsAbs() {
-		fullPath := filepath.Join(baseDir, url.Host, requestUri)
-		if _, err := os.Stat(fullPath); err == nil {
-			return filepath.Dir(fullPath)
+	if url.Scheme == "file" {
+		// If the scheme is file, check if the path is absolute
+		// To check absolute path, check both the host and the opaque fields
+		if url.Opaque != "" {
+			return returnDirIfRelative(url.Opaque, baseDir)
 		}
+		if url.Host == "" {
+			return ""
+		}
+	} else if url.Scheme != "" {
+		return ""
 	}
-	return ""
+
+	return returnDirIfRelative(filepath.Join(url.Host, url.RequestURI()), baseDir)
+}
+
+// returnDirIfRelative returns the directory of the path provided if it is relative
+// if the path is absolute this function returns an empty string to comply with the parent function
+func returnDirIfRelative(path, baseDir string) string {
+	if filepath.IsAbs(path) {
+		return ""
+	}
+
+	fullPath := filepath.Join(baseDir, path)
+
+	return filepath.Dir(fullPath)
 }
 
 // ValidateChecksum validates a given checksum against a given []bytes.
