@@ -79,7 +79,7 @@ func doHTTPReq(ctx context.Context, client http.Client, method string, url url.U
 	return &respObj, nil
 }
 
-func clientFromOpts(opts *ApiOpts) http.Client {
+func clientFromOpts(opts *opts) http.Client {
 	transport := &http.Transport{}
 	if opts.proxyURL != nil {
 		transport.Proxy = http.ProxyURL(opts.proxyURL)
