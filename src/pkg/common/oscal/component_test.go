@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
@@ -689,11 +690,27 @@ func TestResolveImportComponentDefinitions(t *testing.T) {
 		require.Equal(t, expectedComponent, *component.GetCompleteModel())
 	})
 
-	// t.Run("Resolve ImportComponentDefinitions with template data", func(t *testing.T) {
-	// 	component := oscal.ComponentDefinition{}
-	// 	err := component.ResolveImportComponentDefinitions("")
-	// 	require.NoError(t, err)
-	// })
+	t.Run("Resolve ImportComponentDefinitions with remote imports", func(t *testing.T) {
+		componentWithRemoteImportsRel := "../../../test/unit/common/oscal/component-with-remote-imports.yaml"
+
+		// Calculate the absolute paths
+		componentDirAbs, err := filepath.Abs(componentWithRemoteImportsRel)
+		require.NoError(t, err)
+		componentDirAbs = filepath.Dir(componentDirAbs)
+
+		componentBytes := loadTestData(t, componentWithRemoteImportsRel)
+
+		var component oscal.ComponentDefinition
+		err = component.NewModel(componentBytes)
+		require.NoError(t, err)
+
+		err = component.ResolveImportComponentDefinitions(componentDirAbs)
+		require.NoError(t, err)
+
+		// Check expected contents
+		assert.Equal(t, 1, len(*component.Model.Components))
+		assert.Equal(t, 1, len(*component.Model.BackMatter.Resources))
+	})
 
 }
 

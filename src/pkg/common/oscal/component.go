@@ -14,6 +14,7 @@ import (
 
 	"github.com/defenseunicorns/lula/src/internal/template"
 	"github.com/defenseunicorns/lula/src/pkg/common"
+	"github.com/defenseunicorns/lula/src/pkg/common/network"
 	"github.com/defenseunicorns/lula/src/pkg/message"
 )
 
@@ -234,14 +235,9 @@ func (c *ComponentDefinition) ResolveImportComponentDefinitions(componentDir str
 	// Add data from each to the current component definition
 	for _, importCompDef := range *c.Model.ImportComponentDefinitions {
 		// Create a new component definition from the imported component definition Href
-		importCompDefHrefAbs, err := filepath.Abs(filepath.Join(componentDir, importCompDef.Href))
-		if err != nil {
-			return err
-		}
+		importCompDefHrefAbs := network.GetAbsolutePath(importCompDef.Href, componentDir)
 
-		importCompDefHrefAbs = filepath.Clean(importCompDefHrefAbs)
-
-		data, err := os.ReadFile(importCompDefHrefAbs)
+		data, err := network.Fetch(importCompDefHrefAbs)
 		if err != nil {
 			return err
 		}
@@ -258,9 +254,12 @@ func (c *ComponentDefinition) ResolveImportComponentDefinitions(componentDir str
 		}
 
 		// Remap paths in the imported component definition to be relative to the working directory
-		err = importedComponent.RewritePaths(filepath.Dir(importCompDefHrefAbs), componentDir)
-		if err != nil {
-			return err
+		// This only works if local file
+		if network.IsFileLocal(importCompDefHrefAbs) {
+			err = importedComponent.RewritePaths(filepath.Dir(importCompDefHrefAbs), componentDir)
+			if err != nil {
+				return err
+			}
 		}
 
 		// Recursively import any component definitions
