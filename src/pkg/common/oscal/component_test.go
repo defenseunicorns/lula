@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
@@ -110,13 +111,15 @@ func TestNewModel(t *testing.T) {
 			data:    []byte{},
 			wantErr: true,
 		},
-		// Additional test cases can be added here
+		// TODO: test newmodel that's formatted as a template w nil templatedata
+		// TODO: test newmodel with proper templated output(?)
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			model := oscal.NewComponentDefinition()
-			err := model.NewModel(tt.data)
+			model, err := oscal.NewComponentDefinition()
+			require.NoError(t, err)
+			err = model.NewModel(tt.data)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("NewComponentDefinition() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -650,38 +653,109 @@ func TestRewritePaths(t *testing.T) {
 	require.Equal(t, expectedComponent, *component.GetCompleteModel())
 }
 
-func TestImportComponentDefinitions(t *testing.T) {
-	componentWithImportsRel := "../../../test/unit/common/oscal/component-with-imports.yaml"
+func TestResolveImportComponentDefinitions(t *testing.T) {
+	t.Run("Resolve ImportComponentDefinitions with valid imports, no template data", func(t *testing.T) {
+		componentWithImportsRel := "../../../test/unit/common/oscal/component-with-imports.yaml"
 
-	// Calculate the absolute paths
-	componentDirAbs, err := filepath.Abs(componentWithImportsRel)
-	require.NoError(t, err)
-	componentDirAbs = filepath.Dir(componentDirAbs)
+		// Calculate the absolute paths
+		componentDirAbs, err := filepath.Abs(componentWithImportsRel)
+		require.NoError(t, err)
+		componentDirAbs = filepath.Dir(componentDirAbs)
 
-	componentBytes := loadTestData(t, componentWithImportsRel)
+		componentBytes := loadTestData(t, componentWithImportsRel)
 
-	var component oscal.ComponentDefinition
-	err = component.NewModel(componentBytes)
-	require.NoError(t, err)
+		var component oscal.ComponentDefinition
+		err = component.NewModel(componentBytes)
+		require.NoError(t, err)
 
-	err = component.ResolveImportComponentDefinitions(componentDirAbs)
-	require.NoError(t, err)
+		err = component.ResolveImportComponentDefinitions(componentDirAbs)
+		require.NoError(t, err)
 
-	// Make deterministic to ensure same ordering of components
-	err = component.MakeDeterministic()
-	require.NoError(t, err)
+		// Make deterministic to ensure same ordering of components
+		err = component.MakeDeterministic()
+		require.NoError(t, err)
 
-	// Check the component has all expected imports and path re-maps
-	expectedComponentBytes := loadTestData(t, "../../../test/unit/common/oscal/component-with-imports-resolved.yaml")
+		// Check the component has all expected imports and path re-maps
+		expectedComponentBytes := loadTestData(t, "../../../test/unit/common/oscal/component-with-imports-resolved.yaml")
 
-	var expectedComponent oscalTypes.OscalCompleteSchema
-	err = yaml.Unmarshal(expectedComponentBytes, &expectedComponent)
-	require.NoError(t, err)
+		var expectedComponent oscalTypes.OscalCompleteSchema
+		err = yaml.Unmarshal(expectedComponentBytes, &expectedComponent)
+		require.NoError(t, err)
 
-	// Compare the expected and actual component definitions
-	// equate the UUIDs and timestamp since those are changed on merge
-	expectedComponent.ComponentDefinition.UUID = component.GetCompleteModel().ComponentDefinition.UUID
-	expectedComponent.ComponentDefinition.Metadata.LastModified = component.GetCompleteModel().ComponentDefinition.Metadata.LastModified
+		// Compare the expected and actual component definitions
+		// equate the UUIDs and timestamp since those are changed on merge
+		expectedComponent.ComponentDefinition.UUID = component.GetCompleteModel().ComponentDefinition.UUID
+		expectedComponent.ComponentDefinition.Metadata.LastModified = component.GetCompleteModel().ComponentDefinition.Metadata.LastModified
 
-	require.Equal(t, expectedComponent, *component.GetCompleteModel())
+		require.Equal(t, expectedComponent, *component.GetCompleteModel())
+	})
+
+	t.Run("Resolve ImportComponentDefinitions with remote imports", func(t *testing.T) {
+		componentWithRemoteImportsRel := "../../../test/unit/common/oscal/component-with-remote-imports.yaml"
+
+		// Calculate the absolute paths
+		componentDirAbs, err := filepath.Abs(componentWithRemoteImportsRel)
+		require.NoError(t, err)
+		componentDirAbs = filepath.Dir(componentDirAbs)
+
+		componentBytes := loadTestData(t, componentWithRemoteImportsRel)
+
+		var component oscal.ComponentDefinition
+		err = component.NewModel(componentBytes)
+		require.NoError(t, err)
+
+		err = component.ResolveImportComponentDefinitions(componentDirAbs)
+		require.NoError(t, err)
+
+		// Check expected contents
+		assert.Equal(t, 1, len(*component.Model.Components))
+		assert.Equal(t, 1, len(*component.Model.BackMatter.Resources))
+	})
+
+}
+
+func TestMergeVariadicComponentDefinition(t *testing.T) {
+	t.Run("Merge none on empty starting component definition", func(t *testing.T) {
+		var component oscal.ComponentDefinition
+		err := component.MergeVariadicComponentDefinition()
+		require.NoError(t, err)
+	})
+
+	t.Run("Merge on empty starting component definition", func(t *testing.T) {
+		componentBytes := loadTestData(t, validComponentPath)
+
+		var expectedComponent oscalTypes.OscalCompleteSchema
+		err := yaml.Unmarshal(componentBytes, &expectedComponent)
+		require.NoError(t, err)
+
+		var newComponent oscal.ComponentDefinition
+		err = newComponent.NewModel(componentBytes)
+		require.NoError(t, err)
+
+		var component oscal.ComponentDefinition
+		err = component.MergeVariadicComponentDefinition(&newComponent)
+		require.NoError(t, err)
+
+		// Check length of components are the same
+		require.Equal(t, len(*expectedComponent.ComponentDefinition.Components), len(*component.Model.Components))
+	})
+
+	t.Run("Merge on populated starting component definition", func(t *testing.T) {
+		componentBytes := loadTestData(t, validComponentPath)
+		newComponentBytes := loadTestData(t, validGeneratedComponentPath)
+
+		var newComponent oscal.ComponentDefinition
+		err := newComponent.NewModel(newComponentBytes)
+		require.NoError(t, err)
+
+		var component oscal.ComponentDefinition
+		err = component.NewModel(componentBytes)
+		require.NoError(t, err)
+
+		err = component.MergeVariadicComponentDefinition(&newComponent)
+		require.NoError(t, err)
+
+		// Check length of components is merged length, should be 2
+		require.Equal(t, 2, len(*component.Model.Components))
+	})
 }

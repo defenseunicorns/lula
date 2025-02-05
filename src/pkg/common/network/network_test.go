@@ -297,3 +297,105 @@ func TestGetLocalFileDir(t *testing.T) {
 		})
 	}
 }
+
+func TestGetAbsolutePath(t *testing.T) {
+	tests := []struct {
+		name        string
+		inputFile   string
+		baseDir     string
+		expectedDir string
+	}{
+		{
+			name:        "Absolute Path",
+			inputFile:   "/root/path/to/file.txt",
+			baseDir:     "/root",
+			expectedDir: "/root/path/to/file.txt",
+		},
+		{
+			name:        "Relative Path",
+			inputFile:   "path/to/file.txt",
+			baseDir:     "/root",
+			expectedDir: "/root/path/to/file.txt",
+		},
+		{
+			name:        "http URL",
+			inputFile:   "https://example.com/path/to/file.txt",
+			baseDir:     "/path/to",
+			expectedDir: "https://example.com/path/to/file.txt",
+		},
+		{
+			name:        "Relative Path with ..",
+			inputFile:   "../path/to/file.txt",
+			baseDir:     "/root/app",
+			expectedDir: "/root/path/to/file.txt",
+		},
+		{
+			name:        "Relative Path with file://",
+			inputFile:   "file://path/to/file.txt",
+			baseDir:     "/root",
+			expectedDir: "/root/path/to/file.txt",
+		},
+		{
+			name:        "Relative Path with file:",
+			inputFile:   "file:../path/to/file.txt",
+			baseDir:     "/root/app",
+			expectedDir: "/root/path/to/file.txt",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			gotDir := network.GetAbsolutePath(tt.inputFile, tt.baseDir)
+			if tt.expectedDir != gotDir {
+				t.Errorf("GetAbsolutePath() gotDir = %v, want %v", gotDir, tt.expectedDir)
+			}
+		})
+	}
+}
+
+func TestIsFileLocal(t *testing.T) {
+	tests := []struct {
+		name      string
+		inputFile string
+		expected  bool
+	}{
+		{
+			name:      "Absolute Path",
+			inputFile: "/root/path/to/file.txt",
+			expected:  true,
+		},
+		{
+			name:      "Relative Path",
+			inputFile: "path/to/file.txt",
+			expected:  true,
+		},
+		{
+			name:      "http URL",
+			inputFile: "https://example.com/path/to/file.txt",
+			expected:  false,
+		},
+		{
+			name:      "Relative Path with ..",
+			inputFile: "../path/to/file.txt",
+			expected:  true,
+		},
+		{
+			name:      "Path with file://",
+			inputFile: "file:///path/to/file.txt",
+			expected:  true,
+		},
+		{
+			name:      "Path with file:",
+			inputFile: "file:/path/to/file.txt",
+			expected:  true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := network.IsFileLocal(tt.inputFile)
+			if tt.expected != got {
+				t.Errorf("IsFileLocal() got = %v, want %v", got, tt.expected)
+			}
+		})
+	}
+}

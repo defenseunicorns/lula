@@ -1,0 +1,107 @@
+system-security-plan:
+  control-implementation:
+    description: ""
+    implemented-requirements:
+      - by-components:
+          - component-uuid: XXX
+            description: Here is a description
+            links:
+              - href: '#a414c932-1fc9-4698-9e39-18cb8abe4851'
+                rel: lula
+              - href: ../../unit/common/oscal/validation.yaml
+                rel: lula
+            uuid: XXX
+        control-id: ac-1
+        remarks: |
+          STATEMENT:
+          a. Develop, document, and disseminate to [Assignment: organization-defined organization-defined personnel or roles]:
+          	1. [Selection: (one-or-more) organization-defined organization-level; mission/business process-level; system-level;] access control policy that:
+          		(a) Addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; and
+          		(b) Is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines; and
+          	2. Procedures to facilitate the implementation of the access control policy and the associated access controls;
+          b. Designate an [Assignment: organization-defined official] to manage the development, documentation, and dissemination of the access control policy and procedures; and
+          c. Review and update the current access control:
+          	1. Policy [Assignment: organization-defined frequency] and following [Assignment: organization-defined events] ; and
+          	2. Procedures [Assignment: organization-defined frequency] and following [Assignment: organization-defined events].
+        uuid: XXX
+      - control-id: ac-2
+        remarks: |
+          STATEMENT:
+          a. Define and document the types of accounts allowed and specifically prohibited for use within the system;
+          b. Assign account managers;
+          c. Require [Assignment: organization-defined prerequisites and criteria] for group and role membership;
+          d. Specify:
+          	1. Authorized users of the system;
+          	2. Group and role membership; and
+          	3. Access authorizations (i.e., privileges) and [Assignment: organization-defined attributes (as required)] for each account;
+          e. Require approvals by [Assignment: organization-defined personnel or roles] for requests to create accounts;
+          f. Create, enable, modify, disable, and remove accounts in accordance with [Assignment: organization-defined policy, procedures, prerequisites, and criteria];
+          g. Monitor the use of accounts;
+          h. Notify account managers and [Assignment: organization-defined personnel or roles] within:
+          	1. [Assignment: organization-defined time period] when accounts are no longer required;
+          	2. [Assignment: organization-defined time period] when users are terminated or transferred; and
+          	3. [Assignment: organization-defined time period] when system usage or need-to-know changes for an individual;
+          i. Authorize access to the system based on:
+          	1. A valid access authorization;
+          	2. Intended system usage; and
+          	3. [Assignment: organization-defined attributes (as required)];
+          j. Review accounts for compliance with account management requirements [Assignment: organization-defined frequency];
+          k. Establish and implement a process for changing shared or group account authenticators (if deployed) when individuals are removed from the group; and
+          l. Align account management processes with personnel termination and transfer processes.
+        uuid: XXX
+      - control-id: ac-3
+        remarks: |-
+          STATEMENT:
+          Enforce approved authorizations for logical access to information and system resources in accordance with applicable access control policies.
+        uuid: XXX
+  import-profile:
+    href: ../../unit/common/oscal/valid-profile.yaml
+  metadata:
+    last-modified: XXX
+    oscal-version: 1.1.3
+    parties:
+      - links:
+          - href: https://github.com/defenseunicorns/lula
+            rel: website
+        name: Defense Unicorns
+        type: organization
+        uuid: XXX
+    props:
+      - name: generation
+        ns: https://docs.lula.dev/oscal/ns
+        value: system-security-plan --profile ../../unit/common/oscal/valid-profile.yaml --remarks statement --components ../../unit/common/oscal/component-testrewritepaths.yaml
+    published: XXX
+    remarks: System Security Plan generated from Lula
+    title: System Security Plan
+    version: 0.0.1
+  system-characteristics:
+    authorization-boundary:
+      description: ""
+    description: ""
+    status:
+      remarks: 'TODO: Validate state and remove this remark'
+      state: operational
+    system-ids:
+      - id: generated-system
+    system-information:
+      information-types:
+        - description: 'TODO: Update information types'
+          title: Generated System Information
+          uuid: XXX
+    system-name: Generated System
+  system-implementation:
+    components:
+      - description: Some test component
+        links:
+          - href: ../../unit/common/oscal/component-readme.md
+        status:
+          remarks: 'TODO: Validate state and remove this remark'
+          state: operational
+        title: Test Component 1
+        type: software
+        uuid: XXX
+    users:
+      - remarks: 'TODO: Update generated user'
+        title: Generated User
+        uuid: XXX
+  uuid: XXX
