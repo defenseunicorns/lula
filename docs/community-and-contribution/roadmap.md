@@ -2,29 +2,29 @@
 
 ## 2025 Annual
 
-### Q1 - API Domain, Library Improvements, Output Formats:
+### Q1 - Maintenance Support:
 
-* API Domain: Improve capabilities of the API domain to support basic multi-request workflows
-* Validation: Library improvements
-* OSCAL: System Security Plan improvements
-* Formats: Mapping OSCAL data to other consumable artifacts
+* Vulnerabilities
+* Critical Bug Fixes
+* Dependencies
 
-### Q2 - Assessments, Library, Packaging
+### Q2 - Maintenance Support:
 
-* OSCAL: Support for generating Assessment Plan OSCAL model artifacts & POAM model artifacts
-* Assess: Performing the assessment of a system of many components
-* Library: Improve library utilization across project
-* Package: Collection and packaging of deliverable artifacts
+* Vulnerabilities
+* Critical Bug Fixes
+* Dependencies
 
-### Q3 - Reporting, Console, Tutorials
+### Q3 - Maintenance Support:
 
-* Report: Enhance reporting coverage across models
-* Console: Establish console parity with CLI
-* Tutorials: Creation of tutorials to enhance consumer understanding of capabilities
+* Vulnerabilities
+* Critical Bug Fixes
+* Dependencies
 
-### Q4 - TBD
+### Q4 - Maintenance Support:
 
-* Benchmarks: Ability to perform Lula validations against various benchmarks (CIS etc)
+* Vulnerabilities
+* Critical Bug Fixes
+* Dependencies
 
 ## 2024 Annual
 
