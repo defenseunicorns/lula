@@ -12,7 +12,9 @@ import (
 	"github.com/defenseunicorns/go-oscal/src/pkg/uuid"
 	oscalTypes "github.com/defenseunicorns/go-oscal/src/types/oscal-1-1-3"
 
+	"github.com/defenseunicorns/lula/src/internal/template"
 	"github.com/defenseunicorns/lula/src/pkg/common"
+	"github.com/defenseunicorns/lula/src/pkg/common/network"
 	"github.com/defenseunicorns/lula/src/pkg/message"
 )
 
@@ -32,18 +34,59 @@ type parameter struct {
 	Select *selection
 }
 
-type ComponentDefinition struct {
-	Model *oscalTypes.ComponentDefinition
+// Add options to the component definition
+type ComponentDefinitionOption func(*ComponentDefinition) error
+
+func ComponentWithTemplateData(templateData *template.TemplateData) ComponentDefinitionOption {
+	return func(c *ComponentDefinition) error {
+		c.templateData = templateData
+		return nil
+	}
 }
 
-func NewComponentDefinition() *ComponentDefinition {
+func ComponentWithRenderType(renderType template.RenderType) ComponentDefinitionOption {
+	return func(c *ComponentDefinition) error {
+		c.renderType = renderType
+		return nil
+	}
+}
+
+type ComponentDefinition struct {
+	Model *oscalTypes.ComponentDefinition
+
+	// templating params
+	templateData *template.TemplateData
+	renderType   template.RenderType
+}
+
+func NewComponentDefinition(opts ...ComponentDefinitionOption) (*ComponentDefinition, error) {
 	var compDef ComponentDefinition
+
+	for _, opt := range opts {
+		if err := opt(&compDef); err != nil {
+			return nil, err
+		}
+	}
+
 	compDef.Model = nil
-	return &compDef
+
+	return &compDef, nil
 }
 
 // Create a new ComponentDefinition from a byte array
+// Attempts to render data if identified as a template
 func (c *ComponentDefinition) NewModel(data []byte) error {
+	var err error
+	isTemplate := template.IsTemplate(string(data))
+
+	if isTemplate {
+		templateRenderer := template.NewTemplateRenderer(c.templateData)
+		data, err = templateRenderer.Render(string(data), c.renderType)
+		if err != nil {
+			return fmt.Errorf("error rendering template: %v", err)
+		}
+	}
+
 	model, err := NewOscalModel(data)
 	if err != nil {
 		return err
@@ -88,11 +131,17 @@ func (c *ComponentDefinition) HandleExisting(path string) error {
 		if err != nil {
 			return fmt.Errorf("error reading file: %v", err)
 		}
-		compDef := NewComponentDefinition()
+
+		compDef, err := NewComponentDefinition()
+		if err != nil {
+			return err
+		}
+
 		err = compDef.NewModel(existingFileBytes)
 		if err != nil {
 			return err
 		}
+
 		err = MergeComponentDefinitions(compDef.Model, c.Model)
 		if err != nil {
 			return err
@@ -102,19 +151,149 @@ func (c *ComponentDefinition) HandleExisting(path string) error {
 	return nil
 }
 
-// MergeVariadicComponentDefinition merges multiple variadic component definitions into a single component definition
-func MergeVariadicComponentDefinition(compDefs ...*oscalTypes.ComponentDefinition) (mergedCompDef *oscalTypes.ComponentDefinition, err error) {
-	for _, compDef := range compDefs {
-		if mergedCompDef == nil {
-			mergedCompDef = compDef
-		} else {
-			err = MergeComponentDefinitions(mergedCompDef, compDef)
+// RewritePaths finds all the paths in the component definition relative to the baseDir and updates them to be relative to the newDir
+// baseDir and newDir must be absolute paths
+func (c *ComponentDefinition) RewritePaths(baseDir string, newDir string) (err error) {
+	if c.Model == nil {
+		return fmt.Errorf("cannot remap paths, model is nil")
+	}
+
+	// Rewrite BackMatter paths
+	err = RewritePathsBackMatter(c.Model.BackMatter, baseDir, newDir)
+	if err != nil {
+		return err
+	}
+
+	// Rewrite Metadata paths
+	err = RewritePathsMetadata(&c.Model.Metadata, baseDir, newDir)
+	if err != nil {
+		return err
+	}
+
+	// Rewrite ImportComponentDefinitions paths
+	if c.Model.ImportComponentDefinitions != nil {
+		for i, importCompDef := range *c.Model.ImportComponentDefinitions {
+			importCompDef.Href, err = common.RemapPath(importCompDef.Href, baseDir, newDir)
 			if err != nil {
-				return nil, err
+				return fmt.Errorf("error remapping path %s: %v", importCompDef.Href, err)
+			}
+			(*c.Model.ImportComponentDefinitions)[i] = importCompDef
+		}
+	}
+
+	// Rewrite DefinedComponent paths
+	if c.Model.Components != nil {
+		for _, component := range *c.Model.Components {
+			err = RewritePathsLinks(component.Links, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+
+			err = RewritePathsResponsibleRoles(component.ResponsibleRoles, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+
+			err = RewritePathsControlImplementationSet(component.ControlImplementations, baseDir, newDir)
+			if err != nil {
+				return err
 			}
 		}
 	}
-	return mergedCompDef, nil
+
+	// Rewrite Capability paths
+	if c.Model.Capabilities != nil {
+		for _, capability := range *c.Model.Capabilities {
+			err = RewritePathsLinks(capability.Links, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+
+			err = RewritePathsControlImplementationSet(capability.ControlImplementations, baseDir, newDir)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
+}
+
+// ResolveImportComponentDefinitions is a function that resolves the import-component-definitions by adding the referenced
+// component defintitions into the current component definition and re-writing any paths in the component definition to
+// be relative to the importing component's directory
+// componentDir must be absolute paths
+func (c *ComponentDefinition) ResolveImportComponentDefinitions(componentDir string) error {
+	if c.Model == nil {
+		return fmt.Errorf("cannot import component definitions, model is nil")
+	}
+
+	if c.Model.ImportComponentDefinitions == nil {
+		return nil
+	}
+
+	// Add data from each to the current component definition
+	for _, importCompDef := range *c.Model.ImportComponentDefinitions {
+		// Create a new component definition from the imported component definition Href
+		importCompDefHrefAbs := network.GetAbsolutePath(importCompDef.Href, componentDir)
+
+		data, err := network.Fetch(importCompDefHrefAbs)
+		if err != nil {
+			return err
+		}
+
+		// TODO: Could imported components have different templating data?
+		importedComponent, err := NewComponentDefinition(ComponentWithTemplateData(c.templateData), ComponentWithRenderType(c.renderType))
+		if err != nil {
+			return err
+		}
+
+		err = importedComponent.NewModel(data)
+		if err != nil {
+			return err
+		}
+
+		// Remap paths in the imported component definition to be relative to the working directory
+		// This only works if local file
+		if network.IsFileLocal(importCompDefHrefAbs) {
+			err = importedComponent.RewritePaths(filepath.Dir(importCompDefHrefAbs), componentDir)
+			if err != nil {
+				return err
+			}
+		}
+
+		// Recursively import any component definitions
+		err = importedComponent.ResolveImportComponentDefinitions(componentDir)
+		if err != nil {
+			return err
+		}
+
+		// Merge the imported component definition into the current component definition
+		err = MergeComponentDefinitions(c.Model, importedComponent.Model)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Clear the imported component definitions
+	c.Model.ImportComponentDefinitions = nil
+
+	return nil
+}
+
+// MergeVariadicComponentDefinition merges multiple variadic component definitions into a single component definition
+func (c *ComponentDefinition) MergeVariadicComponentDefinition(compDefs ...*ComponentDefinition) (err error) {
+	for _, compDef := range compDefs {
+		if c.Model == nil {
+			c.Model = compDef.Model
+		} else {
+			err = MergeComponentDefinitions(c.Model, compDef.Model)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 // This function should perform a merge of two component-definitions where maintaining the original component-definition is the primary concern.

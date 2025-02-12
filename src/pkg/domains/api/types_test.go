@@ -23,13 +23,13 @@ func TestCreateApiDomain(t *testing.T) {
 			spec:        nil,
 			expectedErr: true,
 		},
-		"empty requests": {
+		"empty Requests": {
 			spec: &ApiSpec{
 				Requests: []Request{},
 			},
 			expectedErr: true,
 		},
-		"invalid request - no name": {
+		"invalid Request - no name": {
 			spec: &ApiSpec{
 				Requests: []Request{
 					{
@@ -39,7 +39,7 @@ func TestCreateApiDomain(t *testing.T) {
 			},
 			expectedErr: true,
 		},
-		"invalid request - no url": {
+		"invalid Request - no url": {
 			spec: &ApiSpec{
 				Requests: []Request{
 					{
@@ -49,7 +49,7 @@ func TestCreateApiDomain(t *testing.T) {
 			},
 			expectedErr: true,
 		},
-		"valid request": {
+		"valid Request": {
 			spec: &ApiSpec{
 				Requests: []Request{
 					{
@@ -81,6 +81,9 @@ func TestGetResources(t *testing.T) {
 
 	apiReqName := "test"
 	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
+		w.Header().Set("Content-Type", "application/json")
+
 		if r.Header.Get("Accept") != "application/json" {
 			w.WriteHeader(http.StatusBadRequest)
 		} else if _, ok := r.URL.Query()["label"]; !ok {
@@ -142,9 +145,85 @@ func TestGetResources(t *testing.T) {
 				"statuscode": 400,
 				"status":     "400 Bad Request",
 				"response":   nil,
-				"raw":        json.RawMessage(nil),
+				"raw":        nil,
 			}},
 			drs,
 		)
+	})
+}
+
+func TestGetResourcesTextHTML(t *testing.T) {
+	respBytes := []byte("<html><body>Healthcheck OK</body></html>")
+	// Parse the response for text/html if necessary
+	resp := string(respBytes)
+
+	apiReqName := "test"
+	svr := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+
+		if r.Header.Get("Accept") != "text/html" {
+			w.WriteHeader(http.StatusBadRequest)
+		} else if _, ok := r.URL.Query()["label"]; !ok {
+			w.WriteHeader(http.StatusBadRequest)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			_, err := w.Write(respBytes)
+			require.NoError(t, err)
+		}
+	}))
+	defer svr.Close()
+
+	t.Run("pass", func(t *testing.T) {
+		api, err := CreateApiDomain(&ApiSpec{
+			Requests: []Request{
+				{
+					Name:   apiReqName,
+					URL:    svr.URL,
+					Params: map[string]string{"label": "test"},
+					Options: &ApiOpts{
+						Headers: map[string]string{"Accept": "text/html"},
+					},
+				},
+			},
+		})
+
+		require.NoError(t, err)
+		drs, err := api.GetResources(context.Background())
+		require.NoError(t, err)
+
+		want := types.DomainResources{
+			apiReqName: types.DomainResources{
+				// "raw" contains the HTML response
+				"raw":        resp,
+				"response":   nil,
+				"status":     "200 OK",
+				"statuscode": 200,
+			},
+		}
+		require.Equal(t, want, drs)
+	})
+
+	t.Run("fail", func(t *testing.T) {
+		api, err := CreateApiDomain(&ApiSpec{
+			Requests: []Request{
+				{
+					Name: apiReqName,
+					URL:  svr.URL,
+				},
+			},
+		})
+
+		require.NoError(t, err) // the spec is correct
+		drs, err := api.GetResources(context.Background())
+		require.NoError(t, err)
+		require.Equal(t, types.DomainResources{
+			apiReqName: types.DomainResources{
+				"statuscode": 400,
+				"status":     "400 Bad Request",
+				"response":   nil,
+				"raw":        nil,
+			},
+		},
+			drs)
 	})
 }

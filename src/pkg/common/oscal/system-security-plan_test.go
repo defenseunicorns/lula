@@ -66,9 +66,10 @@ func createSystemComponentMap(t *testing.T, ssp *oscal.SystemSecurityPlan) map[s
 func TestGenerateSystemSecurityPlan(t *testing.T) {
 
 	t.Run("Simple generation of SSP - no components", func(t *testing.T) {
+		tempDir := t.TempDir()
 		validProfile := getProfile(t, validProfileLocalCatalog)
 
-		ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileLocalCatalog, []string{"statement"}, validProfile)
+		ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileLocalCatalog, tempDir, []string{"statement"}, validProfile)
 		require.NoError(t, err)
 		require.NotNil(t, ssp.Model)
 
@@ -86,10 +87,18 @@ func TestGenerateSystemSecurityPlan(t *testing.T) {
 	})
 
 	t.Run("Simple generation of SSP - with component defn", func(t *testing.T) {
+		tempDir := t.TempDir()
 		validProfile := getProfile(t, validProfileRemoteRev4)
-		validComponentDefn := getComponentDefinition(t, compdefValidMultiComponent)
 
-		ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileRemoteRev4, []string{"statement"}, validProfile, validComponentDefn)
+		profileAbs, err := filepath.Abs(validProfileRemoteRev4)
+		require.NoError(t, err)
+
+		validComponentDefn := getComponentDefinition(t, compdefValidMultiComponent)
+		componentDefn := oscal.ComponentDefinition{
+			Model: validComponentDefn,
+		}
+
+		ssp, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", profileAbs, tempDir, []string{"statement"}, validProfile, &componentDefn)
 		require.NoError(t, err)
 		require.NotNil(t, ssp.Model)
 
@@ -119,9 +128,10 @@ func TestGenerateSystemSecurityPlan(t *testing.T) {
 	})
 
 	t.Run("Generation of SSP using a profile with no controls", func(t *testing.T) {
+		tempDir := t.TempDir()
 		validProfile := getProfile(t, validProfileNoControls)
 
-		_, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileNoControls, []string{"statement"}, validProfile)
+		_, err := oscal.GenerateSystemSecurityPlan("lula generate ssp <flags>", validProfileNoControls, tempDir, []string{"statement"}, validProfile)
 		require.Error(t, err)
 	})
 }
@@ -156,8 +166,12 @@ func TestCreateSourceControlsMap(t *testing.T) {
 	t.Run("Multiple control frameworks", func(t *testing.T) {
 		validComponentDefn := getComponentDefinition(t, compdefValidMultiComponent)
 
-		sourceControlsMap := oscal.CreateSourceControlsMap(validComponentDefn)
-		assert.Len(t, sourceControlsMap, 4) // Should return 4 frameworks
+		compDefAbsPath, err := filepath.Abs(compdefValidMultiComponent)
+		require.NoError(t, err)
+		refDir := filepath.Dir(compDefAbsPath)
+
+		sourceControlsMap := oscal.CreateSourceControlsMap(validComponentDefn, refDir)
+		assert.Len(t, sourceControlsMap, 2) // Should return 2 sources
 
 		// Check source values
 		controlMap, ok := sourceControlsMap[source]
@@ -173,7 +187,11 @@ func TestCreateSourceControlsMap(t *testing.T) {
 	t.Run("Multiple Components per control", func(t *testing.T) {
 		validComponentDefn := getComponentDefinition(t, compdefValidMultiComponentPerControl)
 
-		sourceControlsMap := oscal.CreateSourceControlsMap(validComponentDefn)
+		compDefAbsPath, err := filepath.Abs(compdefValidMultiComponentPerControl)
+		require.NoError(t, err)
+		refDir := filepath.Dir(compDefAbsPath)
+
+		sourceControlsMap := oscal.CreateSourceControlsMap(validComponentDefn, refDir)
 		assert.Len(t, sourceControlsMap, 1) // Should return 1 framework
 
 		// Check source values

@@ -276,8 +276,13 @@ func ResolveProfileControls(profile *oscalTypes.Profile, profilePath, rootDir st
 
 	sourceControlMap := make(map[string]ControlMap)
 
-	// Resolve the directory for imports
-	importDir := network.GetLocalFileDir(profilePath, rootDir)
+	// Resolve the directory for which imports are relative to
+	profileAbsPath := network.GetAbsolutePath(profilePath, rootDir)
+	importDir := filepath.Dir(profileAbsPath)
+	if !network.IsFileLocal(profileAbsPath) {
+		// If the profile is a remote reference, the importDir should be empty
+		importDir = ""
+	}
 
 	for _, importItem := range profile.Imports {
 		importedSourceControlMap, err := controlsFromImport(importItem, importDir)

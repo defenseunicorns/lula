@@ -1,0 +1,37 @@
+# add the descriptions inline
+component-definition:
+  uuid: e1267126-af15-4708-81b3-ead124442dec
+  metadata:
+    title: Test Template
+    last-modified: "2025-01-21T12:00:00Z"
+    version: "20250121"
+    oscal-version: 1.1.3
+    parties:
+      - uuid: C18F4A9F-A402-415B-8D13-B51739D689FF
+        type: organization
+        name: Defense Unicorns
+        links:
+          - href: https://github.com/defenseunicorns/lula
+            rel: website
+  import-component-definitions:
+    - href: valid-component.yaml
+  components:
+    - uuid: 7a8f8801-8e85-4e3c-8784-1a73f2f5be96
+      type: {{ .const.type }}
+      title: {{ .const.title }}
+      description: Some test component
+      purpose: Validate compliance controls
+      links:
+        - href: component-readme.md
+      control-implementations:
+        - uuid: 60c4021d-9bc7-4377-bd2c-da0076e1ded2
+          source: catalog.yaml
+          description: Validate generic security requirements
+          implemented-requirements:
+            - uuid: b3d49a20-84c8-4ff8-a266-ee0810ce7779
+              control-id: ac-1
+              remarks: Here are some remarks about this control.
+              description: Here is a description
+              links:
+                - href: {{ .const.validation_prefix }}/validation.yaml
+                  rel: lula

@@ -10,6 +10,8 @@ Thank you for your interest in contributing to Lula! We welcome all contribution
   - [Getting Started](#getting-started)
     - [Setup](#setup)
   - [Submitting a Pull Request](#submitting-a-pull-request)
+    - [Commit Message](#commit-message)
+    - [Pull Request Title](#pull-request-title)
     - [PR Requirements](#pr-requirements)
   - [Running Tests](#running-tests)
     - [Automated Tests](#automated-tests)
@@ -43,6 +45,24 @@ Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a respectful
 3. **Run Tests**: Ensure that your changes pass all tests by running `go test` for each required test.
 4. **Push Your Branch**: Push your branch to your fork on GitHub.
 5. **Create a Pull Request**: Open a pull request against the `main` branch of the lula repository. Please make sure that your PR passes all CI checks.
+
+### Commit Message
+
+We use conventional commit messages [Conventional Commit messages](https://www.conventionalcommits.org/).
+
+The most important prefixes you should have in mind are:
+
+- `fix:` which represents bug fixes, and correlates to a [SemVer](https://semver.org/)
+  patch.
+- `feat:` which represents a new feature, and correlates to a SemVer minor.
+- `feat!:`,  or `fix!:`, `refactor!:`, etc., which represent a breaking change
+  (indicated by the `!`) and will result in a SemVer major.
+
+### Pull Request Title
+
+PR titles should also follow this pattern and are linted using [commitlint](https://commitlint.js.org/). The PR title will determine the version bump. When a PR is merged (squashed) release-please will kick off a release PR. When that release PR is approved and merged, release-please will create a draft release. Once that draft release is published go-releaser with build and publish the assets, including creating a release in our Homebrew tap repository: [https://github.com/defenseunicorns/homebrew-tap](https://github.com/defenseunicorns/homebrew-tap)
+
+- Pre-v1.0.0 release-please is configured to bump minors on breaking changes and patches otherwise. per [release-please-config](https://github.com/defenseunicorns/lula/blob/main/release-please-config.json)
 
 ### PR Requirements
 
