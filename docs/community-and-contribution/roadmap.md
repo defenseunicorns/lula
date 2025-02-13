@@ -2,29 +2,7 @@
 
 ## 2025 Annual
 
-### Q1 - Maintenance Support:
-
-* Vulnerabilities
-* Critical Bug Fixes
-* Dependencies
-
-### Q2 - Maintenance Support:
-
-* Vulnerabilities
-* Critical Bug Fixes
-* Dependencies
-
-### Q3 - Maintenance Support:
-
-* Vulnerabilities
-* Critical Bug Fixes
-* Dependencies
-
-### Q4 - Maintenance Support:
-
-* Vulnerabilities
-* Critical Bug Fixes
-* Dependencies
+As of 2025, Lula has been placed into maintenance support. The project will not be receiving further active feature development, but will be monitored for issues, critical bug fixes and vulnerabilities. 
 
 ## 2024 Annual
 
