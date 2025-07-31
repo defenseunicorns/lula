@@ -1,1 +1,50 @@
+/*
+  Copyright 2025 Defense Unicorns
+  SPDX-License-Identifier: LicenseRef-Defense-Unicorns-Commercial
+*/
+
 @import 'tailwindcss';
+@plugin 'flowbite/plugin';
+
+:root {
+  --navbar-height: 4rem;
+  --sidebar-width: 16rem;
+  --table-height: 350px;
+}
+
+@theme {
+  --breakpoint-xs: 31rem;
+}
+
+@layer base {
+  html {
+    @apply overflow-y-auto;
+
+    color-scheme: dark; /* Dark scrollbar color for Safari, the webkit overrides do not work */
+    /* Standard scrollbar properties (Firefox) */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+
+    /* WebKit scrollbar styling (Chrome, Edge) */
+    &::-webkit-scrollbar {
+      width: 5px; /* Width that's narrow but still usable */
+      z-index: 20;
+    }
+
+    /* Scrollbar thumb styling */
+    &::-webkit-scrollbar-thumb {
+      border-radius: 4px; /* Rounded corners for better aesthetics */
+      background-color: rgba(156, 163, 175, 0.5); /* Semi-transparent gray */
+    }
+
+    /* Transparent track to focus attention on the thumb */
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    button:not([disabled]),
+    [role='button']:not([disabled]) {
+      cursor: pointer;
+    }
+  }
+}
