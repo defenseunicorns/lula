@@ -24,9 +24,9 @@
 </script>
 
 <!-- Modal Backdrop -->
-<div class="fixed inset-0 bg-gray-600 dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-75 overflow-y-auto h-full w-full z-50" role="dialog" aria-modal="true" onclick={onClose} onkeydown={(e) => e.key === 'Escape' && onClose()}>
+<div class="fixed inset-0 bg-gray-600 dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-75 overflow-y-auto h-full w-full z-50" role="dialog" aria-modal="true" tabindex="-1" onclick={onClose} onkeydown={(e) => e.key === 'Escape' && onClose()}>
   <!-- Modal -->
-  <div class="relative top-20 mx-auto p-5 border border-gray-200 dark:border-gray-700 w-11/12 max-w-4xl shadow-lg rounded-md bg-white dark:bg-gray-800" role="document" onclick={(e) => e.stopPropagation()}>
+  <div class="relative min-h-screen w-full p-6 bg-white dark:bg-gray-800" role="document" onclick={(e) => e.stopPropagation()} onkeydown={(e) => e.stopPropagation()}>
     <!-- Header  -->
     <div class="flex items-center justify-between pb-4 border-b border-gray-200 dark:border-gray-700">
       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -64,10 +64,10 @@
     </div>
     
     <!-- Tab Content -->
-    <div class="mt-6 max-h-96 overflow-y-auto">
+    <div class="mt-6 max-h-screen-3/4 overflow-y-auto">
       {#if activeTab === 'details'}
         <div class="space-y-4">
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <label for="control-id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Control ID</label>
               <input
@@ -88,7 +88,7 @@
             </div>
           </div>
           
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <label for="implementation-status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Implementation Status</label>
               <select
@@ -163,7 +163,7 @@
             </div>
           {/if}
           
-          <div class="grid grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div>
               <label for="cci" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">CCI</label>
               <input

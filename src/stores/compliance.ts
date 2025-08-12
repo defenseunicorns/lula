@@ -9,6 +9,7 @@ export const loading = writable(true);
 export const saveStatus = writable<'saved' | 'saving' | 'error'>('saved');
 export const searchTerm = writable('');
 export const selectedFamily = writable<string | null>(null);
+export const selectedControl = writable<Control | null>(null);
 
 // Derived stores
 export const families = derived(controls, ($controls) => {
@@ -146,6 +147,10 @@ export const complianceStore = {
 
   setSelectedFamily(family: string | null) {
     selectedFamily.set(family);
+  },
+
+  setSelectedControl(control: Control | null) {
+    selectedControl.set(control);
   },
 
   clearFilters() {

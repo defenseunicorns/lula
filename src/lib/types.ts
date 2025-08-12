@@ -46,3 +46,20 @@ export interface Stats {
   families: number;
   familyList: string[];
 }
+
+export interface ControlSet {
+  id: string;
+  name: string;
+  version: string;
+  description: string;
+  published: string;
+  created: string;
+  lastModified: string;
+  path?: string; // directory path for this control set
+  families?: string[]; // derived from directory structure at runtime
+}
+
+export interface ControlSetInfo {
+  currentSet: ControlSet;
+  availableSets: ControlSet[];
+}
