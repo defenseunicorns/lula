@@ -2,6 +2,7 @@
   import type { Control, GitFileHistory } from '$lib/types.js';
   import { mappings, complianceStore } from '../stores/compliance';
   import { api } from '$lib/api';
+  import DiffViewer from './DiffViewer.svelte';
   
   export let control: Control;
   
@@ -10,8 +11,11 @@
   let activeTab = 'details';
   let showNewMappingForm = false;
   let gitHistory: GitFileHistory | null = null;
+  let mappingHistory: GitFileHistory | null = null;
   let loadingHistory = false;
+  let loadingMappingHistory = false;
   let expandedCommits = new Set<string>(); // Track which commits have expanded diffs
+  let expandedMappingCommits = new Set<string>(); // Track which mapping commits have expanded diffs
   let newMapping = {
     justification: '',
     status: 'planned' as 'planned' | 'implemented' | 'verified'
@@ -26,13 +30,6 @@
     originalControl = { ...editedControl };
   }
   
-  function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0;
-      const v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
   
   async function handleCreateMapping() {
     try {
@@ -86,6 +83,29 @@
     }
   }
 
+  async function loadMappingHistory() {
+    if (mappingHistory || loadingMappingHistory) return; // Don't load if already loaded or loading
+    
+    loadingMappingHistory = true;
+    try {
+      const family = control['control-acronym'].split('-')[0];
+      console.log(`Loading mapping git history for family: ${family}`);
+      mappingHistory = await api.getMappingHistory(family, 20); // Get last 20 commits
+      console.log(`Loaded mapping git history:`, mappingHistory);
+    } catch (error) {
+      console.error('Failed to load mapping git history:', error);
+      mappingHistory = {
+        filePath: '',
+        commits: [],
+        totalCommits: 0,
+        firstCommit: null,
+        lastCommit: null
+      };
+    } finally {
+      loadingMappingHistory = false;
+    }
+  }
+
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -104,6 +124,15 @@
     }
     expandedCommits = new Set(expandedCommits); // Trigger reactivity
   }
+
+  function toggleMappingDiffExpansion(commitHash: string) {
+    if (expandedMappingCommits.has(commitHash)) {
+      expandedMappingCommits.delete(commitHash);
+    } else {
+      expandedMappingCommits.add(commitHash);
+    }
+    expandedMappingCommits = new Set(expandedMappingCommits); // Trigger reactivity
+  }
   
   function parseCCIsFromNarrative(narrative: string): string[] {
     const cciPattern = /CCI-(\d{6})/g;
@@ -120,8 +149,11 @@
     originalControl = { ...control };
     // Reset git history when control changes
     gitHistory = null;
+    mappingHistory = null;
     loadingHistory = false;
+    loadingMappingHistory = false;
     expandedCommits = new Set();
+    expandedMappingCommits = new Set();
     // Switch back to details tab when control changes for better UX
     activeTab = 'details';
   }
@@ -129,33 +161,9 @@
   // Load git history when history tab is selected
   $: if (activeTab === 'history') {
     loadGitHistory();
+    loadMappingHistory();
   }
 
-  function getStatusBadgeClass(status: string) {
-    switch (status) {
-      case 'Implemented':
-        return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300';
-      case 'Planned':
-        return 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300';
-      case 'Not Implemented':
-        return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
-      default:
-        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300';
-    }
-  }
-  
-  function getComplianceBadgeClass(status: string) {
-    switch (status) {
-      case 'Compliant':
-        return 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300';
-      case 'Non-Compliant':
-        return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
-      case 'Not Assessed':
-        return 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-300';
-      default:
-        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300';
-    }
-  }
 </script>
 
 <div class="h-full flex flex-col">
@@ -468,15 +476,17 @@
         </div>
       </div>
     {:else if activeTab === 'history'}
-      <div class="space-y-6">
-        <div class="flex items-center justify-between">
-          <h4 class="text-lg font-medium text-gray-900 dark:text-white">Git History</h4>
-          {#if gitHistory}
-            <div class="text-sm text-gray-500 dark:text-gray-400">
-              {gitHistory.totalCommits} total commits
-            </div>
-          {/if}
-        </div>
+      <div class="space-y-8">
+        <!-- Control File History -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-medium text-gray-900 dark:text-white">Control File History</h4>
+            {#if gitHistory}
+              <div class="text-sm text-gray-500 dark:text-gray-400">
+                {gitHistory.totalCommits} commits
+              </div>
+            {/if}
+          </div>
         
         {#if loadingHistory}
           <div class="flex items-center justify-center py-12">
@@ -532,11 +542,8 @@
                 </div>
                 
                 {#if commit.diff && expandedCommits.has(commit.hash)}
-                  <div class="mt-3 border border-gray-200 dark:border-gray-600 rounded-md overflow-hidden">
-                    <div class="bg-gray-50 dark:bg-gray-700 px-3 py-2 border-b border-gray-200 dark:border-gray-600">
-                      <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Changes</span>
-                    </div>
-                    <pre class="p-3 text-xs overflow-x-auto bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 whitespace-pre-wrap font-mono leading-relaxed max-h-96 overflow-y-auto">{commit.diff}</pre>
+                  <div class="mt-3">
+                    <DiffViewer diff={commit.diff} fileName={control.id + '.yaml'} language="yaml" />
                   </div>
                 {/if}
               </div>
@@ -571,6 +578,102 @@
             </p>
           </div>
         {/if}
+        </div>
+        
+        <!-- Mapping History -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="text-lg font-medium text-gray-900 dark:text-white">Mapping History</h4>
+            {#if mappingHistory}
+              <div class="text-sm text-gray-500 dark:text-gray-400">
+                {mappingHistory.totalCommits} commits
+              </div>
+            {/if}
+          </div>
+          
+          {#if loadingMappingHistory}
+            <div class="flex items-center justify-center py-8">
+              <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+              <span class="ml-3 text-gray-600 dark:text-gray-400">Loading mapping history...</span>
+            </div>
+          {:else if mappingHistory && mappingHistory.commits.length > 0}
+            <div class="space-y-3">
+              {#each mappingHistory.commits as commit}
+                <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-3 bg-blue-50 dark:bg-blue-900/20">
+                  <div class="flex items-start justify-between mb-2">
+                    <div class="flex items-center space-x-3">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 font-mono">
+                        {commit.shortHash}
+                      </span>
+                      <span class="text-sm font-medium text-gray-900 dark:text-white">
+                        {commit.author}
+                      </span>
+                    </div>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                      {formatDate(commit.date)}
+                    </span>
+                  </div>
+                  
+                  <p class="text-sm text-gray-700 dark:text-gray-300 mb-2">
+                    {commit.message}
+                  </p>
+                  
+                  <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-2">
+                    <div class="flex items-center space-x-4">
+                      {#if commit.changes.insertions > 0}
+                        <span class="text-green-600 dark:text-green-400">
+                          +{commit.changes.insertions}
+                        </span>
+                      {/if}
+                      {#if commit.changes.deletions > 0}
+                        <span class="text-red-600 dark:text-red-400">
+                          -{commit.changes.deletions}
+                        </span>
+                      {/if}
+                    </div>
+                    {#if commit.diff}
+                      <button
+                        onclick={() => toggleMappingDiffExpansion(commit.hash)}
+                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/20 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                      >
+                        <svg class="w-3 h-3 mr-1 {expandedMappingCommits.has(commit.hash) ? 'rotate-180' : ''} transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                        {expandedMappingCommits.has(commit.hash) ? 'Hide' : 'Show'} Changes
+                      </button>
+                    {/if}
+                  </div>
+                  
+                  {#if commit.diff && expandedMappingCommits.has(commit.hash)}
+                    <div class="mt-2">
+                      <DiffViewer diff={commit.diff} fileName={`${control['control-acronym'].split('-')[0]}-mappings.yaml`} language="yaml" />
+                    </div>
+                  {/if}
+                </div>
+              {/each}
+            </div>
+          {:else if mappingHistory}
+            <div class="text-center py-6">
+              <svg class="mx-auto h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No mapping history found</h3>
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                This family's mapping file is new or hasn't been committed to git yet.
+              </p>
+            </div>
+          {:else}
+            <div class="text-center py-6">
+              <svg class="mx-auto h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Unable to load mapping history</h3>
+              <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                There was an error loading the mapping history.
+              </p>
+            </div>
+          {/if}
+        </div>
       </div>
     {/if}
     </div>
