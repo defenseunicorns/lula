@@ -1,6 +1,7 @@
 <script lang="ts">
-  import type { Control } from '$lib/types.js';
+  import type { Control, GitFileHistory } from '$lib/types.js';
   import { mappings, complianceStore } from '../stores/compliance';
+  import { api } from '$lib/api';
   
   export let control: Control;
   
@@ -8,10 +9,12 @@
   let originalControl = { ...control };
   let activeTab = 'details';
   let showNewMappingForm = false;
+  let gitHistory: GitFileHistory | null = null;
+  let loadingHistory = false;
+  let expandedCommits = new Set<string>(); // Track which commits have expanded diffs
   let newMapping = {
     justification: '',
-    status: 'Pending',
-    created_by: 'Current User'
+    status: 'planned' as 'planned' | 'implemented' | 'verified'
   };
   
   // Check if there are any changes
@@ -37,7 +40,7 @@
         control_id: control.id,
         justification: newMapping.justification,
         status: newMapping.status,
-        created_by: newMapping.created_by
+        source_entries: []
       };
       
       await complianceStore.createMapping(mappingData);
@@ -45,8 +48,7 @@
       // Reset form
       newMapping = {
         justification: '',
-        status: 'Pending',
-        created_by: 'Current User'
+        status: 'planned'
       };
       showNewMappingForm = false;
     } catch (error) {
@@ -57,10 +59,50 @@
   function cancelNewMapping() {
     newMapping = {
       justification: '',
-      status: 'Pending', 
-      created_by: 'Current User'
+      status: 'planned'
     };
     showNewMappingForm = false;
+  }
+
+  async function loadGitHistory() {
+    if (gitHistory || loadingHistory) return; // Don't load if already loaded or loading
+    
+    loadingHistory = true;
+    try {
+      console.log(`Loading git history for control: ${control.id}`);
+      gitHistory = await api.getControlHistory(control.id, 20); // Get last 20 commits
+      console.log(`Loaded git history:`, gitHistory);
+    } catch (error) {
+      console.error('Failed to load git history:', error);
+      gitHistory = {
+        filePath: '',
+        commits: [],
+        totalCommits: 0,
+        firstCommit: null,
+        lastCommit: null
+      };
+    } finally {
+      loadingHistory = false;
+    }
+  }
+
+  function formatDate(dateString: string): string {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  function toggleDiffExpansion(commitHash: string) {
+    if (expandedCommits.has(commitHash)) {
+      expandedCommits.delete(commitHash);
+    } else {
+      expandedCommits.add(commitHash);
+    }
+    expandedCommits = new Set(expandedCommits); // Trigger reactivity
   }
   
   function parseCCIsFromNarrative(narrative: string): string[] {
@@ -76,6 +118,17 @@
   $: {
     editedControl = { ...control };
     originalControl = { ...control };
+    // Reset git history when control changes
+    gitHistory = null;
+    loadingHistory = false;
+    expandedCommits = new Set();
+    // Switch back to details tab when control changes for better UX
+    activeTab = 'details';
+  }
+
+  // Load git history when history tab is selected
+  $: if (activeTab === 'history') {
+    loadGitHistory();
   }
 
   function getStatusBadgeClass(status: string) {
@@ -145,6 +198,12 @@
         class="py-4 px-1 border-b-2 font-medium text-sm {activeTab === 'mappings' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}"
       >
         Mappings ({associatedMappings.length})
+      </button>
+      <button
+        onclick={() => activeTab = 'history'}
+        class="py-4 px-1 border-b-2 font-medium text-sm {activeTab === 'history' ? 'border-blue-500 text-blue-600 dark:text-blue-400' : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}"
+      >
+        History
       </button>
     </nav>
   </div>
@@ -328,7 +387,7 @@
             <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 space-y-4">
               <h4 class="text-lg font-medium text-gray-900 dark:text-white">Create New Mapping</h4>
               
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 gap-4">
                 <div>
                   <label for="mapping-status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
                   <select
@@ -336,19 +395,10 @@
                     bind:value={newMapping.status}
                     class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
                   >
-                    <option>Pending</option>
-                    <option>Approved</option>
-                    <option>Rejected</option>
+                    <option>planned</option>
+                    <option>implemented</option>
+                    <option>verified</option>
                   </select>
-                </div>
-                <div>
-                  <label for="mapping-created-by" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Created By</label>
-                  <input
-                    id="mapping-created-by"
-                    bind:value={newMapping.created_by}
-                    type="text"
-                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500"
-                  />
                 </div>
               </div>
               
@@ -400,8 +450,8 @@
                   </div>
                   <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">{mapping.justification}</p>
                   <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {mapping.status === 'Approved' ? 'bg-green-100 text-green-800' : mapping.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}">Status: {mapping.status}</span>
-                    <span>By: {mapping.created_by}</span>
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {mapping.status === 'implemented' ? 'bg-green-100 text-green-800' : mapping.status === 'verified' ? 'bg-blue-100 text-blue-800' : 'bg-yellow-100 text-yellow-800'}">Status: {mapping.status}</span>
+                    <!-- Author info available via git history -->
                   </div>
                 </div>
               {/each}
@@ -416,6 +466,111 @@
             </div>
           {/if}
         </div>
+      </div>
+    {:else if activeTab === 'history'}
+      <div class="space-y-6">
+        <div class="flex items-center justify-between">
+          <h4 class="text-lg font-medium text-gray-900 dark:text-white">Git History</h4>
+          {#if gitHistory}
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+              {gitHistory.totalCommits} total commits
+            </div>
+          {/if}
+        </div>
+        
+        {#if loadingHistory}
+          <div class="flex items-center justify-center py-12">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span class="ml-3 text-gray-600 dark:text-gray-400">Loading git history...</span>
+          </div>
+        {:else if gitHistory && gitHistory.commits.length > 0}
+          <div class="space-y-4">
+            {#each gitHistory.commits as commit}
+              <div class="border border-gray-200 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-700">
+                <div class="flex items-start justify-between mb-2">
+                  <div class="flex items-center space-x-3">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200 font-mono">
+                      {commit.shortHash}
+                    </span>
+                    <span class="text-sm font-medium text-gray-900 dark:text-white">
+                      {commit.author}
+                    </span>
+                  </div>
+                  <span class="text-xs text-gray-500 dark:text-gray-400">
+                    {formatDate(commit.date)}
+                  </span>
+                </div>
+                
+                <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                  {commit.message}
+                </p>
+                
+                <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 mb-3">
+                  <div class="flex items-center space-x-4">
+                    {#if commit.changes.insertions > 0}
+                      <span class="text-green-600 dark:text-green-400">
+                        +{commit.changes.insertions}
+                      </span>
+                    {/if}
+                    {#if commit.changes.deletions > 0}
+                      <span class="text-red-600 dark:text-red-400">
+                        -{commit.changes.deletions}
+                      </span>
+                    {/if}
+                  </div>
+                  {#if commit.diff}
+                    <button
+                      onclick={() => toggleDiffExpansion(commit.hash)}
+                      class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 bg-blue-50 dark:bg-blue-900/20 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                    >
+                      <svg class="w-3 h-3 mr-1 {expandedCommits.has(commit.hash) ? 'rotate-180' : ''} transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                      {expandedCommits.has(commit.hash) ? 'Hide' : 'Show'} Changes
+                    </button>
+                  {/if}
+                </div>
+                
+                {#if commit.diff && expandedCommits.has(commit.hash)}
+                  <div class="mt-3 border border-gray-200 dark:border-gray-600 rounded-md overflow-hidden">
+                    <div class="bg-gray-50 dark:bg-gray-700 px-3 py-2 border-b border-gray-200 dark:border-gray-600">
+                      <span class="text-xs font-medium text-gray-700 dark:text-gray-300">Changes</span>
+                    </div>
+                    <pre class="p-3 text-xs overflow-x-auto bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 whitespace-pre-wrap font-mono leading-relaxed max-h-96 overflow-y-auto">{commit.diff}</pre>
+                  </div>
+                {/if}
+              </div>
+            {/each}
+          </div>
+        {:else if gitHistory}
+          <div class="text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No git history found</h3>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              This control file is new and hasn't been committed to git yet. Once you make your first commit, the history will appear here.
+            </p>
+            <div class="mt-4">
+              <div class="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                File staged but not committed
+              </div>
+            </div>
+          </div>
+        {:else}
+          <div class="text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">Unable to load git history</h3>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+              There was an error loading the git history for this control.
+            </p>
+          </div>
+        {/if}
       </div>
     {/if}
     </div>

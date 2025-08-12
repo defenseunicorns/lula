@@ -11,7 +11,8 @@ import cors from 'cors';
 import crypto from 'crypto';
 import { FileStore } from './src/lib/fileStore.js';
 import { MigrationUtility } from './src/lib/migration.js';
-import type { Control, Mapping } from './src/lib/types.js';
+import { GitHistoryUtil } from './src/lib/gitHistory.js';
+import type { Control, Mapping, GitFileHistory, ControlWithHistory } from './src/lib/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,6 +21,7 @@ const __dirname = dirname(__filename);
 let serverState: {
   CONTROL_SET_DIR: string;
   fileStore: FileStore;
+  gitHistory: GitHistoryUtil;
   controlsCache: Map<string, Control>;
   mappingsCache: Map<string, Mapping>;
   controlsByFamily: Map<string, Set<string>>;
@@ -318,8 +320,7 @@ app.post('/api/mappings', async (req, res) => {
   try {
     const mapping = {
       ...req.body,
-      uuid: crypto.randomUUID(),
-      created_at: new Date().toISOString()
+      uuid: crypto.randomUUID()
     };
     
     // Update in-memory stores
@@ -382,7 +383,7 @@ app.get('/api/search', (req, res) => {
       return res.json({ controls: [], mappings: [] });
     }
     
-    const searchTerm = q.toLowerCase();
+    const searchTerm = q.toString().toLowerCase();
     
     const matchingControls = Array.from(serverState!.controlsCache.values()).filter(control => 
       JSON.stringify(control).toLowerCase().includes(searchTerm)
@@ -452,6 +453,132 @@ app.get('/api/control-set', async (req, res) => {
   }
 });
 
+// Git History API endpoints
+app.get('/api/controls/:id/history', async (req, res) => {
+  try {
+    const controlId = req.params.id;
+    const limit = parseInt(req.query.limit as string) || 50;
+    
+    console.log(`Getting git history for control: ${controlId}`);
+    
+    // Get control to find its file path
+    const control = serverState!.controlsCache.get(controlId);
+    if (!control) {
+      console.log(`Control not found in cache: ${controlId}`);
+      return res.status(404).json({ error: 'Control not found' });
+    }
+    
+    // Get control metadata to find the file path
+    const metadata = serverState!.fileStore.getControlMetadata(controlId);
+    if (!metadata) {
+      console.log(`Control metadata not found: ${controlId}`);
+      return res.status(404).json({ error: 'Control file not found' });
+    }
+    
+    const family = control['control-acronym'].split('-')[0];
+    const filePath = join(serverState!.CONTROL_SET_DIR, 'controls', family, metadata.filename);
+    
+    console.log(`Looking for git history of file: ${filePath}`);
+    
+    // Check if file exists
+    const { existsSync } = await import('fs');
+    if (!existsSync(filePath)) {
+      console.log(`File does not exist: ${filePath}`);
+      return res.status(404).json({ error: 'Control file does not exist' });
+    }
+    
+    // Get git history
+    const history = await serverState!.gitHistory.getFileHistory(filePath, limit);
+    
+    console.log(`Git history for ${controlId}: ${history.commits.length} commits found`);
+    
+    res.json(history);
+  } catch (error) {
+    console.error('Error getting control history:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Git history for mapping files by family
+app.get('/api/mappings/:family/history', async (req, res) => {
+  try {
+    const family = req.params.family;
+    const limit = parseInt(req.query.limit as string) || 50;
+    
+    console.log(`Getting git history for mappings family: ${family}`);
+    
+    const mappingFilePath = join(serverState!.CONTROL_SET_DIR, 'mappings', family, `${family}-mappings.yaml`);
+    
+    // Check if file exists
+    const { existsSync } = await import('fs');
+    if (!existsSync(mappingFilePath)) {
+      console.log(`Mapping file does not exist: ${mappingFilePath}`);
+      return res.status(404).json({ error: 'Mapping file does not exist' });
+    }
+    
+    // Get git history
+    const history = await serverState!.gitHistory.getFileHistory(mappingFilePath, limit);
+    
+    console.log(`Git history for ${family} mappings: ${history.commits.length} commits found`);
+    
+    res.json(history);
+  } catch (error) {
+    console.error('Error getting mapping history:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/controls/:id/with-history', async (req, res) => {
+  try {
+    const controlId = req.params.id;
+    const limit = parseInt(req.query.limit as string) || 10;
+    
+    // Get control
+    let control = serverState!.controlsCache.get(controlId);
+    if (!control) {
+      // Try loading from file store in case cache is stale
+      control = await serverState!.fileStore.loadControl(controlId);
+      if (control) {
+        serverState!.controlsCache.set(control.id, control);
+        addToIndexes(control);
+      }
+    }
+    
+    if (!control) {
+      return res.status(404).json({ error: 'Control not found' });
+    }
+    
+    // Get control metadata to find the file path
+    const metadata = serverState!.fileStore.getControlMetadata(controlId);
+    let history: GitFileHistory | undefined;
+    
+    if (metadata) {
+      const family = control['control-acronym'].split('-')[0];
+      const filePath = join(serverState!.CONTROL_SET_DIR, 'controls', family, metadata.filename);
+      history = await serverState!.gitHistory.getFileHistory(filePath, limit);
+    }
+    
+    const controlWithHistory: ControlWithHistory = {
+      ...control,
+      history
+    };
+    
+    res.json(controlWithHistory);
+  } catch (error) {
+    console.error('Error getting control with history:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/git/stats', async (req, res) => {
+  try {
+    const stats = await serverState!.gitHistory.getRepositoryStats();
+    res.json(stats);
+  } catch (error) {
+    console.error('Error getting git stats:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // Serve frontend for all other routes
 app.get('*', (req, res) => {
@@ -472,6 +599,7 @@ async function startServer(controlSetDir: string, port: number) {
   serverState = {
     CONTROL_SET_DIR,
     fileStore: new FileStore({ baseDir: CONTROL_SET_DIR }),
+    gitHistory: new GitHistoryUtil(CONTROL_SET_DIR),
     controlsCache: new Map<string, Control>(),
     mappingsCache: new Map<string, Mapping>(),
     controlsByFamily: new Map<string, Set<string>>(),
@@ -487,7 +615,7 @@ async function startServer(controlSetDir: string, port: number) {
     console.log(`Using individual control files in: ${CONTROL_SET_DIR}/controls/`);
     
     // Auto-open browser
-    open(`http://localhost:${PORT}`);
+    // open(`http://localhost:${PORT}`);
   });
 }
 

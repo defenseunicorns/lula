@@ -20,8 +20,6 @@ export interface Mapping {
   control_id: string;
   justification: string;
   source_entries: SourceEntry[];
-  created_by: string;
-  created_at: string;
   status: 'planned' | 'implemented' | 'verified';
 }
 
@@ -62,4 +60,31 @@ export interface ControlSet {
 export interface ControlSetInfo {
   currentSet: ControlSet;
   availableSets: ControlSet[];
+}
+
+export interface GitCommit {
+  hash: string;
+  shortHash: string;
+  author: string;
+  authorEmail: string;
+  date: string;
+  message: string;
+  changes: {
+    insertions: number;
+    deletions: number;
+    files: number;
+  };
+  diff?: string; // The actual file diff
+}
+
+export interface GitFileHistory {
+  filePath: string;
+  commits: GitCommit[];
+  totalCommits: number;
+  firstCommit: GitCommit | null;
+  lastCommit: GitCommit | null;
+}
+
+export interface ControlWithHistory extends Control {
+  history?: GitFileHistory;
 }

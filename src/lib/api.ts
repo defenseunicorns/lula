@@ -1,4 +1,4 @@
-import type { Control, Mapping, SearchResult, Stats } from './types';
+import type { Control, Mapping, SearchResult, Stats, GitFileHistory, ControlWithHistory } from './types';
 
 const BASE_URL = '';
 
@@ -104,6 +104,29 @@ class ApiClient {
     if (!response.ok) {
       throw new Error(`Import Error: ${response.status} ${response.statusText}`);
     }
+  }
+
+  async getControlHistory(id: string, limit?: number): Promise<GitFileHistory> {
+    const params = limit ? `?limit=${limit}` : '';
+    return this.request(`/api/controls/${id}/history${params}`);
+  }
+
+  async getControlWithHistory(id: string, limit?: number): Promise<ControlWithHistory> {
+    const params = limit ? `?limit=${limit}` : '';
+    return this.request(`/api/controls/${id}/with-history${params}`);
+  }
+
+  async getGitStats(): Promise<{
+    totalCommits: number;
+    contributors: number;
+    lastCommitDate: string | null;
+    firstCommitDate: string | null;
+  }> {
+    return this.request('/api/git/stats');
+  }
+
+  async getMappingHistory(family: string, limit: number = 20): Promise<GitFileHistory> {
+    return this.request(`/api/mappings/${family}/history?limit=${limit}`);
   }
 }
 

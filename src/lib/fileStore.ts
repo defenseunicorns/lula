@@ -15,28 +15,27 @@ export interface ControlMetadata {
   shortId: string;
   controlId: string;
   filename: string;
-  lastModified: Date;
-  created: Date;
 }
 
 export interface FileStoreConfig {
   baseDir: string;
   controlsDir?: string;
-  mappingsFile?: string;
+  mappingsDir?: string;
 }
 
 export class FileStore {
   private baseDir: string;
   private controlsDir: string;
-  private mappingsFile: string;
+  private mappingsDir: string;
   private controlsCache = new Map<string, Control>();
   private metadataCache = new Map<string, ControlMetadata>();
   private shortIdToControlId = new Map<string, string>();
   private controlIdToShortId = new Map<string, string>();
+  private mappingsCache = new Map<string, Mapping>();
   constructor(config: FileStoreConfig) {
     this.baseDir = config.baseDir;
     this.controlsDir = config.controlsDir || join(this.baseDir, 'controls');
-    this.mappingsFile = config.mappingsFile || join(this.baseDir, 'mappings.yaml');
+    this.mappingsDir = config.mappingsDir || join(this.baseDir, 'mappings');
     
     this.ensureDirectoriesExist();
   }
@@ -48,10 +47,14 @@ export class FileStore {
     if (!existsSync(this.controlsDir)) {
       mkdirSync(this.controlsDir, { recursive: true });
     }
+    if (!existsSync(this.mappingsDir)) {
+      mkdirSync(this.mappingsDir, { recursive: true });
+    }
   }
 
-  private ensureFamilyDirExists(family: string): void {
-    const familyDir = join(this.controlsDir, family);
+  private ensureFamilyDirExists(family: string, isMapping: boolean = false): void {
+    const baseDir = isMapping ? this.mappingsDir : this.controlsDir;
+    const familyDir = join(baseDir, family);
     if (!existsSync(familyDir)) {
       mkdirSync(familyDir, { recursive: true });
     }
@@ -131,9 +134,7 @@ export class FileStore {
         _metadata: {
           shortId,
           controlId: control.id,
-          family,
-          created: this.metadataCache.get(control.id)?.created || new Date(),
-          lastModified: new Date()
+          family
         },
         ...control
       };
@@ -151,13 +152,10 @@ export class FileStore {
       this.shortIdToControlId.set(shortId, control.id);
       this.controlIdToShortId.set(control.id, shortId);
       
-      const stats = statSync(filepath);
       this.metadataCache.set(control.id, {
         shortId,
         controlId: control.id,
-        filename,
-        lastModified: stats.mtime,
-        created: this.metadataCache.get(control.id)?.created || stats.birthtime
+        filename
       });
       
       return shortId;
@@ -211,36 +209,37 @@ export class FileStore {
   }
 
   /**
-   * Loads mappings from the mappings file
+   * Loads all mappings from individual mapping files
    */
   async loadMappings(): Promise<Mapping[]> {
-    if (!existsSync(this.mappingsFile)) {
-      return [];
-    }
-    
-    try {
-      const content = readFileSync(this.mappingsFile, 'utf8');
-      const data = YAML.parse(content);
-      return data.mappings || [];
-    } catch (error) {
-      console.error('Error loading mappings:', error);
-      return [];
-    }
+    this.refreshMappingsCache();
+    return Array.from(this.mappingsCache.values());
   }
 
   /**
-   * Saves mappings to the mappings file
+   * Saves all mappings to individual files organized by family
    */
   async saveMappings(mappings: Mapping[]): Promise<void> {
-    try {
-      const yamlContent = YAML.stringify({ mappings }, {
-        indent: 2,
-        lineWidth: 0,
-        minContentWidth: 0
-      });
-      writeFileSync(this.mappingsFile, yamlContent, 'utf8');
-    } catch (error) {
-      throw new Error(`Failed to save mappings: ${error}`);
+    // Group mappings by family
+    const mappingsByFamily = new Map<string, Mapping[]>();
+    
+    for (const mapping of mappings) {
+      const family = mapping.control_id.split('-')[0];
+      if (!mappingsByFamily.has(family)) {
+        mappingsByFamily.set(family, []);
+      }
+      mappingsByFamily.get(family)!.push(mapping);
+    }
+    
+    // Save each family's mappings to a separate file
+    for (const [family, familyMappings] of mappingsByFamily) {
+      await this.saveFamilyMappings(family, familyMappings);
+    }
+    
+    // Update cache
+    this.mappingsCache.clear();
+    for (const mapping of mappings) {
+      this.mappingsCache.set(mapping.uuid, mapping);
     }
   }
 
@@ -310,13 +309,10 @@ export class FileStore {
           this.shortIdToControlId.set(shortId, control.id);
           this.controlIdToShortId.set(control.id, shortId);
           
-          const stats = statSync(filepath);
           this.metadataCache.set(control.id, {
             shortId,
             controlId: control.id,
-            filename,
-            lastModified: stats.mtime,
-            created: _metadata?.created ? new Date(_metadata.created) : stats.birthtime
+            filename
           });
         } catch (error) {
           console.error(`Error loading control file ${familyDir.name}/${filename}:`, error);
@@ -326,17 +322,80 @@ export class FileStore {
   }
 
   /**
+   * Saves mappings for a specific family to a file
+   */
+  private async saveFamilyMappings(family: string, mappings: Mapping[]): Promise<void> {
+    this.ensureFamilyDirExists(family, true);
+    const filename = `${family}-mappings.yaml`;
+    const filepath = join(this.mappingsDir, family, filename);
+    
+    try {
+      const yamlContent = YAML.stringify({ mappings }, {
+        indent: 2,
+        lineWidth: 0,
+        minContentWidth: 0
+      });
+      writeFileSync(filepath, yamlContent, 'utf8');
+    } catch (error) {
+      throw new Error(`Failed to save mappings for family ${family}: ${error}`);
+    }
+  }
+  
+  /**
+   * Refreshes the mappings cache by scanning the mappings directory
+   */
+  private refreshMappingsCache(): void {
+    this.mappingsCache.clear();
+    
+    if (!existsSync(this.mappingsDir)) {
+      return;
+    }
+    
+    // Scan family directories in mappings
+    const familyDirs = readdirSync(this.mappingsDir, { withFileTypes: true });
+    
+    for (const familyDir of familyDirs) {
+      if (!familyDir.isDirectory()) {
+        continue;
+      }
+      
+      const familyPath = join(this.mappingsDir, familyDir.name);
+      const files = readdirSync(familyPath);
+      
+      for (const filename of files) {
+        if (!filename.endsWith('.yaml')) {
+          continue;
+        }
+        
+        try {
+          const filepath = join(familyPath, filename);
+          const content = readFileSync(filepath, 'utf8');
+          const data = YAML.parse(content);
+          
+          if (data.mappings && Array.isArray(data.mappings)) {
+            for (const mapping of data.mappings) {
+              this.mappingsCache.set(mapping.uuid, mapping);
+            }
+          }
+        } catch (error) {
+          console.error(`Error loading mapping file ${familyDir.name}/${filename}:`, error);
+        }
+      }
+    }
+  }
+
+  /**
    * Gets statistics about the file store
    */
-  getStats(): { controlFiles: number; totalSize: number; oldestFile: Date | null; newestFile: Date | null; families: string[] } {
+  getStats(): { controlFiles: number; mappingFiles: number; totalSize: number; families: string[] } {
     this.refreshCache();
+    this.refreshMappingsCache();
     
     let totalSize = 0;
-    let oldestFile: Date | null = null;
-    let newestFile: Date | null = null;
     const families = new Set<string>();
+    let mappingFiles = 0;
     
-    // Scan family directories to get accurate stats
+    // Scan family directories to get accurate stats for controls
     if (existsSync(this.controlsDir)) {
       const familyDirs = readdirSync(this.controlsDir, { withFileTypes: true });
       
@@ -354,13 +413,29 @@ export class FileStore {
           if (existsSync(filepath)) {
             const stats = statSync(filepath);
             totalSize += stats.size;
-            
-            if (!oldestFile || stats.birthtime < oldestFile) {
-              oldestFile = stats.birthtime;
-            }
-            if (!newestFile || stats.birthtime > newestFile) {
-              newestFile = stats.birthtime;
-            }
+          }
+        }
+      }
+    }
+    
+    // Scan mapping directories
+    if (existsSync(this.mappingsDir)) {
+      const familyDirs = readdirSync(this.mappingsDir, { withFileTypes: true });
+      
+      for (const familyDir of familyDirs) {
+        if (!familyDir.isDirectory()) continue;
+        
+        const familyPath = join(this.mappingsDir, familyDir.name);
+        const files = readdirSync(familyPath);
+        
+        for (const file of files) {
+          if (!file.endsWith('.yaml')) continue;
+          
+          mappingFiles++;
+          const filepath = join(familyPath, file);
+          if (existsSync(filepath)) {
+            const stats = statSync(filepath);
+            totalSize += stats.size;
           }
         }
       }
@@ -368,9 +443,8 @@ export class FileStore {
     
     return {
       controlFiles: this.metadataCache.size,
+      mappingFiles,
       totalSize,
-      oldestFile,
-      newestFile,
       families: Array.from(families).sort()
     };
   }
