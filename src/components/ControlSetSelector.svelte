@@ -2,8 +2,12 @@
   import { createEventDispatcher } from 'svelte';
   import type { ControlSet } from '$lib/types';
 
-  export let currentSet: ControlSet;
-  export let availableSets: ControlSet[];
+  interface Props {
+    currentSet: ControlSet;
+    availableSets: ControlSet[];
+  }
+
+  let { currentSet, availableSets }: Props = $props();
 
   const dispatch = createEventDispatcher<{ change: string }>();
 
@@ -20,7 +24,7 @@
   <select
     id="control-set"
     value={currentSet.id}
-    on:change={handleChange}
+    onchange={handleChange}
     class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
   >
     {#each availableSets as set}

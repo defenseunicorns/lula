@@ -2,12 +2,16 @@
   import type { Control } from '$lib/types.js';
   import { mappings } from '../stores/compliance';
   
-  export let control: Control;
-  export let onClose: () => void;
-  export let onSave: (control: Control) => void;
+  interface Props {
+    control: Control;
+    onClose: () => void;
+    onSave: (control: Control) => void;
+  }
+
+  let { control, onClose, onSave }: Props = $props();
   
-  let editedControl = { ...control };
-  let activeTab = 'details';
+  let editedControl = $state({ ...control });
+  let activeTab = $state('details');
   
   function handleSave() {
     onSave(editedControl);
@@ -19,8 +23,8 @@
     return matches ? [...new Set(matches)] : [];
   }
   
-  $: ccisInNarrative = parseCCIsFromNarrative(editedControl['control-implementation-narrative']);
-  $: associatedMappings = $mappings.filter(m => m.control_id === control.id);
+  let ccisInNarrative = $derived(parseCCIsFromNarrative(editedControl['control-implementation-narrative']));
+  let associatedMappings = $derived($mappings.filter(m => m.control_id === control.id));
 </script>
 
 <!-- Modal Backdrop -->

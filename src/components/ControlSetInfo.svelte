@@ -2,8 +2,12 @@
 	import { onMount } from 'svelte';
 	import type { ControlSet } from '$lib/types';
 
-	export let controlSet: ControlSet | null = null;
-	let loading = true;
+	interface Props {
+		controlSet?: ControlSet | null;
+	}
+
+	let { controlSet = $bindable(null) }: Props = $props();
+	let loading = $state(true);
 
 	onMount(async () => {
 		try {

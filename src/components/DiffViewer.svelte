@@ -1,12 +1,24 @@
 <script lang="ts">
-  export let diff: string;
-  export let fileName: string = '';
-  export let language: string = 'yaml';
-  export let compact: boolean = false;
-  export let showToggle: boolean = true;
+  import { run } from 'svelte/legacy';
+
+  interface Props {
+    diff: string;
+    fileName?: string;
+    language?: string;
+    compact?: boolean;
+    showToggle?: boolean;
+  }
+
+  let {
+    diff,
+    fileName = '',
+    language = 'yaml',
+    compact = false,
+    showToggle = true
+  }: Props = $props();
   
-  let isCompact = compact;
-  let parsedDiff: DiffLine[] = [];
+  let isCompact = $state(compact);
+  let parsedDiff: DiffLine[] = $state([]);
   
   interface DiffLine {
     type: 'context' | 'addition' | 'deletion' | 'header' | 'hunk';
@@ -112,7 +124,6 @@
       .replace(/#.*$/gm, '<span class="text-gray-500 dark:text-gray-400 italic">$&</span>');
   }
   
-  $: parsedDiff = isCompact ? getCompactDiff(parseDiff(diff)) : parseDiff(diff);
   
   function getCompactDiff(lines: DiffLine[]): DiffLine[] {
     const result: DiffLine[] = [];
@@ -138,6 +149,9 @@
     
     return result;
   }
+  run(() => {
+    parsedDiff = isCompact ? getCompactDiff(parseDiff(diff)) : parseDiff(diff);
+  });
 </script>
 
 <div class="diff-viewer border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">

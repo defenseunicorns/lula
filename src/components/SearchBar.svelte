@@ -1,7 +1,9 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { complianceStore, searchTerm, filteredControls } from '../stores/compliance';
   
-  let searchInput = '';
+  let searchInput = $state('');
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;
   
   function debouncedSearch(term: string) {
@@ -11,7 +13,9 @@
     }, 300);
   }
   
-  $: debouncedSearch(searchInput);
+  run(() => {
+    debouncedSearch(searchInput);
+  });
   
   function clearSearch() {
     searchInput = '';

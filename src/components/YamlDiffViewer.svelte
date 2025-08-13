@@ -1,10 +1,14 @@
 <script lang="ts">
   import { formatValue } from '../lib/yamlDiff.js';
 
-  export let yamlDiff: any; // YamlDiffResult
-  export let showToggle: boolean = true;
+  interface Props {
+    yamlDiff: any; // YamlDiffResult
+    showToggle?: boolean;
+  }
+
+  let { yamlDiff, showToggle = true }: Props = $props();
   
-  let showDetailedView = false; // Default to summary/compact view
+  let showDetailedView = $state(false); // Default to summary/compact view
   
   function getChangeIcon(type: string) {
     switch (type) {

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { api } from '$lib/api';
 	import type { Control, ControlCompleteData } from '$lib/types.js';
 	import { Connect, Edit, Information, Time, View } from 'carbon-icons-svelte';
@@ -7,25 +9,29 @@
 	import YamlDiffViewer from './YamlDiffViewer.svelte';
 	import { modal } from '$lib/actions/modal';
 
-	export let control: Control;
+	interface Props {
+		control: Control;
+	}
 
-	let editedControl = { ...control };
-	let originalControl = { ...control };
-	let activeTab = 'details';
-	let showNewMappingForm = false;
-	let completeData: ControlCompleteData | null = null;
-	let loadingCompleteData = false;
-	let expandedCommits = new Set<string>(); // Track which commits have expanded diffs
-	let fileModalContent = '';
-	let fileModalTitle = '';
-	let loadingFileContent = false;
-	let newMapping = {
+	let { control }: Props = $props();
+
+	let editedControl = $state({ ...control });
+	let originalControl = $state({ ...control });
+	let activeTab = $state('details');
+	let showNewMappingForm = $state(false);
+	let completeData: ControlCompleteData | null = $state(null);
+	let loadingCompleteData = $state(false);
+	let expandedCommits = $state(new Set<string>()); // Track which commits have expanded diffs
+	let fileModalContent = $state('');
+	let fileModalTitle = $state('');
+	let loadingFileContent = $state(false);
+	let newMapping = $state({
 		justification: '',
 		status: 'planned' as 'planned' | 'implemented' | 'verified'
-	};
+	});
 
 	// Check if there are any changes
-	$: hasChanges = JSON.stringify(editedControl) !== JSON.stringify(originalControl);
+	let hasChanges = $derived(JSON.stringify(editedControl) !== JSON.stringify(originalControl));
 
 	function handleSave() {
 		complianceStore.updateControl(editedControl);
@@ -114,12 +120,12 @@
 		return matches ? [...new Set(matches)] : [];
 	}
 
-	$: ccisInNarrative = parseCCIsFromNarrative(editedControl['control-implementation-narrative']);
-	$: associatedMappings =
-		completeData?.mappings || $mappings.filter((m) => m.control_id === control.id);
+	let ccisInNarrative = $derived(parseCCIsFromNarrative(editedControl['control-implementation-narrative']));
+	let associatedMappings =
+		$derived(completeData?.mappings || $mappings.filter((m) => m.control_id === control.id));
 
 	// Update editedControl when control prop changes
-	$: {
+	run(() => {
 		editedControl = { ...control };
 		originalControl = { ...control };
 		// Reset complete data when control changes
@@ -128,7 +134,7 @@
 		expandedCommits = new Set();
 		// Switch back to details tab when control changes for better UX
 		activeTab = 'details';
-	}
+	});
 
 	async function showFileAtCommit(commitHash: string, isMapping: boolean = false) {
 		if (loadingFileContent) return;
@@ -153,17 +159,21 @@
 	}
 
 	// Get unified timeline from complete data
-	$: unifiedTimeline = completeData?.unifiedHistory.commits || [];
+	let unifiedTimeline = $derived(completeData?.unifiedHistory.commits || []);
 
 	// Load complete data when history tab is selected or when component mounts
-	$: if (activeTab === 'history') {
-		loadCompleteData();
-	}
+	run(() => {
+		if (activeTab === 'history') {
+			loadCompleteData();
+		}
+	});
 
 	// Proactively load complete data when control changes to show history count immediately
-	$: if (control) {
-		loadCompleteData();
-	}
+	run(() => {
+		if (control) {
+			loadCompleteData();
+		}
+	});
 </script>
 
 <div class="h-full flex flex-col">
