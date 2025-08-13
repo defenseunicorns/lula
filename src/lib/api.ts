@@ -1,4 +1,4 @@
-import type { Control, Mapping, SearchResult, Stats, GitFileHistory, ControlWithHistory } from './types';
+import type { Control, Mapping, SearchResult, Stats, GitFileHistory, ControlWithHistory, ControlCompleteData } from './types';
 
 const BASE_URL = '';
 
@@ -127,6 +127,30 @@ class ApiClient {
 
   async getMappingHistory(family: string, limit: number = 20): Promise<GitFileHistory> {
     return this.request(`/api/mappings/${family}/history?limit=${limit}`);
+  }
+
+  async getControlComplete(id: string, limit?: number): Promise<ControlCompleteData> {
+    const params = limit ? `?limit=${limit}` : '';
+    return this.request(`/api/controls/${id}/complete${params}`);
+  }
+
+  async getFileContentAtCommit(commitHash: string, type: 'control' | 'mapping', controlId?: string, family?: string): Promise<{ filePath: string; commitHash: string; content: string | null }> {
+    let url = `/api/git/file/${commitHash}/${type}`;
+    
+    if (type === 'mapping' && family) {
+      url += `/${family}`;
+    }
+    
+    const params = new URLSearchParams();
+    if (controlId) {
+      params.append('controlId', controlId);
+    }
+    
+    if (params.toString()) {
+      url += `?${params.toString()}`;
+    }
+    
+    return this.request(url);
   }
 }
 

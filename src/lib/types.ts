@@ -75,6 +75,9 @@ export interface GitCommit {
     files: number;
   };
   diff?: string; // The actual file diff
+  yamlDiff?: any; // Intelligent YAML diff (YamlDiffResult)
+  type?: string; // 'control' or 'mapping' - added by unified endpoint
+  fileType?: string; // 'Control File' or 'Mappings' - added by unified endpoint
 }
 
 export interface GitFileHistory {
@@ -87,4 +90,19 @@ export interface GitFileHistory {
 
 export interface ControlWithHistory extends Control {
   history?: GitFileHistory;
+}
+
+export interface UnifiedHistory {
+  commits: GitCommit[];
+  totalCommits: number;
+  controlCommits: number;
+  mappingCommits: number;
+  controlFilePath?: string;
+  mappingFilePath?: string;
+}
+
+export interface ControlCompleteData {
+  control: Control;
+  mappings: Mapping[];
+  unifiedHistory: UnifiedHistory;
 }

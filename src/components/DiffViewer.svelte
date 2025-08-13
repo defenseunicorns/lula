@@ -2,6 +2,11 @@
   export let diff: string;
   export let fileName: string = '';
   export let language: string = 'yaml';
+  export let compact: boolean = false;
+  export let showToggle: boolean = true;
+  
+  let isCompact = compact;
+  let parsedDiff: DiffLine[] = [];
   
   interface DiffLine {
     type: 'context' | 'addition' | 'deletion' | 'header' | 'hunk';
@@ -15,19 +20,46 @@
     const parsedLines: DiffLine[] = [];
     let oldLineNumber = 1;
     let newLineNumber = 1;
+    let inDiffContent = false;
     
-    for (const line of lines) {
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      
+      // Skip file headers (--- and +++ lines) but include them
+      if (line.startsWith('---') || line.startsWith('+++')) {
+        parsedLines.push({ type: 'header', content: line });
+        continue;
+      }
+      
+      // Handle hunk headers like @@ -4,7 +4,7 @@
       if (line.startsWith('@@')) {
-        // Hunk header - extract line numbers
         const match = line.match(/@@\s-(\d+)(?:,\d+)?\s\+(\d+)(?:,\d+)?\s@@/);
         if (match) {
           oldLineNumber = parseInt(match[1]);
           newLineNumber = parseInt(match[2]);
+          inDiffContent = true;
         }
         parsedLines.push({ type: 'hunk', content: line });
-      } else if (line.startsWith('+++') || line.startsWith('---')) {
-        parsedLines.push({ type: 'header', content: line });
-      } else if (line.startsWith('+')) {
+        continue;
+      }
+      
+      // If we haven't seen a hunk header yet, check if this looks like diff content anyway
+      if (!inDiffContent) {
+        // Sometimes diffs don't have proper hunk headers, so check if line looks like diff content
+        if (line.startsWith('+') || line.startsWith('-') || line.startsWith(' ')) {
+          inDiffContent = true;
+          // Set reasonable default line numbers if we don't have hunk info
+          if (oldLineNumber === 1 && newLineNumber === 1) {
+            oldLineNumber = 1;
+            newLineNumber = 1;
+          }
+        } else {
+          continue;
+        }
+      }
+      
+      // Handle actual diff lines
+      if (line.startsWith('+')) {
         parsedLines.push({
           type: 'addition',
           content: line.slice(1),
@@ -39,16 +71,30 @@
           content: line.slice(1),
           oldLineNumber: oldLineNumber++
         });
-      } else if (line.startsWith(' ') || line === '') {
+      } else if (line.startsWith(' ')) {
+        // Context line (unchanged)
         parsedLines.push({
           type: 'context',
           content: line.slice(1),
           oldLineNumber: oldLineNumber++,
           newLineNumber: newLineNumber++
         });
-      } else {
-        // Handle other lines as context
-        parsedLines.push({ type: 'context', content: line });
+      } else if (line === '' && inDiffContent) {
+        // Empty line in diff
+        parsedLines.push({
+          type: 'context',
+          content: '',
+          oldLineNumber: oldLineNumber++,
+          newLineNumber: newLineNumber++
+        });
+      } else if (inDiffContent) {
+        // Treat unknown lines as context if we're in diff content
+        parsedLines.push({
+          type: 'context',
+          content: line,
+          oldLineNumber: oldLineNumber++,
+          newLineNumber: newLineNumber++
+        });
       }
     }
     
@@ -66,17 +112,60 @@
       .replace(/#.*$/gm, '<span class="text-gray-500 dark:text-gray-400 italic">$&</span>');
   }
   
-  $: parsedDiff = parseDiff(diff);
+  $: parsedDiff = isCompact ? getCompactDiff(parseDiff(diff)) : parseDiff(diff);
+  
+  function getCompactDiff(lines: DiffLine[]): DiffLine[] {
+    const result: DiffLine[] = [];
+    const contextRadius = 2; // Show 2 lines of context around changes
+    
+    // Find all changed lines (additions and deletions)
+    const changedLineIndices = new Set<number>();
+    lines.forEach((line, index) => {
+      if (line.type === 'addition' || line.type === 'deletion') {
+        // Add the changed line and context around it
+        for (let i = Math.max(0, index - contextRadius); i <= Math.min(lines.length - 1, index + contextRadius); i++) {
+          changedLineIndices.add(i);
+        }
+      }
+    });
+    
+    // Always include headers and hunks
+    lines.forEach((line, index) => {
+      if (line.type === 'header' || line.type === 'hunk' || changedLineIndices.has(index)) {
+        result.push(line);
+      }
+    });
+    
+    return result;
+  }
 </script>
 
 <div class="diff-viewer border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
-  {#if fileName}
+  {#if fileName || showToggle}
     <div class="bg-gray-50 dark:bg-gray-700 px-4 py-2 border-b border-gray-200 dark:border-gray-600">
-      <div class="flex items-center space-x-2">
-        <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 font-mono">{fileName}</span>
+      <div class="flex items-center justify-between">
+        {#if fileName}
+          <div class="flex items-center space-x-2">
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span class="text-sm font-medium text-gray-700 dark:text-gray-300 font-mono">{fileName}</span>
+          </div>
+        {:else}
+          <div></div>
+        {/if}
+        
+        {#if showToggle}
+          <button
+            onclick={() => isCompact = !isCompact}
+            class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 bg-gray-100 dark:bg-gray-600 rounded hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors"
+          >
+            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            </svg>
+            {isCompact ? 'Full' : 'Compact'}
+          </button>
+        {/if}
       </div>
     </div>
   {/if}

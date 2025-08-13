@@ -1,0 +1,20 @@
+/*
+  Copyright 2025 Defense Unicorns
+  SPDX-License-Identifier: LicenseRef-Defense-Unicorns-Commercial
+*/
+@reference "tailwindcss";
+
+@layer components {
+  .hljs-attr {
+    color: #33bbc8 !important;
+  }
+
+  .hljs-code,
+  .hljs-addition,
+  .hljs-title.class_.inherited__,
+  .hljs-number,
+  .hljs-literal,
+  .hljs-string {
+    color: #d338d3 !important;
+  }
+}

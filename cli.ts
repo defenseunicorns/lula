@@ -12,7 +12,7 @@ import crypto from 'crypto';
 import { FileStore } from './src/lib/fileStore.js';
 import { MigrationUtility } from './src/lib/migration.js';
 import { GitHistoryUtil } from './src/lib/gitHistory.js';
-import type { Control, Mapping, GitFileHistory, ControlWithHistory } from './src/lib/types.js';
+import type { Control, Mapping, GitFileHistory, ControlWithHistory, ControlCompleteData, UnifiedHistory, GitCommit } from './src/lib/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -570,12 +570,166 @@ app.get('/api/controls/:id/with-history', async (req, res) => {
   }
 });
 
+// NEW: Unified endpoint that loads control, mappings, and unified history
+app.get('/api/controls/:id/complete', async (req, res) => {
+  try {
+    const controlId = req.params.id;
+    const limit = parseInt(req.query.limit as string) || 50;
+    
+    console.log(`Getting complete data for control: ${controlId}`);
+    
+    // Get control
+    let control = serverState!.controlsCache.get(controlId);
+    if (!control) {
+      // Try loading from file store in case cache is stale
+      control = await serverState!.fileStore.loadControl(controlId);
+      if (control) {
+        serverState!.controlsCache.set(control.id, control);
+        addToIndexes(control);
+      }
+    }
+    
+    if (!control) {
+      return res.status(404).json({ error: 'Control not found' });
+    }
+    
+    const family = control['control-acronym'].split('-')[0];
+    
+    // Get mappings for this control
+    const mappings = Array.from(serverState!.mappingsCache.values())
+      .filter(mapping => mapping.control_id === controlId)
+      .sort((a, b) => a.uuid.localeCompare(b.uuid));
+    
+    // Get control file history
+    const metadata = serverState!.fileStore.getControlMetadata(controlId);
+    let controlHistory: GitFileHistory | undefined;
+    let controlFilePath: string | undefined;
+    
+    if (metadata) {
+      controlFilePath = join(serverState!.CONTROL_SET_DIR, 'controls', family, metadata.filename);
+      const { existsSync } = await import('fs');
+      if (existsSync(controlFilePath)) {
+        controlHistory = await serverState!.gitHistory.getFileHistory(controlFilePath, limit);
+      }
+    }
+    
+    // Get mapping file history
+    const mappingFilePath = join(serverState!.CONTROL_SET_DIR, 'mappings', family, `${family}-mappings.yaml`);
+    let mappingHistory: GitFileHistory | undefined;
+    
+    const { existsSync } = await import('fs');
+    if (existsSync(mappingFilePath)) {
+      mappingHistory = await serverState!.gitHistory.getFileHistory(mappingFilePath, limit);
+    }
+    
+    // Merge and sort commits chronologically
+    const allCommits: GitCommit[] = [];
+    let controlCommits = 0;
+    let mappingCommits = 0;
+    
+    // Add control commits with type indicator
+    if (controlHistory?.commits) {
+      controlHistory.commits.forEach(commit => {
+        allCommits.push({
+          ...commit,
+          type: 'control',
+          fileType: 'Control File'
+        } as GitCommit & { type: string; fileType: string });
+        controlCommits++;
+      });
+    }
+    
+    // Add mapping commits with type indicator  
+    if (mappingHistory?.commits) {
+      mappingHistory.commits.forEach(commit => {
+        allCommits.push({
+          ...commit,
+          type: 'mapping',
+          fileType: 'Mappings'
+        } as GitCommit & { type: string; fileType: string });
+        mappingCommits++;
+      });
+    }
+    
+    // Sort by date (newest first)
+    allCommits.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    
+    const unifiedHistory: UnifiedHistory = {
+      commits: allCommits,
+      totalCommits: allCommits.length,
+      controlCommits,
+      mappingCommits,
+      controlFilePath: controlFilePath ? controlFilePath.replace(serverState!.CONTROL_SET_DIR + '/', '') : undefined,
+      mappingFilePath: mappingFilePath ? mappingFilePath.replace(serverState!.CONTROL_SET_DIR + '/', '') : undefined
+    };
+    
+    const completeData: ControlCompleteData = {
+      control,
+      mappings,
+      unifiedHistory
+    };
+    
+    console.log(`Complete data for ${controlId}: ${mappings.length} mappings, ${unifiedHistory.totalCommits} total commits (${controlCommits} control, ${mappingCommits} mapping)`);
+    
+    res.json(completeData);
+  } catch (error) {
+    console.error('Error getting complete control data:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/git/stats', async (req, res) => {
   try {
     const stats = await serverState!.gitHistory.getRepositoryStats();
     res.json(stats);
   } catch (error) {
     console.error('Error getting git stats:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get file content at specific commit
+app.get('/api/git/file/:commitHash/:type/:family?', async (req, res) => {
+  try {
+    const { commitHash, type, family } = req.params;
+    
+    let filePath: string;
+    
+    if (type === 'control') {
+      // For control files, we need the control ID from query params
+      const controlId = req.query.controlId as string;
+      if (!controlId) {
+        return res.status(400).json({ error: 'Control ID required for control file' });
+      }
+      
+      const metadata = serverState!.fileStore.getControlMetadata(controlId);
+      if (!metadata) {
+        return res.status(404).json({ error: 'Control metadata not found' });
+      }
+      
+      const controlFamily = controlId.split('-')[0];
+      filePath = join('controls', controlFamily, metadata.filename);
+    } else if (type === 'mapping') {
+      if (!family) {
+        return res.status(400).json({ error: 'Family required for mapping file' });
+      }
+      filePath = join('mappings', family, `${family}-mappings.yaml`);
+    } else {
+      return res.status(400).json({ error: 'Invalid file type. Must be "control" or "mapping"' });
+    }
+    
+    console.log(`Getting file content for ${filePath} at commit ${commitHash}`);
+    
+    // Use git history utility to get file content at specific commit
+    const fileContent = await serverState!.gitHistory.getFileContentAtCommit(filePath, commitHash);
+    
+    res.json({
+      filePath,
+      commitHash,
+      content: fileContent
+    });
+  } catch (error) {
+    console.error('Error getting file content at commit:', error);
     res.status(500).json({ error: error.message });
   }
 });
