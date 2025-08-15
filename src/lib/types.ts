@@ -55,6 +55,23 @@ export interface ControlSet {
   lastModified: string;
   path?: string; // directory path for this control set
   families?: string[]; // derived from directory structure at runtime
+  
+  // Schema derived from import process
+  schema?: {
+    name: string;
+    version: string;
+    importedFrom?: string; // which adapter was used during import
+    fields: {
+      id: string;
+      label: string;
+      type: 'text' | 'textarea' | 'select' | 'multi-select' | 'date' | 'number' | 'boolean';
+      group: 'identification' | 'description' | 'implementation' | 'compliance' | 'metadata';
+      required?: boolean;
+      options?: string[]; // for select/multi-select fields
+      defaultValue?: any;
+      description?: string;
+    }[];
+  };
 }
 
 export interface ControlSetInfo {

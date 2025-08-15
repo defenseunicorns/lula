@@ -93,6 +93,13 @@ examples/nist-800-53-rev4/
 - Use TypeScript interfaces defined in `src/lib/types.ts`
 - Components in `src/components/` organized by feature area
 
+### Adapter System (Phase 1 Complete)
+- Multi-format support through `src/lib/adapters/` system
+- NIST native adapter wraps current YAML format (zero breaking changes)
+- Registry-based adapter management with auto-discovery
+- Schema-driven validation and form generation planned for Phase 3
+- Import/export capabilities for OSCAL and other formats (Phase 2+)
+
 ## Testing
 - Unit tests with Vitest
 - Browser testing available via `@vitest/browser`

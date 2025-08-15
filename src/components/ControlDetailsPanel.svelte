@@ -1,21 +1,29 @@
 <script lang="ts">
 	import { api } from '$lib/api';
-	import type { Control, ControlCompleteData } from '$lib/types.js';
+	import type { Control, ControlCompleteData, ControlSet } from '$lib/types.js';
 	import { Connect, Edit, Information, Time } from 'carbon-icons-svelte';
 	import { complianceStore, mappings } from '../stores/compliance';
 	import { StatusBadge, TabNavigation, EmptyState } from './ui';
-	import { FormField } from './forms';
+	import { FormField, DynamicControlForm } from './forms';
 	import { MappingCard, MappingForm } from './controls';
 	import { TimelineItem } from './timeline';
 
 	interface Props {
 		control: Control;
+		useDynamicForms: boolean;
 	}
 
-	let { control }: Props = $props();
+	let { control, useDynamicForms }: Props = $props();
+
+	// Load control set schema for dynamic forms
+	let controlSet: ControlSet | null = $state(null);
 
 	// Component state
-	let editedControl = $state({ ...control });
+	let editedControl = $state({ 
+		...control, 
+		inherited: control.inherited || '',
+		'test-results': control['test-results'] || ''
+	});
 	let originalControl = $state({ ...control });
 	let activeTab = $state<'details' | 'narrative' | 'mappings' | 'history'>('details');
 	let showNewMappingForm = $state(false);
@@ -26,13 +34,7 @@
 	let completeData: ControlCompleteData | null = $state(null);
 	let loadingCompleteData = $state(false);
 	
-	// Timeline state
-	let expandedCommits = $state(new Set<string>());
 	
-	// Modal state
-	let fileModalContent = $state('');
-	let fileModalTitle = $state('');
-	let loadingFileContent = $state(false);
 	
 	// Form state
 	let newMappingData = $state({
@@ -56,11 +58,18 @@
 			clearInterval(autoSaveInterval);
 		}
 		
-		editedControl = { ...control };
-		originalControl = { ...control };
+		editedControl = { 
+			...control, 
+			inherited: control.inherited || '',
+			'test-results': control['test-results'] || ''
+		};
+		originalControl = { 
+			...control, 
+			inherited: control.inherited || '',
+			'test-results': control['test-results'] || ''
+		};
 		completeData = null;
 		loadingCompleteData = false;
-		expandedCommits = new Set();
 		activeTab = 'details';
 		editingMapping = null;
 		
@@ -108,6 +117,11 @@
 		if (activeTab === 'history' || control) {
 			loadCompleteData();
 		}
+	});
+
+	$effect(() => {
+		// Load control set schema when component mounts
+		loadControlSet();
 	});
 
 	// Event handlers
@@ -191,44 +205,23 @@
 		}
 	}
 
-	function toggleDiffExpansion(commitHash: string) {
-		if (expandedCommits.has(commitHash)) {
-			expandedCommits.delete(commitHash);
-		} else {
-			expandedCommits.add(commitHash);
-		}
-		expandedCommits = new Set(expandedCommits); // Trigger reactivity
-	}
 
-	async function showFileAtCommit(commitHash: string, isMapping: boolean = false) {
-		if (loadingFileContent) return;
-
-		loadingFileContent = true;
-		try {
-			const type = isMapping ? 'mapping' : 'control';
-			const family = isMapping ? control['control-acronym'].split('-')[0] : undefined;
-			const controlId = !isMapping ? control.id : undefined;
-
-			const result = await api.getFileContentAtCommit(commitHash, type, controlId, family);
-
-			fileModalContent = result.content || 'File content not available';
-			fileModalTitle = `${result.filePath} @ ${commitHash.substring(0, 7)}`;
-		} catch (error) {
-			console.error('Failed to load file content:', error);
-			fileModalContent = 'Error loading file content';
-			fileModalTitle = 'Error';
-		} finally {
-			loadingFileContent = false;
-		}
-	}
 
 	// Utility functions
+	async function loadControlSet() {
+		try {
+			controlSet = await api.getControlSet();
+		} catch (error) {
+			console.error('Failed to load control set:', error);
+		}
+	}
+
 	async function loadCompleteData() {
 		if (completeData || loadingCompleteData) return;
 
 		loadingCompleteData = true;
 		try {
-			completeData = await api.getControlCompleteWithPending(control.id, 50);
+			completeData = await api.getControlComplete(control.id, 50);
 		} catch (error) {
 			console.error('Failed to load complete data:', error);
 			completeData = {
@@ -246,15 +239,6 @@
 		}
 	}
 
-	function formatDate(dateString: string): string {
-		return new Date(dateString).toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'short',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit'
-		});
-	}
 
 	function parseCCIsFromNarrative(narrative: string): string[] {
 		const cciPattern = /CCI-(\d{6})/g;
@@ -316,7 +300,7 @@
 			{ id: 'mappings', label: 'Mappings', icon: Connect, count: associatedMappings.length },
 			{ id: 'history', label: completeData?.unifiedHistory.totalCommits ? `Timeline (${completeData.unifiedHistory.totalCommits})` : 'Timeline', icon: Time }
 		]}
-		onSelect={(tabId) => activeTab = tabId}
+		onSelect={(tabId) => activeTab = tabId as typeof activeTab}
 	/>
 
 	<!-- Tab Content -->
@@ -336,124 +320,185 @@
 </div>
 
 {#snippet detailsTab()}
-	<div class="space-y-6">
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-			<FormField
-				id="control-id"
-				label="Control ID"
-				bind:value={editedControl.id}
-			/>
-			<FormField
-				id="control-acronym"
-				label="Control Acronym"
-				bind:value={editedControl['control-acronym']}
-			/>
-		</div>
-
-		<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-			<FormField
-				id="implementation-status"
-				label="Implementation Status"
-				type="select"
-				bind:value={editedControl['control-implementation-status']}
-				options={['Implemented', 'Planned', 'Not Implemented']}
-			/>
-			<FormField
-				id="compliance-status"
-				label="Compliance Status"
-				type="select"
-				bind:value={editedControl['compliance-status']}
-				options={['Compliant', 'Non-Compliant', 'Not Assessed']}
-			/>
-			<FormField
-				id="security-control-designation"
-				label="Security Control Designation"
-				type="select"
-				bind:value={editedControl['security-control-designation']}
-				options={['Common', 'Hybrid', 'System-Specific']}
-			/>
-		</div>
-
-		<FormField
-			id="control-information"
-			label="Control Information"
-			type="textarea"
-			bind:value={editedControl['control-information']}
-			rows={12}
+	{#if useDynamicForms}
+		<DynamicControlForm
+			bind:control={editedControl}
+			schema={controlSet?.schema ? {
+				name: controlSet.schema.name,
+				version: controlSet.schema.version,
+				description: 'Control identification and basic information',
+				fields: controlSet.schema.fields.filter(f => 
+					f.group === 'identification' || f.group === 'description'
+				).map(f => ({
+					id: f.id,
+					label: f.label,
+					type: f.type === 'multi-select' ? 'multiselect' : f.type,
+					required: f.required || false,
+					options: f.options,
+					description: f.description,
+					group: f.group
+				}))
+			} : { name: 'Loading...', version: '0.0.0', description: 'Loading schema...', fields: [] }}
 		/>
-	</div>
+	{:else}
+		<!-- Legacy static form -->
+		<div class="space-y-6">
+			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+				<FormField
+					id="control-id"
+					label="Control ID"
+					bind:value={editedControl.id}
+				/>
+				<FormField
+					id="control-acronym"
+					label="Control Acronym"
+					bind:value={editedControl['control-acronym']}
+				/>
+			</div>
+
+			<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+				<FormField
+					id="implementation-status"
+					label="Implementation Status"
+					type="select"
+					bind:value={editedControl['control-implementation-status']}
+					options={['Implemented', 'Planned', 'Not Implemented']}
+				/>
+				<FormField
+					id="compliance-status"
+					label="Compliance Status"
+					type="select"
+					bind:value={editedControl['compliance-status']}
+					options={['Compliant', 'Non-Compliant', 'Not Assessed']}
+				/>
+				<FormField
+					id="security-control-designation"
+					label="Security Control Designation"
+					type="select"
+					bind:value={editedControl['security-control-designation']}
+					options={['Common', 'Hybrid', 'System-Specific']}
+				/>
+			</div>
+
+			<FormField
+				id="control-information"
+				label="Control Information"
+				type="textarea"
+				bind:value={editedControl['control-information']}
+				rows={12}
+			/>
+		</div>
+	{/if}
 {/snippet}
 
 {#snippet narrativeTab()}
-	<div class="space-y-6">
-		<FormField
-			id="implementation-narrative"
-			label="Implementation Narrative"
-			type="textarea"
-			bind:value={editedControl['control-implementation-narrative']}
-			rows={8}
+	{#if useDynamicForms}
+		<DynamicControlForm
+			bind:control={editedControl}
+			schema={controlSet?.schema ? {
+				name: controlSet.schema.name,
+				version: controlSet.schema.version,
+				description: 'Control implementation and compliance details',
+				fields: controlSet.schema.fields.filter(f => 
+					f.group === 'implementation' || f.group === 'compliance'
+				).map(f => ({
+					id: f.id,
+					label: f.label,
+					type: f.type === 'multi-select' ? 'multiselect' : f.type,
+					required: f.required || false,
+					options: f.options,
+					description: f.description,
+					group: f.group
+				}))
+			} : { name: 'Loading...', version: '0.0.0', description: 'Loading schema...', fields: [] }}
 		/>
-
+		
 		{#if ccisInNarrative.length > 0}
-			<div>
-				<div class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+			<div class="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+				<div class="block text-sm font-medium text-blue-700 dark:text-blue-300 mb-2">
 					CCIs Found in Narrative
 				</div>
 				<div class="flex flex-wrap gap-2">
 					{#each ccisInNarrative as cci}
-						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+						<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200">
 							{cci}
 						</span>
 					{/each}
 				</div>
 			</div>
 		{/if}
-
-		<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+	{:else}
+		<!-- Legacy static form -->
+		<div class="space-y-6">
 			<FormField
-				id="cci"
-				label="CCI"
-				bind:value={editedControl.cci}
+				id="implementation-narrative"
+				label="Implementation Narrative"
+				type="textarea"
+				bind:value={editedControl['control-implementation-narrative']}
+				rows={8}
 			/>
+
+			{#if ccisInNarrative.length > 0}
+				<div>
+					<div class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+						CCIs Found in Narrative
+					</div>
+					<div class="flex flex-wrap gap-2">
+						{#each ccisInNarrative as cci}
+							<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+								{cci}
+							</span>
+						{/each}
+					</div>
+				</div>
+			{/if}
+
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+				<FormField
+					id="cci"
+					label="CCI"
+					bind:value={editedControl.cci}
+				/>
+				<FormField
+					id="inherited"
+					label="Inherited"
+					bind:value={editedControl.inherited}
+				/>
+			</div>
+
 			<FormField
-				id="inherited"
-				label="Inherited"
-				bind:value={editedControl.inherited}
+				id="cci-definition"
+				label="CCI Definition"
+				type="textarea"
+				bind:value={editedControl['cci-definition']}
+				rows={3}
+			/>
+
+			<FormField
+				id="implementation-guidance"
+				label="Implementation Guidance"
+				type="textarea"
+				bind:value={editedControl['implementation-guidance']}
+				rows={4}
+			/>
+
+			<FormField
+				id="assessment-procedures"
+				label="Assessment Procedures"
+				type="textarea"
+				bind:value={editedControl['assessment-procedures']}
+				rows={4}
+			/>
+
+			<FormField
+				id="test-results"
+				label="Test Results"
+				type="textarea"
+				bind:value={editedControl['test-results']}
+				rows={3}
 			/>
 		</div>
-
-		<FormField
-			id="cci-definition"
-			label="CCI Definition"
-			type="textarea"
-			bind:value={editedControl['cci-definition']}
-			rows={3}
-		/>
-
-		<FormField
-			id="implementation-guidance"
-			label="Implementation Guidance"
-			type="textarea"
-			bind:value={editedControl['implementation-guidance']}
-			rows={4}
-		/>
-
-		<FormField
-			id="assessment-procedures"
-			label="Assessment Procedures"
-			type="textarea"
-			bind:value={editedControl['assessment-procedures']}
-			rows={4}
-		/>
-
-		<FormField
-			id="test-results"
-			label="Test Results"
-			type="textarea"
-			bind:value={editedControl['test-results']}
-			rows={3}
-		/>
-	</div>
+	{/if}
 {/snippet}
 
 {#snippet mappingsTab()}
@@ -522,14 +567,6 @@
 					<TimelineItem
 						{commit}
 						showConnector={index < unifiedTimeline.length - 1}
-						onViewFile={showFileAtCommit}
-						onToggleDiff={toggleDiffExpansion}
-						isDiffExpanded={expandedCommits.has(commit.hash)}
-						{fileModalContent}
-						{fileModalTitle}
-						{loadingFileContent}
-						fileName={commit.type === 'mapping' ? `${control['control-acronym'].split('-')[0]}-mappings.yaml` : control.id + '.yaml'}
-						controlId={control.id}
 					/>
 				{/each}
 			</div>

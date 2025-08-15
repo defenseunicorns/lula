@@ -1,17 +1,19 @@
 #!/usr/bin/env node
 
 import express from 'express';
-import { existsSync, mkdirSync, writeFileSync, promises as fs } from 'fs';
-import { join, dirname } from 'path';
+import * as fs from 'fs';
+import { existsSync, mkdirSync, writeFileSync, promises as fsPromises } from 'fs';
+import { join, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 import * as YAML from 'yaml';
 import { program } from 'commander';
 import open from 'open';
 import cors from 'cors';
 import crypto from 'crypto';
-import { FileStore } from './src/lib/fileStore.js';
-import { MigrationUtility } from './src/lib/migration.js';
+import * as git from 'isomorphic-git';
+import { FileStore } from './src/lib/index.js';
 import { GitHistoryUtil } from './src/lib/gitHistory.js';
+import { importWithAdapter, getAdapter } from './src/lib/adapters/index.js';
 import type { Control, Mapping, GitFileHistory, ControlWithHistory, ControlCompleteData, UnifiedHistory, GitCommit } from './src/lib/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -44,104 +46,176 @@ program
     await startServer(options.dir, parseInt(options.port));
   });
 
-program
-  .command('migrate')
-  .description('Migrate from single YAML files to individual control files')
-  .option('--dir <directory>', 'Control set directory path', './examples/nist-800-53-rev4')
-  .option('--dry-run', 'Show what would be migrated without making changes')
-  .option('--backup', 'Create backup before migration', true)
-  .option('--no-backup', 'Skip creating backup')
-  .option('--overwrite', 'Overwrite existing individual files')
-  .option('--report <file>', 'Generate migration report to file')
-  .action(async (options) => {
-    await runMigration(options);
-  });
+
 
 program
-  .command('status')
-  .description('Check current migration status')
-  .option('--dir <directory>', 'Control set directory path', './examples/nist-800-53-rev4')
+  .command('import')
+  .description('Import controls from external formats (OSCAL, etc.)')
+  .option('--format <format>', 'Source format (oscal-import)', 'oscal-import')
+  .option('--file <file>', 'Source file path (required)')
+  .option('--dir <directory>', 'Target control set directory path', './examples/nist-800-53-rev4')
+  .option('--dry-run', 'Show what would be imported without making changes')
+  .option('--overwrite', 'Overwrite existing controls')
   .action(async (options) => {
-    await checkStatus(options.dir);
+    await runImport(options);
   });
 
 // For backward compatibility, if no command is specified, run serve
-if (process.argv.length === 2 || (!process.argv.includes('serve') && !process.argv.includes('migrate') && !process.argv.includes('status'))) {
+if (process.argv.length === 2 || (!process.argv.includes('serve') && !process.argv.includes('import'))) {
   process.argv.splice(2, 0, 'serve');
 }
 
 program.parse();
 
 // Command implementations
-async function runMigration(options: any) {
-  const CONTROL_SET_DIR = options.dir;
-  
-  // Ensure control set directory exists
-  if (!existsSync(CONTROL_SET_DIR)) {
-    mkdirSync(CONTROL_SET_DIR, { recursive: true });
+async function runImport(options: any) {
+  if (!options.file) {
+    console.error('❌ Error: --file option is required');
+    console.log('Usage: cya import --file <path-to-oscal-catalog.json> [--format oscal-import] [--dir <target-directory>]');
+    process.exit(1);
   }
-  
-  console.log(`\n🚀 Starting migration for directory: ${CONTROL_SET_DIR}\n`);
-  
-  const migrationUtil = new MigrationUtility({
-    baseDir: CONTROL_SET_DIR,
-    backupExisting: options.backup,
-    dryRun: options.dryRun,
-    overwriteExisting: options.overwrite || false
-  });
-  
+
+  const sourceFile = options.file;
+  const targetDir = options.dir;
+  const format = options.format;
+  const dryRun = options.dryRun;
+  const overwrite = options.overwrite;
+
+  console.log(`\n🚀 Starting import from: ${sourceFile}`);
+  console.log(`📁 Target directory: ${targetDir}`);
+  console.log(`📋 Format: ${format}`);
+  if (dryRun) console.log('🧪 Dry run mode - no files will be changed');
+  console.log();
+
   try {
-    // Generate and optionally save report
-    if (options.report) {
-      console.log('Generating migration report...');
-      const report = await migrationUtil.generateReport();
-      writeFileSync(options.report, report, 'utf8');
-      console.log(`Migration report saved to: ${options.report}`);
-      return;
+    // Check if source file exists
+    if (!existsSync(sourceFile)) {
+      console.error(`❌ Source file not found: ${sourceFile}`);
+      process.exit(1);
     }
-    
-    // Run the actual migration
-    const result = await migrationUtil.migrate();
-    
-    if (result.errors.length === 0) {
-      console.log('\n✅ Migration completed successfully!');
-      if (options.dryRun) {
-        console.log('Run without --dry-run to perform the actual migration.');
+
+    // Ensure target directory exists
+    if (!existsSync(targetDir)) {
+      mkdirSync(targetDir, { recursive: true });
+    }
+
+    // Read and parse source file
+    console.log('📖 Reading source file...');
+    const sourceData = JSON.parse(await fsPromises.readFile(sourceFile, 'utf8'));
+
+    // Get the appropriate adapter
+    const adapter = getAdapter(format);
+    if (!adapter) {
+      console.error(`❌ Unknown format: ${format}`);
+      console.log('Available formats:');
+      // List available adapters
+      const { getAvailableAdapters } = await import('./src/lib/adapters/index.js');
+      getAvailableAdapters().forEach(a => {
+        console.log(`  - ${a.id}: ${a.name}`);
+      });
+      process.exit(1);
+    }
+
+    // Validate source data
+    console.log('🔍 Validating source data...');
+    const validation = await adapter.validate(sourceData);
+    if (!validation.valid) {
+      console.error('❌ Source data validation failed:');
+      validation.errors.forEach(error => {
+        console.error(`  - ${error.field ? `${error.field}: ` : ''}${error.message}`);
+      });
+      process.exit(1);
+    }
+
+    if (validation.warnings.length > 0) {
+      console.log('⚠️  Validation warnings:');
+      validation.warnings.forEach(warning => {
+        console.log(`  - ${warning.field ? `${warning.field}: ` : ''}${warning.message}`);
+      });
+    }
+
+    // Import controls
+    console.log('🔄 Converting controls...');
+    const importResult = await adapter.import(sourceData, {
+      preserveIds: true,
+      overwrite
+    });
+
+    console.log(`✅ Successfully converted ${importResult.controls.length} controls`);
+
+    if (importResult.warnings.length > 0) {
+      console.log('\n⚠️  Import warnings:');
+      importResult.warnings.forEach(warning => {
+        console.log(`  - ${warning.field ? `${warning.field}: ` : ''}${warning.message}`);
+      });
+    }
+
+    if (!dryRun) {
+      // Initialize file store for target directory
+      const fileStore = new FileStore({ baseDir: targetDir });
+
+      console.log('💾 Saving controls to individual files...');
+      let savedCount = 0;
+      let skippedCount = 0;
+
+      for (const control of importResult.controls) {
+        try {
+          // Check if control already exists
+          const existingControl = await fileStore.loadControl(control.id).catch(() => null);
+          
+          if (existingControl && !overwrite) {
+            console.log(`⏭️  Skipping existing control: ${control.id}`);
+            skippedCount++;
+            continue;
+          }
+
+          // Save control
+          await fileStore.saveControl(control);
+          savedCount++;
+          
+          if (savedCount % 10 === 0) {
+            console.log(`  Saved ${savedCount} controls...`);
+          }
+        } catch (error) {
+          console.error(`❌ Failed to save control ${control.id}: ${error instanceof Error ? error.message : String(error)}`);
+        }
+      }
+
+      // Save metadata if provided
+      if (importResult.metadata) {
+        const metadataPath = join(targetDir, '.import-metadata.json');
+        writeFileSync(metadataPath, JSON.stringify(importResult.metadata, null, 2), 'utf8');
+        console.log(`📄 Import metadata saved to: ${metadataPath}`);
+      }
+
+      console.log(`\n✅ Import completed successfully!`);
+      console.log(`📊 Summary:`);
+      console.log(`  - Controls imported: ${savedCount}`);
+      console.log(`  - Controls skipped: ${skippedCount}`);
+      console.log(`  - Total processed: ${importResult.controls.length}`);
+      
+      if (skippedCount > 0) {
+        console.log(`\n💡 Use --overwrite to replace existing controls`);
       }
     } else {
-      console.log('\n⚠️  Migration completed with errors.');
+      console.log(`\n🧪 Dry run completed - no files were changed`);
+      console.log(`📊 Would import ${importResult.controls.length} controls`);
+      console.log(`\nSample controls that would be created:`);
+      importResult.controls.slice(0, 5).forEach(control => {
+        console.log(`  - ${control.id}: ${control['control-acronym']}`);
+      });
+      if (importResult.controls.length > 5) {
+        console.log(`  ... and ${importResult.controls.length - 5} more`);
+      }
     }
-    
+
   } catch (error) {
-    console.error('\n❌ Migration failed:', error);
+    console.error('\n❌ Import failed:', error instanceof Error ? error.message : String(error));
     process.exit(1);
   }
 }
 
-async function checkStatus(dir: string) {
-  const CONTROL_SET_DIR = dir;
-  
-  if (!existsSync(CONTROL_SET_DIR)) {
-    console.log(`❌ Directory does not exist: ${CONTROL_SET_DIR}`);
-    return;
-  }
-  
-  const migrationUtil = new MigrationUtility({ baseDir: CONTROL_SET_DIR });
-  const status = await migrationUtil.checkMigrationStatus();
-  
-  console.log(`\n📊 Migration Status for: ${CONTROL_SET_DIR}\n`);
-  console.log(`Legacy files (controls.yaml): ${status.hasLegacyFiles ? '✅ Found' : '❌ Not found'}`);
-  console.log(`Individual files: ${status.hasIndividualFiles ? '✅ Found' : '❌ Not found'}`);
-  console.log(`Controls in legacy file: ${status.controlCount}`);
-  console.log(`Individual control files: ${status.individualFileCount}`);
-  console.log(`Migration needed: ${status.needsMigration ? '⚠️  YES' : '✅ NO'}\n`);
-  
-  if (status.needsMigration) {
-    console.log(`💡 Run \`cya migrate --dir ${CONTROL_SET_DIR}\` to migrate to individual files.`);
-  } else if (status.individualFileCount > 0) {
-    console.log('✅ Using individual control files. Ready for Git-friendly version control!');
-  }
-}
+
 
 async function saveMappingsToFile() {
   if (!serverState) throw new Error('Server not initialized');
@@ -261,13 +335,13 @@ app.put('/api/controls/:id', async (req, res) => {
     const family = control['control-acronym'].split('-')[0];
     
     // Save to file store
-    const shortId = await serverState!.fileStore.saveControl(control);
+    await serverState!.fileStore.saveControl(control);
     
     // Update in-memory cache
     serverState!.controlsCache.set(control.id, control);
     addToIndexes(control);
     
-    res.json({ ...control, _shortId: shortId });
+    res.json(control);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -423,7 +497,7 @@ app.get('/api/control-set', async (req, res) => {
     const controlSetFile = join(serverState!.CONTROL_SET_DIR, 'control-set.yaml');
     
     try {
-      const content = await fs.readFile(controlSetFile, 'utf8');
+      const content = await fsPromises.readFile(controlSetFile, 'utf8');
       const controlSet = YAML.parse(content);
       
       // Add derived families from directory structure
@@ -499,15 +573,16 @@ app.get('/api/controls/:id/history', async (req, res) => {
   }
 });
 
-// Git history for mapping files by family
-app.get('/api/mappings/:family/history', async (req, res) => {
+// Git history for mapping files by control
+app.get('/api/mappings/:controlId/history', async (req, res) => {
   try {
-    const family = req.params.family;
+    const controlId = req.params.controlId;
     const limit = parseInt(req.query.limit as string) || 50;
     
-    console.log(`Getting git history for mappings family: ${family}`);
+    console.log(`Getting git history for mappings control: ${controlId}`);
     
-    const mappingFilePath = join(serverState!.CONTROL_SET_DIR, 'mappings', family, `${family}-mappings.yaml`);
+    const family = controlId.split('-')[0];
+    const mappingFilePath = join(serverState!.CONTROL_SET_DIR, 'mappings', family, `${controlId}-mappings.yaml`);
     
     // Check if file exists
     const { existsSync } = await import('fs');
@@ -519,7 +594,7 @@ app.get('/api/mappings/:family/history', async (req, res) => {
     // Get git history
     const history = await serverState!.gitHistory.getFileHistory(mappingFilePath, limit);
     
-    console.log(`Git history for ${family} mappings: ${history.commits.length} commits found`);
+    console.log(`Git history for ${controlId} mappings: ${history.commits.length} commits found`);
     
     res.json(history);
   } catch (error) {
@@ -581,7 +656,6 @@ app.get('/api/controls/:id/complete', async (req, res) => {
     // Get control
     let control = serverState!.controlsCache.get(controlId);
     if (!control) {
-      // Try loading from file store in case cache is stale
       control = await serverState!.fileStore.loadControl(controlId);
       if (control) {
         serverState!.controlsCache.set(control.id, control);
@@ -600,59 +674,234 @@ app.get('/api/controls/:id/complete', async (req, res) => {
       .filter(mapping => mapping.control_id === controlId)
       .sort((a, b) => a.uuid.localeCompare(b.uuid));
     
-    // Get control file history
-    const metadata = serverState!.fileStore.getControlMetadata(controlId);
-    let controlHistory: GitFileHistory | undefined;
-    let controlFilePath: string | undefined;
+    console.log(`Complete data for ${controlId}: ${mappings.length} mappings, starting history lookup`);
     
-    if (metadata) {
-      controlFilePath = join(serverState!.CONTROL_SET_DIR, 'controls', family, metadata.filename);
-      const { existsSync } = await import('fs');
-      if (existsSync(controlFilePath)) {
-        controlHistory = await serverState!.gitHistory.getFileHistory(controlFilePath, limit);
-      }
-    }
-    
-    // Get mapping file history
-    const mappingFilePath = join(serverState!.CONTROL_SET_DIR, 'mappings', family, `${family}-mappings.yaml`);
-    let mappingHistory: GitFileHistory | undefined;
-    
-    const { existsSync } = await import('fs');
-    if (existsSync(mappingFilePath)) {
-      mappingHistory = await serverState!.gitHistory.getFileHistory(mappingFilePath, limit);
-    }
-    
-    // Merge and sort commits chronologically
+    // Get all commits for both control and mapping files, including pending changes
     const allCommits: GitCommit[] = [];
     let controlCommits = 0;
     let mappingCommits = 0;
     
-    // Add control commits with type indicator
-    if (controlHistory?.commits) {
-      controlHistory.commits.forEach(commit => {
-        allCommits.push({
-          ...commit,
-          type: 'control',
-          fileType: 'Control File'
-        } as GitCommit & { type: string; fileType: string });
-        controlCommits++;
-      });
+    const { existsSync, statSync } = await import('fs');
+    const gitRoot = serverState!.CONTROL_SET_DIR;
+    
+    // Get file paths
+    const metadata = serverState!.fileStore.getControlMetadata(controlId);
+    const controlFilePath = metadata ? join(gitRoot, 'controls', family, metadata.filename) : undefined;
+    const mappingFilePath = join(gitRoot, 'mappings', family, `${controlId}-mappings.yaml`);
+    
+    // Get control file history
+    if (controlFilePath && existsSync(controlFilePath)) {
+      try {
+        const controlHistory = await serverState!.gitHistory.getFileHistory(controlFilePath, limit);
+        controlHistory.commits.forEach(commit => {
+          allCommits.push({ ...commit, type: 'control', fileType: 'Control File' } as GitCommit & { type: string; fileType: string });
+        });
+        controlCommits = controlHistory.commits.length;
+        console.log(`Found ${controlCommits} commits for control file`);
+      } catch (error) {
+        console.log(`No git history for control file: ${controlFilePath}`);
+      }
     }
     
-    // Add mapping commits with type indicator  
-    if (mappingHistory?.commits) {
-      mappingHistory.commits.forEach(commit => {
-        allCommits.push({
-          ...commit,
-          type: 'mapping',
-          fileType: 'Mappings'
-        } as GitCommit & { type: string; fileType: string });
-        mappingCommits++;
-      });
+    // Get mapping file history
+    if (existsSync(mappingFilePath)) {
+      try {
+        const mappingHistory = await serverState!.gitHistory.getFileHistory(mappingFilePath, limit);
+        mappingHistory.commits.forEach(commit => {
+          allCommits.push({ ...commit, type: 'mapping', fileType: 'Mappings' } as GitCommit & { type: string; fileType: string });
+        });
+        mappingCommits = mappingHistory.commits.length;
+        console.log(`Found ${mappingCommits} commits for mapping file`);
+      } catch (error) {
+        console.log(`No git history for mapping file: ${mappingFilePath}`);
+      }
     }
     
-    // Sort by date (newest first)
-    allCommits.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    // Check for pending changes
+    const filesToCheck: { path: string; type: 'control' | 'mapping' }[] = [];
+    if (controlFilePath) filesToCheck.push({ path: controlFilePath, type: 'control' });
+    if (existsSync(mappingFilePath)) filesToCheck.push({ path: mappingFilePath, type: 'mapping' });
+    
+    for (const { path, type } of filesToCheck) {
+      try {
+        const relativePath = relative(gitRoot, path);
+        const status = await git.status({ fs: fs, dir: gitRoot, filepath: relativePath });
+        
+        // isomorphic-git returns different status values: unmodified, *modified, *deleted, *added, etc.
+        if (status !== 'unmodified' && status !== 'absent') {
+          const currentTime = new Date().toISOString();
+          const displayType = type === 'mapping' ? 'Mappings' : 'Control File';
+          
+          // Generate diff for pending changes
+          let diff = '';
+          let yamlDiff = null;
+          try {
+            // Get current working directory content
+            const currentContent = await fsPromises.readFile(path, 'utf8');
+            
+            // Get HEAD content for comparison
+            let headContent = '';
+            try {
+              const headOid = await git.resolveRef({ fs: fs, dir: gitRoot, ref: 'HEAD' });
+              const { blob } = await git.readBlob({ fs: fs, dir: gitRoot, oid: headOid, filepath: relativePath });
+              headContent = new TextDecoder().decode(blob);
+            } catch (error) {
+              // File might be new (not in HEAD), use empty content
+              headContent = '';
+            }
+            
+            // Generate basic diff
+            if (currentContent !== headContent) {
+              const lines1 = headContent.split('\n');
+              const lines2 = currentContent.split('\n');
+              
+              // Simple diff generation - show actual line differences
+              const diffLines = [];
+              diffLines.push(`--- a/${relativePath}`);
+              diffLines.push(`+++ b/${relativePath}`);
+              
+              // Basic line-by-line comparison
+              const maxLines = Math.max(lines1.length, lines2.length);
+              let hasChanges = false;
+              
+              for (let i = 0; i < maxLines; i++) {
+                const oldLine = lines1[i] || '';
+                const newLine = lines2[i] || '';
+                
+                if (oldLine !== newLine) {
+                  if (!hasChanges) {
+                    diffLines.push(`@@ -${i+1},${lines1.length} +${i+1},${lines2.length} @@`);
+                    hasChanges = true;
+                  }
+                  
+                  if (oldLine && lines1[i] !== undefined) {
+                    diffLines.push(`-${oldLine}`);
+                  }
+                  if (newLine && lines2[i] !== undefined) {
+                    diffLines.push(`+${newLine}`);
+                  }
+                }
+              }
+              
+              // For YAML files, try to parse and generate structured diff
+              if (relativePath.endsWith('.yaml') || relativePath.endsWith('.yml')) {
+                try {
+                  const oldData = headContent ? YAML.parse(headContent) : {};
+                  const newData = YAML.parse(currentContent);
+                  
+                  // Find changed fields
+                  const changedFields = [];
+                  
+                  // Simple field comparison
+                  function findChanges(oldObj, newObj, path = '') {
+                    const allKeys = new Set([...Object.keys(oldObj || {}), ...Object.keys(newObj || {})]);
+                    
+                    for (const key of allKeys) {
+                      if (key.startsWith('_')) continue; // Skip metadata
+                      
+                      const oldVal = oldObj?.[key];
+                      const newVal = newObj?.[key];
+                      const fullPath = path ? `${path}.${key}` : key;
+                      
+                      if (oldVal !== newVal) {
+                        if (oldVal === undefined) {
+                          changedFields.push({
+                            type: 'Added',
+                            field: key,
+                            oldValue: undefined,
+                            newValue: newVal
+                          });
+                        } else if (newVal === undefined) {
+                          changedFields.push({
+                            type: 'Removed',
+                            field: key,
+                            oldValue: oldVal,
+                            newValue: undefined
+                          });
+                        } else {
+                          changedFields.push({
+                            type: 'Modified',
+                            field: key,
+                            oldValue: oldVal,
+                            newValue: newVal
+                          });
+                        }
+                      }
+                    }
+                  }
+                  
+                  findChanges(oldData, newData);
+                  
+                  if (changedFields.length > 0) {
+                    // Count change types for concise summary
+                    const added = changedFields.filter(f => f.type === 'Added').length;
+                    const removed = changedFields.filter(f => f.type === 'Removed').length;
+                    const modified = changedFields.filter(f => f.type === 'Modified').length;
+                    
+                    // Create concise summary like "2 added, 1 modified"
+                    const summaryParts = [];
+                    if (added > 0) summaryParts.push(`${added} added`);
+                    if (modified > 0) summaryParts.push(`${modified} modified`);
+                    if (removed > 0) summaryParts.push(`${removed} removed`);
+                    
+                    yamlDiff = {
+                      hasChanges: true,
+                      summary: summaryParts.join(', '),
+                      changes: changedFields.map(change => ({
+                        type: change.type.toLowerCase(),
+                        field: change.field,
+                        path: change.field,
+                        description: `${change.type} ${change.field}`,
+                        oldValue: change.oldValue,
+                        newValue: change.newValue
+                      }))
+                    };
+                  }
+                } catch (yamlError) {
+                  console.log(`YAML parsing error for ${relativePath}:`, yamlError);
+                  // If YAML parsing fails, fall back to text diff
+                }
+              }
+              
+              // Generate simple text diff
+              diff = diffLines.join('\n');
+            }
+          } catch (error) {
+            console.log(`Could not generate diff for ${relativePath}:`, error);
+            diff = 'Unable to generate diff for pending changes';
+          }
+          
+          allCommits.push({
+            hash: 'pending',
+            shortHash: 'pending',
+            author: 'You',
+            authorEmail: '',
+            date: currentTime,
+            message: `Uncommitted modifications`,
+            changes: { insertions: 0, deletions: 0, files: 1 },
+            type,
+            fileType: displayType,
+            isPending: true,
+            diff: diff || undefined,
+            yamlDiff: yamlDiff || undefined
+          } as GitCommit & { type: string; fileType: string; isPending: boolean });
+          
+          if (type === 'control') controlCommits++;
+          else mappingCommits++;
+          
+          console.log(`Found pending changes in ${type} file: ${relativePath}`);
+        }
+      } catch (error) {
+        console.log(`Could not check git status for ${path}:`, error);
+      }
+    }
+    
+    // Sort by date (pending first, then newest first)
+    allCommits.sort((a: any, b: any) => {
+      if (a.isPending && !b.isPending) return -1;
+      if (!a.isPending && b.isPending) return 1;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
     
     const unifiedHistory: UnifiedHistory = {
       commits: allCommits,
@@ -710,10 +959,11 @@ app.get('/api/git/file/:commitHash/:type/:family?', async (req, res) => {
       const controlFamily = controlId.split('-')[0];
       filePath = join('controls', controlFamily, metadata.filename);
     } else if (type === 'mapping') {
-      if (!family) {
-        return res.status(400).json({ error: 'Family required for mapping file' });
+      if (!controlId) {
+        return res.status(400).json({ error: 'Control ID required for mapping file' });
       }
-      filePath = join('mappings', family, `${family}-mappings.yaml`);
+      const controlFamily = controlId.split('-')[0];
+      filePath = join('mappings', controlFamily, `${controlId}-mappings.yaml`);
     } else {
       return res.status(400).json({ error: 'Invalid file type. Must be "control" or "mapping"' });
     }

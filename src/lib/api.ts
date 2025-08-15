@@ -1,4 +1,4 @@
-import type { Control, Mapping, SearchResult, Stats, GitFileHistory, ControlWithHistory, ControlCompleteData } from './types';
+import type { Control, Mapping, SearchResult, Stats, GitFileHistory, ControlWithHistory, ControlCompleteData, ControlSet } from './types';
 
 const BASE_URL = '';
 
@@ -80,6 +80,10 @@ class ApiClient {
     return this.request('/api/stats');
   }
 
+  async getControlSet(): Promise<ControlSet> {
+    return this.request('/api/control-set');
+  }
+
   async exportExcel(): Promise<Blob> {
     const response = await fetch(`${BASE_URL}/api/export/excel`, {
       method: 'POST',
@@ -125,20 +129,13 @@ class ApiClient {
     return this.request('/api/git/stats');
   }
 
-  async getMappingHistory(family: string, limit: number = 20): Promise<GitFileHistory> {
-    return this.request(`/api/mappings/${family}/history?limit=${limit}`);
+  async getMappingHistory(controlId: string, limit: number = 20): Promise<GitFileHistory> {
+    return this.request(`/api/mappings/${controlId}/history?limit=${limit}`);
   }
 
   async getControlComplete(id: string, limit?: number): Promise<ControlCompleteData> {
     const params = limit ? `?limit=${limit}` : '';
     return this.request(`/api/controls/${id}/complete${params}`);
-  }
-
-  async getControlCompleteWithPending(id: string, limit?: number): Promise<ControlCompleteData> {
-    const params = new URLSearchParams();
-    if (limit) params.append('limit', limit.toString());
-    params.append('includePending', 'true');
-    return this.request(`/api/controls/${id}/complete?${params.toString()}`);
   }
 
   async getFileContentAtCommit(commitHash: string, type: 'control' | 'mapping', controlId?: string, family?: string): Promise<{ filePath: string; commitHash: string; content: string | null }> {
