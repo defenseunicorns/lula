@@ -134,6 +134,13 @@ class ApiClient {
     return this.request(`/api/controls/${id}/complete${params}`);
   }
 
+  async getControlCompleteWithPending(id: string, limit?: number): Promise<ControlCompleteData> {
+    const params = new URLSearchParams();
+    if (limit) params.append('limit', limit.toString());
+    params.append('includePending', 'true');
+    return this.request(`/api/controls/${id}/complete?${params.toString()}`);
+  }
+
   async getFileContentAtCommit(commitHash: string, type: 'control' | 'mapping', controlId?: string, family?: string): Promise<{ filePath: string; commitHash: string; content: string | null }> {
     let url = `/api/git/file/${commitHash}/${type}`;
     

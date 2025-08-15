@@ -78,6 +78,8 @@ export interface GitCommit {
   yamlDiff?: any; // Intelligent YAML diff (YamlDiffResult)
   type?: string; // 'control' or 'mapping' - added by unified endpoint
   fileType?: string; // 'Control File' or 'Mappings' - added by unified endpoint
+  isPending?: boolean; // true for uncommitted changes
+  isStaged?: boolean; // true for staged changes (optional since user doesn't care about staged vs unstaged)
 }
 
 export interface GitFileHistory {

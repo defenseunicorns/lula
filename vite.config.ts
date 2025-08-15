@@ -5,6 +5,25 @@ import { defineConfig } from 'vite';
 export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	server: {
+		watch: {
+			// Only watch for changes in src directory and config files
+			ignored: [
+				'**/node_modules/**',
+				'**/dist/**',
+				'**/build/**',
+				'**/coverage/**',
+				'**/.git/**',
+				'**/examples/**',
+				'**/compliance/**',
+				'**/controls/**',
+				'**/mappings/**',
+				'**/*.log',
+				'**/.env*',
+				'**/README.md',
+				'**/CHANGELOG.md',
+				'**/LICENSE'
+			]
+		},
 		proxy: {
 			'/api': {
 				target: 'http://localhost:3000',
