@@ -145,49 +145,49 @@
 	}
 </script>
 
-<div class="space-y-6">
+<div class="space-y-8">
 	{#each Object.entries(fieldGroups) as [groupName, fields]}
-		<div class="space-y-4">
+		<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm overflow-hidden">
 			{#if groupName !== 'general'}
-				<h3 class="text-lg font-medium text-gray-900 dark:text-white capitalize">
-					{groupName.replace(/([A-Z])/g, ' $1').trim()}
-				</h3>
+				<!-- Group Header -->
+				<div class="border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+					<h3 class="text-lg font-medium text-slate-900 dark:text-white capitalize">
+						{groupName.replace(/([A-Z])/g, ' $1').trim()}
+					</h3>
+				</div>
 			{/if}
 			
-			<!-- Grid layout for better organization -->
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				{#each fields as field}
-					{#if field.type !== 'textarea'}
-						{#if control[field.id] === undefined}
-							{(control[field.id] = field.defaultValue || '', '')}
+			<!-- Form Content -->
+			<div class="p-6">
+				<!-- Grid layout for better organization -->
+				<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
+					{#each fields as field}
+						{#if field.type !== 'textarea'}
+							<DynamicField
+								{field}
+								bind:value={control[field.id]}
+								{readonly}
+								error={fieldErrors[field.id]}
+								onChange={() => handleFieldChange(field.id)}
+							/>
 						{/if}
-						<DynamicField
-							{field}
-							bind:value={control[field.id]}
-							{readonly}
-							error={fieldErrors[field.id]}
-							onChange={() => handleFieldChange(field.id)}
-						/>
-					{/if}
-				{/each}
-			</div>
-			
-			<!-- Full-width fields (textareas, etc.) -->
-			<div class="space-y-4">
-				{#each fields as field}
-					{#if field.type === 'textarea'}
-						{#if control[field.id] === undefined}
-							{(control[field.id] = field.defaultValue || '', '')}
+					{/each}
+				</div>
+				
+				<!-- Full-width fields (textareas, etc.) -->
+				<div class="space-y-6">
+					{#each fields as field}
+						{#if field.type === 'textarea'}
+							<DynamicField
+								{field}
+								bind:value={control[field.id]}
+								{readonly}
+								error={fieldErrors[field.id]}
+								onChange={() => handleFieldChange(field.id)}
+							/>
 						{/if}
-						<DynamicField
-							{field}
-							bind:value={control[field.id]}
-							{readonly}
-							error={fieldErrors[field.id]}
-							onChange={() => handleFieldChange(field.id)}
-						/>
-					{/if}
-				{/each}
+					{/each}
+				</div>
 			</div>
 		</div>
 	{/each}

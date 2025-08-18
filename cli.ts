@@ -682,12 +682,19 @@ app.get('/api/controls/:id/complete', async (req, res) => {
     let mappingCommits = 0;
     
     const { existsSync, statSync } = await import('fs');
-    const gitRoot = serverState!.CONTROL_SET_DIR;
+    // Find the actual git root, don't assume it's the control set directory
+    let gitRoot: string;
+    try {
+      gitRoot = await git.findRoot({ fs: fs, filepath: serverState!.CONTROL_SET_DIR });
+    } catch (error) {
+      console.log('Could not find git root, falling back to control set directory');
+      gitRoot = serverState!.CONTROL_SET_DIR;
+    }
     
     // Get file paths
     const metadata = serverState!.fileStore.getControlMetadata(controlId);
-    const controlFilePath = metadata ? join(gitRoot, 'controls', family, metadata.filename) : undefined;
-    const mappingFilePath = join(gitRoot, 'mappings', family, `${controlId}-mappings.yaml`);
+    const controlFilePath = metadata ? join(serverState!.CONTROL_SET_DIR, 'controls', family, metadata.filename) : undefined;
+    const mappingFilePath = join(serverState!.CONTROL_SET_DIR, 'mappings', family, `${controlId}-mappings.yaml`);
     
     // Get control file history
     if (controlFilePath && existsSync(controlFilePath)) {
@@ -728,6 +735,7 @@ app.get('/api/controls/:id/complete', async (req, res) => {
         const status = await git.status({ fs: fs, dir: gitRoot, filepath: relativePath });
         
         // isomorphic-git returns different status values: unmodified, *modified, *deleted, *added, etc.
+        console.log(`Git status for ${relativePath}: ${status}`);
         if (status !== 'unmodified' && status !== 'absent') {
           const currentTime = new Date().toISOString();
           const displayType = type === 'mapping' ? 'Mappings' : 'Control File';
@@ -751,6 +759,7 @@ app.get('/api/controls/:id/complete', async (req, res) => {
             }
             
             // Generate basic diff
+            console.log(`Content comparison for ${relativePath}: current length=${currentContent.length}, head length=${headContent.length}, equal=${currentContent === headContent}`);
             if (currentContent !== headContent) {
               const lines1 = headContent.split('\n');
               const lines2 = currentContent.split('\n');
@@ -857,6 +866,7 @@ app.get('/api/controls/:id/complete', async (req, res) => {
                       }))
                     };
                   }
+                  console.log(`YAML diff generated for ${relativePath}:`, yamlDiff ? `${yamlDiff.changes.length} changes` : 'no yaml diff');
                 } catch (yamlError) {
                   console.log(`YAML parsing error for ${relativePath}:`, yamlError);
                   // If YAML parsing fails, fall back to text diff
@@ -885,6 +895,8 @@ app.get('/api/controls/:id/complete', async (req, res) => {
             diff: diff || undefined,
             yamlDiff: yamlDiff || undefined
           } as GitCommit & { type: string; fileType: string; isPending: boolean });
+          
+          console.log(`Added pending commit for ${relativePath} (${displayType}):`, yamlDiff ? `${yamlDiff.changes.length} yaml changes` : 'text diff only');
           
           if (type === 'control') controlCommits++;
           else mappingCommits++;

@@ -305,7 +305,7 @@
 
 	<!-- Tab Content -->
 	<main class="flex-1 overflow-auto">
-		<div class="p-8">
+		<div class="p-6">
 			{#if activeTab === 'details'}
 				{@render detailsTab()}
 			{:else if activeTab === 'narrative'}
@@ -341,52 +341,76 @@
 			} : { name: 'Loading...', version: '0.0.0', description: 'Loading schema...', fields: [] }}
 		/>
 	{:else}
-		<!-- Legacy static form -->
-		<div class="space-y-6">
-			<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-				<FormField
-					id="control-id"
-					label="Control ID"
-					bind:value={editedControl.id}
-				/>
-				<FormField
-					id="control-acronym"
-					label="Control Acronym"
-					bind:value={editedControl['control-acronym']}
-				/>
+		<!-- Legacy static form with clean sections -->
+		<div class="space-y-8">
+			<!-- Identification Section -->
+			<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm">
+				<div class="border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+					<h3 class="text-lg font-medium text-slate-900 dark:text-white">Identification</h3>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+						<FormField
+							id="control-id"
+							label="Control ID"
+							bind:value={editedControl.id}
+						/>
+						<FormField
+							id="control-acronym"
+							label="Control Acronym"
+							bind:value={editedControl['control-acronym']}
+						/>
+					</div>
+				</div>
 			</div>
 
-			<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-				<FormField
-					id="implementation-status"
-					label="Implementation Status"
-					type="select"
-					bind:value={editedControl['control-implementation-status']}
-					options={['Implemented', 'Planned', 'Not Implemented']}
-				/>
-				<FormField
-					id="compliance-status"
-					label="Compliance Status"
-					type="select"
-					bind:value={editedControl['compliance-status']}
-					options={['Compliant', 'Non-Compliant', 'Not Assessed']}
-				/>
-				<FormField
-					id="security-control-designation"
-					label="Security Control Designation"
-					type="select"
-					bind:value={editedControl['security-control-designation']}
-					options={['Common', 'Hybrid', 'System-Specific']}
-				/>
+			<!-- Status Section -->
+			<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm">
+				<div class="border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+					<h3 class="text-lg font-medium text-slate-900 dark:text-white">Status & Classification</h3>
+				</div>
+				<div class="p-6">
+					<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+						<FormField
+							id="implementation-status"
+							label="Implementation Status"
+							type="select"
+							bind:value={editedControl['control-implementation-status']}
+							options={['Implemented', 'Planned', 'Not Implemented']}
+						/>
+						<FormField
+							id="compliance-status"
+							label="Compliance Status"
+							type="select"
+							bind:value={editedControl['compliance-status']}
+							options={['Compliant', 'Non-Compliant', 'Not Assessed']}
+						/>
+						<FormField
+							id="security-control-designation"
+							label="Security Control Designation"
+							type="select"
+							bind:value={editedControl['security-control-designation']}
+							options={['Common', 'Hybrid', 'System-Specific']}
+						/>
+					</div>
+				</div>
 			</div>
 
-			<FormField
-				id="control-information"
-				label="Control Information"
-				type="textarea"
-				bind:value={editedControl['control-information']}
-				rows={12}
-			/>
+			<!-- Description Section -->
+			<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm">
+				<div class="border-b border-slate-200 dark:border-slate-700 px-6 py-4">
+					<h3 class="text-lg font-medium text-slate-900 dark:text-white">Description</h3>
+				</div>
+				<div class="p-6">
+					<FormField
+						id="control-information"
+						label="Control Information"
+						type="textarea"
+						bind:value={editedControl['control-information']}
+						rows={12}
+					/>
+				</div>
+			</div>
 		</div>
 	{/if}
 {/snippet}

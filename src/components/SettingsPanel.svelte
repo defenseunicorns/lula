@@ -2,6 +2,7 @@
   import { getAvailableAdapters, getAdapter } from '$lib/adapters/index.js';
   import type { FormatAdapter } from '$lib/adapters/types.js';
   import FeatureToggle from './ui/FeatureToggle.svelte';
+  import FieldEditor from './ui/FieldEditor.svelte';
 
   interface Props {
     isOpen: boolean;
@@ -19,6 +20,7 @@
 
   // Get adapter statistics (for import functionality)
   const adapters = getAvailableAdapters();
+  const currentAdapter = getAdapter('internal-yaml'); // Get the current adapter
 </script>
 
 {#if isOpen}
@@ -82,6 +84,16 @@
                 </div>
               </div>
 
+              <!-- Field Configuration Section -->
+              <div class="border-b border-gray-200 dark:border-gray-700 pb-6">
+                {#if currentAdapter}
+                  <FieldEditor 
+                    fields={currentAdapter.schema.fields}
+                    groups={currentAdapter.schema.groups || []}
+                    onConfigChange={(config) => console.log('Field config changed:', config)}
+                  />
+                {/if}
+              </div>
 
               <!-- System Information -->
               <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
@@ -101,23 +113,25 @@
                 </dl>
 
                 <!-- Current Schema Details -->
-                <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
-                  <div class="text-xs text-blue-800 dark:text-blue-200 font-medium mb-2">
-                    Active Schema: {currentAdapter.schema.name}
-                  </div>
-                  <div class="text-xs text-blue-700 dark:text-blue-300">
-                    {currentAdapter.schema.fields.length} fields across {currentAdapter.schema.groups?.length || 1} sections
-                  </div>
-                  {#if currentAdapter.schema.groups}
-                    <div class="mt-2 space-y-1">
-                      {#each currentAdapter.schema.groups as group}
-                        <div class="text-xs text-blue-600 dark:text-blue-300">
-                          • {group.label}: {currentAdapter.schema.fields.filter(f => f.group === group.id).length} fields
-                        </div>
-                      {/each}
+                {#if currentAdapter}
+                  <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
+                    <div class="text-xs text-blue-800 dark:text-blue-200 font-medium mb-2">
+                      Active Schema: {currentAdapter.schema.name}
                     </div>
-                  {/if}
-                </div>
+                    <div class="text-xs text-blue-700 dark:text-blue-300">
+                      {currentAdapter.schema.fields.length} fields across {currentAdapter.schema.groups?.length || 1} sections
+                    </div>
+                    {#if currentAdapter.schema.groups}
+                      <div class="mt-2 space-y-1">
+                        {#each currentAdapter.schema.groups as group}
+                          <div class="text-xs text-blue-600 dark:text-blue-300">
+                            • {group.label}: {currentAdapter.schema.fields.filter(f => f.group === group.id).length} fields
+                          </div>
+                        {/each}
+                      </div>
+                    {/if}
+                  </div>
+                {/if}
               </div>
             </div>
           </div>
