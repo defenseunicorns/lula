@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getAdapter, getAvailableAdapters } from '$lib/adapters/index.js';
-	import FieldEditor from './ui/FieldEditor.svelte';
+	import FieldEditor from './FieldEditor.svelte';
 
 	interface Props {
 		isOpen: boolean;

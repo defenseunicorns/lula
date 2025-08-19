@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Control } from '$lib/types.js';
-  import { mappings } from '../stores/compliance';
+  import { mappings } from '../../stores/compliance';
   
   interface Props {
     control: Control;

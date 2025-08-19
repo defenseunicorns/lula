@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { complianceStore, controls, families, selectedFamily, searchTerm, selectedControl, controlsWithMappings } from '../stores/compliance';
-  import SearchBar from './SearchBar.svelte';
+  import { complianceStore, controls, families, selectedFamily, searchTerm, selectedControl, controlsWithMappings } from '../../stores/compliance';
+  import SearchBar from '../ui/SearchBar.svelte';
   import type { Control } from '$lib/types';
   import { derived } from 'svelte/store';
   import { tooltip } from '$lib/actions/tooltip';
+  import { goto } from '$app/navigation';
   
   // Create filtered controls with mappings
   const filteredControlsWithMappings = derived(
@@ -29,7 +30,7 @@
   );
   
   function selectControl(control: Control) {
-    complianceStore.setSelectedControl(control);
+    goto(`/control/${encodeURIComponent(control.id)}`);
   }
   
   function getStatusBadgeClass(status: string) {

@@ -1,20 +1,19 @@
 #!/usr/bin/env node
 
-import express from 'express';
-import * as fs from 'fs';
-import { existsSync, mkdirSync, writeFileSync, promises as fsPromises } from 'fs';
-import { join, dirname, relative } from 'path';
-import { fileURLToPath } from 'url';
-import * as YAML from 'yaml';
 import { program } from 'commander';
-import open from 'open';
 import cors from 'cors';
 import crypto from 'crypto';
+import express from 'express';
+import * as fs from 'fs';
+import { existsSync, promises as fsPromises, mkdirSync, writeFileSync } from 'fs';
 import * as git from 'isomorphic-git';
-import { FileStore } from './src/lib/index.js';
+import { dirname, join, relative } from 'path';
+import { fileURLToPath } from 'url';
+import * as YAML from 'yaml';
+import { getAdapter } from './src/lib/adapters/index.js';
 import { GitHistoryUtil } from './src/lib/gitHistory.js';
-import { importWithAdapter, getAdapter } from './src/lib/adapters/index.js';
-import type { Control, Mapping, GitFileHistory, ControlWithHistory, ControlCompleteData, UnifiedHistory, GitCommit } from './src/lib/types.js';
+import { FileStore } from './src/lib/index.js';
+import type { Control, ControlCompleteData, ControlWithHistory, GitCommit, GitFileHistory, Mapping, UnifiedHistory } from './src/lib/types.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

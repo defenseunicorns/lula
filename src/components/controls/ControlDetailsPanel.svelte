@@ -2,11 +2,11 @@
 	import { api } from '$lib/api';
 	import type { Control, ControlCompleteData, ControlSet } from '$lib/types.js';
 	import { Connect, Edit, Information, Time } from 'carbon-icons-svelte';
-	import { complianceStore, mappings } from '../stores/compliance';
-	import { StatusBadge, TabNavigation, EmptyState } from './ui';
-	import { FormField, DynamicControlForm } from './forms';
-	import { MappingCard, MappingForm } from './controls';
-	import { TimelineItem } from './timeline';
+	import { complianceStore, mappings } from '../../stores/compliance';
+	import { StatusBadge, TabNavigation, EmptyState } from '../ui';
+	import { FormField, DynamicControlForm } from '../forms';
+	import { MappingCard, MappingForm } from '.';
+	import { TimelineItem } from '../version-control/timeline';
 
 	interface Props {
 		control: Control;

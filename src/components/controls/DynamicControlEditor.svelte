@@ -1,8 +1,8 @@
 <script lang="ts">
 	import type { Control } from '$lib/types.js';
 	import type { ControlSchema, ValidationResult } from '$lib/adapters/types.js';
-	import { mappings } from '../stores/compliance';
-	import DynamicControlForm from './forms/DynamicControlForm.svelte';
+	import { mappings } from '../../stores/compliance';
+	import DynamicControlForm from '../forms/DynamicControlForm.svelte';
 
 	interface Props {
 		control: Control;

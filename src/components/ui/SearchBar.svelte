@@ -1,7 +1,7 @@
 <script lang="ts">
   import { run } from 'svelte/legacy';
 
-  import { complianceStore, searchTerm, filteredControls } from '../stores/compliance';
+  import { complianceStore, searchTerm, filteredControls } from '../../stores/compliance';
   
   let searchInput = $state('');
   let debounceTimer: ReturnType<typeof setTimeout> | undefined;

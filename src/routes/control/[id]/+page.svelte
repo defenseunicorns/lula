@@ -1,20 +1,34 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 	import { goto } from '$app/navigation';
-	import { complianceStore, loading, controls, selectedControl } from '../stores/compliance';
-	import ControlsList from '../components/controls/ControlsList.svelte';
-	import ControlDetailsPanel from '../components/controls/ControlDetailsPanel.svelte';
-	import ControlSetInfo from '../components/control-sets/ControlSetInfo.svelte';
-	import SettingsPanel from '../components/settings/SettingsPanel.svelte';
+	import { complianceStore, loading, controls, selectedControl } from '../../../stores/compliance';
+	import ControlsList from '../../../components/controls/ControlsList.svelte';
+	import ControlDetailsPanel from '../../../components/controls/ControlDetailsPanel.svelte';
+	import ControlSetInfo from '../../../components/control-sets/ControlSetInfo.svelte';
+	import SettingsPanel from '../../../components/settings/SettingsPanel.svelte';
 	import { Document, Settings } from 'carbon-icons-svelte';
 
 	// UI state
 	let showSettings = $state(false);
 
-	onMount(() => {
-		complianceStore.init();
-		// Clear any selected control when visiting home page
-		selectedControl.set(null);
+	onMount(async () => {
+		await complianceStore.init();
+	});
+
+	// React to URL parameter changes
+	$effect(() => {
+		const controlId = decodeURIComponent($page.params.id);
+		
+		if (controlId && $controls.length > 0) {
+			const control = $controls.find(c => c.id === controlId);
+			if (control) {
+				selectedControl.set(control);
+			} else {
+				// Control not found, redirect to home
+				goto('/');
+			}
+		}
 	});
 </script>
 

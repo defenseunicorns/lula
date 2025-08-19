@@ -102,7 +102,8 @@ export class FileStore {
       // Extract the control data (skip metadata if present)
       if (parsed._metadata) {
         const { _metadata, ...control } = parsed;
-        return control as Control;
+        // Preserve the control ID from metadata as the id field
+        return { id: _metadata.controlId, ...control } as Control;
       }
       
       return parsed as Control;
