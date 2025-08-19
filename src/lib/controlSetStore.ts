@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 import path from 'path';
-import yaml from 'js-yaml';
+import * as YAML from 'yaml';
 import type { ControlSet, ControlSetInfo } from './types';
 
 export class ControlSetStore {
@@ -35,7 +35,7 @@ export class ControlSetStore {
         try {
           const controlSetFile = path.join(this.examplesDir, dir.name, 'control-set.yaml');
           const content = await fs.readFile(controlSetFile, 'utf8');
-          const controlSet = yaml.load(content) as ControlSet;
+          const controlSet = YAML.parse(content) as ControlSet;
           
           // Set the path for this control set
           controlSet.path = path.join(this.examplesDir, dir.name);
@@ -100,7 +100,7 @@ export class ControlSetStore {
     
     // Save control-set.yaml (without path and families fields)
     const { path: _, families: __, ...controlSetToSave } = controlSet;
-    const yamlContent = yaml.dump(controlSetToSave, { indent: 2 });
+    const yamlContent = YAML.stringify(controlSetToSave, { indent: 2 });
     await fs.writeFile(path.join(controlSetDir, 'control-set.yaml'), yamlContent, 'utf8');
     
     // Create empty mappings.yaml if it doesn't exist
@@ -144,7 +144,7 @@ export class ControlSetStore {
         }
       }
     } catch (error) {
-      throw new Error(`Failed to delete control set ${controlSetId}: ${error.message}`);
+      throw new Error(`Failed to delete control set ${controlSetId}: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 
@@ -157,7 +157,7 @@ export class ControlSetStore {
     }
 
     this.defaultControlSetId = controlSetId;
-    await this.saveDefaultControlSet();
+    // Note: Default control set is kept in memory only
   }
 
   // No longer need to save default to file - just keep in memory

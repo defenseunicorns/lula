@@ -25,7 +25,7 @@
 		onChange
 	}: Props = $props();
 
-	const baseInputClass = "w-full px-4 py-3 border border-slate-200 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors";
+	const baseInputClass = "w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors";
 	const errorClass = error ? "border-red-400 focus:ring-red-500 focus:border-red-500" : "";
 	const successClass = !error && value ? "border-green-400 dark:border-green-600" : "";
 </script>
@@ -33,7 +33,7 @@
 <div class="space-y-2">
 	<label 
 		for={id} 
-		class="block text-sm font-medium text-slate-700 dark:text-slate-300"
+		class="block text-sm font-medium text-gray-700 dark:text-gray-300"
 	>
 		{label}{#if required}<span class="text-red-500 ml-1">*</span>{/if}
 	</label>
@@ -49,7 +49,7 @@
 				onchange={onChange}
 			></textarea>
 			{#if value}
-				<div class="absolute bottom-3 right-3 text-xs text-slate-400">
+				<div class="absolute bottom-3 right-3 text-xs text-gray-400">
 					{value.length} characters
 				</div>
 			{/if}
@@ -67,7 +67,7 @@
 				{/each}
 			</select>
 			<div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-				<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
 				</svg>
 			</div>

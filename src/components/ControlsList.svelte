@@ -41,7 +41,7 @@
       case 'Not Implemented':
         return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
       default:
-        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300';
+        return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
     }
   }
   
@@ -52,9 +52,9 @@
       case 'Non-Compliant':
         return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
       case 'Not Assessed':
-        return 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-slate-300';
+        return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
       default:
-        return 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300';
+        return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
     }
   }
 </script>
@@ -81,10 +81,10 @@
       <div class="flex flex-wrap gap-2">
         <button
           onclick={() => complianceStore.setSelectedFamily(null)}
-          class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-200 {$selectedFamily === null ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 ring-2 ring-blue-500 ring-opacity-30' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}"
+          class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-200 {$selectedFamily === null ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 ring-2 ring-blue-500 ring-opacity-30' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}"
         >
           All
-          <span class="ml-1.5 px-1.5 py-0.5 text-xs bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full">
+          <span class="ml-1.5 px-1.5 py-0.5 text-xs bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 rounded-full">
             {$controls.length}
           </span>
         </button>
@@ -93,10 +93,10 @@
           {@const familyCount = $controls.filter(c => c['control-acronym'].startsWith(family)).length}
           <button
             onclick={() => complianceStore.setSelectedFamily(family)}
-            class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-200 {$selectedFamily === family ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 ring-2 ring-blue-500 ring-opacity-30' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}"
+            class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-200 {$selectedFamily === family ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 ring-2 ring-blue-500 ring-opacity-30' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}"
           >
             {family}
-            <span class="ml-1.5 px-1.5 py-0.5 text-xs bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full">
+            <span class="ml-1.5 px-1.5 py-0.5 text-xs bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 rounded-full">
               {familyCount}
             </span>
           </button>
@@ -108,7 +108,7 @@
   <!-- Controls Table -->
   <div class="flex-1 flex flex-col overflow-hidden">
     <!-- Fixed Table Header -->
-    <div class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600 flex-shrink-0">
+    <div class="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-600 flex-shrink-0">
       <div class="grid grid-cols-6 gap-4 px-6 py-3">
         <div class="text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Control</div>
         <div class="text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">CCI</div>
@@ -129,7 +129,7 @@
           {@const description = descriptionEnd > descriptionStart ? rawText.substring(descriptionStart, descriptionEnd).trim() : rawText.split('\n').slice(0, 3).join(' ').trim()}
           {@const cleanDescription = description.replace(/^(a\.|b\.|1\.|2\.|\s|The organization:)+/, '').replace(/\s+/g, ' ').trim()}
           <div 
-            class="grid grid-cols-6 gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer transition-all duration-150 {$selectedControl?.id === control.id ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 shadow-sm' : ''}" 
+            class="grid grid-cols-6 gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-all duration-150 {$selectedControl?.id === control.id ? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 shadow-sm' : ''}" 
             onclick={() => selectControl(control)}
             onkeydown={(e) => e.key === 'Enter' || e.key === ' ' ? selectControl(control) : null}
             role="button"
@@ -149,7 +149,7 @@
             <div class="flex flex-col justify-center">
               <div class="relative group text-sm text-gray-500 dark:text-gray-400 font-mono cursor-help" use:tooltip>
                 {control.cci}
-                <div class="tooltip invisible group-hover:visible absolute z-50 w-72 p-3 text-sm text-white bg-gray-900 dark:bg-gray-800 rounded-lg shadow-lg border border-gray-600">
+                <div class="tooltip invisible group-hover:visible absolute z-50 w-72 p-3 text-sm text-white bg-gray-900 dark:bg-gray-900 rounded-lg shadow-lg border border-gray-600">
                   <div class="font-medium text-blue-200 mb-1">CCI Definition:</div>
                   <div class="text-gray-200">{control['cci-definition']}</div>
                 </div>

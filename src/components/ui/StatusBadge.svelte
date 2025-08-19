@@ -17,7 +17,7 @@
 				case 'planned':
 					return 'bg-yellow-500 text-white';
 				default:
-					return 'bg-gray-500 text-white';
+					return 'bg-gray-600 text-white';
 			}
 		}
 		
@@ -28,9 +28,9 @@
 				case 'non-compliant':
 					return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
 				case 'not assessed':
-					return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+					return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
 				default:
-					return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+					return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
 			}
 		}
 
@@ -43,7 +43,7 @@
 			case 'not implemented':
 				return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
 			default:
-				return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200';
+				return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
 		}
 	};
 

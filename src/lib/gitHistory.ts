@@ -200,8 +200,8 @@ export class GitHistoryUtil {
         date: new Date(commit.commit.author.timestamp * 1000).toISOString(),
         message: commit.commit.message,
         changes,
-        diff,
-        yamlDiff
+        ...(diff && { diff }),
+        ...(yamlDiff && { yamlDiff })
       });
     }
 

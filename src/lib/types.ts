@@ -13,6 +13,8 @@ export interface Control {
   'remote-inheritance-instance'?: string;
   'compliance-status': 'Compliant' | 'Non-Compliant' | 'Not Assessed';
   'test-results'?: string;
+  // Allow dynamic field access for form components
+  [key: string]: any;
 }
 
 export interface Mapping {
@@ -21,6 +23,7 @@ export interface Mapping {
   justification: string;
   source_entries: SourceEntry[];
   status: 'planned' | 'implemented' | 'verified';
+  created_by?: string;
 }
 
 export interface SourceEntry {

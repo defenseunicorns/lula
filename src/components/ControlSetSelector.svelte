@@ -25,7 +25,7 @@
     id="control-set"
     value={currentSet.id}
     onchange={handleChange}
-    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+    class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white"
   >
     {#each availableSets as set}
       <option value={set.id}>{set.name} {set.version}</option>

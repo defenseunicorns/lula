@@ -92,7 +92,7 @@ export function createAdapterInfo(adapter: FormatAdapter): {
       canImport: typeof adapter.import === 'function',
       canExport: typeof adapter.export === 'function',
       canValidate: typeof adapter.validate === 'function',
-      hasMappingSchema: !!adapter.mappingSchema
+      hasMappingSchema: false // Mappings are internal-only and don't vary by format
     }
   };
 }

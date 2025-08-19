@@ -156,7 +156,7 @@
 
 <div class="diff-viewer border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">
   {#if fileName || showToggle}
-    <div class="bg-gray-50 dark:bg-gray-700 px-4 py-2 border-b border-gray-200 dark:border-gray-600">
+    <div class="bg-gray-50 dark:bg-gray-800 px-4 py-2 border-b border-gray-200 dark:border-gray-600">
       <div class="flex items-center justify-between">
         {#if fileName}
           <div class="flex items-center space-x-2">
@@ -172,7 +172,7 @@
         {#if showToggle}
           <button
             onclick={() => isCompact = !isCompact}
-            class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 bg-gray-100 dark:bg-gray-600 rounded hover:bg-gray-200 dark:hover:bg-gray-500 transition-colors"
+            class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
           >
             <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
@@ -189,9 +189,9 @@
       <div class="diff-line flex {
         line.type === 'addition' ? 'bg-green-50 dark:bg-green-900/20' :
         line.type === 'deletion' ? 'bg-red-50 dark:bg-red-900/20' :
-        line.type === 'hunk' ? 'bg-gray-100 dark:bg-gray-700' :
-        line.type === 'header' ? 'bg-gray-100 dark:bg-gray-700' :
-        'bg-white dark:bg-gray-800'
+        line.type === 'hunk' ? 'bg-gray-100 dark:bg-gray-800' :
+        line.type === 'header' ? 'bg-gray-100 dark:bg-gray-800' :
+        'bg-white dark:bg-gray-900'
       }">
         <!-- Line numbers -->
         <div class="line-numbers flex text-xs text-gray-400 dark:text-gray-500 font-mono select-none border-r border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-750">

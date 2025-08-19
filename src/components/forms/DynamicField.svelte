@@ -17,8 +17,8 @@
 		onChange
 	}: Props = $props();
 
-	const baseInputClass = "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500";
-	const readonlyClass = readonly ? "bg-gray-50 dark:bg-gray-800 cursor-not-allowed" : "";
+	const baseInputClass = "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-blue-500";
+	const readonlyClass = readonly ? "bg-gray-50 dark:bg-gray-900 cursor-not-allowed" : "";
 	const errorClass = error ? "border-red-500 focus:ring-red-500" : "";
 
 	function handleChange() {

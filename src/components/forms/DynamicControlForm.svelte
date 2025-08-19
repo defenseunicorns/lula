@@ -147,11 +147,11 @@
 
 <div class="space-y-8">
 	{#each Object.entries(fieldGroups) as [groupName, fields]}
-		<div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-sm overflow-hidden">
+		<div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
 			{#if groupName !== 'general'}
 				<!-- Group Header -->
-				<div class="border-b border-slate-200 dark:border-slate-700 px-6 py-4">
-					<h3 class="text-lg font-medium text-slate-900 dark:text-white capitalize">
+				<div class="border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 px-6 py-4">
+					<h3 class="text-lg font-medium text-gray-900 dark:text-white capitalize">
 						{groupName.replace(/([A-Z])/g, ' $1').trim()}
 					</h3>
 				</div>

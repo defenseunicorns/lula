@@ -22,7 +22,7 @@
   }
 </script>
 
-<div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+<div class="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
   <div class="flex items-center justify-between mb-4">
     <h3 class="text-lg font-medium text-gray-900 dark:text-white">
       Control Set Format
@@ -48,7 +48,7 @@
             <span class="text-sm font-medium text-gray-900 dark:text-white">
               {adapter.name}
             </span>
-            <span class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+            <span class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
               v{adapter.version}
             </span>
           </div>

@@ -139,13 +139,13 @@
   <!-- Header -->
   <div class="flex items-center justify-between">
     <div>
-      <h3 class="text-lg font-medium text-slate-900 dark:text-white">Field Configuration</h3>
-      <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+      <h3 class="text-lg font-medium text-gray-900 dark:text-white">Field Configuration</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
         Configure which fields are visible and their order
       </p>
     </div>
     <button
-      class="px-3 py-1.5 text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+      class="px-3 py-1.5 text-xs font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
       onclick={() => {
         // Reset to defaults
         config = {
@@ -169,13 +169,13 @@
         {@const groupFields = groupedFields().get(groupId) || []}
         {#if group}
           <div 
-            class="border border-slate-200 dark:border-slate-700 rounded-lg overflow-hidden"
+            class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
             class:ring-2={dragOverTarget === groupId}
             class:ring-blue-500={dragOverTarget === groupId}
           >
             <!-- Group Header -->
             <div 
-              class="bg-slate-50 dark:bg-slate-800 px-4 py-3 cursor-move select-none"
+              class="bg-gray-50 dark:bg-gray-900 px-4 py-3 cursor-move select-none"
               class:opacity-50={draggedGroup?.id === groupId}
               draggable="true"
               role="button"
@@ -189,12 +189,12 @@
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                   <div class="flex items-center space-x-2">
-                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
                     </svg>
-                    <span class="font-medium text-slate-900 dark:text-white">{group.label}</span>
+                    <span class="font-medium text-gray-900 dark:text-white">{group.label}</span>
                   </div>
-                  <span class="text-xs text-slate-500 dark:text-slate-400 bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded-full">
+                  <span class="text-xs text-gray-500 dark:text-gray-400 bg-gray-200 dark:bg-gray-800 px-2 py-0.5 rounded-full">
                     {groupFields.length} fields
                   </span>
                 </div>
@@ -204,24 +204,24 @@
                   type="checkbox"
                   checked={config.groupVisibility[groupId]}
                   onchange={() => toggleGroupVisibility(groupId)}
-                  class="w-4 h-4 text-blue-600 bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500"
+                  class="w-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
                 />
-                <span class="text-sm text-slate-600 dark:text-slate-400">Visible</span>
+                <span class="text-sm text-gray-600 dark:text-gray-400">Visible</span>
               </label>
             </div>
           </div>
 
           <!-- Fields in Group -->
           {#if config.groupVisibility[groupId]}
-            <div class="divide-y divide-slate-200 dark:divide-slate-700">
+            <div class="divide-y divide-gray-200 dark:divide-gray-700">
               {#each groupFields as field}
                 <div 
-                  class="px-4 py-3 cursor-move select-none hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                  class="px-4 py-3 cursor-move select-none hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
                   class:opacity-50={draggedField?.id === field.id}
                   class:ring-2={dragOverTarget === field.id}
                   class:ring-blue-500={dragOverTarget === field.id}
-                  class:bg-slate-100={!config.visibleFields.includes(field.id)}
-                  class:dark:bg-slate-800={!config.visibleFields.includes(field.id)}
+                  class:bg-gray-100={!config.visibleFields.includes(field.id)}
+                  class:dark:bg-gray-900={!config.visibleFields.includes(field.id)}
                   draggable="true"
                   role="button"
                   tabindex="0"
@@ -233,12 +233,12 @@
                 >
                   <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                      <svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"></path>
                       </svg>
                       <div class="min-w-0 flex-1">
                         <div class="flex items-center space-x-2">
-                          <span class="font-medium text-slate-900 dark:text-white">
+                          <span class="font-medium text-gray-900 dark:text-white">
                             {field.label}
                           </span>
                           {#if field.required}
@@ -247,7 +247,7 @@
                             </span>
                           {/if}
                         </div>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                           {field.helpText || `${field.type} field`}
                         </p>
                       </div>
@@ -258,9 +258,9 @@
                         type="checkbox"
                         checked={config.visibleFields.includes(field.id)}
                         onchange={() => toggleFieldVisibility(field.id)}
-                        class="w-4 h-4 text-blue-600 bg-slate-100 dark:bg-slate-700 border-slate-300 dark:border-slate-600 rounded focus:ring-blue-500"
+                        class="w-4 h-4 text-blue-600 bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
                       />
-                      <span class="text-sm text-slate-600 dark:text-slate-400">Show</span>
+                      <span class="text-sm text-gray-600 dark:text-gray-400">Show</span>
                     </label>
                   </div>
                 </div>
@@ -276,12 +276,12 @@
   <!-- Hidden Fields -->
   {#if fields.filter(f => !config.visibleFields.includes(f.id)).length > 0}
     {@const hiddenFields = fields.filter(f => !config.visibleFields.includes(f.id))}
-    <div class="border border-slate-200 dark:border-slate-700 rounded-lg p-4">
-      <h4 class="font-medium text-slate-900 dark:text-white mb-3">Hidden Fields</h4>
+    <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-4">
+      <h4 class="font-medium text-gray-900 dark:text-white mb-3">Hidden Fields</h4>
       <div class="space-y-2">
         {#each hiddenFields as field}
-          <div class="flex items-center justify-between py-2 px-3 bg-slate-100 dark:bg-slate-800 rounded-md">
-            <span class="text-sm text-slate-700 dark:text-slate-300">{field.label}</span>
+          <div class="flex items-center justify-between py-2 px-3 bg-gray-100 dark:bg-gray-900 rounded-md">
+            <span class="text-sm text-gray-700 dark:text-gray-300">{field.label}</span>
             <button
               onclick={() => toggleFieldVisibility(field.id)}
               class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
