@@ -23,7 +23,7 @@
 		<div class="w-full px-4 sm:px-6 lg:px-8">
 			<div class="flex justify-between items-center py-4">
 				<div>
-					<h1 class="text-2xl font-bold text-gray-900 dark:text-white">Not Lula</h1>
+					<h1 class="text-2xl font-bold text-gray-900 dark:text-white">Lula</h1>
 				</div>
 				<div class="flex items-center space-x-4">
 					<ControlSetInfo />

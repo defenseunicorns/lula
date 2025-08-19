@@ -122,27 +122,6 @@
 			});
 		}
 	});
-
-	function getFieldValue(fieldId: string): any {
-		return control[fieldId] ?? '';
-	}
-
-	function setFieldValue(fieldId: string, value: any) {
-		control[fieldId] = value;
-	}
-	
-	// Create a more stable way to bind field values
-	function createFieldBinding(fieldId: string) {
-		return {
-			get value() {
-				return control[fieldId] ?? '';
-			},
-			set value(newValue: any) {
-				control[fieldId] = newValue;
-				handleFieldChange(fieldId);
-			}
-		};
-	}
 </script>
 
 <div class="space-y-8">
