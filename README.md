@@ -1,4 +1,4 @@
-# CYA - Compliance Manager
+# Lula - Compliance Manager
 
 A git-friendly compliance control management system that supports multiple compliance frameworks through a generic adapter pattern.
 
@@ -162,7 +162,3 @@ control-set/
 2. Add tests for new functionality
 3. Update documentation
 4. Use TypeScript for type safety
-
-## License
-
-MIT

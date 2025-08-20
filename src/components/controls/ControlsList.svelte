@@ -1,11 +1,13 @@
 <script lang="ts">
-  import { complianceStore, controls, families, selectedFamily, searchTerm, selectedControl, controlsWithMappings } from '../../stores/compliance';
+  import { complianceStore, controls, mappings, selectedControl, controlsWithMappings, families, selectedFamily, searchTerm } from '../../stores/compliance';
   import SearchBar from '../ui/SearchBar.svelte';
+  import Dropdown from '../ui/Dropdown.svelte';
+  import { Filter } from 'carbon-icons-svelte';
   import type { Control } from '$lib/types';
-  import { derived } from 'svelte/store';
   import { tooltip } from '$lib/actions/tooltip';
   import { goto } from '$app/navigation';
-  
+  import { derived } from 'svelte/store';
+
   // Create filtered controls with mappings
   const filteredControlsWithMappings = derived(
     [controlsWithMappings, selectedFamily, searchTerm],
@@ -71,37 +73,49 @@
       </span>
     </div>
     
-    <!-- Search Bar -->
-    <SearchBar />
-    
-    <!-- Family Filter Pills -->
-    <div class="space-y-2">
-      <div class="text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-        Filter by Family
+    <!-- Search Bar and Family Filter -->
+    <div class="flex gap-3">
+      <div class="flex-1">
+        <SearchBar />
       </div>
-      <div class="flex flex-wrap gap-2">
-        <button
-          onclick={() => complianceStore.setSelectedFamily(null)}
-          class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-200 {$selectedFamily === null ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 ring-2 ring-blue-500 ring-opacity-30' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}"
+      <div class="flex-shrink-0">
+        <Dropdown
+          buttonLabel={$selectedFamily || 'All Families'}
+          buttonIcon={Filter}
+          buttonClass="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
+          dropdownClass="w-64"
         >
-          All
-          <span class="ml-1.5 px-1.5 py-0.5 text-xs bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 rounded-full">
-            {$controls.length}
-          </span>
-        </button>
-        
-        {#each $families as family}
-          {@const familyCount = $controls.filter(c => c['control-acronym'].startsWith(family)).length}
-          <button
-            onclick={() => complianceStore.setSelectedFamily(family)}
-            class="inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-full transition-all duration-200 {$selectedFamily === family ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 ring-2 ring-blue-500 ring-opacity-30' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'}"
-          >
-            {family}
-            <span class="ml-1.5 px-1.5 py-0.5 text-xs bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-300 rounded-full">
-              {familyCount}
-            </span>
-          </button>
-        {/each}
+          {#snippet children()}
+            <div class="space-y-1">
+              <button
+                onclick={() => {
+                  complianceStore.setSelectedFamily(null);
+                }}
+                class="w-full text-left px-3 py-2 text-sm rounded-md transition-colors duration-200 flex items-center justify-between {$selectedFamily === null ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}"
+              >
+                <span>All Families</span>
+                <span class="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-full">
+                  {$controls.length}
+                </span>
+              </button>
+              
+              {#each $families as family}
+                {@const familyCount = $controls.filter(c => c['control-acronym'].startsWith(family)).length}
+                <button
+                  onclick={() => {
+                    complianceStore.setSelectedFamily(family);
+                  }}
+                  class="w-full text-left px-3 py-2 text-sm rounded-md transition-colors duration-200 flex items-center justify-between {$selectedFamily === family ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}"
+                >
+                  <span>{family}</span>
+                  <span class="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-full">
+                    {familyCount}
+                  </span>
+                </button>
+              {/each}
+            </div>
+          {/snippet}
+        </Dropdown>
       </div>
     </div>
   </div>
@@ -109,7 +123,7 @@
   <!-- Controls Table -->
   <div class="flex-1 flex flex-col overflow-hidden">
     <!-- Fixed Table Header -->
-    <div class="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-600 flex-shrink-0">
+    <div class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600 flex-shrink-0">
       <div class="grid grid-cols-6 gap-4 px-6 py-3">
         <div class="text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Control</div>
         <div class="text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider">CCI</div>

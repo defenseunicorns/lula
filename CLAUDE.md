@@ -29,6 +29,9 @@ against a local git repo.
 
 ### CLI Tool
 - `tsx cli.ts serve --dir <path> --port <port>` - Start server for specific control set
+- `tsx cli.ts import --file <oscal-file> --dir <output-dir>` - Import OSCAL catalog or profile (auto-detected)
+- `tsx cli.ts import-catalog <catalog-file> <output-dir>` - Import OSCAL catalog with options
+- `tsx cli.ts import-profile <profile-file> <output-dir>` - Import OSCAL profile with options  
 - `tsx cli.ts migrate --dir <path>` - Migrate from monolithic YAML to individual files
 - `tsx cli.ts status --dir <path>` - Check migration status
 
@@ -93,12 +96,14 @@ examples/nist-800-53-rev4/
 - Use TypeScript interfaces defined in `src/lib/types.ts`
 - Components in `src/components/` organized by feature area
 
-### Adapter System (Phase 1 Complete)
-- Multi-format support through `src/lib/adapters/` system
-- NIST native adapter wraps current YAML format (zero breaking changes)
-- Registry-based adapter management with auto-discovery
-- Schema-driven validation and form generation planned for Phase 3
-- Import/export capabilities for OSCAL and other formats (Phase 2+)
+### OSCAL Processing System
+- Complete OSCAL catalog and profile import via `cli/oscal/` system
+- Auto-detection of OSCAL catalogs vs profiles
+- Back-matter resource resolution and caching  
+- Enhancement flattening (individual files per control and sub-control)
+- Profile modifications (priority assignment, control alterations)
+- Git-friendly YAML output with one control per file (922 controls from NIST catalog)
+- Configurable options: `--no-links` (remove references), `--flatten-refs` (resolve back-matter)
 
 ## Testing
 - Unit tests with Vitest

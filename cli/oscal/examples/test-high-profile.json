@@ -1,0 +1,103 @@
+{
+  "profile": {
+    "uuid": "test-high-profile-uuid",
+    "metadata": {
+      "title": "Test HIGH Impact Baseline Profile (Sample)",
+      "last-modified": "2025-08-20T00:00:00.000000-00:00",
+      "version": "1.0.0",
+      "oscal-version": "1.1.1"
+    },
+    "imports": [
+      {
+        "href": "nist-catalog.json",
+        "include-controls": [
+          {
+            "with-ids": [
+              "ac-1",
+              "ac-2", 
+              "ac-2.1",
+              "ac-2.2",
+              "ac-3",
+              "au-1",
+              "au-2"
+            ]
+          }
+        ]
+      }
+    ],
+    "modify": {
+      "alters": [
+        {
+          "control-id": "ac-1",
+          "adds": [
+            {
+              "position": "starting",
+              "props": [
+                {
+                  "name": "priority",
+                  "value": "P1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "ac-2", 
+          "adds": [
+            {
+              "position": "starting",
+              "props": [
+                {
+                  "name": "priority",
+                  "value": "P1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "ac-3",
+          "adds": [
+            {
+              "position": "starting", 
+              "props": [
+                {
+                  "name": "priority",
+                  "value": "P1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "au-1",
+          "adds": [
+            {
+              "position": "starting",
+              "props": [
+                {
+                  "name": "priority", 
+                  "value": "P1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "control-id": "au-2",
+          "adds": [
+            {
+              "position": "starting",
+              "props": [
+                {
+                  "name": "priority",
+                  "value": "P1" 
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

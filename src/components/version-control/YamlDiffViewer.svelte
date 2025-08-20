@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatValue } from '../../lib/yamlDiff.js';
+  import { formatValue } from '../../lib/formatUtils.js';
 
   interface Props {
     yamlDiff: any; // YamlDiffResult

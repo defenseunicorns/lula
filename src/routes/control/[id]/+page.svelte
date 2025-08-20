@@ -6,11 +6,8 @@
 	import ControlsList from '../../../components/controls/ControlsList.svelte';
 	import ControlDetailsPanel from '../../../components/controls/ControlDetailsPanel.svelte';
 	import ControlSetInfo from '../../../components/control-sets/ControlSetInfo.svelte';
-	import SettingsPanel from '../../../components/settings/SettingsPanel.svelte';
-	import { Document, Settings } from 'carbon-icons-svelte';
+	import { Document } from 'carbon-icons-svelte';
 
-	// UI state
-	let showSettings = $state(false);
 
 	onMount(async () => {
 		await complianceStore.init();
@@ -18,10 +15,13 @@
 
 	// React to URL parameter changes
 	$effect(() => {
-		const controlId = decodeURIComponent($page.params.id);
+		const controlId = $page.params.id;
+		if (!controlId) return;
 		
-		if (controlId && $controls.length > 0) {
-			const control = $controls.find(c => c.id === controlId);
+		const decodedControlId = decodeURIComponent(controlId);
+		
+		if (decodedControlId && $controls.length > 0) {
+			const control = $controls.find(c => c.id === decodedControlId);
 			if (control) {
 				selectedControl.set(control);
 			} else {
@@ -44,14 +44,6 @@
 				</div>
 				<div class="flex items-center space-x-4">
 					<ControlSetInfo />
-					<button
-						onclick={() => (showSettings = true)}
-						class="flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-						title="Settings"
-					>
-            <Settings class="w-4 h-4 mr-2" />
-						Settings
-					</button>
 				</div>
 			</div>
 		</div>
@@ -95,7 +87,4 @@
 			</div>
 		{/if}
 	</div>
-
-	<!-- Settings Panel -->
-	<SettingsPanel isOpen={showSettings} onClose={() => (showSettings = false)} />
 </div>
