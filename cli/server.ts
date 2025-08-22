@@ -1,11 +1,13 @@
-import express from 'express';
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
 import cors from 'cors';
+import express from 'express';
 import { existsSync, mkdirSync } from 'fs';
-import { join, dirname } from 'path';
+import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { initializeServerState, loadAllData, saveMappingsToFile } from './serverState.js';
 import apiRoutes from './apiRoutes.js';
 import gitRoutes from './gitRoutes.js';
+import { initializeServerState, loadAllData, saveMappingsToFile } from './serverState.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,7 +19,7 @@ export interface ServerOptions {
 
 export async function createServer(options: ServerOptions) {
   const { controlSetDir, port } = options;
-  
+
   // Ensure control set directory exists
   if (!existsSync(controlSetDir)) {
     mkdirSync(controlSetDir, { recursive: true });
@@ -25,25 +27,25 @@ export async function createServer(options: ServerOptions) {
 
   // Initialize server state
   initializeServerState(controlSetDir);
-  
+
   // Load all data into memory
   await loadAllData();
 
   // Create Express app
   const app = express();
-  
+
   // Middleware
   app.use(cors());
   app.use(express.json({ limit: '50mb' }));
-  
+
   // Serve static files from dist directory (build output)
   const distPath = join(__dirname, '../../../dist');
   app.use(express.static(distPath));
-  
+
   // API Routes
   app.use('/api', apiRoutes);
   app.use('/api', gitRoutes);
-  
+
   // Serve frontend for all other routes (SPA fallback)
   app.get('*', (req, res) => {
     res.sendFile(join(distPath, 'index.html'));

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 /**
  * Simplified FileStore for git-friendly YAML storage
  * Uses predictable filenames based on control IDs

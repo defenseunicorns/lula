@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 import { promises as fs } from 'fs';
 import path from 'path';
 import * as YAML from 'yaml';

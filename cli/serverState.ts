@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 import { FileStore } from './fileStore.js';
 import { GitHistoryUtil } from './gitHistory.js';
 import type { Control, Mapping } from '../src/lib/types.js';

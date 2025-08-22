@@ -1,1 +1,0 @@
-export { default as FieldEditor } from './FieldEditor.svelte';

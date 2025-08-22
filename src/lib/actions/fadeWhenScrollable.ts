@@ -1,4 +1,5 @@
-// Copyright 2025 Defense Unicorns
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
 // Action to apply or remove the 'no-fade' class based on when an element is scrollable (overflow-y-scroll)
 // Our 'scrollable-container' class uses a CSS pseudo-element to apply a fade effect at the bottom of the container

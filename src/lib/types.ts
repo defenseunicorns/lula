@@ -1,3 +1,6 @@
+
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
 export interface Control {
   id: string;
   'control-acronym': string;
@@ -58,7 +61,7 @@ export interface ControlSet {
   lastModified: string;
   path?: string; // directory path for this control set
   families?: string[]; // derived from directory structure at runtime
-  
+
   // Schema derived from import process
   schema?: {
     name: string;

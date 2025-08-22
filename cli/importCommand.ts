@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 import { existsSync } from 'fs';
 import * as path from 'path';
 import { OSCALProcessor } from './oscal/processor.js';

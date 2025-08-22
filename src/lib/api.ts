@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 import type { Control, Mapping, SearchResult, Stats, GitFileHistory, ControlWithHistory, ControlCompleteData, ControlSet } from './types';
 
 const BASE_URL = '';

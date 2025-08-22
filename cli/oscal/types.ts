@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 /**
  * Comprehensive OSCAL type definitions for catalog and profile processing
  */

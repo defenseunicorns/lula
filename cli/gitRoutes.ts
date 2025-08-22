@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 import { Router, type Request, type Response } from 'express';
 import * as fs from 'fs';
 import { existsSync, promises as fsPromises } from 'fs';

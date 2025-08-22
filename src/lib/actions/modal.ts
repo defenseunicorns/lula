@@ -1,5 +1,5 @@
-// Copyright 2025 Defense Unicorns
-// SPDX-License-Identifier: LicenseRef-Defense-Unicorns-Commercial
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
 /**
  * Modal action for Svelte components

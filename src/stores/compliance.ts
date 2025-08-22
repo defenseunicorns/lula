@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 import { writable, derived } from 'svelte/store';
 import { api } from '$lib/api';
 import type { Control, Mapping, ControlWithMappings } from '$lib/types';
