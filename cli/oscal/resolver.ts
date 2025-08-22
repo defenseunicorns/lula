@@ -44,7 +44,14 @@ export class OSCALResolver {
       }
     } else {
       // Relative path
-      resolvedPath = path.resolve(baseDir, href);
+      if (baseDir.startsWith('http://') || baseDir.startsWith('https://')) {
+        // URL-based relative resolution
+        const fullUrl = new URL(href, baseDir).toString();
+        resolvedPath = await this.downloadResource(fullUrl, baseDir);
+      } else {
+        // File system relative resolution
+        resolvedPath = path.resolve(baseDir, href);
+      }
     }
 
     // Load and parse catalog
@@ -96,7 +103,14 @@ export class OSCALResolver {
         if (link.href.startsWith('http://') || link.href.startsWith('https://')) {
           return await this.downloadResource(link.href, baseDir);
         } else {
-          return path.resolve(baseDir, link.href);
+          if (baseDir.startsWith('http://') || baseDir.startsWith('https://')) {
+            // URL-based relative resolution
+            const fullUrl = new URL(link.href, baseDir).toString();
+            return await this.downloadResource(fullUrl, baseDir);
+          } else {
+            // File system relative resolution
+            return path.resolve(baseDir, link.href);
+          }
         }
       }
     }
@@ -106,7 +120,14 @@ export class OSCALResolver {
     if (firstLink.href.startsWith('http://') || firstLink.href.startsWith('https://')) {
       return await this.downloadResource(firstLink.href, baseDir);
     } else {
-      return path.resolve(baseDir, firstLink.href);
+      if (baseDir.startsWith('http://') || baseDir.startsWith('https://')) {
+        // URL-based relative resolution
+        const fullUrl = new URL(firstLink.href, baseDir).toString();
+        return await this.downloadResource(fullUrl, baseDir);
+      } else {
+        // File system relative resolution
+        return path.resolve(baseDir, firstLink.href);
+      }
     }
   }
 
@@ -116,7 +137,17 @@ export class OSCALResolver {
   private async downloadResource(url: string, cacheDir: string): Promise<string> {
     // Check if already downloaded
     const filename = this.generateCacheFilename(url);
-    const cachePath = path.join(cacheDir, '.oscal-cache', filename);
+    
+    // For URL-based cacheDir, use system temp directory
+    let actualCacheDir: string;
+    if (cacheDir.startsWith('http://') || cacheDir.startsWith('https://')) {
+      const os = await import('os');
+      actualCacheDir = path.join(os.tmpdir(), '.oscal-cache');
+    } else {
+      actualCacheDir = path.join(cacheDir, '.oscal-cache');
+    }
+    
+    const cachePath = path.join(actualCacheDir, filename);
 
     if (fs.existsSync(cachePath)) {
       return cachePath;

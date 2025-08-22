@@ -33,6 +33,7 @@ export class OSCALProcessor {
       dryRun?: boolean; 
       flattenReferences?: boolean;
       includeLinks?: boolean;
+      resolveParameters?: boolean;
     } = {}
   ): Promise<void> {
     const catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf8')) as OSCALCatalog;
@@ -53,12 +54,12 @@ export class OSCALProcessor {
     
     if (catalog.groups) {
       for (const group of catalog.groups) {
-        controls.push(...this.processGroupControls(group, group.id || 'UNKNOWN'));
+        controls.push(...this.processGroupControls(group, group.id || 'UNKNOWN', options));
       }
     }
 
     if (catalog.controls) {
-      controls.push(...this.processControls(catalog.controls, 'MISC'));
+      controls.push(...this.processControls(catalog.controls, 'MISC', options));
     }
 
     // Post-process controls based on options
@@ -86,6 +87,7 @@ export class OSCALProcessor {
       dryRun?: boolean; 
       flattenReferences?: boolean;
       includeLinks?: boolean;
+      resolveParameters?: boolean;
     } = {}
   ): Promise<void> {
     const profileData = JSON.parse(fs.readFileSync(profilePath, 'utf8')) as OSCALProfile;
@@ -109,7 +111,8 @@ export class OSCALProcessor {
       const importedControls = this.resolveImportedControls(
         resolvedCatalog, 
         importDef,
-        path.basename(profilePath)
+        path.basename(profilePath),
+        options
       );
       controls.push(...importedControls);
     }
@@ -150,27 +153,27 @@ export class OSCALProcessor {
     };
   }
 
-  private processGroupControls(group: any, familyId: string): ProcessedControl[] {
+  private processGroupControls(group: any, familyId: string, options: any = {}): ProcessedControl[] {
     const controls: ProcessedControl[] = [];
     
     if (group.controls) {
-      controls.push(...this.processControls(group.controls, familyId));
+      controls.push(...this.processControls(group.controls, familyId, options));
     }
 
     if (group.groups) {
       for (const subgroup of group.groups) {
-        controls.push(...this.processGroupControls(subgroup, subgroup.id || familyId));
+        controls.push(...this.processGroupControls(subgroup, subgroup.id || familyId, options));
       }
     }
 
     return controls;
   }
 
-  private processControls(controls: OSCALControl[], familyId: string): ProcessedControl[] {
-    return controls.map(control => this.processControl(control, familyId));
+  private processControls(controls: OSCALControl[], familyId: string, options: any = {}): ProcessedControl[] {
+    return controls.map(control => this.processControl(control, familyId, options));
   }
 
-  private processControl(control: OSCALControl, familyId: string): ProcessedControl {
+  private processControl(control: OSCALControl, familyId: string, options: any = {}): ProcessedControl {
     const processedControl: ProcessedControl = {
       id: control.id,
       title: control.title,
@@ -181,62 +184,83 @@ export class OSCALProcessor {
       links: control.links,
     };
 
-    // Process parts (statement, guidance, objectives, etc.)
-    if (control.parts) {
-      this.processControlParts(control.parts, processedControl);
-    }
-
-    // Process parameters
+    // Process parameters first (needed for parameter resolution)
     if (control.params) {
       processedControl.parameters = control.params.map(param => this.processParameter(param));
+    }
+
+    // Process parts (statement, guidance, objectives, etc.)
+    if (control.parts) {
+      this.processControlParts(control.parts, processedControl, options.resolveParameters || false);
+    }
+
+    // Remove parameters from control if they were resolved in the text
+    if (options.resolveParameters && processedControl.parameters) {
+      delete processedControl.parameters;
     }
 
     // Process sub-controls/enhancements
     if (control.controls) {
       processedControl.enhancements = control.controls.map(subControl => 
-        this.processControl(subControl, familyId)
+        this.processControl(subControl, familyId, options)
       );
     }
 
     return processedControl;
   }
 
-  private processControlParts(parts: OSCALPart[], control: ProcessedControl): void {
+  private processControlParts(parts: OSCALPart[], control: ProcessedControl, resolveParams: boolean = false): void {
     for (const part of parts) {
       switch (part.name) {
         case 'statement':
-          control.statement = this.extractPartText(part);
+          control.statement = this.extractPartText(part, control.parameters, resolveParams);
           break;
         case 'guidance':
-          control.guidance = this.extractPartText(part);
+          control.guidance = this.extractPartText(part, control.parameters, resolveParams);
           break;
         case 'objective':
           if (!control.objectives) control.objectives = [];
-          control.objectives.push(this.extractPartText(part));
+          control.objectives.push(this.extractPartText(part, control.parameters, resolveParams));
           break;
         case 'assessment':
         case 'assessment-method':
           if (!control.assessment_methods) control.assessment_methods = [];
-          control.assessment_methods.push(this.extractPartText(part));
+          control.assessment_methods.push(this.extractPartText(part, control.parameters, resolveParams));
           break;
       }
 
       // Recursively process nested parts
       if (part.parts) {
-        this.processControlParts(part.parts, control);
+        this.processControlParts(part.parts, control, resolveParams);
       }
     }
   }
 
-  private extractPartText(part: OSCALPart): string {
+  private extractPartText(part: OSCALPart, parameters?: ProcessedParameter[], resolveParams: boolean = false): string {
     let text = part.prose || '';
     
     if (part.parts) {
-      const subTexts = part.parts.map(subPart => this.extractPartText(subPart));
+      const subTexts = part.parts.map(subPart => this.extractPartText(subPart, parameters, resolveParams));
       text += subTexts.join(' ');
     }
 
+    // Resolve parameter insertions if requested and parameters are available
+    if (resolveParams && parameters) {
+      text = this.resolveParameterInsertions(text, parameters);
+    }
+
     return text.trim();
+  }
+
+  private resolveParameterInsertions(text: string, parameters: ProcessedParameter[]): string {
+    // Create a map for quick parameter lookup
+    const paramMap = new Map(parameters.map(p => [p.id, p.label || `[${p.id}]`]));
+    
+    // Replace {{ insert: param, parameter_id }} with [parameter_label]
+    return text.replace(/\{\{\s*insert:\s*param,\s*([^}]+)\s*\}\}/g, (match, paramId) => {
+      const paramLabel = paramMap.get(paramId.trim());
+      return paramLabel ? `[${paramLabel}]` : match;
+    });
   }
 
   private processParameter(param: OSCALParameter): ProcessedParameter {
@@ -253,19 +277,20 @@ export class OSCALProcessor {
   private resolveImportedControls(
     catalog: OSCALCatalog,
     importDef: any,
-    profileName: string
+    profileName: string,
+    options: any = {}
   ): ProcessedControl[] {
     const allControls: ProcessedControl[] = [];
 
     // Extract all controls from catalog
     if (catalog.catalog.groups) {
       for (const group of catalog.catalog.groups) {
-        allControls.push(...this.processGroupControls(group, group.id || 'UNKNOWN'));
+        allControls.push(...this.processGroupControls(group, group.id || 'UNKNOWN', options));
       }
     }
 
     if (catalog.catalog.controls) {
-      allControls.push(...this.processControls(catalog.catalog.controls, 'MISC'));
+      allControls.push(...this.processControls(catalog.catalog.controls, 'MISC', options));
     }
 
     // Process back-matter from catalog
@@ -309,11 +334,7 @@ export class OSCALProcessor {
       selectedControls = selectedControls.filter(control => !excludeIds.has(control.id));
     }
 
-    // Mark as coming from profile
-    selectedControls.forEach(control => {
-      control.source_profile = profileName;
-      control.source_catalog = catalog.catalog.metadata.title;
-    });
+    // Source information is already stored in control-set.yaml metadata
 
     return selectedControls;
   }
@@ -378,8 +399,8 @@ export class OSCALProcessor {
       fs.writeFileSync(metadataPath, yamlStringify(this.processedMetadata));
     }
 
-    // Write back-matter resources
-    if (this.backMatterResources.size > 0) {
+    // Write back-matter resources (only when preserving OSCAL structure)
+    if (this.backMatterResources.size > 0 && options.includeLinks !== false) {
       const backMatterPath = path.join(outputDir, 'back-matter.yaml');
       const backMatter: ProcessedBackMatter = {
         resources: Object.fromEntries(this.backMatterResources)
