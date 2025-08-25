@@ -5,11 +5,5 @@ import { describe, it, expect } from "vitest";
 describe("crawl", () => {
   it("getPRContext throws error if env vars are missing", () => {
     expect(true).toBe(true);
-    // delete process.env.OWNER;
-    // delete process.env.REPO;
-    // delete process.env.PULL_NUMBER;
-    // expect(() => getPRContext()).toThrow(
-    //   "Set OWNER, REPO, and PULL_NUMBER in the environment for local use.",
-    // );
   });
 });
