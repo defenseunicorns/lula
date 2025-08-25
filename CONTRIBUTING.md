@@ -37,7 +37,7 @@ Please follow our [Code of Conduct](./CODE_OF_CONDUCT.md) to maintain a respectf
 
 1. **Create an Issue**: For significant changes, please create an issue first, describing the problem or feature proposal. Trivial fixes, such as typo corrections, do not require an issue.
 2. **Commit Your Changes**: Make your changes and commit them. All commits must be signed.
-3. **Run Tests**: Ensure that your changes pass all tests by running unit tests (`npm test`) and integration tests (`test:e2e:run`).
+3. **Run Tests**: Ensure that your changes pass all tests by running unit tests (`npm test`).
 4. **Push Your Branch**: Push your branch to your fork on GitHub.
 5. **Create a Pull Request**: Open a pull request against the `main` branch of the Lula Next repository. Please make sure that your PR passes all CI checks.
 
@@ -60,16 +60,15 @@ Please follow the coding conventions and style used in the project. Use ESLint a
 ### Run Tests Locally
 
 - Unit: `npm test`
-- End to end: `npm run test:e2e:run`
 
 ### Running Development Version Locally
 
 1. Run `npm run build` to build the package.
-2. For CLI, you can run `npx ts-node src/cli.ts`.
-3. To consume the package in another project, you can run `npm pack` to generate the `kubernetes-fluent-client-0.0.0-development.tgz`, then you can install with `npm i kubernetes-fluent-client-0.0.0-development.tgz --no-save`.
+2. For CLI, you can run `npx tsx src/index.ts`.
+3. To consume the package in another project, you can run `npm pack` to generate the `lula2-0.0.0-development.tgz`, then you can install with `npm i lula2-0.0.0-development.tgz --no-save`.
 
 > [!TIP]
-> Make sure to re-run `npm run build` after you modify any of the Kubernetes Fluent Client source files.
+> Make sure to re-run `npm run build` after you modify any of the source files.
 
 ## Contact
 
