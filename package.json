@@ -35,9 +35,10 @@
     "prebuild": "rm -rf dist",
     "build": "tsc",
     "semantic-release": "semantic-release",
-    "format:check": "eslint src e2e && prettier . --check",
-    "format:fix": "eslint --fix src e2e && prettier . --write",
-    "prepare": "if [ \"$NODE_ENV\" != 'production' ]; then husky; fi"
+    "format:check": "eslint src && prettier . --check",
+    "format:fix": "eslint --fix src && prettier . --write",
+    "prepare": "if [ \"$NODE_ENV\" != 'production' ]; then husky; fi",
+    "test": "vitest run --coverage"
   },
   "dependencies": {
     "@octokit/rest": "^22.0.0",
@@ -55,6 +56,7 @@
     "esbuild": "^0.25.1",
     "eslint": "^9.26.0",
     "eslint-config-prettier": "^10.0.2",
+    "eslint-plugin-jsdoc": "^54.1.1",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
     "prettier": "3.5.3",
