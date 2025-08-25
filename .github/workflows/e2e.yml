@@ -1,0 +1,67 @@
+name: e2e Test
+
+permissions:
+  contents: read
+on:
+  # Triggered by node.js.yaml & release.yaml
+  workflow_call:
+
+jobs:
+  e2e:
+    name: e2e
+    runs-on: ubuntu-latest
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@ec9f2d5744a09debf3a187a3f4f675c53b671911 # v2.13.0
+        with:
+          egress-policy: audit
+
+      - name: clone kfc
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          repository: defenseunicorns/kubernetes-fluent-client
+          path: kubernetes-fluent-client
+
+      - name: "set env: KFC"
+        run: echo "KFC=${GITHUB_WORKSPACE}/kubernetes-fluent-client" >> "$GITHUB_ENV"
+
+      - name: setup node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: kubernetes-fluent-client
+
+      - name: install kubernetes-fluent-client deps
+        run: |
+          cd "$KFC"
+          npm ci
+        shell: bash
+
+      - name: "install k3d"
+        run: "curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash"
+        shell: bash
+
+      - name: Set up Kubernetes
+        uses: azure/setup-kubectl@776406bce94f63e41d621b960d78ee25c8b76ede # v4.0.1
+        with:
+          version: "latest"
+
+      - name: "create k3d cluster"
+        run: "k3d cluster create kfc-dev --k3s-arg '--debug@server:0' --wait && kubectl rollout status deployment -n kube-system"
+        shell: bash
+
+      - name: Prepare CRDs and Generate Classes
+        run: |
+          cd "$KFC"
+          npm run test:e2e:prep-crds
+        shell: bash
+
+      - name: Prepare Image and Test
+        run: |
+          cd "$KFC"
+          npm run build
+          npm pack
+          npm i kubernetes-fluent-client-0.0.0-development.tgz --no-save
+          npm run test:e2e
+        shell: bash

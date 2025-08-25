@@ -1,0 +1,72 @@
+{
+  "name": "lula2",
+  "version": "0.0.0-development",
+  "description": "Reports Reports and exports compliance status for defined controls.",
+  "bin": "./dist/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/defenseunicorns/lula2.git"
+  },
+  "keywords": [
+    "compliance",
+    "devops",
+    "devsecops"
+  ],
+  "author": "Defense Unicorns",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/defenseunicorns/lula2/issues"
+  },
+  "homepage": "https://github.com/defenseunicorns/lula2#readme",
+  "files": [
+    "/src",
+    "/dist",
+    "!src/**/*.test.ts",
+    "!dist/**/*.test.js*",
+    "!dist/**/*.test.d.ts*"
+  ],
+  "scripts": {
+    "prebuild": "rm -rf dist",
+    "build": "tsc",
+    "semantic-release": "semantic-release",
+    "format:check": "eslint src e2e && prettier . --check",
+    "format:fix": "eslint --fix src e2e && prettier . --write",
+    "prepare": "if [ \"$NODE_ENV\" != 'production' ]; then husky; fi"
+  },
+  "dependencies": {
+    "@octokit/rest": "^22.0.0",
+    "commander": "^14.0.0",
+    "compliance-reporter": "^0.1.2",
+    "undici": "^7.13.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/js": "^9.23.0",
+    "@typescript-eslint/eslint-plugin": "^8.33.0",
+    "@typescript-eslint/parser": "^8.33.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "esbuild": "^0.25.1",
+    "eslint": "^9.26.0",
+    "eslint-config-prettier": "^10.0.2",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "prettier": "3.5.3",
+    "semantic-release": "^24.2.3",
+    "typescript": "5.8.3",
+    "typescript-eslint": "^8.28.0",
+    "vitest": "^3.2.4"
+  },
+  "release": {
+    "branches": [
+      "main",
+      "next"
+    ]
+  }
+}
