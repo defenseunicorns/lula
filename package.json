@@ -1,5 +1,5 @@
 {
-  "name": "lula2",
+  "name": "lula-next",
   "version": "0.0.0-development",
   "description": "Reports Reports and exports compliance status for defined controls.",
   "bin": "./dist/index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/defenseunicorns/lula2.git"
+    "url": "git+https://github.com/defenseunicorns/lula-next.git"
   },
   "keywords": [
     "compliance",
@@ -21,9 +21,9 @@
   "author": "Defense Unicorns",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/defenseunicorns/lula2/issues"
+    "url": "https://github.com/defenseunicorns/lula-next/issues"
   },
-  "homepage": "https://github.com/defenseunicorns/lula2#readme",
+  "homepage": "https://github.com/defenseunicorns/lula-next#readme",
   "files": [
     "/src",
     "/dist",
