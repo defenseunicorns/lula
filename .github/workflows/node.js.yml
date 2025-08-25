@@ -28,7 +28,7 @@ jobs:
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
         run: npm audit signatures
   test:
-    needs: e2e
+    needs: format
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -42,11 +42,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
 
-      # - name: Install dependencies
-      #   run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-      # - name: Build
-      #   run: npm run build
+      - name: Build
+        run: npm run build
 
-      # - name: Test Unit
-      #   run: npm test
+      - name: Test Unit
+        run: npm test

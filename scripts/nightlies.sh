@@ -35,5 +35,6 @@ npm version --no-git-tag-version "$FULL_VERSION"
 
 npm install 
 npm run build
+npm pack
 
 npm publish --tag "nightly"
