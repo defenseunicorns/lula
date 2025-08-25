@@ -35,7 +35,7 @@ router.get('/controls/:id/history', async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Control file not found' });
     }
     
-    const family = control['control-acronym'].split('-')[0];
+    const family = control.family;
     const filePath = join(state.CONTROL_SET_DIR, 'controls', family, metadata.filename);
     
     console.log(`Looking for git history of file: ${filePath}`);
@@ -115,7 +115,7 @@ router.get('/controls/:id/with-history', async (req: Request, res: Response) => 
     let history: GitFileHistory | undefined;
     
     if (metadata) {
-      const family = control['control-acronym'].split('-')[0];
+      const family = control.family;
       const filePath = join(state.CONTROL_SET_DIR, 'controls', family, metadata.filename);
       history = await state.gitHistory.getFileHistory(filePath, limit);
     }
@@ -156,7 +156,8 @@ router.get('/controls/:id/complete', async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Control not found' });
     }
     
-    const family = control['control-acronym'].split('-')[0];
+    // Extract family from control - enhanced controls have it in _metadata.family
+    const family = (control as any)?._metadata?.family || control.family || controlId.split('-')[0].toLowerCase();
     
     // Get mappings for this control
     const mappings = Array.from(state.mappingsCache.values())

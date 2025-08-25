@@ -3,19 +3,29 @@
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 export interface Control {
   id: string;
-  'control-acronym': string;
-  'control-information': string;
-  'control-implementation-status': 'Implemented' | 'Planned' | 'Not Implemented';
-  'security-control-designation': 'Common' | 'Hybrid' | 'System-Specific';
-  'control-implementation-narrative': string;
-  cci: string;
-  'cci-definition': string;
-  'implementation-guidance': string;
-  'assessment-procedures': string;
-  inherited?: string;
-  'remote-inheritance-instance'?: string;
-  'compliance-status': 'Compliant' | 'Non-Compliant' | 'Not Assessed';
-  'test-results'?: string;
+  title: string;
+  family: string;
+  class?: string;
+  sort_id?: string;
+  statement?: string;
+  guidance?: string;
+  objectives?: string[];
+  assessment_methods?: string[];
+  properties?: { [key: string]: string };
+  links?: Array<{
+    href: string;
+    rel?: string;
+    text?: string;
+  }>;
+  parameters?: Array<{
+    id: string;
+    label?: string;
+    usage?: string;
+    values?: string[];
+    guidelines?: string[];
+    constraints?: string[];
+  }>;
+  enhancements?: Control[];
   // Allow dynamic field access for form components
   [key: string]: any;
 }
@@ -52,31 +62,39 @@ export interface Stats {
 }
 
 export interface ControlSet {
-  id: string;
-  name: string;
+  title: string;
   version: string;
-  description: string;
-  published: string;
-  created: string;
-  lastModified: string;
+  last_modified?: string;
+  oscal_version?: string;
+  uuid?: string;
+  source_type?: string;
+  source_file?: string;
+  processed_at?: string;
   path?: string; // directory path for this control set
   families?: string[]; // derived from directory structure at runtime
 
-  // Schema derived from import process
-  schema?: {
-    name: string;
-    version: string;
-    importedFrom?: string; // which adapter was used during import
+  // Dynamic field schema from OSCAL import
+  field_schema?: {
     fields: {
-      id: string;
-      label: string;
-      type: 'text' | 'textarea' | 'select' | 'multi-select' | 'date' | 'number' | 'boolean';
-      group: 'identification' | 'description' | 'implementation' | 'compliance' | 'metadata';
-      required?: boolean;
-      options?: string[]; // for select/multi-select fields
-      defaultValue?: any;
-      description?: string;
-    }[];
+      [fieldName: string]: {
+        type: string;
+        ui_type: string;
+        is_array: boolean;
+        max_length: number;
+        usage_count: number;
+        usage_percentage: number;
+        required: boolean;
+        visible: boolean;
+        show_in_table: boolean;
+        editable: boolean;
+        display_order: number;
+        category: string;
+        examples?: string[];
+        array_item_type?: string;
+      };
+    };
+    total_controls: number;
+    analyzed_at: string;
   };
 }
 

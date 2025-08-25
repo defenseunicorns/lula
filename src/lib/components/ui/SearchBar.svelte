@@ -14,6 +14,11 @@
 		}, 300);
 	}
 
+	// Watch for changes to searchInput and trigger debounced search
+	$effect(() => {
+		debouncedSearch(searchInput);
+	});
+
 	function clearSearch() {
 		searchInput = '';
 		complianceStore.setSearchTerm('');

@@ -25,7 +25,10 @@
 			let results = $controlsWithMappings;
 
 			if ($selectedFamily) {
-				results = results.filter((c) => c['control-acronym'].startsWith($selectedFamily));
+				results = results.filter((c) => {
+					const family = (c as any)?._metadata?.family || (c as any)?.family || (c as any)?.['control-acronym']?.split('-')[0] || '';
+					return family === $selectedFamily;
+				});
 			}
 
 			if ($searchTerm) {
@@ -65,6 +68,34 @@
 			default:
 				return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
 		}
+	}
+
+	function extractDescriptionFromNested(data: any): string {
+		if (typeof data === 'string') {
+			return data;
+		}
+		if (Array.isArray(data)) {
+			// Try to find the first string in the array or extract from nested objects
+			for (const item of data) {
+				if (typeof item === 'string') {
+					return item;
+				}
+				if (typeof item === 'object' && item !== null) {
+					// Extract the first text from nested objects
+					for (const [key, value] of Object.entries(item)) {
+						if (Array.isArray(value)) {
+							const firstText = extractDescriptionFromNested(value);
+							if (firstText && typeof firstText === 'string') {
+								return firstText;
+							}
+						}
+						// Return the key as it's usually meaningful text
+						return key.replace(/:$/, ''); // Remove trailing colon
+					}
+				}
+			}
+		}
+		return 'No description available';
 	}
 </script>
 
@@ -109,9 +140,10 @@
 							</button>
 
 							{#each $families as family}
-								{@const familyCount = $controls.filter((c) =>
-									c['control-acronym'].startsWith(family)
-								).length}
+								{@const familyCount = $controls.filter((c) => {
+									const controlFamily = (c as any)?._metadata?.family || (c as any)?.family || (c as any)?.['control-acronym']?.split('-')[0] || '';
+									return controlFamily === family;
+								}).length}
 								<button
 									onclick={() => {
 										complianceStore.setSelectedFamily(family);
@@ -140,7 +172,7 @@
 		<div
 			class="bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-600 flex-shrink-0"
 		>
-			<div class="grid grid-cols-6 gap-4 px-6 py-3">
+			<div class="grid grid-cols-5 gap-4 px-6 py-3">
 				<div
 					class="text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
 				>
@@ -149,22 +181,17 @@
 				<div
 					class="text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
 				>
-					CCI
+					Title
 				</div>
 				<div
 					class="text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
 				>
-					Description
+					Statement
 				</div>
 				<div
-					class="text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
+					class="text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
 				>
-					Implementation
-				</div>
-				<div
-					class="text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
-				>
-					Compliance
+					Family
 				</div>
 				<div
 					class="text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
@@ -178,19 +205,15 @@
 		<div class="flex-1 overflow-auto">
 			<div class="divide-y divide-gray-200 dark:divide-gray-700">
 				{#each $filteredControlsWithMappings as control}
-					{@const rawText = control['control-information']}
-					{@const descriptionStart = rawText.indexOf('Description:') + 'Description:'.length}
-					{@const descriptionEnd = rawText.indexOf('Supplemental Guidance:')}
-					{@const description =
-						descriptionEnd > descriptionStart
-							? rawText.substring(descriptionStart, descriptionEnd).trim()
-							: rawText.split('\n').slice(0, 3).join(' ').trim()}
+					{@const rawDescription = control['control-information'] || control['cci-definition'] || control['implementation-guidance'] || control.title || 'No description available'}
+					{@const description = extractDescriptionFromNested(rawDescription)}
 					{@const cleanDescription = description
 						.replace(/^(a\.|b\.|1\.|2\.|\s|The organization:)+/, '')
 						.replace(/\s+/g, ' ')
-						.trim()}
+						.trim()
+						.substring(0, 200) + (description.length > 200 ? '...' : '')}
 					<div
-						class="grid grid-cols-6 gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-all duration-150 {$selectedControl?.id ===
+						class="grid grid-cols-5 gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-all duration-150 {$selectedControl?.id ===
 						control.id
 							? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 shadow-sm'
 							: ''}"
@@ -206,48 +229,33 @@
 								{control.id}
 							</div>
 							<div class="text-xs text-gray-500 dark:text-gray-400 font-medium">
-								{control['control-acronym']}
+								{control.class || 'OSCAL'}
 							</div>
 						</div>
-						<!-- CCI Column -->
+						<!-- Title Column -->
 						<div class="flex flex-col justify-center">
-							<div
-								class="relative group text-sm text-gray-500 dark:text-gray-400 font-mono cursor-help"
-								use:tooltip
-							>
-								{control.cci}
-								<div
-									class="tooltip invisible group-hover:visible absolute z-50 w-72 p-3 text-sm text-white bg-gray-900 dark:bg-gray-900 rounded-lg shadow-lg border border-gray-600"
-								>
-									<div class="font-medium text-blue-200 mb-1">CCI Definition:</div>
-									<div class="text-gray-200">{control['cci-definition']}</div>
-								</div>
+							<div class="text-sm text-gray-900 dark:text-white font-medium">
+								{control.title || (control['control-information'] ? 
+									(Array.isArray(control['control-information']) ? 
+										(typeof control['control-information'][0] === 'string' ? 
+											control['control-information'][0]?.trim() || 'No Title' :
+											typeof control['control-information'][0] === 'object' ? 
+												Object.keys(control['control-information'][0])[0]?.replace(/:$/, '') || 'No Title' :
+												'No Title') : 
+										control['control-information'].split('\n')[0].trim()) : 
+									'No Title')}
 							</div>
 						</div>
-						<!-- Description Column -->
+						<!-- Statement Column -->
 						<div class="flex flex-col justify-center">
 							<div class="text-sm text-gray-900 dark:text-white line-clamp-2">
 								{cleanDescription.substring(0, 120)}{cleanDescription.length > 120 ? '...' : ''}
 							</div>
 						</div>
-						<!-- Implementation Column -->
+						<!-- Family Column -->
 						<div class="flex items-center justify-center">
-							<span
-								class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full {getStatusBadgeClass(
-									control['control-implementation-status']
-								)}"
-							>
-								{control['control-implementation-status']}
-							</span>
-						</div>
-						<!-- Compliance Column -->
-						<div class="flex items-center justify-center">
-							<span
-								class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full {getComplianceBadgeClass(
-									control['compliance-status']
-								)}"
-							>
-								{control['compliance-status']}
+							<span class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+								{(control.family || control['control-acronym']?.split('-')[0] || '').toUpperCase()}
 							</span>
 						</div>
 						<!-- Mappings Column -->

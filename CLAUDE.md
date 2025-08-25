@@ -96,14 +96,26 @@ examples/nist-800-53-rev4/
 - Use TypeScript interfaces defined in `src/lib/types.ts`
 - Components in `src/components/` organized by feature area
 
-### OSCAL Processing System
-- Complete OSCAL catalog and profile import via `cli/oscal/` system
-- Auto-detection of OSCAL catalogs vs profiles
-- Back-matter resource resolution and caching  
-- Enhancement flattening (individual files per control and sub-control)
-- Profile modifications (priority assignment, control alterations)
-- Git-friendly YAML output with one control per file (922 controls from NIST catalog)
-- Configurable options: `--no-links` (remove references), `--flatten-refs` (resolve back-matter)
+### OSCAL + CCI Processing System
+- **Primary Processor**: `AtomicProcessor` in `cli/processors/atomicProcessor.ts`
+- **CCI Integration**: `BundledCCIProcessor` in `cli/processors/bundledCciProcessor.ts` 
+- **Processing Flow**:
+  1. `cli.ts import` command → `AtomicProcessor.processOSCAL()`
+  2. Auto-detects NIST catalogs → enables CCI enhancement by default
+  3. `BundledCCIProcessor` creates "enhanced" controls from CCI database
+  4. `AtomicProcessor.enrichEnhancedControlWithOSCAL()` adds OSCAL data
+  5. Outputs git-friendly YAML with combined CCI + OSCAL data
+
+### Enhanced Control Format
+- **CCI Data**: Control Correlation Identifier definitions from DISA
+- **OSCAL Data**: Control statements, implementation guidance, assessment objectives
+- **Compliance Fields**: Implementation status, designation, inheritance tracking
+- **File Structure**: `controls/<family>/<CONTROL>.<CCI_SUFFIX>.yaml` (e.g., `AC-11.57.yaml`)
+
+### Test Validation
+- Run `node test-validation.js` to verify OSCAL+CCI processing pipeline
+- Validates CCI database integration and OSCAL enrichment
+- Ensures enhanced control format completeness
 
 ## Testing
 - Unit tests with Vitest

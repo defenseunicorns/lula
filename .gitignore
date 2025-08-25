@@ -21,3 +21,7 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# Downloaded framework data (use npm scripts to fetch)
+cli/frameworks/cci-data/
+cli/frameworks/nist-oscal-data/

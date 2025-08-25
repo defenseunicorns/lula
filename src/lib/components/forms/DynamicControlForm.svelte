@@ -127,50 +127,195 @@
 	});
 </script>
 
-<div class="space-y-8">
-	{#each Object.entries(fieldGroups) as [groupName, fields]}
-		<div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
-			{#if groupName !== 'general'}
-				<!-- Group Header -->
-				<div class="border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800 px-6 py-4">
-					<h3 class="text-lg font-medium text-gray-900 dark:text-white capitalize">
-						{groupName.replace(/([A-Z])/g, ' $1').trim()}
-					</h3>
-				</div>
-			{/if}
-			
-			<!-- Form Content -->
-			<div class="p-6">
-				<!-- Grid layout for better organization -->
-				<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-6">
-					{#each fields as field}
-						{#if field.type !== 'textarea'}
-							<DynamicField
-								{field}
-								bind:value={control[field.id]}
-								{readonly}
-								error={fieldErrors[field.id]}
-								onChange={() => handleFieldChange(field.id)}
-							/>
-						{/if}
-					{/each}
-				</div>
+{#if readonly}
+	<!-- View Mode: Clean minimal layout -->
+	<div class="space-y-6">
+		{#each Object.entries(fieldGroups) as [groupName, fields]}
+			{#each [fields] as fieldList}
+				{@const importantFields = fieldList.filter(f => ['id', 'title', 'priority', 'status'].includes(f.id))}
+				{@const contentFields = fieldList.filter(f => !importantFields.includes(f) && (control[f.id] !== undefined && control[f.id] !== null && control[f.id] !== ''))}
 				
-				<!-- Full-width fields (textareas, etc.) -->
-				<div class="space-y-6">
-					{#each fields as field}
-						{#if field.type === 'textarea'}
-							<DynamicField
-								{field}
-								bind:value={control[field.id]}
-								{readonly}
-								error={fieldErrors[field.id]}
-								onChange={() => handleFieldChange(field.id)}
-							/>
+				{#if importantFields.length > 0 || contentFields.length > 0}
+					<div class="space-y-6">
+						<!-- Key information with natural layout -->
+						{#if importantFields.length > 0}
+							<div class="pb-4 border-b border-gray-200 dark:border-gray-700">
+								<div class="flex flex-wrap items-center gap-6">
+									{#each importantFields as field}
+										{@const value = control[field.id]}
+										{#if value !== undefined && value !== null && value !== ''}
+											<div class="flex items-center space-x-3">
+												<span class="text-sm font-medium text-gray-500 dark:text-gray-400">
+													{field.label}:
+												</span>
+												<span class="text-lg font-semibold text-gray-900 dark:text-white">
+													{#if field.type === 'boolean'}
+														<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {value 
+															? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+															: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'}">
+															{value ? 'Yes' : 'No'}
+														</span>
+													{:else if field.id === 'family'}
+														<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 uppercase">
+															{value}
+														</span>
+													{:else}
+														{value}
+													{/if}
+												</span>
+											</div>
+										{/if}
+									{/each}
+								</div>
+							</div>
 						{/if}
-					{/each}
+
+						<!-- Content sections -->
+						{#each contentFields as field}
+							{@const value = control[field.id]}
+							
+							{#if field.type === 'textarea'}
+								<!-- Long text content -->
+								<div class="space-y-3">
+									<h3 class="text-base font-semibold text-gray-900 dark:text-white">
+										{field.label}
+									</h3>
+									<div class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+										{value}
+									</div>
+								</div>
+							
+							{:else if field.type === 'string-array' && Array.isArray(value) && value.length > 0}
+								<!-- Simple list -->
+								<div class="space-y-3">
+									<h3 class="text-base font-semibold text-gray-900 dark:text-white">
+										{field.label}
+										<span class="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">
+											({value.length})
+										</span>
+									</h3>
+									<div class="space-y-2">
+										{#each value as item}
+											<div class="flex items-start space-x-3 py-2">
+												<div class="flex-shrink-0 w-1.5 h-1.5 bg-blue-600 rounded-full mt-2"></div>
+												<div class="text-gray-900 dark:text-white leading-relaxed">
+													{item}
+												</div>
+											</div>
+										{/each}
+									</div>
+								</div>
+							
+							{:else if field.type === 'object-array' && Array.isArray(value) && value.length > 0}
+								<!-- Object list -->
+								<div class="space-y-3">
+									<h3 class="text-base font-semibold text-gray-900 dark:text-white">
+										{field.label}
+										<span class="ml-2 text-sm font-normal text-gray-500 dark:text-gray-400">
+											({value.length})
+										</span>
+									</h3>
+									<div class="space-y-3">
+										{#each value as item, index}
+											<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700">
+												{#if field.arraySchema}
+													<dl class="space-y-2">
+														{#each Object.entries(field.arraySchema) as [key, schema]}
+															{@const schemaObj = schema as any}
+															{#if item[key]}
+																<div class="flex justify-between">
+																	<dt class="text-sm font-medium text-gray-500 dark:text-gray-400">
+																		{schemaObj.label || key}:
+																	</dt>
+																	<dd class="text-sm text-gray-900 dark:text-white">
+																		{item[key]}
+																	</dd>
+																</div>
+															{/if}
+														{/each}
+													</dl>
+												{/if}
+											</div>
+										{/each}
+									</div>
+								</div>
+							
+							{:else}
+								<!-- Simple field -->
+								<div class="flex justify-between py-2">
+									<dt class="text-sm font-medium text-gray-500 dark:text-gray-400">
+										{field.label}:
+									</dt>
+									<dd class="text-sm text-gray-900 dark:text-white font-medium">
+										{#if field.type === 'boolean'}
+											<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {value 
+												? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+												: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200'}">
+												{value ? 'Yes' : 'No'}
+											</span>
+										{:else}
+											{value}
+										{/if}
+									</dd>
+								</div>
+							{/if}
+						{/each}
+					</div>
+				{/if}
+			{/each}
+		{/each}
+	</div>
+{:else}
+	<!-- Edit Mode: Enhanced form layout -->
+	<div class="space-y-10">
+		{#each Object.entries(fieldGroups) as [groupName, fields]}
+			<section class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
+				{#if groupName !== 'general'}
+					<!-- Enhanced group header -->
+					<header class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 px-8 py-6 border-b border-gray-200 dark:border-gray-600">
+						<h3 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+							{groupName.replace(/([A-Z])/g, ' $1').trim()}
+						</h3>
+					</header>
+				{/if}
+				
+				<!-- Enhanced form content -->
+				<div class="p-8">
+					<!-- Improved grid layout for simple fields -->
+					<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-10">
+						{#each fields as field}
+							{#if !['textarea', 'string-array', 'object-array'].includes(field.type)}
+								<div class="space-y-2">
+									<DynamicField
+										{field}
+										bind:value={control[field.id]}
+										{readonly}
+										error={fieldErrors[field.id]}
+										onChange={() => handleFieldChange(field.id)}
+									/>
+								</div>
+							{/if}
+						{/each}
+					</div>
+					
+					<!-- Enhanced full-width fields with better spacing -->
+					<div class="space-y-10">
+						{#each fields as field}
+							{#if ['textarea', 'string-array', 'object-array'].includes(field.type)}
+								<div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
+									<DynamicField
+										{field}
+										bind:value={control[field.id]}
+										{readonly}
+										error={fieldErrors[field.id]}
+										onChange={() => handleFieldChange(field.id)}
+									/>
+								</div>
+							{/if}
+						{/each}
+					</div>
 				</div>
-			</div>
-		</div>
-	{/each}
-</div>
+			</section>
+		{/each}
+	</div>
+{/if}

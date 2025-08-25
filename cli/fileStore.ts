@@ -89,6 +89,22 @@ export class FileStore {
    * Load a control by ID
    */
   async loadControl(controlId: string): Promise<Control | null> {
+    // Try flat structure first (atomic controls)
+    const flatFilename = `${controlId}.yaml`;
+    const flatFilePath = join(this.controlsDir, flatFilename);
+    
+    if (existsSync(flatFilePath)) {
+      try {
+        const content = readFileSync(flatFilePath, 'utf8');
+        const parsed = YAML.parse(content);
+        return parsed as Control;
+      } catch (error) {
+        console.error(`Failed to load control ${controlId} from flat structure:`, error);
+        throw new Error(`Failed to load control ${controlId}: ${error instanceof Error ? error.message : String(error)}`);
+      }
+    }
+
+    // Fallback to family-based structure
     const family = this.getControlFamily(controlId);
     const filename = this.getControlFilename(controlId);
     const familyDir = join(this.controlsDir, family);
@@ -185,8 +201,31 @@ export class FileStore {
       return controls;
     }
 
-    // Read all family directories
-    const families = readdirSync(this.controlsDir).filter(name => {
+    const entries = readdirSync(this.controlsDir);
+    
+    // Check for flat structure first (atomic controls)
+    const yamlFiles = entries.filter(file => file.endsWith('.yaml'));
+    if (yamlFiles.length > 0) {
+      // Flat structure - load controls directly from controls/ directory
+      for (const file of yamlFiles) {
+        try {
+          const filePath = join(this.controlsDir, file);
+          const content = readFileSync(filePath, 'utf8');
+          const parsed = YAML.parse(content);
+          
+          // Handle atomic control format directly
+          if (parsed && parsed.id) {
+            controls.push(parsed as Control);
+          }
+        } catch (error) {
+          console.error(`Failed to load control from file ${file}:`, error);
+        }
+      }
+      return controls;
+    }
+    
+    // Fallback to family-based directory structure
+    const families = entries.filter(name => {
       const familyPath = join(this.controlsDir, name);
       return statSync(familyPath).isDirectory();
     });
@@ -305,8 +344,27 @@ export class FileStore {
       return;
     }
 
-    // Scan all family directories
-    const families = readdirSync(this.controlsDir).filter(name => {
+    const entries = readdirSync(this.controlsDir);
+    
+    // Check for flat structure first (atomic controls)
+    const yamlFiles = entries.filter(file => file.endsWith('.yaml'));
+    if (yamlFiles.length > 0) {
+      // Flat structure - cache controls directly from controls/ directory
+      for (const filename of yamlFiles) {
+        const controlId = filename.replace('.yaml', '');
+        const family = this.getControlFamily(controlId);
+
+        this.controlMetadataCache.set(controlId, {
+          controlId: controlId,
+          filename: filename,
+          family: family
+        });
+      }
+      return;
+    }
+
+    // Fallback to family-based directory structure
+    const families = entries.filter(name => {
       const familyPath = join(this.controlsDir, name);
       return statSync(familyPath).isDirectory();
     });
@@ -316,14 +374,38 @@ export class FileStore {
       const files = readdirSync(familyPath).filter(file => file.endsWith('.yaml'));
 
       for (const filename of files) {
-        // Extract control ID from filename (reverse the sanitization)
-        const controlId = filename.replace('.yaml', '').replace(/_/g, '/');
+        try {
+          // Read the actual control ID from the file metadata
+          const filePath = join(familyPath, filename);
+          const content = readFileSync(filePath, 'utf8');
+          const parsed = YAML.parse(content);
+          
+          // Get control ID from _metadata.controlId or fall back to filename
+          let controlId: string;
+          if (parsed._metadata && parsed._metadata.controlId) {
+            controlId = parsed._metadata.controlId;
+          } else if (parsed.id) {
+            controlId = parsed.id;
+          } else {
+            // Fallback to filename extraction (reverse the sanitization)
+            controlId = filename.replace('.yaml', '').replace(/_/g, '/');
+          }
 
-        this.controlMetadataCache.set(controlId, {
-          controlId: controlId,
-          filename: filename,
-          family: family
-        });
+          this.controlMetadataCache.set(controlId, {
+            controlId: controlId,
+            filename: filename,
+            family: family
+          });
+        } catch (error) {
+          console.error(`Failed to read control metadata from ${family}/${filename}:`, error);
+          // Fallback to filename-based control ID
+          const controlId = filename.replace('.yaml', '').replace(/_/g, '/');
+          this.controlMetadataCache.set(controlId, {
+            controlId: controlId,
+            filename: filename,
+            family: family
+          });
+        }
       }
     }
   }

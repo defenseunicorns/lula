@@ -11,6 +11,10 @@
 	let { status, type = 'control', size = 'sm' }: Props = $props();
 
 	const getStatusColor = (status: string, type: string) => {
+		if (!status) {
+			return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
+		}
+		
 		if (type === 'mapping') {
 			switch (status.toLowerCase()) {
 				case 'implemented':

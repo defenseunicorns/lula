@@ -45,7 +45,7 @@ export function getServerState(): ServerState {
 
 export function addControlToIndexes(control: Control): void {
   const state = getServerState();
-  const family = control['control-acronym'].split('-')[0];
+  const family = control.family;
   
   // Add to family index
   if (!state.controlsByFamily.has(family)) {

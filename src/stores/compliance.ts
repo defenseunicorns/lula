@@ -16,10 +16,11 @@ export const selectedControl = writable<Control | null>(null);
 
 // Derived stores
 export const families = derived(controls, ($controls) => {
-  const familySet = new Set($controls.map(c => 
-    c['control-acronym'].split('-')[0]
-  ));
-  return Array.from(familySet).sort();
+  const familySet = new Set($controls.map(c => {
+    // Enhanced controls have family in _metadata.family, fallback to extracting from control-acronym
+    return (c as any)?._metadata?.family || (c as any)?.family || (c as any)?.['control-acronym']?.split('-')[0] || '';
+  }));
+  return Array.from(familySet).filter(f => f).sort();
 });
 
 export const filteredControls = derived(
@@ -28,9 +29,11 @@ export const filteredControls = derived(
     let results = $controls;
     
     if ($selectedFamily) {
-      results = results.filter(c => 
-        c['control-acronym'].startsWith($selectedFamily)
-      );
+      results = results.filter(c => {
+        // Enhanced controls have family in _metadata.family, fallback to extracting from control-acronym
+        const family = (c as any)?._metadata?.family || (c as any)?.family || (c as any)?.['control-acronym']?.split('-')[0] || '';
+        return family === $selectedFamily;
+      });
     }
     
     if ($searchTerm) {

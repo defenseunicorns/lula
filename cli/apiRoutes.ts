@@ -7,6 +7,20 @@ import { promises as fsPromises } from 'fs';
 import { join } from 'path';
 import * as YAML from 'yaml';
 import { getServerState, addControlToIndexes, addMappingToIndexes, saveMappingsToFile } from './serverState.js';
+import type { Control } from '../src/lib/types.js';
+
+// Transform control for UI compatibility (map definition to statement)
+function transformControlForUI(control: Control): Control {
+  const transformed = { ...control };
+  
+  // Map definition field to statement for UI compatibility
+  if (transformed.definition && !('statement' as any in transformed)) {
+    (transformed as any).statement = transformed.definition;
+  }
+  
+  return transformed;
+}
+
 
 const router = Router();
 
@@ -14,7 +28,9 @@ const router = Router();
 router.get('/data/all', (req: Request, res: Response) => {
   try {
     const state = getServerState();
-    const allControls = Array.from(state.controlsCache.values()).sort((a, b) => a.id.localeCompare(b.id));
+    const allControls = Array.from(state.controlsCache.values())
+      .sort((a, b) => a.id.localeCompare(b.id))
+      .map(transformControlForUI);
     const allMappings = Array.from(state.mappingsCache.values()).sort((a, b) => a.control_id.localeCompare(b.control_id));
     
     res.json({ controls: allControls, mappings: allMappings });
@@ -27,7 +43,9 @@ router.get('/data/all', (req: Request, res: Response) => {
 router.get('/controls', (req: Request, res: Response) => {
   try {
     const state = getServerState();
-    const allControls = Array.from(state.controlsCache.values()).sort((a, b) => a.id.localeCompare(b.id));
+    const allControls = Array.from(state.controlsCache.values())
+      .sort((a, b) => a.id.localeCompare(b.id))
+      .map(transformControlForUI);
     res.json(allControls);
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
@@ -51,7 +69,7 @@ router.get('/controls/:id', async (req: Request, res: Response) => {
     if (!control) {
       return res.status(404).json({ error: 'Control not found' });
     }
-    res.json(control);
+    res.json(transformControlForUI(control));
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }
@@ -83,7 +101,7 @@ router.delete('/controls/:id', async (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Control not found' });
     }
     
-    const family = control['control-acronym'].split('-')[0];
+    const family = control.family;
     
     // Delete from file store
     await state.fileStore.deleteControl(req.params.id);
@@ -252,7 +270,7 @@ router.get('/control-set', async (req: Request, res: Response) => {
       });
     } catch (error) {
       console.error('Error reading control-set.yaml:', error);
-      // If no control-set.yaml file, return basic info
+      // If no control-set.yaml file, return basic info with minimal field_schema
       const families = Array.from(state.controlsByFamily.keys()).sort();
       res.json({
         id: 'unknown',
@@ -260,7 +278,81 @@ router.get('/control-set', async (req: Request, res: Response) => {
         version: 'Unknown',
         description: 'Control set metadata not found',
         families,
-        path: state.CONTROL_SET_DIR
+        path: state.CONTROL_SET_DIR,
+        field_schema: {
+          fields: {
+            id: {
+              type: 'string',
+              ui_type: 'short_text',
+              is_array: false,
+              max_length: 20,
+              usage_count: 0,
+              usage_percentage: 100,
+              required: true,
+              visible: true,
+              show_in_table: true,
+              editable: false,
+              display_order: 1,
+              category: 'core',
+              examples: []
+            },
+            title: {
+              type: 'string',
+              ui_type: 'medium_text',
+              is_array: false,
+              max_length: 150,
+              usage_count: 0,
+              usage_percentage: 100,
+              required: true,
+              visible: true,
+              show_in_table: true,
+              editable: true,
+              display_order: 2,
+              category: 'core',
+              examples: []
+            },
+            definition: {
+              type: 'string',
+              ui_type: 'textarea',
+              is_array: false,
+              max_length: 2000,
+              usage_count: 0,
+              usage_percentage: 100,
+              required: false,
+              visible: true,
+              show_in_table: false,
+              editable: true,
+              display_order: 3,
+              category: 'content',
+              examples: []
+            },
+            implementation_status: {
+              type: 'string',
+              ui_type: 'select',
+              is_array: false,
+              max_length: 30,
+              usage_count: 0,
+              usage_percentage: 100,
+              required: true,
+              visible: true,
+              show_in_table: true,
+              editable: true,
+              display_order: 4,
+              category: 'core',
+              options: [
+                'not_implemented',
+                'planned', 
+                'partially_implemented',
+                'implemented',
+                'alternative_implementation',
+                'not_applicable'
+              ],
+              examples: ['not_implemented']
+            }
+          },
+          total_controls: 0,
+          analyzed_at: new Date().toISOString()
+        }
       });
     }
   } catch (error) {

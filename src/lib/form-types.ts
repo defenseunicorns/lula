@@ -4,7 +4,7 @@
 export interface FieldDefinition {
   id: string;
   label: string;
-  type: 'text' | 'textarea' | 'select' | 'boolean' | 'date' | 'number';
+  type: 'text' | 'textarea' | 'select' | 'boolean' | 'date' | 'number' | 'string-array' | 'object-array';
   description?: string;
   placeholder?: string;
   required?: boolean;
@@ -13,6 +13,8 @@ export interface FieldDefinition {
   options?: string[]; // for select
   validation?: ValidationRule[];
   helpText?: string;
+  arrayItemType?: 'string' | 'object'; // for array types
+  arraySchema?: any; // schema for object array items
 }
 
 export interface ValidationRule {

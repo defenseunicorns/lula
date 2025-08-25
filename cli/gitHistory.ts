@@ -104,8 +104,21 @@ export class GitHistoryUtil {
         firstCommit: gitCommits[gitCommits.length - 1] || null,
         lastCommit: gitCommits[0] || null
       };
-    } catch (error) {
-      console.error(`Error getting git history for ${filePath}:`, error);
+    } catch (error: any) {
+      // Handle specific case of files not found in git history (new/untracked files)
+      if (error?.code === 'NotFoundError' || error?.message?.includes('Could not find file')) {
+        console.log(`File not in git history (new/untracked file): ${filePath}`);
+        return {
+          filePath,
+          commits: [],
+          totalCommits: 0,
+          firstCommit: null,
+          lastCommit: null
+        };
+      }
+      
+      // Only log unexpected errors
+      console.error(`Unexpected error getting git history for ${filePath}:`, error);
       return {
         filePath,
         commits: [],

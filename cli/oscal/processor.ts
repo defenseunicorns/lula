@@ -107,11 +107,10 @@ export class OSCALProcessor {
     const controls: ProcessedControl[] = [];
     
     for (const importDef of profile.imports) {
-      const resolvedCatalog = await catalogResolver(importDef.href, this.backMatterResources);
+      const resolvedCatalog = await catalogResolver(importDef.href);
       const importedControls = this.resolveImportedControls(
         resolvedCatalog, 
         importDef,
-        path.basename(profilePath),
         options
       );
       controls.push(...importedControls);
@@ -170,10 +169,18 @@ export class OSCALProcessor {
   }
 
   private processControls(controls: OSCALControl[], familyId: string, options: any = {}): ProcessedControl[] {
-    return controls.map(control => this.processControl(control, familyId, options));
+    return controls.map(control => this.processControl(control, familyId, options))
+      .filter((control): control is ProcessedControl => control !== null);
   }
 
-  private processControl(control: OSCALControl, familyId: string, options: any = {}): ProcessedControl {
+  private processControl(control: OSCALControl, familyId: string, options: any = {}): ProcessedControl | null {
+    // Skip controls that are withdrawn
+    const status = control.props?.find(prop => prop.name === 'status')?.value;
+    if (status === 'Withdrawn') {
+      console.log(`Skipping withdrawn control: ${control.id}`);
+      return null;
+    }
+
     const processedControl: ProcessedControl = {
       id: control.id,
       title: control.title,
@@ -203,7 +210,7 @@ export class OSCALProcessor {
     if (control.controls) {
       processedControl.enhancements = control.controls.map(subControl => 
         this.processControl(subControl, familyId, options)
-      );
+      ).filter((control): control is ProcessedControl => control !== null);
     }
 
     return processedControl;
@@ -220,18 +227,22 @@ export class OSCALProcessor {
           break;
         case 'objective':
           if (!control.objectives) control.objectives = [];
-          control.objectives.push(this.extractPartText(part, control.parameters, resolveParams));
+          // Process the entire objective structure and flatten to strings
+          const objectiveStructure = this.extractObjectiveStructure(part, control.parameters, resolveParams);
+          const flattenedObjectives = this.flattenObjectiveStructure(objectiveStructure);
+          control.objectives.push(...flattenedObjectives);
           break;
         case 'assessment':
         case 'assessment-method':
           if (!control.assessment_methods) control.assessment_methods = [];
           control.assessment_methods.push(this.extractPartText(part, control.parameters, resolveParams));
           break;
-      }
-
-      // Recursively process nested parts
-      if (part.parts) {
-        this.processControlParts(part.parts, control, resolveParams);
+        default:
+          // Recursively process nested parts for other part types
+          if (part.parts) {
+            this.processControlParts(part.parts, control, resolveParams);
+          }
+          break;
       }
     }
   }
@@ -250,6 +261,91 @@ export class OSCALProcessor {
     }
 
     return text.trim();
+  }
+
+
+  /**
+   * Extract objectives as a structured array preserving OSCAL hierarchy
+   */
+  private extractObjectiveStructure(part: OSCALPart, parameters?: ProcessedParameter[], resolveParams: boolean = false): any {
+    // Handle the root objective structure
+    if (part.prose && part.parts && part.parts.length > 0) {
+      // This is a header with sub-objectives
+      let prose = part.prose;
+      if (resolveParams && parameters) {
+        prose = this.resolveParameterInsertions(prose, parameters);
+      }
+      
+      const subObjectives: any[] = [];
+      for (const subPart of part.parts) {
+        if (subPart.name === 'objective') {
+          const subObj = this.extractObjectiveStructure(subPart, parameters, resolveParams);
+          if (subObj) {
+            subObjectives.push(subObj);
+          }
+        }
+      }
+      
+      // Return an object with header and sub-items
+      return {
+        header: prose,
+        items: subObjectives
+      };
+    } else if (part.prose) {
+      // Simple objective with just prose
+      let prose = part.prose;
+      if (resolveParams && parameters) {
+        prose = this.resolveParameterInsertions(prose, parameters);
+      }
+      return prose;
+    } else if (part.parts && part.parts.length > 0) {
+      // No prose but has sub-parts
+      const subObjectives: any[] = [];
+      for (const subPart of part.parts) {
+        if (subPart.name === 'objective') {
+          const subObj = this.extractObjectiveStructure(subPart, parameters, resolveParams);
+          if (subObj) {
+            subObjectives.push(subObj);
+          }
+        }
+      }
+      return subObjectives.length === 1 ? subObjectives[0] : subObjectives;
+    }
+    
+    return null;
+  }
+
+  /**
+   * Flatten the structured objectives back to a clean string array with proper hierarchy
+   */
+  private flattenObjectiveStructure(structure: any): string[] {
+    if (!structure) return [];
+    
+    if (typeof structure === 'string') {
+      return [structure];
+    }
+    
+    if (Array.isArray(structure)) {
+      const result: string[] = [];
+      for (const item of structure) {
+        result.push(...this.flattenObjectiveStructure(item));
+      }
+      return result;
+    }
+    
+    if (structure.header && structure.items) {
+      const result: string[] = [structure.header];
+      for (const item of structure.items) {
+        const flattened = this.flattenObjectiveStructure(item);
+        for (const flatItem of flattened) {
+          // Indent sub-items to show hierarchy
+          result.push(`  ${flatItem}`);
+        }
+      }
+      return result;
+    }
+    
+    return [];
   }
 
   private resolveParameterInsertions(text: string, parameters: ProcessedParameter[]): string {
@@ -277,7 +373,6 @@ export class OSCALProcessor {
   private resolveImportedControls(
     catalog: OSCALCatalog,
     importDef: any,
-    profileName: string,
     options: any = {}
   ): ProcessedControl[] {
     const allControls: ProcessedControl[] = [];
@@ -400,7 +495,7 @@ export class OSCALProcessor {
     }
 
     // Write back-matter resources (only when preserving OSCAL structure)
-    if (this.backMatterResources.size > 0 && options.includeLinks !== false) {
+    if (this.backMatterResources.size > 0) {
       const backMatterPath = path.join(outputDir, 'back-matter.yaml');
       const backMatter: ProcessedBackMatter = {
         resources: Object.fromEntries(this.backMatterResources)
