@@ -8,6 +8,7 @@
 		"dev": "vite dev --port 5173",
 		"dev:api": "tsx --watch cli.ts serve --dir ./examples/nist-800-53-rev4 --port 3000",
 		"dev:full": "concurrently \"npm run dev:api\" \"npm run dev\"",
+		"prebuild": "npm run update-frameworks",
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
@@ -17,9 +18,7 @@
 		"lint": "prettier --check . && eslint .",
 		"test:unit": "vitest",
 		"test": "npm run test:unit -- --run",
-		"fetch-cci-data": "tsx scripts/fetch-cci-data.ts",
-		"fetch-nist-data": "node cli/frameworks/fetch-nist-data.js",
-		"update-frameworks": "npm run fetch-cci-data && npm run fetch-nist-data"
+		"update-frameworks": "tsx scripts/fetch-cci-data.ts"
 	},
 	"dependencies": {
 		"commander": "^11.1.0",

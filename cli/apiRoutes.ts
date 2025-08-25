@@ -7,7 +7,7 @@ import { promises as fsPromises } from 'fs';
 import { join } from 'path';
 import * as YAML from 'yaml';
 import { getServerState, addControlToIndexes, addMappingToIndexes, saveMappingsToFile } from './serverState.js';
-import type { Control } from '../src/lib/types.js';
+import type { Control } from './types/index.js';
 
 // Transform control for UI compatibility (map definition to statement)
 function transformControlForUI(control: Control): Control {

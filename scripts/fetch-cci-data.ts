@@ -132,7 +132,7 @@ async function main() {
 /**
  * Fetch and process CCI data
  */
-async function fetchCCIData(outputDir: string) {
+export async function fetchCCIData(outputDir: string) {
   console.log('🔽 Fetching CCI data from DISA...');
   
   // Ensure output directory exists
@@ -164,6 +164,13 @@ async function fetchCCIData(outputDir: string) {
   fs.writeFileSync(jsonPath, JSON.stringify(database, null, 2));
   console.log('✅ Data saved');
   
+  // Clean up temporary ZIP file
+  console.log('🧹 Cleaning up temporary files...');
+  if (fs.existsSync(zipPath)) {
+    fs.unlinkSync(zipPath);
+    console.log('✅ Cleaned up ZIP file');
+  }
+  
   // Print statistics
   console.log('\n📊 CCI Data Statistics:');
   console.log(`  Version: ${database.version}`);
@@ -183,8 +190,7 @@ async function fetchCCIData(outputDir: string) {
     source_url: CCI_ZIP_URL,
     files: {
       database: 'cci-database.json',
-      raw_xml: CCI_XML_FILENAME,
-      raw_zip: 'U_CCI_List.zip'
+      raw_xml: CCI_XML_FILENAME
     }
   };
   
@@ -195,7 +201,7 @@ async function fetchCCIData(outputDir: string) {
 /**
  * Fetch NIST OSCAL data
  */
-async function fetchNISTOSCALData(outputDir: string) {
+export async function fetchNISTOSCALData(outputDir: string) {
   console.log('🔄 Fetching NIST OSCAL data...');
   
   // Ensure output directory exists

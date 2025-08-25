@@ -8,7 +8,7 @@ import { join, relative } from 'path';
 import * as git from 'isomorphic-git';
 import * as YAML from 'yaml';
 import { getServerState, addControlToIndexes } from './serverState.js';
-import type { ControlCompleteData, ControlWithHistory, GitCommit, GitFileHistory, UnifiedHistory } from '../src/lib/types.js';
+import type { ControlCompleteData, ControlWithHistory, GitCommit, GitFileHistory, UnifiedHistory } from './types/index.js';
 
 const router = Router();
 

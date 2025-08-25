@@ -23,30 +23,30 @@ export class FrameworksCommand {
     console.log('📋 Available Compliance Frameworks\n');
 
     const frameworksByCategory = this.frameworkResolver.getFrameworksByCategory();
-    
+
     Object.entries(frameworksByCategory).forEach(([category, frameworks]) => {
       if (frameworks.length === 0) return;
-      
+
       console.log(`${category}:`);
       frameworks.forEach(framework => {
         const available = this.frameworkResolver.isFrameworkAvailable(framework.id);
         const status = available ? '✅' : '❌';
-        
+
         console.log(`  ${status} ${framework.id}`);
         console.log(`     Name: ${framework.name} ${framework.baseline || ''}`);
         console.log(`     Description: ${framework.description}`);
-        
+
         if (options.verbose) {
           console.log(`     Version: ${framework.version}`);
           console.log(`     Use case: ${framework.use_case}`);
           console.log(`     CCI recommended: ${framework.recommended_cci ? 'Yes' : 'No'}`);
           console.log(`     File: ${framework.file_path}`);
         }
-        
+
         if (!available) {
           console.log(`     ⚠️  Framework file not found - check git submodules`);
         }
-        
+
         console.log('');
       });
     });
@@ -60,17 +60,17 @@ export class FrameworksCommand {
 
   private showUsageExamples(): void {
     console.log('\n📚 Usage Examples:\n');
-    
+
     console.log('Interactive setup (recommended):');
     console.log('  npx tsx cli.ts init\n');
-    
+
     console.log('Quick setup with specific framework:');
     console.log('  npx tsx cli.ts init --framework=nist-800-53-rev4-moderate --project-name=my-project\n');
-    
+
     console.log('Import controls directly:');
     console.log('  npx tsx cli.ts import ./my-controls --framework=nist-800-53-rev4-high --with-cci');
     console.log('  npx tsx cli.ts import ./my-controls --framework=nist-800-53-rev4-high --preserve-oscal  # Keep OSCAL structure\n');
-    
+
     console.log('Common framework choices:');
     console.log('  • nist-800-53-rev4-moderate - Most common choice for federal systems');
     console.log('  • nist-800-53-rev4-high - High-security federal systems');
@@ -116,15 +116,15 @@ export class FrameworksCommand {
       const framework = this.frameworkResolver.getFramework(rec.framework);
       const available = framework && this.frameworkResolver.isFrameworkAvailable(rec.framework);
       const status = available ? '✅' : '❌';
-      
+
       console.log(`${status} ${rec.scenario}:`);
       console.log(`   Framework: ${rec.framework}`);
       console.log(`   Reason: ${rec.reason}`);
-      
+
       if (!available) {
         console.log(`   ⚠️  Not available - check git submodules`);
       }
-      
+
       console.log('');
     });
   }

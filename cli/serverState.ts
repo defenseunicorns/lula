@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
-import { FileStore } from './fileStore.js';
-import { GitHistoryUtil } from './gitHistory.js';
-import type { Control, Mapping } from '../src/lib/types.js';
+import { FileStore } from './infrastructure/fileStore.js';
+import { GitHistoryUtil } from './infrastructure/gitHistory.js';
+import type { Control, Mapping } from './types/index.js';
 
 /**
  * Server state management for the CLI server
  */
-export interface ServerState {
+export interface CLIServerState {
   CONTROL_SET_DIR: string;
   fileStore: FileStore;
   gitHistory: GitHistoryUtil;
@@ -19,9 +19,9 @@ export interface ServerState {
   mappingsByControl: Map<string, Set<string>>;
 }
 
-let serverState: ServerState | undefined = undefined;
+let serverState: CLIServerState | undefined = undefined;
 
-export function initializeServerState(controlSetDir: string): ServerState {
+export function initializeServerState(controlSetDir: string): CLIServerState {
   serverState = {
     CONTROL_SET_DIR: controlSetDir,
     fileStore: new FileStore({ baseDir: controlSetDir }),
@@ -36,7 +36,7 @@ export function initializeServerState(controlSetDir: string): ServerState {
   return serverState;
 }
 
-export function getServerState(): ServerState {
+export function getServerState(): CLIServerState {
   if (!serverState) {
     throw new Error('Server state not initialized. Call initializeServerState() first.');
   }
