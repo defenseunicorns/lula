@@ -24,6 +24,8 @@ jobs:
       id-token: write
       pull-requests: read
       contents: read
+      actions: read
+
 
     steps:
       - name: "Checkout code"
