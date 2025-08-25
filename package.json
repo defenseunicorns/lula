@@ -1,5 +1,5 @@
 {
-  "name": "lula-next",
+  "name": "lula2",
   "version": "0.0.0-development",
   "description": "Reports Reports and exports compliance status for defined controls.",
   "bin": "./dist/index.js",
