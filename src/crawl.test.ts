@@ -20,7 +20,7 @@ describe("getPRContext", () => {
     delete process.env.PULL_NUMBER;
 
     expect(() => getPRContext()).toThrowError(
-      "Set OWNER, REPO, and PULL_NUMBER in the environment for local use."
+      "Set OWNER, REPO, and PULL_NUMBER in the environment for local use.",
     );
   });
 
