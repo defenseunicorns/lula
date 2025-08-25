@@ -1,6 +1,6 @@
 # Contributor Guide
 
-Thank you for your interest in contributing to Kubernetes Fluent Client! We welcome all contributions and are grateful for your help. This guide outlines how to get started with contributing to this project.
+Thank you for your interest in contributing to Lula Next! We welcome all contributions and are grateful for your help. This guide outlines how to get started with contributing to this project.
 
 ## Table of Contents
 
@@ -22,14 +22,14 @@ Please follow our [Code of Conduct](./CODE_OF_CONDUCT.md) to maintain a respectf
 
 ## Getting Started
 
-- **Repository**: [https://github.com/defenseunicorns/kubernetes-fluent-client/](https://github.com/defenseunicorns/kubernetes-fluent-client/)
-- **npm package**: [https://www.npmjs.com/package/kubernetes-fluent-client](https://www.npmjs.com/package/kubernetes-fluent-client)
+- **Repository**: [https://github.com/defenseunicorns/lula-next](https://github.com/defenseunicorns/lula-next)
+- **npm package**: [https://www.npmjs.com/package/lula-next](https://www.npmjs.com/package/lula-next)
 - **Required Node version**: `>=20.0.0`
 
 ### Setup
 
 1. Fork the repository.
-2. Clone your fork locally: `git clone https://github.com/your-username/kubernetes-fluent-client.git`.
+2. Clone your fork locally: `git clone https://github.com/your-username/lula-next.git`.
 3. Install dependencies: `npm ci`.
 4. Create a new branch for your feature or fix: `git checkout -b my-feature-branch`.
 
@@ -39,7 +39,7 @@ Please follow our [Code of Conduct](./CODE_OF_CONDUCT.md) to maintain a respectf
 2. **Commit Your Changes**: Make your changes and commit them. All commits must be signed.
 3. **Run Tests**: Ensure that your changes pass all tests by running unit tests (`npm test`) and integration tests (`test:e2e:run`).
 4. **Push Your Branch**: Push your branch to your fork on GitHub.
-5. **Create a Pull Request**: Open a pull request against the `main` branch of the Kubernetes Fluent Client repository. Please make sure that your PR passes all CI checks.
+5. **Create a Pull Request**: Open a pull request against the `main` branch of the Lula Next repository. Please make sure that your PR passes all CI checks.
 
 ### PR Requirements
 
