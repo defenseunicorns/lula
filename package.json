@@ -1,7 +1,7 @@
 {
   "name": "lula2",
   "version": "0.0.0-development",
-  "description": "Reports Reports and exports compliance status for defined controls.",
+  "description": "A tool for managing compliance as code in your GitHub repositories.",
   "bin": "./dist/index.js",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
