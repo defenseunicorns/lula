@@ -13,6 +13,7 @@ jobs:
   title_check:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: read
 
     steps:
@@ -21,19 +22,19 @@ jobs:
         with:
           egress-policy: audit
 
-      # - name: Checkout
-      #   uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      #   with:
-      #     fetch-depth: 0
+      - name: Checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          fetch-depth: 0
 
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
 
-      # - name: Install commitlint
-      #   run: npm install --save-dev @commitlint/{config-conventional,cli}
+      - name: Install commitlint
+        run: npm install --save-dev @commitlint/{config-conventional,cli}
 
-      # - name: Lint PR title
-      #   if: ${{ github.event.pull_request && github.event.pull_request.title }}
-      #   env:
-      #     PR_TITLE: ${{ github.event.pull_request.title }}
-      #   run: echo "$PR_TITLE" | npx commitlint
+      - name: Lint PR title
+        if: ${{ github.event.pull_request && github.event.pull_request.title }}
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: echo "$PR_TITLE" | npx commitlint
