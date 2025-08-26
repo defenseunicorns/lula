@@ -6,5 +6,5 @@
  */
 
 export function hasAssessmentObjectives(objectives: any[] | null | undefined): boolean {
-  return !!(objectives && Array.isArray(objectives) && objectives.length > 0);
+	return !!(objectives && Array.isArray(objectives) && objectives.length > 0);
 }

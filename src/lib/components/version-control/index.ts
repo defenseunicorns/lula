@@ -4,4 +4,3 @@
 export { default as DiffViewer } from './DiffViewer.svelte';
 export { default as TimelineItem } from './TimelineItem.svelte';
 export { default as YamlDiffViewer } from './YamlDiffViewer.svelte';
-

@@ -9,123 +9,122 @@ import { join } from 'path';
 import * as YAML from 'yaml';
 
 interface CleanOptions {
-  baseDir: string;
-  dryRun?: boolean;
+	baseDir: string;
+	dryRun?: boolean;
 }
 
 async function cleanMetadata(options: CleanOptions) {
-  const { baseDir, dryRun = false } = options;
-  const controlsDir = join(baseDir, 'controls');
+	const { baseDir, dryRun = false } = options;
+	const controlsDir = join(baseDir, 'controls');
 
-  if (!existsSync(controlsDir)) {
-    console.log('No controls directory found, nothing to clean');
-    return;
-  }
+	if (!existsSync(controlsDir)) {
+		console.log('No controls directory found, nothing to clean');
+		return;
+	}
 
-  console.log(`🧹 Cleaning metadata in: ${controlsDir}`);
-  console.log(`📋 Dry run mode: ${dryRun ? 'ON' : 'OFF'}`);
+	console.log(`🧹 Cleaning metadata in: ${controlsDir}`);
+	console.log(`📋 Dry run mode: ${dryRun ? 'ON' : 'OFF'}`);
 
-  let cleanedCount = 0;
-  let skippedCount = 0;
-  let errorCount = 0;
+	let cleanedCount = 0;
+	let skippedCount = 0;
+	let errorCount = 0;
 
-  // Read all family directories
-  const families = readdirSync(controlsDir).filter(name => {
-    const familyPath = join(controlsDir, name);
-    return statSync(familyPath).isDirectory();
-  });
+	// Read all family directories
+	const families = readdirSync(controlsDir).filter((name) => {
+		const familyPath = join(controlsDir, name);
+		return statSync(familyPath).isDirectory();
+	});
 
-  for (const family of families) {
-    const familyPath = join(controlsDir, family);
-    const files = readdirSync(familyPath).filter(file => file.endsWith('.yaml'));
+	for (const family of families) {
+		const familyPath = join(controlsDir, family);
+		const files = readdirSync(familyPath).filter((file) => file.endsWith('.yaml'));
 
-    console.log(`\n📁 Processing family: ${family} (${files.length} files)`);
+		console.log(`\n📁 Processing family: ${family} (${files.length} files)`);
 
-    for (const filename of files) {
-      const filePath = join(familyPath, filename);
-      
-      try {
-        // Read the file
-        const content = readFileSync(filePath, 'utf8');
-        const parsed = YAML.parse(content);
+		for (const filename of files) {
+			const filePath = join(familyPath, filename);
 
-        if (!parsed._metadata) {
-          console.log(`  ⏭️  Skipping (no metadata): ${filename}`);
-          skippedCount++;
-          continue;
-        }
+			try {
+				// Read the file
+				const content = readFileSync(filePath, 'utf8');
+				const parsed = YAML.parse(content);
 
-        // Check if we need to clean anything
-        const needsCleaning = parsed._metadata.shortId || parsed._metadata.lastModified;
-        
-        if (!needsCleaning) {
-          console.log(`  ⏭️  Skipping (already clean): ${filename}`);
-          skippedCount++;
-          continue;
-        }
+				if (!parsed._metadata) {
+					console.log(`  ⏭️  Skipping (no metadata): ${filename}`);
+					skippedCount++;
+					continue;
+				}
 
-        console.log(`  🧹 Cleaning: ${filename}`);
+				// Check if we need to clean anything
+				const needsCleaning = parsed._metadata.shortId || parsed._metadata.lastModified;
 
-        if (!dryRun) {
-          // Remove unwanted metadata fields
-          delete parsed._metadata.shortId;
-          delete parsed._metadata.lastModified;
+				if (!needsCleaning) {
+					console.log(`  ⏭️  Skipping (already clean): ${filename}`);
+					skippedCount++;
+					continue;
+				}
 
-          // Ensure we have the essential metadata
-          if (!parsed._metadata.controlId && parsed.id) {
-            parsed._metadata.controlId = parsed.id;
-          }
-          if (!parsed._metadata.family) {
-            parsed._metadata.family = family;
-          }
+				console.log(`  🧹 Cleaning: ${filename}`);
 
-          // Write back to file
-          const yamlContent = YAML.stringify(parsed, {
-            indent: 2,
-            lineWidth: 0,
-            minContentWidth: 0
-          });
+				if (!dryRun) {
+					// Remove unwanted metadata fields
+					delete parsed._metadata.shortId;
+					delete parsed._metadata.lastModified;
 
-          writeFileSync(filePath, yamlContent, 'utf8');
-        }
+					// Ensure we have the essential metadata
+					if (!parsed._metadata.controlId && parsed.id) {
+						parsed._metadata.controlId = parsed.id;
+					}
+					if (!parsed._metadata.family) {
+						parsed._metadata.family = family;
+					}
 
-        cleanedCount++;
+					// Write back to file
+					const yamlContent = YAML.stringify(parsed, {
+						indent: 2,
+						lineWidth: 0,
+						minContentWidth: 0
+					});
 
-      } catch (error) {
-        console.log(`  ❌ Error processing ${filename}: ${error}`);
-        errorCount++;
-      }
-    }
-  }
+					writeFileSync(filePath, yamlContent, 'utf8');
+				}
 
-  console.log(`\n📊 Cleaning Summary:`);
-  console.log(`  🧹 Cleaned: ${cleanedCount}`);
-  console.log(`  ⏭️  Skipped: ${skippedCount}`);
-  console.log(`  ❌ Errors: ${errorCount}`);
+				cleanedCount++;
+			} catch (error) {
+				console.log(`  ❌ Error processing ${filename}: ${error}`);
+				errorCount++;
+			}
+		}
+	}
 
-  if (dryRun) {
-    console.log(`\n🧪 This was a dry run. Run without --dry-run to perform actual cleaning.`);
-  } else {
-    console.log(`\n✨ Metadata cleaning completed!`);
-  }
+	console.log(`\n📊 Cleaning Summary:`);
+	console.log(`  🧹 Cleaned: ${cleanedCount}`);
+	console.log(`  ⏭️  Skipped: ${skippedCount}`);
+	console.log(`  ❌ Errors: ${errorCount}`);
+
+	if (dryRun) {
+		console.log(`\n🧪 This was a dry run. Run without --dry-run to perform actual cleaning.`);
+	} else {
+		console.log(`\n✨ Metadata cleaning completed!`);
+	}
 }
 
 // CLI interface
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const baseDir = process.argv[2] || './examples/nist-800-53-rev4';
-  const dryRun = process.argv.includes('--dry-run');
+	const baseDir = process.argv[2] || './examples/nist-800-53-rev4';
+	const dryRun = process.argv.includes('--dry-run');
 
-  console.log('🧹 Metadata Cleaning Tool');
-  console.log('========================\n');
+	console.log('🧹 Metadata Cleaning Tool');
+	console.log('========================\n');
 
-  cleanMetadata({ baseDir, dryRun })
-    .then(() => {
-      console.log('\n✅ Cleaning script completed');
-    })
-    .catch(error => {
-      console.error('\n❌ Cleaning failed:', error);
-      process.exit(1);
-    });
+	cleanMetadata({ baseDir, dryRun })
+		.then(() => {
+			console.log('\n✅ Cleaning script completed');
+		})
+		.catch((error) => {
+			console.error('\n❌ Cleaning failed:', error);
+			process.exit(1);
+		});
 }
 
 export { cleanMetadata };

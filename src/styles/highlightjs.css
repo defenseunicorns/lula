@@ -5,16 +5,16 @@
 @reference "tailwindcss";
 
 @layer components {
-  .hljs-attr {
-    color: #33bbc8 !important;
-  }
+	.hljs-attr {
+		color: #33bbc8 !important;
+	}
 
-  .hljs-code,
-  .hljs-addition,
-  .hljs-title.class_.inherited__,
-  .hljs-number,
-  .hljs-literal,
-  .hljs-string {
-    color: #d338d3 !important;
-  }
+	.hljs-code,
+	.hljs-addition,
+	.hljs-title.class_.inherited__,
+	.hljs-number,
+	.hljs-literal,
+	.hljs-string {
+		color: #d338d3 !important;
+	}
 }

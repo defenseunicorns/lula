@@ -1,1 +1,45 @@
-import"../chunks/DsnmJJEf.js";import"../chunks/BXb1rXVW.js";import{f,a as y,b as n,c as t,r,s as w,n as C}from"../chunks/BnKEWqYI.js";import{i as k,s as $,a as D}from"../chunks/Du6_yM1O.js";import{C as S,a as j,D as L}from"../chunks/BV0VOAYG.js";import{s as N}from"../chunks/CD9Q30NH.js";var P=f('<div class=" h-full flex flex-col"><div class="flex-1 flex items-center justify-center p-8"><div class="text-center text-gray-500 dark:text-gray-400"><!> <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Control Selected</h3> <p class="text-gray-600 dark:text-gray-400">Select a control from the list to view and edit its details</p></div></div></div>'),q=f('<div class="w-1/2 flex flex-col"><div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm h-full flex flex-col"><!></div></div> <div class="w-1/2 flex flex-col"><!></div>',1);function H(m){const[x,g]=$(),o=()=>D(N,"$selectedControl",x);var l=q(),a=y(l),i=t(a),p=t(i);S(p,{}),r(i),r(a);var d=w(a,2),_=t(d);{var h=e=>{j(e,{get control(){return o()}})},b=e=>{var s=P(),c=t(s),v=t(c),u=t(v);L(u,{class:"mx-auto h-16 w-16 mb-4"}),C(4),r(v),r(c),r(s),n(e,s)};k(_,e=>{o()?e(h):e(b,!1)})}r(d),n(m,l),g()}export{H as component};
+import '../chunks/DsnmJJEf.js';
+import '../chunks/BXb1rXVW.js';
+import { f, a as y, b as n, c as t, r, s as w, n as C } from '../chunks/BnKEWqYI.js';
+import { i as k, s as $, a as D } from '../chunks/Du6_yM1O.js';
+import { C as S, a as j, D as L } from '../chunks/BV0VOAYG.js';
+import { s as N } from '../chunks/CD9Q30NH.js';
+var P = f(
+		'<div class=" h-full flex flex-col"><div class="flex-1 flex items-center justify-center p-8"><div class="text-center text-gray-500 dark:text-gray-400"><!> <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No Control Selected</h3> <p class="text-gray-600 dark:text-gray-400">Select a control from the list to view and edit its details</p></div></div></div>'
+	),
+	q = f(
+		'<div class="w-1/2 flex flex-col"><div class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm h-full flex flex-col"><!></div></div> <div class="w-1/2 flex flex-col"><!></div>',
+		1
+	);
+function H(m) {
+	const [x, g] = $(),
+		o = () => D(N, '$selectedControl', x);
+	var l = q(),
+		a = y(l),
+		i = t(a),
+		p = t(i);
+	(S(p, {}), r(i), r(a));
+	var d = w(a, 2),
+		_ = t(d);
+	{
+		var h = (e) => {
+				j(e, {
+					get control() {
+						return o();
+					}
+				});
+			},
+			b = (e) => {
+				var s = P(),
+					c = t(s),
+					v = t(c),
+					u = t(v);
+				(L(u, { class: 'mx-auto h-16 w-16 mb-4' }), C(4), r(v), r(c), r(s), n(e, s));
+			};
+		k(_, (e) => {
+			o() ? e(h) : e(b, !1);
+		});
+	}
+	(r(d), n(m, l), g());
+}
+export { H as component };

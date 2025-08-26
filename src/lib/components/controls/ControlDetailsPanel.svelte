@@ -622,9 +622,7 @@
 					</p>
 				</div>
 				<div class="p-6">
-					<div
-						class="prose prose-sm dark:prose-invert max-w-none"
-					>
+					<div class="prose prose-sm dark:prose-invert max-w-none">
 						<p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
 							{editedControl['implementation-guidance']}
 						</p>
@@ -641,7 +639,8 @@
 				<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
 					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Assessment Objectives</h3>
 					<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-						A set of determination statements that expresses the desired outcome for the assessment of a security control, privacy control, or control enhancement.
+						A set of determination statements that expresses the desired outcome for the assessment
+						of a security control, privacy control, or control enhancement.
 					</p>
 				</div>
 				<div class="p-6">
@@ -698,7 +697,8 @@
 				<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
 					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Assessment Procedures</h3>
 					<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-						A set of assessment objectives and an associated set of assessment methods and assessment objects.
+						A set of assessment objectives and an associated set of assessment methods and
+						assessment objects.
 					</p>
 				</div>
 				<div class="p-6">
@@ -872,7 +872,9 @@
 						<p class="text-sm font-medium text-gray-900 dark:text-white leading-relaxed">{key}</p>
 					{:else if depth === 1}
 						<div class="flex-shrink-0 w-1.5 h-1.5 bg-gray-500 rounded-full mt-2"></div>
-						<p class="text-sm font-medium text-gray-800 dark:text-gray-200 leading-relaxed">{key}</p>
+						<p class="text-sm font-medium text-gray-800 dark:text-gray-200 leading-relaxed">
+							{key}
+						</p>
 					{:else}
 						<div class="flex-shrink-0 w-1 h-1 bg-gray-400 rounded-full mt-2"></div>
 						<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{key}</p>

@@ -135,7 +135,7 @@ id: AC-1
 control-acronym: AC-1
 control-information: |
   Title: Access Control Policy and Procedures
-  
+
   Statement: The organization develops, documents...
 control-implementation-status: Not Implemented
 # ... additional fields

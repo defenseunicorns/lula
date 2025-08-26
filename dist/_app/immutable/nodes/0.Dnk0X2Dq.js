@@ -1,1 +1,143 @@
-import"../chunks/DsnmJJEf.js";import{ab as D,m as I,ac as M,ad as A,a as G,b as r,o as N,S as E,ae as H,A as J,f,c as t,s as b,r as s,F as C,G as F,af as K}from"../chunks/BnKEWqYI.js";import{p as O,i as g,s as P,a as Q}from"../chunks/Du6_yM1O.js";import{a as R,s as T,l as U}from"../chunks/CD9Q30NH.js";D(["change"]);var V=f('<div class="text-sm text-gray-500 dark:text-gray-400">Loading...</div>'),W=f('<span class="font-normal text-gray-600 dark:text-gray-300"> </span>'),X=f('<div class="text-gray-600 dark:text-gray-400 mt-1"> </div>'),Y=f('<div class="text-sm"><div class="font-medium text-gray-900 dark:text-white"> <!></div> <!></div>'),Z=f('<div class="text-sm text-gray-500 dark:text-gray-400">No control set info</div>');function $(k,m){I(m,!0);let o=O(m,"controlSet",15,null),_=H(!0);M(async()=>{try{const a=await fetch("/api/control-set");a.ok&&o(await a.json())}catch(a){console.error("Failed to load control set info:",a)}finally{E(_,!1)}});var u=A(),p=G(u);{var x=a=>{var l=V();r(a,l)},h=a=>{var l=A(),w=G(l);{var y=i=>{var d=Y(),e=t(d),v=t(e),j=b(v);{var q=n=>{var c=W(),L=t(c,!0);s(c),C(()=>F(L,o().version)),r(n,c)};g(j,n=>{o().version&&n(q)})}s(e);var z=b(e,2);{var B=n=>{var c=X(),L=t(c,!0);s(c),C(()=>F(L,o().description)),r(n,c)};g(z,n=>{o().description&&n(B)})}s(d),C(()=>F(v,`${o().name??""} `)),r(i,d)},S=i=>{var d=Z();r(i,d)};g(w,i=>{o()?i(y):i(S,!1)},!0)}r(a,l)};g(p,a=>{J(_)?a(x):a(h,!1)})}r(k,u),N()}var aa=f('<div class="flex-1 flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>'),ea=f('<div class="h-screen flex flex-col"><header class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 flex-shrink-0"><div class="w-full px-4 sm:px-6 lg:px-8"><div class="flex justify-between items-center py-4"><a href="/" class="ml-1 flex sm:ml-2 md:mr-4"><img src="/lula.png" class="mr-1 block h-8 sm:mr-4" alt="Logo"/> <span class="text-md self-center font-semibold whitespace-nowrap text-gray-100 md:text-2xl">Lula</span></a> <div class="flex items-center space-x-4"><!></div></div></div></header> <div class="flex-1 flex gap-6 p-6 overflow-hidden"><!></div></div>');function ia(k,m){I(m,!0);const[o,_]=P(),u=()=>Q(U,"$loading",o);M(()=>{R.init(),T.set(null)});var p=ea(),x=t(p),h=t(x),a=t(h),l=b(t(a),2),w=t(l);$(w,{}),s(l),s(a),s(h),s(x);var y=b(x,2),S=t(y);{var i=e=>{var v=aa();r(e,v)},d=e=>{var v=A(),j=G(v);K(j,()=>m.children),r(e,v)};g(S,e=>{u()?e(i):e(d,!1)})}s(y),s(p),r(k,p),N(),_()}export{ia as component};
+import '../chunks/DsnmJJEf.js';
+import {
+	ab as D,
+	m as I,
+	ac as M,
+	ad as A,
+	a as G,
+	b as r,
+	o as N,
+	S as E,
+	ae as H,
+	A as J,
+	f,
+	c as t,
+	s as b,
+	r as s,
+	F as C,
+	G as F,
+	af as K
+} from '../chunks/BnKEWqYI.js';
+import { p as O, i as g, s as P, a as Q } from '../chunks/Du6_yM1O.js';
+import { a as R, s as T, l as U } from '../chunks/CD9Q30NH.js';
+D(['change']);
+var V = f('<div class="text-sm text-gray-500 dark:text-gray-400">Loading...</div>'),
+	W = f('<span class="font-normal text-gray-600 dark:text-gray-300"> </span>'),
+	X = f('<div class="text-gray-600 dark:text-gray-400 mt-1"> </div>'),
+	Y = f(
+		'<div class="text-sm"><div class="font-medium text-gray-900 dark:text-white"> <!></div> <!></div>'
+	),
+	Z = f('<div class="text-sm text-gray-500 dark:text-gray-400">No control set info</div>');
+function $(k, m) {
+	I(m, !0);
+	let o = O(m, 'controlSet', 15, null),
+		_ = H(!0);
+	M(async () => {
+		try {
+			const a = await fetch('/api/control-set');
+			a.ok && o(await a.json());
+		} catch (a) {
+			console.error('Failed to load control set info:', a);
+		} finally {
+			E(_, !1);
+		}
+	});
+	var u = A(),
+		p = G(u);
+	{
+		var x = (a) => {
+				var l = V();
+				r(a, l);
+			},
+			h = (a) => {
+				var l = A(),
+					w = G(l);
+				{
+					var y = (i) => {
+							var d = Y(),
+								e = t(d),
+								v = t(e),
+								j = b(v);
+							{
+								var q = (n) => {
+									var c = W(),
+										L = t(c, !0);
+									(s(c), C(() => F(L, o().version)), r(n, c));
+								};
+								g(j, (n) => {
+									o().version && n(q);
+								});
+							}
+							s(e);
+							var z = b(e, 2);
+							{
+								var B = (n) => {
+									var c = X(),
+										L = t(c, !0);
+									(s(c), C(() => F(L, o().description)), r(n, c));
+								};
+								g(z, (n) => {
+									o().description && n(B);
+								});
+							}
+							(s(d), C(() => F(v, `${o().name ?? ''} `)), r(i, d));
+						},
+						S = (i) => {
+							var d = Z();
+							r(i, d);
+						};
+					g(
+						w,
+						(i) => {
+							o() ? i(y) : i(S, !1);
+						},
+						!0
+					);
+				}
+				r(a, l);
+			};
+		g(p, (a) => {
+			J(_) ? a(x) : a(h, !1);
+		});
+	}
+	(r(k, u), N());
+}
+var aa = f(
+		'<div class="flex-1 flex justify-center items-center"><div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>'
+	),
+	ea = f(
+		'<div class="h-screen flex flex-col"><header class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 flex-shrink-0"><div class="w-full px-4 sm:px-6 lg:px-8"><div class="flex justify-between items-center py-4"><a href="/" class="ml-1 flex sm:ml-2 md:mr-4"><img src="/lula.png" class="mr-1 block h-8 sm:mr-4" alt="Logo"/> <span class="text-md self-center font-semibold whitespace-nowrap text-gray-100 md:text-2xl">Lula</span></a> <div class="flex items-center space-x-4"><!></div></div></div></header> <div class="flex-1 flex gap-6 p-6 overflow-hidden"><!></div></div>'
+	);
+function ia(k, m) {
+	I(m, !0);
+	const [o, _] = P(),
+		u = () => Q(U, '$loading', o);
+	M(() => {
+		(R.init(), T.set(null));
+	});
+	var p = ea(),
+		x = t(p),
+		h = t(x),
+		a = t(h),
+		l = b(t(a), 2),
+		w = t(l);
+	($(w, {}), s(l), s(a), s(h), s(x));
+	var y = b(x, 2),
+		S = t(y);
+	{
+		var i = (e) => {
+				var v = aa();
+				r(e, v);
+			},
+			d = (e) => {
+				var v = A(),
+					j = G(v);
+				(K(j, () => m.children), r(e, v));
+			};
+		g(S, (e) => {
+			u() ? e(i) : e(d, !1);
+		});
+	}
+	(s(y), s(p), r(k, p), N(), _());
+}
+export { ia as component };

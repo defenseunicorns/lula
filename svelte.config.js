@@ -1,6 +1,6 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
-import { optimizeImports } from 'carbon-preprocess-svelte'
+import { optimizeImports } from 'carbon-preprocess-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -16,9 +16,9 @@ const config = {
 		alias: {
 			$components: './src/lib/components',
 			$features: './src/lib/features',
-			$stores: './src/stores',
-		},
-	},
+			$stores: './src/stores'
+		}
+	}
 };
 
 export default config;

@@ -26,7 +26,11 @@
 
 			if ($selectedFamily) {
 				results = results.filter((c) => {
-					const family = (c as any)?._metadata?.family || (c as any)?.family || (c as any)?.['control-acronym']?.split('-')[0] || '';
+					const family =
+						(c as any)?._metadata?.family ||
+						(c as any)?.family ||
+						(c as any)?.['control-acronym']?.split('-')[0] ||
+						'';
 					return family === $selectedFamily;
 				});
 			}
@@ -141,7 +145,11 @@
 
 							{#each $families as family}
 								{@const familyCount = $controls.filter((c) => {
-									const controlFamily = (c as any)?._metadata?.family || (c as any)?.family || (c as any)?.['control-acronym']?.split('-')[0] || '';
+									const controlFamily =
+										(c as any)?._metadata?.family ||
+										(c as any)?.family ||
+										(c as any)?.['control-acronym']?.split('-')[0] ||
+										'';
 									return controlFamily === family;
 								}).length}
 								<button
@@ -205,13 +213,19 @@
 		<div class="flex-1 overflow-auto">
 			<div class="divide-y divide-gray-200 dark:divide-gray-700">
 				{#each $filteredControlsWithMappings as control}
-					{@const rawDescription = control['control-information'] || control['cci-definition'] || control['implementation-guidance'] || control.title || 'No description available'}
+					{@const rawDescription =
+						control['control-information'] ||
+						control['cci-definition'] ||
+						control['implementation-guidance'] ||
+						control.title ||
+						'No description available'}
 					{@const description = extractDescriptionFromNested(rawDescription)}
-					{@const cleanDescription = description
-						.replace(/^(a\.|b\.|1\.|2\.|\s|The organization:)+/, '')
-						.replace(/\s+/g, ' ')
-						.trim()
-						.substring(0, 200) + (description.length > 200 ? '...' : '')}
+					{@const cleanDescription =
+						description
+							.replace(/^(a\.|b\.|1\.|2\.|\s|The organization:)+/, '')
+							.replace(/\s+/g, ' ')
+							.trim()
+							.substring(0, 200) + (description.length > 200 ? '...' : '')}
 					<div
 						class="grid grid-cols-5 gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-all duration-150 {$selectedControl?.id ===
 						control.id
@@ -235,15 +249,17 @@
 						<!-- Title Column -->
 						<div class="flex flex-col justify-center">
 							<div class="text-sm text-gray-900 dark:text-white font-medium">
-								{control.title || (control['control-information'] ? 
-									(Array.isArray(control['control-information']) ? 
-										(typeof control['control-information'][0] === 'string' ? 
-											control['control-information'][0]?.trim() || 'No Title' :
-											typeof control['control-information'][0] === 'object' ? 
-												Object.keys(control['control-information'][0])[0]?.replace(/:$/, '') || 'No Title' :
-												'No Title') : 
-										control['control-information'].split('\n')[0].trim()) : 
-									'No Title')}
+								{control.title ||
+									(control['control-information']
+										? Array.isArray(control['control-information'])
+											? typeof control['control-information'][0] === 'string'
+												? control['control-information'][0]?.trim() || 'No Title'
+												: typeof control['control-information'][0] === 'object'
+													? Object.keys(control['control-information'][0])[0]?.replace(/:$/, '') ||
+														'No Title'
+													: 'No Title'
+											: control['control-information'].split('\n')[0].trim()
+										: 'No Title')}
 							</div>
 						</div>
 						<!-- Statement Column -->
@@ -254,7 +270,9 @@
 						</div>
 						<!-- Family Column -->
 						<div class="flex items-center justify-center">
-							<span class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
+							<span
+								class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+							>
 								{(control.family || control['control-acronym']?.split('-')[0] || '').toUpperCase()}
 							</span>
 						</div>
