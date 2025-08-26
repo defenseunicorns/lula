@@ -11,9 +11,9 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as readline from 'readline';
-import { FrameworkResolver, FrameworkInfo } from '../frameworks/resolver.js';
-import { AtomicProcessor } from '../processors/atomicProcessor.js';
-import { AtomicImportOptions } from '../types/atomicControl.js';
+import { FrameworkResolver, FrameworkInfo } from '../frameworks/resolver';
+import { AtomicProcessor } from '../processors/atomicProcessor';
+import { AtomicImportOptions } from '../types/atomicControl';
 
 export interface InitOptions {
 	framework?: string;

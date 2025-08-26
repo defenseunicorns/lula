@@ -1,5 +1,5 @@
-import { AtomicProcessor } from '../processors/atomicProcessor.js';
-import { AtomicImportOptions } from '../types/atomicControl.js';
+import { AtomicProcessor } from '../processors/atomicProcessor';
+import { AtomicImportOptions } from '../types/atomicControl';
 import * as path from 'path';
 
 export interface ImportOptions {

@@ -11,15 +11,15 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { stringify as yamlStringify } from 'yaml';
-import { BundledCCIProcessor } from './bundledCciProcessor.js';
+import { BundledCCIProcessor } from './bundledCciProcessor';
 import {
 	AtomicControl,
 	CCIControl,
 	ControlFramework,
 	AtomicImportOptions,
 	AtomicControlType
-} from '../types/atomicControl.js';
-import { OSCALCatalog, OSCALProfile } from '../oscal/types.js';
+} from '../types/atomicControl';
+import { OSCALCatalog, OSCALProfile } from '../oscal/types';
 
 export class AtomicProcessor {
 	private cciProcessor: BundledCCIProcessor;

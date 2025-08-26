@@ -70,10 +70,4 @@
 			</svg>
 		</button>
 	{/if}
-
-	{#if $searchTerm}
-		<div class="absolute top-full mt-1 text-sm text-gray-600 dark:text-gray-300">
-			{$filteredControls.length} results found
-		</div>
-	{/if}
 </div>

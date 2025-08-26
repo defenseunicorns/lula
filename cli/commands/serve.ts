@@ -1,4 +1,4 @@
-import { startServer } from '../index.js';
+import { startServer } from '..';
 
 export interface ServeOptions {
 	dir: string;

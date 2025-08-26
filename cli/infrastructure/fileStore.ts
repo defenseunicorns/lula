@@ -9,15 +9,15 @@
 import {
 	existsSync,
 	mkdirSync,
-	readFileSync,
-	writeFileSync,
 	readdirSync,
+	readFileSync,
 	statSync,
-	unlinkSync
+	unlinkSync,
+	writeFileSync
 } from 'fs';
-import { join, dirname } from 'path';
+import { join } from 'path';
 import * as YAML from 'yaml';
-import type { Control, Mapping } from '../types/index.js';
+import type { Control, Mapping } from '../types';
 
 export interface ControlMetadata {
 	controlId: string;

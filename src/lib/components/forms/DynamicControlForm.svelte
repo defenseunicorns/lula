@@ -2,8 +2,8 @@
 <!-- SPDX-FileCopyrightText: 2023-Present The Lula Authors -->
 
 <script lang="ts">
-	import type { Control } from '$lib/types.js';
-	import type { ControlSchema, ValidationResult } from '$lib/form-types.js';
+	import type { Control } from '$lib/types';
+	import type { ControlSchema, ValidationResult } from '$lib/form-types';
 	import DynamicField from './DynamicField.svelte';
 
 	interface Props {

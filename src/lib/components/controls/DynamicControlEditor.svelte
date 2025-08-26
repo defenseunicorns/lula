@@ -3,8 +3,8 @@
 
 <script lang="ts">
 	import { DynamicControlForm } from '$components/forms';
-	import type { ControlSchema, ValidationResult } from '$lib/form-types.js';
-	import type { Control } from '$lib/types.js';
+	import type { ControlSchema, ValidationResult } from '$lib/form-types';
+	import type { Control } from '$lib/types';
 	import { mappings } from '$stores/compliance';
 
 	interface Props {

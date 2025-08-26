@@ -35,10 +35,6 @@ class ApiClient {
 		return this.request('/api/data/all');
 	}
 
-	async getControls(): Promise<Control[]> {
-		return this.request('/api/controls');
-	}
-
 	async getControl(id: string): Promise<Control> {
 		return this.request(`/api/controls/${id}`);
 	}
@@ -48,20 +44,6 @@ class ApiClient {
 			method: 'PUT',
 			body: JSON.stringify(control)
 		});
-	}
-
-	async deleteControl(id: string): Promise<{ success: boolean }> {
-		return this.request(`/api/controls/${id}`, {
-			method: 'DELETE'
-		});
-	}
-
-	async getMappings(): Promise<Mapping[]> {
-		return this.request('/api/mappings');
-	}
-
-	async getMapping(uuid: string): Promise<Mapping> {
-		return this.request(`/api/mappings/${uuid}`);
 	}
 
 	async createMapping(mapping: Omit<Mapping, 'uuid' | 'created_at'>): Promise<Mapping> {
@@ -86,10 +68,6 @@ class ApiClient {
 
 	async search(query: string): Promise<SearchResult> {
 		return this.request(`/api/search?q=${encodeURIComponent(query)}`);
-	}
-
-	async getStats(): Promise<Stats> {
-		return this.request('/api/stats');
 	}
 
 	async getControlSet(): Promise<ControlSet> {
@@ -122,57 +100,6 @@ class ApiClient {
 		}
 	}
 
-	async getControlHistory(id: string, limit?: number): Promise<GitFileHistory> {
-		const params = limit ? `?limit=${limit}` : '';
-		return this.request(`/api/controls/${id}/history${params}`);
-	}
-
-	async getControlWithHistory(id: string, limit?: number): Promise<ControlWithHistory> {
-		const params = limit ? `?limit=${limit}` : '';
-		return this.request(`/api/controls/${id}/with-history${params}`);
-	}
-
-	async getGitStats(): Promise<{
-		totalCommits: number;
-		contributors: number;
-		lastCommitDate: string | null;
-		firstCommitDate: string | null;
-	}> {
-		return this.request('/api/git/stats');
-	}
-
-	async getMappingHistory(controlId: string, limit: number = 20): Promise<GitFileHistory> {
-		return this.request(`/api/mappings/${controlId}/history?limit=${limit}`);
-	}
-
-	async getControlComplete(id: string, limit?: number): Promise<ControlCompleteData> {
-		const params = limit ? `?limit=${limit}` : '';
-		return this.request(`/api/controls/${id}/complete${params}`);
-	}
-
-	async getFileContentAtCommit(
-		commitHash: string,
-		type: 'control' | 'mapping',
-		controlId?: string,
-		family?: string
-	): Promise<{ filePath: string; commitHash: string; content: string | null }> {
-		let url = `/api/git/file/${commitHash}/${type}`;
-
-		if (type === 'mapping' && family) {
-			url += `/${family}`;
-		}
-
-		const params = new URLSearchParams();
-		if (controlId) {
-			params.append('controlId', controlId);
-		}
-
-		if (params.toString()) {
-			url += `?${params.toString()}`;
-		}
-
-		return this.request(url);
-	}
 }
 
 export const api = new ApiClient();

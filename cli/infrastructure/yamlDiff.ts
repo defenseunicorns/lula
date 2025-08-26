@@ -260,7 +260,7 @@ function generateSummary(changes: YamlDiffChange[]): string {
 	const removed = changes.filter((c) => c.type === 'removed').length;
 	const modified = changes.filter((c) => c.type === 'modified').length;
 
-	const parts = [];
+	const parts: string[] = [];
 	if (added > 0) parts.push(`${added} added`);
 	if (removed > 0) parts.push(`${removed} removed`);
 	if (modified > 0) parts.push(`${modified} modified`);

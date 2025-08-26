@@ -7,7 +7,7 @@
  * Lists available bundled compliance frameworks and their details.
  */
 
-import { FrameworkResolver } from '../frameworks/resolver.js';
+import { FrameworkResolver } from '../frameworks/resolver';
 
 export class FrameworksCommand {
 	private frameworkResolver: FrameworkResolver;

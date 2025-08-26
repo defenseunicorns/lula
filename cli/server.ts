@@ -5,9 +5,9 @@ import express from 'express';
 import { existsSync, mkdirSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import apiRoutes from './apiRoutes.js';
-import gitRoutes from './gitRoutes.js';
-import { initializeServerState, loadAllData, saveMappingsToFile } from './serverState.js';
+import apiRoutes from './apiRoutes';
+import gitRoutes from './gitRoutes';
+import { initializeServerState, loadAllData, saveMappingsToFile } from './serverState';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

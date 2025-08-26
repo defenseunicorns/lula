@@ -11,8 +11,8 @@ import {
 	addControlToIndexes,
 	addMappingToIndexes,
 	saveMappingsToFile
-} from './serverState.js';
-import type { Control } from './types/index.js';
+} from './serverState';
+import type { Control } from './types';
 
 // Transform control for UI compatibility (map definition to statement)
 function transformControlForUI(control: Control): Control {
@@ -40,19 +40,6 @@ router.get('/data/all', (req: Request, res: Response) => {
 		);
 
 		res.json({ controls: allControls, mappings: allMappings });
-	} catch (error) {
-		res.status(500).json({ error: (error as Error).message });
-	}
-});
-
-// Controls endpoints
-router.get('/controls', (req: Request, res: Response) => {
-	try {
-		const state = getServerState();
-		const allControls = Array.from(state.controlsCache.values())
-			.sort((a, b) => a.id.localeCompare(b.id))
-			.map(transformControlForUI);
-		res.json(allControls);
 	} catch (error) {
 		res.status(500).json({ error: (error as Error).message });
 	}
@@ -94,55 +81,6 @@ router.put('/controls/:id', async (req: Request, res: Response) => {
 		addControlToIndexes(control);
 
 		res.json(control);
-	} catch (error) {
-		res.status(500).json({ error: (error as Error).message });
-	}
-});
-
-router.delete('/controls/:id', async (req: Request, res: Response) => {
-	try {
-		const state = getServerState();
-		const control = state.controlsCache.get(req.params.id);
-		if (!control) {
-			return res.status(404).json({ error: 'Control not found' });
-		}
-
-		const family = control.family;
-
-		// Delete from file store
-		await state.fileStore.deleteControl(req.params.id);
-
-		// Remove from caches
-		state.controlsCache.delete(req.params.id);
-		state.controlsByFamily.get(family)?.delete(req.params.id);
-
-		res.json({ success: true });
-	} catch (error) {
-		res.status(500).json({ error: (error as Error).message });
-	}
-});
-
-// Mappings endpoints
-router.get('/mappings', (req: Request, res: Response) => {
-	try {
-		const state = getServerState();
-		const allMappings = Array.from(state.mappingsCache.values()).sort((a, b) =>
-			a.control_id.localeCompare(b.control_id)
-		);
-		res.json(allMappings);
-	} catch (error) {
-		res.status(500).json({ error: (error as Error).message });
-	}
-});
-
-router.get('/mappings/:uuid', (req: Request, res: Response) => {
-	try {
-		const state = getServerState();
-		const mapping = state.mappingsCache.get(req.params.uuid);
-		if (!mapping) {
-			return res.status(404).json({ error: 'Mapping not found' });
-		}
-		res.json(mapping);
 	} catch (error) {
 		res.status(500).json({ error: (error as Error).message });
 	}
@@ -232,27 +170,6 @@ router.get('/search', (req: Request, res: Response) => {
 			.sort((a, b) => a.control_id.localeCompare(b.control_id));
 
 		res.json({ controls: matchingControls, mappings: matchingMappings });
-	} catch (error) {
-		res.status(500).json({ error: (error as Error).message });
-	}
-});
-
-// Stats endpoint
-router.get('/stats', (req: Request, res: Response) => {
-	try {
-		const state = getServerState();
-		const controlCount = state.controlsCache.size;
-		const mappingCount = state.mappingsCache.size;
-		const families = Array.from(state.controlsByFamily.keys()).sort();
-		const fileStats = state.fileStore.getStats();
-
-		res.json({
-			controls: controlCount,
-			mappings: mappingCount,
-			families: families.length,
-			familyList: families,
-			fileStore: fileStats
-		});
 	} catch (error) {
 		res.status(500).json({ error: (error as Error).message });
 	}

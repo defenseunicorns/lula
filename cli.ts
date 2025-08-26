@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
-import { InitCommand } from './cli/commands/init.js';
-import { FrameworksCommand } from './cli/commands/frameworks.js';
-import { ServeCommand } from './cli/commands/serve.js';
-import { ImportCommand } from './cli/commands/import.js';
-import { StatusCommand } from './cli/commands/status.js';
+import { InitCommand } from './cli/commands/init';
+import { FrameworksCommand } from './cli/commands/frameworks';
+import { ServeCommand } from './cli/commands/serve';
+import { ImportCommand } from './cli/commands/import';
+import { StatusCommand } from './cli/commands/status';
 
 // CLI setup
 program

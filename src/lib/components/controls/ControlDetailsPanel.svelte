@@ -4,8 +4,8 @@
 <script lang="ts">
 	import { TimelineItem } from '$components/version-control';
 	import { api } from '$lib/api';
-	import type { Control, ControlCompleteData, ControlSet } from '$lib/types.js';
-	import type { FieldDefinition, ValidationRule } from '$lib/form-types.js';
+	import type { Control, ControlCompleteData, ControlSet } from '$lib/types';
+	import type { FieldDefinition, ValidationRule } from '$lib/form-types';
 	import { complianceStore, mappings } from '$stores/compliance';
 	import {
 		Connect,

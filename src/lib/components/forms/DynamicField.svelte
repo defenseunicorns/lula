@@ -2,7 +2,7 @@
 <!-- SPDX-FileCopyrightText: 2023-Present The Lula Authors -->
 
 <script lang="ts">
-	import type { FieldDefinition } from '$lib/form-types.js';
+	import type { FieldDefinition } from '$lib/form-types';
 
 	interface Props {
 		field: FieldDefinition;

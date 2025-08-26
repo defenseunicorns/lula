@@ -4,144 +4,17 @@
 import { Router, type Request, type Response } from 'express';
 import * as fs from 'fs';
 import { existsSync, promises as fsPromises } from 'fs';
-import { join, relative } from 'path';
 import * as git from 'isomorphic-git';
+import { join, relative } from 'path';
 import * as YAML from 'yaml';
-import { getServerState, addControlToIndexes } from './serverState.js';
+import { addControlToIndexes, getServerState } from './serverState';
 import type {
 	ControlCompleteData,
-	ControlWithHistory,
 	GitCommit,
-	GitFileHistory,
 	UnifiedHistory
-} from './types/index.js';
+} from './types';
 
 const router = Router();
-
-// Git History API endpoints
-router.get('/controls/:id/history', async (req: Request, res: Response) => {
-	try {
-		const controlId = req.params.id;
-		const limit = parseInt(req.query.limit as string) || 50;
-		const state = getServerState();
-
-		console.log(`Getting git history for control: ${controlId}`);
-
-		// Get control to find its file path
-		const control = state.controlsCache.get(controlId);
-		if (!control) {
-			console.log(`Control not found in cache: ${controlId}`);
-			return res.status(404).json({ error: 'Control not found' });
-		}
-
-		// Get control metadata to find the file path
-		const metadata = state.fileStore.getControlMetadata(controlId);
-		if (!metadata) {
-			console.log(`Control metadata not found: ${controlId}`);
-			return res.status(404).json({ error: 'Control file not found' });
-		}
-
-		const family = control.family;
-		const filePath = join(state.CONTROL_SET_DIR, 'controls', family, metadata.filename);
-
-		console.log(`Looking for git history of file: ${filePath}`);
-
-		// Check if file exists
-		if (!existsSync(filePath)) {
-			console.log(`File does not exist: ${filePath}`);
-			return res.status(404).json({ error: 'Control file does not exist' });
-		}
-
-		// Get git history
-		const history = await state.gitHistory.getFileHistory(filePath, limit);
-
-		console.log(`Git history for ${controlId}: ${history.commits.length} commits found`);
-
-		res.json(history);
-	} catch (error) {
-		console.error('Error getting control history:', error);
-		res.status(500).json({ error: (error as Error).message });
-	}
-});
-
-// Git history for mapping files by control
-router.get('/mappings/:controlId/history', async (req: Request, res: Response) => {
-	try {
-		const controlId = req.params.controlId;
-		const limit = parseInt(req.query.limit as string) || 50;
-		const state = getServerState();
-
-		console.log(`Getting git history for mappings control: ${controlId}`);
-
-		const family = controlId.split('-')[0];
-		const mappingFilePath = join(
-			state.CONTROL_SET_DIR,
-			'mappings',
-			family,
-			`${controlId}-mappings.yaml`
-		);
-
-		// Check if file exists
-		if (!existsSync(mappingFilePath)) {
-			console.log(`Mapping file does not exist: ${mappingFilePath}`);
-			return res.status(404).json({ error: 'Mapping file does not exist' });
-		}
-
-		// Get git history
-		const history = await state.gitHistory.getFileHistory(mappingFilePath, limit);
-
-		console.log(`Git history for ${controlId} mappings: ${history.commits.length} commits found`);
-
-		res.json(history);
-	} catch (error) {
-		console.error('Error getting mapping history:', error);
-		res.status(500).json({ error: (error as Error).message });
-	}
-});
-
-router.get('/controls/:id/with-history', async (req: Request, res: Response) => {
-	try {
-		const controlId = req.params.id;
-		const limit = parseInt(req.query.limit as string) || 10;
-		const state = getServerState();
-
-		// Get control
-		let control = state.controlsCache.get(controlId);
-		if (!control) {
-			// Try loading from file store in case cache is stale
-			const loadedControl = await state.fileStore.loadControl(controlId);
-			if (loadedControl) {
-				control = loadedControl;
-				state.controlsCache.set(control.id, control);
-				addControlToIndexes(control);
-			}
-		}
-
-		if (!control) {
-			return res.status(404).json({ error: 'Control not found' });
-		}
-
-		// Get control metadata to find the file path
-		const metadata = state.fileStore.getControlMetadata(controlId);
-		let history: GitFileHistory | undefined;
-
-		if (metadata) {
-			const family = control.family;
-			const filePath = join(state.CONTROL_SET_DIR, 'controls', family, metadata.filename);
-			history = await state.gitHistory.getFileHistory(filePath, limit);
-		}
-
-		const controlWithHistory: ControlWithHistory = {
-			...control,
-			history
-		};
-
-		res.json(controlWithHistory);
-	} catch (error) {
-		console.error('Error getting control with history:', error);
-		res.status(500).json({ error: (error as Error).message });
-	}
-});
 
 // Unified endpoint that loads control, mappings, and unified history
 router.get('/controls/:id/complete', async (req: Request, res: Response) => {
@@ -334,7 +207,7 @@ router.get('/controls/:id/complete', async (req: Request, res: Response) => {
 										const removed = changedFields.filter((f) => f.type === 'Removed').length;
 										const modified = changedFields.filter((f) => f.type === 'Modified').length;
 
-										const summaryParts = [];
+										const summaryParts: string[] = [];
 										if (added > 0) summaryParts.push(`${added} added`);
 										if (modified > 0) summaryParts.push(`${modified} modified`);
 										if (removed > 0) summaryParts.push(`${removed} removed`);
@@ -449,17 +322,6 @@ router.get('/controls/:id/complete', async (req: Request, res: Response) => {
 		res.json(completeData);
 	} catch (error) {
 		console.error('Error getting complete control data:', error);
-		res.status(500).json({ error: (error as Error).message });
-	}
-});
-
-router.get('/git/stats', async (req: Request, res: Response) => {
-	try {
-		const state = getServerState();
-		const stats = await state.gitHistory.getRepositoryStats();
-		res.json(stats);
-	} catch (error) {
-		console.error('Error getting git stats:', error);
 		res.status(500).json({ error: (error as Error).message });
 	}
 });

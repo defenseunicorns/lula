@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
-import { FileStore } from './infrastructure/fileStore.js';
-import { GitHistoryUtil } from './infrastructure/gitHistory.js';
-import type { Control, Mapping } from './types/index.js';
+import { FileStore } from './infrastructure/fileStore';
+import { GitHistoryUtil } from './infrastructure/gitHistory';
+import type { Control, Mapping } from './types';
 
 /**
  * Server state management for the CLI server
@@ -46,6 +46,10 @@ export function getServerState(): CLIServerState {
 export function addControlToIndexes(control: Control): void {
 	const state = getServerState();
 	const family = control.family;
+
+	if (!family) {
+		return;
+	}
 
 	// Add to family index
 	if (!state.controlsByFamily.has(family)) {

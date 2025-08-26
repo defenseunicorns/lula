@@ -11,7 +11,7 @@
 import * as git from 'isomorphic-git';
 import * as fs from 'fs';
 import { relative, join } from 'path';
-import { createYamlDiff, type YamlDiffResult } from './yamlDiff.js';
+import { createYamlDiff, type YamlDiffResult } from './yamlDiff';
 
 export interface GitCommit {
 	hash: string;
