@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **Compliance Manager** - a Git-friendly compliance control management system built with SvelteKit 5. The application manages security compliance controls (like NIST 800-53) with individual YAML files per control, enabling proper version control and collaboration on compliance documentation. It is designed to be a generic way to manage
+This is a **Lula** - a Git-friendly compliance control management system built with SvelteKit 5. The application manages security compliance controls (like NIST 800-53) with individual YAML files per control, enabling proper version control and collaboration on compliance documentation. It is designed to be a generic way to manage
 controls of any sort, split the work of defining them, mapping them and also associating to actual source code & docs
 for tracking changes over time. Everything is persisted by git and this is intended to be run as an `npx app` command
 against a local git repo.

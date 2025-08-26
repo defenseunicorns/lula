@@ -31,16 +31,21 @@
 {:else if controlSet}
 	<div class="text-sm">
 		<div class="font-medium text-gray-900 dark:text-white">
-			{controlSet.name}
-			{#if controlSet.version}
-				<span class="font-normal text-gray-600 dark:text-gray-300">{controlSet.version}</span>
+			{controlSet.title || controlSet.name}
+		</div>
+		<div class="text-gray-600 dark:text-gray-300 mt-1 space-y-1">
+			{#if controlSet.project?.framework?.baseline}
+				<div class="text-xs">
+					<span class="font-medium">{controlSet.project.framework.baseline.toUpperCase()}</span> baseline
+				</div>
+			{/if}
+			{#if controlSet.families && controlSet.families.length > 0}
+				{@const totalControls = controlSet.families.reduce((sum, family) => sum + (family.control_count || 0), 0)}
+				<div class="text-xs">
+					{controlSet.families.length} families • {totalControls > 0 ? totalControls : controlSet.statistics?.total_controls || 'Unknown'} controls
+				</div>
 			{/if}
 		</div>
-		{#if controlSet.description}
-			<div class="text-gray-600 dark:text-gray-400 mt-1">
-				{controlSet.description}
-			</div>
-		{/if}
 	</div>
 {:else}
 	<div class="text-sm text-gray-500 dark:text-gray-400">No control set info</div>

@@ -1,4 +1,4 @@
-# Lula - Compliance Manager
+# Lula 
 
 A git-friendly compliance control management system that supports multiple compliance frameworks through a generic adapter pattern.
 

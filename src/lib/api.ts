@@ -39,6 +39,10 @@ class ApiClient {
 		return this.request(`/api/controls/${id}`);
 	}
 
+	async getControlComplete(id: string): Promise<ControlCompleteData> {
+		return this.request(`/api/controls/${id}/complete`);
+	}
+
 	async updateControl(control: Control): Promise<Control> {
 		return this.request(`/api/controls/${control.id}`, {
 			method: 'PUT',

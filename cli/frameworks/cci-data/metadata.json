@@ -1,13 +1,12 @@
 {
-	"version": "unknown",
-	"last_updated": "2025-08-24T05:56:26.979Z",
-	"download_date": "2025-08-24T05:56:26.979Z",
-	"total_ccis": 5137,
-	"nist_mappings_count": 343,
-	"source_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
-	"files": {
-		"database": "cci-database.json",
-		"raw_xml": "U_CCI_List.xml",
-		"raw_zip": "U_CCI_List.zip"
-	}
+  "version": "unknown",
+  "last_updated": "2025-08-26T16:16:51.646Z",
+  "download_date": "2025-08-26T16:16:51.647Z",
+  "total_ccis": 5137,
+  "nist_mappings_count": 343,
+  "source_url": "https://dl.dod.cyber.mil/wp-content/uploads/stigs/zip/U_CCI_List.zip",
+  "files": {
+    "database": "cci-database.json",
+    "raw_xml": "U_CCI_List.xml"
+  }
 }

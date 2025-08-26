@@ -185,12 +185,14 @@ router.get('/control-set', async (req: Request, res: Response) => {
 			const content = await fsPromises.readFile(controlSetFile, 'utf8');
 			const controlSet = YAML.parse(content);
 
-			// Add derived families from directory structure
-			const families = Array.from(state.controlsByFamily.keys()).sort();
-
+			// Add derived families from directory structure if not already present in YAML
+			const derivedFamilies = Array.from(state.controlsByFamily.keys()).sort();
+			const yamlFamilies = controlSet.families || [];
+			
 			res.json({
 				...controlSet,
-				families,
+				// Prefer YAML families if they exist and have data, otherwise use derived families
+				families: yamlFamilies.length > 0 ? yamlFamilies : derivedFamilies,
 				path: state.CONTROL_SET_DIR
 			});
 		} catch (error) {

@@ -10,7 +10,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import * as readline from 'readline';
+import prompt from 'prompts';
 import { FrameworkResolver, FrameworkInfo } from '../frameworks/resolver';
 import { AtomicProcessor } from '../processors/atomicProcessor';
 import { AtomicImportOptions } from '../types/atomicControl';
@@ -25,21 +25,16 @@ export interface InitOptions {
 
 export class InitCommand {
 	private frameworkResolver: FrameworkResolver;
-	private rl: readline.Interface;
 
 	constructor() {
 		this.frameworkResolver = new FrameworkResolver();
-		this.rl = readline.createInterface({
-			input: process.stdin,
-			output: process.stdout
-		});
 	}
 
 	/**
 	 * Run the init command
 	 */
 	async run(options: InitOptions): Promise<void> {
-		console.log('🚀 Welcome to Compliance Manager Setup\n');
+		console.log('🚀 Welcome to Lula Setup\n');
 
 		try {
 			let projectConfig;
@@ -55,13 +50,12 @@ export class InitCommand {
 			console.log('\n✅ Project setup complete!');
 			console.log(`\nNext steps:`);
 			console.log(`  cd ${projectConfig.directory}`);
-			console.log(`  npx tsx ../cli.ts serve`);
+			console.log(`  npx tsx ../cli.ts serve .`);
+			console.log(`\nOr run directly: npx tsx cli.ts serve "${projectConfig.directory}"`);
 			console.log(`\nOpen http://localhost:3000 to start managing your controls.`);
 		} catch (error) {
 			console.error('❌ Setup failed:', error);
 			process.exit(1);
-		} finally {
-			this.rl.close();
 		}
 	}
 
@@ -70,55 +64,107 @@ export class InitCommand {
 	 */
 	private async runInteractiveSetup(options: InitOptions): Promise<ProjectConfig> {
 		const frameworks = this.frameworkResolver.getFrameworksByCategory();
+		
+		// Build category choices
+		const categoryChoices = Object.keys(frameworks).map(category => ({
+			title: category,
+			value: category,
+			description: `${frameworks[category].length} framework${frameworks[category].length === 1 ? '' : 's'} available`
+		}));
 
-		// Project name
-		const projectName =
-			options.projectName ||
-			(await this.askQuestion('What is your project name? ', 'my-compliance-project'));
-
-		// Framework selection
-		console.log('\n📋 Available Compliance Frameworks:\n');
-
-		const frameworkChoices: FrameworkInfo[] = [];
-		let choiceIndex = 1;
-
-		Object.entries(frameworks).forEach(([category, categoryFrameworks]) => {
-			console.log(`${category}:`);
-			categoryFrameworks.forEach((framework) => {
-				console.log(`  ${choiceIndex}. ${framework.baseline} - ${framework.description}`);
-				console.log(`     Use case: ${framework.use_case}`);
-				frameworkChoices.push(framework);
-				choiceIndex++;
-			});
-			console.log('');
+		// Run the interactive prompts in steps
+		// First get project name
+		const projectNameResponse = await prompt({
+			type: 'text',
+			name: 'projectName',
+			message: 'What is your project name?',
+			initial: options.projectName || 'my-compliance-project',
+			validate: (value: string) => 
+				value.length > 0 ? true : 'Project name cannot be empty',
+			format: (value: string) => value.trim()
 		});
 
-		const frameworkChoice = await this.askQuestion(
-			`Select a framework (1-${frameworkChoices.length}): `,
-			'2' // Default to NIST 800-53 Rev 4 Moderate
-		);
-
-		const selectedFramework = frameworkChoices[parseInt(frameworkChoice) - 1];
-		if (!selectedFramework) {
-			throw new Error('Invalid framework selection');
+		if (!projectNameResponse.projectName) {
+			console.log('\n❌ Setup cancelled');
+			process.exit(0);
 		}
 
-		// CCI recommendation
-		const cciDefault = selectedFramework.recommended_cci ? 'y' : 'n';
-		const withCci = await this.askYesNo(
-			`Enable CCI-level tracking? (Recommended for NIST frameworks) [${cciDefault.toUpperCase()}/n]: `,
-			selectedFramework.recommended_cci
-		);
+		// Then get the rest of the responses
+		const responses = await prompt([
+			{
+				type: 'select',
+				name: 'category',
+				message: 'Choose a compliance framework category',
+				choices: categoryChoices,
+				initial: categoryChoices.findIndex(c => c.value === 'NIST 800-53 Rev 4') || 0
+			},
+			{
+				type: 'select',
+				name: 'framework',
+				message: (prev: any) => `Choose a ${prev} framework`,
+				choices: (prev: any) => {
+					const selectedCategory = prev;
+					const categoryFrameworks = frameworks[selectedCategory];
+					
+					if (!categoryFrameworks || !Array.isArray(categoryFrameworks)) {
+						console.error(`No frameworks found for category: "${selectedCategory}"`);
+						return [];
+					}
+					
+					return categoryFrameworks.map((framework: FrameworkInfo) => ({
+						title: `${framework.baseline} - ${framework.description}`,
+						description: `Use case: ${framework.use_case}`,
+						value: framework
+					}));
+				},
+				initial: (prev: any) => {
+					const selectedCategory = prev;
+					if (!selectedCategory) return 0;
+					
+					const categoryFrameworks = frameworks[selectedCategory];
+					if (!categoryFrameworks || !Array.isArray(categoryFrameworks)) return 0;
+					
+					const moderateIndex = categoryFrameworks.findIndex((f: FrameworkInfo) => f.id === 'nist-800-53-rev4-moderate');
+					return moderateIndex >= 0 ? moderateIndex : 0;
+				}
+			},
+			{
+				type: 'confirm',
+				name: 'withCci',
+				message: 'Enable CCI (Control Correlation Identifier) tracking?',
+				initial: true
+			},
+			{
+				type: 'text',
+				name: 'directory',
+				message: 'Project directory',
+				initial: options.directory || `./${projectNameResponse.projectName}`,
+				validate: (value: string) => {
+					const resolved = path.resolve(value);
+					if (fs.existsSync(resolved) && fs.readdirSync(resolved).length > 0) {
+						return 'Directory already exists and is not empty';
+					}
+					return true;
+				}
+			}
+		], {
+			onCancel: () => {
+				console.log('\n❌ Setup cancelled');
+				process.exit(0);
+			}
+		});
 
-		// Directory selection
-		const directory =
-			options.directory || (await this.askQuestion('Project directory: ', `./${projectName}`));
+		// Combine the responses
+		const allResponses = {
+			projectName: projectNameResponse.projectName,
+			...responses
+		};
 
 		return {
-			projectName,
-			framework: selectedFramework,
-			withCci,
-			directory: path.resolve(directory)
+			projectName: allResponses.projectName,
+			framework: allResponses.framework,
+			withCci: allResponses.withCci,
+			directory: path.resolve(allResponses.directory)
 		};
 	}
 
@@ -136,7 +182,7 @@ export class InitCommand {
 		return {
 			projectName: options.projectName || 'compliance-project',
 			framework,
-			withCci: options.withCci ?? framework.recommended_cci,
+			withCci: options.withCci ?? true,
 			directory: path.resolve(options.directory || './compliance-project')
 		};
 	}
@@ -194,7 +240,7 @@ export class InitCommand {
 
 		fs.writeFileSync(
 			path.join(config.directory, 'project.yaml'),
-			`# Compliance Manager Project\n# Generated on ${new Date().toISOString()}\n\n` +
+			`# Lula Project\n# Generated on ${new Date().toISOString()}\n\n` +
 				`name: ${projectMetadata.name}\n` +
 				`framework:\n` +
 				`  id: ${projectMetadata.framework.id}\n` +
@@ -213,34 +259,6 @@ export class InitCommand {
 		}
 	}
 
-	/**
-	 * Ask a question and return the answer
-	 */
-	private askQuestion(question: string, defaultValue?: string): Promise<string> {
-		return new Promise((resolve) => {
-			this.rl.question(question, (answer) => {
-				resolve(answer.trim() || defaultValue || '');
-			});
-		});
-	}
-
-	/**
-	 * Ask a yes/no question
-	 */
-	private askYesNo(question: string, defaultValue: boolean = false): Promise<boolean> {
-		return new Promise((resolve) => {
-			this.rl.question(question, (answer) => {
-				const normalized = answer.trim().toLowerCase();
-				if (normalized === 'y' || normalized === 'yes') {
-					resolve(true);
-				} else if (normalized === 'n' || normalized === 'no') {
-					resolve(false);
-				} else {
-					resolve(defaultValue);
-				}
-			});
-		});
-	}
 }
 
 interface ProjectConfig {

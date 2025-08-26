@@ -155,48 +155,6 @@ export class FrameworkResolver {
 			use_case: 'Modern high-risk systems requiring latest security controls'
 		});
 
-		// FedRAMP Baselines (these are typically based on NIST baselines)
-		this.frameworks.set('fedramp-low', {
-			id: 'fedramp-low',
-			name: 'FedRAMP Low Impact',
-			description: 'FedRAMP authorization baseline for low-impact cloud services',
-			version: 'Rev 4',
-			baseline: 'LOW',
-			file_path: path.join(
-				this.oscalContentPath,
-				'NIST_SP-800-53_rev4_LOW-baseline-resolved-profile_catalog-min.json'
-			), // FedRAMP uses NIST baselines
-			recommended_cci: true,
-			use_case: 'FedRAMP cloud services, SaaS applications'
-		});
-
-		this.frameworks.set('fedramp-moderate', {
-			id: 'fedramp-moderate',
-			name: 'FedRAMP Moderate Impact',
-			description: 'FedRAMP authorization baseline for moderate-impact cloud services',
-			version: 'Rev 4',
-			baseline: 'MODERATE',
-			file_path: path.join(
-				this.oscalContentPath,
-				'NIST_SP-800-53_rev4_MODERATE-baseline-resolved-profile_catalog-min.json'
-			),
-			recommended_cci: true,
-			use_case: 'Most FedRAMP cloud services'
-		});
-
-		this.frameworks.set('fedramp-high', {
-			id: 'fedramp-high',
-			name: 'FedRAMP High Impact',
-			description: 'FedRAMP authorization baseline for high-impact cloud services',
-			version: 'Rev 4',
-			baseline: 'HIGH',
-			file_path: path.join(
-				this.oscalContentPath,
-				'NIST_SP-800-53_rev4_HIGH-baseline-resolved-profile_catalog-min.json'
-			),
-			recommended_cci: true,
-			use_case: 'High-impact FedRAMP cloud services, DoD systems'
-		});
 	}
 
 	/**
@@ -206,8 +164,7 @@ export class FrameworkResolver {
 		const frameworks = this.getFrameworks();
 		const categories: Record<string, FrameworkInfo[]> = {
 			'NIST 800-53 Rev 4': [],
-			'NIST 800-53 Rev 5': [],
-			FedRAMP: []
+			'NIST 800-53 Rev 5': []
 		};
 
 		frameworks.forEach((framework) => {
@@ -215,8 +172,6 @@ export class FrameworkResolver {
 				categories['NIST 800-53 Rev 4'].push(framework);
 			} else if (framework.id.includes('rev5')) {
 				categories['NIST 800-53 Rev 5'].push(framework);
-			} else if (framework.id.includes('fedramp')) {
-				categories['FedRAMP'].push(framework);
 			}
 		});
 
@@ -233,7 +188,7 @@ export class FrameworkResolver {
 			case 'development':
 				return this.frameworks.get('nist-800-53-rev4-low')!;
 			case 'cloud':
-				return this.frameworks.get('fedramp-moderate')!;
+				return this.frameworks.get('nist-800-53-rev4-moderate')!;
 			case 'federal':
 				return this.frameworks.get('nist-800-53-rev4-moderate')!;
 			case 'production':

@@ -39,7 +39,7 @@ export async function createServer(options: ServerOptions) {
 	app.use(express.json({ limit: '50mb' }));
 
 	// Serve static files from dist directory (build output)
-	const distPath = join(__dirname, '../../../dist');
+	const distPath = join(__dirname, '../dist');
 	app.use(express.static(distPath));
 
 	// API Routes
@@ -56,7 +56,7 @@ export async function createServer(options: ServerOptions) {
 		start: () => {
 			return new Promise<void>((resolve) => {
 				app.listen(port, () => {
-					console.log(`Compliance Manager running on http://localhost:${port}`);
+					console.log(`Lula running on http://localhost:${port}`);
 					console.log(`Control set directory: ${controlSetDir}`);
 					console.log(`Using individual control files in: ${controlSetDir}/controls/`);
 					resolve();

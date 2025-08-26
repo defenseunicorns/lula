@@ -609,7 +609,7 @@ export class AtomicProcessor {
 			}));
 
 		const controlSetData = {
-			title: metadata.title || framework.name,
+			title: this.cleanFrameworkTitle(metadata.title || framework.name),
 			version: framework.version,
 			last_modified: new Date().toISOString(),
 			oscal_version: metadata['oscal-version'] || '1.1.1',
@@ -1453,6 +1453,14 @@ export class AtomicProcessor {
 		if (name.includes('800-53')) return 'moderate'; // Default NIST baseline
 
 		return 'custom';
+	}
+
+	private cleanFrameworkTitle(title: string): string {
+		// Remove baseline information from framework title since we store it separately
+		return title
+			.replace(/\s*(HIGH|MODERATE|LOW)\s*(IMPACT\s+)?BASELINE\s*$/i, '')
+			.replace(/\s*(HIGH|MODERATE|LOW)\s*$/i, '')
+			.trim();
 	}
 
 	/**

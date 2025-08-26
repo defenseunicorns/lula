@@ -63,11 +63,26 @@ export interface Stats {
 export interface ControlSet {
 	id: string;
 	name: string;
+	title?: string;
 	description?: string;
 	version?: string;
 	lastModified?: string;
 	path?: string;
-	families?: string[];
+	families?: Array<{
+		id: string;
+		name: string;
+		control_count?: number;
+	}>;
+	project?: {
+		framework?: {
+			baseline?: string;
+			name?: string;
+		};
+	};
+	statistics?: {
+		total_controls?: number;
+		families?: number;
+	};
 	metadata?: {
 		source?: string;
 		baseline?: string;
@@ -75,7 +90,6 @@ export interface ControlSet {
 		[key: string]: any;
 	};
 	// Legacy OSCAL fields for backward compatibility
-	title?: string; // alias for name
 	last_modified?: string; // alias for lastModified
 	oscal_version?: string;
 	uuid?: string;

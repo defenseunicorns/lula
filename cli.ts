@@ -54,14 +54,15 @@ program
 
 // Serve command - start the web server
 program
-	.command('serve')
+	.command('serve [directory]')
 	.description('Start the web server')
-	.option('--dir <directory>', 'Control set directory path', './examples/nist-800-53-rev4')
+	.option('--dir <directory>', 'Control set directory path (alternative to positional argument)')
 	.option('--port <port>', 'Server port', '3000')
-	.action(async (options) => {
+	.action(async (directory: string | undefined, options) => {
 		const serveCommand = new ServeCommand();
+		const controlSetDir = directory || options.dir || './examples/nist-800-53-rev4';
 		await serveCommand.run({
-			dir: options.dir,
+			dir: controlSetDir,
 			port: parseInt(options.port)
 		});
 	});

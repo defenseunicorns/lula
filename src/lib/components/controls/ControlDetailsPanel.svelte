@@ -265,7 +265,7 @@
 
 		loadingCompleteData = true;
 		try {
-			completeData = await api.getControlComplete(control.id, 50);
+			completeData = await api.getControlComplete(control.id);
 		} catch (error) {
 			console.error('Failed to load complete data:', error);
 			completeData = {
