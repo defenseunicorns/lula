@@ -9,7 +9,7 @@ const program = new Command();
 
 /**
  * Get the current version from package.json
- * 
+ *
  * @returns The current version
  */
 export function getVersion(): string {
