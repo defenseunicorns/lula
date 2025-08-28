@@ -5,13 +5,16 @@ import crawl from "./crawl.js";
 import fs from "fs";
 import path from "path";
 
-
 const program = new Command();
 
+/**
+ * Get the current version from package.json
+ * @returns {string} The current version
+ */
 export function getVersion(): string {
-   const packageJson = fs.readFileSync(path.resolve(process.cwd(),"./package.json"), "utf8");
-   const { version } = JSON.parse(packageJson);
-   return version
+  const packageJson = fs.readFileSync(path.resolve(process.cwd(), "./package.json"), "utf8");
+  const { version } = JSON.parse(packageJson);
+  return version;
 }
 
 program

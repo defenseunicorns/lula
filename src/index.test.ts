@@ -15,9 +15,6 @@ describe("lula2", () => {
     const version = getVersion();
     expect(version).toBe("1.2.3");
 
-    expect(fs.readFileSync).toHaveBeenCalledWith(
-      expect.stringContaining("package.json"),
-      "utf8"
-    );
+    expect(fs.readFileSync).toHaveBeenCalledWith(expect.stringContaining("package.json"), "utf8");
   });
 });
