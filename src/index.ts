@@ -9,7 +9,8 @@ const program = new Command();
 
 /**
  * Get the current version from package.json
- * @returns {string} The current version
+ * 
+ * @returns The current version
  */
 export function getVersion(): string {
   const packageJson = fs.readFileSync(path.resolve(process.cwd(), "./package.json"), "utf8");
