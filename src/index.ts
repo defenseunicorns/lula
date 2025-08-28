@@ -2,13 +2,26 @@
 
 import { Command } from "commander";
 import crawl from "./crawl.js";
-// Define the program
+import fs from "fs";
+import path from "path";
+
 const program = new Command();
 
-// Set basic information
+/**
+ * Get the current version from package.json
+ *
+ * @returns The current version
+ */
+export function getVersion(): string {
+  const packageJson = fs.readFileSync(path.resolve(process.cwd(), "./package.json"), "utf8");
+  const { version } = JSON.parse(packageJson);
+  return version;
+}
+
 program
   .name("lula2")
   .description("Reports and exports compliance status for defined controls")
+  .version(getVersion(), "-v, --version", "output the current version")
   .option("-c, --config <path>", "path to config file", "compliance.json")
   .addCommand(crawl())
   .action(options => {
