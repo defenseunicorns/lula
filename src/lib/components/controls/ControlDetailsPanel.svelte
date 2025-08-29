@@ -4,7 +4,7 @@
 <script lang="ts">
 	import { TimelineItem } from '$components/version-control';
 	import { api } from '$lib/api';
-	import type { Control, ControlCompleteData, ControlSet } from '$lib/types';
+	import type { Control, ControlCompleteData, ControlSet, FieldSchema } from '$lib/types';
 	import type { FieldDefinition, ValidationRule } from '$lib/form-types';
 	import { complianceStore, mappings } from '$stores/compliance';
 	import {
@@ -29,14 +29,16 @@
 	// Component state
 	let editedControl = $state({ ...control });
 	let originalControl = $state({ ...control });
-	let activeTab = $state<'details' | 'narrative' | 'mappings' | 'history'>('details');
+	let activeTab = $state<'details' | 'narrative' | 'custom' | 'mappings' | 'history'>('details');
 	let showNewMappingForm = $state(false);
 	let editingMapping = $state<any>(null);
 	let autoSaveInterval: ReturnType<typeof setInterval> | null = null;
+	let fieldSchema = $state<Record<string, FieldSchema> | null>(null);
 
 	// Data loading state
 	let completeData: ControlCompleteData | null = $state(null);
 	let loadingCompleteData = $state(false);
+	let loadingSchema = $state(false);
 
 	// Form state
 	let newMappingData = $state({
@@ -117,6 +119,9 @@
 		loadingCompleteData = false;
 		activeTab = 'details';
 		editingMapping = null;
+
+		// Load field schema on mount
+		loadFieldSchema();
 
 		// Cleanup on component unmount
 		return () => {
@@ -260,6 +265,50 @@
 
 	// Utility functions
 
+	async function loadFieldSchema() {
+		if (fieldSchema || loadingSchema) return;
+		
+		loadingSchema = true;
+		try {
+			const controlSet = await api.getControlSet();
+			// Handle both fieldSchema and field_schema for compatibility
+			const schema = controlSet.fieldSchema || controlSet.field_schema;
+			if (schema?.fields) {
+				fieldSchema = schema.fields;
+			}
+		} catch (error) {
+			console.error('Failed to load field schema:', error);
+		} finally {
+			loadingSchema = false;
+		}
+	}
+
+	// Helper to get fields for a specific tab
+	function getFieldsForTab(tab: 'overview' | 'implementation' | 'custom') {
+		if (!fieldSchema) return [];
+		
+		return Object.entries(fieldSchema)
+			.filter(([_, field]) => {
+				// Map category to tab if tab not explicitly set
+				const fieldTab = field.tab || getDefaultTabForCategory(field.category);
+				return fieldTab === tab && field.visible;
+			})
+			.sort((a, b) => a[1].display_order - b[1].display_order);
+	}
+	
+	function getDefaultTabForCategory(category: string): 'overview' | 'implementation' | 'custom' {
+		switch (category) {
+			case 'core':
+			case 'metadata':
+				return 'overview';
+			case 'compliance':
+			case 'content':
+				return 'implementation';
+			default:
+				return 'custom';
+		}
+	}
+
 	async function loadCompleteData() {
 		if (completeData || loadingCompleteData) return;
 
@@ -365,6 +414,7 @@
 		tabs={[
 			{ id: 'details', label: 'Overview', icon: Information },
 			{ id: 'narrative', label: 'Implementation', icon: Edit },
+			...fieldSchema && getFieldsForTab('custom').length > 0 ? [{ id: 'custom', label: 'Custom', icon: Edit }] : [],
 			{ id: 'mappings', label: 'Mappings', icon: Connect, count: associatedMappings.length },
 			{
 				id: 'history',
@@ -384,6 +434,8 @@
 			{@render detailsTab()}
 		{:else if activeTab === 'narrative'}
 			{@render narrativeTab()}
+		{:else if activeTab === 'custom'}
+			{@render customTab()}
 		{:else if activeTab === 'mappings'}
 			{@render mappingsTab()}
 		{:else if activeTab === 'history'}
@@ -395,44 +447,63 @@
 {#snippet detailsTab()}
 	<!-- Edit Mode: Custom form matching view layout -->
 	<div class="space-y-6">
-		<!-- Key Details Card -->
-		<div
-			class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-xl border border-blue-200 dark:border-blue-700/30 p-6"
-		>
-			<div class="flex items-center justify-between mb-4">
-				<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Control Overview</h2>
-				<div class="flex items-center space-x-3">
-					<!-- Implementation Status Editor -->
-					<div class="flex flex-col space-y-1">
-						<label class="text-xs font-medium text-gray-500 dark:text-gray-400"
-							>Implementation Status</label
-						>
-						<select
-							bind:value={editedControl['control-implementation-status']}
-							class="text-xs font-medium rounded-full px-3 py-1 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-						>
-							<option value="Not Implemented">Not Implemented</option>
-							<option value="Partially Implemented">Partially Implemented</option>
-							<option value="Implemented">Implemented</option>
-							<option value="Planned">Planned</option>
-						</select>
+		<!-- Dynamic Fields based on Schema (Overview Tab) -->
+		{#if fieldSchema}
+			{@const overviewFields = getFieldsForTab('overview')}
+			{#if overviewFields.length > 0}
+				<div
+					class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-xl border border-blue-200 dark:border-blue-700/30 p-6"
+				>
+					<div class="flex items-center justify-between mb-4">
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Control Overview</h2>
 					</div>
-
-					{#if editedControl.priority !== undefined}
+					
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+						{#each overviewFields as [fieldName, field]}
+							{@render renderField(fieldName, field)}
+						{/each}
+					</div>
+				</div>
+			{/if}
+		{:else}
+			<!-- Fallback to static fields if no schema -->
+			<div
+				class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-xl border border-blue-200 dark:border-blue-700/30 p-6"
+			>
+				<div class="flex items-center justify-between mb-4">
+					<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Control Overview</h2>
+					<div class="flex items-center space-x-3">
+						<!-- Implementation Status Editor -->
 						<div class="flex flex-col space-y-1">
-							<label class="text-xs font-medium text-gray-500 dark:text-gray-400">Priority</label>
+							<label class="text-xs font-medium text-gray-500 dark:text-gray-400"
+								>Implementation Status</label
+							>
 							<select
-								bind:value={editedControl.priority}
+								bind:value={editedControl['control-implementation-status']}
 								class="text-xs font-medium rounded-full px-3 py-1 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
 							>
-								<option value="low">Low</option>
-								<option value="medium">Medium</option>
-								<option value="high">High</option>
+								<option value="Not Implemented">Not Implemented</option>
+								<option value="Partially Implemented">Partially Implemented</option>
+								<option value="Implemented">Implemented</option>
+								<option value="Planned">Planned</option>
 							</select>
 						</div>
-					{/if}
+
+						{#if editedControl.priority !== undefined}
+							<div class="flex flex-col space-y-1">
+								<label class="text-xs font-medium text-gray-500 dark:text-gray-400">Priority</label>
+								<select
+									bind:value={editedControl.priority}
+									class="text-xs font-medium rounded-full px-3 py-1 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+								>
+									<option value="low">Low</option>
+									<option value="medium">Medium</option>
+									<option value="high">High</option>
+								</select>
+							</div>
+						{/if}
+					</div>
 				</div>
-			</div>
 
 			<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 				<div class="space-y-3">
@@ -539,6 +610,7 @@
 				</div>
 			</div>
 		{/if}
+		{/if}
 
 		<!-- Control Properties Editor -->
 		{#if editedControl.properties && Object.keys(editedControl.properties).length > 0}
@@ -575,38 +647,58 @@
 {#snippet narrativeTab()}
 	<!-- Edit Mode: Custom implementation form -->
 	<div class="space-y-6">
-		<!-- Implementation Status Summary Editor -->
-		<div
-			class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 rounded-xl border border-green-200 dark:border-green-700/30 p-6"
-		>
-			<div class="flex items-center justify-between mb-4">
-				<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Implementation Status</h2>
-				<div class="flex flex-col space-y-1">
-					<label class="text-xs font-medium text-gray-500 dark:text-gray-400">Status</label>
-					<select
-						bind:value={editedControl['control-implementation-status']}
-						class="text-sm font-medium rounded-full px-4 py-2 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+		<!-- Dynamic Fields based on Schema (Implementation Tab) -->
+		{#if fieldSchema}
+			{@const implementationFields = getFieldsForTab('implementation')}
+			{#if implementationFields.length > 0}
+				<div
+					class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 rounded-xl border border-green-200 dark:border-green-700/30 p-6"
+				>
+					<div class="flex items-center justify-between mb-4">
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Implementation Details</h2>
+					</div>
+					
+					<div class="grid grid-cols-1 gap-6">
+						{#each implementationFields as [fieldName, field]}
+							{@render renderField(fieldName, field)}
+						{/each}
+					</div>
+				</div>
+			{/if}
+		{:else}
+			<!-- Fallback to static fields if no schema -->
+			<div
+				class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 rounded-xl border border-green-200 dark:border-green-700/30 p-6"
+			>
+				<div class="flex items-center justify-between mb-4">
+					<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Implementation Status</h2>
+					<div class="flex flex-col space-y-1">
+						<label class="text-xs font-medium text-gray-500 dark:text-gray-400">Status</label>
+						<select
+							bind:value={editedControl['control-implementation-status']}
+							class="text-sm font-medium rounded-full px-4 py-2 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+						>
+							<option value="Not Implemented">Not Implemented</option>
+							<option value="Partially Implemented">Partially Implemented</option>
+							<option value="Implemented">Implemented</option>
+							<option value="Planned">Planned</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="mt-4">
+					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+						>Implementation Narrative</label
 					>
-						<option value="Not Implemented">Not Implemented</option>
-						<option value="Partially Implemented">Partially Implemented</option>
-						<option value="Implemented">Implemented</option>
-						<option value="Planned">Planned</option>
-					</select>
+					<textarea
+						bind:value={editedControl['control-implementation-narrative']}
+						rows="4"
+						class="w-full text-gray-600 dark:text-gray-400 leading-relaxed bg-transparent border border-gray-200 dark:border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+						placeholder="Add implementation narrative, progress updates, or current status details..."
+					></textarea>
 				</div>
 			</div>
-
-			<div class="mt-4">
-				<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-					>Implementation Narrative</label
-				>
-				<textarea
-					bind:value={editedControl['control-implementation-narrative']}
-					rows="4"
-					class="w-full text-gray-600 dark:text-gray-400 leading-relaxed bg-transparent border border-gray-200 dark:border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-green-500"
-					placeholder="Add implementation narrative, progress updates, or current status details..."
-				></textarea>
-			</div>
-		</div>
+		{/if}
 
 		<!-- Implementation Guidance Editor -->
 		{#if editedControl['implementation-guidance']}
@@ -764,6 +856,41 @@
 	</div>
 {/snippet}
 
+{#snippet customTab()}
+	<div class="space-y-6">
+		{#if fieldSchema}
+			{@const customFields = getFieldsForTab('custom')}
+			{#if customFields.length > 0}
+				<div
+					class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
+				>
+					<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+						<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Custom Fields</h3>
+						<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+							Additional fields specific to your organization
+						</p>
+					</div>
+					<div class="p-6">
+						<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+							{#each customFields as [fieldName, field]}
+								{@render renderField(fieldName, field)}
+							{/each}
+						</div>
+					</div>
+				</div>
+			{:else}
+				<div class="text-center py-12">
+					<p class="text-gray-500 dark:text-gray-400">No custom fields configured</p>
+				</div>
+			{/if}
+		{:else}
+			<div class="text-center py-12">
+				<p class="text-gray-500 dark:text-gray-400">Loading field schema...</p>
+			</div>
+		{/if}
+	</div>
+{/snippet}
+
 {#snippet mappingsTab()}
 	<div class="space-y-6">
 		<!-- Add New Mapping Section -->
@@ -890,4 +1017,75 @@
 			</div>
 		{/each}
 	{/if}
+{/snippet}
+
+{#snippet renderField(fieldName: string, field: FieldSchema)}
+	<div class="space-y-2">
+		<label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+			{field.original_name || fieldName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+			{#if field.required}
+				<span class="text-red-500">*</span>
+			{/if}
+		</label>
+		
+		{#if field.ui_type === 'select' && field.options}
+			<select
+				bind:value={editedControl[fieldName]}
+				disabled={!field.editable}
+				class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+			>
+				<option value="">-- Select --</option>
+				{#each field.options as option}
+					<option value={option}>{option}</option>
+				{/each}
+			</select>
+		{:else if field.ui_type === 'textarea'}
+			<textarea
+				bind:value={editedControl[fieldName]}
+				disabled={!field.editable}
+				rows="4"
+				class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+				placeholder={field.examples?.[0] || ''}
+			></textarea>
+		{:else if field.ui_type === 'boolean'}
+			<div class="flex items-center">
+				<input
+					type="checkbox"
+					bind:checked={editedControl[fieldName]}
+					disabled={!field.editable}
+					class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+				/>
+				<label class="ml-2 text-sm text-gray-900 dark:text-gray-300">
+					{editedControl[fieldName] ? 'Yes' : 'No'}
+				</label>
+			</div>
+		{:else if field.ui_type === 'date'}
+			<input
+				type="date"
+				bind:value={editedControl[fieldName]}
+				disabled={!field.editable}
+				class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+			/>
+		{:else if field.ui_type === 'number'}
+			<input
+				type="number"
+				bind:value={editedControl[fieldName]}
+				disabled={!field.editable}
+				class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+			/>
+		{:else}
+			<!-- Default to text input -->
+			<input
+				type="text"
+				bind:value={editedControl[fieldName]}
+				disabled={!field.editable}
+				class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+				placeholder={field.examples?.[0] || ''}
+			/>
+		{/if}
+		
+		{#if field.is_array}
+			<p class="text-xs text-gray-500 dark:text-gray-400">This field supports multiple values</p>
+		{/if}
+	</div>
 {/snippet}

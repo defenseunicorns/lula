@@ -51,11 +51,13 @@ export class FileStore {
 		this.controlsDir = join(this.baseDir, 'controls');
 		this.mappingsDir = join(this.baseDir, 'mappings');
 
-		// Ensure directories exist
-		this.ensureDirectories();
-
-		// Load control metadata
-		this.refreshControlsCache();
+		// Don't create directories in constructor - only when needed
+		// This prevents creating empty folders in project root
+		
+		// Load control metadata if directories exist
+		if (existsSync(this.controlsDir)) {
+			this.refreshControlsCache();
+		}
 	}
 
 	/**
@@ -148,6 +150,9 @@ export class FileStore {
 	 * Save a control
 	 */
 	async saveControl(control: Control): Promise<void> {
+		// Ensure base directories exist when saving
+		this.ensureDirectories();
+		
 		const family = this.getControlFamily(control.id);
 		const filename = this.getControlFilename(control.id);
 		const familyDir = join(this.controlsDir, family);
@@ -309,6 +314,9 @@ export class FileStore {
 	 * Save mappings to per-control files
 	 */
 	async saveMappings(mappings: Mapping[]): Promise<void> {
+		// Ensure base directories exist when saving
+		this.ensureDirectories();
+		
 		// Group mappings by control ID
 		const mappingsByControl = new Map<string, Mapping[]>();
 

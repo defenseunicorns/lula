@@ -14,7 +14,7 @@ against a local git repo.
 ### Development Server (typically already running out-of-band)
 
 - `npm run dev` - Start frontend development server on port 5173
-- `npm run dev:api` - Start backend API server on port 3000 (serves from examples/nist-800-53-rev4)
+- `npm run dev:api` - Start backend API server on port 3000 (serves from examples/nist-800-53-v4-moderate)
 - `npm run dev:full` - Run both frontend and backend concurrently
 
 ### Building and Testing
@@ -65,7 +65,7 @@ against a local git repo.
 ### File Structure
 
 ```
-examples/nist-800-53-rev4/
+examples/nist-800-53-v4-moderate/
 ├── control-set.yaml          # Control set metadata
 ├── controls/                 # Individual control files
 │   ├── AC/                   # Access Control family
@@ -106,24 +106,6 @@ examples/nist-800-53-rev4/
 - Prefer composition over inheritance
 - Use TypeScript interfaces defined in `src/lib/types.ts`
 - Components in `src/components/` organized by feature area
-
-### OSCAL + CCI Processing System
-
-- **Primary Processor**: `AtomicProcessor` in `cli/processors/atomicProcessor.ts`
-- **CCI Integration**: `BundledCCIProcessor` in `cli/processors/bundledCciProcessor.ts`
-- **Processing Flow**:
-  1. `cli.ts import` command → `AtomicProcessor.processOSCAL()`
-  2. Auto-detects NIST catalogs → enables CCI enhancement by default
-  3. `BundledCCIProcessor` creates "enhanced" controls from CCI database
-  4. `AtomicProcessor.enrichEnhancedControlWithOSCAL()` adds OSCAL data
-  5. Outputs git-friendly YAML with combined CCI + OSCAL data
-
-### Enhanced Control Format
-
-- **CCI Data**: Control Correlation Identifier definitions from DISA
-- **OSCAL Data**: Control statements, implementation guidance, assessment objectives
-- **Compliance Fields**: Implementation status, designation, inheritance tracking
-- **File Structure**: `controls/<family>/<CONTROL>.<CCI_SUFFIX>.yaml` (e.g., `AC-11.57.yaml`)
 
 ### Test Validation
 

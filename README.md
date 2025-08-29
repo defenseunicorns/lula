@@ -30,7 +30,7 @@ npm run build
 Start the web server to manage controls through the browser:
 
 ```bash
-npx tsx cli.ts serve --dir ./examples/nist-800-53-rev4
+npx tsx cli.ts serve --dir ./examples/nist-800-53-v4-moderate
 ```
 
 The interface will be available at `http://localhost:3000`
@@ -58,10 +58,10 @@ Migrate from legacy single YAML files to individual control files:
 
 ```bash
 # Check migration status
-npx tsx cli.ts status --dir ./examples/nist-800-53-rev4
+npx tsx cli.ts status --dir ./examples/nist-800-53-v4-moderate
 
 # Run migration
-npx tsx cli.ts migrate --dir ./examples/nist-800-53-rev4
+npx tsx cli.ts migrate --dir ./examples/nist-800-53-v4-moderate
 ```
 
 ## Project Structure

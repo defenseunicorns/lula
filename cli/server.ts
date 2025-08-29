@@ -7,6 +7,7 @@ import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import apiRoutes from './apiRoutes';
 import gitRoutes from './gitRoutes';
+import spreadsheetRoutes from './spreadsheetRoutes';
 import { initializeServerState, loadAllData, saveMappingsToFile } from './serverState';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -15,10 +16,11 @@ const __dirname = dirname(__filename);
 export interface ServerOptions {
 	controlSetDir: string;
 	port: number;
+	wizardMode?: boolean;
 }
 
 export async function createServer(options: ServerOptions) {
-	const { controlSetDir, port } = options;
+	const { controlSetDir, port, wizardMode = false } = options;
 
 	// Ensure control set directory exists
 	if (!existsSync(controlSetDir)) {
@@ -45,6 +47,7 @@ export async function createServer(options: ServerOptions) {
 	// API Routes
 	app.use('/api', apiRoutes);
 	app.use('/api', gitRoutes);
+	app.use('/api', spreadsheetRoutes);
 
 	// Serve frontend for all other routes (SPA fallback)
 	app.get('*', (req, res) => {
@@ -66,8 +69,8 @@ export async function createServer(options: ServerOptions) {
 	};
 }
 
-export async function startServer(controlSetDir: string, port: number) {
-	const server = await createServer({ controlSetDir, port });
+export async function startServer(controlSetDir: string, port: number, options: { wizardMode?: boolean } = {}) {
+	const server = await createServer({ controlSetDir, port, ...options });
 	await server.start();
 
 	// Graceful shutdown

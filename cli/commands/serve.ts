@@ -1,12 +1,34 @@
+import { existsSync } from 'fs';
+import { join } from 'path';
 import { startServer } from '..';
+import open from 'open';
 
 export interface ServeOptions {
 	dir: string;
 	port: number;
+	openBrowser?: boolean;
 }
 
 export class ServeCommand {
 	async run(options: ServeOptions): Promise<void> {
-		await startServer(options.dir, options.port);
+		const { dir, port, openBrowser } = options;
+		
+		// Check if control-set.yaml exists in the directory
+		const controlSetPath = join(dir, 'control-set.yaml');
+		const hasControlSet = existsSync(controlSetPath);
+		
+		// Start server with wizard mode if no control set exists
+		await startServer(dir, port, { wizardMode: !hasControlSet });
+		
+		// Open browser if requested
+		if (openBrowser) {
+			const url = `http://localhost:${port}`;
+			if (!hasControlSet) {
+				// Open directly to the setup wizard
+				await open(`${url}/setup`); 
+			} else {
+				await open(url);
+			}
+		}
 	}
 }

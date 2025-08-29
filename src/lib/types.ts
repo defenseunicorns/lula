@@ -60,6 +60,25 @@ export interface Stats {
 	familyList: string[];
 }
 
+export interface FieldSchema {
+	type: string;
+	ui_type: 'short_text' | 'medium_text' | 'textarea' | 'select' | 'date' | 'number' | 'boolean';
+	is_array: boolean;
+	max_length?: number;
+	usage_count?: number;
+	usage_percentage?: number;
+	required: boolean;
+	visible: boolean;
+	show_in_table?: boolean;
+	editable: boolean;
+	display_order: number;
+	category: 'core' | 'content' | 'metadata' | 'compliance' | 'custom';
+	tab?: 'overview' | 'implementation' | 'custom' | 'hidden';
+	examples?: any[];
+	options?: string[];
+	original_name?: string;
+}
+
 export interface ControlSet {
 	id: string;
 	name: string;
@@ -89,36 +108,15 @@ export interface ControlSet {
 		revision?: string;
 		[key: string]: any;
 	};
-	// Legacy OSCAL fields for backward compatibility
-	last_modified?: string; // alias for lastModified
-	oscal_version?: string;
-	uuid?: string;
-	source_type?: string;
-	source_file?: string;
-	processed_at?: string;
-
-	// Dynamic field schema from OSCAL import
+	fieldSchema?: {
+		fields: Record<string, FieldSchema>;
+		total_controls?: number;
+		analyzed_at?: string;
+	};
 	field_schema?: {
-		fields: {
-			[fieldName: string]: {
-				type: string;
-				ui_type: string;
-				is_array: boolean;
-				max_length: number;
-				usage_count: number;
-				usage_percentage: number;
-				required: boolean;
-				visible: boolean;
-				show_in_table: boolean;
-				editable: boolean;
-				display_order: number;
-				category: string;
-				examples?: string[];
-				array_item_type?: string;
-			};
-		};
-		total_controls: number;
-		analyzed_at: string;
+		fields: Record<string, FieldSchema>;
+		total_controls?: number;
+		analyzed_at?: string;
 	};
 }
 

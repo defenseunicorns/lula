@@ -311,10 +311,22 @@
 					{#if $searchTerm}
 						No controls match your search criteria. Try adjusting your search terms or clearing
 						filters.
-					{:else}
+					{:else if $selectedFamily}
 						No controls available in this family. Select a different family or check your data.
+					{:else if $controls.length === 0}
+						No controls have been imported yet.
+					{:else}
+						No controls available. Select a different family or check your data.
 					{/if}
 				</p>
+				{#if $controls.length === 0}
+					<a 
+						href="/setup" 
+						class="mt-4 inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+					>
+						Import Controls Now
+					</a>
+				{/if}
 			</div>
 		</div>
 	{/if}

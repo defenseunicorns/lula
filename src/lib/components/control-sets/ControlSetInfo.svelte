@@ -28,7 +28,7 @@
 
 {#if loading}
 	<div class="text-sm text-gray-500 dark:text-gray-400">Loading...</div>
-{:else if controlSet}
+{:else if controlSet && controlSet.name !== 'Unknown Control Set' && controlSet.id !== 'unknown'}
 	<div class="text-sm">
 		<div class="font-medium text-gray-900 dark:text-white">
 			{controlSet.title || controlSet.name}
@@ -48,5 +48,10 @@
 		</div>
 	</div>
 {:else}
-	<div class="text-sm text-gray-500 dark:text-gray-400">No control set info</div>
+	<a 
+		href="/setup" 
+		class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
+	>
+		Import Controls
+	</a>
 {/if}
