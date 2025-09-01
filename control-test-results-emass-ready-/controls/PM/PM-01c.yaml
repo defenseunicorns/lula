@@ -1,0 +1,134 @@
+control-acronym: "[r5] PM-01"
+control-information: >-
+  Description:
+
+  a. Develop and disseminate an organization-wide information security program
+  plan that:
+
+  1. Provides an overview of the requirements for the security program and a
+  description of the security program management controls and common controls in
+  place or planned for meeting those requirements;
+
+  2. Includes the identification and assignment of roles, responsibilities,
+  management commitment, coordination among organizational entities, and
+  compliance;
+
+  3. Reflects the coordination among organizational entities responsible for
+  information security; and
+
+  4. Is approved by a senior official with responsibility and accountability for
+  the risk being incurred to organizational operations (including mission,
+  functions, image, and reputation), organizational assets, individuals, other
+  organizations, and the Nation;
+
+  b. Review and update the organization-wide information security program plan
+  [Assignment: organization-defined frequency] and following [Assignment:
+  organization-defined events]; and
+
+  c. Protect the information security program plan from unauthorized disclosure
+  and modification.
+
+
+  Supplemental Guidance:
+
+  An information security program plan is a formal document that provides an
+  overview of the security requirements for an organization-wide information
+  security program and describes the program management controls and common
+  controls in place or planned for meeting those requirements. An information
+  security program plan can be represented in a single document or compilations
+  of documents. Privacy program plans and supply chain risk management plans are
+  addressed separately in PM-18 and SR-2, respectively.
+
+
+  An information security program plan documents implementation details about
+  program management and common controls. The plan provides sufficient
+  information about the controls (including specification of parameters for
+  assignment and selection operations, explicitly or by reference) to enable
+  implementations that are unambiguously compliant with the intent of the plan
+  and a determination of the risk to be incurred if the plan is implemented as
+  intended. Updates to information security program plans include organizational
+  changes and problems identified during plan implementation or control
+  assessments.
+
+
+  Program management controls may be implemented at the organization level or
+  the mission or business process level, and are essential for managing the
+  organization’s information security program. Program management controls are
+  distinct from common, system-specific, and hybrid controls because program
+  management controls are independent of any particular system. Together, the
+  individual system security plans and the organization-wide information
+  security program plan provide complete coverage for the security controls
+  employed within the organization.
+
+
+  Common controls available for inheritance by organizational systems are
+  documented in an appendix to the organization’s information security program
+  plan unless the controls are included in a separate security plan for a
+  system. The organization-wide information security program plan indicates
+  which separate security plans contain descriptions of common controls.
+
+
+  Events that may precipitate an update to the information security program plan
+  include, but are not limited to, organization-wide assessment or audit
+  findings, security incidents or breaches, or changes in laws, executive
+  orders, directives, regulations, policies, standards, and guidelines. Related
+  Control(s): PL-2, PM-18, PM-30, RA-9, SI-12, SR-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Information security program plan; procedures
+  addressing program plan development and implementation; procedures addressing
+  program plan reviews and updates; procedures addressing coordination of the
+  program plan with relevant entities; procedures for program plan approvals;
+  records of program plan reviews and updates; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  program planning and plan implementation responsibilities; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for information security program
+  plan development, review, update, and approval; mechanisms supporting and/or
+  implementing the information security program plan].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PM-01c
+cci: 002989; 002990
+cci-definition: "002989: Protect the information security program plan from
+  unauthorized disclosure.; 002990: Protect the information security program
+  plan from unauthorized modification."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the information security program plan is protected from unauthorized
+  disclosure.
+
+  - the information security program plan is protected from unauthorized
+  modification.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PM-1.12, PM-1.13."
+mapped-rev4-aps: PM-1.12; PM-1.13
+family: PM

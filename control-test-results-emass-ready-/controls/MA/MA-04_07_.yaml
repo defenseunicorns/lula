@@ -1,0 +1,82 @@
+control-acronym: "[r5] MA-04(07)"
+control-information: >-
+  Description:
+
+  Verify session and network connection termination after the completion of
+  nonlocal maintenance and diagnostic sessions.
+
+
+  Supplemental Guidance:
+
+  Verifying the termination of a connection once maintenance is completed
+  ensures that connections established during nonlocal maintenance and
+  diagnostic sessions have been terminated and are no longer available for use.
+  Related Control(s): AC-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Maintenance policy; procedures addressing nonlocal
+  system maintenance; system design documentation; system configuration settings
+  and associated documentation; session/network termination logs; cryptographic
+  mechanisms protecting nonlocal maintenance activities; maintenance records;
+  diagnostic records; audit records; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system maintenance
+  responsibilities; network engineers; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Mechanisms implementing remote disconnect verifications of
+  terminated nonlocal maintenance and diagnostic sessions].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: MA-04(07)
+cci: 2891
+cci-definition: "002891: Verify session and network connection termination after
+  the completion of nonlocal maintenance and diagnostic sessions."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - session connection termination is verified after the completion of nonlocal
+  maintenance and diagnostic sessions.
+
+  - network connection termination is verified after the completion of nonlocal
+  maintenance and diagnostic sessions.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: MA-4(7).1. The
+  resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: MA-4(7).1.
+
+
+  Not Applicable to UDS technology stack. (All maintenance would be considered
+  local maintenance as admins would either be provided by the organization or
+  contracted.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: MA-4(7).1. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: MA-4(7).1."
+mapped-rev4-aps: MA-4(7)
+family: MA

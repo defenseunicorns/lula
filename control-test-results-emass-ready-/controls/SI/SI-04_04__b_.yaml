@@ -1,0 +1,100 @@
+control-acronym: "[r5] SI-04(04)"
+control-information: >-
+  Description:
+
+  (a) Determine criteria for unusual or unauthorized activities or conditions
+  for inbound and outbound communications traffic;
+
+  (b) Monitor inbound and outbound communications traffic [Assignment:
+  organization-defined frequency] for [Assignment: organization-defined unusual
+  or unauthorized activities or conditions].
+
+
+  Supplemental Guidance:
+
+  Unusual or unauthorized activities or conditions related to system inbound and
+  outbound communications traffic includes internal traffic that indicates the
+  presence of malicious code or unauthorized use of legitimate code or
+  credentials within organizational systems or propagating among system
+  components, signaling to external systems, and the unauthorized exporting of
+  information. Evidence of malicious code or unauthorized use of legitimate code
+  or credentials is used to identify potentially compromised systems or system
+  components. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and information integrity policy; system and
+  information integrity procedures; procedures addressing system monitoring
+  tools and techniques; system design documentation; system monitoring tools and
+  techniques documentation; system configuration settings and associated
+  documentation; system protocols; system audit records; system security plan;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the system; organizational
+  personnel responsible for monitoring the system; organizational personnel
+  responsible for the intrusion detection system].
+
+
+  Test: [SELECT FROM: Organizational processes for intrusion detection and
+  system monitoring; mechanisms supporting and/or implementing intrusion
+  detection and system monitoring capabilities; mechanisms supporting and/or
+  implementing the monitoring of inbound and outbound communications traffic].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-04(04)(b)
+cci: 002659; 002660; 002661; 002662; 004973; 004974
+cci-definition: "002659: Defines the frequency on which it will monitor inbound
+  communications for unusual or unauthorized activities or conditions.; 002660:
+  Defines the frequency on which it will monitor outbound communications for
+  unusual or unauthorized activities or conditions.; 002661: Monitor inbound
+  communications traffic per organization-defined frequency for
+  organization-defined unusual or unauthorized activities or conditions.;
+  002662: Monitor outbound communications traffic per organization-defined
+  frequency for organization-defined unusual or unauthorized activities or
+  conditions.; 004973: Defines the unusual or unauthorized activities or
+  conditions that will be monitored for inbound communications traffic.; 004974:
+  Defines the unusual or unauthorized activities or conditions that will be
+  monitored for outbound communications traffic."
+implementation-guidance: CCI-002659 and CCI-002660 of this assessment procedure
+  are automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - inbound communications traffic is monitored [Assignment:
+  organization-defined frequency] for [Assignment: organization-defined unusual
+  or unauthorized activities or conditions].
+
+  - outbound communications traffic is monitored [Assignment:
+  organization-defined frequency] for [Assignment: organization-defined unusual
+  or unauthorized activities or conditions].
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SI-4(4).1, SI-4(4).2, SI-4(4).3, SI-4(4).4; as well as the
+  following Rev. 5 security requirements: CCI-004973, CCI-004974. The resulting
+  compliance status was set to non-compliant because of the addition of a new
+  security requirement to the assessment procedure that has not been previously
+  assessed: CCI-004973, CCI-004974."
+mapped-rev4-aps: SI-4(4)
+family: SI

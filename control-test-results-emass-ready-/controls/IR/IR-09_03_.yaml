@@ -1,0 +1,70 @@
+control-acronym: "[r5] IR-09(03)"
+control-information: >-
+  Description:
+
+  Implement the following procedures to ensure that organizational personnel
+  impacted by information spills can continue to carry out assigned tasks while
+  contaminated systems are undergoing corrective actions: [Assignment:
+  organization-defined procedures].
+
+
+  Supplemental Guidance:
+
+  Corrective actions for systems contaminated due to information spillages may
+  be time-consuming. Personnel may not have access to the contaminated systems
+  while corrective actions are being taken, which may potentially affect their
+  ability to conduct organizational business. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident response; procedures addressing information spillage; incident
+  response plan; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for post-spill operations].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IR-09(03)
+cci: 002818; 002819
+cci-definition: "002818: Implement organization-defined procedures to ensure
+  that organizational personnel impacted by information spills can continue to
+  carry out assigned tasks while contaminated systems are undergoing corrective
+  actions.; 002819: Defines the procedures to be implemented to ensure that
+  organizational personnel impacted by information spills can continue to carry
+  out assigned tasks while contaminated systems are undergoing corrective
+  actions."
+implementation-guidance: "-"
+assessment-procedures: "Determine if [Assignment: organization-defined
+  procedures] are implemented to ensure that organizational personnel impacted
+  by information spills can continue to carry out assigned tasks while
+  contaminated systems are undergoing corrective actions."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IR-9(3).1, IR-9(3).2."
+mapped-rev4-aps: IR-9(3)
+family: IR

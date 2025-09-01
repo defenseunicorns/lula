@@ -1,0 +1,122 @@
+control-acronym: RA-5
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Scans for vulnerabilities in the information system and hosted applications
+  [Assignment: organization-defined frequency and/or randomly in accordance with
+  organization-defined process] and when new vulnerabilities potentially
+  affecting the system/applications are identified and reported;
+
+  b. Employs vulnerability scanning tools and techniques that facilitate
+  interoperability among tools and automate parts of the vulnerability
+  management process by using standards for:
+
+  1. Enumerating platforms, software flaws, and improper configurations;
+
+  2. Formatting checklists and test procedures; and
+
+  3. Measuring vulnerability impact;
+
+  c. Analyzes vulnerability scan reports and results from security control
+  assessments;
+
+  d. Remediates legitimate vulnerabilities [Assignment: organization-defined
+  response times] in accordance with an organizational assessment of risk; and
+
+  e. Shares information obtained from the vulnerability scanning process and
+  security control assessments with [Assignment: organization-defined personnel
+  or roles] to help eliminate similar vulnerabilities in other information
+  systems (i.e., systemic weaknesses or deficiencies).
+
+
+  Supplemental Guidance:
+
+  Security categorization of information systems guides the frequency and
+  comprehensiveness of vulnerability scans. Organizations determine the required
+  vulnerability scanning for all information system components, ensuring that
+  potential sources of vulnerabilities such as networked printers, scanners, and
+  copiers are not overlooked. Vulnerability analyses for custom software
+  applications may require additional approaches such as static analysis,
+  dynamic analysis, binary analysis, or a hybrid of the three approaches.
+  Organizations can employ these analysis approaches in a variety of tools
+  (e.g., web-based application scanners, static analysis tools, binary
+  analyzers) and in source code reviews. Vulnerability scanning includes, for
+  example: (i) scanning for patch levels; (ii) scanning for functions, ports,
+  protocols, and services that should not be accessible to users or devices; and
+  (iii) scanning for improperly configured or incorrectly operating information
+  flow control mechanisms. Organizations consider using tools that express
+  vulnerabilities in the Common Vulnerabilities and Exposures (CVE) naming
+  convention and that use the Open Vulnerability Assessment Language (OVAL) to
+  determine/test for the presence of vulnerabilities. Suggested sources for
+  vulnerability information include the Common Weakness Enumeration (CWE)
+  listing and the National Vulnerability Database (NVD). In addition, security
+  control assessments such as red team exercises provide other sources of
+  potential vulnerabilities for which to scan. Organizations also consider using
+  tools that express vulnerability impact by the Common Vulnerability Scoring
+  System (CVSS). Related controls: CA-2, CA-7, CM-4, CM-6, RA-2, RA-3, SA-11,
+  SI-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Risk assessment policy; procedures addressing
+  vulnerability scanning; risk assessment; security plan; security assessment
+  report; vulnerability scanning tools and associated configuration
+  documentation; vulnerability scanning results; patch and vulnerability
+  management records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with risk assessment,
+  security control assessment and vulnerability scanning responsibilities;
+  organizational personnel with vulnerability scan analysis responsibilities;
+  organizational personnel with vulnerability remediation responsibilities;
+  organizational personnel with information security responsibilities;
+  system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for vulnerability scanning,
+  analysis, remediation, and information sharing; automated mechanisms
+  supporting and/or implementing vulnerability scanning, analysis, remediation,
+  and information sharing].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  RA-5.1,CCI-001054,Organization AWS Cloud Brokerage Package
+  RA-5.2,CCI-001055,DoD Organization or Service Common Control Package
+  RA-5.3,CCI-001056,Organization AWS Cloud Brokerage Package
+  RA-5.4,CCI-001641,Organization AWS Cloud Brokerage Package
+  RA-5.5,CCI-001643,Organization AWS Cloud Brokerage Package
+  RA-5.6,CCI-001057,Organization AWS Cloud Brokerage Package
+  RA-5.7,CCI-001058,Local
+  RA-5.8,CCI-001059,Local
+  RA-5.9,CCI-001060,DoD Organization or Service Common Control Package
+  RA-5.10,CCI-001061,Organization AWS Cloud Brokerage Package
+  RA-5.11,CCI-002376,DoD Organization or Service Common Control Package...
+ap-acronym: RA-5.11
+cci: 2376
+cci-definition: '002376: The organization defines the personnel or roles whom
+  the information obtained from the vulnerability scanning process and security
+  control assessments will be shared.'
+implementation-guidance: |-
+  DoD has defined the personnel or roles as at a minimum, the ISSO and ISSM.
+
+  Recommended Compelling Evidence:
+  Automatically compliant.
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the personnel or roles as at a minimum, the ISSO and
+  ISSM.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: RA

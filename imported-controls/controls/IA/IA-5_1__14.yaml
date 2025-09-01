@@ -1,0 +1,123 @@
+control-acronym: IA-5(1)
+control-information: >-
+  Description:
+
+  The information system, for password-based authentication:
+
+  (a) Enforces minimum password complexity of [Assignment: organization-defined
+  requirements for case sensitivity, number of characters, mix of upper-case
+  letters, lower-case letters, numbers, and special characters, including
+  minimum requirements for each type];
+
+  (b) Enforces at least the following number of changed characters when new
+  passwords are created: [Assignment: organization-defined number];
+
+  (c) Stores and transmits only cryptographically-protected passwords;
+
+  (d) Enforces password minimum and maximum lifetime restrictions of
+  [Assignment: organization-defined numbers for lifetime minimum, lifetime
+  maximum];
+
+  (e) Prohibits password reuse for [Assignment: organization-defined number]
+  generations; and
+
+  (f) Allows the use of a temporary password for system logons with an immediate
+  change to a permanent password.
+
+
+  Supplemental Guidance:
+
+  This control enhancement applies to single-factor authentication of
+  individuals using passwords as individual or group authenticators, and in a
+  similar manner, when passwords are part of multifactor authenticators. This
+  control enhancement does not apply when passwords are used to unlock hardware
+  authenticators (e.g., Personal Identity Verification cards). The
+  implementation of such password mechanisms may not meet all of the
+  requirements in the enhancement. Cryptographically-protected passwords
+  include, for example, encrypted versions of passwords and one-way
+  cryptographic hashes of passwords. The number of changed characters refers to
+  the number of changes required with respect to the total number of positions
+  in the current password. Password lifetime restrictions do not apply to
+  temporary passwords. To mitigate certain brute force attacks against
+  passwords, organizations may also consider salting passwords. Related control:
+  IA-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; password
+  policy; procedures addressing authenticator management; security plan;
+  information system design documentation; information system configuration
+  settings and associated documentation; password configurations and associated
+  documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with authenticator
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  password-based authenticator management capability].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IA-5(1).1,CCI-000192,Local
+  IA-5(1).2,CCI-000193,Local
+  IA-5(1).3,CCI-000205,Local
+  IA-5(1).4,CCI-000194,Local
+  IA-5(1).5,CCI-001611,DoD Organization or Service Common Control Package
+  IA-5(1).6,CCI-001612,DoD Organization or Service Common Control Package
+  IA-5(1).7,CCI-001613,DoD Organization or Service Common Control Package
+  IA-5(1).8,CCI-001614,DoD Organization or Service Common Control Package
+  IA-5(1).9,CCI-001619,Local
+  IA-5(1).10,CCI-000195,Local
+  IA-5(1).11,CCI-001615,DoD Organization or Service Common Control Package
+  IA-5(1).12,CCI-000196,Local
+  IA-5(1).13,CCI-000197,Local
+  IA-5(1).14,CCI-000198,Local
+  IA-5(1).15,CCI-000199,Local
+  IA-5(1).16,CCI-001616,DoD Organization or Service Common Control Package
+  IA-5(1).17,CCI-001617,DoD Organization or Service Common Control Package
+  IA-5(1).18,CCI-000200,Local
+  IA-5(1).19,CCI-001618,DoD Organization or Service Common Control Package
+  IA-5(1).20,CCI-002041,Local...
+ap-acronym: IA-5(1).14
+cci: 198
+cci-definition: '000198: The information system enforces minimum password
+  lifetime restrictions.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  enforce minimum password lifetime restrictions. For information system
+  components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  198.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Key Management Policy referencing enforcement of minimum
+  password lifetime restrictions.
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to enforce minimum
+  password lifetime restrictions. For information system components that have
+  applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 198.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (UDS utilizes Keycloak for
+  identity and access management, supporting comprehensive password policy
+  enforcement. However, Keycloak's built-in password policy features do not
+  explicitly enforce a minimum password lifetime (e.g., preventing users from
+  changing passwords before a defined minimum period).)
+family: IA

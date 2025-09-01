@@ -1,0 +1,94 @@
+control-acronym: SC-8(1)
+control-information: >-
+  Description:
+
+  The information system implements cryptographic mechanisms to [Selection (one
+  or more): prevent unauthorized disclosure of information; detect changes to
+  information] during transmission unless otherwise protected by [Assignment:
+  organization-defined alternative physical safeguards].
+
+
+  Supplemental Guidance:
+
+  Encrypting information for transmission protects information from unauthorized
+  disclosure and modification. Cryptographic mechanisms implemented to protect
+  information integrity include, for example, cryptographic hash functions which
+  have common application in digital signatures, checksums, and message
+  authentication codes. Alternative physical security safeguards include, for
+  example, protected distribution systems. Related control: SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing transmission confidentiality and integrity; information system
+  design documentation; information system configuration settings and associated
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer].
+
+
+  Test: [SELECT FROM: Cryptographic mechanisms supporting and/or implementing
+  transmission confidentiality and/or integrity; automated mechanisms supporting
+  and/or implementing alternative physical safeguards; organizational processes
+  for defining and implementing alternative physical safeguards].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-8(1).1,CCI-002419,DoD Organization or Service Common Control Package
+  SC-8(1).2,CCI-002421,Local...
+ap-acronym: SC-8(1).2
+cci: 2421
+cci-definition: '002421: The information system implements cryptographic
+  mechanisms to prevent unauthorized disclosure of information and/or detect
+  changes to information during transmission unless otherwise protected by
+  organization-defined alternative physical safeguards.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  implement cryptographic mechanisms to prevent unauthorized disclosure of
+  information and detect changes to information during transmission unless
+  otherwise protected by Protected Distribution System (PDS). For information
+  system components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  2421. DoD has defined the selection as both prevention of unauthorized
+  disclosure and detection of changes to information. DoD has defined the
+  alternative physical safeguards as Protected Distribution System (PDS).
+
+  Recommended Compelling Evidence:
+
+  1.) Current Network diagram.
+
+  2.) Signed and dated System Security Plan (SSP).
+
+  3.) Applicable STIG/SRG checks.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to implement
+  cryptographic mechanisms to prevent unauthorized disclosure of information and
+  detect changes to information during transmission unless otherwise protected
+  by Protected Distribution System (PDS). For information system components that
+  have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 2421. DoD has defined the
+  alternative physical safeguards as Protected Distribution System (PDS).
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: 'The cryptographic mechanisms used (TLS 1.2+/AES) by UDS are
+  industry-standard and can be configured to meet federal standards (e.g., using
+  FIPS-validated algorithms if needed). Istioâs mTLS and standard HTTPS both
+  use protocols that provide end-to-end encryption and integrity. They are
+  implemented via well-known libraries (OpenSSL, BoringSSL, etc.) which include
+  proper cipher suites.'
+uds-alignment: Istio, Keycloak
+family: SC

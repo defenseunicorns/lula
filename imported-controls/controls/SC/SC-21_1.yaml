@@ -1,0 +1,88 @@
+control-acronym: SC-21
+control-information: >-
+  Description:
+
+  The information system requests and performs data origin authentication and
+  data integrity verification on the name/address resolution responses the
+  system receives from authoritative sources.
+
+
+  Supplemental Guidance:
+
+  Each client of name resolution services either performs this validation on its
+  own, or has authenticated channels to trusted validation providers.
+  Information systems that provide name and address resolution services for
+  local clients include, for example, recursive resolving or caching domain name
+  system (DNS) servers. DNS client resolvers either perform validation of DNSSEC
+  signatures, or clients use authenticated channels to recursive resolvers that
+  perform such validations. Information systems that use technologies other than
+  the DNS to map between host/service names and network addresses provide other
+  means to enable clients to verify the authenticity and integrity of response
+  data. Related controls: SC-20, SC-22.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing secure name/address resolution service (recursive or caching
+  resolver); information system design documentation; information system
+  configuration settings and associated documentation; information system audit
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with responsibilities for managing DNS].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing data
+  origin authentication and data integrity verification for name/address
+  resolution services].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-21.1
+cci: 2465
+cci-definition: '002465: The information system requests data origin
+  authentication verification on the name/address resolution responses the
+  system receives from authoritative sources.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the:
+
+  1. recursive/caching name server software to enable DNSSEC;
+
+  2. software to enable DNSSEC validation; and
+
+  3. software to establish a secure entry point trust anchor by installing key
+  signing keys in the software configuration of trusted keys. For information
+  system components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that determines the
+  name server software configuration files and pertains to CCI 2465.
+
+  Recommended Compelling Evidence:
+
+  1.) DNS logs.
+
+  2.) Applicable STIG/SRG checks that determine the name server software
+  configuration files and pertain to CCI 2465.
+assessment-procedures: The organization conducting the inspection/assessment
+  utilizes DNSSEC diagnostic tools, such as dig, and performs queries which will
+  exercise the data flow path for recursive name resolution services. For
+  information system components that have applicable STIGs or SRGs, the
+  organization conducting the inspection/assessment evaluates the components to
+  ensure that the organization being inspected/assessed has configured the
+  information system in compliance with the applicable STIGs and SRGs that
+  determine the name server software configuration files and pertain to CCI
+  2465.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (Architecture and
+  provisioning for name/address resolution DNS architecture, out of scope of UDS
+  which focuses on application layer.)
+family: SC

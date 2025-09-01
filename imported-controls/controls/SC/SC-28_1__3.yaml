@@ -1,0 +1,98 @@
+control-acronym: SC-28(1)
+control-information: >-
+  Description:
+
+  The information system implements cryptographic mechanisms to prevent
+  unauthorized disclosure and modification of [Assignment: organization-defined
+  information] on [Assignment: organization-defined information system
+  components].
+
+
+  Supplemental Guidance:
+
+  Selection of cryptographic mechanisms is based on the need to protect the
+  confidentiality and integrity of organizational information. The strength of
+  mechanism is commensurate with the security category and/or classification of
+  the information. This control enhancement applies to significant
+  concentrations of digital media in organizational areas designated for media
+  storage and also to limited quantities of media generally associated with
+  information system components in operational environments (e.g., portable
+  storage devices, mobile devices). Organizations have the flexibility to either
+  encrypt all information on storage devices (i.e., full disk encryption) or
+  encrypt specific data structures (e.g., files, records, or fields).
+  Organizations employing cryptographic mechanisms to protect information at
+  rest also consider cryptographic key management solutions. Related controls:
+  AC-19, SC-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing protection of information at rest; information system design
+  documentation; information system configuration settings and associated
+  documentation; cryptographic mechanisms and associated configuration
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer].
+
+
+  Test: [SELECT FROM: Cryptographic mechanisms implementing confidentiality and
+  integrity protections for information at rest].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-28(1).1,CCI-002473,Local
+  SC-28(1).2,CCI-002474,DoD Organization or Service Common Control Package
+  SC-28(1).3,CCI-002475,Local
+  SC-28(1).4,CCI-002476,Local...
+ap-acronym: SC-28(1).3
+cci: 2475
+cci-definition: '002475: Implement cryptographic mechanisms to prevent
+  unauthorized modification of organization-defined information when at rest on
+  organization-defined system components.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  implement cryptographic mechanisms to prevent unauthorized modification of
+  information at rest defined in SC-28 (1), CCI 2473 on any information system
+  components storing data defined in SC-28 (1), 2473. For information system
+  components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  2475. DoD has defined the information system components as any information
+  system components storing data defined in SC-28 (1), 2473.
+
+  Recommended Compelling Evidence:
+
+  1.) Applicable STIG/SRG checks pertains to CCI 2475.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to implement
+  cryptographic mechanisms to prevent unauthorized modification of information
+  at rest defined in SC-28 (1), CCI 2473 on any information system components
+  storing data defined in SC-28 (1), 2473. For information system components
+  that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 2475. DoD has defined the
+  information system components as any information system components storing
+  data defined in SC-28 (1), 2473.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: UDS ensures protection of confidentiality and integrity of
+  information at rest by employing industry-standard encryption practices.
+  Specifically, data at rest, including persistent storage used by platform
+  components like Keycloak, Grafana, Loki logs, and any Kubernetes persistent
+  volumes, are encrypted using widely accepted, industry-standard cryptographic
+  algorithms such as AES-256. Backups managed through Velero can be configured
+  for encryption, ensuring data remains secure even when stored externally.
+uds-alignment: Keycloak, Grafana, Loki, Kubernetes, Velero
+family: SC

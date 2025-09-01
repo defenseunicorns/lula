@@ -1,0 +1,109 @@
+control-acronym: MP-6
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Sanitizes [Assignment: organization-defined information system media] prior
+  to disposal, release out of organizational control, or release for reuse using
+  [Assignment: organization-defined sanitization techniques and procedures] in
+  accordance with applicable federal and organizational standards and policies;
+  and
+
+  b. Employs sanitization mechanisms with the strength and integrity
+  commensurate with the security category or classification of the information.
+
+
+  Supplemental Guidance:
+
+  This control applies to all information system media, both digital and
+  non-digital, subject to disposal or reuse, whether or not the media is
+  considered removable. Examples include media found in scanners, copiers,
+  printers, notebook computers, workstations, network components, and mobile
+  devices. The sanitization process removes information from the media such that
+  the information cannot be retrieved or reconstructed. Sanitization techniques,
+  including clearing, purging, cryptographic erase, and destruction, prevent the
+  disclosure of information to unauthorized individuals when such media is
+  reused or released for disposal. Organizations determine the appropriate
+  sanitization methods recognizing that destruction is sometimes necessary when
+  other methods cannot be applied to media requiring sanitization. Organizations
+  use discretion on the employment of approved sanitization techniques and
+  procedures for media containing information deemed to be in the public domain
+  or publicly releasable, or deemed to have no adverse impact on organizations
+  or individuals if released for reuse or disposal. Sanitization of non-digital
+  media includes, for example, removing a classified appendix from an otherwise
+  unclassified document, or redacting selected sections or words from a document
+  by obscuring the redacted sections/words in a manner equivalent in
+  effectiveness to removing them from the document. NSA standards and policies
+  control the sanitization process for media containing classified information.
+  Related controls: MA-2, MA-4, RA-3, SC-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information system media protection policy; procedures
+  addressing media sanitization and disposal; applicable federal standards and
+  policies addressing media sanitization; media sanitization records; audit
+  records; information system design documentation; information system
+  configuration settings and associated documentation; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with media sanitization
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for media sanitization; automated
+  mechanisms supporting and/or implementing media sanitization].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: MP-6.3
+cci: 2579
+cci-definition: '002579: The organization defines the sanitization techniques
+  and procedures in accordance with applicable federal and organization
+  standards and policies to be used to sanitize organization-defined information
+  system media prior to disposal, release out of organizational control, or
+  release for reuse.'
+implementation-guidance: >-
+  DoD has defined the sanitization techniques as techniques and procedures IAW
+  NIST SP 800-88.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the sanitization techniques as techniques and
+  procedures IAW NIST SP 800-88.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: MP

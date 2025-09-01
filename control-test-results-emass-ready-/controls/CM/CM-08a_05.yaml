@@ -1,0 +1,134 @@
+control-acronym: "[r5] CM-08"
+control-information: >-
+  Description:
+
+  a. Develop and document an inventory of system components that:
+
+  1. Accurately reflects the system;
+
+  2. Includes all components within the system;
+
+  3. Does not include duplicate accounting of components or components assigned
+  to any other system;
+
+  4. Is at the level of granularity deemed necessary for tracking and reporting;
+  and
+
+  5. Includes the following information to achieve system component
+  accountability: [Assignment: organization-defined information deemed necessary
+  to achieve effective system component accountability]; and
+
+  b. Review and update the system component inventory [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  System components are discrete, identifiable information technology assets
+  that include hardware, software, and firmware. Organizations may choose to
+  implement centralized system component inventories that include components
+  from all organizational systems. In such situations, organizations ensure that
+  the inventories include system-specific information required for component
+  accountability. The information necessary for effective accountability of
+  system components includes the system name, software owners, software version
+  numbers, hardware inventory specifications, software license information, and
+  for networked components, the machine names and network addresses across all
+  implemented protocols (e.g., IPv4, IPv6). Inventory specifications include
+  date of receipt, cost, model, serial number, manufacturer, supplier
+  information, component type,  and physical location.
+
+
+  Preventing duplicate accounting of system components addresses the lack of
+  accountability that occurs when component ownership and system association is
+  not known, especially in large or complex connected systems. Effective
+  prevention of duplicate accounting of system components necessitates use of a
+  unique identifier for each component. For software inventory, centrally
+  managed software that is accessed via other systems is addressed as a
+  component of the system on which it is installed and managed. Software
+  installed on multiple organizational systems and managed at the system level
+  is addressed for each individual system and may appear more than once in a
+  centralized component inventory, necessitating a system association for each
+  software instance in the centralized inventory to avoid duplicate accounting
+  of components. Scanning systems implementing multiple network protocols (e.g.,
+  IPv4 and IPv6) can result in duplicate components being identified in
+  different address spaces. The implementation of CM-8(7) can help to eliminate
+  duplicate accounting of components. Related Control(s): CM-2, CM-7, CM-9,
+  CM-10, CM-11, CM-13, CP-2, CP-9, MA-2, MA-6, PE-20, PL-9, PM-5, SA-4, SA-5,
+  SI-2, SR-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  system component inventory; configuration management plan; system security
+  plan; system design documentation; system component inventory; inventory
+  reviews and update records; system security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with component inventory
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing the system component
+  inventory; mechanisms supporting and/or implementing system component
+  inventory].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-08a.05
+cci: 000398; 003967
+cci-definition: "000398: Defines information deemed necessary to achieve
+  effective system component accountability.; 003967: Develop and document an
+  inventory of system components that includes organization-defined information
+  deemed necessary to achieve effective system component accountability."
+implementation-guidance: CCI-000398 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if an inventory of system components that
+  includes [Assignment: organization-defined information deemed necessary to
+  achieve effective system component accountability] is developed and
+  documented."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: CM-8.4, CM-8.5; as
+  well as the following Rev. 5 security requirements: CCI-003967. The resulting
+  compliance status was set to non-compliant because the following Rev. 4
+  assessment procedure had no locally entered test result/compliance statement:
+  CM-8.5. The resulting compliance status was set to non-compliant because of
+  the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-003967.
+
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  Not Applicable to UDS technology stack. (Though UDS provides a detailed list
+  of software and components within UDS there might be others for the
+  organization to report on that fall outside the boundary of UDS.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-8.4, CM-8.5; as well as the following Rev. 5 security
+  requirements: CCI-003967. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: CM-8.5. The resulting compliance
+  status was set to non-compliant because of the addition of a new security
+  requirement to the assessment procedure that has not been previously assessed:
+  CCI-003967."
+mapped-rev4-aps: CM-8.4; CM-8.5
+family: CM

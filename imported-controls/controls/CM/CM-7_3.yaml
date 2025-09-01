@@ -1,0 +1,101 @@
+control-acronym: CM-7
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Configures the information system to provide only essential capabilities;
+  and
+
+  b. Prohibits or restricts the use of the following functions, ports,
+  protocols, and/or services: [Assignment: organization-defined prohibited or
+  restricted functions, ports, protocols, and/or services].
+
+
+  Supplemental Guidance:
+
+  Information systems can provide a wide variety of functions and services. Some
+  of the functions and services, provided by default, may not be necessary to
+  support essential organizational operations (e.g., key missions, functions).
+  Additionally, it is sometimes convenient to provide multiple services from
+  single information system components, but doing so increases risk over
+  limiting the services provided by any one component. Where feasible,
+  organizations limit component functionality to a single function per device
+  (e.g., email servers or web servers, but not both). Organizations review
+  functions and services provided by information systems or individual
+  components of information systems, to determine which functions and services
+  are candidates for elimination (e.g., Voice Over Internet Protocol, Instant
+  Messaging, auto-execute, and file sharing). Organizations consider disabling
+  unused or unnecessary physical and logical ports/protocols (e.g., Universal
+  Serial Bus, File Transfer Protocol, and Hyper Text Transfer Protocol) on
+  information systems to prevent unauthorized connection of devices,
+  unauthorized transfer of information, or unauthorized tunneling. Organizations
+  can utilize network scanning tools, intrusion detection and prevention
+  systems, and end-point protections such as firewalls and host-based intrusion
+  detection systems to identify and prevent the use of prohibited functions,
+  ports, protocols, and services. Related controls: AC-6, CM-2, RA-5, SA-5,
+  SC-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; configuration
+  management plan; procedures addressing least functionality in the information
+  system; security plan; information system design documentation; information
+  system configuration settings and associated documentation; security
+  configuration checklists; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security configuration
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes prohibiting or restricting
+  functions, ports, protocols, and/or services; automated mechanisms
+  implementing restrictions or prohibition of functions, ports, protocols,
+  and/or services].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CM-7.1,CCI-000381,Local
+  CM-7.2,CCI-000380,DoD Organization or Service Common Control Package
+  CM-7.3,CCI-000382,Local...
+ap-acronym: CM-7.3
+cci: 382
+cci-definition: '000382: The organization configures the information system to
+  prohibit or restrict the use of organization-defined functions, ports,
+  protocols, and/or services.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  prohibit or restrict the use of functions, ports, protocols, and/or services
+  IAW DoDI 8551.01. DoD has defined the information system prohibited or
+  restricted functions, ports, protocols, and/or services as IAW DoDI 8551.01.
+
+  Recommended Compelling Evidence:
+
+  1.) Approved ports, protocols, and/or services list
+assessment-procedures: The organization conducting the inspection/assessment
+  inspects the information system to ensure the organization being
+  inspected/assessed prohibits or restricts the use of functions, ports,
+  protocols, and/or services IAW DoDI 8551.01. DoD has defined the information
+  system prohibited or restricted functions, ports, protocols, and/or services
+  as IAW DoDI 8551.01.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: Unused ports or interfaces are not exposed by default (e.g., by
+  Kubernetes network policy and Istio configuration). Thus, UDS provides only
+  essential capabilities, and unnecessary functionalities (services, ports,
+  privileges) are removed or turned off. UDS is deployed with only the necessary
+  services and features enabled. The platform uses a minimal set of software
+  just the components needed for its mission are installed. Defense Unicorns
+  provides a ports, protocols, and services list for tracking.
+uds-alignment: Kubernetes, Istio
+family: CM

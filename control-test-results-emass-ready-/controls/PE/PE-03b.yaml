@@ -1,0 +1,111 @@
+control-acronym: "[r5] PE-03"
+control-information: >-
+  Description:
+
+  a. Enforce physical access authorizations at [Assignment: organization-defined
+  entry and exit points to the facility where the system resides] by:
+
+  1. Verifying individual access authorizations before granting access to the
+  facility; and
+
+  2. Controlling ingress and egress to the facility using [Selection (one or
+  more): [Assignment: organization-defined physical access control systems or
+  devices]; guards];
+
+  b. Maintain physical access audit logs for [Assignment: organization-defined
+  entry or exit points];
+
+  c. Control access to areas within the facility designated as publicly
+  accessible by implementing the following controls: [Assignment:
+  organization-defined physical access controls];
+
+  d. Escort visitors and control visitor activity [Assignment:
+  organization-defined circumstances requiring visitor escorts and control of
+  visitor activity];
+
+  e. Secure keys, combinations, and other physical access devices;
+
+  f. Inventory [Assignment: organization-defined physical access devices] every
+  [Assignment: organization-defined frequency]; and
+
+  g. Change combinations and keys [Assignment: organization-defined frequency]
+  and/or when keys are lost, combinations are compromised, or when individuals
+  possessing the keys or combinations are transferred or terminated.
+
+
+  Supplemental Guidance:
+
+  Physical access control applies to employees and visitors. Individuals with
+  permanent physical access authorizations are not considered visitors. Physical
+  access controls for publicly accessible areas may include physical access
+  control logs/records, guards, or physical access devices and barriers to
+  prevent movement from publicly accessible areas to non-public areas.
+  Organizations determine the types of guards needed, including professional
+  security staff, system users, or administrative staff. Physical access devices
+  include keys, locks, combinations, biometric readers, and card readers.
+  Physical access control systems comply with applicable laws, executive orders,
+  directives, policies, regulations, standards, and guidelines. Organizations
+  have flexibility in the types of audit logs employed. Audit logs can be
+  procedural, automated, or some combination thereof. Physical access points can
+  include facility access points, interior access points to systems that require
+  supplemental access controls, or both. Components of systems may be in areas
+  designated as publicly accessible with organizations controlling access to the
+  components. Related Control(s): AT-3, AU-2, AU-6, AU-9, AU-13, CP-10, IA-3,
+  IA-8, MA-5, MP-2, MP-4, PE-2, PE-4, PE-5, PE-8, PS-2, PS-3, PS-6, PS-7, RA-3,
+  SC-28, SI-4, SR-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing physical access control; physical access control logs or
+  records; inventory records of physical access control devices; system entry
+  and exit points; records of key and lock combination changes; storage
+  locations for physical access control devices; physical access control
+  devices; list of security safeguards controlling access to designated publicly
+  accessible areas within facility; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access control
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for physical access control;
+  mechanisms supporting and/or implementing physical access control; physical
+  access control devices].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-03b
+cci: 002917; 002918
+cci-definition: "002917: Maintain physical access audit logs for
+  organization-defined entry/exit points to the facility where the system
+  resides.; 002918: Defines entry and exit points to the facility where the
+  system resides that require physical access audit logs be maintained."
+implementation-guidance: "-"
+assessment-procedures: "Determine if physical access audit logs are maintained
+  for [Assignment: organization-defined entry or exit points]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PE-3.6, PE-3.7."
+mapped-rev4-aps: PE-3.6; PE-3.7
+family: PE

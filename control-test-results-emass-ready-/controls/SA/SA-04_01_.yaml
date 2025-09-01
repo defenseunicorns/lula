@@ -1,0 +1,72 @@
+control-acronym: "[r5] SA-04(01)"
+control-information: >-
+  Description:
+
+  Require the developer of the system, system component, or system service to
+  provide a description of the functional properties of the controls to be
+  implemented.
+
+
+  Supplemental Guidance:
+
+  Functional properties of security and privacy controls describe the
+  functionality (i.e., security or privacy capability, functions, or mechanisms)
+  visible at the interfaces of the controls and specifically exclude
+  functionality and data structures internal to the operation of the controls.
+  Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; system and
+  services acquisition procedures; procedures addressing the integration of
+  security and privacy requirements, descriptions, and criteria into the
+  acquisition process; solicitation documents; acquisition documentation;
+  acquisition contracts for the system, system component, or system services;
+  system security plan; privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with acquisition/contracting
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes for determining system security
+  functional requirements; organizational processes for developing acquisition
+  contracts; mechanisms supporting and/or implementing acquisitions and the
+  inclusion of security and privacy requirements in contracts].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-04(01)
+cci: 623
+cci-definition: "000623: Require the developer of the system, system component,
+  or system service to provide a description of the functional properties of the
+  controls to be implemented."
+implementation-guidance: This assessment procedure is automatically compliant
+  because of coverage by DoD Enterprise.
+assessment-procedures: Determine if the developer of the system, system
+  component, or system service is required to provide a description of the
+  functional properties of the controls to be implemented.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SA-4(1).1."
+mapped-rev4-aps: SA-4(1)
+family: SA

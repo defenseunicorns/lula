@@ -1,0 +1,78 @@
+control-acronym: "[r5] SC-23(05)"
+control-information: >-
+  Description:
+
+  Only allow the use of [Assignment: organization-defined certificate
+  authorities] for verification of the establishment of protected sessions.
+
+
+  Supplemental Guidance:
+
+  Reliance on certificate authorities for the establishment of secure sessions
+  includes the use of Transport Layer Security (TLS) certificates. These
+  certificates, after verification by their respective certificate authorities,
+  facilitate the establishment of protected sessions between web clients and web
+  servers. Related Control(s): SC-12, SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing session authenticity; system design documentation; system
+  configuration settings and associated documentation; list of certificate
+  authorities allowed for verification of the establishment of protected
+  sessions; system audit records; system security plan; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing the management
+  of certificate authorities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-23(05)
+cci: 002469; 002470
+cci-definition: "002469: Defines the certificate authorities allowed to be used
+  for verification of the establishment of protected sessions.; 002470: Only
+  allow the use of organization-defined certificate authorities for verification
+  of the establishment of protected sessions."
+implementation-guidance: CCI-002469 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if only the use of [Assignment:
+  organization-defined certificate authorities] for verification of the
+  establishment of protected sessions is allowed."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  UDS platform uses the Istio Service Mesh, which includes an internal
+  certificate authority (Citadel) to manage mutual TLS (mTLS) certificates for
+  internal service-to-service sessions. By default, Istio’s built-in certificate
+  authority generates certificates to securely verify internal communications.
+  However, to fully align with this control organizations typically configure
+  Istio to utilize certificates issued by an approved certificate authority
+  compliant with DoDI 8520.02.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-23(5).1, SC-23(5).2."
+mapped-rev4-aps: SC-23(5)
+family: SC

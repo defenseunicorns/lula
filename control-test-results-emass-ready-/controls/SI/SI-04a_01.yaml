@@ -1,0 +1,135 @@
+control-acronym: "[r5] SI-04"
+control-information: >-
+  Description:
+
+  a. Monitor the system to detect:
+
+  1. Attacks and indicators of potential attacks in accordance with the
+  following monitoring objectives: [Assignment: organization-defined monitoring
+  objectives]; and
+
+  2. Unauthorized local, network, and remote connections;
+
+  b. Identify unauthorized use of the system through the following techniques
+  and methods: [Assignment: organization-defined techniques and methods];
+
+  c. Invoke internal monitoring capabilities or deploy monitoring devices:
+
+  1. Strategically within the system to collect organization-determined
+  essential information; and
+
+  2. At ad hoc locations within the system to track specific types of
+  transactions of interest to the organization;
+
+  d. Analyze detected events and anomalies;
+
+  e. Adjust the level of system monitoring activity when there is a change in
+  risk to organizational operations and assets, individuals, other
+  organizations, or the Nation;
+
+  f. Obtain legal opinion regarding system monitoring activities; and
+
+  g. Provide [Assignment: organization-defined system monitoring information] to
+  [Assignment: organization-defined personnel or roles] [Selection (one or
+  more): as needed; [Assignment: organization-defined frequency]].
+
+
+  Supplemental Guidance:
+
+  System monitoring includes external and internal monitoring. External
+  monitoring includes the observation of events occurring at external interfaces
+  to the system. Internal monitoring includes the observation of events
+  occurring within the system. Organizations monitor systems by observing audit
+  activities in real time or by observing other system aspects such as access
+  patterns, characteristics of access, and other actions. The monitoring
+  objectives guide and inform the determination of the events. System monitoring
+  capabilities are achieved through a variety of tools and techniques, including
+  intrusion detection and prevention systems, malicious code protection
+  software, scanning tools, audit record monitoring software, and network
+  monitoring software.
+
+
+  Depending on the security architecture, the distribution and configuration of
+  monitoring devices may impact throughput at key internal and external
+  boundaries as well as at other locations across a network due to the
+  introduction of network throughput latency. If throughput management is
+  needed, such devices are strategically located and deployed as part of an
+  established organization-wide security architecture. Strategic locations for
+  monitoring devices include selected perimeter locations and near key servers
+  and server farms that support critical applications. Monitoring devices are
+  typically employed at the managed interfaces associated with controls SC-7 and
+  AC-17. The information collected is a function of the organizational
+  monitoring objectives and the capability of systems to support such
+  objectives. Specific types of transactions of interest include Hypertext
+  Transfer Protocol (HTTP) traffic that bypasses HTTP proxies. System monitoring
+  is an integral part of organizational continuous monitoring and incident
+  response programs, and output from system monitoring serves as input to those
+  programs. System monitoring requirements, including the need for specific
+  types of system monitoring, may be referenced in other controls (e.g., AC-2g,
+  AC-2(7), AC-2(12)(a), AC-17(1), AU-13, AU-13(1), AU-13(2), CM-3f, CM-6d,
+  MA-3a, MA-4a, SC-5(3)(b), SC-7a, SC-7(24)(b), SC-18b, SC-43b). Adjustments to
+  levels of system monitoring are based on law enforcement information,
+  intelligence information, or other sources of information. The legality of
+  system monitoring activities is based on applicable laws, executive orders,
+  directives, regulations, policies, standards, and guidelines. Related
+  Control(s): AC-2, AC-3, AC-4, AC-8, AC-17, AU-2, AU-6, AU-7, AU-9, AU-12,
+  AU-13, AU-14, CA-7, CM-3, CM-6, CM-8, CM-11, IA-10, IR-4, MA-3, MA-4, PL-9,
+  PM-12, RA-5, RA-10, SC-5, SC-7, SC-18, SC-26, SC-31, SC-35, SC-36, SC-37,
+  SC-43, SI-3, SI-6, SI-7, SR-9, SR-10.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and information integrity policy; system and
+  information integrity procedures; procedures addressing system monitoring
+  tools and techniques; continuous monitoring strategy; facility diagram/layout;
+  system design documentation; system monitoring tools and techniques
+  documentation; locations within the system where monitoring devices are
+  deployed; system configuration settings and associated documentation; system
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the system; organizational
+  personnel responsible for monitoring the system].
+
+
+  Test: [SELECT FROM: Organizational processes for system monitoring; mechanisms
+  supporting and/or implementing system monitoring capabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-04a.01
+cci: 001253; 002641
+cci-definition: "001253: Defines the objectives of monitoring for attacks and
+  indicators of potential attacks on the system.; 002641: Monitor the system to
+  detect attacks and indicators of potential attacks in accordance with
+  organization-defined monitoring objectives."
+implementation-guidance: CCI-001253 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if the system is monitored to detect attacks
+  and indicators of potential attacks in accordance with [Assignment:
+  organization-defined monitoring objectives]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SI-4.1, SI-4.2."
+mapped-rev4-aps: SI-4.1; SI-4.2
+family: SI

@@ -1,0 +1,75 @@
+control-acronym: "[r5] PM-26"
+control-information: >-
+  Description:
+
+  Implement a process for receiving and responding to complaints, concerns, or
+  questions from individuals about the organizational security and privacy
+  practices that includes:
+
+  a. Mechanisms that are easy to use and readily accessible by the public;
+
+  b. All information necessary for successfully filing complaints;
+
+  c. Tracking mechanisms to ensure all complaints received are reviewed and
+  addressed within [Assignment: organization-defined time period];
+
+  d. Acknowledgement of receipt of complaints, concerns, or questions from
+  individuals within [Assignment: organization-defined time period]; and
+
+  e. Response to complaints, concerns, or questions from individuals within
+  [Assignment: organization-defined time period].
+
+
+  Supplemental Guidance:
+
+  Complaints, concerns, and questions from individuals can serve as valuable
+  sources of input to organizations and ultimately improve operational models,
+  uses of technology, data collection practices, and controls. Mechanisms that
+  can be used by the public include telephone hotline, email, or web-based
+  forms. The information necessary for successfully filing complaints includes
+  contact information for the senior agency official for privacy or other
+  official designated to receive complaints. Privacy complaints may also include
+  personally identifiable information which is handled in accordance with
+  relevant policies and processes. Related Control(s): IR-7, IR-9, PM-22, SI-18.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Privacy program plan; procedures addressing complaint
+  management; complaint documentation; procedures addressing the reviews of
+  complaints; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with privacy program
+  responsibilities; organizational personnel with privacy responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for complaint management;
+  mechanisms supporting complaint management; tools used by the public to submit
+  complaints, concerns, and questions (e.g., telephone, hotline, email, or
+  web-based forms].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PM-26b
+cci: 4439
+cci-definition: "004439: Implement all information necessary for successfully
+  filing complaints."
+implementation-guidance: "-"
+assessment-procedures: Determine if the complaint management process includes
+  all information necessary for successfully filing complaints.
+inherited: Local
+remote-inheritance-instance: "-"
+family: PM

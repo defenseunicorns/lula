@@ -1,0 +1,71 @@
+control-acronym: "[r5] SA-08(33)"
+control-information: >-
+  Description:
+
+  Implement the privacy principle of minimization using [Assignment:
+  organization-defined processes].
+
+
+  Supplemental Guidance:
+
+  The principle of minimization states that organizations should only process
+  personally identifiable information that is directly relevant and necessary to
+  accomplish an authorized purpose and should only maintain personally
+  identifiable information for as long as is necessary to accomplish the
+  purpose. Organizations have processes in place, consistent with applicable
+  laws and policies, to implement the principle of minimization. Related
+  Control(s): PE-8, PM-25, SC-42, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; system and
+  services acquisition procedures; personally identifiable information
+  processing policy; procedures addressing the minimization of personally
+  identifiable information in system design; system design documentation; system
+  configuration settings and associated documentation; change control records;
+  information security and privacy requirements and specifications for the
+  system; system security and privacy architecture; system security plan;
+  privacy plan; privacy impact assessment; privacy risk assessment
+  documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  and privacy responsibilities; organizational personnel with system
+  specification, design, development, implementation, and modification
+  responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes for applying the privacy design
+  principle of minimization in system specification, design, development,
+  implementation, and modification; mechanisms supporting the application of the
+  security design principle of sufficient documentation in system specification,
+  design, development, implementation, and modification; mechanisms that enforce
+  security and privacy policy; organizational processes for managing change
+  configuration; mechanisms supporting configuration control].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-08(33)
+cci: 004780; 004781
+cci-definition: "004780: Implement the privacy principle of minimization using
+  organization-defined processes.; 004781: Defines the processes for
+  implementing the privacy principle of minimization."
+implementation-guidance: "-"
+assessment-procedures: "Determine if the privacy principle of minimization is
+  implemented using [Assignment: organization-defined processes]."
+inherited: Local
+remote-inheritance-instance: "-"
+family: SA

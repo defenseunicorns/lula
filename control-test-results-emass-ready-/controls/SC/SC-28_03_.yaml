@@ -1,0 +1,58 @@
+control-acronym: "[r5] SC-28(03)"
+control-information: >-
+  Description:
+
+  Provide protected storage for cryptographic keys [Selection: [Assignment:
+  organization-defined safeguards]; hardware-protected key store].
+
+
+  Supplemental Guidance:
+
+  A Trusted Platform Module (TPM) is an example of a hardware-protected data
+  store that can be used to protect cryptographic keys. Related Control(s):
+  SC-12, SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing the protection of information at rest; system design documentation;
+  system configuration settings and associated documentation; cryptographic
+  mechanisms and associated configuration documentation; system audit records;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing hardware-based
+  key store protection].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-28(03)
+cci: 004910; 004911
+cci-definition: "004910: Provide protected storage for cryptographic keys with
+  organization-defined safeguards and/or hardware protected key store.; 004911:
+  Defines the safeguards for providing protected storage for cryptographic
+  keys."
+implementation-guidance: "-"
+assessment-procedures: "Determine if protected storage for cryptographic keys is
+  provided using [Selection: [Assignment: organization-defined safeguards];
+  hardware-protected key store]."
+inherited: Local
+remote-inheritance-instance: "-"
+family: SC

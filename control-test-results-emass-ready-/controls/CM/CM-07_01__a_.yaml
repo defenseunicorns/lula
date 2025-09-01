@@ -1,0 +1,100 @@
+control-acronym: "[r5] CM-07(01)"
+control-information: >-
+  Description:
+
+  (a) Review the system [Assignment: organization-defined frequency] to identify
+  unnecessary and/or nonsecure functions, ports, protocols, software, and
+  services; and
+
+  (b) Disable or remove [Assignment: organization-defined functions, ports,
+  protocols, software, and services within the system deemed to be unnecessary
+  and/or nonsecure].
+
+
+  Supplemental Guidance:
+
+  Organizations review functions, ports, protocols, and services provided by
+  systems or system components to determine the functions and services that are
+  candidates for elimination. Such reviews are especially important during
+  transition periods from older technologies to newer technologies (e.g.,
+  transition from IPv4 to IPv6). These technology transitions may require
+  implementing the older and newer technologies simultaneously during the
+  transition period and returning to minimum essential functions, ports,
+  protocols, and services at the earliest opportunity. Organizations can either
+  decide the relative security of the function, port, protocol, and/or service
+  or base the security decision on the assessment of other entities. Unsecure
+  protocols include Bluetooth, FTP, and peer-to-peer networking. Related
+  Control(s): AC-18.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  least functionality in the system; configuration management plan; system
+  design documentation; system configuration settings and associated
+  documentation; common secure configuration checklists; documented reviews of
+  functions, ports, protocols, and/or services; change control records; system
+  audit records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  reviewing functions, ports, protocols, and services on the system;
+  organizational personnel with information security responsibilities;
+  system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes for reviewing or disabling
+  functions, ports, protocols, and services on the system; mechanisms
+  implementing review and disabling of functions, ports, protocols, and/or
+  services].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-07(01)(a)
+cci: 000384; 001760
+cci-definition: "000384: Review the system per organization-defined frequency to
+  identify unnecessary and nonsecure functions, ports, protocols, software, and
+  services.; 001760: Defines the frequency of system reviews to identify
+  unnecessary and/or nonsecure functions, ports, protocols, software, and
+  services."
+implementation-guidance: CCI-001760 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if the system is reviewed [Assignment:
+  organization-defined frequency] to identify unnecessary and/or non-secure
+  functions, ports, protocols, software, and services."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: CM-7(1).1,
+  CM-7(1).2. The resulting compliance status was set to non-compliant because
+  the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: CM-7(1).1.
+
+
+  Not Applicable to UDS technology stack. (Though UDS provides the audit trail
+  the organization must complete the review every 30 days per the implementation
+  guidance.)
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-7(1).1, CM-7(1).2. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: CM-7(1).1."
+mapped-rev4-aps: CM-7(1)
+family: CM

@@ -1,0 +1,85 @@
+control-acronym: AC-11
+control-information: >-
+  Description:
+
+  The information system:
+
+  a. Prevents further access to the system by initiating a session lock after
+  [Assignment: organization-defined time period] of inactivity or upon receiving
+  a request from a user; and
+
+  b. Retains the session lock until the user reestablishes access using
+  established identification and authentication procedures.
+
+
+  Supplemental Guidance:
+
+  Session locks are temporary actions taken when users stop work and move away
+  from the immediate vicinity of information systems but do not want to log out
+  because of the temporary nature of their absences. Session locks are
+  implemented where session activities can be determined. This is typically at
+  the operating system level, but can also be at the application level. Session
+  locks are not an acceptable substitute for logging out of information systems,
+  for example, if organizations require users to log out at the end of workdays.
+  Related control: AC-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing session
+  lock; procedures addressing identification and authentication; information
+  system design documentation; information system configuration settings and
+  associated documentation; security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing access control policy
+  for session lock].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-11.1,CCI-000058,Local
+  AC-11.2,CCI-000059,DoD Organization or Service Common Control Package
+  AC-11.3,CCI-000056,Local
+  AC-11.4,CCI-000057,Local...
+ap-acronym: AC-11.4
+cci: 57
+cci-definition: '000057: The information system initiates a session lock after
+  the organization-defined time period of inactivity.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  initiate a session lock after the organization-defined time period defined in
+  CCI 59.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to initiate a session
+  lock after the organization-defined time period defined in CCI 59.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: 'UDS enforces session locking after an organizationally defined
+  period of user inactivity through its centralized identity management
+  solution, Keycloak. Administrators explicitly configure session lock
+  thresholds by navigating to the Keycloak administrative interface under Realm
+  Settings â Tokens â SSO Session Idle Timeout, setting the desired
+  inactivity timeout (e.g., 15 minutes). Once configured, Keycloak automatically
+  initiates a secure session lock upon reaching the inactivity threshold,
+  preventing further user interaction without reauthentication. This automated
+  enforcement ensures sessions remain protected during periods of user
+  inactivity, fully satisfying this control requirement.'
+uds-alignment: Keycloak
+family: AC

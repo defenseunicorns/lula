@@ -1,0 +1,173 @@
+control-acronym: "[r5] AC-02"
+control-information: >-
+  Description:
+
+  a. Define and document the types of accounts allowed and specifically
+  prohibited for use within the system;
+
+  b. Assign account managers;
+
+  c. Require [Assignment: organization-defined prerequisites and criteria] for
+  group and role membership;
+
+  d. Specify:
+
+  1. Authorized users of the system;
+
+  2. Group and role membership; and
+
+  3. Access authorizations (i.e., privileges) and [Assignment:
+  organization-defined attributes (as required)] for each account;
+
+  e. Require approvals by [Assignment: organization-defined personnel or roles]
+  for requests to create accounts;
+
+  f. Create, enable, modify, disable, and remove accounts in accordance with
+  [Assignment: organization-defined policy, procedures, prerequisites, and
+  criteria];
+
+  g. Monitor the use of accounts;
+
+  h. Notify account managers and [Assignment: organization-defined personnel or
+  roles] within:
+
+  1. [Assignment: organization-defined time period] when accounts are no longer
+  required;
+
+  2. [Assignment: organization-defined time period] when users are terminated or
+  transferred; and
+
+  3. [Assignment: organization-defined time period] when system usage or
+  need-to-know changes for an individual;
+
+  i. Authorize access to the system based on:
+
+  1. A valid access authorization;
+
+  2. Intended system usage; and
+
+  3. [Assignment: organization-defined attributes (as required)];
+
+  j. Review accounts for compliance with account management requirements
+  [Assignment: organization-defined frequency];
+
+  k. Establish and implement a process for changing shared or group account
+  authenticators (if deployed) when individuals are removed from the group; and
+
+  l. Align account management processes with personnel termination and transfer
+  processes.
+
+
+  Supplemental Guidance:
+
+  Examples of system account types include individual, shared, group, system,
+  guest, anonymous, emergency, developer, temporary, and service. Identification
+  of authorized system users and the specification of access privileges reflect
+  the requirements in other controls in the security plan. Users requiring
+  administrative privileges on system accounts receive additional scrutiny by
+  organizational personnel responsible for approving such accounts and
+  privileged access, including system owner, mission or business owner, senior
+  agency information security officer, or senior agency official for privacy.
+  Types of accounts that organizations may wish to prohibit due to increased
+  risk include shared, group, emergency, anonymous, temporary, and guest
+  accounts.
+
+
+  Where access involves personally identifiable information, security programs
+  collaborate with the senior agency official for privacy to establish the
+  specific conditions for group and role membership; specify authorized users,
+  group and role membership, and access authorizations for each account; and
+  create, adjust, or remove system accounts in accordance with organizational
+  policies. Policies can include such information as account expiration dates or
+  other factors that trigger the disabling of accounts. Organizations may choose
+  to define access privileges or other attributes by account, type of account,
+  or a combination of the two. Examples of other attributes required for
+  authorizing access include restrictions on time of day, day of week, and point
+  of origin. In defining other system account attributes, organizations consider
+  system-related requirements and mission/business requirements. Failure to
+  consider these factors could affect system availability.
+
+
+  Temporary and emergency accounts are intended for short-term use.
+  Organizations establish temporary accounts as part of normal account
+  activation procedures when there is a need for short-term accounts without the
+  demand for immediacy in account activation. Organizations establish emergency
+  accounts in response to crisis situations and with the need for rapid account
+  activation. Therefore, emergency account activation may bypass normal account
+  authorization processes. Emergency and temporary accounts are not to be
+  confused with infrequently used accounts, including local logon accounts used
+  for special tasks or when network resources are unavailable (may also be known
+  as accounts of last resort). Such accounts remain available and are not
+  subject to automatic disabling or removal dates. Conditions for disabling or
+  deactivating accounts include when shared/group, emergency, or temporary
+  accounts are no longer required and when individuals are transferred or
+  terminated. Changing shared/group authenticators when members leave the group
+  is intended to ensure that former group members do not retain access to the
+  shared or group account. Some types of system accounts may require specialized
+  training. Related Control(s): AC-3, AC-5, AC-6, AC-17, AC-18, AC-20, AC-24,
+  AU-2, AU-12, CM-5, IA-2, IA-4, IA-5, IA-8, MA-3, MA-5, PE-2, PL-4, PS-2, PS-4,
+  PS-5, PS-7, PT-2, PT-3, SC-7, SC-12, SC-13, SC-37.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; personnel termination policy and
+  procedure; personnel transfer policy and procedure; procedures for addressing
+  account management; system design documentation; system configuration settings
+  and associated documentation; list of active system accounts along with the
+  name of the individual associated with each account; list of recently disabled
+  system accounts and the name of the individual associated with each account;
+  list of conditions for group and role membership; notifications of recent
+  transfers, separations, or terminations of employees; access authorization
+  records; account management compliance reviews; system monitoring records;
+  system audit records; system security plan; privacy plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security with information security and privacy responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for account management on the
+  system; mechanisms for implementing account management].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-02e
+cci: 000010; 002120
+cci-definition: "000010: Require approvals by organization-defined personnel or
+  roles for requests to create accounts.; 002120: Defines the personnel or roles
+  authorized to approve the creation of accounts."
+implementation-guidance: CCI-002120 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if approvals are required by [Assignment:
+  organization-defined personnel or roles] for requests to create accounts."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  Keycloak administrators are required to approve all self-registration accounts
+  if required by the ISSM. The audit trail can be examined in the Keycloak Admin
+  Console under Events. For automating evidence generating and reporting the
+  logs can be forwarded to external logging tools.
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-2.11, AC-2.12."
+mapped-rev4-aps: AC-2.11; AC-2.12
+family: AC

@@ -1,0 +1,89 @@
+control-acronym: "[r5] AC-02(12)"
+control-information: >-
+  Description:
+
+  (a) Monitor system accounts for [Assignment: organization-defined atypical
+  usage]; and
+
+  (b) Report atypical usage of system accounts to [Assignment:
+  organization-defined personnel or roles].
+
+
+  Supplemental Guidance:
+
+  Atypical usage includes accessing systems at certain times of the day or from
+  locations that are not consistent with the normal usage patterns of
+  individuals. Monitoring for atypical usage may reveal rogue behavior by
+  individuals or an attack in progress. Account monitoring may inadvertently
+  create privacy risks since data collected to identify atypical usage may
+  reveal previously unknown information about the behavior of individuals.
+  Organizations assess and document privacy risks from monitoring accounts for
+  atypical usage in their privacy impact assessment and make determinations that
+  are in alignment with their privacy program plan. Related Control(s): AU-6,
+  AU-7, CA-7, IR-8, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; system design documentation; system configuration settings and
+  associated documentation; system monitoring records; system audit records;
+  audit tracking and monitoring reports; privacy impact assessment; system
+  security plan; privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms implementing account management functions].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-02(12)(a)
+cci: 002146; 002147
+cci-definition: "002146: Defines atypical usage for which the system accounts
+  are to be monitored.; 002147: Monitor system accounts for organization-defined
+  atypical usage."
+implementation-guidance: "-"
+assessment-procedures: "Determine if system accounts are monitored for
+  [Assignment: organization-defined atypical usage]."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: >-
+  Not applicable to UDS technology stack. (It should be an organizational
+  decision on how to define atypical usage for the monitored system though UDS
+  provides the monitoring capabilities.)
+
+  Keycloak generates detailed login, logout, and admin event logs. Those logs
+  can be viewed in the Keycloak Admin Event log or can be written to a JSON or
+  other structured format compatible with Vector. The Vector configuration can
+  be set up as a “source” that ingests Keycloak logs from the appropriate file
+  or stream, apply any parsing or filtering needed, and define a “sink” that
+  forwards the data to Loki.  Loki can then be used to parse and analyze fields
+  (e.g., event type, user ID, IP address) for anomalies such as excessive failed
+  logins within a defined interval or unexpected admin actions. Loki with
+  Grafana can be used to set up alert rules to trigger notifications when these
+  queries exceed thresholds that indicate suspicious or atypical activity
+  according to the organization.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-2(12).1, AC-2(12).2. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: AC-2(12).1."
+mapped-rev4-aps: AC-2(12)
+family: AC

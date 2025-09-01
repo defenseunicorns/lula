@@ -1,0 +1,86 @@
+control-acronym: CM-7(1)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Reviews the information system [Assignment: organization-defined
+  frequency] to identify unnecessary and/or nonsecure functions, ports,
+  protocols, and services; and
+
+  (b) Disables [Assignment: organization-defined functions, ports, protocols,
+  and services within the information system deemed to be unnecessary and/or
+  nonsecure].
+
+
+  Supplemental Guidance:
+
+  The organization can either make a determination of the relative security of
+  the function, port, protocol, and/or service or base the security decision on
+  the assessment of other entities. Bluetooth, FTP, and peer-to-peer networking
+  are examples of less than secure protocols. Related controls: AC-18, CM-7,
+  IA-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  least functionality in the information system; configuration management plan;
+  security plan; information system design documentation; information system
+  configuration settings and associated documentation; security configuration
+  checklists; documented reviews of functions, ports, protocols, and/or
+  services; change control records; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  reviewing functions, ports, protocols, and services on the information system;
+  organizational personnel with information security responsibilities;
+  system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for reviewing/disabling nonsecure
+  functions, ports, protocols, and/or services; automated mechanisms
+  implementing review and disabling of nonsecure functions, ports, protocols,
+  and/or services].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CM-7(1).1,CCI-000384,Local
+  CM-7(1).2,CCI-001760,DoD Organization or Service Common Control Package
+  CM-7(1).3,CCI-001761,Local
+  CM-7(1).4,CCI-001762,Local...
+ap-acronym: CM-7(1).1
+cci: 384
+cci-definition: '000384: The organization reviews the information system per
+  organization defined frequency to identify unnecessary and nonsecure
+  functions, ports, protocols, and services.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to review the information system every 30 days to identify unnecessary and
+  nonsecure functions, ports, protocols, and services. The organization must
+  maintain an audit trail of the reviews. DoD has defined the frequency as every
+  30 days.
+
+  Recommended Compelling Evidence:
+
+  1.) Approved ports, protocols, and/or services list
+
+  2.) Audit trail of ports, protocols, and/or services scan and/or review
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process and audit trail of reviews to
+  ensure the organization being inspected/assessed reviews the information
+  system every 30 days to identify unnecessary and nonsecure functions, ports,
+  protocols, and services. DoD has defined the frequency as every 30 days.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (Though UDS provides the
+  audit trail the organization must complete the review every 30 days per the
+  implementation guidance.)
+family: CM

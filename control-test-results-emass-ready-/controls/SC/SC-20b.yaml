@@ -1,0 +1,91 @@
+control-acronym: "[r5] SC-20"
+control-information: >-
+  Description:
+
+  a. Provide additional data origin authentication and integrity verification
+  artifacts along with the authoritative name resolution data the system returns
+  in response to external name/address resolution queries; and
+
+  b. Provide the means to indicate the security status of child zones and (if
+  the child supports secure resolution services) to enable verification of a
+  chain of trust among parent and child domains, when operating as part of a
+  distributed, hierarchical namespace.
+
+
+  Supplemental Guidance:
+
+  Providing authoritative source information enables external clients, including
+  remote Internet clients, to obtain origin authentication and integrity
+  verification assurances for the host/service name to network address
+  resolution information obtained through the service. Systems that provide name
+  and address resolution services include domain name system (DNS) servers.
+  Additional artifacts include DNS Security Extensions (DNSSEC) digital
+  signatures and cryptographic keys. Authoritative data includes DNS resource
+  records. The means for indicating the security status of child zones include
+  the use of delegation signer resource records in the DNS. Systems that use
+  technologies other than the DNS to map between host and service names and
+  network addresses provide other means to assure the authenticity and integrity
+  of response data. Related Control(s): AU-10, SC-8, SC-12, SC-13, SC-21, SC-22.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing secure name/address resolution services (authoritative source);
+  system design documentation; system configuration settings and associated
+  documentation; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with responsibilities for managing DNS].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing secure
+  name/address resolution services].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-20b
+cci: 001179; 001663
+cci-definition: "001179: Provides the means to indicate the security status of
+  child zones, when operating as part of a distributed, hierarchical namespace.;
+  001663: Provide the means to enable verification of a chain of trust among
+  parent and child domains (if the child supports secure resolution services),
+  when operating as part of a distributed, hierarchical namespace."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the means to indicate the security status of child zones (and if the child
+  supports secure resolution services) is provided when operating as part of a
+  distributed, hierarchical namespace.
+
+  - the means to enable verification of a chain of trust among parent and child
+  domains when operating as part of a distributed, hierarchical namespace is
+  provided.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (Architecture and
+  provisioning for name/address resolution DNS architecture, out of scope of UDS
+  which focuses on application layer.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-20.3, SC-20.4. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: SC-20.3, SC-20.4."
+mapped-rev4-aps: SC-20.3; SC-20.4
+family: SC

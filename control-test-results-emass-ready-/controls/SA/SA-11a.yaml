@@ -1,0 +1,160 @@
+control-acronym: "[r5] SA-11"
+control-information: >-
+  Description:
+
+  Require the developer of the system, system component, or system service, at
+  all post-design stages of the system development life cycle, to:
+
+  a. Develop and implement a plan for ongoing security and privacy control
+  assessments;
+
+  b. Perform [Selection (one or more): unit; integration; system; regression]
+  testing/evaluation [Assignment: organization-defined frequency] at
+  [Assignment: organization-defined depth and coverage];
+
+  c. Produce evidence of the execution of the assessment plan and the results of
+  the testing and evaluation;
+
+  d. Implement a verifiable flaw remediation process; and
+
+  e. Correct flaws identified during testing and evaluation.
+
+
+  Supplemental Guidance:
+
+  Developmental testing and evaluation confirms that the required controls are
+  implemented correctly, operating as intended, enforcing the desired security
+  and privacy policies, and meeting established security and privacy
+  requirements. Security properties of systems and the privacy of individuals
+  may be affected by the interconnection of system components or changes to
+  those components. The interconnections or changes—including upgrading or
+  replacing applications, operating systems, and firmware—may adversely affect
+  previously implemented controls. Ongoing assessment during development allows
+  for additional types of testing and evaluation that developers can conduct to
+  reduce or eliminate potential flaws. Testing custom software applications may
+  require approaches such as manual code review, security architecture review,
+  and penetration testing, as well as and static analysis, dynamic analysis,
+  binary analysis, or a hybrid of the three analysis approaches.
+
+
+  Developers can use the analysis approaches, along with security
+  instrumentation and fuzzing, in a variety of tools and in source code reviews.
+  The security and privacy assessment plans include the specific activities that
+  developers plan to carry out, including the types of analyses, testing,
+  evaluation, and reviews of software and firmware components; the degree of
+  rigor to be applied; the frequency of the ongoing testing and evaluation; and
+  the types of artifacts produced during those processes. The depth of testing
+  and evaluation refers to the rigor and level of detail associated with the
+  assessment process. The coverage of testing and evaluation refers to the scope
+  (i.e., number and type) of the artifacts included in the assessment process.
+  Contracts specify the acceptance criteria for security and privacy assessment
+  plans, flaw remediation processes, and the evidence that the plans and
+  processes have been diligently applied. Methods for reviewing and protecting
+  assessment plans, evidence, and documentation are commensurate with the
+  security category or classification level of the system. Contracts may specify
+  protection requirements for documentation. Related Control(s): CA-2, CA-7,
+  CM-4, SA-3, SA-4, SA-5, SA-8, SA-15, SA-17, SI-2, SR-5, SR-6, SR-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; system and
+  services acquisition procedures; procedures addressing system developer
+  security and privacy testing; procedures addressing flaw remediation;
+  solicitation documentation; acquisition documentation; service level
+  agreements; acquisition contracts for the system, system component, or system
+  service; security and privacy architecture; system design documentation;
+  system developer security and privacy assessment plans; results of developer
+  security and privacy assessments for the system, system component, or system
+  service; security and privacy flaw and remediation tracking records; system
+  security plan; privacy plan; privacy impact assessment; privacy risk
+  assessment documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and service
+  acquisition responsibilities; organizational personnel with information
+  security and privacy responsibilities; organizational personnel with developer
+  security and privacy testing responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes for monitoring developer security
+  testing and evaluation; mechanisms supporting and/or implementing the
+  monitoring of developer security and privacy testing and evaluation].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-11a
+cci: 003171; 003172; 004798; 004799
+cci-definition: "003171: Require the developer of the system, system component,
+  or system service, at all post-design phases of the system development life
+  cycle, to develop a plan for ongoing security control assessment.; 003172:
+  Require the developer of the system, system component, or system service to
+  implement a plan for ongoing security control assessment.; 004798: Require the
+  developer of the system, system component, or system service, at all
+  post-design phases of the system development life cycle, to develop a plan for
+  ongoing privacy control assessment.; 004799: Require the developer of the
+  system, system component, or system service to implement a plan for ongoing
+  privacy control assessment."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the developer of the system, system component, or system service is required
+  at all post-design stages of the system development life cycle to develop a
+  plan for ongoing security assessments.
+
+  - the developer of the system, system component, or system service is required
+  at all post-design stages of the system development life cycle to implement a
+  plan for ongoing security assessments.
+
+  - the developer of the system, system component, or system service is required
+  at all post-design stages of the system development life cycle to develop a
+  plan for privacy assessments.
+
+  - the developer of the system, system component, or system service is required
+  at all post-design stages of the system development life cycle to implement a
+  plan for ongoing privacy assessments.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: SA-11.1, SA-11.2;
+  as well as the following Rev. 5 security requirements: CCI-004798, CCI-004799.
+  The resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: SA-11.1, SA-11.2. The resulting compliance status was set to
+  non-compliant because of the addition of a new security requirement to the
+  assessment procedure that has not been previously assessed: CCI-004798,
+  CCI-004799.
+
+
+  Not Applicable to UDS technology stack. (This pertains to the UDS developers
+  performing code reviews, security testing, etc. The UDS product comes tested;
+  the user of UDS does not control the internal development processes of those
+  components, aside from applying updates when available. Several UDS components
+  are widely used open source project; that have their own testing regimes (unit
+  tests, integration tests, possibly security audits by the community).
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SA-11.1, SA-11.2; as well as the following Rev. 5 security
+  requirements: CCI-004798, CCI-004799. The resulting compliance status was set
+  to non-compliant because the following Rev. 4 assessment procedure had no
+  locally entered test result/compliance statement: SA-11.1, SA-11.2. The
+  resulting compliance status was set to non-compliant because of the addition
+  of a new security requirement to the assessment procedure that has not been
+  previously assessed: CCI-004798, CCI-004799."
+mapped-rev4-aps: SA-11.1; SA-11.2
+family: SA

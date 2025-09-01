@@ -1,0 +1,85 @@
+control-acronym: "[r5] SC-07(12)"
+control-information: >-
+  Description:
+
+  Implement [Assignment: organization-defined host-based boundary protection
+  mechanisms] at [Assignment: organization-defined system components].
+
+
+  Supplemental Guidance:
+
+  Host-based boundary protection mechanisms include host-based firewalls. System
+  components that employ host-based boundary protection mechanisms include
+  servers, workstations, notebook computers, and mobile devices. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; system design documentation; boundary
+  protection hardware and software; system configuration settings and associated
+  documentation; system audit records; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with boundary protection responsibilities; system users].
+
+
+  Test: [SELECT FROM: Mechanisms implementing host-based boundary protection
+  capabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-07(12)
+cci: 002404; 002405; 002406
+cci-definition: "002404: Defines the host-based boundary protection mechanisms
+  that are to be implemented at organization-defined system components.; 002405:
+  Defines the system components at which organization-defined host-based
+  boundary protection mechanisms will be implemented.; 002406: Implement
+  organization-defined host-based boundary protection mechanisms at
+  organization-defined system components."
+implementation-guidance: CCI-002405 and CCI-002406 of this assessment procedure
+  are automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if [Assignment: organization-defined
+  host-based boundary protection mechanisms] are implemented at [Assignment:
+  organization-defined system components]."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  All UDS components that require a host-based boundary protection mechanisms
+  are documented in the Security Assessment Plan (SAP) which identifies the test
+  targets and test methods.
+
+  UDS enforces host-based boundary protection mechanisms through its integrated
+  container security solution (NeuVector) and Kubernetes-native policy
+  enforcement (Pepr). NeuVector acts as a container-level firewall, providing
+  real-time enforcement of network boundaries by blocking unauthorized network
+  connections and detecting anomalous behavior within containers. Pepr policies
+  further reinforce boundary protection by controlling Kubernetes resource
+  definitions and ensuring that configurations align with organizational
+  standards, preventing unauthorized or insecure container deployments.
+  Additionally, the Istio service mesh ensures secure service-to-service
+  communications via mutual TLS (mTLS), establishing strong internal boundaries
+  and minimizing unauthorized lateral movement. Together, these components
+  implement robust host-based boundary protections
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-7(12).1, SC-7(12).2, SC-7(12).3."
+mapped-rev4-aps: SC-7(12)
+family: SC

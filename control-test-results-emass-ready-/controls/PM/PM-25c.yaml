@@ -1,0 +1,84 @@
+control-acronym: "[r5] PM-25"
+control-information: >-
+  Description:
+
+  a. Develop, document, and implement policies and procedures that address the
+  use of personally identifiable information for internal testing, training, and
+  research;
+
+  b. Limit or minimize the amount of personally identifiable information used
+  for internal testing, training, and research purposes;
+
+  c. Authorize the use of personally identifiable information when such
+  information is required for internal testing, training, and research; and
+
+  d. Review and update policies and procedures [Assignment: organization-defined
+  frequency].
+
+
+  Supplemental Guidance:
+
+  The use of personally identifiable information in testing, research, and
+  training increases the risk of unauthorized disclosure or misuse of such
+  information. Organizations consult with the senior agency official for privacy
+  and/or legal counsel to ensure that the use of personally identifiable
+  information in testing, training, and research is compatible with the original
+  purpose for which it was collected. When possible, organizations use
+  placeholder data to avoid exposure of personally identifiable information when
+  conducting testing, training, and research. Related Control(s): PM-23, PT-3,
+  SA-3, SA-8, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Privacy program plan; policies and procedures for the
+  minimization of personally identifiable information used in testing, training,
+  and research; documentation supporting policy implementation (e.g., templates
+  for testing, training, and research; privacy threshold analysis; privacy risk
+  assessment); data sets used for testing, training, and research].
+
+
+  Interview: [SELECT FROM: Organizational personnel with privacy program
+  responsibilities; organizational personnel with privacy responsibilities;
+  system developers; personnel with IRB responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for data quality and personally
+  identifiable information management; mechanisms supporting data quality
+  management and personally identifiable information management to minimize the
+  use of personally identifiable information].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PM-25c
+cci: 4430
+cci-definition: "004430: Authorize the use of personally identifiable
+  information when such information is required for internal testing, training,
+  and research."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the required use of personally identifiable information for internal testing
+  is authorized.
+
+  - the required use of personally identifiable information for internal
+  training is authorized.
+
+  - the required use of personally identifiable information for internal
+  research is authorized.
+inherited: Local
+remote-inheritance-instance: "-"
+family: PM

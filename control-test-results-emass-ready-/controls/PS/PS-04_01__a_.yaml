@@ -1,0 +1,72 @@
+control-acronym: "[r5] PS-04(01)"
+control-information: >-
+  Description:
+
+  (a) Notify terminated individuals of applicable, legally binding
+  post-employment requirements for the protection of organizational information;
+  and
+
+  (b) Require terminated individuals to sign an acknowledgment of
+  post-employment requirements as part of the organizational termination
+  process.
+
+
+  Supplemental Guidance:
+
+  Organizations consult with the Office of the General Counsel regarding matters
+  of post-employment requirements on terminated individuals. Related Control(s):
+  None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  personnel termination; signed post-employment acknowledgement forms; list of
+  applicable, legally binding post-employment requirements; system security
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for post-employment
+  requirements].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PS-04(01)(a)
+cci: 3027
+cci-definition: "003027: Notify terminated individuals of applicable, legally
+  binding post-employment requirements for the protection of organizational
+  information."
+implementation-guidance: "-"
+assessment-procedures: Determine if terminated individuals are notified of
+  applicable, legally binding post-employment requirements for the protection of
+  organizational information.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (UDS is unrelated to
+  personnel security controls, which cover hiring, transfer, agreements,
+  termination, etc.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PS-4(1).1. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: PS-4(1).1."
+mapped-rev4-aps: PS-4(1)
+family: PS

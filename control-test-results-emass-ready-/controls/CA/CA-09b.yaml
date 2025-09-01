@@ -1,0 +1,108 @@
+control-acronym: "[r5] CA-09"
+control-information: >-
+  Description:
+
+  a. Authorize internal connections of [Assignment: organization-defined system
+  components or classes of components] to the system;
+
+  b. Document, for each internal connection, the interface characteristics,
+  security and privacy requirements, and the nature of the information
+  communicated;
+
+  c. Terminate internal system connections after [Assignment:
+  organization-defined conditions]; and
+
+  d. Review [Assignment: organization-defined frequency] the continued need for
+  each internal connection.
+
+
+  Supplemental Guidance:
+
+  Internal system connections are connections between organizational systems and
+  separate constituent system components (i.e., connections between components
+  that are part of the same system) including components used for system
+  development. Intra-system connections include connections with mobile devices,
+  notebook and desktop computers, tablets, printers, copiers, facsimile
+  machines, scanners, sensors, and servers. Instead of authorizing each internal
+  system connection individually, organizations can authorize internal
+  connections for a class of system components with common characteristics
+  and/or configurations, including printers, scanners, and copiers with a
+  specified processing, transmission, and storage capability or smart phones and
+  tablets with a specific baseline configuration. The continued need for an
+  internal system connection is reviewed from the perspective of whether it
+  provides support for organizational missions or business functions. Related
+  Control(s): AC-3, AC-4, AC-18, AC-19, CM-2, IA-3, SC-7, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Assessment, authorization, and monitoring policy;
+  access control policy; procedures addressing system connections; system and
+  communications protection policy; system design documentation; system
+  configuration settings and associated documentation; list of components or
+  classes of components authorized as internal system connections; assessment
+  report; system audit records; system security plan; privacy plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  developing, implementing, or authorizing internal system connections;
+  organizational personnel with information security and privacy
+  responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting internal system connections].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CA-09b
+cci: 002103; 002104; 002105; 003891
+cci-definition: "002103: Document, for each internal connection, the interface
+  characteristics.; 002104: Document, for each internal connection, the security
+  requirements.; 002105: Document, for each internal connection, the nature of
+  the information communicated.; 003891: Document, for each internal connection,
+  the privacy requirements."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - for each internal connection, the interface characteristics are documented.
+
+  - for each internal connection, the security requirements are documented.
+
+  - for each internal connection, the privacy requirements are documented.
+
+  - for each internal connection, the nature of the information communicated is
+  documented.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: Defense Unicorns provides ports, protocols, and services used and
+  their component connections in the architecture diagram. UDS provides robust
+  technical capabilities to explicitly define and authorize internal connections
+  between information system components. Specifically, UDS leverages
+  Infrastructure as Code (IaC) with OpenTofu and enforces connection
+  authorization through Istio Service Mesh and the policy engine Pepr, allowing
+  the organization to clearly specify permitted internal connections between
+  Kubernetes components, microservices, containers, and supporting
+  infrastructure.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CA-9.3, CA-9.4, CA-9.5; as well as the following Rev. 5 security
+  requirements: CCI-003891. The resulting compliance status was set to
+  non-compliant because of the addition of a new security requirement to the
+  assessment procedure that has not been previously assessed: CCI-003891."
+mapped-rev4-aps: CA-9.3; CA-9.4; CA-9.5
+family: CA

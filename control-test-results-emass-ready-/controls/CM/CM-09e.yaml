@@ -1,0 +1,133 @@
+control-acronym: "[r5] CM-09"
+control-information: >-
+  Description:
+
+  Develop, document, and implement a configuration management plan for the
+  system that:
+
+  a. Addresses roles, responsibilities, and configuration management processes
+  and procedures;
+
+  b. Establishes a process for identifying configuration items throughout the
+  system development life cycle and for managing the configuration of the
+  configuration items;
+
+  c. Defines the configuration items for the system and places the configuration
+  items under configuration management;
+
+  d. Is reviewed and approved by [Assignment: organization-defined personnel or
+  roles]; and
+
+  e. Protects the configuration management plan from unauthorized disclosure and
+  modification.
+
+
+  Supplemental Guidance:
+
+  Configuration management activities occur throughout the system development
+  life cycle. As such, there are developmental configuration management
+  activities (e.g., the control of code and software libraries) and operational
+  configuration management activities (e.g., control of installed components and
+  how the components are configured). Configuration management plans satisfy the
+  requirements in configuration management policies while being tailored to
+  individual systems. Configuration management plans define processes and
+  procedures for how configuration management is used to support system
+  development life cycle activities.
+
+
+  Configuration management plans are generated during the development and
+  acquisition stage of the system development life cycle. The plans describe how
+  to advance changes through change management processes; update configuration
+  settings and baselines; maintain component inventories; control development,
+  test, and operational environments; and develop, release, and update key
+  documents.
+
+
+  Organizations can employ templates to help ensure the consistent and timely
+  development and implementation of configuration management plans. Templates
+  can represent a configuration management plan for the organization with
+  subsets of the plan implemented on a system by system basis. Configuration
+  management approval processes include the designation of key stakeholders
+  responsible for reviewing and approving proposed changes to systems, and
+  personnel who conduct security and privacy impact analyses prior to the
+  implementation of changes to the systems. Configuration items are the system
+  components, such as the hardware, software, firmware, and documentation to be
+  configuration-managed. As systems continue through the system development life
+  cycle, new configuration items may be identified, and some existing
+  configuration items may no longer need to be under configuration control.
+  Related Control(s): CM-2, CM-3, CM-4, CM-5, CM-8, PL-2, RA-8, SA-10, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  configuration management planning; configuration management plan; system
+  design documentation; system security plan; privacy plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  developing the configuration management plan; organizational personnel with
+  responsibilities for implementing and managing processes defined in the
+  configuration management plan; organizational personnel with responsibilities
+  for protecting the configuration management plan; organizational personnel
+  with information security and privacy responsibilities; system/network
+  administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for developing and documenting
+  the configuration management plan; organizational processes for identifying
+  and managing configuration items; organizational processes for protecting the
+  configuration management plan; mechanisms implementing the configuration
+  management plan; mechanisms for managing configuration items; mechanisms for
+  protecting the configuration management plan].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-09e
+cci: 001799; 001801
+cci-definition: "001799: Develop and document a configuration management plan
+  for the system that protects the configuration management plan from
+  unauthorized disclosure and modification.; 001801: Implement a configuration
+  management plan for the system that protects the configuration management plan
+  from unauthorized disclosure and modification."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the configuration management plan is protected from unauthorized disclosure.
+
+  - the configuration management plan is protected from unauthorized
+  modification.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: CM-9.11, CM-9.12.
+  The resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: CM-9.11, CM-9.12.
+
+
+  Not Applicable to UDS technology stack. (The organization must define and
+  manage the configuration management plan outside of UDS.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-9.11, CM-9.12. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: CM-9.11, CM-9.12."
+mapped-rev4-aps: CM-9.11; CM-9.12
+family: CM

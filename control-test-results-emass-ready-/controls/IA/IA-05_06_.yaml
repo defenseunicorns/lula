@@ -1,0 +1,60 @@
+control-acronym: "[r5] IA-05(06)"
+control-information: >-
+  Description:
+
+  Protect authenticators commensurate with the security category of the
+  information to which use of the authenticator permits access.
+
+
+  Supplemental Guidance:
+
+  For systems that contain multiple security categories of information without
+  reliable physical or logical separation between categories, authenticators
+  used to grant access to the systems are protected commensurate with the
+  highest security category of information on the systems. Security categories
+  of information are determined as part of the security categorization process.
+  Related Control(s): RA-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing authenticator management; security categorization documentation for
+  the system; security assessments of authenticator protections; risk assessment
+  results; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with authenticator
+  management responsibilities; organizational personnel implementing and/or
+  maintaining authenticator protections; organizational personnel with
+  information security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing authenticator
+  management capability; mechanisms protecting authenticators].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-05(06)
+cci: 201
+cci-definition: "000201: Protect authenticators commensurate with the security
+  category of the information to which use of the authenticator permits access."
+implementation-guidance: "-"
+assessment-procedures: Determine if authenticators are protected commensurate
+  with the security category of the information to which use of the
+  authenticator permits access.
+inherited: Local
+remote-inheritance-instance: "-"
+family: IA

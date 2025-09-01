@@ -1,0 +1,81 @@
+control-acronym: "[r5] AC-06(10)"
+control-information: >-
+  Description:
+
+  Prevent non-privileged users from executing privileged functions.
+
+
+  Supplemental Guidance:
+
+  Privileged functions include disabling, circumventing, or altering implemented
+  security or privacy controls, establishing system accounts, performing system
+  integrity checks, and administering cryptographic key management activities.
+  Non-privileged users are individuals who do not possess appropriate
+  authorizations. Privileged functions that require protection from
+  non-privileged users include circumventing intrusion detection and prevention
+  mechanisms or malicious code protection mechanisms. Preventing non-privileged
+  users from executing privileged functions is enforced by AC-3. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing least
+  privilege; system design documentation; system configuration settings and
+  associated documentation; list of privileged functions and associated user
+  account assignments; system audit records; system security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  defining least privileges necessary to accomplish specified tasks;
+  organizational personnel with information security responsibilities; system
+  developers].
+
+
+  Test: [SELECT FROM: Mechanisms implementing least privilege functions for
+  non-privileged users].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-06(10)
+cci: 2235
+cci-definition: "002235: Prevent non-privileged users from executing privileged functions."
+implementation-guidance: "-"
+assessment-procedures: Determine if non-privileged users are prevented from
+  executing privileged functions.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: The UDS information system prevents non-privileged users from
+  executing privileged functions, including disabling, circumventing, or
+  altering implemented security safeguards and countermeasures. UDS utilizes
+  Keycloak to manage user groups, and roles, which defines the separation of
+  duties. This ensures that only authorized users can perform privileged
+  functions such as establishing information system accounts, performing system
+  integrity checks, or administering cryptographic key management activities.
+  Additionally, Pepr policies are implemented to prevent privilege escalation,
+  ensuring that non-privileged users cannot gain unauthorized access to
+  privileged functions. Istio Gateways further enhance security by segregating
+  admin and user traffic to services within the system, ensuring that
+  non-privileged users cannot interfere with administrative functions. These
+  measures collectively enforce the principle of least privilege and protect
+  privileged functions from unauthorized access, ensuring compliance with the
+  control requirements.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-6(10).1."
+mapped-rev4-aps: AC-6(10)
+family: AC

@@ -1,0 +1,68 @@
+control-acronym: "[r5] IR-06(01)"
+control-information: >-
+  Description:
+
+  Report incidents using [Assignment: organization-defined automated
+  mechanisms].
+
+
+  Supplemental Guidance:
+
+  The recipients of incident reports are specified in IR-6b. Automated reporting
+  mechanisms include email, posting on websites (with automatic updates), and
+  automated incident response tools and programs. Related Control(s): IR-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident reporting; automated mechanisms supporting incident reporting; system
+  design documentation; system configuration settings and associated
+  documentation; incident response plan; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident reporting
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for incident reporting; automated
+  mechanisms supporting and/or implementing the reporting of security
+  incidents].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IR-06(01)
+cci: 000837; 004155
+cci-definition: "000837: Report incidents using organization-defined automated
+  mechanisms.; 004155: Defines the automated mechanisms for reporting
+  incidents."
+implementation-guidance: "-"
+assessment-procedures: "Determine if incidents are reported using [Assignment:
+  organization-defined automated mechanisms]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IR-6(1).1; as well as the following Rev. 5 security requirements:
+  CCI-004155. The resulting compliance status was set to non-compliant because
+  of the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-004155."
+mapped-rev4-aps: IR-6(1)
+family: IR

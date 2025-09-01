@@ -1,0 +1,111 @@
+control-acronym: "[r5] RA-02"
+control-information: >-
+  Description:
+
+  a. Categorize the system and information it processes, stores, and transmits;
+
+  b. Document the security categorization results, including supporting
+  rationale, in the security plan for the system; and
+
+  c. Verify that the authorizing official or authorizing official designated
+  representative reviews and approves the security categorization decision.
+
+
+  Supplemental Guidance:
+
+  Security categories describe the potential adverse impacts or negative
+  consequences to organizational operations, organizational assets, and
+  individuals if organizational information and systems are compromised through
+  a loss of confidentiality, integrity, or availability. Security categorization
+  is also a type of asset loss characterization in systems security engineering
+  processes that is carried out throughout the system development life cycle.
+  Organizations can use privacy risk assessments or privacy impact assessments
+  to better understand the potential adverse effects on individuals. CNSSI 1253
+  provides additional guidance on categorization for national security systems.
+
+
+  Organizations conduct the security categorization process as an
+  organization-wide activity with the direct involvement of chief information
+  officers, senior agency information security officers, senior agency officials
+  for privacy, system owners, mission and business owners, and information
+  owners or stewards. Organizations consider the potential adverse impacts to
+  other organizations and, in accordance with USA PATRIOT and Homeland Security
+  Presidential Directives, potential national-level adverse impacts.
+
+
+  Security categorization processes facilitate the development of inventories of
+  information assets and, along with CM-8, mappings to specific system
+  components where information is processed, stored, or transmitted. The
+  security categorization process is revisited throughout the system development
+  life cycle to ensure that the security categories remain accurate and
+  relevant. Related Control(s): CM-8, MP-4, PL-2, PL-10, PL-11, PM-7, RA-3,
+  RA-5, RA-7, RA-8, SA-8, SC-7, SC-38, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Risk assessment policy; security planning policy and
+  procedures; procedures addressing security categorization of organizational
+  information and systems; security categorization documentation; system
+  security plan; privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security categorization
+  and risk assessment responsibilities; organizational personnel with security
+  and privacy responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for security categorization].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: RA-02a
+cci: 004614; 004615; 004616
+cci-definition: "004614: Categorize the system and information it processes.;
+  004615: Categorize the system and information it stores.; 004616: Categorize
+  the system and information it transmits."
+implementation-guidance: This assessment procedure is automatically compliant
+  because of coverage by DoD Enterprise.
+assessment-procedures: Determine if the system and the information it processes,
+  stores, and transmits are categorized.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: RA-2.1; as well as
+  the following Rev. 5 security requirements: CCI-004614, CCI-004615,
+  CCI-004616. The resulting compliance status was set to non-compliant because
+  the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: RA-2.1. The resulting compliance status was set
+  to non-compliant because of the addition of a new security requirement to the
+  assessment procedure that has not been previously assessed: CCI-004614,
+  CCI-004615, CCI-004616.
+
+
+  Not Applicable to UDS technology stack. (The system and data categorization is
+  typically documented on an organizational template or in the eMASS
+  Categorization tab which lives outside of UDS.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: RA-2.1; as well as the following Rev. 5 security requirements:
+  CCI-004614, CCI-004615, CCI-004616. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: RA-2.1. The resulting compliance
+  status was set to non-compliant because of the addition of a new security
+  requirement to the assessment procedure that has not been previously assessed:
+  CCI-004614, CCI-004615, CCI-004616."
+mapped-rev4-aps: RA-2.1
+family: RA

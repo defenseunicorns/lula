@@ -1,0 +1,74 @@
+control-acronym: "[r5] SC-15"
+control-information: >-
+  Description:
+
+  a. Prohibit remote activation of collaborative computing devices and
+  applications with the following exceptions: [Assignment: organization-defined
+  exceptions where remote activation is to be allowed]; and
+
+  b. Provide an explicit indication of use to users physically present at the
+  devices.
+
+
+  Supplemental Guidance:
+
+  Collaborative computing devices and applications include remote meeting
+  devices and applications, networked white boards, cameras, and microphones.
+  The explicit indication of use includes signals to users when collaborative
+  computing devices and applications are activated. Related Control(s): AC-21,
+  SC-42.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing collaborative computing; access control policy and procedures;
+  system design documentation; system configuration settings and associated
+  documentation; system audit records; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel with responsibilities for managing collaborative
+  computing devices].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing the management
+  of remote activation of collaborative computing devices; mechanisms providing
+  an indication of use of collaborative computing devices].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-15b
+cci: 1152
+cci-definition: "001152: Provide an explicit indication of use to users
+  physically present at collaborative computing devices."
+implementation-guidance: "-"
+assessment-procedures: Determine if an explicit indication of use is provided to
+  users physically present at the devices.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (UDS does not involve
+  devices like smart whiteboards, VTC, or cameras where indicator lights would
+  be relevant.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-15.3. The resulting compliance status was set to non-compliant
+  because the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: SC-15.3."
+mapped-rev4-aps: SC-15.3
+family: SC

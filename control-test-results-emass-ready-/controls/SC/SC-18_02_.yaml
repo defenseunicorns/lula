@@ -1,0 +1,87 @@
+control-acronym: "[r5] SC-18(02)"
+control-information: >-
+  Description:
+
+  Verify that the acquisition, development, and use of mobile code to be
+  deployed in the system meets [Assignment: organization-defined mobile code
+  requirements].
+
+
+  Supplemental Guidance:
+
+  None. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing mobile code; mobile code requirements; mobile code usage
+  restrictions; mobile code implementation policy and procedures; acquisition
+  documentation; acquisition contracts for system, system component, or system
+  service; system development life cycle documentation; system security plan;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with responsibilities for managing mobile code; organizational personnel with
+  acquisition and contracting responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for the acquisition, development,
+  and use of mobile code].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-18(02)
+cci: 001167; 001168; 001687; 001688
+cci-definition: "001167: Verify that the development of mobile code to be
+  deployed in information systems meets organization-defined mobile code
+  requirements.; 001168: Defines mobile code requirements for the acquisition,
+  development, and use of mobile code.; 001687: Verify that the use of mobile
+  code deployed in system meets organization-defined mobile code requirements.;
+  001688: Verify the acquisition of mobile code deployed in the system meets
+  organization-defined mobile code requirements."
+implementation-guidance: CCI-001168 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - the acquisition of mobile code to be deployed in the system meets
+  [Assignment: organization-defined mobile code requirements].
+
+  - the development of mobile code to be deployed in the system meets
+  [Assignment: organization-defined mobile code requirements].
+
+  - the use of mobile code to be deployed in the system meets [Assignment:
+  organization-defined mobile code requirements].
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (UDS is primarily designed
+  for secure application deployment and operations within Kubernetes clusters.
+  It does not inherently utilize or permit execution of mobile code (such as
+  Java applets, ActiveX controls, or scripts downloaded and executed directly by
+  user endpoints). Any policies regarding acceptable or unacceptable mobile code
+  technologies would be organizationally defined and enforced on client
+  endpoints or application-specific components outside the UDS core platform.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-18(2).1, SC-18(2).2, SC-18(2).3, SC-18(2).4. The resulting
+  compliance status was set to non-compliant because the following Rev. 4
+  assessment procedure had no locally entered test result/compliance statement:
+  SC-18(2).1, SC-18(2).2, SC-18(2).3, SC-18(2).4."
+mapped-rev4-aps: SC-18(2)
+family: SC

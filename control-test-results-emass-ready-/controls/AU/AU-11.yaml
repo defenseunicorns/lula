@@ -1,0 +1,74 @@
+control-acronym: "[r5] AU-11"
+control-information: >-
+  Description:
+
+  Retain audit records for [Assignment: organization-defined time period
+  consistent with records retention policy] to provide support for
+  after-the-fact investigations of incidents and to meet regulatory and
+  organizational information retention requirements.
+
+
+  Supplemental Guidance:
+
+  Organizations retain audit records until it is determined that the records are
+  no longer needed for administrative, legal, audit, or other operational
+  purposes. This includes the retention and availability of audit records
+  relative to Freedom of Information Act (FOIA) requests, subpoenas, and law
+  enforcement actions. Organizations develop standard categories of audit
+  records relative to such types of actions and standard response processes for
+  each type of action. The National Archives and Records Administration (NARA)
+  General Records Schedules provide federal policy on records retention. Related
+  Control(s): AU-2, AU-4, AU-5, AU-6, AU-9, AU-14, MP-6, RA-5, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; system security plan;
+  privacy plan; audit record retention policy and procedures; security plan;
+  organization-defined retention period for audit records; audit record
+  archives; audit logs; audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit record retention
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities; system/network administrators].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-11
+cci: 000167; 000168
+cci-definition: "000167: Retain audit records for an organization-defined time
+  period to provide support for after-the-fact investigations of incidents and
+  to meet regulatory and organizational information retention requirements.;
+  000168: Defines the time period for retention of audit records, which is
+  consistent with its records retention policy, to provide support for
+  after-the-fact investigations of incidents and meet regulatory and
+  organizational information retention requirements."
+implementation-guidance: CCI-000168 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if audit records are retained for [Assignment:
+  organization-defined time period consistent with records retention policy] to
+  provide support for after-the-fact investigations of incidents and to meet
+  regulatory and organizational information retention requirements."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AU-11.1, AU-11.2."
+mapped-rev4-aps: AU-11.1; AU-11.2
+family: AU

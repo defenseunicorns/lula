@@ -1,0 +1,96 @@
+control-acronym: "[r5] AC-11"
+control-information: >-
+  Description:
+
+  a. Prevent further access to the system by [Selection (one or more):
+  initiating a device lock after [Assignment: organization-defined time period]
+  of inactivity; requiring the user to initiate a device lock before leaving the
+  system unattended]; and
+
+  b. Retain the device lock until the user reestablishes access using
+  established identification and authentication procedures.
+
+
+  Supplemental Guidance:
+
+  Device locks are temporary actions taken to prevent logical access to
+  organizational systems when users stop work and move away from the immediate
+  vicinity of those systems but do not want to log out because of the temporary
+  nature of their absences. Device locks can be implemented at the operating
+  system level or at the application level. A proximity lock may be used to
+  initiate the device lock (e.g., via a Bluetooth-enabled device or dongle).
+  User-initiated device locking is behavior or policy-based and, as such,
+  requires users to take physical action to initiate the device lock. Device
+  locks are not an acceptable substitute for logging out of systems, such as
+  when organizations require users to log out at the end of workdays. Related
+  Control(s): AC-2, AC-7, IA-11, PL-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing session
+  lock; procedures addressing identification and authentication; system design
+  documentation; system configuration settings and associated documentation;
+  security plan; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms implementing access control policy for session
+  lock].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-11a
+cci: 000057; 000059
+cci-definition: "000057: The information system initiates a session lock after
+  the organization-defined time period of inactivity.; 000059: Defines the
+  time-period of inactivity after which the system initiates a device lock."
+implementation-guidance: CCI-000059 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if further access to the system is prevented
+  by [Selection (one or more): initiating a device lock after [Assignment:
+  organization-defined time period] of inactivity; requiring the user to
+  initiate a device lock before leaving the system unattended]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  Session lock (e.g., auto-locking an interactive session after inactivity) in a
+  web context translates to session timeouts. Keycloak tokens and sessions have
+  configurable timeouts for inactivity and maximum session lifespan. For
+  example, if a user is logged into an application via UDS and is idle, their
+  session token can expire after a set idle period, forcing re-authentication.
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  UDS enforces session locking after an organizationally defined period of user
+  inactivity through its centralized identity management solution, Keycloak.
+  Administrators explicitly configure session lock thresholds by navigating to
+  the Keycloak administrative interface under Realm Settings → Tokens → SSO
+  Session Idle Timeout, setting the desired inactivity timeout (e.g., 15
+  minutes). Once configured, Keycloak automatically initiates a secure session
+  lock upon reaching the inactivity threshold, preventing further user
+  interaction without reauthentication. This automated enforcement ensures
+  sessions remain protected during periods of user inactivity, fully satisfying
+  this control requirement.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-11.1, AC-11.2, AC-11.4."
+mapped-rev4-aps: AC-11.1; AC-11.2; AC-11.4
+family: AC

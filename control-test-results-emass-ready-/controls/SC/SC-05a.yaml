@@ -1,0 +1,81 @@
+control-acronym: "[r5] SC-05"
+control-information: >-
+  Description:
+
+  a. [Selection: Protect against; Limit] the effects of the following types of
+  denial-of-service events: [Assignment: organization-defined types of
+  denial-of-service events]; and
+
+  b. Employ the following controls to achieve the denial-of-service objective:
+  [Assignment: organization-defined controls by type of denial-of-service
+  event].
+
+
+  Supplemental Guidance:
+
+  Denial-of-service events may occur due to a variety of internal and external
+  causes, such as an attack by an adversary or a lack of planning to support
+  organizational needs with respect to capacity and bandwidth. Such attacks can
+  occur across a wide range of network protocols (e.g., IPv4, IPv6). A variety
+  of technologies are available to limit or eliminate the origination and
+  effects of denial-of-service events. For example, boundary protection devices
+  can filter certain types of packets to protect system components on internal
+  networks from being directly affected by or the source of denial-of-service
+  attacks. Employing increased network capacity and bandwidth combined with
+  service redundancy also reduces the susceptibility to denial-of-service
+  events. Related Control(s): CP-2, IR-4, SC-6, SC-7, SC-40.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing denial-of-service protection; system design documentation; list of
+  denial-of-service attacks requiring employment of security safeguards to
+  protect against or limit effects of such attacks; list of security safeguards
+  protecting against or limiting the effects of denial-of-service attacks;
+  system configuration settings and associated documentation; system audit
+  records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with incident response responsibilities; system developer].
+
+
+  Test: [SELECT FROM: Mechanisms protecting against or limiting the effects of
+  denial-of-service attacks].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-05a
+cci: 001093; 002385
+cci-definition: "001093: Defines the types of denial of service events for
+  protecting against or limiting the effects of the denial-of-service events.;
+  002385: Protect against or limit the effects of organization-defined types of
+  denial of service events."
+implementation-guidance: "-"
+assessment-procedures: "Determine if the effects of [Assignment:
+  organization-defined types of denial-of-service events] are [Selection:
+  Protect against; Limit]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-5.1, SC-5.2."
+mapped-rev4-aps: SC-5.1; SC-5.2
+family: SC

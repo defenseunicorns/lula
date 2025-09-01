@@ -1,0 +1,75 @@
+control-acronym: "[r5] AT-03(05)"
+control-information: >-
+  Description:
+
+  Provide [Assignment: organization-defined personnel or roles] with initial and
+  [Assignment: organization-defined frequency] training in the employment and
+  operation of personally identifiable information processing and transparency
+  controls.
+
+
+  Supplemental Guidance:
+
+  Personally identifiable information processing and transparency controls
+  include the organization’s authority to process personally identifiable
+  information and personally identifiable information processing purposes.
+  Role-based training for federal agencies addresses the types of information
+  that may constitute personally identifiable information and the risks,
+  considerations, and obligations associated with its processing. Such training
+  also considers the authority to process personally identifiable information
+  documented in privacy policies and notices, system of records notices,
+  computer matching agreements and notices, privacy impact assessments, PRIVACT
+  statements, contracts, information sharing agreements, memoranda of
+  understanding, and/or other documentation. Related Control(s): PT-2, PT-3,
+  PT-5, PT-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Security and privacy awareness and training policy;
+  procedures addressing security and privacy awareness training implementation;
+  security and privacy awareness training curriculum; security and privacy
+  awareness training materials; system security plan; privacy plan;
+  organizational privacy notices; organizational policies; system of records
+  notices; Privacy Act statements; computer matching agreements and notices;
+  privacy impact assessments; information sharing agreements; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  role-based security and privacy training; organizational personnel who
+  participate in security and privacy awareness training].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AT-03(05)
+cci: 003791; 003792; 003793
+cci-definition: "003791: Defines the frequency for providing training in the
+  employment and operation of personally identifiable information processing and
+  transparency controls to personnel or roles.; 003792: Provide
+  organization-defined personnel or roles with initial training in the
+  employment and operation of personally identifiable information processing and
+  transparency controls.; 003793: Defines the personnel or roles who are to be
+  provided training in the employment and operation of personally identifiable
+  information processing and transparency controls."
+implementation-guidance: CCI-003791 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if [Assignment: organization-defined personnel
+  or roles] are provided with initial and refresher training [Assignment:
+  organization-defined frequency] in the employment and operation of personally
+  identifiable information processing and transparency controls."
+inherited: Local
+remote-inheritance-instance: "-"
+family: AT

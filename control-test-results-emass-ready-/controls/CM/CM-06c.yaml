@@ -1,0 +1,156 @@
+control-acronym: "[r5] CM-06"
+control-information: >-
+  Description:
+
+  a. Establish and document configuration settings for components employed
+  within the system that reflect the most restrictive mode consistent with
+  operational requirements using [Assignment: organization-defined common secure
+  configurations];
+
+  b. Implement the configuration settings;
+
+  c. Identify, document, and approve any deviations from established
+  configuration settings for [Assignment: organization-defined system
+  components] based on [Assignment: organization-defined operational
+  requirements]; and
+
+  d. Monitor and control changes to the configuration settings in accordance
+  with organizational policies and procedures.
+
+
+  Supplemental Guidance:
+
+  Configuration settings are the parameters that can be changed in the hardware,
+  software, or firmware components of the system that affect the security and
+  privacy posture or functionality of the system. Information technology
+  products for which configuration settings can be defined include mainframe
+  computers, servers, workstations, operating systems, mobile devices,
+  input/output devices, protocols, and applications. Parameters that impact the
+  security posture of systems include registry settings; account, file, or
+  directory permission settings; and settings for functions, protocols, ports,
+  services, and remote connections. Privacy parameters are parameters impacting
+  the privacy posture of systems, including the parameters required to satisfy
+  other privacy controls. Privacy parameters include settings for access
+  controls, data processing preferences, and processing and retention
+  permissions. Organizations establish organization-wide configuration settings
+  and subsequently derive specific configuration settings for systems. The
+  established settings become part of the configuration baseline for the system.
+
+
+  Common secure configurations (also known as security configuration checklists,
+  lockdown and hardening guides, and security reference guides) provide
+  recognized, standardized, and established benchmarks that stipulate secure
+  configuration settings for information technology products and platforms as
+  well as instructions for configuring those products or platforms to meet
+  operational requirements. Common secure configurations can be developed by a
+  variety of organizations, including information technology product developers,
+  manufacturers, vendors, federal agencies, consortia, academia, industry, and
+  other organizations in the public and private sectors.
+
+
+  Implementation of a common secure configuration may be mandated at the
+  organization level, mission and business process level, system level, or at a
+  higher level, including by a regulatory agency. Common secure configurations
+  include the United States Government Configuration Baseline USGCB and security
+  technical implementation guides (STIGs), which affect the implementation of
+  CM-6 and other controls such as AC-19 and CM-7. The Security Content
+  Automation Protocol (SCAP) and the defined standards within the protocol
+  provide an effective method to uniquely identify, track, and control
+  configuration settings. Related Control(s): AC-3, AC-19, AU-2, AU-6, CA-9,
+  CM-2, CM-3, CM-5, CM-7, CM-11, CP-7, CP-9, CP-10, IA-3, IA-5, PL-8, PL-9,
+  RA-5, SA-4, SA-5, SA-8, SA-9, SC-18, SC-28, SC-43, SI-2, SI-4, SI-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  configuration settings for the system; configuration management plan; system
+  design documentation; system configuration settings and associated
+  documentation; common secure configuration checklists; system component
+  inventory; evidence supporting approved deviations from established
+  configuration settings; change control records; system data processing and
+  retention permissions; system audit records; system security plan; privacy
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security configuration
+  management responsibilities; organizational personnel with privacy
+  configuration management responsibilities; organizational personnel with
+  information security and privacy responsibilities; system/network
+  administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing configuration
+  settings; mechanisms that implement, monitor, and/or control system
+  configuration settings; mechanisms that identify and/or document deviations
+  from established configuration settings].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-06c
+cci: 000367; 000368; 000369; 001755; 001756
+cci-definition: "000367: Identify any deviations from the established
+  configuration settings for organization-defined system components based on
+  organization-defined operational requirements.; 000368: Document any
+  deviations from the established configuration settings for
+  organization-defined system components based on organization-defined
+  operational requirements.; 000369: Approve any deviations from the established
+  configuration settings for organization-defined system components based on
+  organization-defined operational requirements.; 001755: Defines the system
+  components for which any deviation from the established configuration settings
+  are to be identified, documented, and approved.; 001756: Defines the
+  operational requirements on which the configuration settings for the
+  organization-defined system components are to be based."
+implementation-guidance: CCI-001755 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - any deviations from established configuration settings for [Assignment:
+  organization-defined system components] are identified and documented based on
+  [Assignment: organization-defined operational requirements].
+
+  - any deviations from established configuration settings for [Assignment:
+  organization-defined system components] are approved.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: CM-6.6, CM-6.7,
+  CM-6.8, CM-6.9, CM-6.10. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: CM-6.6, CM-6.7, CM-6.8.
+
+
+  Not Applicable to UDS technology stack. (Any deviations from the established
+  configuration baseline would need to be documented and tracked inside a POA&M
+  typically done in eMASS.)
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  UDS inherently supports configuration management aligned to operational
+  requirements through its Infrastructure as Code (IaC) approach using OpenTofu
+  and secure software packaging with Zarf. This ensures deployments are
+  consistent, repeatable, and reflect defined operational objectives.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-6.6, CM-6.7, CM-6.8, CM-6.9, CM-6.10. The resulting compliance
+  status was set to non-compliant because the following Rev. 4 assessment
+  procedure had no locally entered test result/compliance statement: CM-6.6,
+  CM-6.7, CM-6.8."
+mapped-rev4-aps: CM-6.10; CM-6.6; CM-6.7; CM-6.8; CM-6.9
+family: CM

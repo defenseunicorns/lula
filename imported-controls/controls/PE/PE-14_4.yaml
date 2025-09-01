@@ -1,0 +1,71 @@
+control-acronym: PE-14
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Maintains temperature and humidity levels within the facility where the
+  information system resides at [Assignment: organization - defined acceptable
+  levels]; and
+
+  b. Monitors temperature and humidity levels [Assignment: organization-defined
+  frequency].
+
+
+  Supplemental Guidance:
+
+  This control applies primarily to facilities containing concentrations of
+  information system resources, for example, data centers, server rooms, and
+  mainframe computer rooms. Related control: AT-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing temperature and humidity control; security plan;
+  temperature and humidity controls; facility housing the information system;
+  temperature and humidity controls documentation; temperature and humidity
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  information system environmental controls; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  maintenance and monitoring of temperature and humidity levels].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PE-14.1,CCI-000971,AWS GovCloud L5 Cloud Service Provider Package
+  PE-14.2,CCI-000972,DoD Organization or Service Common Control Package
+  PE-14.3,CCI-000973,AWS GovCloud L5 Cloud Service Provider Package
+  PE-14.4,CCI-000974,DoD Organization or Service Common Control Package...
+ap-acronym: PE-14.4
+cci: 974
+cci-definition: '000974: The organization defines a frequency for monitoring
+  temperature and humidity levels.'
+implementation-guidance: >-
+  DoD has defined the frequency as continuously unless manufacturer
+  specifications allow for a wide enough tolerance that control is not required.
+
+  Recommended Compelling Evidence:
+
+  Automatically Compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the frequency as continuously unless manufacturer
+  specifications allow for a wide enough tolerance that control is not required.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PE

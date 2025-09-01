@@ -1,0 +1,78 @@
+control-acronym: "[r5] SC-05(03)"
+control-information: >-
+  Description:
+
+  (a) Employ the following monitoring tools to detect indicators of
+  denial-of-service attacks against, or launched from, the system: [Assignment:
+  organization-defined monitoring tools]; and
+
+  (b) Monitor the following system resources to determine if sufficient
+  resources exist to prevent effective denial-of-service attacks: [Assignment:
+  organization-defined system resources].
+
+
+  Supplemental Guidance:
+
+  Organizations consider the utilization and capacity of system resources when
+  managing risk associated with a denial of service due to malicious attacks.
+  Denial-of-service attacks can originate from external or internal sources.
+  System resources that are sensitive to denial of service include physical disk
+  storage, memory, and CPU cycles. Techniques used to prevent denial-of-service
+  attacks related to storage utilization and capacity include instituting disk
+  quotas, configuring systems to automatically alert administrators when
+  specific storage capacity thresholds are reached, using file compression
+  technologies to maximize available storage space, and imposing separate
+  partitions for system and user data. Related Control(s): CA-7, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing denial-of-service protection; system design documentation; system
+  monitoring tools and techniques documentation; system configuration settings
+  and associated documentation; system audit records; system security plan;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with detection and monitoring responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms/tools implementing system monitoring for
+  denial-of-service attacks].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-05(03)(b)
+cci: 002390; 002391
+cci-definition: "002390: Defines the system resources to be monitored to
+  determine if sufficient resources exist to prevent effective denial of service
+  attacks.; 002391: Monitor organization-defined system resources to determine
+  if sufficient resources exist to prevent effective denial of service attacks."
+implementation-guidance: "-"
+assessment-procedures: "Determine if [Assignment: organization-defined system
+  resources] are monitored to determine if sufficient resources exist to prevent
+  effective denial-of-service attacks."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-5(3).3, SC-5(3).4."
+mapped-rev4-aps: SC-5(3)
+family: SC

@@ -1,0 +1,89 @@
+control-acronym: MA-6
+control-information: >-
+  Description:
+
+  The organization obtains maintenance support and/or spare parts for
+  [Assignment: organization-defined information system components] within
+  [Assignment: organization-defined time period] of failure.
+
+
+  Supplemental Guidance:
+
+  Organizations specify the information system components that result in
+  increased risk to organizational operations and assets, individuals, other
+  organizations, or the Nation when the functionality provided by those
+  components is not operational. Organizational actions to obtain maintenance
+  support typically include having appropriate contracts in place. Related
+  controls: CM-8, CP-2, CP-7, SA-14, SA-15.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information system maintenance policy; procedures
+  addressing information system maintenance; service provider contracts;
+  service-level agreements; inventory and availability of spare parts; security
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  maintenance responsibilities; organizational personnel with acquisition
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for ensuring timely maintenance].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: GovCloud employs an N+1 redundancy model for
+  information system components. As such, all components (N) have at least one
+  backup component (+1). In some cases, some components may have two backup
+  components. The N+1 redundancy model is deployed in active-active components
+  mode so the backup component is active in the operation even if all other
+  components are fully functional. This is applied throughout GovCloud including
+  network and data center implementation....
+ap-acronym: MA-6.3
+cci: 2897
+cci-definition: '002897: The organization defines a time period for obtaining
+  maintenance support and/or spare parts for organization-defined information
+  system components after a failure.'
+implementation-guidance: >-
+  DoD has defined the time period as within 24 hours (Low and Moderate
+  Availability) or immediately upon failure for (High Availability).
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the time period as within 24 hours (Low and Moderate
+  Availability) or immediately upon failure for (High Availability).
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: MA

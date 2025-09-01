@@ -1,0 +1,102 @@
+control-acronym: "[r5] CM-07(05)"
+control-information: >-
+  Description:
+
+  (a) Identify [Assignment: organization-defined software programs authorized to
+  execute on the system];
+
+  (b) Employ a deny-all, permit-by-exception policy to allow the execution of
+  authorized software programs on the system; and
+
+  (c) Review and update the list of authorized software programs [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  Authorized software programs can be limited to specific versions or from a
+  specific source. To facilitate a comprehensive authorized software process and
+  increase the strength of protection for attacks that bypass application level
+  authorized software, software programs may be decomposed into and monitored at
+  different levels of detail. These levels include applications, application
+  programming interfaces, application modules, scripts, system processes, system
+  services, kernel functions, registries, drivers, and dynamic link libraries.
+  The concept of permitting the execution of authorized software may also be
+  applied to user actions, system ports and protocols, IP addresses/ranges,
+  websites, and MAC addresses. Organizations consider verifying the integrity of
+  authorized software programs using digital signatures, cryptographic
+  checksums, or hash functions. Verification of authorized software can occur
+  either prior to execution or at system startup. The identification of
+  authorized URLs for websites is addressed in CA-3(5) and SC-7. Related
+  Control(s): CM-2, CM-6, CM-8, CM-10, PL-9, PM-5, SA-10, SC-34, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  least functionality in the system; configuration management plan; system
+  design documentation; system configuration settings and associated
+  documentation; list of software programs authorized to execute on the system;
+  system component inventory; common secure configuration checklists; review and
+  update records associated with list of authorized software programs; change
+  control records; system audit records; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  identifying software authorized to execute on the system; organizational
+  personnel with information security responsibilities; system/network
+  administrators].
+
+
+  Test: [SELECT FROM: Organizational process for identifying, reviewing, and
+  updating programs authorized to execute on the system; organizational process
+  for implementing authorized software policy; mechanisms supporting and/or
+  implementing authorized software policy].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-07(05)(c)
+cci: 001775; 001777
+cci-definition: "001775: Defines the frequency on which the list of authorized
+  software programs will be reviewed and updated.; 001777: Review and update the
+  list of authorized software programs per organization-defined frequency."
+implementation-guidance: CCI-001775 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if the list of authorized software programs is
+  reviewed and updated [Assignment: organization-defined frequency]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: CM-7(5).4,
+  CM-7(5).5. The resulting compliance status was set to non-compliant because
+  the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: CM-7(5).5.
+
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  Not Applicable to UDS technology stack. (The organization must complete the
+  review of the approved software list.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-7(5).4, CM-7(5).5. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: CM-7(5).5."
+mapped-rev4-aps: CM-7(5)
+family: CM

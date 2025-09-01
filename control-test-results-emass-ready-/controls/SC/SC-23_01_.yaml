@@ -1,0 +1,66 @@
+control-acronym: "[r5] SC-23(01)"
+control-information: >-
+  Description:
+
+  Invalidate session identifiers upon user logout or other session termination.
+
+
+  Supplemental Guidance:
+
+  Invalidating session identifiers at logout curtails the ability of adversaries
+  to capture and continue to employ previously valid session IDs. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing session authenticity; system design documentation; system
+  configuration settings and associated documentation; system audit records;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing session
+  identifier invalidation upon session termination].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-23(01)
+cci: 1185
+cci-definition: "001185: Invalidate session identifiers upon user logout or
+  other session termination."
+implementation-guidance: "-"
+assessment-procedures: Determine if session identifiers are invalidated upon
+  user logout or other session termination.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS leverages Keycloak, integrated with AuthService, to manage
+  user sessions securely. Keycloak automatically invalidates session identifiers
+  upon explicit user logout, session timeout, or administrator-initiated
+  termination of sessions. Upon invalidation, JWT tokens and associated session
+  cookies become unusable, effectively preventing reuse or replay attacks. The
+  Istio Service Mesh enforces token validation on each request, ensuring that
+  terminated or invalidated sessions cannot access system resources after
+  termination.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-23(1).1."
+mapped-rev4-aps: SC-23(1)
+family: SC

@@ -1,0 +1,65 @@
+control-acronym: "[r5] AT-03(01)"
+control-information: >-
+  Description:
+
+  Provide [Assignment: organization-defined personnel or roles] with initial and
+  [Assignment: organization-defined frequency] training in the employment and
+  operation of environmental controls.
+
+
+  Supplemental Guidance:
+
+  Environmental controls include fire suppression and detection devices or
+  systems, sprinkler systems, handheld fire extinguishers, fixed fire hoses,
+  smoke detectors, temperature or humidity, heating, ventilation, air
+  conditioning, and power within the facility. Related Control(s): PE-1, PE-11,
+  PE-13, PE-14, PE-15.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Security and privacy awareness and training policy;
+  procedures addressing security and privacy training implementation; security
+  and privacy training curriculum; security and privacy training materials;
+  system security plan; privacy plan; training records; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  role-based security and privacy training; organizational personnel with
+  responsibilities for employing and operating environmental controls].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AT-03(01)
+cci: 001481; 001482; 001483; 002050
+cci-definition: "001481: Provide organization-defined personnel or roles with
+  initial training in the employment and operation of environmental controls.;
+  001482: Provide organization-defined personnel or roles with refresher
+  training in the employment and operation of environmental controls in
+  accordance with the organization-defined frequency.; 001483: Defines a
+  frequency for providing employees with refresher training in the employment
+  and operation of environmental controls.; 002050: Defines the personnel or
+  roles to whom initial and refresher training in the employment and operation
+  of environmental controls is to be provided."
+implementation-guidance: CCI-001483 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if [Assignment: organization-defined personnel
+  or roles] are provided with initial and refresher training [Assignment:
+  organization-defined frequency] in the employment and operation of
+  environmental controls."
+inherited: Local
+remote-inheritance-instance: "-"
+family: AT

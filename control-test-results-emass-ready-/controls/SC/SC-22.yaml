@@ -1,0 +1,90 @@
+control-acronym: "[r5] SC-22"
+control-information: >-
+  Description:
+
+  Ensure the systems that collectively provide name/address resolution service
+  for an organization are fault-tolerant and implement internal and external
+  role separation.
+
+
+  Supplemental Guidance:
+
+  Systems that provide name and address resolution services include domain name
+  system (DNS) servers. To eliminate single points of failure in systems and
+  enhance redundancy, organizations employ at least two authoritative domain
+  name system servers—one configured as the primary server and the other
+  configured as the secondary server. Additionally, organizations typically
+  deploy the servers in two geographically separated network subnetworks (i.e.,
+  not located in the same physical facility). For role separation, DNS servers
+  with internal roles only process name and address resolution requests from
+  within organizations (i.e., from internal clients). DNS servers with external
+  roles only process name and address resolution information requests from
+  clients external to organizations (i.e., on external networks, including the
+  Internet). Organizations specify clients that can access authoritative DNS
+  servers in certain roles (e.g., by address ranges and explicit lists). Related
+  Control(s): SC-2, SC-20, SC-21, SC-24.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing architecture and provisioning for name/address resolution services;
+  access control policy and procedures; system design documentation; assessment
+  results from independent testing organizations; system configuration settings
+  and associated documentation; system audit records; system security plan;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with responsibilities for managing DNS].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing name/address
+  resolution services for fault tolerance and role separation].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-22
+cci: 001182; 001183
+cci-definition: "001182: Ensure the systems that collectively provide
+  name/address resolution service for an organization are fault-tolerant.;
+  001183: Ensure the systems that collectively provide name/address resolution
+  service for an organization implement internal/external role separation."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the systems that collectively provide name/address resolution services for
+  an organization are fault-tolerant.
+
+  - the systems that collectively provide name/address resolution services for
+  an organization implement internal role separation. 
+
+  - the systems that collectively provide name/address resolution services for
+  an organization implement external role separation.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (Architecture and
+  provisioning for name/address resolution DNS architecture, out of scope of UDS
+  which focuses on application layer.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-22.1, SC-22.2. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: SC-22.1, SC-22.2."
+mapped-rev4-aps: SC-22.1; SC-22.2
+family: SC

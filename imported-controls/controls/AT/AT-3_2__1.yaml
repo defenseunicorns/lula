@@ -1,0 +1,77 @@
+control-acronym: AT-3(2)
+control-information: >-
+  Description:
+
+  The organization provides [Assignment: organization-defined personnel or
+  roles] with initial and [Assignment: organization-defined frequency] training
+  in the employment and operation of physical security controls.
+
+
+  Supplemental Guidance:
+
+  Physical security controls include, for example, physical access control
+  devices, physical intrusion alarms, monitoring/surveillance equipment, and
+  security guards (deployment and operating procedures). Organizations identify
+  personnel with specific roles and responsibilities associated with physical
+  security controls requiring specialized training. Related controls: PE-2,
+  PE-3, PE-4, PE-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Security awareness and training policy; procedures
+  addressing security training implementation; security training curriculum;
+  security training materials; security plan; training records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  role-based security training; organizational personnel with responsibilities
+  for employing and operating physical security controls].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AT-3(2).1,CCI-001566,Local
+  AT-3(2).2,CCI-001567,Local
+  AT-3(2).3,CCI-001568,DoD Organization or Service Common Control Package
+  AT-3(2).4,CCI-002051,Local...
+ap-acronym: AT-3(2).1
+cci: 1566
+cci-definition: '001566: The organization provides organization-defined
+  personnel or roles with initial training in the employment and operation of
+  physical security controls.'
+implementation-guidance: >-
+  The organization being inspected/assessed:
+
+  1. Identifies and documents physical security controls that require training.
+
+  2. Identifies the personnel defined in AT-3 (2), CCI 2051
+
+  3. Ensures designated personnel receive this training.
+
+  4. Maintains and monitors records of personnel who have received this
+  training.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation of physical security controls that require training
+
+  2.) Documented list of personnel defined in AT-3 (2), CCI 2051
+assessment-procedures: |-
+  The organization conducting the inspection/assessment obtains and examines:
+  1. Documentation of physical security controls that require training.
+  2. Documented list of personnel defined in AT-3 (2), CCI 2051
+  3. Ensures identified personnel have received the initial training.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (UDS does not provide
+  personnel training or awareness programs which must be addressed at the
+  organizational level.)
+family: AT

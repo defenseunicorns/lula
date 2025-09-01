@@ -1,0 +1,136 @@
+control-acronym: "[r5] SA-10"
+control-information: >-
+  Description:
+
+  Require the developer of the system, system component, or system service to:
+
+  a. Perform configuration management during system, component, or service
+  [Selection (one or more): design; development; implementation; operation;
+  disposal];
+
+  b. Document, manage, and control the integrity of changes to [Assignment:
+  organization-defined configuration items under configuration management];
+
+  c. Implement only organization-approved changes to the system, component, or
+  service;
+
+  d. Document approved changes to the system, component, or service and the
+  potential security and privacy impacts of such changes; and
+
+  e. Track security flaws and flaw resolution within the system, component, or
+  service and report findings to [Assignment: organization-defined personnel].
+
+
+  Supplemental Guidance:
+
+  Organizations consider the quality and completeness of configuration
+  management activities conducted by developers as direct evidence of applying
+  effective security controls. Controls include protecting the master copies of
+  material used to generate security-relevant portions of the system hardware,
+  software, and firmware from unauthorized modification or destruction.
+  Maintaining the integrity of changes to the system, system component, or
+  system service requires strict configuration control throughout the system
+  development life cycle to track authorized changes and prevent unauthorized
+  changes.
+
+
+  The configuration items that are placed under configuration management include
+  the formal model; the functional, high-level, and low-level design
+  specifications; other design data; implementation documentation; source code
+  and hardware schematics; the current running version of the object code; tools
+  for comparing new versions of security-relevant hardware descriptions and
+  source code with previous versions; and test fixtures and documentation.
+  Depending on the mission and business needs of organizations and the nature of
+  the contractual relationships in place, developers may provide configuration
+  management support during the operations and maintenance stage of the system
+  development life cycle. Related Control(s): CM-2, CM-3, CM-4, CM-7, CM-9,
+  SA-4, SA-5, SA-8, SA-15, SI-2, SR-3, SR-4, SR-5, SR-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing system developer configuration management; solicitation
+  documentation; acquisition documentation; service level agreements;
+  acquisition contracts for the system, system component, or system service;
+  system developer configuration management plan; security flaw and flaw
+  resolution tracking records; system change authorization records; change
+  control records; configuration management records; system security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and service
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with configuration
+  management responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes for monitoring developer
+  configuration management; mechanisms supporting and/or implementing the
+  monitoring of developer configuration management].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-10b
+cci: 003156; 003157; 003158; 003159
+cci-definition: "003156: Require the developer of the system, system component,
+  or system service to document the integrity of changes to organization-defined
+  configuration items under configuration management.; 003157: Require the
+  developer of the system, system component, or system service to manage the
+  integrity of changes to organization-defined configuration items under
+  configuration management.; 003158: Require the developer of the system, system
+  component, or system service to control the integrity of changes to
+  organization-defined configuration items under configuration management.;
+  003159: Defines the configuration items under configuration management that
+  require the integrity of changes to be documented, managed and controlled."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the developer of the system, system component, or system service is required
+  to document the integrity of changes to [Assignment: organization-defined
+  configuration items under configuration management].
+
+  - the developer of the system, system component, or system service is required
+  to manage the integrity of changes to [Assignment: organization-defined
+  configuration items under configuration management].
+
+  - the developer of the system, system component, or system service is required
+  to control the integrity of changes to [Assignment: organization-defined
+  configuration items under configuration management].
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: SA-10.2, SA-10.3,
+  SA-10.4, SA-10.5. The resulting compliance status was set to non-compliant
+  because the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: SA-10.2, SA-10.3, SA-10.4, SA-10.5.
+
+
+  Not Applicable to UDS technology stack. (This control is about the Defense
+  Unicorns (developer) following config management during development of UDS and
+  its packages. As a consumer deploying UDS, the organization benefits from all
+  provided updates to the software but the organization is not directly involved
+  in the configuration management during the development of UDS.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SA-10.2, SA-10.3, SA-10.4, SA-10.5. The resulting compliance
+  status was set to non-compliant because the following Rev. 4 assessment
+  procedure had no locally entered test result/compliance statement: SA-10.2,
+  SA-10.3, SA-10.4, SA-10.5."
+mapped-rev4-aps: SA-10.2; SA-10.3; SA-10.4; SA-10.5
+family: SA

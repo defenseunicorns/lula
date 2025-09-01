@@ -1,0 +1,75 @@
+control-acronym: IR-4(4)
+control-information: >-
+  Description:
+
+  The organization correlates incident information and individual incident
+  responses to achieve an organization-wide perspective on incident awareness
+  and response.
+
+
+  Supplemental Guidance:
+
+  Sometimes the nature of a threat event, for example, a hostile cyber attack,
+  is such that it can only be observed by bringing together information from
+  different sources including various reports and reporting procedures
+  established by organizations.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident handling; incident response plan; security plan; automated mechanisms
+  supporting incident and event correlation; information system design
+  documentation; information system configuration settings and associated
+  documentation; incident management correlation logs; event management
+  correlation logs; security information and event management logs; incident
+  management correlation reports; event management correlation reports; security
+  information and event management reports; audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident handling
+  responsibilities; organizational personnel with information security
+  responsibilities; organizational personnel with whom incident information and
+  individual incident responses are to be correlated].
+
+
+  Test: [SELECT FROM: Organizational processes for correlating incident
+  information and individual incident responses; automated mechanisms that
+  support and or implement correlation of incident response information with
+  individual incident responses].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IR-4(4).1
+cci: 829
+cci-definition: '000829: The organization correlates incident information and
+  individual incident responses to achieve an organization-wide perspective on
+  incident awareness and response.'
+implementation-guidance: >-
+  The organization being inspected/assessed defines procedures to examine
+  incident information gathered and the actual actions taken by both the
+  individuals affected and the incident response personnel. These procedures
+  shall be defined IAW CJCSM 6510.01B. The end goal is to achieve a top level
+  perspective of the effectiveness of the incident response and awareness.
+  Recommended Compelling Evidence:
+
+  1.) Incident response plan
+
+  2.) Minutes from an incident response after action meeting or similar activity
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines proof of the analysis (such as minutes from an incident
+  response after action meeting or other similar activity) to ensure that
+  incident information is being examined and correlated.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IR

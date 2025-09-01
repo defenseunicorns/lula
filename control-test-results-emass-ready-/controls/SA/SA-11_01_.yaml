@@ -1,0 +1,86 @@
+control-acronym: "[r5] SA-11(01)"
+control-information: >-
+  Description:
+
+  Require the developer of the system, system component, or system service to
+  employ static code analysis tools to identify common flaws and document the
+  results of the analysis.
+
+
+  Supplemental Guidance:
+
+  Static code analysis provides a technology and methodology for security
+  reviews and includes checking for weaknesses in the code as well as for the
+  incorporation of libraries or other included code with known vulnerabilities
+  or that are out-of-date and not supported. Static code analysis can be used to
+  identify vulnerabilities and enforce secure coding practices. It is most
+  effective when used early in the development process, when each code change
+  can automatically be scanned for potential weaknesses. Static code analysis
+  can provide clear remediation guidance and identify defects for developers to
+  fix. Evidence of the correct implementation of static analysis can include
+  aggregate defect density for critical defect types, evidence that defects were
+  inspected by developers or security professionals, and evidence that defects
+  were remediated. A high density of ignored findings, commonly referred to as
+  false positives, indicates a potential problem with the analysis process or
+  the analysis tool. In such cases, organizations weigh the validity of the
+  evidence against evidence from other sources. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; system and
+  services acquisition procedures; procedures addressing system developer
+  security testing; procedures addressing flaw remediation; solicitation
+  documentation; acquisition documentation; service level agreements;
+  acquisition contracts for the system, system component, or system service;
+  security and privacy architecture; system design documentation; system
+  developer security and privacy assessment plans; results of system developer
+  security and privacy assessments; security flaw and remediation tracking
+  records; system security plan; privacy plan; privacy impact assessment;
+  privacy risk assessment documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and service
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with developer security
+  and privacy testing responsibilities; organizational personnel with
+  configuration management responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes for monitoring developer security
+  testing and evaluation; mechanisms supporting and/or implementing the
+  monitoring of developer security testing and evaluation; static code analysis
+  tools].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-11(01)
+cci: 003179; 003180
+cci-definition: "003179: Require the developer of the system, system component,
+  or system service to employ static code analysis tools to identify common
+  flaws.; 003180: Require the developer of the system, system component, or
+  system service to document the results of static code analysis."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the developer of the system, system component, or system service is required
+  to employ static code analysis tools to identify common flaws.
+
+  - the developer of the system, system component, or system service is required
+  to employ static code analysis tools to document the results of the analysis.
+inherited: Local
+remote-inheritance-instance: "-"
+family: SA

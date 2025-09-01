@@ -1,0 +1,78 @@
+control-acronym: "[r5] PE-06(01)"
+control-information: >-
+  Description:
+
+  Monitor physical access to the facility where the system resides using
+  physical intrusion alarms and surveillance equipment.
+
+
+  Supplemental Guidance:
+
+  Physical intrusion alarms can be employed to alert security personnel when
+  unauthorized access to the facility is attempted. Alarm systems work in
+  conjunction with physical barriers, physical access control systems, and
+  security guards by triggering a response when these other forms of security
+  have been compromised or breached. Physical intrusion alarms can include
+  different types of sensor devices, such as motion sensors, contact sensors,
+  and broken glass sensors. Surveillance equipment includes video cameras
+  installed at strategic locations throughout the facility. Related Control(s):
+  None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing physical access monitoring; physical access logs or
+  records; physical access monitoring records; physical access log reviews;
+  system security plan; privacy plan; privacy impact assessment; privacy risk
+  assessment documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access
+  monitoring responsibilities; organizational personnel with incident response
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for monitoring physical intrusion
+  alarms and surveillance equipment; mechanisms supporting and/or implementing
+  physical access monitoring; mechanisms supporting and/or implementing physical
+  intrusion alarms and surveillance equipment].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-06(01)
+cci: 942
+cci-definition: "000942: Monitor physical access to the facility where the
+  system resides using physical intrusion alarms and surveillance equipment."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - physical access to the facility where the system resides is monitored using
+  physical intrusion alarms.
+
+  - physical access to the facility where the system resides is monitored using
+  physical surveillance equipment.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PE-6(1).1."
+mapped-rev4-aps: PE-6(1)
+family: PE

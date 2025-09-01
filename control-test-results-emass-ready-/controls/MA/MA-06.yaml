@@ -1,0 +1,72 @@
+control-acronym: "[r5] MA-06"
+control-information: >-
+  Description:
+
+  Obtain maintenance support and/or spare parts for [Assignment:
+  organization-defined system components] within [Assignment:
+  organization-defined time period] of failure.
+
+
+  Supplemental Guidance:
+
+  Organizations specify the system components that result in increased risk to
+  organizational operations and assets, individuals, other organizations, or the
+  Nation when the functionality provided by those components is not operational.
+  Organizational actions to obtain maintenance support include having
+  appropriate contracts in place. Related Control(s): CM-8, CP-2, CP-7, RA-7,
+  SA-15, SI-13, SR-2, SR-3, SR-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Maintenance policy; procedures addressing system
+  maintenance; service provider contracts; service-level agreements; inventory
+  and availability of spare parts; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system maintenance
+  responsibilities; organizational personnel with acquisition responsibilities;
+  organizational personnel with information security responsibilities;
+  system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for ensuring timely maintenance].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: MA-06
+cci: 000903; 002896; 002897
+cci-definition: "000903: Obtain maintenance support and/or spare parts for
+  organization-defined system components within an organization-defined time
+  period of failure.; 002896: Defines the system components for which it obtains
+  maintenance support and/or spare parts.; 002897: Defines a time period for
+  obtaining maintenance support and/or spare parts for organization-defined
+  system components after a failure."
+implementation-guidance: CCI-002897 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if maintenance support and/or spare parts are
+  obtained for [Assignment: organization-defined system components] within
+  [Assignment: organization-defined time period] of failure."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: MA-6.1, MA-6.2, MA-6.3."
+mapped-rev4-aps: MA-6.1; MA-6.2; MA-6.3
+family: MA

@@ -1,0 +1,60 @@
+control-acronym: "[r5] SI-10(06)"
+control-information: >-
+  Description:
+
+  Prevent untrusted data injections.
+
+
+  Supplemental Guidance:
+
+  Untrusted data injections may be prevented using a parameterized interface or
+  output escaping (output encoding). Parameterized interfaces separate data from
+  code so that injections of malicious or unintended data cannot change the
+  semantics of commands being sent. Output escaping uses specified characters to
+  inform the interpreter’s parser whether data is trusted. Prevention of
+  untrusted data injections are with respect to the information inputs defined
+  by the organization in the base control (SI-10). Related Control(s): AC-3,
+  AC-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and information integrity policy; system and
+  information integrity procedures; procedures addressing information input
+  validation; system design documentation; system configuration settings and
+  associated documentation; list of trusted sources for information inputs; list
+  of acceptable formats for input restrictions; system audit records; system
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel responsible for information
+  input validation; organizational personnel with information security
+  responsibilities; system/network administrators; system developer].
+
+
+  Test: [SELECT FROM: Organizational processes for preventing untrusted data
+  injections; automated mechanisms supporting and/or implementing injection
+  prevention].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-10(06)
+cci: 5003
+cci-definition: "005003: Prevent untrusted data injections."
+implementation-guidance: "-"
+assessment-procedures: Determine if untrusted data injections are prevented.
+inherited: Local
+remote-inheritance-instance: "-"
+family: SI

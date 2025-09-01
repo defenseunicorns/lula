@@ -1,0 +1,84 @@
+control-acronym: "[r5] MA-03"
+control-information: >-
+  Description:
+
+  a. Approve, control, and monitor the use of system maintenance tools; and
+
+  b. Review previously approved system maintenance tools [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  Approving, controlling, monitoring, and reviewing maintenance tools address
+  security-related issues associated with maintenance tools that are not within
+  system authorization boundaries and are used specifically for diagnostic and
+  repair actions on organizational systems. Organizations have flexibility in
+  determining roles for the approval of maintenance tools and how that approval
+  is documented. A periodic review of maintenance tools facilitates the
+  withdrawal of approval for outdated, unsupported, irrelevant, or
+  no-longer-used tools. Maintenance tools can include hardware, software, and
+  firmware items and may be pre-installed, brought in with maintenance personnel
+  on media, cloud-based, or downloaded from a website. Such tools can be
+  vehicles for transporting malicious code, either intentionally or
+  unintentionally, into a facility and subsequently into systems. Maintenance
+  tools can include hardware and software diagnostic test equipment and packet
+  sniffers. The hardware and software components that support maintenance and
+  are a part of the system (including the software implementing utilities such
+  as ping, ls, ipconfig, or the hardware and software implementing the
+  monitoring port of an Ethernet switch) are not addressed by maintenance tools.
+  Related Control(s): MA-2, PE-16.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Maintenance policy; procedures addressing system
+  maintenance tools; system maintenance tools and associated documentation;
+  maintenance records; system security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system maintenance
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for approving, controlling, and
+  monitoring maintenance tools; mechanisms supporting and/or implementing the
+  approval, control, and/or monitoring of maintenance tools].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: MA-03a
+cci: 000865; 000866; 000867
+cci-definition: "000865: Approve the use of system maintenance tools.; 000866:
+  Control the use of system maintenance tools.; 000867: Monitor the use of
+  system maintenance tools."
+implementation-guidance: "-"
+assessment-procedures: |-
+  Determine if:
+  - the use of system maintenance tools is approved.
+  - the use of system maintenance tools is controlled.
+  - the use of system maintenance tools is monitored.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: MA-3.1, MA-3.2, MA-3.3."
+mapped-rev4-aps: MA-3.1; MA-3.2; MA-3.3
+family: MA

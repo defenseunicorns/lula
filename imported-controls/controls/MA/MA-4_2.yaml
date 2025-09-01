@@ -1,0 +1,119 @@
+control-acronym: MA-4
+control-information: >-
+  Description:
+
+  The organization
+
+  a. Approves and monitors nonlocal maintenance and diagnostic activities;
+
+  b. Allows the use of nonlocal maintenance and diagnostic tools only as
+  consistent with organizational policy and documented in the security plan for
+  the information system;
+
+  c. Employs strong authenticators in the establishment of nonlocal maintenance
+  and diagnostic sessions;
+
+  d. Maintains records for nonlocal maintenance and diagnostic activities; and
+
+  e. Terminates session and network connections when nonlocal maintenance is
+  completed.
+
+
+  Supplemental Guidance:
+
+  Nonlocal maintenance and diagnostic activities are those activities conducted
+  by individuals communicating through a network, either an external network
+  (e.g., the Internet) or an internal network. Local maintenance and diagnostic
+  activities are those activities carried out by individuals physically present
+  at the information system or information system component and not
+  communicating across a network connection. Authentication techniques used in
+  the establishment of nonlocal maintenance and diagnostic sessions reflect the
+  network access requirements in IA-2. Typically, strong authentication requires
+  authenticators that are resistant to replay attacks and employ multifactor
+  authentication. Strong authenticators include, for example, PKI where
+  certificates are stored on a token protected by a password, passphrase, or
+  biometric. Enforcing requirements in MA-4 is accomplished in part by other
+  controls. Related controls: AC-2, AC-3, AC-6, AC-17, AU-2, AU-3, IA-2, IA-4,
+  IA-5, IA-8, MA-2, MA-5, MP-6, PL-2, SC-7, SC-10, SC-17.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information system maintenance policy; procedures
+  addressing nonlocal information system maintenance; security plan; information
+  system design documentation; information system configuration settings and
+  associated documentation; maintenance records; diagnostic records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  maintenance responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing nonlocal
+  maintenance; automated mechanisms implementing, supporting, and/or managing
+  nonlocal maintenance; automated mechanisms for strong authentication of
+  nonlocal maintenance diagnostic sessions; automated mechanisms for terminating
+  nonlocal maintenance sessions and network connections].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: MA-4.2
+cci: 874
+cci-definition: '000874: The organization monitors nonlocal maintenance and
+  diagnostic activities.'
+implementation-guidance: >-
+  The organization being inspected/assessed develops and implements procedures
+  to monitor non-local maintenance and diagnostic activities. Records of
+  monitoring activity must be maintained.
+
+  Recommended Compelling Evidence:
+
+  1.) List of identified authorized non-local maintenance and diagnostic
+  activities
+
+  2.) Signed and dated Security Plan, referencing section with procedures for
+  monitoring non-local maintenance and diagnostic activities
+
+  3.) Records of monitored non-local maintenance and diagnostic activities
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines:
+
+  1. the Security Plan to identify the authorized non-local maintenance and
+  diagnostic activities; and
+
+  2. documented procedures to identify how the use of non-local maintenance and
+  diagnostic activities are monitored; and
+
+  3. reviews evidence that the monitoring is conducted IAW the documented
+  procedures.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: MA

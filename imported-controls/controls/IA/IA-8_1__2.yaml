@@ -1,0 +1,92 @@
+control-acronym: IA-8(1)
+control-information: >-
+  Description:
+
+  The information system accepts and electronically verifies Personal Identity
+  Verification (PIV) credentials from other federal agencies.
+
+
+  Supplemental Guidance:
+
+  This control enhancement applies to logical access control systems (LACS) and
+  physical access control systems (PACS). Personal Identity Verification (PIV)
+  credentials are those credentials issued by federal agencies that conform to
+  FIPS Publication 201 and supporting guidance documents. OMB Memorandum 11-11
+  requires federal agencies to continue implementing the requirements specified
+  in HSPD-12 to enable agency-wide use of PIV credentials. Related controls:
+  AU-2, PE-3, SA-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing user identification and authentication; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; PIV verification records;
+  evidence of PIV credentials; PIV credential authorizations; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  operations responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers;
+  organizational personnel with account management responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  identification and authentication capability; automated mechanisms that accept
+  and verify PIV credentials].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-8(1).2
+cci: 2010
+cci-definition: '002010: The information system electronically verifies Personal
+  Identity Verification (PIV) credentials from other federal agencies.'
+implementation-guidance: >-
+  The information system performing hardware token-based authentication must be
+  configured to validate DoD-approved external PKI PIV credentials to
+  authenticate federal agency users in accordance with RFC 5280. The information
+  system must be configured to perform a revocation check as part of the
+  certificate validation process. Revocation checking may be performed using
+  certificate revocation lists (CRLs) published by the issuing PKI or Online
+  Certificate Status Protocol (OCSP) services. For information system components
+  that have applicable STIGs or SRGs, the organization being inspected/assessed
+  must comply with the STIG/SRG guidance that pertains to CCI 2010.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated SOP/TTP documentation configuring the information system
+  to validate DoD-approved external PKI PIV credentials in accordance with RFC
+  5280.
+
+  2.) Provide SOP/TTP documentation configuring the information system to
+  perform a revocation check as part of the certificate validation process.
+
+  3.) Applicable STIG/SRG checks.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed has configured the information system to validate
+  DoD-approved external PKI PIV credentials in accordance with RFC 5280. The
+  organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed has configured the
+  information system to perform a revocation check as part of the certificate
+  validation process. For information system components that have applicable
+  STIGs or SRGs, the organization conducting the inspection/assessment evaluates
+  the components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 2010.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: Keycloak can support PIV credentials from other federal agencies
+  but this must be determined by the organization deploying UDS. Most
+  organizations will find this control Not Applicable.
+uds-alignment: Keycloak
+family: IA

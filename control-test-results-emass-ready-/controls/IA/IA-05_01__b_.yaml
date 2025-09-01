@@ -1,0 +1,112 @@
+control-acronym: "[r5] IA-05(01)"
+control-information: >-
+  Description:
+
+  For password-based authentication:
+
+  (a) Maintain a list of commonly-used, expected, or compromised passwords and
+  update the list [Assignment: organization-defined frequency] and when
+  organizational passwords are suspected to have been compromised directly or
+  indirectly;
+
+  (b) Verify, when users create or update passwords, that the passwords are not
+  found on the list of commonly-used, expected, or compromised passwords in
+  IA-5(1)(a);
+
+  (c) Transmit passwords only over cryptographically-protected channels;
+
+  (d) Store passwords using an approved salted key derivation function,
+  preferably using a keyed hash;
+
+  (e) Require immediate selection of a new password upon account recovery;
+
+  (f) Allow user selection of long passwords and passphrases, including spaces
+  and all printable characters;
+
+  (g) Employ automated tools to assist the user in selecting strong password
+  authenticators; and
+
+  (h) Enforce the following composition and complexity rules: [Assignment:
+  organization-defined composition and complexity rules].
+
+
+  Supplemental Guidance:
+
+  Password-based authentication applies to passwords regardless of whether they
+  are used in single-factor or multi-factor authentication. Long passwords or
+  passphrases are preferable over shorter passwords. Enforced composition rules
+  provide marginal security benefits while decreasing usability. However,
+  organizations may choose to establish certain rules for password generation
+  (e.g., minimum character length for long passwords) under certain
+  circumstances and can enforce this requirement in IA-5(1)(h). Account recovery
+  can occur, for example, in situations when a password is forgotten.
+  Cryptographically protected passwords include salted one-way cryptographic
+  hashes of passwords. The list of commonly used, compromised, or expected
+  passwords includes passwords obtained from previous breach corpuses,
+  dictionary words, and repetitive or sequential characters. The list includes
+  context-specific words, such as the name of the service, username, and
+  derivatives thereof. Related Control(s): IA-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; password
+  policy; procedures addressing authenticator management; system security plan;
+  system design documentation; system configuration settings and associated
+  documentation; password configurations and associated documentation; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with authenticator
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing password-based
+  authenticator management capability].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-05(01)(b)
+cci: 4061
+cci-definition: "004061: For password-based authentication, verify when users
+  create or update passwords, that the passwords are not found on the list of
+  commonly-used, expected, or compromised passwords in IA-5 (1) (a)."
+implementation-guidance: "-"
+assessment-procedures: Determine if for password-based authentication when
+  passwords are created or updated by users, the passwords are verified not to
+  be found on the list of commonly used, expected, or compromised passwords in
+  IA-05(01)(a).
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: In UDS, the system enforces an organization-defined restriction on
+  password reuse by preventing users from reusing any of their previous
+  passwords within a specified number of generations. This is achieved through
+  Keycloak, which is configured to securely store a history of past password
+  hashes for each user. When a password change is requested, the new password is
+  automatically compared against the historical passwords, and if it matches any
+  of the prohibited entries, the change is rejected. This automated mechanism
+  ensures that users must create a unique password that has not been used within
+  the defined period, thereby enhancing password security and maintaining
+  compliance with organizational policies.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IA-5(1).18; as well as the following Rev. 5 security requirements:
+  CCI-004061. The resulting compliance status was set to non-compliant because
+  of the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-004061."
+mapped-rev4-aps: IA-5(1)
+family: IA

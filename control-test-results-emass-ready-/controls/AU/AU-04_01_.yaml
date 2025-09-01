@@ -1,0 +1,80 @@
+control-acronym: "[r5] AU-04(01)"
+control-information: >-
+  Description:
+
+  Transfer audit logs [Assignment: organization-defined frequency] to a
+  different system, system component, or media other than the system or system
+  component conducting the logging.
+
+
+  Supplemental Guidance:
+
+  Audit log transfer, also known as off-loading, is a common process in systems
+  with limited audit log storage capacity and thus supports availability of the
+  audit logs. The initial audit log storage is only used in a transitory fashion
+  until the system can communicate with the secondary or alternate system
+  allocated to audit log storage, at which point the audit logs are transferred.
+  Transferring audit logs to alternate storage is similar to AU-9(2) in that
+  audit logs are transferred to a different entity. However, the purpose of
+  selecting AU-9(2) is to protect the confidentiality and integrity of audit
+  records. Organizations can select either control enhancement to obtain the
+  benefit of increased audit log storage capacity and preserving the
+  confidentiality, integrity, and availability of audit records and logs.
+  Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; system security plan;
+  privacy plan; procedures addressing audit storage capacity; procedures
+  addressing transfer of system audit records to secondary or alternate systems;
+  system design documentation; system configuration settings and associated
+  documentation; logs of audit record transfers to secondary or alternate
+  systems; system audit records transferred to secondary or alternate systems;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit storage capacity
+  planning responsibilities; organizational personnel with information security
+  and privacy responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Mechanisms supporting the transfer of audit records onto a
+  different system].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-04(01)
+cci: 001850; 001851
+cci-definition: "001850: Defines the frequency to off-load audit records onto a
+  different system or media than the system being audited.; 001851: Transfer
+  audit logs per organization-defined frequency to a different system, system
+  component, or media than the system or system component conducting the
+  logging."
+implementation-guidance: CCI-001850 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if audit logs are transferred [Assignment:
+  organization-defined frequency] to a different system, system component, or
+  media other than the system or system component conducting the logging."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AU-4(1).1, AU-4(1).2."
+mapped-rev4-aps: AU-4(1)
+family: AU

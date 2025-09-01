@@ -1,0 +1,134 @@
+control-acronym: "[r5] SA-03"
+control-information: >-
+  Description:
+
+  a. Acquire, develop, and manage the system using [Assignment:
+  organization-defined system development life cycle] that incorporates
+  information security and privacy considerations;
+
+  b. Define and document information security and privacy roles and
+  responsibilities throughout the system development life cycle;
+
+  c. Identify individuals having information security and privacy roles and
+  responsibilities; and
+
+  d. Integrate the organizational information security and privacy risk
+  management process into system development life cycle activities.
+
+
+  Supplemental Guidance:
+
+  A system development life cycle process provides the foundation for the
+  successful development, implementation, and operation of organizational
+  systems. The integration of security and privacy considerations early in the
+  system development life cycle is a foundational principle of systems security
+  engineering and privacy engineering. To apply the required controls within the
+  system development life cycle requires a basic understanding of information
+  security and privacy, threats, vulnerabilities, adverse impacts, and risk to
+  critical mission and business functions. The security engineering principles
+  in SA-8 help individuals properly design, code, and test systems and system
+  components. Organizations include qualified personnel (e.g., senior agency
+  information security officers, senior agency officials for privacy, security
+  and privacy architects, and security and privacy engineers) in system
+  development life cycle processes to ensure that established security and
+  privacy requirements are incorporated into organizational systems. Role-based
+  security and privacy training programs can ensure that individuals with key
+  security and privacy roles and responsibilities have the experience, skills,
+  and expertise to conduct assigned system development life cycle activities.
+
+
+  The effective integration of security and privacy requirements into enterprise
+  architecture also helps to ensure that important security and privacy
+  considerations are addressed throughout the system life cycle and that those
+  considerations are directly related to organizational mission and business
+  processes. This process also facilitates the integration of the information
+  security and privacy architectures into the enterprise architecture,
+  consistent with the risk management strategy of the organization. Because the
+  system development life cycle involves multiple organizations, (e.g., external
+  suppliers, developers, integrators, service providers), acquisition and supply
+  chain risk management functions and controls play significant roles in the
+  effective management of the system during the life cycle. Related Control(s):
+  AT-3, PL-8, PM-7, SA-4, SA-5, SA-8, SA-11, SA-15, SA-17, SA-22, SR-3, SR-4,
+  SR-5, SR-9.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; system and
+  services acquisition procedures; procedures addressing the integration of
+  information security and privacy and supply chain risk management into the
+  system development life cycle process; system development life cycle
+  documentation; organizational risk management strategy; information security
+  and privacy risk management strategy documentation; system security plan;
+  privacy plan; privacy program plan; enterprise architecture documentation;
+  role-based security and privacy training program documentation; data mapping
+  documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  and privacy responsibilities; organizational personnel with system life cycle
+  development responsibilities; organizational personnel with supply chain risk
+  management responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for defining and documenting the
+  system development life cycle; organizational processes for identifying system
+  development life cycle roles and responsibilities; organizational processes
+  for integrating information security and privacy and supply chain risk
+  management into the system development life cycle; mechanisms supporting
+  and/or implementing the system development life cycle].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-03c
+cci: 000618; 004677
+cci-definition: "000618: Identify individuals having information system security
+  roles and responsibilities.; 004677: Identify individuals having information
+  system privacy roles and responsibilities."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - individuals with information security roles and responsibilities are
+  identified.
+
+  - individuals with privacy roles and responsibilities are identified.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: SA-3.4; as well as
+  the following Rev. 5 security requirements: CCI-004677. The resulting
+  compliance status was set to non-compliant because the following Rev. 4
+  assessment procedure had no locally entered test result/compliance statement:
+  SA-3.4. The resulting compliance status was set to non-compliant because of
+  the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-004677.
+
+
+  Not Applicable to UDS technology stack. (UDS is itself developed following
+  secure SDLC by Defense Unicorns; when the organization develops custom apps to
+  run on UDS, they should follow their own secure SDLC requirements.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SA-3.4; as well as the following Rev. 5 security requirements:
+  CCI-004677. The resulting compliance status was set to non-compliant because
+  the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: SA-3.4. The resulting compliance status was set
+  to non-compliant because of the addition of a new security requirement to the
+  assessment procedure that has not been previously assessed: CCI-004677."
+mapped-rev4-aps: SA-3.4
+family: SA

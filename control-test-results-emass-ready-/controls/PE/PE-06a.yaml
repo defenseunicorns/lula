@@ -1,0 +1,82 @@
+control-acronym: "[r5] PE-06"
+control-information: >-
+  Description:
+
+  a. Monitor physical access to the facility where the system resides to detect
+  and respond to physical security incidents;
+
+  b. Review physical access logs [Assignment: organization-defined frequency]
+  and upon occurrence of [Assignment: organization-defined events or potential
+  indications of events]; and
+
+  c. Coordinate results of reviews and investigations with the organizational
+  incident response capability.
+
+
+  Supplemental Guidance:
+
+  Physical access monitoring includes publicly accessible areas within
+  organizational facilities. Examples of physical access monitoring include the
+  employment of guards, video surveillance equipment (i.e., cameras), and sensor
+  devices. Reviewing physical access logs can help identify suspicious activity,
+  anomalous events, or potential threats. The reviews can be supported by audit
+  logging controls, such as AU-2, if the access logs are part of an automated
+  system. Organizational incident response capabilities include investigations
+  of physical security incidents and responses to the incidents. Incidents
+  include security violations or suspicious physical access activities.
+  Suspicious physical access activities include accesses outside of normal work
+  hours, repeated accesses to areas not normally accessed, accesses for unusual
+  lengths of time, and out-of-sequence accesses. Related Control(s): AU-2, AU-6,
+  AU-9, AU-12, CA-7, CP-10, IR-4, IR-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing physical access monitoring; physical access logs or
+  records; physical access monitoring records; physical access log reviews;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access
+  monitoring responsibilities; organizational personnel with incident response
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for monitoring physical access;
+  mechanisms supporting and/or implementing physical access monitoring;
+  mechanisms supporting and/or implementing the review of physical access logs].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-06a
+cci: 2939
+cci-definition: "002939: Monitor physical access to the facility where the
+  system resides to detect and respond to physical security incidents."
+implementation-guidance: "-"
+assessment-procedures: Determine if physical access to the facility where the
+  system resides is monitored to detect and respond to physical security
+  incidents.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PE-6.1."
+mapped-rev4-aps: PE-6.1
+family: PE

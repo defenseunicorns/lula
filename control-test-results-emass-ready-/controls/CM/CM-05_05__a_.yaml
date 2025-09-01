@@ -1,0 +1,98 @@
+control-acronym: "[r5] CM-05(05)"
+control-information: >-
+  Description:
+
+  (a) Limit privileges to change system components and system-related
+  information within a production or operational environment; and
+
+  (b) Review and reevaluate privileges [Assignment: organization-defined
+  frequency].
+
+
+  Supplemental Guidance:
+
+  In many organizations, systems support multiple mission and business
+  functions. Limiting privileges to change system components with respect to
+  operational systems is necessary because changes to a system component may
+  have far-reaching effects on mission and business processes supported by the
+  system. The relationships between systems and mission/business processes are,
+  in some cases, unknown to developers. System-related information includes
+  operational procedures. Related Control(s): AC-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  access restrictions for changes to the system; configuration management plan;
+  system design documentation; system architecture and configuration
+  documentation; system configuration settings and associated documentation;
+  user privilege reviews; user privilege recertifications; system component
+  inventory; change control records; system audit records; system security plan;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing access restrictions
+  to change; mechanisms supporting and/or implementing access restrictions for
+  change].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-05(05)(a)
+cci: 001753; 001754
+cci-definition: "001753: Limit privileges to change system components within a
+  production or operational environment.; 001754: Limit privileges to change
+  system-related information within a production or operational environment."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - privileges to change system components within a production or operational
+  environment are limited.
+
+  - privileges to change system-related information within a production or
+  operational environment are limited.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  UDS effectively limits privileges to change information system components
+  within production or operational environments exclusively to authorized
+  administrative accounts through multiple integrated security controls.
+  Centralized access management via Keycloak and Kubernetes Role-Based Access
+  Control (RBAC) explicitly restrict the privileges required for deploying,
+  modifying, or removing infrastructure components, software, or configurations
+  to only designated administrator accounts. Infrastructure as Code (IaC)
+  managed through OpenTofu, along with secure deployments via signed Zarf
+  packages, ensures that all changes are version-controlled, reviewed, and
+  implemented solely by administrative roles.
+
+  UDS strictly limits privileges for making changes to system-related
+  information within production and operational environments through a robust
+  combination of identity management, role-based access control, and automated
+  policy enforcement. Specifically, access and privilege assignments are
+  centrally managed through Keycloak and enforced by AuthService, allowing only
+  authorized personnel with designated administrative roles to modify system
+  configurations or operational components. Pepr acts as the policy engine to
+  enforce deployment and operational constraints within Kubernetes, preventing
+  unauthorized configuration changes or deployments.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-5(5).1, CM-5(5).2."
+mapped-rev4-aps: CM-5(5)
+family: CM

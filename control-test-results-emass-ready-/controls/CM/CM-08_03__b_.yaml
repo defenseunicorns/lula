@@ -1,0 +1,104 @@
+control-acronym: "[r5] CM-08(03)"
+control-information: >-
+  Description:
+
+  (a) Detect the presence of unauthorized hardware, software, and firmware
+  components within the system using [Assignment: organization-defined automated
+  mechanisms] [Assignment: organization-defined frequency]; and
+
+  (b) Take the following actions when unauthorized components are detected:
+  [Selection (one or more): disable network access by such components; isolate
+  the components; notify [Assignment: organization-defined personnel or roles]].
+
+
+  Supplemental Guidance:
+
+  Automated unauthorized component detection is applied in addition to the
+  monitoring for unauthorized remote connections and mobile devices. Monitoring
+  for unauthorized system components may be accomplished on an ongoing basis or
+  by the periodic scanning of systems for that purpose. Automated mechanisms may
+  also be used to prevent the connection of unauthorized components (see
+  CM-7(9)). Automated mechanisms can be implemented in systems or in separate
+  system components. When acquiring and implementing automated mechanisms,
+  organizations consider whether such mechanisms depend on the ability of the
+  system component to support an agent or supplicant in order to be detected
+  since some types of components do not have or cannot support agents (e.g., IoT
+  devices, sensors). Isolation can be achieved , for example, by placing
+  unauthorized system components in separate domains or subnets or quarantining
+  such components. This type of component isolation is commonly referred to as
+  sandboxing. Related Control(s): AC-19, CA-7, RA-5, SC-3, SC-39, SC-44, SI-3,
+  SI-4, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  system component inventory; configuration management plan; system design
+  documentation; system security plan; system component inventory; change
+  control records; alerts/notifications of unauthorized components within the
+  system; system monitoring records; system maintenance records; system audit
+  records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with component inventory
+  management responsibilities; organizational personnel with responsibilities
+  for managing the automated mechanisms implementing unauthorized system
+  component detection; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes for detection of unauthorized
+  system components; organizational processes for taking action when
+  unauthorized system components are detected; automated mechanisms supporting
+  and/or implementing the detection of unauthorized system components; automated
+  mechanisms supporting and/or implementing actions taken when unauthorized
+  system components are detected].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-08(03)(b)
+cci: 001783; 001784
+cci-definition: "001783: Defines the personnel or roles to be notified when
+  unauthorized hardware, software, and firmware components are detected within
+  the system.; 001784: When unauthorized hardware, software, and firmware
+  components are detected within the system, take action to disable network
+  access by such components; isolate the components, and/or notify
+  organization-defined personnel or roles."
+implementation-guidance: CCI-001783 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:  
+
+  - [Selection (one or more): disable network access by such components; isolate
+  the components; notify [Assignment: organization-defined personnel or roles]]
+  are taken when unauthorized hardware is detected.  
+
+  - [Selection (one or more): disable network access by such components; isolate
+  the components; notify [Assignment: organization-defined personnel or roles]]
+  are taken when unauthorized software is detected.  
+
+  - [Selection (one or more): disable network access by such components; isolate
+  the components; notify [Assignment: organization-defined personnel or roles]]
+  are taken when unauthorized firmware is detected.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-8(3).3, CM-8(3).4."
+mapped-rev4-aps: CM-8(3)
+family: CM

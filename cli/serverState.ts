@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
+import { join } from 'path';
 import { FileStore } from './infrastructure/fileStore';
 import { GitHistoryUtil } from './infrastructure/gitHistory';
 import type { Control, Mapping } from './types';
@@ -9,7 +10,8 @@ import type { Control, Mapping } from './types';
  * Server state management for the CLI server
  */
 export interface CLIServerState {
-	CONTROL_SET_DIR: string;
+	CONTROL_SET_DIR: string; // Base directory (root)
+	currentSubdir: string; // Current subdirectory (e.g., 'new-fancy' or '.')
 	fileStore: FileStore;
 	gitHistory: GitHistoryUtil;
 	controlsCache: Map<string, Control>;
@@ -21,11 +23,14 @@ export interface CLIServerState {
 
 let serverState: CLIServerState | undefined = undefined;
 
-export function initializeServerState(controlSetDir: string): CLIServerState {
+export function initializeServerState(controlSetDir: string, subdir: string = '.'): CLIServerState {
+	const fullPath = subdir === '.' ? controlSetDir : join(controlSetDir, subdir);
+
 	serverState = {
 		CONTROL_SET_DIR: controlSetDir,
-		fileStore: new FileStore({ baseDir: controlSetDir }),
-		gitHistory: new GitHistoryUtil(controlSetDir),
+		currentSubdir: subdir,
+		fileStore: new FileStore({ baseDir: fullPath }),
+		gitHistory: new GitHistoryUtil(fullPath),
 		controlsCache: new Map<string, Control>(),
 		mappingsCache: new Map<string, Mapping>(),
 		controlsByFamily: new Map<string, Set<string>>(),
@@ -41,6 +46,13 @@ export function getServerState(): CLIServerState {
 		throw new Error('Server state not initialized. Call initializeServerState() first.');
 	}
 	return serverState;
+}
+
+export function getCurrentControlSetPath(): string {
+	const state = getServerState();
+	return state.currentSubdir === '.'
+		? state.CONTROL_SET_DIR
+		: join(state.CONTROL_SET_DIR, state.currentSubdir);
 }
 
 export function addControlToIndexes(control: Control): void {

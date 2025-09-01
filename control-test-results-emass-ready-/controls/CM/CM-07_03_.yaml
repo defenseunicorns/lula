@@ -1,0 +1,86 @@
+control-acronym: "[r5] CM-07(03)"
+control-information: >-
+  Description:
+
+  Ensure compliance with [Assignment: organization-defined registration
+  requirements for functions, ports, protocols, and services].
+
+
+  Supplemental Guidance:
+
+  Organizations use the registration process to manage, track, and provide
+  oversight for systems and implemented functions, ports, protocols, and
+  services. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System security plan; configuration management policy;
+  procedures addressing least functionality in the system; configuration
+  management plan; system configuration settings and associated documentation;
+  system component inventory; audit and compliance reviews; system audit
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes ensuring compliance with
+  registration requirements for functions, ports, protocols, and/or services;
+  mechanisms implementing compliance with registration requirements for
+  functions, ports, protocols, and/or services].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-07(03)
+cci: 000387; 000388
+cci-definition: "000387: Defines registration requirements for functions, ports,
+  protocols, and services.; 000388: Ensure compliance with organization-defined
+  registration requirements for functions, ports, protocols, and services."
+implementation-guidance: CCI-000387 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if [Assignment: organization-defined
+  registration requirements for functions, ports, protocols, and services] are
+  complied with."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  UDS ensures compliance with organizationally defined registration requirements
+  for functions, ports, protocols, and services through its integrated
+  infrastructure management and policy enforcement capabilities. Specifically,
+  the platform leverages Infrastructure as Code (IaC) practices via OpenTofu to
+  explicitly define and provision approved network configurations. The Istio
+  Service Mesh enforces these definitions, strictly controlling and monitoring
+  network communications, ports, protocols, and inter-service interactions.
+  Istio explicitly controls and provides observability into network
+  communications, clearly defining allowable protocols, ports, and services.
+  Istio's telemetry data (accessible via Prometheus and Grafana) allows
+  administrators to monitor network traffic and enforce policy compliance.
+  Together, these tools offer detailed metrics and visualizations of the PPS
+  usage across Kubernetes clusters. Grafana dashboards visualize active network
+  services, resource endpoints, traffic patterns, and anomalies. By aggregating
+  container and system logs, Vector and Loki provide audit trails and detailed
+  records of PPS usage, facilitating compliance monitoring and forensic
+  analysis.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-7(3).1, CM-7(3).2."
+mapped-rev4-aps: CM-7(3)
+family: CM

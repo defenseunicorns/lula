@@ -1,0 +1,92 @@
+control-acronym: IA-8(4)
+control-information: >-
+  Description:
+
+  The information system conforms to FICAM-issued profiles.
+
+
+  Supplemental Guidance:
+
+  This control enhancement addresses open identity management standards. To
+  ensure that these standards are viable, robust, reliable, sustainable (e.g.,
+  available in commercial information technology products), and interoperable as
+  documented, the United States Government assesses and scopes identity
+  management standards and technology implementations against applicable federal
+  legislation, directives, policies, and requirements. The result is
+  FICAM-issued implementation profiles of approved protocols (e.g., FICAM
+  authentication protocols such as SAML 2.0 and OpenID 2.0, as well as other
+  protocols such as the FICAM Backend Attribute Exchange). Related control:
+  SA-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; system and
+  services acquisition policy; procedures addressing user identification and
+  authentication; procedures addressing the integration of security requirements
+  into the acquisition process; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system audit records; list of FICAM-issued profiles and
+  associated, approved protocols; acquisition documentation; acquisition
+  contracts for information system procurements or services; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  operations responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers;
+  organizational personnel with account management responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  identification and authentication capability; automated mechanisms supporting
+  and/or implementing conformance with FICAM-issued profiles].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-8(4).1
+cci: 2014
+cci-definition: '002014: The information system conforms to FICAM-issued profiles.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  conform to Federal Identity, Credential, and Access Management (FICAM)-issued
+  profiles. For information system components that have applicable STIGs or
+  SRGs, the organization being inspected/assessed must comply with the STIG/SRG
+  guidance that pertains to CCI 2014. FICAM Guidance is available at
+  http://www.idmanagement.gov.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated SOP/TTP documentation demonstrating that the information
+  system is configured to conform to Federal Identity, Credential, and Access
+  Management (FICAM)-issued profiles
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to conform to
+  FICAM-issued profiles. For information system components that have applicable
+  STIGs or SRGs, the organization conducting the inspection/assessment evaluates
+  the components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 2014.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: 'Not Applicable to UDS technology stack. (UDS employs the Keycloak
+  identity management component, which supports authentication integration with
+  FICAM-approved identity and credentialing solutions, including DoD-approved
+  PKI (such as CAC and PIV) and other FICAM-approved external credential
+  providers. Keycloak itself provides the necessary technical
+  capabilitiesâsuch as certificate-based authentication, validation, and
+  federation with approved identity providers to meet FICAM compliance
+  requirements. However, explicit verification and formal documentation of
+  Keycloak as a FICAM-approved component, or integrating it explicitly with
+  approved FICAM-compliant identity services, remain organizational
+  responsibilities.)'
+family: IA

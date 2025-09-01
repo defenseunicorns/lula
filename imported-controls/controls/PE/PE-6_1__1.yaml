@@ -1,0 +1,74 @@
+control-acronym: PE-6(1)
+control-information: >-
+  Description:
+
+  The organization monitors physical intrusion alarms and surveillance
+  equipment.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing physical access monitoring; security plan; physical
+  access logs or records; physical access monitoring records; physical access
+  log reviews; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access
+  monitoring responsibilities; organizational personnel with incident response
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for monitoring physical intrusion
+  alarms and surveillance equipment; automated mechanisms supporting and/or
+  implementing physical access monitoring; automated mechanisms supporting
+  and/or implementing physical intrusion alarms and surveillance equipment].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: PE-6(1).1
+cci: 942
+cci-definition: '000942: The organization monitors physical intrusion alarms and
+  surveillance equipment.'
+implementation-guidance: >-
+  The organization being inspected/assessed will actively monitor physical
+  intrusion alarms and surveillance equipment.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Physical security incident response policy
+assessment-procedures: The organization conducting the inspection/assessment
+  will observe and interview security personnel conducting monitoring activities
+  to validate the organization is actively monitoring all physical intrusion
+  alarms and surveillance equipment.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PE

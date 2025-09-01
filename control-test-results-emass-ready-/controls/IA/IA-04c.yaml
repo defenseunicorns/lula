@@ -1,0 +1,99 @@
+control-acronym: "[r5] IA-04"
+control-information: >-
+  Description:
+
+  Manage system identifiers by:
+
+  a. Receiving authorization from [Assignment: organization-defined personnel or
+  roles] to assign an individual, group, role, service, or device identifier;
+
+  b. Selecting an identifier that identifies an individual, group, role,
+  service, or device;
+
+  c. Assigning the identifier to the intended individual, group, role, service,
+  or device; and
+
+  d. Preventing reuse of identifiers for [Assignment: organization-defined time
+  period].
+
+
+  Supplemental Guidance:
+
+  Common device identifiers include Media Access Control (MAC) addresses,
+  Internet Protocol (IP) addresses, or device-unique token identifiers. The
+  management of individual identifiers is not applicable to shared system
+  accounts. Typically, individual identifiers are the usernames of the system
+  accounts assigned to those individuals. In such instances, the account
+  management activities of AC-2 use account names provided by IA-4. Identifier
+  management also addresses individual identifiers not necessarily associated
+  with system accounts. Preventing the reuse of identifiers implies preventing
+  the assignment of previously used individual, group, role, service, or device
+  identifiers to different individuals, groups, roles, services, or devices.
+  Related Control(s): AC-5, IA-2, IA-3, IA-5, IA-8, IA-9, IA-12, MA-4, PE-2,
+  PE-3, PE-4, PL-4, PM-12, PS-3, PS-4, PS-5, SC-37.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing identifier management; procedures addressing account management;
+  system security plan; system design documentation; system configuration
+  settings and associated documentation; list of system accounts; list of
+  identifiers generated from physical access control devices; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with identifier management
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing identifier
+  management].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-04c
+cci: 1973
+cci-definition: "001973: Manage system identifiers by assigning the identifier
+  to the intended individual, group, role, or device."
+implementation-guidance: "-"
+assessment-procedures: Determine if system identifiers are managed by assigning
+  the identifier to the intended individual, group, role, service, or device.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: "Identifier management is essentially how the system manages user
+  IDs and other identifiers (like service account names). UDS provides
+  centralized identity management via Keycloak for users. When a new user needs
+  to be created, an administrator uses Keycloak’s console to create a unique
+  username (or it’s federated from an external directory to ensure corporate
+  uniqueness). Keycloak prevents duplicate usernames in a realm, ensuring
+  uniqueness. It also allows assignment of attributes like email, employee ID,
+  etc., to clearly identify individuals. For service accounts, Kubernetes
+  ensures each service account has a unique name within its namespace and a
+  unique token. The provisioning and de-provisioning of accounts is all done
+  through controlled interfaces (Keycloak admin for users, kubectl or IaC for
+  service accounts), and those actions can be tied into workflows. When a user
+  leaves, disabling or deleting their Keycloak account removes their access
+  across all integrated apps. These mechanisms align with IA-4’s intent by
+  providing central control over identity lifecycle: only admins can
+  create/delete accounts, accounts are unique and tied to individuals, and
+  removing access is one centralized step."
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IA-4.4."
+mapped-rev4-aps: IA-4.4
+family: IA

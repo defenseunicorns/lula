@@ -1,0 +1,70 @@
+control-acronym: "[r5] IR-06(02)"
+control-information: >-
+  Description:
+
+  Report system vulnerabilities associated with reported incidents to
+  [Assignment: organization-defined personnel or roles].
+
+
+  Supplemental Guidance:
+
+  Reported incidents that uncover system vulnerabilities are analyzed by
+  organizational personnel including system owners, mission and business owners,
+  senior agency information security officers, senior agency officials for
+  privacy, authorizing officials, and the risk executive (function). The
+  analysis can serve to prioritize and initiate mitigation actions to address
+  the discovered system vulnerability. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident reporting; incident response plan; system security plan; privacy
+  plan; security incident reports and associated system vulnerabilities; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident reporting
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities; system/network administrators; personnel to whom
+  vulnerabilities associated with security incidents are to be reported].
+
+
+  Test: [SELECT FROM: Organizational processes for incident reporting;
+  mechanisms supporting and/or implementing the reporting of vulnerabilities
+  associated with security incidents].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IR-06(02)
+cci: 000838; 002792
+cci-definition: "000838: Report system vulnerabilities associated with reported
+  incidents to organization-defined personnel or roles.; 002792: Defines
+  personnel or roles to whom system vulnerabilities associated with reported
+  incident information are reported."
+implementation-guidance: "-"
+assessment-procedures: "Determine if system vulnerabilities associated with
+  reported incidents are reported to [Assignment: organization-defined personnel
+  or roles]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IR-6(2).1, IR-6(2).2."
+mapped-rev4-aps: IR-6(2)
+family: IR

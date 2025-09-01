@@ -1,0 +1,74 @@
+control-acronym: "[r5] SA-10(07)"
+control-information: >-
+  Description:
+
+  Require [Assignment: organization-defined security and privacy
+  representatives] to be included in the [Assignment: organization-defined
+  configuration change management and control process].
+
+
+  Supplemental Guidance:
+
+  Information security and privacy representatives can include system security
+  officers, senior agency information security officers, senior agency officials
+  for privacy, and system privacy officers. Representation by personnel with
+  information security and privacy expertise is important because changes to
+  system configurations can have unintended side effects, some of which may be
+  security- or privacy-relevant. Detecting such changes early in the process can
+  help avoid unintended, negative consequences that could ultimately affect the
+  security and privacy posture of systems. The configuration change management
+  and control process in this control enhancement refers to the change
+  management and control process defined by organizations in SA-10b. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; system and
+  services acquisition procedures; configuration management policy;
+  configuration management plan; solicitation documentation requiring
+  representatives for security and privacy; acquisition documentation; service
+  level agreements; acquisition contracts for the system, system component, or
+  system service; system developer configuration management plan; change control
+  records; configuration management records; system security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and service
+  acquisition responsibilities; organizational personnel with information
+  security and privacy responsibilities; organizational personnel with
+  configuration management responsibilities; system developers].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-10(07)
+cci: 004795; 004796; 004797
+cci-definition: "004795: Require organization-defined security and privacy
+  representatives to be included in the organization-defined configuration
+  change management and control process.; 004796: Defines the security and
+  privacy representatives to be included the organization-defined configuration
+  change management and control process.; 004797: Defines the configuration
+  change management and control process required for the organization-defined
+  security and privacy representatives."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - [Assignment: organization-defined security and privacy representatives] are
+  required to be included in the [Assignment: organization-defined configuration
+  change management and control process].
+inherited: Local
+remote-inheritance-instance: "-"
+family: SA

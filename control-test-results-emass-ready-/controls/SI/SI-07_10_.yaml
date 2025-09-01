@@ -1,0 +1,73 @@
+control-acronym: "[r5] SI-07(10)"
+control-information: >-
+  Description:
+
+  Implement the following mechanisms to protect the integrity of boot firmware
+  in [Assignment: organization-defined system components]: [Assignment:
+  organization-defined mechanisms].
+
+
+  Supplemental Guidance:
+
+  Unauthorized modifications to boot firmware may indicate a sophisticated,
+  targeted attack. These types of targeted attacks can result in a permanent
+  denial of service or a persistent malicious code presence. These situations
+  can occur if the firmware is corrupted or if the malicious code is embedded
+  within the firmware. System components can protect the integrity of boot
+  firmware in organizational systems by verifying the integrity and authenticity
+  of all updates to the firmware prior to applying changes to the system
+  component and preventing unauthorized processes from modifying the boot
+  firmware. Related Control(s): SI-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and information integrity policy; system and
+  information integrity procedures; procedures addressing software, firmware,
+  and information integrity; system design documentation; system configuration
+  settings and associated documentation; integrity verification tools and
+  associated documentation; records of integrity verification scans; system
+  audit records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel responsible for software,
+  firmware, and/or information integrity; organizational personnel with
+  information security responsibilities; system/network administrators; system
+  developer].
+
+
+  Test: [SELECT FROM: Software, firmware, and information integrity verification
+  tools; mechanisms supporting and/or implementing protection of the integrity
+  of boot firmware; safeguards implementing protection of the integrity of boot
+  firmware].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-07(10)
+cci: 002727; 002728; 002729
+cci-definition: "002727: Defines the mechanisms to be implemented to protect the
+  integrity of the boot firmware in organization-defined system components.;
+  002728: Defines the system components on which organization-defined mechanisms
+  will be implemented to protect the integrity of the boot firmware.; 002729:
+  Implement organization-defined mechanisms to protect the integrity of boot
+  firmware in organization-defined system components."
+implementation-guidance: CCI-002727 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if [Assignment: organization-defined
+  mechanisms] are implemented to protect the integrity of boot firmware in
+  [Assignment: organization-defined system components]."
+inherited: Local
+remote-inheritance-instance: "-"
+family: SI

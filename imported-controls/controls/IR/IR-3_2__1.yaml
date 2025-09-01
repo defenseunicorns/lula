@@ -1,0 +1,63 @@
+control-acronym: IR-3(2)
+control-information: >-
+  Description:
+
+  The organization coordinates incident response testing with organizational
+  elements responsible for related plans.
+
+
+  Supplemental Guidance:
+
+  Organizational plans related to incident response testing include, for
+  example, Business Continuity Plans, Contingency Plans, Disaster Recovery
+  Plans, Continuity of Operations Plans, Crisis Communications Plans, Critical
+  Infrastructure Plans, and Occupant Emergency Plans.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; contingency planning policy;
+  procedures addressing incident response testing; incident response testing
+  documentation; incident response plan; business continuity plans; contingency
+  plans; disaster recovery plans; continuity of operations plans; crisis
+  communications plans; critical infrastructure plans; occupant emergency plans;
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  testing responsibilities; organizational personnel with responsibilities for
+  testing organizational plans related to incident response testing;
+  organizational personnel with information security responsibilities].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IR-3(2).1
+cci: 2780
+cci-definition: '002780: The organization coordinates incident response testing
+  with organizational elements responsible for related plans.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents within their incident
+  response testing plan, the necessary support from all responsible
+  organizational elements for incident response testing.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Incident Response Training documentation, referencing
+  frequency for incident response tests requirements section
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the incident response testing plan to ensure the
+  organization being inspected/assessed coordinates incident response testing
+  with organizational elements responsible for related plans.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IR

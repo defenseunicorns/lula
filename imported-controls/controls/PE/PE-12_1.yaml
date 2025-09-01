@@ -1,0 +1,85 @@
+control-acronym: PE-12
+control-information: >-
+  Description:
+
+  The organization employs and maintains automatic emergency lighting for the
+  information system that activates in the event of a power outage or disruption
+  and that covers emergency exits and evacuation routes within the facility.
+
+
+  Supplemental Guidance:
+
+  This control applies primarily to facilities containing concentrations of
+  information system resources including, for example, data centers, server
+  rooms, and mainframe computer rooms. Related controls: CP-2, CP-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing emergency lighting; emergency lighting documentation;
+  emergency lighting test records; emergency exits and evacuation routes; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  emergency lighting and/or planning; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  emergency lighting capability].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: PE-12.1
+cci: 963
+cci-definition: '000963: The organization employs and maintains automatic
+  emergency lighting for the information system that activates in the event of a
+  power outage or disruption and that covers emergency exits and evacuation
+  routes within the facility.'
+implementation-guidance: >-
+  The organization being inspected/assessed must install and maintain automatic
+  emergency lighting for the information system that activates in the event of a
+  power outage or disruption and covers emergency exits and evacuation routes
+  within the facility in compliance with established OSHA requirements.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Evidence of automatic emergency lighting
+assessment-procedures: The organization conducting the inspection/assessment
+  conducts visual inspections and interviews physical security personnel to
+  validate the organization is in compliance with established OSHA requirements
+  by employing and maintaining emergency lighting for the information system,
+  the emergency lighting activates in the event of a power outage or disruption,
+  and it covers emergency exits and evacuation routes within the facility
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PE

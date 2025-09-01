@@ -1,0 +1,99 @@
+control-acronym: AC-2(7)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Establishes and administers privileged user accounts in accordance with a
+  role-based access scheme that organizes allowed information system access and
+  privileges into roles;
+
+  (b) Monitors privileged role assignments; and
+
+  (c) Takes [Assignment: organization-defined actions] when privileged role
+  assignments are no longer appropriate.
+
+
+  Supplemental Guidance:
+
+  Privileged roles are organization-defined roles assigned to individuals that
+  allow those individuals to perform certain security-relevant functions that
+  ordinary users are not authorized to perform. These privileged roles include,
+  for example, key management, account management, network and system
+  administration, database administration, and web administration.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; information system design documentation; information system
+  configuration settings and associated documentation; information
+  system-generated list of privileged user accounts and associated role; records
+  of actions taken when privileged role assignments are no longer appropriate;
+  information system audit records; audit tracking and monitoring reports;
+  information system monitoring records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing account management
+  functions; automated mechanisms monitoring privileged role assignments].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-2(7).1,CCI-001358,Local
+  AC-2(7).2,CCI-001407,Local
+  AC-2(7).3,CCI-001360,Local
+  AC-2(7).4,CCI-002136,DoD Organization or Service Common Control Package
+  AC-2(7).5,CCI-002137,Local...
+ap-acronym: AC-2(7).5
+cci: 2137
+cci-definition: '002137: The organization takes organization-defined actions
+  when privileged role assignments are no longer appropriate.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to disable (or revoke) the privileged user account when privileged role
+  assignments are no longer appropriate. The organization must maintain an audit
+  trail of the actions taken. DoD has defined the actions as disables (or
+  revokes) privileged user account.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation of a process for disabling/revoking
+  privileged user accounts.
+
+  2.) Audit trail of disabling/revoking privileged user accounts.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented process as well as the audit trail of actions taken to ensure the
+  organization being inspected/assessed disables (or revokes) the privileged
+  user account when privileged role assignments are no longer appropriate.
+
+  DoD has defined the actions as disables (or revokes) privileged user account.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: 'Keycloak can implement a systematic procedure for disabling or
+  revoking privileged user accounts by leveraging its built-in role-based access
+  control (RBAC) and auditing capabilities. Administrators can regularly review
+  privileged roles and, when the assignments are no longer appropriate, remove
+  or disable the associated account through the Keycloak Admin Console or API.
+  By disabling an account (or removing the role assignment) rather than simply
+  deleting it, organizations preserve the accountâs historical data for audit
+  or investigative purposes, satisfying DoD requirements. Every administrative
+  action in Keycloak, such as disabling accounts or revoking roles, can be
+  logged through its auditing and event features, ensuring an audit trail is
+  maintained. This log data includes the timestamp of the action, the
+  administrator or service principal responsible, and the nature of the change,
+  providing the necessary evidence for compliance and governance reviews.'
+uds-alignment: Keycloak
+family: AC

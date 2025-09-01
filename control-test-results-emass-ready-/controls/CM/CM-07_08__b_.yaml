@@ -1,0 +1,111 @@
+control-acronym: "[r5] CM-07(08)"
+control-information: >-
+  Description:
+
+  (a) Prohibit the use of binary or machine-executable code from sources with
+  limited or no warranty or without the provision of source code; and
+
+  (b) Allow exceptions only for compelling mission or operational requirements
+  and with the approval of the authorizing official.
+
+
+  Supplemental Guidance:
+
+  Binary or machine executable code applies to all sources of binary or
+  machine-executable code, including commercial software and firmware and
+  open-source software. Organizations assess software products without
+  accompanying source code or from sources with limited or no warranty for
+  potential security impacts. The assessments address the fact that software
+  products without the provision of source code may be difficult to review,
+  repair, or extend. In addition, there may be no owners to make such repairs on
+  behalf of organizations. If open-source software is used, the assessments
+  address the fact that there is no warranty, the open-source software could
+  contain back doors or malware, and there may be no support available. Related
+  Control(s): SA-5, SA-22.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  least functionality in the system; configuration management plan; system
+  security plan; system design documentation; system configuration settings and
+  associated documentation; list or record of binary or machine-executable code;
+  system component inventory; common secure configuration checklists; system
+  audit records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  determining mission and operational requirements; authorizing official for the
+  system; organizational personnel with information security responsibilities;
+  organizational personnel with software management responsibilities;
+  system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational process for approving execution of binary
+  or machine-executable code; mechanisms supporting and/or implementing the
+  prohibition of binary or machine-executable code].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-07(08)(b)
+cci: 3956
+cci-definition: "003956: Allow exceptions only for compelling mission or
+  operational requirements and with the approval of the authorizing official."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - exceptions to the prohibition of binary or machine-executable code from
+  sources with limited or no warranty or without the provision of source code
+  are allowed only for compelling mission or operational requirements.
+
+  - exceptions to the prohibition of binary or machine-executable code from
+  sources with limited or no warranty or without the provision of source code
+  are allowed only with the approval of the authorizing official.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: SI-7(14).2; as
+  well as the following Rev. 5 security requirements: CCI-003956. The resulting
+  compliance status was set to non-compliant because the following Rev. 4
+  assessment procedure had no locally entered test result/compliance statement:
+  SI-7(14).2. The resulting compliance status was set to non-compliant because
+  of the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-003956.
+
+
+  Not Applicable to UDS technology stack. (UDS inherently emphasizes open-source
+  software, transparency, and traceability through Infrastructure as Code (IaC)
+  and containerization strategies. It provides full visibility and access to
+  source code and software components used within the system. The policy
+  decision to provide exceptions for utilizing binary or executable code without
+  accompanying source code and warranties is an organizational governance
+  matter, managed through internal security policies, risk acceptance, and
+  approval processes. As this control relates specifically to procedural policy
+  decisions about software sourcing rather than technical implementation, it is
+  considered outside the technical scope of UDS itself and therefore not
+  applicable directly to the technology stack provided.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SI-7(14).2; as well as the following Rev. 5 security requirements:
+  CCI-003956. The resulting compliance status was set to non-compliant because
+  the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: SI-7(14).2. The resulting compliance status was
+  set to non-compliant because of the addition of a new security requirement to
+  the assessment procedure that has not been previously assessed: CCI-003956."
+mapped-rev4-aps: SI-7(14)
+family: CM

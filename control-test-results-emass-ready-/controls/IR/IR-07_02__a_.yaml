@@ -1,0 +1,67 @@
+control-acronym: "[r5] IR-07(02)"
+control-information: >-
+  Description:
+
+  (a) Establish a direct, cooperative relationship between its incident response
+  capability and external providers of system protection capability; and
+
+  (b) Identify organizational incident response team members to the external
+  providers.
+
+
+  Supplemental Guidance:
+
+  External providers of a system protection capability include the Computer
+  Network Defense program within the U.S. Department of Defense. External
+  providers help to protect, monitor, analyze, detect, and respond to
+  unauthorized activity within organizational information systems and networks.
+  It may be beneficial to have agreements in place with external providers to
+  clarify the roles and responsibilities of each party before an incident
+  occurs. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident response assistance; incident response plan; system security plan;
+  privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  support and assistance responsibilities; external providers of system
+  protection capability; organizational personnel with information security and
+  privacy responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IR-07(02)(a)
+cci: 841
+cci-definition: "000841: Establish a direct, cooperative relationship between
+  its incident response capability and external providers of system protection
+  capability."
+implementation-guidance: "-"
+assessment-procedures: Determine if a direct, cooperative relationship is
+  established between its incident response capability and external providers of
+  the system protection capability.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IR-7(2).1."
+mapped-rev4-aps: IR-7(2)
+family: IR

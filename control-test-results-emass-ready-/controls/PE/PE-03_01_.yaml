@@ -1,0 +1,77 @@
+control-acronym: "[r5] PE-03(01)"
+control-information: >-
+  Description:
+
+  Enforce physical access authorizations to the system in addition to the
+  physical access controls for the facility at [Assignment: organization-defined
+  physical spaces containing one or more components of the system].
+
+
+  Supplemental Guidance:
+
+  Control of physical access to the system provides additional physical security
+  for those areas within facilities where there is a concentration of system
+  components. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing physical access control; physical access control logs or
+  records; physical access control devices; access authorizations; access
+  credentials; system entry and exit points; list of areas within the facility
+  containing concentrations of system components or system components requiring
+  additional physical protection; system security plan; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access
+  authorization responsibilities; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for physical access control to
+  the information system/components; mechanisms supporting and/or implementing
+  physical access control for facility areas containing system components].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-03(01)
+cci: 000928; 002926
+cci-definition: "000928: Enforce physical access authorizations to the system in
+  addition to the physical access controls for the facility where the system
+  resides at organization-defined physical spaces containing one or more
+  components of the system.; 002926: Defines the physical spaces containing one
+  or more components of the system that require physical access authorizations
+  and controls at the facility where the system resides."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - physical access authorizations to the system are enforced.
+
+  - physical access controls are enforced for the facility at [Assignment:
+  organization-defined physical spaces containing one or more components of the
+  system].
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PE-3(1).1, PE-3(1).2."
+mapped-rev4-aps: PE-3(1)
+family: PE

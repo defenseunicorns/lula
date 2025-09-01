@@ -1,0 +1,86 @@
+control-acronym: "[r5] SA-10(01)"
+control-information: >-
+  Description:
+
+  Require the developer of the system, system component, or system service to
+  enable integrity verification of software and firmware components.
+
+
+  Supplemental Guidance:
+
+  Software and firmware integrity verification allows organizations to detect
+  unauthorized changes to software and firmware components using
+  developer-provided tools, techniques, and mechanisms. The integrity checking
+  mechanisms can also address counterfeiting of software and firmware
+  components. Organizations verify the integrity of software and firmware
+  components, for example, through secure one-way hashes provided by developers.
+  Delivered software and firmware components also include any updates to such
+  components. Related Control(s): SI-7, SR-11.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing system developer configuration management; solicitation
+  documentation; acquisition documentation; service level agreements;
+  acquisition contracts for the system, system component, or system service;
+  system developer configuration management plan; software and firmware
+  integrity verification records; system change authorization records; change
+  control records; configuration management records; system security plan;
+  supply chain risk management plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and service
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with configuration
+  management responsibilities; system developers; organizational personnel with
+  supply chain risk management responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for monitoring developer
+  configuration management; mechanisms supporting and/or implementing the
+  monitoring of developer configuration management].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-10(01)
+cci: 698
+cci-definition: "000698: Require the developer of the system, system component,
+  or system service to enable integrity verification of software and firmware
+  components."
+implementation-guidance: "-"
+assessment-procedures: Determine if the developer of the system, system
+  component, or system service is required to enable integrity verification of
+  software and firmware components.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS implements integrity verification mechanisms for software and
+  firmware components across several layers of the stack. Grype performs
+  vulnerability scanning and software composition analysis, while OpenTofu
+  ensures infrastructure-as-code (IaC) integrity. Zarf secures the supply chain
+  by cryptographically signing software bundles and verifying authenticity
+  before deployment, with SBOM tracking to detect unauthorized modifications.
+  Istio enforces mutual TLS (mTLS) for secure service communication, and
+  NeuVector provides runtime security by blocking unsigned or tampered
+  workloads. Vector and Loki enable immutable logging and tamper detection.
+  Velero ensures secure backup integrity with cryptographic hashing for tamper
+  detection before restoration. These combined controls safeguard the integrity
+  of software and firmware, ensuring a secure and compliant deployment.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SA-10(1).1."
+mapped-rev4-aps: SA-10(1)
+family: SA

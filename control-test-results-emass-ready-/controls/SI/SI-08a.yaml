@@ -1,0 +1,97 @@
+control-acronym: "[r5] SI-08"
+control-information: >-
+  Description:
+
+  a. Employ spam protection mechanisms at system entry and exit points to detect
+  and act on unsolicited messages; and
+
+  b. Update spam protection mechanisms when new releases are available in
+  accordance with organizational configuration management policy and procedures.
+
+
+  Supplemental Guidance:
+
+  System entry and exit points include firewalls, remote-access servers,
+  electronic mail servers, web servers, proxy servers, workstations, notebook
+  computers, and mobile devices. Spam can be transported by different means,
+  including email, email attachments, and web accesses. Spam protection
+  mechanisms include signature definitions. Related Control(s): PL-9, SC-5,
+  SC-7, SC-38, SI-3, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and information integrity policy; system and
+  information integrity procedures; configuration management policies and
+  procedures (CM-1); procedures addressing spam protection; spam protection
+  mechanisms; records of spam protection updates; system design documentation;
+  system configuration settings and associated documentation; system audit
+  records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel responsible for spam
+  protection; organizational personnel with information security
+  responsibilities; system/network administrators; system developer].
+
+
+  Test: [SELECT FROM: Organizational processes for implementing spam protection;
+  mechanisms supporting and/or implementing spam protection].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-08a
+cci: 002741; 002742
+cci-definition: "002741: Employ spam protection mechanisms at system entry
+  points to detect and take action on unsolicited messages.; 002742: Employ spam
+  protection mechanisms at system exit points to detect and take action on
+  unsolicited messages."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - spam protection mechanisms are employed at system entry points to detect
+  unsolicited messages.
+
+  - spam protection mechanisms are employed at system exit points to detect
+  unsolicited messages.
+
+  - spam protection mechanisms are employed at system entry points to act on
+  unsolicited messages.
+
+  - spam protection mechanisms are employed at system exit points to act on
+  unsolicited messages.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: SI-8.1, SI-8.2.
+  The resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: SI-8.1, SI-8.2.
+
+
+  Not Applicable to UDS technology stack. (Spam protection – relates to
+  filtering spam in email or inputs. UDS doesn’t have an email system or
+  user-generated content filtering; that’s outside scope. If an app on UDS was
+  an email server, that app would need spam filtering, but the platform itself
+  is neutral here.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SI-8.1, SI-8.2. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: SI-8.1, SI-8.2."
+mapped-rev4-aps: SI-8.1; SI-8.2
+family: SI

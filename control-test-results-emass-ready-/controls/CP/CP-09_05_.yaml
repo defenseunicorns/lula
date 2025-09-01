@@ -1,0 +1,78 @@
+control-acronym: "[r5] CP-09(05)"
+control-information: >-
+  Description:
+
+  Transfer system backup information to the alternate storage site [Assignment:
+  organization-defined time period and transfer rate consistent with the
+  recovery time and recovery point objectives].
+
+
+  Supplemental Guidance:
+
+  System backup information can be transferred to alternate storage sites either
+  electronically or by the physical shipment of storage media. Related
+  Control(s): CP-7, MP-3, MP-4, MP-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  system backup; contingency plan; system backup logs or records; evidence of
+  system backup information transferred to alternate storage site; alternate
+  storage site agreements; system security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system backup
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for transferring system backups
+  to the alternate storage site; mechanisms supporting and/or implementing
+  system backups; mechanisms supporting and/or implementing information transfer
+  to the alternate storage site].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CP-09(05)
+cci: 000547; 000548
+cci-definition: "000547: Defines the time-period and transfer rate of the system
+  backup information to the alternate storage site consistent with the recovery
+  time and recovery point objectives.; 000548: Transfer system backup
+  information to the alternate storage site in accordance with the
+  organization-defined time period and transfer rate consistent with the
+  recovery time and recovery point objectives."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - system backup information is transferred to the alternate storage site for
+  [Assignment: organization-defined time period and transfer rate consistent
+  with the recovery time and recovery point objectives].
+
+  - system backup information is transferred to the alternate storage site
+  [Assignment: organization-defined time period and transfer rate consistent
+  with the recovery time and recovery point objectives].
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CP-9(5).1, CP-9(5).2."
+mapped-rev4-aps: CP-9(5)
+family: CP

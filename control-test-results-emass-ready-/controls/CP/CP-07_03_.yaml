@@ -1,0 +1,66 @@
+control-acronym: "[r5] CP-07(03)"
+control-information: >-
+  Description:
+
+  Develop alternate processing site agreements that contain priority-of-service
+  provisions in accordance with availability requirements (including recovery
+  time objectives).
+
+
+  Supplemental Guidance:
+
+  Priority of service agreements refer to negotiated agreements with service
+  providers that ensure that organizations receive priority treatment consistent
+  with their availability requirements and the availability of information
+  resources for logical alternate processing and/or at the physical alternate
+  processing site. Organizations establish recovery time objectives as part of
+  contingency planning. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  alternate processing sites; contingency plan; alternate processing site
+  agreements; service-level agreements; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  alternate processing site responsibilities; organizational personnel with
+  system recovery responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with responsibility for
+  acquisitions/contractual agreements].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CP-07(03)
+cci: 518
+cci-definition: "000518: Develop alternate processing site agreements that
+  contain priority-of-service provisions in accordance with availability
+  requirements (including recovery time objectives)."
+implementation-guidance: "-"
+assessment-procedures: Determine if alternate processing site agreements that
+  contain priority-of-service provisions in accordance with availability
+  requirements (including recovery time objectives) are developed.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CP-7(3).1."
+mapped-rev4-aps: CP-7(3)
+family: CP

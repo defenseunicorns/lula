@@ -1,0 +1,84 @@
+control-acronym: SC-22
+control-information: >-
+  Description:
+
+  The information systems that collectively provide name/address resolution
+  service for an organization are fault-tolerant and implement internal/external
+  role separation.
+
+
+  Supplemental Guidance:
+
+  Information systems that provide name and address resolution services include,
+  for example, domain name system (DNS) servers. To eliminate single points of
+  failure and to enhance redundancy, organizations employ at least two
+  authoritative domain name system servers, one configured as the primary server
+  and the other configured as the secondary server. Additionally, organizations
+  typically deploy the servers in two geographically separated network
+  subnetworks (i.e., not located in the same physical facility). For role
+  separation, DNS servers with internal roles only process name and address
+  resolution requests from within organizations (i.e., from internal clients).
+  DNS servers with external roles only process name and address resolution
+  information requests from clients external to organizations (i.e., on external
+  networks including the Internet). Organizations specify clients that can
+  access authoritative DNS servers in particular roles (e.g., by address ranges,
+  explicit lists). Related controls: SC-2, SC-20, SC-21, SC-24.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing architecture and provisioning for name/address resolution service;
+  access control policy and procedures; information system design documentation;
+  assessment results from independent, testing organizations; information system
+  configuration settings and associated documentation; information system audit
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with responsibilities for managing DNS].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  name/address resolution service for fault tolerance and role separation].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-22.1
+cci: 1182
+cci-definition: '001182: The information systems that collectively provide
+  name/address resolution service for an organization are fault-tolerant.'
+implementation-guidance: >-
+  The organization being inspected/assessed implements a name service resolution
+  architecture consisting of primary and secondary servers. The organization
+  must document the architecture in the site security plan. For information
+  system components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  1182.
+
+  Recommended Compelling Evidence:
+
+  1.) DNS logs.
+
+  2.) Applicable STIG/SRG checks pertaining to CCI 1182.
+assessment-procedures: The organization conducting the inspection/assessment
+  reviews the sites implementation documentation of the name resolution servers
+  and verifies primary and alternate services are available. For information
+  system components that have applicable STIGs or SRGs, the organization
+  conducting the inspection/assessment evaluates the components to ensure that
+  the organization being inspected/assessed has configured the information
+  system in compliance with the applicable STIGs and SRGs pertaining to CCI
+  1182.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (Architecture and
+  provisioning for name/address resolution DNS architecture, out of scope of UDS
+  which focuses on application layer.)
+family: SC

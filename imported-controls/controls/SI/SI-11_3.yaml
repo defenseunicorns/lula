@@ -1,0 +1,75 @@
+control-acronym: SI-11
+control-information: >-
+  Description:
+
+  The information system:
+
+  a. Generates error messages that provide information necessary for corrective
+  actions without revealing information that could be exploited by adversaries;
+  and
+
+  b. Reveals error messages only to [Assignment: organization-defined personnel
+  or roles].
+
+
+  Supplemental Guidance:
+
+  Organizations carefully consider the structure/content of error messages. The
+  extent to which information systems are able to identify and handle error
+  conditions is guided by organizational policy and operational requirements.
+  Information that could be exploited by adversaries includes, for example,
+  erroneous logon attempts with passwords entered by mistake as the username,
+  mission/business information that can be derived from (if not stated
+  explicitly by) information recorded, and personal information such as account
+  numbers, social security numbers, and credit card numbers. In addition, error
+  messages may provide a covert channel for transmitting information. Related
+  controls: AU-2, AU-3, SC-31.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing information system error handling; information system design
+  documentation; information system configuration settings and associated
+  documentation; documentation providing structure/content of error messages;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  information input validation; organizational personnel with information
+  security responsibilities; system/network administrators; system developer].
+
+
+  Test: [SELECT FROM: Organizational processes for error handling; automated
+  mechanisms supporting and/or implementing error handling; automated mechanisms
+  supporting and/or implementing management of error messages].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SI-11.1,CCI-001312,Local
+  SI-11.2,CCI-001314,Local
+  SI-11.3,CCI-002759,DoD Organization or Service Common Control Package...
+ap-acronym: SI-11.3
+cci: 2759
+cci-definition: '002759: The organization defines the personnel or roles to whom
+  error messages are to be revealed.'
+implementation-guidance: |-
+  DoD has defined the personnel or roles as the ISSO, ISSM, and SCA.
+
+  Recommended Compelling Evidence:
+  Automatically compliant.
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the personnel or roles as the ISSO, ISSM, and SCA.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SI

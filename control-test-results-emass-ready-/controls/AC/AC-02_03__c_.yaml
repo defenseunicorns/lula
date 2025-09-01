@@ -1,0 +1,64 @@
+control-acronym: "[r5] AC-02(03)"
+control-information: >-
+  Description:
+
+  Disable accounts within [Assignment: organization-defined time period] when
+  the accounts:
+
+  (a) Have expired;
+
+  (b) Are no longer associated with a user or individual;
+
+  (c) Are in violation of organizational policy; or
+
+  (d) Have been inactive for [Assignment: organization-defined time period].
+
+
+  Supplemental Guidance:
+
+  Disabling expired, inactive, or otherwise anomalous accounts supports the
+  concepts of least privilege and least functionality which reduce the attack
+  surface of the system. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures for addressing
+  account management; system security plan; system design documentation; system
+  configuration settings and associated documentation; system-generated list of
+  accounts removed; system-generated list of emergency accounts disabled; system
+  audit records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms for implementing account management functions].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-02(03)(c)
+cci: 3629
+cci-definition: "003629: Disable accounts when the accounts are in violation of
+  organizational policy."
+implementation-guidance: "-"
+assessment-procedures: "Determine if accounts are disabled within [Assignment:
+  organization-defined time period] when the accounts are in violation of
+  organizational policy."
+inherited: Local
+remote-inheritance-instance: "-"
+family: AC

@@ -1,0 +1,70 @@
+control-acronym: AU-14(3)
+control-information: >-
+  Description:
+
+  The information system provides the capability for authorized users to
+  remotely view/hear all content related to an established user session in real
+  time.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  user session auditing; information system design documentation; information
+  system configuration settings and associated documentation; information system
+  audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing user session auditing
+  capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-14(3).1
+cci: 1920
+cci-definition: '001920: The information system provides the capability for
+  authorized users to remotely view/hear all content related to an established
+  user session in real time.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  provide the capability for authorized users to remotely view/hear all content
+  related to an established user session in real time. For information system
+  components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  1920.
+
+  Recommended Compelling Evidence:
+
+  1.) List of privileged users who will be authorized remote access to manage
+  user sessions in real time
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to provide the capability
+  for authorized users to remotely view/hear all content related to an
+  established user session in real time. For information system components that
+  have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 1920.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (UDS itself does not
+  inherently provide or support remote, real-time viewing or listening to user
+  session content (e.g., session mirroring, remote desktop viewing, or real-time
+  session monitoring). Such functionality, if required, would typically be
+  provided by specialized endpoint monitoring or auditing tools external to the
+  UDS environment. Therefore, this control is considered not applicable directly
+  to the UDS platform.)
+family: AU

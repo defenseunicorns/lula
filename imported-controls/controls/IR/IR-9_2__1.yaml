@@ -1,0 +1,57 @@
+control-acronym: IR-9(2)
+control-information: >-
+  Description:
+
+  The organization provides information spillage response training [Assignment:
+  organization-defined frequency].
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  information spillage response training; information spillage response training
+  curriculum; information spillage response training materials; incident
+  response plan; information spillage response training records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  training responsibilities; organizational personnel with information security
+  responsibilities].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IR-9(2).1,CCI-002816,Organization AWS Cloud Brokerage Package
+  IR-9(2).2,CCI-002817,DoD Organization or Service Common Control Package...
+ap-acronym: IR-9(2).1
+cci: 2816
+cci-definition: '002816: The organization provides information spillage response
+  training according to an organization-defined frequency.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to provide information spillage response training annually. The organization
+  must maintain a record of training. DoD has defined the frequency as annually.
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation of a process to provide information spillage response
+  training annually
+
+  2.) Record of training
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process as well as the training records
+  for a sampling of incident response personnel to ensure the organization being
+  inspected/assessed provides information spillage response training annually.
+  DoD has defined the frequency as annually.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IR

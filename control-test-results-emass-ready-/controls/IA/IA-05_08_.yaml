@@ -1,0 +1,82 @@
+control-acronym: "[r5] IA-05(08)"
+control-information: >-
+  Description:
+
+  Implement [Assignment: organization-defined security controls] to manage the
+  risk of compromise due to individuals having accounts on multiple systems.
+
+
+  Supplemental Guidance:
+
+  When individuals have accounts on multiple systems and use the same
+  authenticators such as passwords, there is the risk that a compromise of one
+  account may lead to the compromise of other accounts. Alternative approaches
+  include having different authenticators (passwords) on all systems, employing
+  a single sign-on or federation mechanism, or using some form of one-time
+  passwords on all systems. Organizations can also use rules of behavior (see
+  PL-4) and access agreements (see PS-6) to mitigate the risk of multiple system
+  accounts. Related Control(s): PS-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing authenticator management; system security plan; list of individuals
+  having accounts on multiple systems; list of security safeguards intended to
+  manage risk of compromise due to individuals having accounts on multiple
+  systems; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with authenticator
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing safeguards for
+  authenticator management].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-05(08)
+cci: 000204; 001621
+cci-definition: "000204: Defines the security controls required to manage the
+  risk of compromise due to individuals having accounts on multiple information
+  systems.; 001621: Implement organization-defined security controls to manage
+  the risk of compromise due to individuals having accounts on multiple
+  systems."
+implementation-guidance: CCI-000204 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if [Assignment: organization-defined security
+  controls] are implemented to manage the risk of compromise due to individuals
+  having accounts on multiple systems."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  UDS supports organizational efforts to manage risks associated with account
+  use across multiple systems through its centralized identity management
+  solution, Keycloak. Keycloak provides robust single sign-on (SSO) and
+  federated authentication capabilities, ensuring centralized and consistent
+  enforcement of authentication policies across connected systems. By leveraging
+  federated identity services, UDS significantly reduces the likelihood of
+  credential reuse and unauthorized account access.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IA-5(8).1, IA-5(8).2."
+mapped-rev4-aps: IA-5(8)
+family: IA

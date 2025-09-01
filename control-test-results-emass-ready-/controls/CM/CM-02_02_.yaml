@@ -1,0 +1,86 @@
+control-acronym: "[r5] CM-02(02)"
+control-information: >-
+  Description:
+
+  Maintain the currency, completeness, accuracy, and availability of the
+  baseline configuration of the system using [Assignment: organization-defined
+  automated mechanisms].
+
+
+  Supplemental Guidance:
+
+  Automated mechanisms that help organizations maintain consistent baseline
+  configurations for systems include configuration management tools, hardware,
+  software, firmware inventory tools, and network management tools. Automated
+  tools can be used at the organization level, mission and business process
+  level, or system level on workstations, servers, notebook computers, network
+  components, or mobile devices. Tools can be used to track version numbers on
+  operating systems, applications, types of software installed, and current
+  patch levels. Automation support for accuracy and currency can be satisfied by
+  the implementation of CM-8(2) for organizations that combine system component
+  inventory and baseline configuration activities. Related Control(s): CM-7,
+  IA-3, RA-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  the baseline configuration of the system; configuration management plan;
+  system design documentation; system architecture and configuration
+  documentation; system configuration settings and associated documentation;
+  system component inventory; configuration change control records; system
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with configuration
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing baseline
+  configurations; automated mechanisms implementing baseline configuration
+  maintenance].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-02(02)
+cci: 000300; 000301; 000302; 000303; 003911
+cci-definition: "000300: Maintain complete configuration of the system using
+  organization-defined automated mechanisms.; 000301: Maintain current
+  configuration of the system using organization-defined automated mechanisms.;
+  000302: Maintain accurate configuration of the system using
+  organization-defined automated mechanisms.; 000303: Maintain available
+  configuration of the system using organization-defined automated mechanisms.;
+  003911: Defines the automated mechanisms for maintaining the currency,
+  completeness, accuracy, and availability of the baseline configuration of the
+  system."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the currency of the baseline configuration of the system is maintained using
+  [Assignment: organization-defined automated mechanisms].
+
+  - the completeness of the baseline configuration of the system is maintained
+  using [Assignment: organization-defined automated mechanisms].
+
+  - the accuracy of the baseline configuration of the system is maintained using
+  [Assignment: organization-defined automated mechanisms].
+
+  - the availability of the baseline configuration of the system is maintained
+  using [Assignment: organization-defined automated mechanisms].
+inherited: Local
+remote-inheritance-instance: "-"
+family: CM

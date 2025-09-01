@@ -1,0 +1,69 @@
+control-acronym: "[r5] AC-02(01)"
+control-information: >-
+  Description:
+
+  Support the management of system accounts using [Assignment:
+  organization-defined automated mechanisms].
+
+
+  Supplemental Guidance:
+
+  Automated system account management includes using automated mechanisms to
+  create, enable, modify, disable, and remove accounts; notify account managers
+  when an account is created, enabled, modified, disabled, or removed, or when
+  users are terminated or transferred; monitor system account usage; and report
+  atypical system account usage. Automated mechanisms can include internal
+  system functions and email, telephonic, and text messaging notifications.
+  Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures for addressing
+  account management; system design documentation; system configuration settings
+  and associated documentation; system audit records; system security plan;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security with information security responsibilities; system
+  developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms for implementing account management
+  functions].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-02(01)
+cci: 15
+cci-definition: "000015: Support the management of system accounts using
+  (organization-defined automated mechanisms)."
+implementation-guidance: "-"
+assessment-procedures: "Determine if the management of system accounts is
+  supported using [Assignment: organization-defined automated mechanisms]."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS supports automated mechanisms for account management via
+  Keycloak. Keycloak automates many account management functions (creation,
+  disablement, role assignments) through its interface and APIs, reducing the
+  need for manual processes and meeting the intent of AC-2(1).
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-2(1).1."
+mapped-rev4-aps: AC-2(1)
+family: AC

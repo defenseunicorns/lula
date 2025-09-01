@@ -1,0 +1,71 @@
+control-acronym: PS-8
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Employs a formal sanctions process for individuals failing to comply with
+  established information security policies and procedures; and
+
+  b. Notifies [Assignment: organization-defined personnel or roles] within
+  [Assignment: organization-defined time period] when a formal employee
+  sanctions process is initiated, identifying the individual sanctioned and the
+  reason for the sanction.
+
+
+  Supplemental Guidance:
+
+  Organizational sanctions processes reflect applicable federal laws, Executive
+  Orders, directives, regulations, policies, standards, and guidance. Sanctions
+  processes are described in access agreements and can be included as part of
+  general personnel policies and procedures for organizations. Organizations
+  consult with the Office of the General Counsel regarding matters of employee
+  sanctions. Related controls: PL-4, PS-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  personnel sanctions; rules of behavior; records of formal sanctions; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for managing personnel sanctions;
+  automated mechanisms supporting and/or implementing notifications].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PS-8.1,CCI-001542,Local
+  PS-8.2,CCI-003046,DoD Organization or Service Common Control Package
+  PS-8.3,CCI-003044,Local
+  PS-8.4,CCI-003045,DoD Organization or Service Common Control Package...
+ap-acronym: PS-8.2
+cci: 3046
+cci-definition: '003046: The organization defines the time period to notify
+  organization-defined personnel or roles when a formal employee sanctions
+  process is initiated.'
+implementation-guidance: |-
+  DoD has defined the time period as immediately.
+
+  Recommended Compelling Evidence:
+  Automatically compliant.
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the time period as immediately.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PS

@@ -1,0 +1,130 @@
+control-acronym: "[r5] CM-01"
+control-information: >-
+  Description:
+
+  a. Develop, document, and disseminate to [Assignment: organization-defined
+  personnel or roles]:
+
+  1. [Selection (one or more): Organization-level; Mission/business
+  process-level; System-level] configuration management policy that:
+    (a) Addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; and
+    (b) Is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines; and
+  2. Procedures to facilitate the implementation of the configuration management
+  policy and the associated configuration management controls;
+
+  b. Designate an [Assignment: organization-defined official] to manage the
+  development, documentation, and dissemination of the configuration management
+  policy and procedures; and
+
+  c. Review and update the current configuration management:
+
+  1. Policy [Assignment: organization-defined frequency] and following
+  [Assignment: organization-defined events]; and
+
+  2. Procedures [Assignment: organization-defined frequency] and following
+  [Assignment: organization-defined events].
+
+
+  Supplemental Guidance:
+
+  Configuration management policy and procedures address the controls in the CM
+  family that are implemented within systems and organizations. The risk
+  management strategy is an important factor in establishing such policies and
+  procedures. Policies and procedures contribute to security and privacy
+  assurance. Therefore, it is important that security and privacy programs
+  collaborate on the development of configuration management policy and
+  procedures. Security and privacy program policies and procedures at the
+  organization level are preferable, in general, and may obviate the need for
+  mission- or system-specific policies and procedures. The policy can be
+  included as part of the general security and privacy policy or be represented
+  by multiple policies that reflect the complex nature of organizations.
+  Procedures can be established for security and privacy programs, for
+  mission/business processes, and for systems, if needed. Procedures describe
+  how the policies or controls are implemented and can be directed at the
+  individual or role that is the object of the procedure. Procedures can be
+  documented in system security and privacy plans or in one or more separate
+  documents. Events that may precipitate an update to configuration management
+  policy and procedures include, but are not limited to, assessment or audit
+  findings, security incidents or breaches, or changes in applicable laws,
+  executive orders, directives, regulations, policies, standards, and
+  guidelines. Simply restating controls does not constitute an organizational
+  policy or procedure. Related Control(s): PM-9, PS-8, SA-8, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy and procedures;
+  security and privacy program policies and procedures; assessment or audit
+  findings; documentation of security incidents or breaches; system security
+  plan; privacy plan; risk management strategy; other relevant artifacts,
+  documents, or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with configuration
+  management responsibilities; organizational personnel with information
+  security and privacy responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-01c.01
+cci: 000286; 000289; 003904; 003905
+cci-definition: "000286: Defines the frequency with which to review and update
+  the configuration management policies.; 000289: Review and update, on an
+  organization-defined frequency, the configuration management policy.; 003904:
+  Review and update the configuration management policy following
+  organization-defined events.; 003905: Defines the events for when the policy
+  will be reviewed and updated."
+implementation-guidance: CCI-000286 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - the current configuration management policy is reviewed and updated
+  [Assignment: organization-defined frequency].
+
+  - the current configuration management policy is reviewed and updated
+  following [Assignment: organization-defined events].
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: CM-1.7, CM-1.8; as
+  well as the following Rev. 5 security requirements: CCI-003904, CCI-003905.
+  The resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: CM-1.8. The resulting compliance status was set to non-compliant
+  because of the addition of a new security requirement to the assessment
+  procedure that has not been previously assessed: CCI-003904, CCI-003905.
+
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  Not Applicable to UDS technology stack. (Explicitly defining, documenting,
+  reviewing, and updating the organization's configuration management policy
+  including setting formal review intervals (e.g., annually) remains an
+  organizational administrative responsibility.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-1.7, CM-1.8; as well as the following Rev. 5 security
+  requirements: CCI-003904, CCI-003905. The resulting compliance status was set
+  to non-compliant because the following Rev. 4 assessment procedure had no
+  locally entered test result/compliance statement: CM-1.8. The resulting
+  compliance status was set to non-compliant because of the addition of a new
+  security requirement to the assessment procedure that has not been previously
+  assessed: CCI-003904, CCI-003905."
+mapped-rev4-aps: CM-1.7; CM-1.8
+family: CM

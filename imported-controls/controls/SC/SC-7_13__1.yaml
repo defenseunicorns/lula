@@ -1,0 +1,109 @@
+control-acronym: SC-7(13)
+control-information: >-
+  Description:
+
+  The organization isolates [Assignment: organization-defined information
+  security tools, mechanisms, and support components] from other internal
+  information system components by implementing physically separate subnetworks
+  with managed interfaces to other components of the system.
+
+
+  Supplemental Guidance:
+
+  Physically separate subnetworks with managed interfaces are useful, for
+  example, in isolating computer network defenses from critical operational
+  processing networks to prevent adversaries from discovering the analysis and
+  forensics techniques of organizations. Related controls: SA-8, SC-2, SC-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; information system design documentation;
+  information system hardware and software; information system architecture;
+  information system configuration settings and associated documentation; list
+  of security tools and support components to be isolated from other internal
+  information system components; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  isolation of information security tools, mechanisms, and support components].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: |-
+  SC-7(13).1,CCI-001119,Organization AWS Cloud Brokerage Package
+  SC-7(13).2,CCI-001120,DoD Organization or Service Common Control Package...
+ap-acronym: SC-7(13).1
+cci: 1119
+cci-definition: '001119: The organization isolates organization-defined
+  information security tools, mechanisms, and support components from other
+  internal information system components by implementing physically separate
+  subnetworks with managed interfaces to other components of the system.'
+implementation-guidance: >-
+  The organization being inspected/assessed designs the information system to
+  isolate key information security tools, mechanisms, and support components
+  such as, but not limited to PKI, Patching infrastructure, HBSS, CND Tools,
+  Special Purpose Gateway, vulnerability tracking systems, honeypots, internet
+  access points (IAPs); network element and data center
+  administrative/management traffic; Demilitarized Zones (DMZs), Server
+  farms/computing centers, centralized audit log servers etc. from other
+  internal information system components by implementing physically separate
+  subnetworks with managed interfaces to other components of the system. DoD has
+  defined the key information security tools, mechanisms, and support components
+  as key information security tools, mechanisms, and support components such as,
+  but not limited to PKI, Patching infrastructure, HBSS, CND Tools, Special
+  Purpose Gateway, vulnerability tracking systems, honeypots, internet access
+  points (IAPs); network element and data center administrative/management
+  traffic; Demilitarized Zones (DMZs), Server farms/computing centers,
+  centralized audit log servers etc. Recommended Compelling Evidence:
+
+  1.) Current network topology diagrams.
+
+  2.) Architecture documentation or any other relevant documentation.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines network topology diagrams, architecture documentation, or
+  any other documentation identifying component partitioning to ensure the
+  organization being inspected/assessed isolates key information security tools,
+  mechanisms, and support components such as, but not limited to PKI, Patching
+  infrastructure, HBSS, CND Tools, Special Purpose Gateway, vulnerability
+  tracking systems, honeypots, internet access points (IAPs); network element
+  and data center administrative/management traffic; Demilitarized Zones (DMZs),
+  Server farms/computing centers, centralized audit log servers etc. from other
+  internal information system components by implementing physically separate
+  subnetworks with managed interfaces to other components of the system. DoD has
+  defined the key information security tools, mechanisms, and support components
+  as key information security tools, mechanisms, and support components such as,
+  but not limited to PKI, Patching infrastructure, HBSS, CND Tools, Special
+  Purpose Gateway, vulnerability tracking systems, honeypots, internet access
+  points (IAPs); network element and data center administrative/management
+  traffic; Demilitarized Zones (DMZs), Server farms/computing centers,
+  centralized audit log servers etc.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: 'In UDS, isolation of security tools and support components is
+  achieved by deploying them into dedicated environments using separate
+  Kubernetes namespaces and, where the underlying infrastructure permits,
+  physically separate subnetworks with controlled interfaces. Critical security
+  services like Keycloak, NeuVector, and the Istio control plane are isolated
+  from general application workloads through strict network segmentation and
+  managed access points, ensuring that communications between these components
+  and other system elements occur only through predefined, secure channels. This
+  approach is enforced via Infrastructure as Code (using OpenTofu and Zarf),
+  which codifies and consistently deploys these boundaries, thereby reducing the
+  attack surface and safeguarding the integrity of the organizationâs core
+  security functions.'
+uds-alignment: OpenTofu, Zarf
+family: SC

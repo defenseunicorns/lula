@@ -1,0 +1,107 @@
+control-acronym: "[r5] CP-10"
+control-information: >-
+  Description:
+
+  Provide for the recovery and reconstitution of the system to a known state
+  within [Assignment: organization-defined time period consistent with recovery
+  time and recovery point objectives] after a disruption, compromise, or
+  failure.
+
+
+  Supplemental Guidance:
+
+  Recovery is executing contingency plan activities to restore organizational
+  mission and business functions. Reconstitution takes place following recovery
+  and includes activities for returning systems to fully operational states.
+  Recovery and reconstitution operations reflect mission and business
+  priorities; recovery point, recovery time, and reconstitution objectives; and
+  organizational metrics consistent with contingency plan requirements.
+  Reconstitution includes the deactivation of interim system capabilities that
+  may have been needed during recovery operations. Reconstitution also includes
+  assessments of fully restored system capabilities, reestablishment of
+  continuous monitoring activities, system reauthorization (if required), and
+  activities to prepare the system and organization for future disruptions,
+  breaches, compromises, or failures. Recovery and reconstitution capabilities
+  can include automated mechanisms and manual procedures. Organizations
+  establish recovery time and recovery point objectives as part of contingency
+  planning. Related Control(s): CP-2, CP-4, CP-6, CP-7, CP-9, IR-4, SA-8, SC-24,
+  SI-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  system backup; contingency plan; system backup test results; contingency plan
+  test results; contingency plan test documentation; redundant secondary system
+  for system backups; location(s) of redundant secondary backup system(s);
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency planning,
+  recovery, and/or reconstitution responsibilities; organizational personnel
+  with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes implementing system recovery and
+  reconstitution operations; mechanisms supporting and/or implementing system
+  recovery and reconstitution operations].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CP-10
+cci: 004028; 004029
+cci-definition: "004028: Provide for the recovery and reconstitution of the
+  system to a known state within an organization-defined time-period consistent
+  with recovery time and recovery point objectives after a disruption,
+  compromise, or failure.; 004029: Defines the time-period consistent with
+  recovery time and recovery point objectives for the recovery and
+  reconstitution of the system."
+implementation-guidance: CCI-004029 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - the recovery of the system to a known state is provided within [Assignment:
+  organization-defined time period consistent with recovery time and recovery
+  point objectives] after a disruption, compromise, or failure.
+
+  - a reconstitution of the system to a known state is provided within
+  [Assignment: organization-defined time period consistent with recovery time
+  and recovery point objectives] after a disruption, compromise, or failure.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: In UDS, recovery and reconstitution after a disruption,
+  compromise, or failure are achieved through a coordinated, automated process
+  that restores the system to a known secure state. This is primarily managed
+  using Infrastructure as Code with OpenTofu and Zarf, which ensure that the
+  system’s baseline configuration and deployments are version-controlled and can
+  be redeployed consistently. Velero plays a key role by regularly backing up
+  Kubernetes resources and persistent data, allowing the system to be restored
+  to a recent, known state in the event of data loss or corruption.
+  Complementing these measures, monitoring and logging tools such as Prometheus,
+  Grafana, and Loki provide real-time visibility to verify that the system state
+  aligns with expected security baselines post-recovery. Together, these
+  components enable UDS to rapidly recover and reconstitute the information
+  system to a secure, operational state following disruptions.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CP-10.1, CP-10.2, CP-10.3; as well as the following Rev. 5
+  security requirements: CCI-004028, CCI-004029. The resulting compliance status
+  was set to non-compliant because of the addition of a new security requirement
+  to the assessment procedure that has not been previously assessed: CCI-004028,
+  CCI-004029."
+mapped-rev4-aps: CP-10.1; CP-10.2; CP-10.3
+family: CP

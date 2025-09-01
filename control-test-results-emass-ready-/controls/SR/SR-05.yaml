@@ -1,0 +1,97 @@
+control-acronym: "[r5] SR-05"
+control-information: >-
+  Description:
+
+  Employ the following acquisition strategies, contract tools, and procurement
+  methods to protect against, identify, and mitigate supply chain risks:
+  [Assignment: organization-defined acquisition strategies, contract tools, and
+  procurement methods].
+
+
+  Supplemental Guidance:
+
+  The use of the acquisition process provides an important vehicle to protect
+  the supply chain. There are many useful tools and techniques available,
+  including obscuring the end use of a system or system component, using blind
+  or filtered buys, requiring tamper-evident packaging, or using trusted or
+  controlled distribution. The results from a supply chain risk assessment can
+  guide and inform the strategies, tools, and methods that are most applicable
+  to the situation. Tools and techniques may provide protections against
+  unauthorized production, theft, tampering, insertion of counterfeits,
+  insertion of malicious software or backdoors, and poor development practices
+  throughout the system development life cycle. Organizations also consider
+  providing incentives for suppliers who implement controls, promote
+  transparency into their processes and security and privacy practices, provide
+  contract language that addresses the prohibition of tainted or counterfeit
+  components, and restrict purchases from untrustworthy suppliers. Organizations
+  consider providing training, education, and awareness programs for personnel
+  regarding supply chain risk, available mitigation strategies, and when the
+  programs should be employed. Methods for reviewing and protecting development
+  plans, documentation, and evidence are commensurate with the security and
+  privacy requirements of the organization. Contracts may specify documentation
+  protection requirements. Related Control(s): AT-3, SA-2, SA-3, SA-4, SA-5,
+  SA-8, SA-9, SA-10, SA-15, SR-6, SR-9, SR-10, SR-11.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Supply chain risk management policy; supply chain risk
+  management procedures; supply chain risk management plan; system and services
+  acquisition policy; system and services acquisition procedures; procedures
+  addressing supply chain protection; procedures addressing the integration of
+  information security and privacy requirements into the acquisition process;
+  solicitation documentation; acquisition documentation (including purchase
+  orders); service level agreements; acquisition contracts for systems, system
+  components, or services; documentation of training, education, and awareness
+  programs for personnel regarding supply chain risk; system security plan;
+  privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with acquisition
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities; organizational personnel with supply chain risk
+  management responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for defining and employing
+  tailored acquisition strategies, contract tools, and procurement methods;
+  mechanisms supporting and/or implementing the definition and employment of
+  tailored acquisition strategies, contract tools, and procurement methods].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SR-05
+cci: 005112; 005113
+cci-definition: "005112: Employ the following acquisition strategies, contract
+  tools, and procurement methods to protect against, identify, and mitigate
+  supply chain risks.; 005113: Defines the acquisition strategies, contract
+  tools, and procurement methods for protecting against, identifying, and
+  mitigating supply chain risks."
+implementation-guidance: CCI-005113 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - [Assignment: organization-defined acquisition strategies, contract tools,
+  and procurement methods] are employed to protect against supply chain risks.
+
+  - [Assignment: organization-defined acquisition strategies, contract tools,
+  and procurement methods] are employed to identify supply chain risks.
+
+  - [Assignment: organization-defined acquisition strategies, contract tools,
+  and procurement methods] are employed to mitigate supply chain risks.
+inherited: Local
+remote-inheritance-instance: "-"
+family: SR

@@ -1,0 +1,60 @@
+control-acronym: PE-19(1)
+control-information: >-
+  Description:
+
+  The organization ensures that information system components, associated data
+  communications, and networks are protected in accordance with national
+  emissions and TEMPEST policies and procedures based on the security category
+  or classification of the information.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing information leakage that comply with national emissions
+  and TEMPEST policies and procedures; information system component design
+  documentation; information system configuration settings and associated
+  documentation other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  information system environmental controls; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Information system components for compliance with national
+  emissions and TEMPEST policies and procedures].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: PE-19(1).1
+cci: 994
+cci-definition: '000994: The organization ensures that information system
+  components, associated data communications, and networks are protected in
+  accordance with national emissions and TEMPEST policies and procedures based
+  on the security category or classification of the information.'
+implementation-guidance: >-
+  The organization being inspected/assessed will obtain a TEMPEST countermeasure
+  review and implement the required countermeasures in order to protect the
+  information system from information leakage due to electromagnetic signals
+  emanations.
+
+  Recommended Compelling Evidence:
+
+  1.) Documented TEMPEST countermeasure review results
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the TEMPEST countermeasures review and inspects the
+  information system to ensure those countermeasures have been implemented.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (Physical access controls,
+  monitoring, device protection, etc., must be managed in the data center, cloud
+  facility, or on-premise environment and are not functions of UDS. UDS assumes
+  the physical environment is secured per organizational policy.)
+family: PE

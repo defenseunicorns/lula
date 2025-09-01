@@ -1,0 +1,95 @@
+control-acronym: RA-5(5)
+control-information: >-
+  Description:
+
+  The information system implements privileged access authorization to
+  [Assignment: organization-identified information system components] for
+  selected [Assignment: organization-defined vulnerability scanning activities].
+
+
+  Supplemental Guidance:
+
+  In certain situations, the nature of the vulnerability scanning may be more
+  intrusive or the information system component that is the subject of the
+  scanning may contain highly sensitive information. Privileged access
+  authorization to selected system components facilitates more thorough
+  vulnerability scanning and also protects the sensitive nature of such
+  scanning.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Risk assessment policy; procedures addressing
+  vulnerability scanning; security plan; information system design
+  documentation; information system configuration settings and associated
+  documentation; list of information system components for vulnerability
+  scanning; personnel access authorization list; authorization credentials;
+  access authorization records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with vulnerability scanning
+  responsibilities; system/network administrators; organizational personnel
+  responsible for access control to the information system; organizational
+  personnel responsible for configuration management of the information system;
+  system developers; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for vulnerability scanning;
+  organizational processes for access control; automated mechanisms supporting
+  and/or implementing access control; automated mechanisms/tools supporting
+  and/or implementing vulnerability scanning].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  RA-5(5).1,CCI-001067,Local
+  RA-5(5).2,CCI-001645,DoD Organization or Service Common Control Package
+  RA-5(5).3,CCI-002906,Local...
+ap-acronym: RA-5(5).1
+cci: 1067
+cci-definition: '001067: The information system implements privileged access
+  authorization to organization-identified information system components for
+  selected organization-defined vulnerability scanning activities.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  implement privileged access authorization to all information systems and
+  infrastructure components for selected vulnerability scanning activities
+  defined in RA-5 (5), CCI 2906. For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 1067. DoD has defined
+  the information system components as all information systems and
+  infrastructure components.
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP).
+
+  2.) Reference to system security plan (SSP) section pertaining to the roles
+  and responsibilities of vulnerability scanning.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to implement privileged
+  access authorization to all information systems and infrastructure components
+  for selected vulnerability scanning activities defined in RA-5 (5), CCI 2906.
+  For information system components that have applicable STIGs or SRGs, the
+  organization conducting the inspection/assessment evaluates the components to
+  ensure that the organization being inspected/assessed has configured the
+  information system in compliance with the applicable STIGs and SRGs pertaining
+  to CCI 1067. DoD has defined the information system components as all
+  information systems and infrastructure components.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: UDS ensures that all vulnerability scanning software that requires
+  privileged access to information system components is done following least
+  privilege and done in a controlled manner through a specific role. For example
+  if an authenticated scan is required a non-human service account will be used
+  to complete the task.
+uds-alignment: UDS UI, Grype, Neuvector
+family: RA

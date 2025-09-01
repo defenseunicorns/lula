@@ -1,0 +1,101 @@
+control-acronym: "[r5] PL-01"
+control-information: >-
+  Description:
+
+  a. Develop, document, and disseminate to [Assignment: organization-defined
+  personnel or roles]:
+
+  1. [Selection (one or more): Organization-level; Mission/business
+  process-level; System-level] planning policy that:
+    (a) Addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; and
+    (b) Is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines; and
+  2. Procedures to facilitate the implementation of the planning policy and the
+  associated planning controls;
+
+  b. Designate an [Assignment: organization-defined official] to manage the
+  development, documentation, and dissemination of the planning policy and
+  procedures; and
+
+  c. Review and update the current planning:
+
+  1. Policy [Assignment: organization-defined frequency] and following
+  [Assignment: organization-defined events]; and
+
+  2. Procedures [Assignment: organization-defined frequency] and following
+  [Assignment: organization-defined events].
+
+
+  Supplemental Guidance:
+
+  Planning policy and procedures for the controls in the PL family implemented
+  within systems and organizations. The risk management strategy is an important
+  factor in establishing such policies and procedures. Policies and procedures
+  contribute to security and privacy assurance. Therefore, it is important that
+  security and privacy programs collaborate on their development. Security and
+  privacy program policies and procedures at the organization level are
+  preferable, in general, and may obviate the need for mission level or
+  system-specific policies and procedures. The policy can be included as part of
+  the general security and privacy policy or be represented by multiple policies
+  that reflect the complex nature of organizations. Procedures can be
+  established for security and privacy programs, for mission/business processes,
+  and for systems, if needed. Procedures describe how the policies or controls
+  are implemented and can be directed at the individual or role that is the
+  object of the procedure. Procedures can be documented in system security and
+  privacy plans or in one or more separate documents. Events that may
+  precipitate an update to planning policy and procedures include, but are not
+  limited to, assessment or audit findings, security incidents or breaches, or
+  changes in laws, executive orders, directives, regulations, policies,
+  standards, and guidelines. Simply restating controls does not constitute an
+  organizational policy or procedure. Related Control(s): PM-9, PS-8, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Planning policy and procedures; system security plan;
+  privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with planning
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PL-01a.02
+cci: 000566; 000567; 003048
+cci-definition: "000566: Develop and document procedures to facilitate the
+  implementation of the planning policy and associated planning controls.;
+  000567: Disseminates planning procedures to organization-defined personnel or
+  roles.; 003048: Defines the personnel or roles to whom the planning procedures
+  are disseminated."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - planning procedures to facilitate the implementation of the planning policy
+  and associated planning controls are developed and documented.
+
+  - the planning procedures are disseminated to [Assignment:
+  organization-defined personnel or roles].
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PL-1.2, PL-1.5, PL-1.8."
+mapped-rev4-aps: PL-1.2; PL-1.5; PL-1.8
+family: PL

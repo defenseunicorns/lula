@@ -1,0 +1,76 @@
+control-acronym: "[r5] AC-06(09)"
+control-information: >-
+  Description:
+
+  Log the execution of privileged functions.
+
+
+  Supplemental Guidance:
+
+  The misuse of privileged functions, either intentionally or unintentionally by
+  authorized users or by unauthorized external entities that have compromised
+  system accounts, is a serious and ongoing concern and can have significant
+  adverse impacts on organizations. Logging and analyzing the use of privileged
+  functions is one way to detect such misuse and, in doing so, help mitigate the
+  risk from insider threats and the advanced persistent threat. Related
+  Control(s): AU-2, AU-3, AU-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing least
+  privilege; system design documentation; system configuration settings and
+  associated documentation; list of privileged functions to be audited; list of
+  audited events; system audit records; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  reviewing least privileges necessary to accomplish specified tasks;
+  organizational personnel with information security responsibilities;
+  system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms auditing the execution of least privilege
+  functions].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-06(09)
+cci: 2234
+cci-definition: "002234: Log the execution of privileged functions."
+implementation-guidance: "-"
+assessment-procedures: Determine if the execution of privileged functions is logged.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: The UDS information system audits the execution of privileged
+  functions to detect and mitigate the risk of misuse by authorized users or
+  unauthorized external entities. UDS employs Vector for log shipping and Loki
+  for log aggregation, which enables the collection and centralization of audit
+  logs. These logs can be sent to a Security Information and Event Management
+  (SIEM) system for comprehensive auditing and alerting, depending on the
+  customer's setup. This configuration ensures that all privileged functions are
+  monitored, and any misuse can be promptly detected and addressed. The auditing
+  process includes reviewing access control policies, procedures addressing
+  least privilege, and maintaining detailed records of privileged functions and
+  audited events. This approach helps mitigate the risk from insider threats and
+  advanced persistent threats (APT), ensuring compliance with the control
+  requirements.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-6(9).1."
+mapped-rev4-aps: AC-6(9)
+family: AC

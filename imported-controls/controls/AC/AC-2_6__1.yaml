@@ -1,0 +1,88 @@
+control-acronym: AC-2(6)
+control-information: >-
+  Description:
+
+  The information system implements the following dynamic privilege management
+  capabilities: [Assignment: organization-defined list of dynamic privilege
+  management capabilities].
+
+
+  Supplemental Guidance:
+
+  In contrast to conventional access control approaches which employ static
+  information system accounts and predefined sets of user privileges, dynamic
+  access control approaches (e.g., service-oriented architectures) rely on run
+  time access control decisions facilitated by dynamic privilege management.
+  While user identities may remain relatively constant over time, user
+  privileges may change more frequently based on ongoing mission/business
+  requirements and operational needs of organizations. Dynamic privilege
+  management can include, for example, the immediate revocation of privileges
+  from users, as opposed to requiring that users terminate and restart their
+  sessions to reflect any changes in privileges. Dynamic privilege management
+  can also refer to mechanisms that change the privileges of users based on
+  dynamic rules as opposed to editing specific user profiles. This type of
+  privilege management includes, for example, automatic adjustments of
+  privileges if users are operating out of their normal work times, or if
+  information systems are under duress or in emergency maintenance situations.
+  This control enhancement also includes the ancillary effects of privilege
+  changes, for example, the potential changes to encryption keys used for
+  communications. Dynamic privilege management can support requirements for
+  information system resiliency. Related control: AC-16.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; information system design documentation; information system
+  configuration settings and associated documentation; system-generated list of
+  dynamic privilege management capabilities; information system audit records;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Information system implementing dynamic privilege
+  management capabilities].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-2(6).1
+cci: 2134
+cci-definition: '002134: The organization defines a list of dynamic privilege
+  management capabilities to be implemented by the information system.'
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents a list of
+  dynamic privilege management capabilities to be implemented by the information
+  system. DoD has determined the list is not appropriate to define at the
+  Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that lists the dynamic privilege management
+  capabilities to be implemented by the information system.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented list to ensure the dynamic privilege
+  management capabilities have been defined. DoD has determined the list is not
+  appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: Keycloak supports dynamic privilege management by allowing
+  privilege revocation via the Admin REST API or Admin Console, which then
+  requires active sessions to be revoked or reauthenticated to reflect new
+  permissions. It offers fine-grained access control through Authorization
+  Services, enabling dynamic policies based on attributes, environment, and user
+  behavior, and supports context-aware access via conditional authentication and
+  authentication flows. Real-time privilege adjustments without session
+  termination would require a custom event listeners and short-lived tokens.
+uds-alignment: Keycloak
+family: AC

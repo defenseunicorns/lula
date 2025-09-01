@@ -1,0 +1,73 @@
+control-acronym: "[r5] CA-07(03)"
+control-information: >-
+  Description:
+
+  Employ trend analyses to determine if control implementations, the frequency
+  of continuous monitoring activities, and the types of activities used in the
+  continuous monitoring process need to be modified based on empirical data.
+
+
+  Supplemental Guidance:
+
+  Trend analyses include examining recent threat information that addresses the
+  types of threat events that have occurred in the organization or the Federal
+  Government, success rates of certain types of attacks, emerging
+  vulnerabilities in technologies, evolving social engineering techniques, the
+  effectiveness of configuration settings, results from multiple control
+  assessments, and findings from Inspectors General or auditors. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Organizational continuous monitoring strategy;
+  system-level continuous monitoring strategy; assessment, authorization, and
+  monitoring policy; procedures addressing continuous monitoring of system
+  controls; privacy controls; assessment report; plan of action and milestones;
+  system monitoring records; impact analyses; status reports; system security
+  plan; privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with continuous monitoring
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting trend analyses].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CA-07(03)
+cci: 2086
+cci-definition: "002086: Employ trend analyses to determine if control
+  implementations, the frequency of continuous monitoring activities, and the
+  types of activities used in the continuous monitoring process need to be
+  modified based on empirical data."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - trend analysis is employed to determine if control implementations used in
+  the continuous monitoring process need to be modified based on empirical data.
+
+  - trend analysis is employed to determine if the frequency of continuous
+  monitoring activities used in the continuous monitoring process needs to be
+  modified based on empirical data.
+
+  - trend analysis is employed to determine if the types of activities used in
+  the continuous monitoring process need to be modified based on empirical data.
+inherited: Local
+remote-inheritance-instance: "-"
+family: CA

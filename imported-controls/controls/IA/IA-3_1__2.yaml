@@ -1,0 +1,93 @@
+control-acronym: IA-3(1)
+control-information: >-
+  Description:
+
+  The information system authenticates [Assignment: organization-defined
+  specific devices and/or types of devices] before establishing [Selection (one
+  or more): local; remote; network] connection using bidirectional
+  authentication that is cryptographically based.
+
+
+  Supplemental Guidance:
+
+  A local connection is any connection with a device communicating without the
+  use of a network. A network connection is any connection with a device that
+  communicates through a network (e.g., local area or wide area network,
+  Internet). A remote connection is any connection with a device communicating
+  through an external network (e.g., the Internet). Bidirectional authentication
+  provides stronger safeguards to validate the identity of other devices for
+  connections that are of greater risk (e.g., remote connections). Related
+  controls: SC-8, SC-12, SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing device identification and authentication; information system design
+  documentation; list of devices requiring unique identification and
+  authentication; device connection reports; information system configuration
+  settings and associated documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with operational
+  responsibilities for device identification and authentication; organizational
+  personnel with information security responsibilities; system/network
+  administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing device
+  authentication capability; cryptographically based bidirectional
+  authentication mechanisms].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IA-3(1).1,CCI-001959,DoD Organization or Service Common Control Package
+  IA-3(1).2,CCI-001967,Local...
+ap-acronym: IA-3(1).2
+cci: 1967
+cci-definition: '001967: The information system authenticates
+  organization-defined devices and/or types of devices before establishing a
+  local, remote and/or network connection using bidirectional authentication
+  that is cryptographically based.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  use cryptographically based bidirectional authentication. For information
+  system components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  1967.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation for use of cryptographically based
+  bidirectional authentication.
+
+  2.) Applicable STIG/SRG checks.
+assessment-procedures: The organization conducting the inspection/assessment
+  examine a sampling of the network infrastructure device configurations to
+  ensure devices connecting to the infrastructure use cryptographically based
+  bidirectional authentication. For information system components that have
+  applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 1967.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: 'Device authentication is handled in UDS through mutual TLS and
+  certificate-based trust between components. Each server/node in the Kubernetes
+  cluster has its own credentials (certificates for the kubelet, etc.) and each
+  service in the service mesh has a certificate identity (issued by Istioâs
+  Citadel). These certificates are used to authenticate machines and services to
+  each other. For example, when Service A connects to Service B within the mesh,
+  it presents its certificate and Bâs sidecar verifies it only if itâs a
+  valid known service cert will communication proceed. This means that devices
+  and applications are being authenticated at the network layer without user
+  involvement.'
+uds-alignment: Kubernetes, Istio
+family: IA

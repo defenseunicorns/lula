@@ -1,0 +1,100 @@
+control-acronym: CA-6
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Assigns a senior-level executive or manager as the authorizing official for
+  the information system;
+
+  b. Ensures that the authorizing official authorizes the information system for
+  processing before commencing operations; and
+
+  c. Updates the security authorization [Assignment: organization - defined
+  frequency].
+
+
+  Supplemental Guidance:
+
+  Security authorizations are official management decisions, conveyed through
+  authorization decision documents, by senior organizational officials or
+  executives (i.e., authorizing officials) to authorize operation of information
+  systems and to explicitly accept the risk to organizational operations and
+  assets, individuals, other organizations, and the Nation based on the
+  implementation of agreed-upon security controls. Authorizing officials provide
+  budgetary oversight for organizational information systems or assume
+  responsibility for the mission/business operations supported by those systems.
+  The security authorization process is an inherently federal responsibility and
+  therefore, authorizing officials must be federal employees. Through the
+  security authorization process, authorizing officials assume responsibility
+  and are accountable for security risks associated with the operation and use
+  of organizational information systems. Accordingly, authorizing officials are
+  in positions with levels of authority commensurate with understanding and
+  accepting such information security-related risks. OMB policy requires that
+  organizations conduct ongoing authorizations of information systems by
+  implementing continuous monitoring programs. Continuous monitoring programs
+  can satisfy three-year reauthorization requirements, so separate
+  reauthorization processes are not necessary. Through the employment of
+  comprehensive continuous monitoring processes, critical information contained
+  in authorization packages (i.e., security plans, security assessment reports,
+  and plans of action and milestones) is updated on an ongoing basis, providing
+  authorizing officials and information system owners with an up-to-date status
+  of the security state of organizational information systems and environments
+  of operation. To reduce the administrative cost of security reauthorization,
+  authorizing officials use the results of continuous monitoring processes to
+  the maximum extent possible as the basis for rendering reauthorization
+  decisions. Related controls: CA-2, CA-7, PM-9, PM-10.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Security assessment and authorization policy;
+  procedures addressing security authorization; security authorization package
+  (including security plan; security assessment report; plan of action and
+  milestones; authorization statement); other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security authorization
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms that facilitate security
+  authorizations and updates].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CA-6.1,CCI-000270,DoD Organization or Service Common Control Package
+  CA-6.2,CCI-000271,Local
+  CA-6.3,CCI-000272,Local
+  CA-6.4,CCI-000273,DoD Organization or Service Common Control Package...
+ap-acronym: CA-6.4
+cci: 273
+cci-definition: '000273: The organization defines the frequency of updating the
+  security authorization.'
+implementation-guidance: >-
+  DoD has defined the frequency as at least every three years, whenever there is
+  a significant change to the system, or if there is a change to the environment
+  in which the system operates.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically Compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the frequency as at least every three years, whenever
+  there is a significant change to the system, or if there is a change to the
+  environment in which the system operates.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: CA

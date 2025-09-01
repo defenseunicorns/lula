@@ -1,0 +1,76 @@
+control-acronym: SI-4(5)
+control-information: >-
+  Description:
+
+  The information system alerts [Assignment: organization-defined personnel or
+  roles] when the following indications of compromise or potential compromise
+  occur: [Assignment: organization-defined compromise indicators].
+
+
+  Supplemental Guidance:
+
+  Alerts may be generated from a variety of sources, including, for example,
+  audit records or inputs from malicious code protection mechanisms, intrusion
+  detection or prevention mechanisms, or boundary protection devices such as
+  firewalls, gateways, and routers. Alerts can be transmitted, for example,
+  telephonically, by electronic mail messages, or by text messaging.
+  Organizational personnel on the notification list can include, for example,
+  system administrators, mission/business owners, system owners, or information
+  system security officers. Related controls: AU-5, PE-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing information system monitoring tools and techniques; information
+  system monitoring tools and techniques documentation; information system
+  configuration settings and associated documentation; alerts/notifications
+  generated based on compromise indicators; information system audit records;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers;;
+  organizational personnel installing, configuring, and/or maintaining the
+  information system; organizational personnel with responsibility for
+  monitoring the information system; organizational personnel with
+  responsibility for the intrusion detection system].
+
+
+  Test: [SELECT FROM: Organizational processes for intrusion
+  detection/information system monitoring; automated mechanisms supporting
+  and/or implementing intrusion detection/information system monitoring
+  capability; automated mechanisms supporting and/or implementing alerts for
+  compromise indicators].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SI-4(5).1,CCI-001264,DoD Organization or Service Common Control Package
+  SI-4(5).2,CCI-002663,DoD Organization or Service Common Control Package
+  SI-4(5).3,CCI-002664,Local...
+ap-acronym: SI-4(5).2
+cci: 2663
+cci-definition: '002663: The organization defines the personnel or roles to
+  receive information system alerts when organization-defined indicators of
+  compromise or potential compromise occur.'
+implementation-guidance: |-
+  DoD has defined the personnel or roles as at a minimum, the ISSM and ISSO. 
+
+  Recommended Compelling Evidence:
+  Automatically compliant.
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the personnel or roles as at a minimum, the ISSM and
+  ISSO.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SI

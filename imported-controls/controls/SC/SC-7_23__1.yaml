@@ -1,0 +1,78 @@
+control-acronym: SC-7(23)
+control-information: >-
+  Description:
+
+  The information system disables feedback to senders on protocol format
+  validation failure.
+
+
+  Supplemental Guidance:
+
+  Disabling feedback to senders when there is a failure in protocol validation
+  format prevents adversaries from obtaining information which would otherwise
+  be unavailable.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; information system design documentation;
+  information system hardware and software; information system architecture;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing the
+  disabling of feedback to senders on protocol format validation failure].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-7(23).1
+cci: 2417
+cci-definition: '002417: The information system disables feedback to senders on
+  protocol format validation failure.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  disable feedback to senders on protocol format validation failure For
+  information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 2417.
+
+  Recommended Compelling Evidence:
+
+  1.) Current Network diagram.
+
+  2.) Applicable STIG/SRG checks.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to disable feedback to
+  senders on protocol format validation failure For information system
+  components that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 2417.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: UDS leverages Istio Service Mesh and Envoy Proxy, which inherently
+  disable detailed feedback on protocol format validation failures to external
+  senders. Specifically, Istio and Envoy proxies provide generic HTTP or TCP
+  error messages (e.g., "400 Bad Request") when receiving invalid protocol
+  formats without detailed diagnostics or stack traces. This prevents attackers
+  from obtaining useful information for reconnaissance or exploitation.
+  Additionally, Keycloak and AuthService provide generic error messages upon
+  failed authentication or authorization attempts, further reducing feedback
+  specificity.
+uds-alignment: Istio
+family: SC

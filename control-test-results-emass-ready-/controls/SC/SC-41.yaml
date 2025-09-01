@@ -1,0 +1,72 @@
+control-acronym: "[r5] SC-41"
+control-information: >-
+  Description:
+
+  [Selection: Physically; Logically] disable or remove [Assignment:
+  organization-defined connection ports or input/output devices] on the
+  following systems or system components: [Assignment: organization-defined
+  systems or system components].
+
+
+  Supplemental Guidance:
+
+  Connection ports include Universal Serial Bus (USB), Thunderbolt, and Firewire
+  (IEEE 1394). Input/output (I/O) devices include compact disc and digital
+  versatile disc drives. Disabling or removing such connection ports and I/O
+  devices helps prevent the exfiltration of information from systems and the
+  introduction of malicious code from those ports or devices. Physically
+  disabling or removing ports and/or devices is the stronger action. Related
+  Control(s): AC-20, MP-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; access
+  control policy and procedures; procedures addressing port and input/output
+  device access; system design documentation; system configuration settings and
+  associated documentation; system architecture; systems or system components;
+  list of connection ports or input/output devices to be physically disabled or
+  removed on systems or system components; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the system].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing the disabling of
+  connection ports or input/output devices].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-41
+cci: 002544; 002545; 002546
+cci-definition: "002544: Defines the systems or system components on which
+  organization-defined connection ports or input/output devices are to be
+  physically or logically disabled or removed.; 002545: Defines the connection
+  ports or input/output devices that are to be physically or logically disabled
+  or removed from organization-defined systems or system components.; 002546:
+  Physically or logically disable or remove organization-defined connection
+  ports or input/output devices on organization-defined systems or system
+  components."
+implementation-guidance: "-"
+assessment-procedures: "Determine if [Assignment: organization-defined
+  connection ports or input/output devices] are [Selection: Physically;
+  Logically] disabled or removed on [Assignment: organization-defined systems or
+  system components]."
+inherited: Local
+remote-inheritance-instance: "-"
+family: SC

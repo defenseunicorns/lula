@@ -1,0 +1,95 @@
+control-acronym: "[r5] SC-23(03)"
+control-information: >-
+  Description:
+
+  Generate a unique session identifier for each session with [Assignment:
+  organization-defined randomness requirements] and recognize only session
+  identifiers that are system-generated.
+
+
+  Supplemental Guidance:
+
+  Generating unique session identifiers curtails the ability of adversaries to
+  reuse previously valid session IDs. Employing the concept of randomness in the
+  generation of unique session identifiers protects against brute-force attacks
+  to determine future session identifiers. Related Control(s): AC-10, SC-12,
+  SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing session authenticity; system design documentation; system
+  configuration settings and associated documentation; system audit records;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting, implementing, generating, and
+  monitoring unique session identifiers; mechanisms supporting and/or
+  implementing randomness requirements].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-23(03)
+cci: 001188; 001189; 001664
+cci-definition: "001188: Generate a unique session identifier for each session
+  with organization-defined randomness requirements.; 001189: Defines randomness
+  requirements for generating unique session identifiers.; 001664: Recognize
+  only session identifiers that are system-generated."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - a unique session identifier is generated for each session with [Assignment:
+  organization-defined randomness requirements].
+
+  - only system-generated session identifiers are recognized.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  UDS uses Keycloak for session management and authentication, generating unique
+  and secure session identifiers in the form of cryptographically signed JSON
+  Web Tokens (JWT). Keycloak employs industry-standard cryptographic libraries
+  and secure randomness sources provided by the underlying operating system,
+  ensuring session identifiers (tokens) meet stringent randomness and uniqueness
+  requirements. The Istio Service Mesh generates unique cryptographic session
+  identifiers (certificates) for each internal service-to-service session using
+  secure random number generation compliant with best practices and DoD security
+  standards.
+
+  Not Applicable to UDS technology stack. (Defining the appropriate level of
+  randomness must be down at the organizational level.)
+
+  UDS utilizes Keycloak for managing authentication sessions, which exclusively
+  accepts session identifiers generated internally through its cryptographic
+  mechanisms (JWT tokens and session cookies). Keycloak validates tokens and
+  rejects any externally supplied or user-manipulated session identifiers that
+  are not cryptographically verified.  Istio Service Mesh employs mutual TLS
+  certificates issued internally through the embedded certificate authority
+  (Citadel), strictly accepting only internally generated session credentials
+  for secure inter-service communication.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-23(3).1, SC-23(3).2, SC-23(3).3. The resulting compliance
+  status was set to non-compliant because the following Rev. 4 assessment
+  procedure had no locally entered test result/compliance statement:
+  SC-23(3).2."
+mapped-rev4-aps: SC-23(3)
+family: SC

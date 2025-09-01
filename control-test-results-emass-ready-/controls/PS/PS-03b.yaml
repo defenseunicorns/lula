@@ -1,0 +1,85 @@
+control-acronym: "[r5] PS-03"
+control-information: >-
+  Description:
+
+  a. Screen individuals prior to authorizing access to the system; and
+
+  b. Rescreen individuals in accordance with [Assignment: organization-defined
+  conditions requiring rescreening and, where rescreening is so indicated, the
+  frequency of rescreening].
+
+
+  Supplemental Guidance:
+
+  Personnel screening and rescreening activities reflect applicable laws,
+  executive orders, directives, regulations, policies, standards, guidelines,
+  and specific criteria established for the risk designations of assigned
+  positions. Examples of personnel screening include background investigations
+  and agency checks. Organizations may define different rescreening conditions
+  and frequencies for personnel accessing systems based on types of information
+  processed, stored, or transmitted by the systems. Related Control(s): AC-2,
+  IA-4, MA-5, PE-2, PM-12, PS-2, PS-6, PS-7, SA-21.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  personnel screening; records of screened personnel; system security plan;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for personnel screening].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PS-03b
+cci: 001517; 001518; 001519
+cci-definition: "001517: Rescreen individuals with authorized access to the
+  system in accordance with organization-defined conditions requiring
+  rescreening, and where rescreening is so indicated, on the
+  organization-defined frequency of rescreening.; 001518: Defines the conditions
+  requiring rescreening of individuals with authorized access to the system.;
+  001519: Defines the frequency for rescreening individuals with authorized
+  access to the information system when organization-defined conditions
+  requiring rescreening are met."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - individuals are rescreened in accordance with [Assignment:
+  organization-defined conditions requiring rescreening and, where rescreening
+  is so indicated, the frequency of rescreening].
+
+  - where rescreening is so indicated, individuals are rescreened [Assignment:
+  organization-defined conditions requiring rescreening and, where rescreening
+  is so indicated, the frequency of rescreening].
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (UDS is unrelated to
+  personnel security controls, which cover hiring, transfer, agreements,
+  termination, etc.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PS-3.2, PS-3.3, PS-3.4. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: PS-3.2, PS-3.3, PS-3.4."
+mapped-rev4-aps: PS-3.2; PS-3.3; PS-3.4
+family: PS

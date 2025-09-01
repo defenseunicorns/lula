@@ -1,0 +1,79 @@
+control-acronym: SC-8(2)
+control-information: >-
+  Description:
+
+  The information system maintains the [Selection (one or more):
+  confidentiality; integrity] of information during preparation for transmission
+  and during reception.
+
+
+  Supplemental Guidance:
+
+  Information can be either unintentionally or maliciously disclosed or modified
+  during preparation for transmission or during reception including, for
+  example, during aggregation, at protocol transformation points, and during
+  packing/unpacking. These unauthorized disclosures or modifications compromise
+  the confidentiality or integrity of the information. Related control: AU-10.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing transmission confidentiality and integrity; information system
+  design documentation; information system configuration settings and associated
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  transmission confidentiality and/or integrity].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-8(2).2
+cci: 2422
+cci-definition: '002422: The information system maintains the confidentiality
+  and/or integrity of information during reception.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  maintain the confidentiality and integrity of information during reception.
+  For information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 2422. DoD has defined the selection as both
+  confidentiality and integrity.
+
+  Recommended Compelling Evidence:
+
+  1.) Applicable STIG/SRG checks pertaining to CCI 2422.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to maintain the
+  confidentiality and integrity of information during reception. For information
+  system components that have applicable STIGs or SRGs, the organization
+  conducting the inspection/assessment evaluates the components to ensure that
+  the organization being inspected/assessed has configured the information
+  system in compliance with the applicable STIGs and SRGs pertaining to CCI
+  2422.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: UDS system employs a multi-layered approach to ensure that
+  information remains confidential and unaltered during reception. Data arriving
+  through controlled ingress points such as the Istio Ingress Gateway is
+  transmitted over TLS-encrypted channels, preventing interception and
+  maintaining confidentiality. Upon receipt, cryptographic checks (including
+  digital signature validation and checksum verification) confirm the data's
+  integrity, ensuring it has not been tampered with in transit. Keycloak and
+  AuthService work together to verify the identity of the sender.
+uds-alignment: Istio, Keycloak, Authservice
+family: SC

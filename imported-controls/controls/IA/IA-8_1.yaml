@@ -1,0 +1,99 @@
+control-acronym: IA-8
+control-information: >-
+  Description:
+
+  The information system uniquely identifies and authenticates
+  non-organizational users (or processes acting on behalf of non-organizational
+  users).
+
+
+  Supplemental Guidance:
+
+  Non-organizational users include information system users other than
+  organizational users explicitly covered by IA-2. These individuals are
+  uniquely identified and authenticated for accesses other than those accesses
+  explicitly identified and documented in AC-14. In accordance with the
+  E-Authentication E-Government initiative, authentication of non-organizational
+  users accessing federal information systems may be required to protect
+  federal, proprietary, or privacy-related information (with exceptions noted
+  for national security systems). Organizations use risk assessments to
+  determine authentication needs and consider scalability, practicality, and
+  security in balancing the need to ensure ease of use for access to federal
+  information and information systems with the need to protect and adequately
+  mitigate risk. IA-2 addresses identification and authentication requirements
+  for access to information systems by organizational users. Related controls:
+  AC-2, AC-14, AC-17, AC-18, IA-2, IA-4, IA-5, MA-4, RA-3, SA-12, SC-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing user identification and authentication; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; list of information system
+  accounts; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  operations responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; organizational
+  personnel with account management responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  identification and authentication capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-8.1
+cci: 804
+cci-definition: '000804: The information system uniquely identifies and
+  authenticates non-organizational users (or processes acting on behalf of
+  non-organizational users).'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  uniquely identify and authenticate non-organizational users (or processes
+  acting on behalf of non-organizational users). For information system
+  components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  804.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated SOP/TTP documenting configuration of the information
+  system to uniquely identify and authenticate non-organizational users (or
+  processes acting on behalf of non-organizational users)
+
+  2.) Applicable STIG/SRG CHECKS.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to uniquely identify and
+  authenticate non-organizational users (or processes acting on behalf of
+  non-organizational users). For information system components that have
+  applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 804.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: 'Identification and authentication of non-organizational users
+  (e.g., guest users, federation partners) can be handled by UDS through
+  Keycloak. Keycloak supports setting up separate user realms or groups for
+  external users and applying different authentication requirements to them. For
+  instance, if external partner users need to access a certain application, they
+  can be put in a separate realm or marked with an attribute, and Keycloak can
+  enforce that they use their own credentials or an agreed federation (such as
+  logging in via their home organizationâs IdP which Keycloak trusts).
+  Keycloakâs identity brokering capabilityâ is very useful here: UDS can
+  accept identities from external identity providers (e.g. SAML/OIDC provider)
+  without issuing local accounts, meaning external users are authenticated via
+  their organization but still identified to UDS.'
+uds-alignment: Keycloak
+family: IA

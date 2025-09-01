@@ -1,0 +1,134 @@
+control-acronym: "[r5] RA-03"
+control-information: >-
+  Description:
+
+  a. Conduct a risk assessment, including:
+
+  1. Identifying threats to and vulnerabilities in the system;
+
+  2. Determining the likelihood and magnitude of harm from unauthorized access,
+  use, disclosure, disruption, modification, or destruction of the system, the
+  information it processes, stores, or transmits, and any related information;
+  and
+
+  3. Determining the likelihood and impact of adverse effects on individuals
+  arising from the processing of personally identifiable information;
+
+  b. Integrate risk assessment results and risk management decisions from the
+  organization and mission or business process perspectives with system-level
+  risk assessments;
+
+  c. Document risk assessment results in [Selection: security and privacy plans;
+  risk assessment report; [Assignment: organization-defined document]];
+
+  d. Review risk assessment results [Assignment: organization-defined
+  frequency];
+
+  e. Disseminate risk assessment results to [Assignment: organization-defined
+  personnel or roles]; and
+
+  f. Update the risk assessment [Assignment: organization-defined frequency] or
+  when there are significant changes to the system, its environment of
+  operation, or other conditions that may impact the security or privacy state
+  of the system.
+
+
+  Supplemental Guidance:
+
+  Risk assessments consider threats, vulnerabilities, likelihood, and impact to
+  organizational operations and assets, individuals, other organizations, and
+  the Nation. Risk assessments also consider risk from external parties,
+  including contractors who operate systems on behalf of the organization,
+  individuals who access organizational systems, service providers, and
+  outsourcing entities.
+
+
+  Organizations can conduct risk assessments at all three levels in the risk
+  management hierarchy (i.e., organization level, mission/business process
+  level, or information system level) and at any stage in the system development
+  life cycle. Risk assessments can also be conducted at various steps in the
+  Risk Management Framework, including preparation, categorization, control
+  selection, control implementation, control assessment, authorization, and
+  control monitoring. Risk assessment is an ongoing activity carried out
+  throughout the system development life cycle.
+
+
+  Risk assessments can also address information related to the system, including
+  system design, the intended use of the system, testing results, and supply
+  chain-related information or artifacts. Risk assessments can play an important
+  role in control selection processes, particularly during the application of
+  tailoring guidance and in the earliest phases of capability determination.
+  Related Control(s): CA-3, CA-6, CM-4, CM-13, CP-6, CP-7, IA-8, MA-5, PE-3,
+  PE-8, PE-18, PL-2, PL-10, PL-11, PM-8, PM-9, PM-28, PT-2, PT-7, RA-2, RA-5,
+  RA-7, SA-8, SA-9, SC-38, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Risk assessment policy; risk assessment procedures;
+  security and privacy planning policy and procedures; procedures addressing
+  organizational assessments of risk; risk assessment; risk assessment results;
+  risk assessment reviews; risk assessment updates; system security plan;
+  privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with risk assessment
+  responsibilities; organizational personnel with security and privacy
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for risk assessment; mechanisms
+  supporting and/or conducting, documenting, reviewing, disseminating, and
+  updating the risk assessment].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: RA-03f
+cci: 001052; 001053
+cci-definition: "001052: Update the risk assessment on an organization-defined
+  frequency or when there are significant changes to the system, its environment
+  of operation, or other conditions that may impact the security or privacy
+  state of the system.; 001053: Defines a frequency for updating the risk
+  assessment."
+implementation-guidance: CCI-001053 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if the risk assessment is updated [Assignment:
+  organization-defined frequency] or when there are significant changes to the
+  system, its environment of operation, or other conditions that may impact the
+  security or privacy state of the system."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: RA-3.8, RA-3.9.
+  The resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: RA-3.8.
+
+
+  Not Applicable to UDS technology stack. (UDS provides data (like vulnerability
+  scan results, logs) that feed into a risk assessment, but the actual
+  assessment is done outside of the UDS boundary.)
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: RA-3.8, RA-3.9. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: RA-3.8."
+mapped-rev4-aps: RA-3.8; RA-3.9
+family: RA

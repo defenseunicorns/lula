@@ -1,0 +1,76 @@
+control-acronym: "[r5] AC-06(07)"
+control-information: >-
+  Description:
+
+  (a) Review [Assignment: organization-defined frequency] the privileges
+  assigned to [Assignment: organization-defined roles or classes of users] to
+  validate the need for such privileges; and
+
+  (b) Reassign or remove privileges, if necessary, to correctly reflect
+  organizational mission and business needs.
+
+
+  Supplemental Guidance:
+
+  The need for certain assigned user privileges may change over time to reflect
+  changes in organizational mission and business functions, environments of
+  operation, technologies, or threats. A periodic review of assigned user
+  privileges is necessary to determine if the rationale for assigning such
+  privileges remains valid. If the need cannot be revalidated, organizations
+  take appropriate corrective actions. Related Control(s): CA-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing least
+  privilege; list of system-generated roles or classes of users and assigned
+  privileges; system design documentation; system configuration settings and
+  associated documentation; validation reviews of privileges assigned to roles
+  or classes or users; records of privilege removals or reassignments for roles
+  or classes of users; system audit records; system security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  reviewing least privileges necessary to accomplish specified tasks;
+  organizational personnel with information security responsibilities;
+  system/network administrators].
+
+
+  Test: [SELECT FROM: Mechanisms implementing review of user privileges].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-06(07)(b)
+cci: 2231
+cci-definition: "002231: Reassign or remove privileges, if necessary, to
+  correctly reflect organizational mission and business needs."
+implementation-guidance: "-"
+assessment-procedures: Determine if privileges are reassigned or removed, if
+  necessary, to correctly reflect organizational mission and business needs.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (While UDS incorporates
+  various technologies, such as Keycloak, for creating and managing roles,
+  actual reassignments or removed privileges per an organizational
+  business/mission need is managed by the organization.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-6(7).4. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: AC-6(7).4."
+mapped-rev4-aps: AC-6(7)
+family: AC

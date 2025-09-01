@@ -1,0 +1,58 @@
+control-acronym: "[r5] AU-16(01)"
+control-information: >-
+  Description:
+
+  Preserve the identity of individuals in cross-organizational audit trails.
+
+
+  Supplemental Guidance:
+
+  Identity preservation is applied when there is a need to be able to trace
+  actions that are performed across organizational boundaries to a specific
+  individual. Related Control(s): IA-2, IA-4, IA-5, IA-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; system security plan;
+  privacy plan; procedures addressing cross-organizational audit trails; system
+  design documentation; system configuration settings and associated
+  documentation; system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with cross-organizational
+  audit responsibilities; organizational personnel with information security and
+  privacy responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms implementing cross-organizational auditing (if
+  applicable)].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-16(01)
+cci: 1926
+cci-definition: "001926: Preserve the identity of individuals in
+  cross-organizational audit trails."
+implementation-guidance: "-"
+assessment-procedures: Determine if the identity of individuals in
+  cross-organizational audit trails is preserved.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (Though UDS can be used to
+  provide the technical implementation and monitoring of audit coordination
+  between organization its is neither defined or configured by default.)
+family: AU

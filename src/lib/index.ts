@@ -3,6 +3,3 @@
 
 // Types (base types first)
 export type * from './types';
-
-// Existing utilities (explicit exports to avoid conflicts)
-export { api } from './api';

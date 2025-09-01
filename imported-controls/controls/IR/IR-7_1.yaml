@@ -1,0 +1,93 @@
+control-acronym: IR-7
+control-information: >-
+  Description:
+
+  The organization provides an incident response support resource, integral to
+  the organizational incident response capability that offers advice and
+  assistance to users of the information system for the handling and reporting
+  of security incidents.
+
+
+  Supplemental Guidance:
+
+  Incident response support resources provided by organizations include, for
+  example, help desks, assistance groups, and access to forensics services, when
+  required. Related controls: AT-2, IR-4, IR-6, IR-8, SA-9.
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay:
+  Incident response assistance for incidents involving PII may include use of
+  the forensic, technical, policy, and legal expertise of the organization's
+  Information Assurance Officers/Managers, Privacy Officers, Legal Counsel,
+  external or internal IT help desks, and the organization's Computer Emergency
+  Response Team (CERT), in investigating and remediating incidents. Related
+  Control: SE-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident response assistance; incident response plan; security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  assistance and support responsibilities; organizational personnel with access
+  to incident response support and assistance capability; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for incident response assistance;
+  automated mechanisms supporting and/or implementing incident response
+  assistance].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay:
+  Security incident response resources and privacy incident and breach response
+  resources must know which resources are available, and how and when to
+  coordinate.
+
+
+  Regulatory Statutory Reference: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: OMB
+  M-07-16, Att. 3, B.
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IR-7.1
+cci: 839
+cci-definition: '000839: The organization provides an incident response support
+  resource, integral to the organizational incident response capability, that
+  offers advice and assistance to users of the information system for the
+  handling and reporting of security incidents.'
+implementation-guidance: >-
+  The organization being inspected/assessed will establish an incident response
+  support service, analogous to an IT help desk, to provide advice and
+  assistance to users for handling and reporting of security incidents.
+  Recommended Compelling Evidence:
+
+  1.) Incident response support resource
+assessment-procedures: The organization conducting the inspection/assessment
+  will interview organizational users to determine awareness of incident
+  response support services and quality of assistance of those services when
+  used. If interviewing organizational users is not feasible, then review users
+  manuals/documentation to ensures it identifies an incident response support
+  service to contact.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: 'Not Applicable to UDS technology stack. (This control ensures the
+  organization has IR support resources. UDS, as a product, is not an IR team
+  though its vendor or community could provide help on technical issues. The
+  formal IR assistance is outside UDSâs scope.)'
+family: IR

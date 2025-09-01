@@ -1,0 +1,95 @@
+control-acronym: "[r5] MA-04(03)"
+control-information: >-
+  Description:
+
+  (a) Require that nonlocal maintenance and diagnostic services be performed
+  from a system that implements a security capability comparable to the
+  capability implemented on the system being serviced; or
+
+  (b) Remove the component to be serviced from the system prior to nonlocal
+  maintenance or diagnostic services; sanitize the component (for organizational
+  information); and after the service is performed, inspect and sanitize the
+  component (for potentially malicious software) before reconnecting the
+  component to the system.
+
+
+  Supplemental Guidance:
+
+  Comparable security capability on systems, diagnostic tools, and equipment
+  providing maintenance services implies that the implemented controls on those
+  systems, tools, and equipment are at least as comprehensive as the controls on
+  the system being serviced. Related Control(s): MP-6, SI-3, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Maintenance policy; procedures addressing nonlocal
+  system maintenance; service provider contracts and/or service-level
+  agreements; maintenance records; inspection records; audit records; equipment
+  sanitization records; media sanitization records; system security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system maintenance
+  responsibilities; system maintenance provider; organizational personnel with
+  information security responsibilities; organizational personnel responsible
+  for media sanitization; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for comparable security and
+  sanitization for nonlocal maintenance; organizational processes for the
+  removal, sanitization, and inspection of components serviced via nonlocal
+  maintenance; mechanisms supporting and/or implementing component sanitization
+  and inspection].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: MA-04(03)(a)
+cci: 882
+cci-definition: "000882: Require that nonlocal maintenance and diagnostic
+  services be performed from a system that implements a security capability
+  comparable to the capability implemented on the system being serviced."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - nonlocal maintenance services are required to be performed from a system
+  that implements a security capability comparable to the capability implemented
+  on the system being serviced.
+
+  - nonlocal diagnostic services are required to be performed from a system that
+  implements a security capability comparable to the capability implemented on
+  the system being serviced.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: MA-4(3).1. The
+  resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: MA-4(3).1.
+
+
+  Not Applicable to UDS technology stack. (All maintenance would be considered
+  local maintenance as admins would either be provided by the organization or
+  contracted.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: MA-4(3).1. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: MA-4(3).1."
+mapped-rev4-aps: MA-4(3)
+family: MA

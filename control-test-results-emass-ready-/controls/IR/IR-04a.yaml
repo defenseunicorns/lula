@@ -1,0 +1,116 @@
+control-acronym: "[r5] IR-04"
+control-information: >-
+  Description:
+
+  a. Implement an incident handling capability for incidents that is consistent
+  with the incident response plan and includes preparation, detection and
+  analysis, containment, eradication, and recovery;
+
+  b. Coordinate incident handling activities with contingency planning
+  activities;
+
+  c. Incorporate lessons learned from ongoing incident handling activities into
+  incident response procedures, training, and testing, and implement the
+  resulting changes accordingly; and
+
+  d. Ensure the rigor, intensity, scope, and results of incident handling
+  activities are comparable and predictable across the organization.
+
+
+  Supplemental Guidance:
+
+  Organizations recognize that incident response capabilities are dependent on
+  the capabilities of organizational systems and the mission and business
+  processes being supported by those systems. Organizations consider incident
+  response as part of the definition, design, and development of mission and
+  business processes and systems. Incident-related information can be obtained
+  from a variety of sources, including audit monitoring, physical access
+  monitoring, and network monitoring; user or administrator reports; and
+  reported supply chain events. An effective incident handling capability
+  includes coordination among many organizational entities (e.g., mission or
+  business owners, system owners, authorizing officials, human resources
+  offices, physical security offices, personnel security offices, legal
+  departments, risk executive [function], operations personnel, procurement
+  offices). Suspected security incidents include the receipt of suspicious email
+  communications that can contain malicious code. Suspected supply chain
+  incidents include the insertion of counterfeit hardware or malicious code into
+  organizational systems or system components. For federal agencies, an incident
+  that involves personally identifiable information is considered a breach. A
+  breach results in unauthorized disclosure, the loss of control, unauthorized
+  acquisition, compromise, or a similar occurrence where a person other than an
+  authorized user accesses or potentially accesses personally identifiable
+  information or an authorized user accesses or potentially accesses such
+  information for other than authorized purposes. Related Control(s): AC-19,
+  AU-6, AU-7, CM-6, CP-2, CP-3, CP-4, IR-2, IR-3, IR-5, IR-6, IR-8, PE-6, PL-2,
+  PM-12, SA-8, SC-5, SC-7, SI-3, SI-4, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Incident response policy; contingency planning policy;
+  procedures addressing incident handling; incident response plan; contingency
+  plan; system security plan; privacy plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident handling
+  responsibilities; organizational personnel with contingency planning
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities].
+
+
+  Test: [SELECT FROM: Incident handling capability for the organization].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IR-04a
+cci: 822
+cci-definition: "000822: Implement an incident handling capability for incidents
+  that is consistent with the incident response plan and includes preparation,
+  detection and analysis, containment, eradication, and recovery."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - an incident handling capability for incidents is implemented that is
+  consistent with the incident response plan.
+
+  - the incident handling capability for incidents includes preparation.
+
+  - the incident handling capability for incidents includes detection and
+  analysis.
+
+  - the incident handling capability for incidents includes containment.
+
+  - the incident handling capability for incidents includes eradication.
+
+  - the incident handling capability for incidents includes recovery.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS supports incident handling by providing detection, analysis,
+  and containment tools that the incident response team can use. Logs and alerts
+  from Prometheus or Loki give responders information to analyze what happened
+  (which user, which service, etc.). While UDS can't perform all IR steps (such
+  as the forensic investigation by itself), it significantly aids in the
+  technical containment and mitigation. The platform is resilient and can be
+  restored (via Velero backups), which helps in recovery steps. However, the
+  coordination and notification aspects of incident response (assigning teams,
+  reporting to authorities, etc.) are outside UDS.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IR-4.1."
+mapped-rev4-aps: IR-4.1
+family: IR

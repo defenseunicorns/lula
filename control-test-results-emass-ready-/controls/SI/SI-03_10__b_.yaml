@@ -1,0 +1,88 @@
+control-acronym: "[r5] SI-03(10)"
+control-information: >-
+  Description:
+
+  (a) Employ the following tools and techniques to analyze the characteristics
+  and behavior of malicious code: [Assignment: organization-defined tools and
+  techniques]; and
+
+  (b) Incorporate the results from malicious code analysis into organizational
+  incident response and flaw remediation processes.
+
+
+  Supplemental Guidance:
+
+  The use of malicious code analysis tools provides organizations with a more
+  in-depth understanding of adversary tradecraft (i.e., tactics, techniques, and
+  procedures) and the functionality and purpose of specific instances of
+  malicious code. Understanding the characteristics of malicious code
+  facilitates effective organizational responses to current and future threats.
+  Organizations can conduct malicious code analyses by employing reverse
+  engineering techniques or by monitoring the behavior of executing code.
+  Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and information integrity policy; system and
+  information integrity procedures; procedures addressing malicious code
+  protection; procedures addressing incident response; procedures addressing
+  flaw remediation; system design documentation; malicious code protection
+  mechanisms, tools, and techniques; system configuration settings and
+  associated documentation; results from malicious code analyses; records of
+  flaw remediation events resulting from malicious code analyses; system audit
+  records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the system; organizational
+  personnel responsible for malicious code protection; organizational personnel
+  responsible for flaw remediation; organizational personnel responsible for
+  incident response/management].
+
+
+  Test: [SELECT FROM: Organizational process for incident response;
+  organizational process for flaw remediation; mechanisms supporting and/or
+  implementing malicious code protection capabilities; tools and techniques for
+  the analysis of malicious code characteristics and behavior].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-03(10)(b)
+cci: 002639; 002640
+cci-definition: "002639: Incorporate the results from malicious code analysis
+  into organizational incident response processes.; 002640: Incorporate the
+  results from malicious code analysis into organizational flaw remediation
+  processes."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the results from malicious code analysis are incorporated into
+  organizational incident response processes.
+
+  - the results from malicious code analysis are incorporated into
+  organizational flaw remediation processes.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SI-3(10).5, SI-3(10).6."
+mapped-rev4-aps: SI-3(10)
+family: SI

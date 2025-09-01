@@ -1,0 +1,89 @@
+control-acronym: "[r5] CP-06(03)"
+control-information: >-
+  Description:
+
+  Identify potential accessibility problems to the alternate storage site in the
+  event of an area-wide disruption or disaster and outline explicit mitigation
+  actions.
+
+
+  Supplemental Guidance:
+
+  Area-wide disruptions refer to those types of disruptions that are broad in
+  geographic scope with such determinations made by organizations based on
+  organizational assessments of risk. Explicit mitigation actions include
+  duplicating backup information at other alternate storage sites if access
+  problems occur at originally designated alternate sites or planning for
+  physical access to retrieve backup information if electronic accessibility to
+  the alternate site is disrupted. Related Control(s): RA-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  alternate storage sites; contingency plan; alternate storage site; list of
+  potential accessibility problems to alternate storage site; mitigation actions
+  for accessibility problems to alternate storage site; organizational risk
+  assessments; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  alternate storage site responsibilities; organizational personnel with system
+  recovery responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CP-06(03)
+cci: 000509; 001604
+cci-definition: "000509: Identify potential accessibility problems to the
+  alternate storage site in the event of an area-wide disruption or disaster.;
+  001604: Outline explicit mitigation actions for potential accessibility
+  problems to the alternate storage site in the event of an area-wide disruption
+  or disaster."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - potential accessibility problems to the alternate storage site in the event
+  of an area-wide disruption or disaster are identified.
+
+  - explicit mitigation actions to address identified accessibility problems are
+  outlined.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: CP-6(3).1,
+  CP-6(3).2. The resulting compliance status was set to non-compliant because
+  the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: CP-6(3).2.
+
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  Not Applicable to UDS technology stack. (If an alternate storage site is
+  needed for data, that’s an organizational decision. UDS can send backups
+  offsite via Velero if configured, but selection and preparation of an
+  alternate site is organizational.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CP-6(3).1, CP-6(3).2. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: CP-6(3).2."
+mapped-rev4-aps: CP-6(3)
+family: CP

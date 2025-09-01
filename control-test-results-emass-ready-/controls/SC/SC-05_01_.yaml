@@ -1,0 +1,76 @@
+control-acronym: "[r5] SC-05(01)"
+control-information: >-
+  Description:
+
+  Restrict the ability of individuals to launch the following denial-of-service
+  attacks against other systems: [Assignment: organization-defined
+  denial-of-service attacks].
+
+
+  Supplemental Guidance:
+
+  Restricting the ability of individuals to launch denial-of-service attacks
+  requires the mechanisms commonly used for such attacks to be unavailable.
+  Individuals of concern include hostile insiders or external adversaries who
+  have breached or compromised the system and are using it to launch a
+  denial-of-service attack. Organizations can restrict the ability of
+  individuals to connect and transmit arbitrary information on the transport
+  medium (i.e., wired networks, wireless networks, spoofed Internet protocol
+  packets). Organizations can also limit the ability of individuals to use
+  excessive system resources. Protection against individuals having the ability
+  to launch denial-of-service attacks may be implemented on specific systems or
+  boundary devices that prohibit egress to potential target systems. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing denial-of-service protection; system design documentation; list of
+  denial-of-service attacks launched by individuals against systems; system
+  configuration settings and associated documentation; system audit records;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with incident response responsibilities; system developer].
+
+
+  Test: [SELECT FROM: Mechanisms restricting the ability to launch
+  denial-of-service attacks against other systems].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-05(01)
+cci: 001094; 002387
+cci-definition: "001094: Restrict the ability of individuals to launch
+  organization-defined denial of service attacks against other systems.; 002387:
+  Defines the denial of service attacks against other systems that the system is
+  to restrict the ability of individuals to launch."
+implementation-guidance: "-"
+assessment-procedures: "Determine if the ability of individuals to launch
+  [Assignment: organization-defined denial-of-service attacks] against other
+  systems is restricted."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-5(1).1, SC-5(1).2."
+mapped-rev4-aps: SC-5(1)
+family: SC

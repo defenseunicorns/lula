@@ -1,0 +1,66 @@
+control-acronym: "[r5] AC-17(09)"
+control-information: >-
+  Description:
+
+  Provide the capability to disconnect or disable remote access to the system
+  within [Assignment: organization-defined time period].
+
+
+  Supplemental Guidance:
+
+  The speed of system disconnect or disablement varies based on the criticality
+  of missions or business functions and the need to eliminate immediate or
+  future remote access to systems. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing
+  disconnecting or disabling remote access to the system; system design
+  documentation; system configuration settings and associated documentation;
+  security plan, system audit records; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms implementing capability to disconnect or
+  disable remote access to system].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-17(09)
+cci: 002321; 002322
+cci-definition: "002321: Defines the time-period within which it disconnects or
+  disables remote access to the system.; 002322: Provide the capability to
+  disconnect or disable remote access to the system within the
+  organization-defined time period."
+implementation-guidance: CCI-002321 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if the capability to disconnect or disable
+  remote access to the system within [Assignment: organization-defined time
+  period] is provided."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-17(9).1, AC-17(9).2."
+mapped-rev4-aps: AC-17(9)
+family: AC

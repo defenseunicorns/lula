@@ -1,0 +1,97 @@
+control-acronym: "[r5] SR-01"
+control-information: >-
+  Description:
+
+  a. Develop, document, and disseminate to [Assignment: organization-defined
+  personnel or roles]:
+
+  1. [Selection (one or more): Organization-level; Mission/business
+  process-level; System-level] supply chain risk management policy that:
+    (a) Addresses purpose, scope, roles, responsibilities, management commitment, coordination among organizational entities, and compliance; and
+    (b) Is consistent with applicable laws, executive orders, directives, regulations, policies, standards, and guidelines; and
+  2. Procedures to facilitate the implementation of the supply chain risk
+  management policy and the associated supply chain risk management controls;
+
+  b. Designate an [Assignment: organization-defined official] to manage the
+  development, documentation, and dissemination of the supply chain risk
+  management policy and procedures; and
+
+  c. Review and update the current supply chain risk management:
+
+  1. Policy [Assignment: organization-defined frequency] and following
+  [Assignment: organization-defined events]; and
+
+  2. Procedures [Assignment: organization-defined frequency] and following
+  [Assignment: organization-defined events].
+
+
+  Supplemental Guidance:
+
+  Supply chain risk management policy and procedures address the controls in the
+  SR family as well as supply chain-related controls in other families that are
+  implemented within systems and organizations. The risk management strategy is
+  an important factor in establishing such policies and procedures. Policies and
+  procedures contribute to security and privacy assurance. Therefore, it is
+  important that security and privacy programs collaborate on the development of
+  supply chain risk management policy and procedures. Security and privacy
+  program policies and procedures at the organization level are preferable, in
+  general, and may obviate the need for mission- or system-specific policies and
+  procedures. The policy can be included as part of the general security and
+  privacy policy or be represented by multiple policies that reflect the complex
+  nature of organizations. Procedures can be established for security and
+  privacy programs, for mission or business processes, and for systems, if
+  needed. Procedures describe how the policies or controls are implemented and
+  can be directed at the individual or role that is the object of the procedure.
+  Procedures can be documented in system security and privacy plans or in one or
+  more separate documents. Events that may precipitate an update to supply chain
+  risk management policy and procedures include assessment or audit findings,
+  security incidents or breaches, or changes in applicable laws, executive
+  orders, directives, regulations, policies, standards, and guidelines. Simply
+  restating controls does not constitute an organizational policy or procedure.
+  Related Control(s): PM-9, PM-30, PS-8, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Supply chain risk management policy; supply chain risk
+  management procedures; system security plan; privacy plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with supply chain risk
+  management responsibilities; organizational personnel with information
+  security and privacy responsibilities; organizational personnel with
+  acquisition responsibilities; organizational personnel with enterprise risk
+  management responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SR-01b
+cci: 005060; 005061; 005062; 005063
+cci-definition: "005060: Designate an organization-defined official to manage
+  the development and documentation of the supply chain risk management policy.;
+  005061: Designate an organization-defined official to manage the development
+  and documentation of the supply chain risk management procedures.; 005062:
+  Designate an organization-defined official to manage the dissemination of the
+  supply chain risk management policy.; 005063: Designate an
+  organization-defined official to manage the dissemination of the supply chain
+  risk management procedures."
+implementation-guidance: "-"
+assessment-procedures: "Determine if the [Assignment: organization-defined
+  official] is designated to manage the development, documentation, and
+  dissemination of the supply chain risk management policy and procedures."
+inherited: Local
+remote-inheritance-instance: "-"
+family: SR

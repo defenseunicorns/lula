@@ -1,0 +1,92 @@
+control-acronym: "[r5] SA-21"
+control-information: >-
+  Description:
+
+  Require that the developer of [Assignment: organization-defined system, system
+  component, or system service]:
+
+  a. Has appropriate access authorizations as determined by assigned
+  [Assignment: organization-defined official government duties]; and
+
+  b. Satisfies the following additional personnel screening criteria:
+  [Assignment: organization-defined additional personnel screening criteria].
+
+
+  Supplemental Guidance:
+
+  Developer screening is directed at external developers. Internal developer
+  screening is addressed by PS-3. Because the system, system component, or
+  system service may be used in critical activities essential to the national or
+  economic security interests of the United States, organizations have a strong
+  interest in ensuring that developers are trustworthy. The degree of trust
+  required of developers may need to be consistent with that of the individuals
+  who access the systems, system components, or system services once deployed.
+  Authorization and personnel screening criteria include clearances, background
+  checks, citizenship, and nationality. Developer trustworthiness may also
+  include a review and analysis of company ownership and relationships that the
+  company has with entities that may potentially affect the quality and
+  reliability of the systems, components, or services being developed.
+  Satisfying the required access authorizations and personnel screening criteria
+  includes providing a list of all individuals who are authorized to perform
+  development activities on the selected system, system component, or system
+  service so that organizations can validate that the developer has satisfied
+  the authorization and screening requirements. Related Control(s): PS-2, PS-3,
+  PS-6, PS-7, SA-4, SR-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; personnel
+  security policy and procedures; procedures addressing personnel screening;
+  system design documentation; acquisition documentation; service level
+  agreements; acquisition contracts for developer services; system configuration
+  settings and associated documentation; list of appropriate access
+  authorizations required by the developers of the system; personnel screening
+  criteria and associated documentation; system security plan; supply chain risk
+  management plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and service
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel responsible for developer
+  screening].
+
+
+  Test: [SELECT FROM: Organizational processes for developer screening;
+  mechanisms supporting developer screening].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-21b
+cci: 003384; 003381; 003382
+cci-definition: "003384: Defines the system, system component, or system service
+  which requires the system developer to have appropriate access authorizations,
+  satisfy additional personnel screening criteria, and provide information that
+  the access authorizations and screening criteria are satisfied.; 003381:
+  Defines additional personnel screening criteria that must be satisfied by the
+  developer of an organization-defined system, system component, or system
+  service.; 003382: Require that the developer of an organization-defined
+  information system, system component, or information system service satisfies
+  organization-defined additional personnel screening criteria."
+implementation-guidance: "-"
+assessment-procedures: "Determine if the developer of [Assignment:
+  organization-defined system, system component, or system service] is required
+  to satisfy [Assignment: organization-defined additional personnel screening
+  criteria]."
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (The organization must
+  manage developer screening and authorization.)
+family: SA

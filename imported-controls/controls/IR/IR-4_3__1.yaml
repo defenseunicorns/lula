@@ -1,0 +1,73 @@
+control-acronym: IR-4(3)
+control-information: >-
+  Description:
+
+  The organization identifies [Assignment: organization-defined classes of
+  incidents] and [Assignment: organization-defined actions to take in response
+  to classes of incidents] to ensure continuation of organizational missions and
+  business functions.
+
+
+  Supplemental Guidance:
+
+  Classes of incidents include, for example, malfunctions due to
+  design/implementation errors and omissions, targeted malicious attacks, and
+  untargeted malicious attacks. Appropriate incident response actions include,
+  for example, graceful degradation, information system shutdown, fall back to
+  manual mode/alternative technology whereby the system operates differently,
+  employing deceptive measures, alternate information flows, or operating in a
+  mode that is reserved solely for when systems are under attack.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident handling; incident response plan; security plan; list of classes of
+  incidents; list of appropriate incident response actions; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident handling
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms that support and/or implement
+  continuity of operations].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: ...
+ap-acronym: IR-4(3).1
+cci: 827
+cci-definition: '000827: The organization defines and identifies classes of
+  incidents for which organization-defined actions are to be taken to ensure
+  continuation of organizational mission and business functions.'
+implementation-guidance: >-
+  CJCSM 6510.01B has already identified DoD's classes of incidents.
+
+
+  DoD Components are automatically compliant with this CCI because DoD has
+  defined the classes of incidents as classes of incidents defined in CJCSM
+  6510.01B Appendix A- Enclosure B.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per CJCSM 6510.01B
+assessment-procedures: CJCSM 6510.01B has already identified DoD's classes of
+  incidents. The organization being inspected/assessed is automatically
+  compliant with this CCI because they are covered at the DoD level. DoD has
+  defined the classes of incidents as classes of incidents defined in CJCSM
+  6510.01B Appendix A- Enclosure B.6510.01M
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IR

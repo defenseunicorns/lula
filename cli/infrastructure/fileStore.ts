@@ -18,6 +18,7 @@ import {
 import { join } from 'path';
 import * as YAML from 'yaml';
 import type { Control, Mapping } from '../types';
+import { getControlId } from './controlHelpers';
 
 export interface ControlMetadata {
 	controlId: string;
@@ -53,7 +54,7 @@ export class FileStore {
 
 		// Don't create directories in constructor - only when needed
 		// This prevents creating empty folders in project root
-		
+
 		// Load control metadata if directories exist
 		if (existsSync(this.controlsDir)) {
 			this.refreshControlsCache();
@@ -65,7 +66,7 @@ export class FileStore {
 	 */
 	private getControlFilename(controlId: string): string {
 		// Sanitize control ID for filename (replace invalid characters)
-		const sanitized = controlId.replace(/[^\w\-\.]/g, '_');
+		const sanitized = controlId.replace(/[^\w\-.]/g, '_');
 		return `${sanitized}.yaml`;
 	}
 
@@ -107,6 +108,10 @@ export class FileStore {
 			try {
 				const content = readFileSync(flatFilePath, 'utf8');
 				const parsed = YAML.parse(content);
+				// Ensure the control has an 'id' field
+				if (!parsed.id) {
+					parsed.id = getControlId(parsed, this.baseDir);
+				}
 				return parsed as Control;
 			} catch (error) {
 				console.error(`Failed to load control ${controlId} from flat structure:`, error);
@@ -129,14 +134,10 @@ export class FileStore {
 		try {
 			const content = readFileSync(filePath, 'utf8');
 			const parsed = YAML.parse(content);
-
-			// Extract the control data (skip metadata if present)
-			if (parsed._metadata) {
-				const { _metadata, ...control } = parsed;
-				// Preserve the control ID from metadata as the id field
-				return { id: _metadata.controlId, ...control } as Control;
+			// Ensure the control has an 'id' field
+			if (!parsed.id) {
+				parsed.id = getControlId(parsed, this.baseDir);
 			}
-
 			return parsed as Control;
 		} catch (error) {
 			console.error(`Failed to load control ${controlId}:`, error);
@@ -152,9 +153,10 @@ export class FileStore {
 	async saveControl(control: Control): Promise<void> {
 		// Ensure base directories exist when saving
 		this.ensureDirectories();
-		
-		const family = this.getControlFamily(control.id);
-		const filename = this.getControlFilename(control.id);
+
+		const controlId = getControlId(control, this.baseDir);
+		const family = this.getControlFamily(controlId);
+		const filename = this.getControlFilename(controlId);
 		const familyDir = join(this.controlsDir, family);
 		const filePath = join(familyDir, filename);
 
@@ -167,8 +169,8 @@ export class FileStore {
 			// Create control data with simple metadata
 			const controlWithMetadata = {
 				_metadata: {
-					controlId: control.id,
-					family: family
+					controlId,
+					family
 				},
 				...control
 			};
@@ -182,14 +184,14 @@ export class FileStore {
 			writeFileSync(filePath, yamlContent, 'utf8');
 
 			// Update cache
-			this.controlMetadataCache.set(control.id, {
-				controlId: control.id,
-				filename: filename,
-				family: family
+			this.controlMetadataCache.set(controlId, {
+				controlId,
+				filename,
+				family
 			});
 		} catch (error) {
 			throw new Error(
-				`Failed to save control ${control.id}: ${error instanceof Error ? error.message : String(error)}`
+				`Failed to save control ${controlId}: ${error instanceof Error ? error.message : String(error)}`
 			);
 		}
 	}
@@ -230,11 +232,11 @@ export class FileStore {
 					const filePath = join(this.controlsDir, file);
 					const content = readFileSync(filePath, 'utf8');
 					const parsed = YAML.parse(content);
-
-					// Handle atomic control format directly
-					if (parsed && parsed.id) {
-						controls.push(parsed as Control);
+					// Ensure the control has an 'id' field
+					if (!parsed.id) {
+						parsed.id = getControlId(parsed, this.baseDir);
 					}
+					controls.push(parsed as Control);
 				} catch (error) {
 					console.error(`Failed to load control from file ${file}:`, error);
 				}
@@ -259,6 +261,7 @@ export class FileStore {
 
 					const control = await this.loadControl(controlId);
 					if (control) {
+						// The loadControl method now ensures id field exists
 						controls.push(control);
 					}
 				} catch (error) {
@@ -316,7 +319,7 @@ export class FileStore {
 	async saveMappings(mappings: Mapping[]): Promise<void> {
 		// Ensure base directories exist when saving
 		this.ensureDirectories();
-		
+
 		// Group mappings by control ID
 		const mappingsByControl = new Map<string, Mapping[]>();
 
@@ -402,15 +405,8 @@ export class FileStore {
 					const parsed = YAML.parse(content);
 
 					// Get control ID from _metadata.controlId or fall back to filename
-					let controlId: string;
-					if (parsed._metadata && parsed._metadata.controlId) {
-						controlId = parsed._metadata.controlId;
-					} else if (parsed.id) {
-						controlId = parsed.id;
-					} else {
-						// Fallback to filename extraction (reverse the sanitization)
-						controlId = filename.replace('.yaml', '').replace(/_/g, '/');
-					}
+					// let controlId: string;
+					const controlId = getControlId(parsed, this.baseDir);
 
 					this.controlMetadataCache.set(controlId, {
 						controlId: controlId,
@@ -466,6 +462,3 @@ export class FileStore {
 		this.refreshControlsCache();
 	}
 }
-
-// Backward compatibility export
-export { FileStore as SimpleFileStore };

@@ -1,0 +1,71 @@
+control-acronym: "[r5] IA-12"
+control-information: >-
+  Description:
+
+  a. Identity proof users that require accounts for logical access to systems
+  based on appropriate identity assurance level requirements as specified in
+  applicable standards and guidelines;
+
+  b. Resolve user identities to a unique individual; and
+
+  c. Collect, validate, and verify identity evidence.
+
+
+  Supplemental Guidance:
+
+  Identity proofing is the process of collecting, validating, and verifying a
+  user’s identity information for the purposes of establishing credentials for
+  accessing a system. Identity proofing is intended to mitigate threats to the
+  registration of users and the establishment of their accounts. Standards and
+  guidelines specifying identity assurance levels for identity proofing include
+  SP 800-63-3 and SP 800-63A. Organizations may be subject to laws, executive
+  orders, directives, regulations, or policies that address the collection of
+  identity evidence. Organizational personnel consult with the senior agency
+  official for privacy and legal counsel regarding such requirements. Related
+  Control(s): AC-5, IA-1, IA-2, IA-3, IA-4, IA-5, IA-6, IA-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing identity proofing; system security plan; privacy plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system operations
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities; legal counsel; system/network administrators; system
+  developers; organizational personnel with identification and authentication
+  responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing identification
+  and authentication capabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-12c
+cci: 004095; 004096; 004097
+cci-definition: "004095: Collect identity evidence.; 004096: Validate identity
+  evidence.; 004097: Verify identity evidence."
+implementation-guidance: "-"
+assessment-procedures: |-
+  Determine if:
+  - identity evidence is collected.
+  - identity evidence is validated.
+  - identity evidence is verified.
+inherited: Local
+remote-inheritance-instance: "-"
+family: IA

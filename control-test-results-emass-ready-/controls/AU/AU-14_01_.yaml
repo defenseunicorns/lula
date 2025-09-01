@@ -1,0 +1,67 @@
+control-acronym: "[r5] AU-14(01)"
+control-information: >-
+  Description:
+
+  Initiate session audits automatically at system start-up.
+
+
+  Supplemental Guidance:
+
+  The automatic initiation of session audits at startup helps to ensure that the
+  information being captured on selected individuals is complete and not subject
+  to compromise through tampering by malicious threat actors. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; system security plan;
+  privacy plan; procedures addressing user session auditing; system design
+  documentation; system configuration settings and associated documentation;
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  and privacy responsibilities; system/network administrators; system
+  developers].
+
+
+  Test: [SELECT FROM: Mechanisms implementing user session auditing capability].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-14(01)
+cci: 1464
+cci-definition: "001464: Initiates session audits automatically at system start-up."
+implementation-guidance: "-"
+assessment-procedures: Determine if session audits are initiated automatically at system start-up.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: The UDS platform is configured to initiate session audits at
+  system start-up, ensuring that all relevant session activities are logged from
+  the beginning of system operation. This capability is implemented across all
+  components of the UDS platform, including Keycloak, Kubernetes, and NeuVector.
+  Upon start-up, these components generate audit logs that capture session
+  initiation and other relevant activities. The logs are collected using Vector
+  and aggregated in Loki, providing a centralized repository for audit records.
+  These logs can be visualized and analyzed in Grafana, offering insights into
+  session activities and ensuring that session audits are conducted consistently
+  from system start-up.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AU-14(1).1."
+mapped-rev4-aps: AU-14(1)
+family: AU

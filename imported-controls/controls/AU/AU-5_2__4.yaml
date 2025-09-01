@@ -1,0 +1,97 @@
+control-acronym: AU-5(2)
+control-information: >-
+  Description:
+
+  The information system provides an alert in [Assignment: organization-defined
+  real-time period] to [Assignment: organization-defined personnel, roles,
+  and/or locations] when the following audit failure events occur: [Assignment:
+  organization-defined audit failure events requiring real-time alerts].
+
+
+  Supplemental Guidance:
+
+  Alerts provide organizations with urgent messages. Real-time alerts provide
+  these messages at information technology speed (i.e., the time from event
+  detection to alert occurs in seconds or less).
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  response to audit processing failures; information system design
+  documentation; security plan; information system configuration settings and
+  associated documentation; records of notifications or real-time alerts when
+  audit processing failures occur; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing real-time audit alerts
+  when organization-defined audit failure events occur].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AU-5(2).1,CCI-000147,DoD Organization or Service Common Control Package
+  AU-5(2).2,CCI-001856,DoD Organization or Service Common Control Package
+  AU-5(2).3,CCI-001857,Local
+  AU-5(2).4,CCI-001858,Local...
+ap-acronym: AU-5(2).4
+cci: 1858
+cci-definition: '001858: The information system provides a real-time alert in
+  organization-defined real-time period to organization-defined personnel,
+  roles, and/or locations when organization-defined audit failure events
+  requiring real-time alerts occur.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  immediately provide a real-time alert to personnel, roles, and/or locations
+  defined in AU-5 (2), CCI 1857 when all audit failure events requiring
+  real-time alerts occur. DoD has defined the real-time period as immediate. DoD
+  has defined the audit failure events as all. For information system components
+  that have applicable STIGs or SRGs, the organization being inspected/assessed
+  must comply with the STIG/SRG guidance that pertains to CCI 1858.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+
+  2.) List of personnel who receive indications of organization-defined
+  inappropriate or unusual activity
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configured the information system to immediately provide a
+  real-time alert to personnel, roles, and/or locations defined in AU-5 (2), CCI
+  1857 when all audit failure events requiring real-time alerts occur. DoD has
+  defined the real-time period as immediate. DoD has defined the audit failure
+  events as all. For information system components that have applicable STIGs or
+  SRGs, the organization conducting the inspection/assessment evaluates the
+  components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 1858.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: 'UDS warning and notifications are immediate once they are
+  triggered. To meet the requirement of providing a warning when allocated audit
+  record storage nears capacity, you can configure a threshold-based alert in
+  your monitoring stack (e.g., Grafana + Loki) that checks repository
+  utilization and triggers once it surpasses an organization-defined percentage.
+  In Grafana, create an alert rule that queries storage metrics (or log volume
+  usage) and compares them against your defined threshold (e.g., 75% of maximum
+  capacity per DoD defined percentage). Then, use notification policies and
+  contact points to route the alert to the appropriate personnel, roles, or
+  locations (such as a security teamâs Mattermost channel or a compliance
+  officerâs email) within the specified time period. This ensures the system
+  automatically provides advance warning, giving staff adequate time to manage
+  storage capacity and maintain audit record integrity.'
+uds-alignment: Grafana, Loki
+family: AU

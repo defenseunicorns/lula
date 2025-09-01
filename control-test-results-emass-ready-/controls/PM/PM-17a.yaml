@@ -1,0 +1,76 @@
+control-acronym: "[r5] PM-17"
+control-information: >-
+  Description:
+
+  a. Establish policy and procedures to ensure that requirements for the
+  protection of controlled unclassified information that is processed, stored or
+  transmitted on external systems, are implemented in accordance with applicable
+  laws, executive orders, directives, policies, regulations, and standards; and
+
+  b. Review and update the policy and procedures [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  Controlled unclassified information is defined by the National Archives and
+  Records Administration along with the safeguarding and dissemination
+  requirements for such information and is codified in 32 CFR 2002 and,
+  specifically for systems external to the federal organization, 32 CFR
+  2002.14h. The policy prescribes the specific use and conditions to be
+  implemented in accordance with organizational procedures, including via its
+  contracting processes. Related Control(s): CA-6, PM-10.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Controlled unclassified information policy; controlled
+  unclassified information procedures; other relevant documents or records.].
+
+
+  Interview: [SELECT FROM: Organizational personnel with controlled unclassified
+  information responsibilities; organizational personnel with information
+  security responsibilities.].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PM-17a
+cci: 004366; 004367
+cci-definition: "004366: Establish policy to ensure that the requirements for
+  the protection of Controlled Unclassified Information that is processed,
+  stored or transmitted on external systems, are implemented in accordance with
+  applicable laws, Executive Orders, directives, policies, regulations, and
+  standards.; 004367: Establish procedures to ensure that the requirements for
+  the protection of Controlled Unclassified Information that is processed,
+  stored or transmitted on external systems, are implemented in accordance with
+  applicable laws, Executive Orders, directives, policies, regulations, and
+  standards."
+implementation-guidance: This assessment procedure is automatically compliant
+  because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - policy is established to ensure that requirements for the protection of
+  controlled unclassified information that is processed, stored, or transmitted
+  on external systems are implemented in accordance with applicable laws,
+  executive orders, directives, policies, regulations, and standards.
+
+  - procedures are established to ensure that requirements for the protection of
+  controlled unclassified information that is processed, stored, or transmitted
+  on external systems are implemented in accordance with applicable laws,
+  executive orders, directives, policies, regulations, and standards.
+inherited: Local
+remote-inheritance-instance: "-"
+family: PM

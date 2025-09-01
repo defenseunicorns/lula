@@ -1,0 +1,83 @@
+control-acronym: "[r5] IA-04(04)"
+control-information: >-
+  Description:
+
+  Manage individual identifiers by uniquely identifying each individual as
+  [Assignment: organization-defined characteristic identifying individual
+  status].
+
+
+  Supplemental Guidance:
+
+  Characteristics that identify the status of individuals include contractors,
+  foreign nationals, and non-organizational users. Identifying the status of
+  individuals by these characteristics provides additional information about the
+  people with whom organizational personnel are communicating. For example, it
+  might be useful for a government employee to know that one of the individuals
+  on an email message is a contractor. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; system
+  security plan; procedures addressing identifier management; procedures
+  addressing account management; list of characteristics identifying individual
+  status; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with identifier management
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing identifier
+  management].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-04(04)
+cci: 000800; 000801
+cci-definition: "000800: Defines characteristics for identifying individual
+  status.; 000801: Manage individual identifiers by uniquely identifying each
+  individual as organization-defined characteristics identifying individual
+  status."
+implementation-guidance: CCI-000800 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if individual identifiers are managed by
+  uniquely identifying each individual as [Assignment: organization-defined
+  characteristic identifying individual status]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  UDS fully supports managing individual identifiers through its integrated
+  identity management solution, Keycloak, ensuring each user is uniquely
+  identified according to defined organizational characteristics (government
+  employee or contractor, including nationality). Keycloak's flexible username
+  and account schema can strictly follow DoD-defined naming conventions and
+  formats (e.g., per implementation guidance; john.smith.ctr@army.mil,
+  john.smith.uk@army.mil, or combined identifiers such as
+  john.smith.ctr.uk@army.mil). Display names within Keycloak and integrated
+  applications are similarly configurable to reflect appropriate organizational
+  conventions, clearly identifying users as contractors, government employees,
+  or foreign nationals.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IA-4(4).1, IA-4(4).2."
+mapped-rev4-aps: IA-4(4)
+family: IA

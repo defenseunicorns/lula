@@ -1,0 +1,91 @@
+control-acronym: PM-15
+control-information: >-
+  Description:
+
+  The organization establishes and institutionalizes contact with selected
+  groups and associations within the security community:
+
+  a. To facilitate ongoing security education and training for organizational
+  personnel;
+
+  b. To maintain currency with recommended security practices, techniques, and
+  technologies; and
+
+  c. To share current security-related information including threats,
+  vulnerabilities, and incidents.
+
+
+  Supplemental Guidance:
+
+  Ongoing contact with security groups and associations is of paramount
+  importance in an environment of rapidly changing technologies and threats.
+  Security groups and associations include, for example, special interest
+  groups, forums, professional associations, news groups, and/or peer groups of
+  security professionals in similar organizations. Organizations select groups
+  and associations based on organizational missions/business functions.
+  Organizations share threat, vulnerability, and incident information consistent
+  with applicable federal laws, Executive Orders, directives, policies,
+  regulations, standards, and guidance. Related control: SI-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information security program plan; risk management
+  strategy; procedures for contacts with security groups and associations;
+  evidence of established and institutionalized contact with security groups and
+  associations; lists or other documentation about contact with and/or
+  membership in security groups and associations; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  program planning and plan implementation responsibilities; organizational
+  personnel responsible for establishing and institutionalizing contact with
+  security groups and associations; organizational personnel with information
+  security responsibilities; personnel from selected groups and associations
+  with which the organization has established and institutionalized contact].
+
+
+  Test: [SELECT FROM: Organizational processes for establishing and
+  institutionalizing contact with security groups and associations; automated
+  mechanisms supporting contacts with security groups and associations].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: ...
+ap-acronym: PM-15.3
+cci: 3012
+cci-definition: '003012: The organization establishes and institutionalizes
+  contact with selected groups and associations within the security community to
+  share current security-related information including threats, vulnerabilities,
+  and incidents.'
+implementation-guidance: >-
+  The organization being inspected/assessed establishes and institutionalizes
+  contact with selected groups and associations within the security community to
+  share current security-related information including threats, vulnerabilities,
+  and incidents.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that establishes and institutionalizes
+  contact with selected groups and associations within the security community to
+  share current security-related information including threats, vulnerabilities,
+  and incidents.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines artifacts showing contact to ensure the organization
+  being inspected/assessed establishes and institutionalizes contact with
+  selected groups and associations within the security community to share
+  current security-related information including threats, vulnerabilities, and
+  incidents.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PM

@@ -1,0 +1,70 @@
+control-acronym: SC-18(3)
+control-information: >-
+  Description:
+
+  The information system prevents the download and execution of [Assignment:
+  organization-defined unacceptable mobile code].
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing mobile code; mobile code usage restrictions, mobile code
+  implementation policy and procedures; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel with responsibilities for managing mobile code].
+
+
+  Test: [SELECT FROM: Automated mechanisms preventing download and execution of
+  unacceptable mobile code].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-18(3).2
+cci: 1695
+cci-definition: '001695: The information system prevents the execution of
+  organization-defined unacceptable mobile code.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  prevent the execution of unacceptable mobile code defined in CCI 2459.
+
+  For information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 1695.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Applicable STIG/SRG checks pertaining to CCI 1695.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to prevent the execution of unacceptable mobile code
+  defined in CCI 2459.
+
+  For information system components that have applicable STIGs or SRGs, the
+  organization conducting the inspection/assessment evaluates the components to
+  ensure that the organization being inspected/assessed has configured the
+  information system in compliance with the applicable STIGs and SRGs pertaining
+  to CCI 1695.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (UDS is primarily designed
+  for secure application deployment and operations within Kubernetes clusters.
+  It does not inherently utilize or permit execution of mobile code (such as
+  Java applets, ActiveX controls, or scripts downloaded and executed directly by
+  user endpoints). Any policies regarding acceptable or unacceptable mobile code
+  technologies would be organizationally defined and enforced on client
+  endpoints or application-specific components outside the UDS core platform.)
+family: SC

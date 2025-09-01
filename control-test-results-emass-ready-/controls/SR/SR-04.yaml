@@ -1,0 +1,92 @@
+control-acronym: "[r5] SR-04"
+control-information: >-
+  Description:
+
+  Document, monitor, and maintain valid provenance of the following systems,
+  system components, and associated data: [Assignment: organization-defined
+  systems, system components, and associated data].
+
+
+  Supplemental Guidance:
+
+  Every system and system component has a point of origin and may be changed
+  throughout its existence. Provenance is the chronology of the origin,
+  development, ownership, location, and changes to a system or system component
+  and associated data. It may also include personnel and processes used to
+  interact with or make modifications to the system, component, or associated
+  data. Organizations consider developing procedures (see SR-1) for allocating
+  responsibilities for the creation, maintenance, and monitoring of provenance
+  for systems and system components; transferring provenance documentation and
+  responsibility between organizations; and preventing and monitoring for
+  unauthorized changes to the provenance records. Organizations have methods to
+  document, monitor, and maintain valid provenance baselines for systems, system
+  components, and related data. These actions help track, assess, and document
+  any changes to the provenance, including changes in supply chain elements or
+  configuration, and help ensure non-repudiation of provenance information and
+  the provenance change records. Provenance considerations are addressed
+  throughout the system development life cycle and incorporated into contracts
+  and other arrangements, as appropriate. Related Control(s): CM-8, MA-2, MA-6,
+  RA-9, SA-3, SA-8, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Supply chain risk management policy; supply chain risk
+  management procedures; supply chain risk management plan; documentation of
+  critical systems, critical system components, and associated data;
+  documentation showing the history of ownership, custody, and location of and
+  changes to critical systems or critical system components; system
+  architecture; inter-organizational agreements and procedures; contracts;
+  system security plan; privacy plan; personally identifiable information
+  processing policy; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with acquisition
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities; organizational personnel with supply chain risk
+  management responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for identifying the provenance of
+  critical systems and critical system components; mechanisms used to document,
+  monitor, or maintain provenance].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SR-04
+cci: 005096; 005097; 005098; 005099
+cci-definition: "005096: Document valid provenance of the following systems,
+  system components, and associated data.; 005097: Monitor valid provenance of
+  the following systems, system components, and associated data.; 005098:
+  Maintain valid provenance of the following systems, system components, and
+  associated data.; 005099: Defines the systems, system components, and
+  associated data for documenting, monitoring, and maintaining valid
+  provenance."
+implementation-guidance: CCI-005099 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - valid provenance is documented for [Assignment: organization-defined
+  systems, system components, and associated data].
+
+  - valid provenance is monitored for [Assignment: organization-defined systems,
+  system components, and associated data].
+
+  - valid provenance is maintained for [Assignment: organization-defined
+  systems, system components, and associated data].
+inherited: Local
+remote-inheritance-instance: "-"
+family: SR

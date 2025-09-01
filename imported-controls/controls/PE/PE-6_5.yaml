@@ -1,0 +1,79 @@
+control-acronym: PE-6
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Monitors physical access to the facility where the information system
+  resides to detect and respond to physical security incidents;
+
+  b. Reviews physical access logs [Assignment: organization-defined frequency]
+  and upon occurrence of [Assignment: organization-defined events or potential
+  indications of events]; and
+
+  c. Coordinates results of reviews and investigations with the organizational
+  incident response capability.
+
+
+  Supplemental Guidance:
+
+  Organizational incident response capabilities include investigations of and
+  responses to detected physical security incidents. Security incidents include,
+  for example, apparent security violations or suspicious physical access
+  activities. Suspicious physical access activities include, for example: (i)
+  accesses outside of normal work hours; (ii) repeated accesses to areas not
+  normally accessed; (iii) accesses for unusual lengths of time; and (iv)
+  out-of-sequence accesses. Related controls: CA-7, IR-4, IR-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing physical access monitoring; security plan; physical
+  access logs or records; physical access monitoring records; physical access
+  log reviews; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access
+  monitoring responsibilities; organizational personnel with incident response
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for monitoring physical access;
+  automated mechanisms supporting and/or implementing physical access
+  monitoring; automated mechanisms supporting and/or implementing reviewing of
+  physical access logs].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PE-6.1,CCI-002939,AWS GovCloud L5 Cloud Service Provider Package
+  PE-6.2,CCI-002940,AWS GovCloud L5 Cloud Service Provider Package
+  PE-6.3,CCI-002941,AWS GovCloud L5 Cloud Service Provider Package
+  PE-6.4,CCI-000939,AWS GovCloud L5 Cloud Service Provider Package
+  PE-6.5,CCI-000940,DoD Organization or Service Common Control Package
+  PE-6.6,CCI-000941,AWS GovCloud L5 Cloud Service Provider Package...
+ap-acronym: PE-6.5
+cci: 940
+cci-definition: '000940: The organization defines a frequency for reviewing
+  physical access logs.'
+implementation-guidance: |-
+  DoD has defined the frequency as every 30 days.
+
+  Recommended Compelling Evidence:
+  Automatically Compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the frequency as every 30 days.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PE

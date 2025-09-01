@@ -1,0 +1,66 @@
+control-acronym: "[r5] IR-04(13)"
+control-information: >-
+  Description:
+
+  Analyze anomalous or suspected adversarial behavior in or related to
+  [Assignment: organization-defined environments or resources].
+
+
+  Supplemental Guidance:
+
+  If the organization maintains a deception environment, an analysis of
+  behaviors in that environment, including resources targeted by the adversary
+  and timing of the incident or event, can provide insight into adversarial
+  tactics, techniques, and procedures. External to a deception environment, the
+  analysis of anomalous adversarial behavior (e.g., changes in system
+  performance or usage patterns) or suspected behavior (e.g., changes in
+  searches for the location of specific resources) can give the organization
+  such insight. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing system
+  monitoring tools and techniques; incident response plan; system monitoring
+  logs or records; system monitoring tools and techniques documentation; system
+  configuration settings and associated documentation; security plan; system
+  component inventory; network diagram; system protocols documentation; list of
+  acceptable thresholds for false positives and false negatives; system security
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for detecting anomalous
+  behavior].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IR-04(13)
+cci: 004146; 004147
+cci-definition: "004146: Analyze anomalous or suspected adversarial behavior in
+  or related to organization-defined environments or resources.; 004147: Defines
+  the environments or resources for analyzing anomalous or suspected adversarial
+  behavior."
+implementation-guidance: "-"
+assessment-procedures: "Determine if anomalous or suspected adversarial behavior
+  in or related to [Assignment: organization-defined environments or resources]
+  are analyzed."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+family: IR

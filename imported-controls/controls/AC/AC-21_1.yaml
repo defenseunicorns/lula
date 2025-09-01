@@ -1,0 +1,94 @@
+control-acronym: AC-21
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Facilitates information sharing by enabling authorized users to determine
+  whether access authorizations assigned to the sharing partner match the access
+  restrictions on the information for [Assignment: organization-defined
+  information sharing circumstances where user discretion is required]; and
+
+  b. Employs [Assignment: organization-defined automated mechanisms or manual
+  processes] to assist users in making information sharing/collaboration
+  decisions.
+
+
+  Supplemental Guidance:
+
+  This control applies to information that may be restricted in some manner
+  (e.g., privileged medical information, contract-sensitive information,
+  proprietary information, personally identifiable information, classified
+  information related to special access programs or compartments) based on some
+  formal or administrative determination. Depending on the particular
+  information-sharing circumstances, sharing partners may be defined at the
+  individual, group, or organizational level. Information may be defined by
+  content, type, security category, or special access program/compartment.
+  Related control: AC-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing user-based
+  collaboration and information sharing (including restrictions); information
+  system design documentation; information system configuration settings and
+  associated documentation; list of users authorized to make information
+  sharing/collaboration decisions; list of information sharing circumstances
+  requiring user discretion; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel responsible for making
+  information sharing/collaboration decisions; system/network administrators;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms or manual process implementing access
+  authorizations supporting information sharing/user collaboration decisions].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-21.1
+cci: 98
+cci-definition: '000098: The organization facilitates information sharing by
+  enabling authorized users to determine whether access authorizations assigned
+  to the sharing partner match the access restrictions on the information for
+  organization-defined information circumstances where user discretion is
+  required.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to determine whether access authorizations assigned to the sharing partner
+  match the access restrictions on the information for information circumstances
+  defined in AC-21, CCI 1470 where user discretion is required.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that describes a process that determines
+  whether access authorizations assigned to the sharing partner match the access
+  restrictions on the information for information circumstances defined in
+  AC-21, CCI 1470 where user discretion is required.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process to ensure the organization being
+  inspected/assessed determines whether access authorizations assigned to the
+  sharing partner match the access restrictions on the information for
+  information circumstances defined in AC-21, CCI 1470 where user discretion is
+  required.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: 'Not Applicable to UDS technology stack. (The UDS stack itself
+  doesnât facilitate user-to-user information sharing beyond hosting
+  applications that might do so. However, it provides controls to ensure that
+  any sharing of data through UDS applications is access-controlled. For
+  instance, if two users from different projects use an application on UDS,
+  Keycloak can enforce that each user only accesses their authorized project
+  data. So, while UDS doesnât implement a policy for information sharing, it
+  enables secure sharing by honoring the access rules configured (no
+  unauthorized cross-tenant data access, etc.). Also, audit logs (through Loki)
+  can track when information is accessed or shared.)'
+family: AC

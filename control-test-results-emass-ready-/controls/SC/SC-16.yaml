@@ -1,0 +1,80 @@
+control-acronym: "[r5] SC-16"
+control-information: >-
+  Description:
+
+  Associate [Assignment: organization-defined security and privacy attributes]
+  with information exchanged between systems and between system components.
+
+
+  Supplemental Guidance:
+
+  Security and privacy attributes can be explicitly or implicitly associated
+  with the information contained in organizational systems or system components.
+  Attributes are abstractions that represent the basic properties or
+  characteristics of an entity with respect to protecting information or the
+  management of personally identifiable information. Attributes are typically
+  associated with internal data structures, including records, buffers, and
+  files within the system. Security and privacy attributes are used to implement
+  access control and information flow control policies; reflect special
+  dissemination, management, or distribution instructions, including permitted
+  uses of personally identifiable information; or support other aspects of the
+  information security and privacy policies. Privacy attributes may be used
+  independently or in conjunction with security attributes. Related Control(s):
+  AC-3, AC-4, AC-16.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing the transmission of security and privacy attributes; access control
+  policy and procedures; information flow control policy; system design
+  documentation; system configuration settings and associated documentation;
+  system audit records; system security plan; privacy plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security and privacy responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing the transmission
+  of security and privacy attributes between systems].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-16
+cci: 001157; 002454; 002455; 004901; 004902; 004903
+cci-definition: "001157: Associate organization-defined security attributes with
+  information exchanged between systems.; 002454: Defines the security
+  attributes to associate with the information being exchanged between systems
+  and between system components.; 002455: Associate organization-defined
+  security attributes with information exchanged between system components.;
+  004901: Associate organization-defined privacy attributes with information
+  exchanged between systems.; 004902: Associate organization-defined privacy
+  attributes with information exchanged between system components.; 004903:
+  Defines the privacy attributes to associate with the information being
+  exchanged between systems and between system components."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:  
+
+  - [Assignment: organization-defined security and privacy attributes] are
+  associated with information exchanged between systems.  
+
+  - [Assignment: organization-defined security and privacy attributes] are
+  associated with information exchanged between system components.
+inherited: Local
+remote-inheritance-instance: "-"
+family: SC

@@ -1,0 +1,81 @@
+control-acronym: SI-8
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Employs spam protection mechanisms at information system entry and exit
+  points to detect and take action on unsolicited messages; and
+
+  b. Updates spam protection mechanisms when new releases are available in
+  accordance with organizational configuration management policy and procedures.
+
+
+  Supplemental Guidance:
+
+  Information system entry and exit points include, for example, firewalls,
+  electronic mail servers, web servers, proxy servers, remote-access servers,
+  workstations, mobile devices, and notebook/laptop computers. Spam can be
+  transported by different means including, for example, electronic mail,
+  electronic mail attachments, and web accesses. Spam protection mechanisms
+  include, for example, signature definitions. Related controls: AT-2, AT-3,
+  SC-5, SC-7, SI-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; configuration
+  management policy and procedures (CM-1); procedures addressing spam
+  protection; spam protection mechanisms; records of spam protection updates;
+  information system design documentation; information system configuration
+  settings and associated documentation; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for spam
+  protection; organizational personnel with information security
+  responsibilities; system/network administrators; system developer].
+
+
+  Test: [SELECT FROM: Organizational processes for implementing spam protection;
+  automated mechanisms supporting and/or implementing spam protection].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-8.1
+cci: 2741
+cci-definition: '002741: The organization employs spam protection mechanisms at
+  information system entry points to detect and take action on unsolicited
+  messages.'
+implementation-guidance: >-
+  The organization being inspected/assessed implements spam protection
+  mechanisms at information system entry points to detect and take action on
+  unsolicited messages.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System security plan documents what protection mechanisms
+  are used to guard against spam at information system entry points.
+
+  2.) Protection software logs.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the hardware/software list to ensure the organization
+  being inspected/assessed implements spam protection mechanisms at information
+  system entry points to detect and take action on unsolicited messages. The
+  organization may be required to demonstrate the use of the identified spam
+  protection mechanisms.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: 'Not Applicable to UDS technology stack. (Spam protection â
+  relates to filtering spam in email or inputs. UDS doesnât have an email
+  system or user-generated content filtering; thatâs outside scope. If an app
+  on UDS was an email server, that app would need spam filtering, but the
+  platform itself is neutral here.)'
+family: SI

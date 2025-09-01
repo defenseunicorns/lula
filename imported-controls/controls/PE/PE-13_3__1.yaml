@@ -1,0 +1,80 @@
+control-acronym: PE-13(3)
+control-information: >-
+  Description:
+
+  The organization employs an automatic fire suppression capability for the
+  information system when the facility is not staffed on a continuous basis.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing fire protection; fire suppression and detection
+  devices/systems documentation; facility housing the information system; alarm
+  service-level agreements; test records of fire suppression and detection
+  devices/systems; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  fire detection and suppression devices/systems; organizational personnel with
+  responsibilities for providing automatic notifications of any activation of
+  fire suppression devices/systems to appropriate personnel, roles, and
+  emergency responders; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing fire
+  suppression devices/systems; activation of fire suppression devices/systems
+  (simulated)].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: PE-13(3).1
+cci: 968
+cci-definition: '000968: The organization employs an automatic fire suppression
+  capability for the information system when the facility is not staffed on a
+  continuous basis.'
+implementation-guidance: >-
+  The organization being inspected/assessed must implement and maintain an
+  automatic fire suppression capability that is fully operational when the
+  facility is not staffed on a continuous basis.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation/audit trail of visual inspections of fire suppression
+  systems with safety personnel
+assessment-procedures: The organization conducting the inspection/assessment
+  conducts visual inspections and interviews physical security/safety personnel
+  to validate the organization has installed and implemented an automatic fire
+  suppression capability which is operational during those times the facility is
+  not staffed.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PE

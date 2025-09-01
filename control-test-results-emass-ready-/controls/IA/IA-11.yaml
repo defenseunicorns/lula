@@ -1,0 +1,64 @@
+control-acronym: "[r5] IA-11"
+control-information: >-
+  Description:
+
+  Require users to re-authenticate when [Assignment: organization-defined
+  circumstances or situations requiring re-authentication].
+
+
+  Supplemental Guidance:
+
+  In addition to the re-authentication requirements associated with device
+  locks, organizations may require re-authentication of individuals in certain
+  situations, including when roles, authenticators or credentials change, when
+  security categories of systems change, when the execution of privileged
+  functions occurs, after a fixed time period, or periodically. Related
+  Control(s): AC-3, AC-11, IA-2, IA-3, IA-4, IA-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing user and device re-authentication; system security plan; system
+  design documentation; system configuration settings and associated
+  documentation; list of circumstances or situations requiring
+  re-authentication; system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system operations
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers;
+  organizational personnel with identification and authentication
+  responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing identification
+  and authentication capabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-11
+cci: 002036; 002038
+cci-definition: "002036: Defines the circumstances or situations under which
+  users will be required to reauthenticate.; 002038: The organization requires
+  users to reauthenticate upon organization-defined circumstances or situations
+  requiring reauthentication."
+implementation-guidance: "-"
+assessment-procedures: "Determine if users are required to re-authenticate when
+  [Assignment: organization-defined circumstances or situations requiring
+  re-authentication]."
+inherited: Local
+remote-inheritance-instance: "-"
+family: IA

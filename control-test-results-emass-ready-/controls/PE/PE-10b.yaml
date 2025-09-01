@@ -1,0 +1,77 @@
+control-acronym: "[r5] PE-10"
+control-information: >-
+  Description:
+
+  a. Provide the capability of shutting off power to [Assignment:
+  organization-defined system or individual system components] in emergency
+  situations;
+
+  b. Place emergency shutoff switches or devices in [Assignment:
+  organization-defined location by system or system component] to facilitate
+  access for authorized personnel; and
+
+  c. Protect emergency power shutoff capability from unauthorized activation.
+
+
+  Supplemental Guidance:
+
+  Emergency power shutoff primarily applies to organizational facilities that
+  contain concentrations of system resources, including data centers, mainframe
+  computer rooms, server rooms, and areas with computer-controlled machinery.
+  Related Control(s): PE-15.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing power source emergency shutoff; emergency shutoff
+  controls or switches; locations housing emergency shutoff switches and
+  devices; security safeguards protecting the emergency power shutoff capability
+  from unauthorized activation; system security plan; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with the responsibility for
+  the emergency power shutoff capability (both implementing and using the
+  capability); organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing emergency power
+  shutoff].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-10b
+cci: 000957; 000958
+cci-definition: "000957: Place emergency shutoff switches or devices in an
+  organization-defined location by system or system component to facilitate
+  access for authorized personnel.; 000958: Defines a location for emergency
+  shutoff switches or devices by system or system component."
+implementation-guidance: CCI-000958 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if emergency shutoff switches or devices are
+  placed in [Assignment: organization-defined location by system or system
+  component] to facilitate access for authorized personnel."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PE-10.2, PE-10.3."
+mapped-rev4-aps: PE-10.2; PE-10.3
+family: PE

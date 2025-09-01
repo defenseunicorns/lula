@@ -1,0 +1,95 @@
+control-acronym: "[r5] RA-05(04)"
+control-information: >-
+  Description:
+
+  Determine information about the system that is discoverable and take
+  [Assignment: organization-defined corrective actions].
+
+
+  Supplemental Guidance:
+
+  Discoverable information includes information that adversaries could obtain
+  without compromising or breaching the system, such as by collecting
+  information that the system is exposing or by conducting extensive web
+  searches. Corrective actions include notifying appropriate organizational
+  personnel, removing designated information, or changing the system to make the
+  designated information less relevant or attractive to adversaries. This
+  enhancement excludes intentionally discoverable information that may be part
+  of a decoy capability (e.g., honeypots, honeynets, or deception nets) deployed
+  by the organization. Related Control(s): AU-13, SC-26.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Procedures addressing vulnerability scanning;
+  assessment report; penetration test results; vulnerability scanning results;
+  risk assessment report; records of corrective actions taken; incident response
+  records; audit records; system security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with vulnerability scanning
+  and/or penetration testing responsibilities; organizational personnel with
+  vulnerability scan analysis responsibilities; organizational personnel
+  responsible for risk response; organizational personnel responsible for
+  incident management and response; organizational personnel with security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for vulnerability scanning;
+  organizational processes for risk response; organizational processes for
+  incident management and response; mechanisms/tools supporting and/or
+  implementing vulnerability scanning; mechanisms supporting and/or implementing
+  risk response; mechanisms supporting and/or implementing incident management
+  and response].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: RA-05(04)
+cci: 001066; 002374; 002375
+cci-definition: "001066: Determine information about the system that is
+  discoverable.; 002374: Defines the corrective actions if unintended
+  information about the system is discovered.; 002375: Take organization-defined
+  corrective actions if information about the system is discovered."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - information about the system is discoverable.
+
+  - [Assignment: organization-defined corrective actions] are taken when
+  information about the system is confirmed as discoverable.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: RA-5(4).1,
+  RA-5(4).2, RA-5(4).3. The resulting compliance status was set to non-compliant
+  because the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: RA-5(4).1, RA-5(4).2, RA-5(4).3.
+
+
+  Not Applicable to UDS technology stack. (This is an organizational level
+  control that is related to information about the information system and its
+  discoverability outside of the organization.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: RA-5(4).1, RA-5(4).2, RA-5(4).3. The resulting compliance status
+  was set to non-compliant because the following Rev. 4 assessment procedure had
+  no locally entered test result/compliance statement: RA-5(4).1, RA-5(4).2,
+  RA-5(4).3."
+mapped-rev4-aps: RA-5(4)
+family: RA

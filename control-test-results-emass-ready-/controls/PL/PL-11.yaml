@@ -1,0 +1,77 @@
+control-acronym: "[r5] PL-11"
+control-information: >-
+  Description:
+
+  Tailor the selected control baseline by applying specified tailoring actions.
+
+
+  Supplemental Guidance:
+
+  The concept of tailoring allows organizations to specialize or customize a set
+  of baseline controls by applying a defined set of tailoring actions. Tailoring
+  actions facilitate such specialization and customization by allowing
+  organizations to develop security and privacy plans that reflect their
+  specific mission and business functions, the environments where their systems
+  operate, the threats and vulnerabilities that can affect their systems, and
+  any other conditions or situations that can impact their mission or business
+  success. Tailoring guidance is provided in SP 800-53B. Tailoring a control
+  baseline is accomplished by identifying and designating common controls,
+  applying scoping considerations, selecting compensating controls, assigning
+  values to control parameters, supplementing the control baseline with
+  additional controls as needed, and providing information for control
+  implementation. The general tailoring actions in SP 800-53B can be
+  supplemented with additional actions based on the needs of organizations.
+  Tailoring actions can be applied to the baselines in SP 800-53B in accordance
+  with the security and privacy requirements from FISMA, PRIVACT, and OMB A-130.
+  Alternatively, other communities of interest adopting different control
+  baselines can apply the tailoring actions in SP 800-53B to specialize or
+  customize the controls that represent the specific needs and concerns of those
+  entities. Related Control(s): PL-10, RA-2, RA-3, RA-9, SA-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Security and privacy planning policy; procedures
+  addressing system security and privacy plan development and implementation;
+  system design documentation; system categorization decision; information types
+  stored, transmitted, and processed by the system; system element/component
+  information; stakeholder needs analysis; list of security and privacy
+  requirements allocated to the system, system elements, and environment of
+  operation; list of contractual requirements allocated to external providers of
+  the system or system element; business impact analysis or criticality
+  analysis; risk assessments; risk management strategy; organizational security
+  and privacy policy; federal or organization-approved or mandated baselines or
+  overlays; baseline tailoring rationale; system security plan; privacy plan;
+  records of system security and privacy plan reviews and updates; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security and privacy
+  planning and plan implementation responsibilities; organizational personnel
+  with information security and privacy responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PL-11
+cci: 4311
+cci-definition: "004311: Tailor the selected control baseline by applying
+  specified tailoring actions."
+implementation-guidance: This assessment procedure is automatically compliant
+  because of coverage by DoD Enterprise.
+assessment-procedures: Determine if the selected control baseline is tailored by
+  applying specified tailoring actions.
+inherited: Local
+remote-inheritance-instance: "-"
+family: PL

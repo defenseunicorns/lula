@@ -1,0 +1,71 @@
+control-acronym: "[r5] AC-11(01)"
+control-information: >-
+  Description:
+
+  Conceal, via the device lock, information previously visible on the display
+  with a publicly viewable image.
+
+
+  Supplemental Guidance:
+
+  The pattern-hiding display can include static or dynamic images, such as
+  patterns used with screen savers, photographic images, solid colors, clock,
+  battery life indicator, or a blank screen with the caveat that controlled
+  unclassified information is not displayed. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing session
+  lock; display screen with session lock activated; system design documentation;
+  system configuration settings and associated documentation; system security
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: System session lock mechanisms].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-11(01)
+cci: 60
+cci-definition: "000060: Conceal, via the device lock, information previously
+  visible on the display with a publicly viewable image."
+implementation-guidance: "-"
+assessment-procedures: Determine if information previously visible on the
+  display is concealed, via device lock, with a publicly viewable image.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (By default, Keycloak
+  doesn't automatically change the user's screen when a session expires due to
+  inactivity. Instead, the current page remains displayed, and the session
+  timeout occurs silently on the server side. Only when the user attempts
+  another interaction, like navigating or submitting a form, will the session
+  expiration become apparent, prompting a redirect to Keycloak's login screen
+  for reauthentication. To proactively handle this, applications can implement
+  custom logic, such as client-side timers or periodic background checks, to
+  detect inactivity and prompt the user accordingly, but this behavior isn't
+  provided automatically by Keycloak.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-11(1).1. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: AC-11(1).1."
+mapped-rev4-aps: AC-11(1)
+family: AC

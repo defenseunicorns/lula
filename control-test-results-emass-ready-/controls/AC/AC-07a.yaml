@@ -1,0 +1,111 @@
+control-acronym: "[r5] AC-07"
+control-information: >-
+  Description:
+
+  a. Enforce a limit of [Assignment: organization-defined number] consecutive
+  invalid logon attempts by a user during a [Assignment: organization-defined
+  time period]; and
+
+  b. Automatically [Selection (one or more): lock the account or node for an
+  [Assignment: organization-defined time period]; lock the account or node until
+  released by an administrator; delay next logon prompt per [Assignment:
+  organization-defined delay algorithm]; notify system administrator; take other
+  [Assignment: organization-defined action]] when the maximum number of
+  unsuccessful attempts is exceeded.
+
+
+  Supplemental Guidance:
+
+  The need to limit unsuccessful logon attempts and take subsequent action when
+  the maximum number of attempts is exceeded applies regardless of whether the
+  logon occurs via a local or network connection. Due to the potential for
+  denial of service, automatic lockouts initiated by systems are usually
+  temporary and automatically release after a predetermined,
+  organization-defined time period. If a delay algorithm is selected,
+  organizations may employ different algorithms for different components of the
+  system based on the capabilities of those components. Responses to
+  unsuccessful logon attempts may be implemented at the operating system and the
+  application levels. Organization-defined actions that may be taken when the
+  number of allowed consecutive invalid logon attempts is exceeded include
+  prompting the user to answer a secret question in addition to the username and
+  password, invoking a lockdown mode with limited user capabilities (instead of
+  full lockout), allowing users to only logon from specified Internet Protocol
+  (IP) addresses, requiring a CAPTCHA to prevent automated attacks, or applying
+  user profiles such as location, time of day, IP address, device, or Media
+  Access Control (MAC) address. If automatic system lockout or execution of a
+  delay algorithm is not implemented in support of the availability objective,
+  organizations consider a combination of other actions to help prevent brute
+  force attacks. In addition to the above, organizations can prompt users to
+  respond to a secret question before the number of allowed unsuccessful logon
+  attempts is exceeded. Automatically unlocking an account after a specified
+  period of time is generally not permitted. However, exceptions may be required
+  based on operational mission or need. Related Control(s): AC-2, AC-9, AU-2,
+  AU-6, IA-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing
+  unsuccessful logon attempts; system design documentation; system configuration
+  settings and associated documentation; system audit records; system security
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system developers; system/network administrators].
+
+
+  Test: [SELECT FROM: Mechanisms implementing access control policy for
+  unsuccessful logon attempts].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-07a
+cci: 000043; 000044; 001423
+cci-definition: "000043: Defines the maximum number of consecutive invalid logon
+  attempts to the information system by a user during an organization-defined
+  time period.; 000044: Enforce the organization-defined limit of consecutive
+  invalid logon attempts by a user during the organization-defined time period.;
+  001423: Defines the time period in which the organization-defined maximum
+  number of consecutive invalid logon attempts occur."
+implementation-guidance: CCI-000043 and CCI-001423 of this assessment procedure
+  are automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if a limit of [Assignment:
+  organization-defined number] consecutive invalid logon attempts by a user
+  during [Assignment: organization-defined time period] is enforced."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  UDS addresses unsuccessful login attempt controls via Keycloak’s brute force
+  protection features. Keycloak can automatically lock an account or temporarily
+  disable login for a username after a configurable number of failed login
+  attempts​. By enabling this in the Keycloak realm settings, if an attacker (or
+  user) enters an incorrect password repeatedly, Keycloak will trigger a
+  temporary lockout or even require administrator intervention after the
+  threshold is exceeded​. This mechanism ensures that repeated failed login
+  attempts are thwarted and accounts are not vulnerable to brute-force guessing
+  attacks. The duration of lockout and thresholds are configurable to meet
+  organizational policy. Thus, the stack meets the intent by providing a
+  built-in technical control to automatically record unsuccessful login attempts
+  and take action (lockout) when a defined limit is reached.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-7.1, AC-7.2, AC-7.3."
+mapped-rev4-aps: AC-7.1; AC-7.2; AC-7.3
+family: AC

@@ -1,0 +1,74 @@
+control-acronym: "[r5] SI-04(22)"
+control-information: >-
+  Description:
+
+  (a) Detect network services that have not been authorized or approved by
+  [Assignment: organization-defined authorization or approval processes]; and
+
+  (b)[Selection (one or more): Audit; Alert [Assignment: organization-defined
+  personnel or roles]] when detected.
+
+
+  Supplemental Guidance:
+
+  Unauthorized or unapproved network services include services in
+  service-oriented architectures that lack organizational verification or
+  validation and may therefore be unreliable or serve as malicious rogues for
+  valid services. Related Control(s): CM-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and information integrity policy; system and
+  information integrity procedures; procedures addressing system monitoring
+  tools and techniques; system design documentation; system monitoring tools and
+  techniques documentation; system configuration settings and associated
+  documentation; documented authorization/approval of network services;
+  notifications or alerts of unauthorized network services; system monitoring
+  logs or records; system audit records; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel installing, configuring, and/or maintaining the
+  system; organizational personnel responsible for monitoring the system].
+
+
+  Test: [SELECT FROM: Organizational processes for system monitoring; mechanisms
+  supporting and/or implementing a system monitoring capability; mechanisms for
+  auditing network services; mechanisms for providing alerts].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-04(22)(b)
+cci: 2684
+cci-definition: "002684: Audit and/or alert organization-defined personnel when
+  unauthorized network services are detected."
+implementation-guidance: "-"
+assessment-procedures: "Determine if [Selection (one or more): Audit; Alert
+  [Assignment: organization-defined personnel or roles]] is/are initiated when
+  network services that have not been authorized or approved by authorization or
+  approval processes are detected."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SI-4(22).4."
+mapped-rev4-aps: SI-4(22)
+family: SI

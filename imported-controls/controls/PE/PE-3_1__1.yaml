@@ -1,0 +1,95 @@
+control-acronym: PE-3(1)
+control-information: >-
+  Description:
+
+  The organization enforces physical access authorizations to the information
+  system in addition to the physical access controls for the facility at
+  [Assignment: organization-defined physical spaces containing one or more
+  components of the information system].
+
+
+  Supplemental Guidance:
+
+  This control enhancement provides additional physical security for those areas
+  within facilities where there is a concentration of information system
+  components (e.g., server rooms, media storage areas, data and communications
+  centers). Related control: PS-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing physical access control; physical access control logs or
+  records; physical access control devices; access authorizations; access
+  credentials; information system entry and exit points; list of areas within
+  the facility containing concentrations of information system components or
+  information system components requiring additional physical protection; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access
+  authorization responsibilities; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for physical access control to
+  the information system/components; automated mechanisms supporting and/or
+  implementing physical access control for facility areas containing information
+  system components].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: PE-3(1).1
+cci: 928
+cci-definition: '000928: The organization enforces physical access
+  authorizations to the information system in addition to the physical access
+  controls for the facility at organization-defined physical spaces containing
+  one or more components of the information system.'
+implementation-guidance: >-
+  The organization being inspected/assessed will provide documentation of
+  additional physical access authorizations for the facility/facilities at
+  physical spaces containing one or more components of the information system
+  defined in PE-3 (1), CCI 2926. The organization will ensure that these
+  controls are separate from, and independent of, the physical access controls
+  established for the facility.
+
+  Recommended Compelling Evidence:
+
+  1.) List of additional physical access authorizations
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented list of additional physical access
+  authorizations for the facility/facilities at physical spaces containing one
+  or more components of the information system. The objective of the examination
+  is to determine if the organization is enforcing additional physical access
+  authorizations to areas of the facility at physical spaces containing one or
+  more components of the information system defined in PE-3 (1), CCI 2926. These
+  controls are independent of the physical access controls established for the
+  facility.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PE

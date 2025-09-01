@@ -1,0 +1,67 @@
+control-acronym: AU-6(3)
+control-information: >-
+  Description:
+
+  The organization analyzes and correlates audit records across different
+  repositories to gain organization-wide situational awareness.
+
+
+  Supplemental Guidance:
+
+  Organization-wide situational awareness includes awareness across all three
+  tiers of risk management (i.e., organizational, mission/business process, and
+  information system) and supports cross-organization awareness. Related
+  controls: AU-12, IR-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit review, analysis, and reporting; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records across different repositories;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit review, analysis,
+  and reporting responsibilities; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting analysis and correlation
+  of audit records].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-6(3).1
+cci: 153
+cci-definition: '000153: The organization analyzes and correlates audit records
+  across different repositories to gain organization-wide situational
+  awareness.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to analyze and correlate audit records across different repositories to gain
+  organization-wide situational awareness. The organization must maintain a
+  record of the analysis.
+
+  Recommended Compelling Evidence:
+
+  1.) Record of the analysis of correlation of audit records across different
+  repositories
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process as well as the record of analysis
+  to ensure the organization being inspected/assessed analyzes and correlates
+  audit records across different repositories to gain organization-wide
+  situational awareness.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (Cross organizational
+  situational awareness by correlating audit records from different repositories
+  would need to be accomplished at the organizational level.)
+family: AU

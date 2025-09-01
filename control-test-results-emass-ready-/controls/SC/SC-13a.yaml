@@ -1,0 +1,93 @@
+control-acronym: "[r5] SC-13"
+control-information: >-
+  Description:
+
+  a. Determine the [Assignment: organization-defined cryptographic uses]; and
+
+  b. Implement the following types of cryptography required for each specified
+  cryptographic use: [Assignment: organization-defined types of cryptography for
+  each specified cryptographic use].
+
+
+  Supplemental Guidance:
+
+  Cryptography can be employed to support a variety of security solutions,
+  including the protection of classified information and controlled unclassified
+  information, the provision and implementation of digital signatures, and the
+  enforcement of information separation when authorized individuals have the
+  necessary clearances but lack the necessary formal access approvals.
+  Cryptography can also be used to support random number and hash generation.
+  Generally applicable cryptographic standards include FIPS-validated
+  cryptography and NSA-approved cryptography. For example, organizations that
+  need to protect classified information may specify the use of NSA-approved
+  cryptography. Organizations that need to provision and implement digital
+  signatures may specify the use of FIPS-validated cryptography. Cryptography is
+  implemented in accordance with applicable laws, executive orders, directives,
+  regulations, policies, standards, and guidelines. Related Control(s): AC-2,
+  AC-3, AC-7, AC-17, AC-18, AC-19, AU-9, AU-10, CM-11, CP-9, IA-3, IA-5, IA-7,
+  MA-4, MP-2, MP-4, MP-5, SA-4, SA-8, SA-9, SC-8, SC-12, SC-20, SC-23, SC-28,
+  SC-40, SI-3, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing cryptographic protection; system design documentation; system
+  configuration settings and associated documentation; cryptographic module
+  validation certificates; list of FIPS-validated cryptographic modules; system
+  audit records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel with responsibilities for cryptographic protection].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing cryptographic
+  protection].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-13a
+cci: 002449; 002450
+cci-definition: "002449: Defines the cryptographic uses, and type of
+  cryptography required for each use, to be implemented by the system.; 002450:
+  Implement organization-defined types of cryptography for each specified
+  cryptography use."
+implementation-guidance: This assessment procedure is automatically compliant
+  because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if [Assignment: organization-defined
+  cryptographic uses] are identified."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  UDS employs federally approved cryptographic algorithms and protocols to
+  protect information. It uses TLS (which can be configured to use FIPS 140-2
+  validated libraries and strong ciphers) for all encryption needs. Data
+  encryption at rest would rely on AES-256 or similar, consistent with
+  standards. UDS’s emphasis on FIPS compliance​ means it is designed to use
+  approved crypto. For example, mutual TLS between services uses strong
+  certificates and ciphers; Keycloak’s token signing uses RSA or ECDSA with
+  appropriate key lengths. By using these standard, vetted cryptographic
+  techniques for both data in transit and at rest.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-13.1, SC-13.2."
+mapped-rev4-aps: SC-13.1; SC-13.2
+family: SC

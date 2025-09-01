@@ -1,0 +1,94 @@
+control-acronym: "[r5] CM-11"
+control-information: >-
+  Description:
+
+  a. Establish [Assignment: organization-defined policies] governing the
+  installation of software by users;
+
+  b. Enforce software installation policies through the following methods:
+  [Assignment: organization-defined methods]; and
+
+  c. Monitor policy compliance [Assignment: organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  If provided the necessary privileges, users can install software in
+  organizational systems. To maintain control over the software installed,
+  organizations identify permitted and prohibited actions regarding software
+  installation. Permitted software installations include updates and security
+  patches to existing software and downloading new applications from
+  organization-approved app stores. Prohibited software installations include
+  software with unknown or suspect pedigrees or software that organizations
+  consider potentially malicious. Policies selected for governing user-installed
+  software are organization-developed or provided by some external entity.
+  Policy enforcement methods can include procedural methods and automated
+  methods. Related Control(s): AC-3, AU-6, CM-2, CM-3, CM-5, CM-6, CM-7, CM-8,
+  PL-4, SI-4, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  user-installed software; configuration management plan; system security plan;
+  system design documentation; system configuration settings and associated
+  documentation; list of rules governing user installed software; system
+  monitoring records; system audit records; continuous monitoring strategy;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  governing user-installed software; organizational personnel operating, using,
+  and/or maintaining the system; organizational personnel monitoring compliance
+  with user-installed software policy; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes governing user-installed software
+  on the system; mechanisms enforcing policies and methods for governing the
+  installation of software by users; mechanisms monitoring policy compliance].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-11b
+cci: 001806; 001807
+cci-definition: "001806: Defines methods to be employed to enforce the software
+  installation policies.; 001807: Enforce software installation policies through
+  organization-defined methods."
+implementation-guidance: "-"
+assessment-procedures: "Determine if software installation policies are enforced
+  through [Assignment: organization-defined methods]."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  Regular users of UDS have no ability to install software on the system. They
+  interact with deployed applications but cannot add new applications
+  themselves. For instance, a user using a web app served by UDS can't install
+  anything on the server hosting it. Installation of software requires
+  administrative privileges and goes through the controlled deployment
+  mechanism. 
+
+  UDS enforces organizationally defined software installation policies through
+  its robust Infrastructure as Code (IaC) approach using OpenTofu and secure
+  software deployment via cryptographically signed and verified Zarf packages.
+  Software installations are strictly controlled, version-managed, and audited,
+  ensuring that only explicitly approved software components and container
+  images are deployed within Kubernetes clusters.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-11.3, CM-11.4."
+mapped-rev4-aps: CM-11.3; CM-11.4
+family: CM

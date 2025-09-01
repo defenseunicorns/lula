@@ -1,0 +1,101 @@
+control-acronym: "[r5] AC-14"
+control-information: >-
+  Description:
+
+  a. Identify [Assignment: organization-defined user actions] that can be
+  performed on the system without identification or authentication consistent
+  with organizational mission and business functions; and
+
+  b. Document and provide supporting rationale in the security plan for the
+  system, user actions not requiring identification or authentication.
+
+
+  Supplemental Guidance:
+
+  Specific user actions may be permitted without identification or
+  authentication if organizations determine that identification and
+  authentication are not required for the specified user actions. Organizations
+  may allow a limited number of user actions without identification or
+  authentication, including when individuals access public websites or other
+  publicly accessible federal systems, when individuals use mobile phones to
+  receive calls, or when facsimiles are received. Organizations identify actions
+  that normally require identification or authentication but may, under certain
+  circumstances, allow identification or authentication mechanisms to be
+  bypassed. Such bypasses may occur, for example, via a software-readable
+  physical switch that commands bypass of the logon functionality and is
+  protected from accidental or unmonitored use. Permitting actions without
+  identification or authentication does not apply to situations where
+  identification and authentication have already occurred and are not repeated
+  but rather to situations where identification and authentication have not yet
+  occurred. Organizations may decide that there are no user actions that can be
+  performed on organizational systems without identification and authentication,
+  and therefore, the value for the assignment operation can be none. Related
+  Control(s): AC-8, IA-2, PL-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing permitted
+  actions without identification or authentication; system configuration
+  settings and associated documentation; security plan; list of user actions
+  that can be performed without identification or authentication; system audit
+  records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-14a
+cci: 000061; 003695
+cci-definition: "000061: Identify organization-defined user actions that can be
+  performed on the system without identification or authentication consistent
+  with organizational missions/business functions.; 003695: Defines the user
+  actions that can be performed on the system without identification or
+  authentication consistent with organizational missions/business functions."
+implementation-guidance: "-"
+assessment-procedures: "Determine if [Assignment: organization-defined user
+  actions] that can be performed on the system without identification or
+  authentication consistent with organizational mission and business functions
+  are identified."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (UDS inherently enforces
+  strong authentication and identification through its centralized identity
+  management system, Keycloak, ensuring all interactions with sensitive or
+  protected resources require identification and authentication. While the
+  platform supports granular access control and typically mandates
+  authentication for most actions, explicitly defining which specific user
+  actions (such as accessing public-facing status pages or health-check
+  endpoints) may be permitted without authentication is an organizational
+  decision. Organizations deploying UDS must formally define, document, and
+  explicitly approve any exceptions to authentication requirements, clearly
+  specifying permissible unauthenticated actions (e.g., public API health checks
+  or metrics endpoints) within their security policies or Standard Operating
+  Procedures (SOPs). Although UDS technically supports enforcing strong
+  authentication standards, the explicit definition of allowed unauthenticated
+  interactions remains an organizational responsibility.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-14.1; as well as the following Rev. 5 security requirements:
+  CCI-003695. The resulting compliance status was set to non-compliant because
+  the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: AC-14.1. The resulting compliance status was set
+  to non-compliant because of the addition of a new security requirement to the
+  assessment procedure that has not been previously assessed: CCI-003695."
+mapped-rev4-aps: AC-14.1
+family: AC

@@ -1,0 +1,82 @@
+control-acronym: SI-4(14)
+control-information: >-
+  Description:
+
+  The organization employs a wireless intrusion detection system to identify
+  rogue wireless devices and to detect attack attempts and potential
+  compromises/breaches to the information system.
+
+
+  Supplemental Guidance:
+
+  Wireless signals may radiate beyond the confines of organization-controlled
+  facilities. Organizations proactively search for unauthorized wireless
+  connections including the conduct of thorough scans for unauthorized wireless
+  access points. Scans are not limited to those areas within facilities
+  containing information systems, but also include areas outside of facilities
+  as needed, to verify that unauthorized wireless access points are not
+  connected to the systems. Related controls: AC-18, IA-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing information system monitoring tools and techniques; information
+  system design documentation; information system monitoring tools and
+  techniques documentation; information system configuration settings and
+  associated documentation; information system protocols; information system
+  audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system;
+  organizational personnel with responsibility for monitoring the information
+  system; organizational personnel with responsibility for the intrusion
+  detection system].
+
+
+  Test: [SELECT FROM: Organizational processes for intrusion detection;
+  automated mechanisms supporting and/or implementing wireless intrusion
+  detection capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SI-4(14).1
+cci: 1673
+cci-definition: '001673: The organization employs a wireless intrusion detection
+  system to identify rogue wireless devices and to detect attack attempts and
+  potential compromises/breaches to the information system.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a wireless
+  intrusion detection system to identify rogue wireless devices and to detect
+  attack attempts and potential compromises/breaches to the information system.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan reference to section pertaining to a
+  wireless intrusion detection system to identify rogue wireless devices and to
+  detect attack attempts and potential compromises/breaches to the information
+  system.
+
+  2.) Log of wireless intrusion detection system.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines documentation of the use of the identified wireless
+  intrusion detection system and the system hardware/software list to ensure the
+  organization being inspected/assessed employs a wireless intrusion detection
+  system to identify rogue wireless devices and to detect attack attempts and
+  potential compromises/breaches to the information system. The organization
+  being inspected/assessed may be required to demonstrate use of the wireless
+  intrusion detection system.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (UDS does not provide the
+  functionality of a wireless intrusion detection system.)
+family: SI

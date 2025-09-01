@@ -1,0 +1,130 @@
+control-acronym: MP-5
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Protects and controls [Assignment: organization-defined types of
+  information system media] during transport outside of controlled areas using
+  [Assignment: organization-defined security safeguards];
+
+  b. Maintains accountability for information system media during transport
+  outside of controlled areas;
+
+  c. Documents activities associated with the transport of information system
+  media; and
+
+  d. Restricts the activities associated with the transport of information
+  system media to authorized personnel.
+
+
+  Supplemental Guidance:
+
+  Information system media includes both digital and non-digital media. Digital
+  media includes, for example, diskettes, magnetic tapes, external/removable
+  hard disk drives, flash drives, compact disks, and digital video disks.
+  Non-digital media includes, for example, paper and microfilm. This control
+  also applies to mobile devices with information storage capability (e.g.,
+  smart phones, tablets, E-readers), that are transported outside of controlled
+  areas. Controlled areas are areas or spaces for which organizations provide
+  sufficient physical and/or procedural safeguards to meet the requirements
+  established for protecting information and/or information systems.
+
+
+  Physical and technical safeguards for media are commensurate with the security
+  category or classification of the information residing on the media.
+  Safeguards to protect media during transport include, for example, locked
+  containers and cryptography. Cryptographic mechanisms can provide
+  confidentiality and integrity protections depending upon the mechanisms used.
+  Activities associated with transport include the actual transport as well as
+  those activities such as releasing media for transport and ensuring that media
+  enters the appropriate transport processes. For the actual transport,
+  authorized transport and courier personnel may include individuals from
+  outside the organization (e.g., U.S. Postal Service or a commercial transport
+  or delivery service). Maintaining accountability of media during transport
+  includes, for example, restricting transport activities to authorized
+  personnel, and tracking and/or obtaining explicit records of transport
+  activities as the media moves through the transportation system to prevent and
+  detect loss, destruction, or tampering. Organizations establish documentation
+  requirements for activities associated with the transport of information
+  system media in accordance with organizational assessments of risk to include
+  the flexibility to define different record-keeping methods for the different
+  types of media transport as part of an overall system of transport-related
+  records. Related controls: AC-19, CP-9, MP-3, MP-4, RA-3, SC-8, SC-13, SC-28.
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: MP-5 (a)
+  Requirement: The service provider defines security measures to protect digital
+  and non-digital media in transport. The security measures are approved and
+  accepted by the JAB.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information system media protection policy; procedures
+  addressing media storage; physical and environmental protection policy and
+  procedures; access control policy and procedures; security plan; information
+  system media; designated controlled areas; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  media protection and storage responsibilities; organizational personnel with
+  information security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for storing information media;
+  automated mechanisms supporting and/or implementing media storage/media
+  protection].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: MP-5.4
+cci: 1023
+cci-definition: '001023: The organization maintains accountability for
+  information system media during transport outside of controlled areas.'
+implementation-guidance: >-
+  The organization being inspected/assessed ensures the organization defined
+  security measures (MP-2) includes method of accountability for information
+  system media during transport outside of controlled areas, IAW DoDM 5200.01 M
+  Vol. 1-4 and DoDD 5015.2.
+
+
+  Recommended Compelling Evidence:
+
+  1.) List of defined security measures and verify the defined list includes
+  method(s) of accountability for information system media during transport
+  outside controlled areas
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the list of organization defined security measures (MP-2)
+  to ensure method of accountability for information system media during
+  transport outside of controlled areas has been identified.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: MP

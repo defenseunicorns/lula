@@ -1,0 +1,59 @@
+control-acronym: "[r5] IA-12(02)"
+control-information: >-
+  Description:
+
+  Require evidence of individual identification be presented to the registration
+  authority.
+
+
+  Supplemental Guidance:
+
+  Identity evidence, such as documentary evidence or a combination of documents
+  and biometrics, reduces the likelihood of individuals using fraudulent
+  identification to establish an identity or at least increases the work factor
+  of potential adversaries. The forms of acceptable evidence are consistent with
+  the risks to the systems, roles, and privileges associated with the user’s
+  account. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing identity proofing; system security plan; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system operations
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers;
+  organizational personnel with identification and authentication
+  responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing identification
+  and authentication capabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-12(02)
+cci: 4099
+cci-definition: "004099: Require evidence of individual identification be
+  presented to the registration authority."
+implementation-guidance: "-"
+assessment-procedures: Determine if evidence of individual identification is
+  presented to the registration authority.
+inherited: Local
+remote-inheritance-instance: "-"
+family: IA

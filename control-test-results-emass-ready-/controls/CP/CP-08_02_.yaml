@@ -1,0 +1,64 @@
+control-acronym: "[r5] CP-08(02)"
+control-information: >-
+  Description:
+
+  Obtain alternate telecommunications services to reduce the likelihood of
+  sharing a single point of failure with primary telecommunications services.
+
+
+  Supplemental Guidance:
+
+  In certain circumstances, telecommunications service providers or services may
+  share the same physical lines, which increases the vulnerability of a single
+  failure point. It is important to have provider transparency for the actual
+  physical transmission capability for telecommunication services. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  primary and alternate telecommunications services; contingency plan; primary
+  and alternate telecommunications service agreements; system security plan;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  telecommunications responsibilities; organizational personnel with system
+  recovery responsibilities; primary and alternate telecommunications service
+  providers; organizational personnel with information security
+  responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CP-08(02)
+cci: 530
+cci-definition: "000530: Obtain alternate telecommunications services to reduce
+  the likelihood of sharing a single point of failure with primary
+  telecommunications services."
+implementation-guidance: "-"
+assessment-procedures: Determine if alternate telecommunications services to
+  reduce the likelihood of sharing a single point of failure with primary
+  telecommunications services are obtained.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CP-8(2).1."
+mapped-rev4-aps: CP-8(2)
+family: CP

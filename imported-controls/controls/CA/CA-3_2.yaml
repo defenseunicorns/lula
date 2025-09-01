@@ -1,0 +1,110 @@
+control-acronym: CA-3
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Authorizes connections from the information system to other information
+  systems through the use of Interconnection Security Agreements;
+
+  b. Documents, for each interconnection, the interface characteristics,
+  security requirements, and the nature of the information communicated; and
+
+  c. Reviews and updates Interconnection Security Agreements [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  This control applies to dedicated connections between information systems
+  (i.e., system interconnections) and does not apply to transitory,
+  user-controlled connections such as email and website browsing. Organizations
+  carefully consider the risks that may be introduced when information systems
+  are connected to other systems with different security requirements and
+  security controls, both within organizations and external to organizations.
+  Authorizing officials determine the risk associated with information system
+  connections and the appropriate controls employed. If interconnecting systems
+  have the same authorizing official, organizations do not need to develop
+  Interconnection Security Agreements. Instead, organizations can describe the
+  interface characteristics between those interconnecting systems in their
+  respective security plans. If interconnecting systems have different
+  authorizing officials within the same organization, organizations can either
+  develop Interconnection Security Agreements or describe the interface
+  characteristics between systems in the security plans for the respective
+  systems. Organizations may also incorporate Interconnection Security Agreement
+  information into formal contracts, especially for interconnections established
+  between federal agencies and nonfederal (i.e., private sector) organizations.
+  Risk considerations also include information systems sharing the same
+  networks. For certain technologies (e.g., space, unmanned aerial vehicles, and
+  medical devices), there may be specialized connections in place during
+  preoperational testing. Such connections may require Interconnection Security
+  Agreements and be subject to additional security controls. Related controls:
+  AC-3, AC-4, AC-20, AU-2, AU-12, AU-16, CA-7, IA-3, SA-9, SC-7, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing
+  information system connections; system and communications protection policy;
+  information system Interconnection Security Agreements; security plan;
+  information system design documentation; information system configuration
+  settings and associated documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  developing, implementing, or approving information system interconnection
+  agreements; organizational personnel with information security
+  responsibilities; personnel managing the system(s) to which the
+  Interconnection Security Agreement applies].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CA-3.1,CCI-000257,Local
+  CA-3.2,CCI-000258,Local
+  CA-3.3,CCI-000259,Local
+  CA-3.4,CCI-000260,Local
+  CA-3.5,CCI-002083,Local
+  CA-3.6,CCI-002084,DoD Organization or Service Common Control Package...
+ap-acronym: CA-3.2
+cci: 258
+cci-definition: '000258: The organization documents, for each interconnection,
+  the interface characteristics.'
+implementation-guidance: >-
+  The organization being inspected/assessed will document the interface
+  characteristics for each interconnection. Use of external reporting databases
+  for these characteristics when tied to the specific interconnection is
+  acceptable (e.g., ports, protocols, and services). Policy Note:
+  Interconnection security agreements are required for systems connecting
+  between enclaves that require the hosting enclave to enable PPS outside of
+  their already established and approved business practices. Connections can
+  include both DoD enclaves or non DoD enclaves.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Interconnection Security Agreement
+
+  2.) Signed and dated network diagram
+assessment-procedures: 'The organization conducting the inspection/assessment
+  obtains and examines interconnection security agreement documentation. Policy
+  Note: Interconnection security agreements are required for systems connecting
+  between enclaves that require the hosting enclave to enable PPS outside of
+  their already established and approved business practices. Connections can
+  include both DoD enclaves or non DoD enclaves.'
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: 'Not Applicable to UDS technology stack. (UDS can enforce
+  technical controls on external system connections (as discussed in AC-20) â
+  for example, only allowing connections to approved external services and using
+  secure protocols. If UDS needs to connect with another system (like a data
+  feed or identity service), those connections can be governed by configuration
+  and monitored.. However, the requirement to obtain formal authorization for
+  interconnection is an organizational responsibility. The stack itself cannot
+  grant or record âinterconnection agreements;â it can only enforce security
+  on the connection.)'
+family: CA

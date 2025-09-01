@@ -1,0 +1,100 @@
+control-acronym: "[r5] PM-15"
+control-information: >-
+  Description:
+
+  Establish and institutionalize contact with selected groups and associations
+  within the security and privacy communities:
+
+  a. To facilitate ongoing security and privacy education and training for
+  organizational personnel;
+
+  b. To maintain currency with recommended security and privacy practices,
+  techniques, and technologies; and
+
+  c. To share current security and privacy information, including threats,
+  vulnerabilities, and incidents.
+
+
+  Supplemental Guidance:
+
+  Ongoing contact with security and privacy groups and associations is important
+  in an environment of rapidly changing technologies and threats. Groups and
+  associations include special interest groups, professional associations,
+  forums, news groups, users’ groups, and peer groups of security and privacy
+  professionals in similar organizations. Organizations select security and
+  privacy groups and associations based on mission and business functions.
+  Organizations share threat, vulnerability, and incident information as well as
+  contextual insights, compliance techniques, and privacy problems consistent
+  with applicable laws, executive orders, directives, policies, regulations,
+  standards, and guidelines. Related Control(s): SA-11, SI-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Information security program plan; privacy program
+  plan; risk management strategy; procedures for establishing and
+  institutionalizing contacts with security and privacy groups and associations;
+  lists or other records of contacts with and/or membership in security and
+  privacy groups and associations; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  and privacy program planning and plan implementation responsibilities;
+  organizational personnel responsible for establishing and institutionalizing
+  contact with security and privacy groups and associations; organizational
+  personnel with information security and privacy responsibilities; personnel
+  from selected groups and associations with which the organization has
+  established and institutionalized contact].
+
+
+  Test: [SELECT FROM: Organizational processes for establishing and
+  institutionalizing contact with security and privacy groups and associations;
+  mechanisms supporting contact with security and privacy groups and
+  associations].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PM-15b
+cci: 003011; 004363
+cci-definition: "003011: Establish and institutionalize contact with selected
+  groups and associations within the security community to maintain currency
+  with recommended security practices, techniques, and technologies.; 004363:
+  Establish and institutionalize contact with selected groups and associations
+  within the privacy community to maintain currency with recommended privacy
+  practices, techniques, and technologies."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - contact is established and institutionalized with selected groups and
+  associations within the security community to maintain currency with
+  recommended security practices, techniques, and technologies.
+
+  - contact is established and institutionalized with selected groups and
+  associations within the privacy community to maintain currency with
+  recommended privacy practices, techniques, and technologies.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PM-15.2; as well as the following Rev. 5 security requirements:
+  CCI-004363. The resulting compliance status was set to non-compliant because
+  of the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-004363."
+mapped-rev4-aps: PM-15.2
+family: PM

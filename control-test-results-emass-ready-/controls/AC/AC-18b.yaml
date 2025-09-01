@@ -1,0 +1,72 @@
+control-acronym: "[r5] AC-18"
+control-information: >-
+  Description:
+
+  a. Establish configuration requirements, connection requirements, and
+  implementation guidance for each type of wireless access; and
+
+  b. Authorize each type of wireless access to the system prior to allowing such
+  connections.
+
+
+  Supplemental Guidance:
+
+  Wireless technologies include microwave, packet radio (ultra-high frequency or
+  very high frequency), 802.11x, and Bluetooth. Wireless networks use
+  authentication protocols that provide authenticator protection and mutual
+  authentication. Related Control(s): AC-2, AC-3, AC-17, AC-19, CA-9, CM-7,
+  IA-2, IA-3, IA-8, PL-4, SC-40, SC-43, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing wireless
+  access implementation and usage (including restrictions); configuration
+  management plan; system design documentation; system configuration settings
+  and associated documentation; wireless access authorizations; system audit
+  records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  managing wireless access connections; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Wireless access management capability for the system].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-18b
+cci: 1441
+cci-definition: "001441: Authorize each type of wireless access to the system
+  prior to allowing such connections."
+implementation-guidance: "-"
+assessment-procedures: Determine if each type of wireless access to the system
+  is authorized prior to allowing such connections.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (Wireless access control
+  pertains to use of wireless networks, which is outside the scope of a
+  container platform stack. UDS runs on underlying infrastructure that could be
+  on wired networks or cloud; any wireless networking controls would be handled
+  by the environment, not UDS itself.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-18.4. The resulting compliance status was set to non-compliant
+  because the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: AC-18.4."
+mapped-rev4-aps: AC-18.4
+family: AC

@@ -1,0 +1,59 @@
+control-acronym: "[r5] IA-12(01)"
+control-information: >-
+  Description:
+
+  Require that the registration process to receive an account for logical access
+  includes supervisor or sponsor authorization.
+
+
+  Supplemental Guidance:
+
+  Including supervisor or sponsor authorization as part of the registration
+  process provides an additional level of scrutiny to ensure that the user’s
+  management chain is aware of the account, the account is essential to carry
+  out organizational missions and functions, and the user’s privileges are
+  appropriate for the anticipated responsibilities and authorities within the
+  organization. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing identity proofing; system security plan; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system operations
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers;
+  organizational personnel with identification and authentication
+  responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing identification
+  and authentication capabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-12(01)
+cci: 4098
+cci-definition: "004098: Require that the registration process to receive an
+  account for logical access includes supervisor or sponsor authorization."
+implementation-guidance: "-"
+assessment-procedures: Determine if the registration process to receive an
+  account for logical access includes supervisor or sponsor authorization.
+inherited: Local
+remote-inheritance-instance: "-"
+family: IA

@@ -1,0 +1,78 @@
+control-acronym: "[r5] AU-06(04)"
+control-information: >-
+  Description:
+
+  Provide and implement the capability to centrally review and analyze audit
+  records from multiple components within the system.
+
+
+  Supplemental Guidance:
+
+  Automated mechanisms for centralized reviews and analyses include Security
+  Information and Event Management products. Related Control(s): AU-2, AU-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit review, analysis, and reporting; system design documentation; system
+  configuration settings and associated documentation; system security plan;
+  privacy plan; system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit review, analysis,
+  and reporting responsibilities; organizational personnel with information
+  security and privacy responsibilities; system developers].
+
+
+  Test: [SELECT FROM: System capability to centralize review and analysis of
+  audit records].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-06(04)
+cci: 000154; 003821
+cci-definition: "000154: Provide the capability to centrally review and analyze
+  audit records from multiple components within the system.; 003821: Implement
+  the capability to centrally review and analyze audit records from multiple
+  components within the system."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the capability to centrally review and analyze audit records from multiple
+  components within the system is provided.
+
+  - the capability to centrally review and analyze audit records from multiple
+  components within the system is implemented.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: UDS provides centralized audit log review and analysis
+  capabilities using a combination of Loki for log aggregation, Vector for log
+  collection and transformation, and Grafana for visualization and analysis.
+  These components ensure that audit records from multiple system components,
+  including authentication logs from Keycloak, network activity logs from Istio,
+  and security events from NeuVector, are collected, normalized, and centrally
+  accessible. This enables security teams to efficiently correlate events,
+  detect anomalies, and respond to incidents
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AU-6(4).1; as well as the following Rev. 5 security requirements:
+  CCI-003821. The resulting compliance status was set to non-compliant because
+  of the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-003821."
+mapped-rev4-aps: AU-6(4)
+family: AU

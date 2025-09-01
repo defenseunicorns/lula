@@ -1,0 +1,78 @@
+control-acronym: "[r5] IA-06"
+control-information: >-
+  Description:
+
+  Obscure feedback of authentication information during the authentication
+  process to protect the information from possible exploitation and use by
+  unauthorized individuals.
+
+
+  Supplemental Guidance:
+
+  Authentication feedback from systems does not provide information that would
+  allow unauthorized individuals to compromise authentication mechanisms. For
+  some types of systems, such as desktops or notebooks with relatively large
+  monitors, the threat (referred to as shoulder surfing) may be significant. For
+  other types of systems, such as mobile devices with small displays, the threat
+  may be less significant and is balanced against the increased likelihood of
+  typographic input errors due to small keyboards. Thus, the means for obscuring
+  authentication feedback is selected accordingly. Obscuring authentication
+  feedback includes displaying asterisks when users type passwords into input
+  devices or displaying feedback for a very limited time before obscuring it.
+  Related Control(s): AC-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; system
+  security plan; procedures addressing authenticator feedback; system design
+  documentation; system configuration settings and associated documentation;
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing the obscuring of
+  feedback of authentication information during authentication].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-06
+cci: 206
+cci-definition: "000206: Obscure feedback of authentication information during
+  the authentication process to protect the information from possible
+  exploitation and use by unauthorized individuals."
+implementation-guidance: "-"
+assessment-procedures: Determine if the feedback of authentication information
+  is obscured during the authentication process to protect the information from
+  possible exploitation and use by unauthorized individuals.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS does not reveal sensitive info during login (like not telling
+  which part of the credential was wrong). Keycloak’s behavior by default is to
+  present generic error messages such as “Invalid username or password” on a
+  failed login, which does not specifically indicate if the username exists or
+  not. This prevents an attacker from enumerating valid usernames. Also, when
+  MFA is involved, Keycloak errors are careful not to divulge unnecessary
+  detail. The UDS stack’s UIs do not expose password characters (they mask
+  input) and do not echo back any secret info.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IA-6.1."
+mapped-rev4-aps: IA-6.1
+family: IA

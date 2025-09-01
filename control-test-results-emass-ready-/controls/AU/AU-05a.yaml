@@ -1,0 +1,110 @@
+control-acronym: "[r5] AU-05"
+control-information: >-
+  Description:
+
+  a. Alert [Assignment: organization-defined personnel or roles] within
+  [Assignment: organization-defined time period] in the event of an audit
+  logging process failure; and
+
+  b. Take the following additional actions: [Assignment: organization-defined
+  additional actions].
+
+
+  Supplemental Guidance:
+
+  Audit logging process failures include software and hardware errors, failures
+  in audit log capturing mechanisms, and reaching or exceeding audit log storage
+  capacity. Organization-defined actions include overwriting oldest audit
+  records, shutting down the system, and stopping the generation of audit
+  records. Organizations may choose to define additional actions for audit
+  logging process failures based on the type of failure, the location of the
+  failure, the severity of the failure, or a combination of such factors. When
+  the audit logging process failure is related to storage, the response is
+  carried out for the audit log storage repository (i.e., the distinct system
+  component where the audit logs are stored), the system on which the audit logs
+  reside, the total audit log storage capacity of the organization (i.e., all
+  audit log storage repositories combined), or all three. Organizations may
+  decide to take no additional actions after alerting designated roles or
+  personnel. Related Control(s): AU-2, AU-4, AU-7, AU-9, AU-11, AU-12, AU-14,
+  SI-4, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  response to audit processing failures; system design documentation; system
+  security plan; privacy plan; system configuration settings and associated
+  documentation; list of personnel to be notified in case of an audit processing
+  failure; system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security and privacy responsibilities; system/network administrators; system
+  developers].
+
+
+  Test: [SELECT FROM: Mechanisms implementing system response to audit
+  processing failures].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-05a
+cci: 000139; 001572; 003814
+cci-definition: "000139: Alert organization-defined personnel or roles within an
+  organization-defined time period in the event of an audit logging process
+  failure.; 001572: Defines the personnel or roles to be alerted in the event of
+  an audit logging process failure.; 003814: Defines the time-period for the
+  alert in the event of an audit process failure."
+implementation-guidance: CCI-001572 and CCI-003814 of this assessment procedure
+  are automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if [Assignment: organization-defined personnel
+  or roles] are alerted in the event of an audit logging process failure within
+  [Assignment: organization-defined time period]."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  This control deals with responses to audit logging failures (such as running
+  out of log space or logger crashing). The UDS stack uses Loki and Vector which
+  are both typically run as highly available components. If Loki becomes
+  unavailable or its volume is full, Vector (the log shipping agent) can buffer
+  a certain amount of logs in memory/disk. This is not infinite, but it provides
+  a window for recovery. The stack itself won't shut down the system if logging
+  fails (UDS doesn’t halt applications for logger issues by default). However,
+  you can configure monitoring e.g., Prometheus can watch Loki’s health and send
+  an alert if it’s down or if log volume usage is critical. An administrator
+  could then intervene (increase storage or restart components). Detection and
+  alerting of logging failures is achievable with the monitoring tools
+  included. 
+
+  UDS alerts and notifications are enabled through Grafana and are located under
+  the “Alerting” menu in the left sidebar. Next, create your contact points by
+  navigating to Alerting then Contact points, clicking New contact point, giving
+  it a name (e.g., “Email Alerts” or “Mattermost Alerts”), selecting a contact
+  type, and filling in the relevant details (such as a Mattermost Webhook URL or
+  email addresses). Finally, set up your notification policies under Alerting
+  then Notification policies, where you will configure a root policy to select a
+  default contact point and, if needed, define child policies that match
+  specific labels (for example, sending critical alerts to a third party tool
+  like PagerDuty contact point and all others to a Mattermost channel).
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AU-5.1, AU-5.2; as well as the following Rev. 5 security
+  requirements: CCI-003814. The resulting compliance status was set to
+  non-compliant because of the addition of a new security requirement to the
+  assessment procedure that has not been previously assessed: CCI-003814."
+mapped-rev4-aps: AU-5.1; AU-5.2
+family: AU

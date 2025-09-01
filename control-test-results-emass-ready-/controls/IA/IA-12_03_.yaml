@@ -1,0 +1,68 @@
+control-acronym: "[r5] IA-12(03)"
+control-information: >-
+  Description:
+
+  Require that the presented identity evidence be validated and verified through
+  [Assignment: organizational defined methods of validation and verification].
+
+
+  Supplemental Guidance:
+
+  Validation and verification of identity evidence increases the assurance that
+  accounts and identifiers are being established for the correct user and
+  authenticators are being bound to that user. Validation refers to the process
+  of confirming that the evidence is genuine and authentic, and the data
+  contained in the evidence is correct, current, and related to an individual.
+  Verification confirms and establishes a linkage between the claimed identity
+  and the actual existence of the user presenting the evidence. Acceptable
+  methods for validating and verifying identity evidence are consistent with the
+  risks to the systems, roles, and privileges associated with the users account.
+  Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing identity proofing; system security plan; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system operations
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers;
+  organizational personnel with identification and authentication
+  responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing identification
+  and authentication capabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-12(03)
+cci: 004100; 004101; 004102; 004103
+cci-definition: "004100: Require that the presented identity evidence be
+  validated through organizational defined methods of validation.; 004101:
+  Require that the presented identity evidence be verified through
+  organizational defined methods of verification.; 004102: Defines the methods
+  of validation required for presenting identity evidence.; 004103: Defines the
+  methods of verification required for presenting identity evidence."
+implementation-guidance: "-"
+assessment-procedures: "Determine if the presented identity evidence is
+  validated and verified through [Assignment: organizational defined methods of
+  validation and verification]."
+inherited: Local
+remote-inheritance-instance: "-"
+family: IA

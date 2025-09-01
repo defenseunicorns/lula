@@ -1,0 +1,80 @@
+control-acronym: "[r5] MP-02"
+control-information: >-
+  Description:
+
+  Restrict access to [Assignment: organization-defined types of digital and/or
+  non-digital media] to [Assignment: organization-defined personnel or roles].
+
+
+  Supplemental Guidance:
+
+  System media includes digital and non-digital media. Digital media includes
+  flash drives, diskettes, magnetic tapes, external or removable hard disk
+  drives (e.g., solid state, magnetic), compact discs, and digital versatile
+  discs. Non-digital media includes paper and microfilm. Denying access to
+  patient medical records in a community hospital unless the individuals seeking
+  access to such records are authorized healthcare providers is an example of
+  restricting access to non-digital media. Limiting access to the design
+  specifications stored on compact discs in the media library to individuals on
+  the system development team is an example of restricting access to digital
+  media. Related Control(s): AC-19, AU-9, CP-2, CP-9, CP-10, MA-5, MP-4, MP-6,
+  PE-2, PE-3, SC-12, SC-13, SC-34, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System media protection policy; procedures addressing
+  media access restrictions; access control policy and procedures; physical and
+  environmental protection policy and procedures; media storage facilities;
+  access control records; system security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system media protection
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for restricting information
+  media; mechanisms supporting and/or implementing media access restrictions].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: MP-02
+cci: 001003; 001004; 001005
+cci-definition: "001003: Restrict access to organization-defined types of
+  digital and/or non-digital media to organization-defined personnel or roles.;
+  001004: Defines types of digital and/or non-digital media for which the
+  organization restricts access.; 001005: Defines personnel or roles from which
+  to restrict access to organization-defined types of digital and/or non-digital
+  media."
+implementation-guidance: CCI-001004 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - access to [Assignment: organization-defined types of digital and/or
+  non-digital media] is restricted to [Assignment: organization-defined
+  personnel or roles].
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: MP-2.1, MP-2.2, MP-2.3."
+mapped-rev4-aps: MP-2.1; MP-2.2; MP-2.3
+family: MP

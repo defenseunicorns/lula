@@ -1,0 +1,164 @@
+control-acronym: "[r5] SA-04"
+control-information: >-
+  Description:
+
+  Include the following requirements, descriptions, and criteria, explicitly or
+  by reference, using [Selection (one or more): standardized contract language;
+  [Assignment: organization-defined contract language]] in the acquisition
+  contract for the system, system component, or system service:
+
+  a. Security and privacy functional requirements;
+
+  b. Strength of mechanism requirements;
+
+  c. Security and privacy assurance requirements;
+
+  d. Controls needed to satisfy the security and privacy requirements.
+
+  e. Security and privacy documentation requirements;
+
+  f. Requirements for protecting security and privacy documentation;
+
+  g. Description of the system development environment and environment in which
+  the system is intended to operate;
+
+  h. Allocation of responsibility or identification of parties responsible for
+  information security, privacy, and supply chain risk management; and
+
+  i. Acceptance criteria.
+
+
+  Supplemental Guidance:
+
+  Security and privacy functional requirements are typically derived from the
+  high-level security and privacy requirements described in SA-2. The derived
+  requirements include security and privacy capabilities, functions, and
+  mechanisms. Strength requirements associated with such capabilities,
+  functions, and mechanisms include degree of correctness, completeness,
+  resistance to tampering or bypass, and resistance to direct attack. Assurance
+  requirements include development processes, procedures, and methodologies as
+  well as the evidence from development and assessment activities that provide
+  grounds for confidence that the required functionality is implemented and
+  possesses the required strength of mechanism. SP 800-160-1 describes the
+  process of requirements engineering as part of the system development life
+  cycle.
+
+
+  Controls can be viewed as descriptions of the safeguards and protection
+  capabilities appropriate for achieving the particular security and privacy
+  objectives of the organization and for reflecting the security and privacy
+  requirements of stakeholders. Controls are selected and implemented in order
+  to satisfy system requirements and include developer and organizational
+  responsibilities. Controls can include technical, administrative, and physical
+  aspects. In some cases, the selection and implementation of a control may
+  necessitate additional specification by the organization in the form of
+  derived requirements or instantiated control parameter values. The derived
+  requirements and control parameter values may be necessary to provide the
+  appropriate level of implementation detail for controls within the system
+  development life cycle.
+
+
+  Security and privacy documentation requirements address all stages of the
+  system development life cycle. Documentation provides user and administrator
+  guidance for the implementation and operation of controls. The level of detail
+  required in such documentation is based on the security categorization or
+  classification level of the system and the degree to which organizations
+  depend on the capabilities, functions, or mechanisms to meet risk response
+  expectations. Requirements can include mandated configuration settings that
+  specify allowed functions, ports, protocols, and services. Acceptance criteria
+  for systems, system components, and system services are defined in the same
+  manner as the criteria for any organizational acquisition or procurement.
+  Related Control(s): CM-6, CM-8, PS-7, SA-3, SA-5, SA-8, SA-11, SA-15, SA-16,
+  SA-17, SA-21, SR-3, SR-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; system and
+  services acquisition procedures; procedures addressing the integration of
+  information security and privacy and supply chain risk management into the
+  acquisition process; configuration management plan; acquisition contracts for
+  the system, system component, or system service; system design documentation;
+  system security plan; supply chain risk management plan; privacy plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with acquisition/contracting
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities; system/network administrators; organizational
+  personnel with supply chain risk management responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for determining system security
+  and privacy functional, strength, and assurance requirements; organizational
+  processes for developing acquisition contracts; mechanisms supporting and/or
+  implementing acquisitions and the inclusion of security and privacy
+  requirements in contracts].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-04e
+cci: 004686; 003097; 004691
+cci-definition: "004686: Defines the organization-defined contract language for
+  including the requirements, descriptions, and criteria in the acquisition
+  contract for the system, system component, or system service.; 003097: Include
+  the security documentation requirements, explicitly or by reference, using
+  standardized contract language; and/or organization-defined contract language
+  in the acquisition contract for the information system, system component, or
+  information system service.; 004691: Include the privacy documentation
+  requirements, explicitly or by reference, using standardized contract
+  language; and/or organization-defined contract language in the acquisition
+  contract for the information system, system component, or information system
+  service."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - security documentation requirements, descriptions, and criteria are included
+  explicitly or by reference using [Selection (one or more): standardized
+  contract language; [Assignment: organization-defined contract language]] in
+  the acquisition contract for the system, system component, or system service.
+
+  - privacy documentation requirements, descriptions, and criteria are included
+  explicitly or by reference using [Selection (one or more): standardized
+  contract language; [Assignment: organization-defined contract language]] in
+  the acquisition contract for the system, system component, or system service.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: SA-4.4; as well as
+  the following Rev. 5 security requirements: CCI-004686, CCI-004691. The
+  resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: SA-4.4. The resulting compliance status was set to non-compliant
+  because of the addition of a new security requirement to the assessment
+  procedure that has not been previously assessed: CCI-004686, CCI-004691.
+
+
+  Not Applicable to UDS technology stack. (Organizational level control dealing
+  with the system and components acquisition.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SA-4.4; as well as the following Rev. 5 security requirements:
+  CCI-004686, CCI-004691. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: SA-4.4. The resulting compliance
+  status was set to non-compliant because of the addition of a new security
+  requirement to the assessment procedure that has not been previously assessed:
+  CCI-004686, CCI-004691."
+mapped-rev4-aps: SA-4.4
+family: SA

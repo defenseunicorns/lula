@@ -1,0 +1,73 @@
+control-acronym: AU-9(2)
+control-information: >-
+  Description:
+
+  The information system backs up audit records [Assignment:
+  organization-defined frequency] onto a physically different system or system
+  component than the system or component being audited.
+
+
+  Supplemental Guidance:
+
+  This control enhancement helps to ensure that a compromise of the information
+  system being audited does not also result in a compromise of the audit
+  records. Related controls: AU-4, AU-5, AU-11.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  protection of audit information; information system design documentation;
+  information system configuration settings and associated documentation, system
+  or media storing backups of information system audit records; information
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing the backing up of audit
+  records].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AU-9(2).1,CCI-001348,Organization AWS Cloud Brokerage Package
+  AU-9(2).2,CCI-001349,DoD Organization or Service Common Control Package
+  AU-9(2).3,CCI-001575,Organization AWS Cloud Brokerage Package...
+ap-acronym: AU-9(2).3
+cci: 1575
+cci-definition: '001575: The organization defines the system or system component
+  for storing audit records that is a different system or system component other
+  than the system or component being audited.'
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents a system or
+  storage media that will be used to store information system audit data
+  different and separate from the system or media generating the audit data.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+
+  2.) Example of information system backs up audit records at least weekly onto
+  a different system or media than the system being audited.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the information system or media documentation addressing
+  the storage of backups of information system audit records; information system
+  audit records; and any other relevant documents or records. The purpose of the
+  reviews is to ensure the organization has defined and documented a system or
+  storage media different from the system or media being audited.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AU

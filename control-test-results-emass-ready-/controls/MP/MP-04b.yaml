@@ -1,0 +1,90 @@
+control-acronym: "[r5] MP-04"
+control-information: >-
+  Description:
+
+  a. Physically control and securely store [Assignment: organization-defined
+  types of digital and/or non-digital media] within [Assignment:
+  organization-defined controlled areas]; and
+
+  b. Protect system media types defined in MP-4a until the media are destroyed
+  or sanitized using approved equipment, techniques, and procedures.
+
+
+  Supplemental Guidance:
+
+  System media includes digital and non-digital media. Digital media includes
+  flash drives, diskettes, magnetic tapes, external or removable hard disk
+  drives (e.g., solid state, magnetic), compact discs, and digital versatile
+  discs. Non-digital media includes paper and microfilm. Physically controlling
+  stored media includes conducting inventories, ensuring procedures are in place
+  to allow individuals to check out and return media to the library, and
+  maintaining accountability for stored media. Secure storage includes a locked
+  drawer, desk, or cabinet or a controlled media library. The type of media
+  storage is commensurate with the security category or classification of the
+  information on the media. Controlled areas are spaces that provide physical
+  and procedural controls to meet the requirements established for protecting
+  information and systems. Fewer controls may be needed for media that contains
+  information determined to be in the public domain, publicly releasable, or
+  have limited adverse impacts on organizations, operations, or individuals if
+  accessed by other than authorized personnel. In these situations, physical
+  access controls provide adequate protection. Related Control(s): AC-19, CP-2,
+  CP-6, CP-9, CP-10, MP-2, MP-7, PE-3, PL-2, SC-12, SC-13, SC-28, SC-34, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System media protection policy; procedures addressing
+  media storage; physical and environmental protection policy and procedures;
+  access control policy and procedures; system media; designated controlled
+  areas; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system media protection
+  and storage responsibilities; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for storing information media;
+  mechanisms supporting and/or implementing secure media storage/media
+  protection].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: MP-04b
+cci: 004213; 004214; 004215
+cci-definition: "004213: Protect system media types defined in MP-4a until the
+  media are destroyed or sanitized using approved equipment.; 004214: Protect
+  system media types defined in MP-4a until the media are destroyed or sanitized
+  using approved techniques.; 004215: Protect system media types defined in
+  MP-4a until the media are destroyed or sanitized using approved procedures."
+implementation-guidance: "-"
+assessment-procedures: "Determine if system media types (defined in [Assignment:
+  organization-defined types of digital and/or non-digital media]) are protected
+  until the media are destroyed or sanitized using approved equipment,
+  techniques, and procedures."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: MP-4.4; as well as the following Rev. 5 security requirements:
+  CCI-004213, CCI-004214, CCI-004215. The resulting compliance status was set to
+  non-compliant because of the addition of a new security requirement to the
+  assessment procedure that has not been previously assessed: CCI-004213,
+  CCI-004214, CCI-004215."
+mapped-rev4-aps: MP-4.4
+family: MP

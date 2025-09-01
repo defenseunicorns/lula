@@ -1,0 +1,91 @@
+control-acronym: AC-2(7)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Establishes and administers privileged user accounts in accordance with a
+  role-based access scheme that organizes allowed information system access and
+  privileges into roles;
+
+  (b) Monitors privileged role assignments; and
+
+  (c) Takes [Assignment: organization-defined actions] when privileged role
+  assignments are no longer appropriate.
+
+
+  Supplemental Guidance:
+
+  Privileged roles are organization-defined roles assigned to individuals that
+  allow those individuals to perform certain security-relevant functions that
+  ordinary users are not authorized to perform. These privileged roles include,
+  for example, key management, account management, network and system
+  administration, database administration, and web administration.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; information system design documentation; information system
+  configuration settings and associated documentation; information
+  system-generated list of privileged user accounts and associated role; records
+  of actions taken when privileged role assignments are no longer appropriate;
+  information system audit records; audit tracking and monitoring reports;
+  information system monitoring records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing account management
+  functions; automated mechanisms monitoring privileged role assignments].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-2(7).1,CCI-001358,Local
+  AC-2(7).2,CCI-001407,Local
+  AC-2(7).3,CCI-001360,Local
+  AC-2(7).4,CCI-002136,DoD Organization or Service Common Control Package
+  AC-2(7).5,CCI-002137,Local...
+ap-acronym: AC-2(7).3
+cci: 1360
+cci-definition: '001360: The organization monitors privileged role assignments.'
+implementation-guidance: >-
+  The organization being inspected/assessed implements a process to monitor
+  privileged role assignments. The organization must maintain an audit trail of
+  monitoring.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System Security Plan (SSP), referencing section which
+  defines the process for monitoring and reviewing privileged role assignments.
+
+  2.) Audit trail of monitoring.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the audit trail of monitoring to ensure the organization
+  being inspected/assessed monitors privileged role assignments.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: Keycloak monitors privileged role assignments through its built-in
+  event listeners and audit logging mechanisms. When a privileged role is
+  assigned, Keycloak generates an admin event that includes details such as the
+  realm, client, user, and assigned role. These events are stored in the
+  database and can be sent to external logging systems via the Event Listener
+  SPI, which supports integrations with Loki, syslog, or custom audit handlers.
+  By configuring Loki as an external logging backend, Keycloak can stream role
+  assignment events in real-time, enabling administrators to query, visualize,
+  and set up alerts for high-privilege role changes using Grafana.
+  Administrators can configure policies using fine-grained authorization with
+  Keycloak's Authorization Services to enforce role assignment approvals,
+  implement review workflows, or trigger alerts for high-privilege role changes.
+uds-alignment: Keycloak, Loki, Grafana
+family: AC

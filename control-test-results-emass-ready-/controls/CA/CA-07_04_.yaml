@@ -1,0 +1,70 @@
+control-acronym: "[r5] CA-07(04)"
+control-information: >-
+  Description:
+
+  Ensure risk monitoring is an integral part of the continuous monitoring
+  strategy that includes the following:
+
+  (a) Effectiveness monitoring;
+
+  (b) Compliance monitoring; and
+
+  (c) Change monitoring.
+
+
+  Supplemental Guidance:
+
+  Risk monitoring is informed by the established organizational risk tolerance.
+  Effectiveness monitoring determines the ongoing effectiveness of the
+  implemented risk response measures. Compliance monitoring verifies that
+  required risk response measures are implemented. It also verifies that
+  security and privacy requirements are satisfied. Change monitoring identifies
+  changes to organizational systems and environments of operation that may
+  affect security and privacy risk. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Assessment, authorization, and monitoring policy;
+  organizational continuous monitoring strategy; system-level continuous
+  monitoring strategy; procedures addressing continuous monitoring of system
+  controls; assessment report; plan of action and milestones; system monitoring
+  records; impact analyses; status reports; system security plan; privacy plan;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with continuous monitoring
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting risk monitoring].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CA-07(04)
+cci: 003881; 003882; 003883
+cci-definition: "003881: Ensure risk monitoring is an integral part of the
+  continuous monitoring strategy that includes effectiveness monitoring.;
+  003882: Ensure risk monitoring is an integral part of the continuous
+  monitoring strategy that includes compliance monitoring.; 003883: Ensure risk
+  monitoring is an integral part of the continuous monitoring strategy that
+  includes change monitoring."
+implementation-guidance: "-"
+assessment-procedures: Determine if risk monitoring is an integral part of the
+  continuous monitoring strategy.
+inherited: Local
+remote-inheritance-instance: "-"
+family: CA

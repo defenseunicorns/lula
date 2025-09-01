@@ -1,0 +1,70 @@
+control-acronym: "[r5] CM-12(01)"
+control-information: >-
+  Description:
+
+  Use automated tools to identify [Assignment: organization-defined information
+  by information type] on [Assignment: organization-defined system components]
+  to ensure controls are in place to protect organizational information and
+  individual privacy.
+
+
+  Supplemental Guidance:
+
+  The use of automated tools helps to increase the effectiveness and efficiency
+  of the information location capability implemented within the system.
+  Automation also helps organizations manage the data produced during
+  information location activities and share such information across the
+  organization. The output of automated information location tools can be used
+  to guide and inform system architecture and design decisions. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  identification and documentation of information location; configuration
+  management plan; system design documentation; PII inventory documentation;
+  data mapping documentation; change control records; system component
+  inventory; system security plan; privacy plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  managing information location; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes governing information location;
+  automated mechanisms enforcing policies and methods for governing information
+  location; automated tools used to identify information on system components].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-12(01)
+cci: 003988; 003989; 003990
+cci-definition: "003988: Use automated tools to identify organization-defined
+  information by information type on organization-defined components to ensure
+  adequate controls are in place to protect organizational information.; 003989:
+  Defines the information by information type for identifying automated tools.;
+  003990: Defines the system components used to ensure controls are in place to
+  protect organizational information and individual privacy."
+implementation-guidance: "-"
+assessment-procedures: "Determine if automated tools are used to identify
+  [Assignment: organization-defined information by information type] on
+  [Assignment: organization-defined system components] to ensure that controls
+  are in place to protect organizational information and individual privacy."
+inherited: Local
+remote-inheritance-instance: "-"
+family: CM

@@ -1,0 +1,130 @@
+control-acronym: "[r5] CM-04(01)"
+control-information: >-
+  Description:
+
+  Analyze changes to the system in a separate test environment before
+  implementation in an operational environment, looking for security and privacy
+  impacts due to flaws, weaknesses, incompatibility, or intentional malice.
+
+
+  Supplemental Guidance:
+
+  A separate test environment requires an environment that is physically or
+  logically separate and distinct from the operational environment. The
+  separation is sufficient to ensure that activities in the test environment do
+  not impact activities in the operational environment and that information in
+  the operational environment is not inadvertently transmitted to the test
+  environment. Separate environments can be achieved by physical or logical
+  means. If physically separate test environments are not implemented,
+  organizations determine the strength of mechanism required when implementing
+  logical separation. Related Control(s): SA-11, SC-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  security impact analyses for changes to the system; procedures addressing
+  privacy impact analyses for changes to the system; configuration management
+  plan; security impact analysis documentation; privacy impact analysis
+  documentation; privacy impact assessment; privacy risk assessment
+  documentation; analysis tools and associated outputs system design
+  documentation; system architecture and configuration documentation; change
+  control records; procedures addressing the authority to test with PII; system
+  audit records; documentation of separate test and operational environments;
+  system security plan; privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  conducting security and privacy impact analyses; organizational personnel with
+  information security and privacy responsibilities; system/network
+  administrators; members of change control board or similar].
+
+
+  Test: [SELECT FROM: Organizational processes for security and privacy impact
+  analyses; mechanisms supporting and/or implementing security and privacy
+  impact analyses of changes].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-04(01)
+cci: 001817; 001818; 003931
+cci-definition: "001817: When analyzing changes to the system, looks for privacy
+  impacts due to flaws, weaknesses, incompatibility, or intentional malice.;
+  001818: Analyze changes to the system in a separate test environment before
+  installation in an operational environment.; 003931: When analyzing changes to
+  the system, looks for security impacts due to flaws, weaknesses,
+  incompatibility, or intentional malice."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - changes to the system are analyzed in a separate test environment before
+  implementation in an operational environment.
+
+  - changes to the system are analyzed for security impacts due to flaws.
+
+  - changes to the system are analyzed for privacy impacts due to flaws.
+
+  - changes to the system are analyzed for security impacts due to weaknesses.
+
+  - changes to the system are analyzed for privacy impacts due to weaknesses.
+
+  - changes to the system are analyzed for privacy impacts due to
+  incompatibility.
+
+  - changes to the system are analyzed for privacy impacts due to
+  incompatibility.
+
+  - changes to the system are analyzed for security impacts due to intentional
+  malice.
+
+  - changes to the system are analyzed for privacy impacts due to intentional
+  malice.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: CM-4(1).1,
+  CM-4(1).2; as well as the following Rev. 5 security requirements: CCI-003931.
+  The resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: CM-4(1).1. The resulting compliance status was set to non-compliant
+  because of the addition of a new security requirement to the assessment
+  procedure that has not been previously assessed: CCI-003931.
+
+
+  Not Applicable to UDS technology stack. (The UDS technology stack provides all
+  the information needed to analyze changes, but the responsibility for
+  conducting the analysis of changes to the information system in a separate
+  test environment, looking for security impacts due to flaws, weaknesses,
+  incompatibility, or intentional malice, lies with the organization.)
+
+  UDS fully supports organizational analysis of changes within dedicated test
+  environments prior to implementation in operational systems. Leveraging
+  Infrastructure as Code (IaC) with OpenTofu and secure deployments using signed
+  Zarf packages, UDS enables consistent and repeatable configuration testing in
+  isolated, controlled environments that mirror production systems.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-4(1).1, CM-4(1).2; as well as the following Rev. 5 security
+  requirements: CCI-003931. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: CM-4(1).1. The resulting compliance
+  status was set to non-compliant because of the addition of a new security
+  requirement to the assessment procedure that has not been previously assessed:
+  CCI-003931."
+mapped-rev4-aps: CM-4(1)
+family: CM

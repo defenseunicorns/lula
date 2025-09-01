@@ -1,0 +1,133 @@
+control-acronym: "[r5] SI-07(08)"
+control-information: >-
+  Description:
+
+  Upon detection of a potential integrity violation, provide the capability to
+  audit the event and initiate the following actions: [Selection (one or more):
+  generate an audit record; alert current user; alert [Assignment:
+  organization-defined personnel or roles]; [Assignment: organization-defined
+  other actions]].
+
+
+  Supplemental Guidance:
+
+  Organizations select response actions based on types of software, specific
+  software, or information for which there are potential integrity violations.
+  Related Control(s): AU-2, AU-6, AU-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and information integrity policy; system and
+  information integrity procedures; procedures addressing software, firmware,
+  and information integrity; system design documentation; system configuration
+  settings and associated documentation; integrity verification tools and
+  associated documentation; records of integrity scans; incident response
+  records; list of security-relevant changes to the system; automated tools
+  supporting alerts and notifications if unauthorized security changes are
+  detected; system audit records; system security plan; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel responsible for software,
+  firmware, and/or information integrity; organizational personnel with
+  information security responsibilities; system/network administrators; system
+  developer].
+
+
+  Test: [SELECT FROM: Software, firmware, and information integrity verification
+  tools; mechanisms supporting and/or implementing the capability to audit
+  potential integrity violations; mechanisms supporting and/or implementing
+  alerts about potential integrity violations].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-07(08)
+cci: 002721; 002722; 002723; 002724
+cci-definition: "002721: Defines the personnel or roles that are to be alerted
+  when a potential integrity violation is detected.; 002722: Defines other
+  actions that can be taken when a potential integrity violation is detected.;
+  002723: Upon detection of a potential integrity violation, provides the
+  capability to audit the event.; 002724: Upon detection of a potential
+  integrity violation, initiate one or more of the following actions: generate
+  an audit record; alert the current user; alert organization-defined personnel
+  or roles; and/or organization-defined other actions."
+implementation-guidance: CCI-002722 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - the capability to audit an event upon the detection of a potential integrity
+  violation is provided.
+
+  - [Selection (one or more): generate an audit record; alert current user;
+  alert [Assignment: organization-defined personnel or roles]; [Assignment:
+  organization-defined other actions]] is/are initiated upon the detection of a
+  potential integrity violation.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: SI-7(8).1,
+  SI-7(8).2, SI-7(8).3, SI-7(8).4. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: SI-7(8).3.
+
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  This likely refers to detecting unauthorized changes to software and
+  information. As described, NeuVector is effectively doing this it will detect
+  if any unexpected process or file change occurs in a container beyond what was
+  present at deployment. Also, any changes to Kubernetes resources (adding a new
+  pod, changing a config) are logged and can be monitored an unauthorized change
+  (like someone applying a manifest outside of GitOps) can trigger an alert via
+  admission control tools (Pepr could block or log it). So the infrastructure is
+  in place to catch if something deviates from the baseline. This could be
+  considered integrity monitoring. For example, if an attacker managed to modify
+  a container image on disk, its hash would differ and would notice either
+  failing to start the container or flagging it as un-scanned. UDS covers
+  continuous verification and alerts on any unauthorized modifications.
+
+  In UDS, when a potential integrity violation is detected, the system
+  automatically generates a detailed audit record capturing critical information
+  such as timestamps, affected components, user or service identities, and the
+  nature of the violation. This capability is provided by integrated logging
+  tools like Loki and enforced through Pepr policies and NeuVector’s monitoring,
+  ensuring that all events are documented in a tamper-resistant manner for
+  subsequent forensic analysis and incident response.
+
+  UDS actively responds to potential integrity violations through its integrated
+  security tools. Specifically, NeuVector immediately detects unauthorized
+  container modifications, runtime anomalies, and integrity deviations,
+  automatically generating detailed audit records and real-time alerts to
+  designated security administrators. Additionally, Vector and Loki aggregate
+  these security event logs, preserving detailed audit trails. Alerts generated
+  by NeuVector and metrics monitored via Prometheus and Grafana ensure rapid
+  visibility of potential integrity violations, notifying defined organizational
+  personnel or security roles to facilitate timely incident response.
+  Collectively, these capabilities meet the requirement by promptly initiating
+  audit logging and alerting actions upon detection of potential integrity
+  violations.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SI-7(8).1, SI-7(8).2, SI-7(8).3, SI-7(8).4. The resulting
+  compliance status was set to non-compliant because the following Rev. 4
+  assessment procedure had no locally entered test result/compliance statement:
+  SI-7(8).3."
+mapped-rev4-aps: SI-7(8)
+family: SI

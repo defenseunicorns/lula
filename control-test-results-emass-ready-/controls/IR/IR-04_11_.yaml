@@ -1,0 +1,99 @@
+control-acronym: "[r5] IR-04(11)"
+control-information: >-
+  Description:
+
+  Establish and maintain an integrated incident response team that can be
+  deployed to any location identified by the organization in [Assignment:
+  organization-defined time period].
+
+
+  Supplemental Guidance:
+
+  An integrated incident response team is a team of experts that assesses,
+  documents, and responds to incidents so that organizational systems and
+  networks can recover quickly and implement the necessary controls to avoid
+  future incidents. Incident response team personnel include forensic and
+  malicious code analysts, tool developers, systems security and privacy
+  engineers, and real-time operations personnel. The incident handling
+  capability includes performing rapid forensic preservation of evidence and
+  analysis of and response to intrusions. For some organizations, the incident
+  response team can be a cross-organizational entity.
+
+
+  An integrated incident response team facilitates information sharing and
+  allows organizational personnel (e.g., developers, implementers, and
+  operators) to leverage team knowledge of the threat and implement defensive
+  measures that enable organizations to deter intrusions more effectively.
+  Moreover, integrated teams promote the rapid detection of intrusions, the
+  development of appropriate mitigations, and the deployment of effective
+  defensive measures. For example, when an intrusion is detected, the integrated
+  team can rapidly develop an appropriate response for operators to implement,
+  correlate the new incident with information on past intrusions, and augment
+  ongoing cyber intelligence development. Integrated incident response teams are
+  better able to identify adversary tactics, techniques, and procedures that are
+  linked to the operations tempo or specific mission and business functions and
+  to define responsive actions in a way that does not disrupt those mission and
+  business functions. Incident response teams can be distributed within
+  organizations to make the capability resilient. Related Control(s): AT-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident handling; procedures addressing incident response planning; incident
+  response plan; system security plan; privacy plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident handling
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities; members of the integrated incident response team].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IR-04(11)
+cci: 004143; 004144
+cci-definition: "004143: Establish and maintain an integrated incident response
+  team that can be deployed to any location identified by the organization in an
+  organization-defined time period.; 004144: Defines the time period for
+  establishing and maintaining an integrated incident response team that can be
+  deployed to any location identified by the organization."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - an integrated incident response team is established and maintained.
+
+  - the integrated incident response team can be deployed to any location
+  identified by the organization in [Assignment: organization-defined time
+  period].
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (This control ensures the
+  organization has IR support resources. UDS, as a product, is not an IR team
+  though its vendor or community could provide help on technical issues. The
+  formal IR assistance is outside UDS’s scope.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IR-10.1; as well as the following Rev. 5 security requirements:
+  CCI-004143, CCI-004144. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: IR-10.1. The resulting compliance
+  status was set to non-compliant because of the addition of a new security
+  requirement to the assessment procedure that has not been previously assessed:
+  CCI-004143, CCI-004144."
+mapped-rev4-aps: IR-10.1
+family: IR

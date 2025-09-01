@@ -1,0 +1,65 @@
+control-acronym: "[r5] MA-03(02)"
+control-information: >-
+  Description:
+
+  Check media containing diagnostic and test programs for malicious code before
+  the media are used in the system.
+
+
+  Supplemental Guidance:
+
+  If, upon inspection of media containing maintenance, diagnostic, and test
+  programs, organizations determine that the media contains malicious code, the
+  incident is handled consistent with organizational incident handling policies
+  and procedures. Related Control(s): SI-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Maintenance policy; procedures addressing system
+  maintenance tools; system maintenance tools and associated documentation;
+  maintenance records; system security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system maintenance
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational process for inspecting media for malicious
+  code; mechanisms supporting and/or implementing the inspection of media used
+  for maintenance].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: MA-03(02)
+cci: 870
+cci-definition: "000870: Check media containing diagnostic and test programs for
+  malicious code before the media are used in the system."
+implementation-guidance: "-"
+assessment-procedures: Determine if media containing diagnostic and test
+  programs are checked for malicious code before the media are used in the
+  system.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: MA-3(2).1."
+mapped-rev4-aps: MA-3(2)
+family: MA

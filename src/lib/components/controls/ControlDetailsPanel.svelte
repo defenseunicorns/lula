@@ -3,22 +3,21 @@
 
 <script lang="ts">
 	import { TimelineItem } from '$components/version-control';
-	import { api } from '$lib/api';
-	import type { Control, ControlCompleteData, ControlSet, FieldSchema } from '$lib/types';
-	import type { FieldDefinition, ValidationRule } from '$lib/form-types';
-	import { complianceStore, mappings } from '$stores/compliance';
+	import { hasAssessmentObjectives } from '$lib/assessmentObjectives';
+	import type { Control, ControlCompleteData, FieldSchema } from '$lib/types';
+	import { appState, wsClient } from '$lib/websocket';
+	import { mappings } from '$stores/compliance';
 	import {
+		CheckmarkOutline,
 		Connect,
 		Edit,
+		Error,
 		Information,
 		Time,
-		CheckmarkOutline,
-		WarningAlt,
-		Error
+		WarningAlt
 	} from 'carbon-icons-svelte';
 	import { MappingCard, MappingForm } from '.';
-	import { EmptyState, StatusBadge, TabNavigation } from '../ui';
-	import { hasAssessmentObjectives } from '$lib/assessmentObjectives';
+	import { EmptyState, TabNavigation } from '../ui';
 
 	interface Props {
 		control: Control;
@@ -151,7 +150,7 @@
 	async function checkAndSave() {
 		if (hasChanges) {
 			try {
-				await complianceStore.updateControl(editedControl);
+				await wsClient.updateControl(editedControl);
 				originalControl = { ...editedControl };
 				console.log('Auto-saved control changes');
 			} catch (error) {
@@ -176,8 +175,8 @@
 	});
 
 	$effect(() => {
-		// Load complete data when history tab is selected or when component mounts
-		if (activeTab === 'history' || control) {
+		// Load complete data when history tab is selected or control changes
+		if (activeTab === 'history' || control.timeline) {
 			loadCompleteData();
 		}
 	});
@@ -187,7 +186,7 @@
 		// No need to cancel anything for manual save
 
 		try {
-			await complianceStore.updateControl(editedControl);
+			await wsClient.updateControl(editedControl);
 			originalControl = { ...editedControl };
 			console.log('Manual save completed');
 		} catch (error) {
@@ -204,7 +203,7 @@
 				source_entries: []
 			};
 
-			await complianceStore.createMapping(mappingData);
+			await wsClient.createMapping(mappingData);
 			resetMappingForm();
 		} catch (error) {
 			console.error('Failed to create mapping:', error);
@@ -243,7 +242,7 @@
 				status: data.status
 			};
 
-			await complianceStore.updateMapping(updatedMapping);
+			await wsClient.updateMapping(updatedMapping);
 			resetMappingForm();
 		} catch (error) {
 			console.error('Failed to update mapping:', error);
@@ -252,7 +251,7 @@
 
 	async function handleDeleteMapping(uuid: string) {
 		try {
-			await complianceStore.deleteMapping(uuid);
+			await wsClient.deleteMapping(uuid);
 			// Refresh complete data if needed
 			if (completeData) {
 				completeData = null;
@@ -267,12 +266,11 @@
 
 	async function loadFieldSchema() {
 		if (fieldSchema || loadingSchema) return;
-		
+
 		loadingSchema = true;
 		try {
-			const controlSet = await api.getControlSet();
-			// Handle both fieldSchema and field_schema for compatibility
-			const schema = controlSet.fieldSchema || controlSet.field_schema;
+			// Get field schema from WebSocket state
+			const schema = $appState.fieldSchema || $appState.field_schema;
 			if (schema?.fields) {
 				fieldSchema = schema.fields;
 			}
@@ -286,16 +284,77 @@
 	// Helper to get fields for a specific tab
 	function getFieldsForTab(tab: 'overview' | 'implementation' | 'custom') {
 		if (!fieldSchema) return [];
-		
+
 		return Object.entries(fieldSchema)
-			.filter(([_, field]) => {
+			.filter(([fieldName, field]) => {
+				// Exclude id and family fields from overview since they're in the header
+				if (tab === 'overview' && (fieldName === 'id' || fieldName === 'family')) {
+					return false;
+				}
 				// Map category to tab if tab not explicitly set
 				const fieldTab = field.tab || getDefaultTabForCategory(field.category);
 				return fieldTab === tab && field.visible;
 			})
 			.sort((a, b) => a[1].display_order - b[1].display_order);
 	}
-	
+
+	// Helper to determine field layout class based on field type
+	function getFieldLayoutClass(field: FieldSchema): string {
+		// Textareas and long text fields get full width
+		if (field.ui_type === 'textarea' || field.ui_type === 'long_text') {
+			return 'col-span-full';
+		}
+		// Medium text fields also get full width
+		if (field.ui_type === 'medium_text' && field.max_length && field.max_length > 100) {
+			return 'col-span-full';
+		}
+		// Dropdowns and short fields can be side by side
+		if (
+			field.ui_type === 'select' ||
+			field.ui_type === 'boolean' ||
+			field.ui_type === 'date' ||
+			field.ui_type === 'number' ||
+			(field.ui_type === 'short_text' && field.max_length && field.max_length <= 50)
+		) {
+			return 'col-span-1';
+		}
+		// Default to full width for everything else
+		return 'col-span-full';
+	}
+
+	// Helper to group fields by layout type
+	function groupFieldsForLayout(fields: Array<[string, FieldSchema]>) {
+		const groups: Array<Array<[string, FieldSchema]>> = [];
+		let currentGroup: Array<[string, FieldSchema]> = [];
+
+		for (const field of fields) {
+			const layoutClass = getFieldLayoutClass(field[1]);
+
+			if (layoutClass === 'col-span-full') {
+				// Full width fields go in their own group
+				if (currentGroup.length > 0) {
+					groups.push(currentGroup);
+					currentGroup = [];
+				}
+				groups.push([field]);
+			} else {
+				// Half width fields can be grouped
+				currentGroup.push(field);
+				if (currentGroup.length === 2) {
+					groups.push(currentGroup);
+					currentGroup = [];
+				}
+			}
+		}
+
+		// Add any remaining fields
+		if (currentGroup.length > 0) {
+			groups.push(currentGroup);
+		}
+
+		return groups;
+	}
+
 	function getDefaultTabForCategory(category: string): 'overview' | 'implementation' | 'custom' {
 		switch (category) {
 			case 'core':
@@ -314,13 +373,26 @@
 
 		loadingCompleteData = true;
 		try {
-			completeData = await api.getControlComplete(control.id);
+			// Get mappings from WebSocket state
+			const controlMappings = $appState.mappings.filter((m) => m.control_id === control.id);
+
+			// Use timeline from control prop if available
+			completeData = {
+				control,
+				mappings: controlMappings,
+				unifiedHistory: control.timeline || {
+					commits: [],
+					totalCommits: 0,
+					controlCommits: 0,
+					mappingCommits: 0
+				}
+			};
 		} catch (error) {
 			console.error('Failed to load complete data:', error);
 			completeData = {
 				control,
-				mappings: $mappings.filter((m) => m.control_id === control.id),
-				unifiedHistory: {
+				mappings: $appState.mappings.filter((m) => m.control_id === control.id),
+				unifiedHistory: control.timeline || {
 					commits: [],
 					totalCommits: 0,
 					controlCommits: 0,
@@ -347,7 +419,7 @@
 							{control.title}
 						</p>
 						<span
-							class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-700 dark:text-blue-200"
+							class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
 						>
 							{control.family?.toUpperCase()}
 						</span>
@@ -414,7 +486,9 @@
 		tabs={[
 			{ id: 'details', label: 'Overview', icon: Information },
 			{ id: 'narrative', label: 'Implementation', icon: Edit },
-			...fieldSchema && getFieldsForTab('custom').length > 0 ? [{ id: 'custom', label: 'Custom', icon: Edit }] : [],
+			...(fieldSchema && getFieldsForTab('custom').length > 0
+				? [{ id: 'custom', label: 'Custom', icon: Edit }]
+				: []),
 			{ id: 'mappings', label: 'Mappings', icon: Connect, count: associatedMappings.length },
 			{
 				id: 'history',
@@ -452,15 +526,21 @@
 			{@const overviewFields = getFieldsForTab('overview')}
 			{#if overviewFields.length > 0}
 				<div
-					class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-xl border border-blue-200 dark:border-blue-700/30 p-6"
+					class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
 				>
 					<div class="flex items-center justify-between mb-4">
 						<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Control Overview</h2>
 					</div>
-					
-					<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-						{#each overviewFields as [fieldName, field]}
-							{@render renderField(fieldName, field)}
+
+					<div class="space-y-6">
+						{#each groupFieldsForLayout(overviewFields) as fieldGroup}
+							<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+								{#each fieldGroup as [fieldName, field]}
+									<div class={getFieldLayoutClass(field)}>
+										{@render renderField(fieldName, field)}
+									</div>
+								{/each}
+							</div>
 						{/each}
 					</div>
 				</div>
@@ -468,7 +548,7 @@
 		{:else}
 			<!-- Fallback to static fields if no schema -->
 			<div
-				class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/10 dark:to-indigo-900/10 rounded-xl border border-blue-200 dark:border-blue-700/30 p-6"
+				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
 			>
 				<div class="flex items-center justify-between mb-4">
 					<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Control Overview</h2>
@@ -505,81 +585,72 @@
 					</div>
 				</div>
 
-			<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-				<div class="space-y-3">
-					<div class="flex justify-between">
-						<span class="text-sm font-medium text-gray-500 dark:text-gray-400">ID:</span>
-						<input
-							type="text"
-							bind:value={editedControl.id}
-							readonly
-							class="text-sm font-semibold text-gray-900 dark:text-white bg-transparent border-none p-0 focus:ring-0"
-						/>
-					</div>
-
-					<div class="flex justify-between">
-						<span class="text-sm font-medium text-gray-500 dark:text-gray-400">CCI:</span>
-						<span class="text-sm font-semibold text-gray-900 dark:text-white"
-							>CCI-{editedControl.cci || 'N/A'}</span
-						>
-					</div>
-
-					<div class="flex justify-between">
-						<span class="text-sm font-medium text-gray-500 dark:text-gray-400"
-							>Security Control Designation:</span
-						>
-						<span class="text-sm font-semibold text-gray-900 dark:text-white"
-							>{editedControl['security-control-designation'] || 'System'}</span
-						>
-					</div>
-
-					<div class="flex justify-between">
-						<span class="text-sm font-medium text-gray-500 dark:text-gray-400"
-							>Control Acronym:</span
-						>
-						<span class="text-sm font-semibold text-gray-900 dark:text-white uppercase"
-							>{editedControl['control-acronym']}</span
-						>
-					</div>
-				</div>
-
-				<div class="space-y-3">
-					<div class="flex justify-between">
-						<span class="text-sm font-medium text-gray-500 dark:text-gray-400">Status:</span>
-						<span class="text-sm font-semibold text-gray-900 dark:text-white capitalize"
-							>{editedControl.status}</span
-						>
-					</div>
-
-					{#if editedControl.cci_type}
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+					<div class="space-y-3">
 						<div class="flex justify-between">
-							<span class="text-sm font-medium text-gray-500 dark:text-gray-400">CCI Type:</span>
-							<span class="text-sm font-semibold text-gray-900 dark:text-white capitalize"
-								>{editedControl.cci_type}</span
-							>
-						</div>
-					{/if}
-
-					{#if editedControl.publish_date}
-						<div class="flex justify-between">
-							<span class="text-sm font-medium text-gray-500 dark:text-gray-400">Published:</span>
+							<span class="text-sm font-medium text-gray-500 dark:text-gray-400">CCI:</span>
 							<span class="text-sm font-semibold text-gray-900 dark:text-white"
-								>{editedControl.publish_date}</span
+								>CCI-{editedControl.cci || 'N/A'}</span
 							>
 						</div>
-					{/if}
+
+						<div class="flex justify-between">
+							<span class="text-sm font-medium text-gray-500 dark:text-gray-400"
+								>Security Control Designation:</span
+							>
+							<span class="text-sm font-semibold text-gray-900 dark:text-white"
+								>{editedControl['security-control-designation'] || 'System'}</span
+							>
+						</div>
+
+						{#if editedControl['control-acronym']}
+							<div class="flex justify-between">
+								<span class="text-sm font-medium text-gray-500 dark:text-gray-400"
+									>Control Acronym:</span
+								>
+								<span class="text-sm font-semibold text-gray-900 dark:text-white uppercase"
+									>{editedControl['control-acronym']}</span
+								>
+							</div>
+						{/if}
+					</div>
+
+					<div class="space-y-3">
+						<div class="flex justify-between">
+							<span class="text-sm font-medium text-gray-500 dark:text-gray-400">Status:</span>
+							<span class="text-sm font-semibold text-gray-900 dark:text-white capitalize"
+								>{editedControl.status}</span
+							>
+						</div>
+
+						{#if editedControl.cci_type}
+							<div class="flex justify-between">
+								<span class="text-sm font-medium text-gray-500 dark:text-gray-400">CCI Type:</span>
+								<span class="text-sm font-semibold text-gray-900 dark:text-white capitalize"
+									>{editedControl.cci_type}</span
+								>
+							</div>
+						{/if}
+
+						{#if editedControl.publish_date}
+							<div class="flex justify-between">
+								<span class="text-sm font-medium text-gray-500 dark:text-gray-400">Published:</span>
+								<span class="text-sm font-semibold text-gray-900 dark:text-white"
+									>{editedControl.publish_date}</span
+								>
+							</div>
+						{/if}
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<!-- Control Information Editor -->
-		<div
-			class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
-		>
-			<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Control Information</h3>
-			</div>
-			<div class="p-6">
+			<!-- Control Information Editor -->
+			<div
+				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
+			>
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+					Control Information
+				</h3>
 				<div class="space-y-3">
 					{#if Array.isArray(editedControl['control-information'])}
 						{#each editedControl['control-information'] as part}
@@ -593,51 +664,42 @@
 					{/if}
 				</div>
 			</div>
-		</div>
 
-		<!-- CCI Definition (read-only) -->
-		{#if editedControl['cci-definition']}
-			<div
-				class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
-			>
-				<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">CCI Definition</h3>
-				</div>
-				<div class="p-6">
+			<!-- CCI Definition (read-only) -->
+			{#if editedControl['cci-definition']}
+				<div
+					class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
+				>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">CCI Definition</h3>
 					<div class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
 						{editedControl['cci-definition']}
 					</div>
 				</div>
-			</div>
-		{/if}
+			{/if}
 		{/if}
 
 		<!-- Control Properties Editor -->
 		{#if editedControl.properties && Object.keys(editedControl.properties).length > 0}
 			<div
-				class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
+				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
 			>
-				<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Control Properties</h3>
-					<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-						Read-only metadata and properties
-					</p>
-				</div>
-				<div class="p-6">
-					<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-						{#each Object.entries(editedControl.properties) as [key, value]}
-							<div
-								class="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0"
-							>
-								<span class="text-sm font-medium text-gray-500 dark:text-gray-400 capitalize">
-									{key.replace(/_/g, ' ')}:
-								</span>
-								<span class="text-sm text-gray-900 dark:text-white font-medium">
-									{typeof value === 'object' ? JSON.stringify(value, null, 2) : value}
-								</span>
-							</div>
-						{/each}
-					</div>
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Control Properties</h3>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+					Read-only metadata and properties
+				</p>
+				<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+					{#each Object.entries(editedControl.properties) as [key, value]}
+						<div
+							class="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0"
+						>
+							<span class="text-sm font-medium text-gray-500 dark:text-gray-400 capitalize">
+								{key.replace(/_/g, ' ')}:
+							</span>
+							<span class="text-sm text-gray-900 dark:text-white font-medium">
+								{typeof value === 'object' ? JSON.stringify(value, null, 2) : value}
+							</span>
+						</div>
+					{/each}
 				</div>
 			</div>
 		{/if}
@@ -652,15 +714,23 @@
 			{@const implementationFields = getFieldsForTab('implementation')}
 			{#if implementationFields.length > 0}
 				<div
-					class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 rounded-xl border border-green-200 dark:border-green-700/30 p-6"
+					class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
 				>
 					<div class="flex items-center justify-between mb-4">
-						<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Implementation Details</h2>
+						<h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+							Implementation Details
+						</h2>
 					</div>
-					
-					<div class="grid grid-cols-1 gap-6">
-						{#each implementationFields as [fieldName, field]}
-							{@render renderField(fieldName, field)}
+
+					<div class="space-y-6">
+						{#each groupFieldsForLayout(implementationFields) as fieldGroup}
+							<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+								{#each fieldGroup as [fieldName, field]}
+									<div class={getFieldLayoutClass(field)}>
+										{@render renderField(fieldName, field)}
+									</div>
+								{/each}
+							</div>
 						{/each}
 					</div>
 				</div>
@@ -668,7 +738,7 @@
 		{:else}
 			<!-- Fallback to static fields if no schema -->
 			<div
-				class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/10 dark:to-emerald-900/10 rounded-xl border border-green-200 dark:border-green-700/30 p-6"
+				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
 			>
 				<div class="flex items-center justify-between mb-4">
 					<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Implementation Status</h2>
@@ -703,22 +773,18 @@
 		<!-- Implementation Guidance Editor -->
 		{#if editedControl['implementation-guidance']}
 			<div
-				class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
+				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
 			>
-				<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-						Implementation Guidance
-					</h3>
-					<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-						Guidance from the control framework
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+					Implementation Guidance
+				</h3>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+					Guidance from the control framework
+				</p>
+				<div class="prose prose-sm dark:prose-invert max-w-none">
+					<p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+						{editedControl['implementation-guidance']}
 					</p>
-				</div>
-				<div class="p-6">
-					<div class="prose prose-sm dark:prose-invert max-w-none">
-						<p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
-							{editedControl['implementation-guidance']}
-						</p>
-					</div>
 				</div>
 			</div>
 		{/if}
@@ -726,57 +792,53 @@
 		<!-- Assessment Objectives (Read-only) -->
 		{#if hasAssessmentObjectives(editedControl['assessment-objectives'])}
 			<div
-				class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
+				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
 			>
-				<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Assessment Objectives</h3>
-					<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-						A set of determination statements that expresses the desired outcome for the assessment
-						of a security control, privacy control, or control enhancement.
-					</p>
-				</div>
-				<div class="p-6">
-					<div class="space-y-3">
-						{#each editedControl['assessment-objectives'] as objective}
-							{#if typeof objective === 'string'}
-								<!-- Simple string objective -->
-								<div class="flex items-start space-x-3">
-									<div class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-									<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
-										{objective}
-									</p>
-								</div>
-							{:else if typeof objective === 'object' && objective !== null}
-								<!-- Nested objective with sub-items -->
-								{#each Object.entries(objective) as [key, value]}
-									<div class="space-y-2">
-										<div class="flex items-start space-x-3">
-											<div class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
-											<p
-												class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium"
-											>
-												{key}
-											</p>
-										</div>
-										{#if Array.isArray(value)}
-											<div class="ml-5 space-y-2">
-												{#each value as subItem}
-													<div class="flex items-start space-x-3">
-														<div
-															class="flex-shrink-0 w-1.5 h-1.5 bg-gray-400 rounded-full mt-2.5"
-														></div>
-														<p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-															{subItem}
-														</p>
-													</div>
-												{/each}
-											</div>
-										{/if}
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+					Assessment Objectives
+				</h3>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+					A set of determination statements that expresses the desired outcome for the assessment of
+					a security control, privacy control, or control enhancement.
+				</p>
+				<div class="space-y-3">
+					{#each editedControl['assessment-objectives'] as objective}
+						{#if typeof objective === 'string'}
+							<!-- Simple string objective -->
+							<div class="flex items-start space-x-3">
+								<div class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+								<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+									{objective}
+								</p>
+							</div>
+						{:else if typeof objective === 'object' && objective !== null}
+							<!-- Nested objective with sub-items -->
+							{#each Object.entries(objective) as [key, value]}
+								<div class="space-y-2">
+									<div class="flex items-start space-x-3">
+										<div class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
+										<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed font-medium">
+											{key}
+										</p>
 									</div>
-								{/each}
-							{/if}
-						{/each}
-					</div>
+									{#if Array.isArray(value)}
+										<div class="ml-5 space-y-2">
+											{#each value as subItem}
+												<div class="flex items-start space-x-3">
+													<div
+														class="flex-shrink-0 w-1.5 h-1.5 bg-gray-400 rounded-full mt-2.5"
+													></div>
+													<p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+														{subItem}
+													</p>
+												</div>
+											{/each}
+										</div>
+									{/if}
+								</div>
+							{/each}
+						{/if}
+					{/each}
 				</div>
 			</div>
 		{/if}
@@ -784,24 +846,22 @@
 		<!-- Assessment Procedures (Read-only) -->
 		{#if editedControl['assessment-procedures'] && Array.isArray(editedControl['assessment-procedures']) && editedControl['assessment-procedures'].length > 0}
 			<div
-				class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
+				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
 			>
-				<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Assessment Procedures</h3>
-					<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-						A set of assessment objectives and an associated set of assessment methods and
-						assessment objects.
-					</p>
-				</div>
-				<div class="p-6">
-					<div class="space-y-3">
-						{#each editedControl['assessment-procedures'] as procedure}
-							<div class="flex items-start space-x-3">
-								<div class="flex-shrink-0 w-2 h-2 bg-green-600 rounded-full mt-2"></div>
-								<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{procedure}</p>
-							</div>
-						{/each}
-					</div>
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+					Assessment Procedures
+				</h3>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+					A set of assessment objectives and an associated set of assessment methods and assessment
+					objects.
+				</p>
+				<div class="space-y-3">
+					{#each editedControl['assessment-procedures'] as procedure}
+						<div class="flex items-start space-x-3">
+							<div class="flex-shrink-0 w-2 h-2 bg-green-600 rounded-full mt-2"></div>
+							<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{procedure}</p>
+						</div>
+					{/each}
 				</div>
 			</div>
 		{/if}
@@ -809,47 +869,43 @@
 		<!-- Parameters Editor -->
 		{#if editedControl.parameters && Array.isArray(editedControl.parameters) && editedControl.parameters.length > 0}
 			<div
-				class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
+				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
 			>
-				<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Control Parameters</h3>
-					<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-						Read-only parameters from the control framework
-					</p>
-				</div>
-				<div class="p-6">
-					<div class="space-y-4">
-						{#each editedControl.parameters as param}
-							<div
-								class="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600"
-							>
-								<div class="flex items-center justify-between mb-2">
-									<span class="text-sm font-medium text-gray-900 dark:text-white"
-										>{param.label || param.id}</span
-									>
-									<code
-										class="text-xs font-mono text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 px-2 py-1 rounded"
-									>
-										{param.id}
-									</code>
-								</div>
-								{#if param.values && param.values.length > 0}
-									<div class="mt-2">
-										<p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Values:</p>
-										<div class="flex flex-wrap gap-1">
-											{#each param.values as value}
-												<span
-													class="inline-flex items-center px-2 py-1 rounded text-xs bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-200"
-												>
-													{value}
-												</span>
-											{/each}
-										</div>
-									</div>
-								{/if}
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Control Parameters</h3>
+				<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+					Read-only parameters from the control framework
+				</p>
+				<div class="space-y-4">
+					{#each editedControl.parameters as param}
+						<div
+							class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600"
+						>
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-sm font-medium text-gray-900 dark:text-white"
+									>{param.label || param.id}</span
+								>
+								<code
+									class="text-xs font-mono text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded"
+								>
+									{param.id}
+								</code>
 							</div>
-						{/each}
-					</div>
+							{#if param.values && param.values.length > 0}
+								<div class="mt-2">
+									<p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Values:</p>
+									<div class="flex flex-wrap gap-1">
+										{#each param.values as value}
+											<span
+												class="inline-flex items-center px-2 py-1 rounded text-xs bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
+											>
+												{value}
+											</span>
+										{/each}
+									</div>
+								</div>
+							{/if}
+						</div>
+					{/each}
 				</div>
 			</div>
 		{/if}
@@ -862,20 +918,22 @@
 			{@const customFields = getFieldsForTab('custom')}
 			{#if customFields.length > 0}
 				<div
-					class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
+					class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
 				>
-					<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-						<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Custom Fields</h3>
-						<p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-							Additional fields specific to your organization
-						</p>
-					</div>
-					<div class="p-6">
-						<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-							{#each customFields as [fieldName, field]}
-								{@render renderField(fieldName, field)}
-							{/each}
-						</div>
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Custom Fields</h3>
+					<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+						Additional fields specific to your organization
+					</p>
+					<div class="space-y-6">
+						{#each groupFieldsForLayout(customFields) as fieldGroup}
+							<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+								{#each fieldGroup as [fieldName, field]}
+									<div class={getFieldLayoutClass(field)}>
+										{@render renderField(fieldName, field)}
+									</div>
+								{/each}
+							</div>
+						{/each}
 					</div>
 				</div>
 			{:else}
@@ -1022,12 +1080,12 @@
 {#snippet renderField(fieldName: string, field: FieldSchema)}
 	<div class="space-y-2">
 		<label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-			{field.original_name || fieldName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+			{field.original_name || fieldName.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
 			{#if field.required}
 				<span class="text-red-500">*</span>
 			{/if}
 		</label>
-		
+
 		{#if field.ui_type === 'select' && field.options}
 			<select
 				bind:value={editedControl[fieldName]}
@@ -1083,7 +1141,7 @@
 				placeholder={field.examples?.[0] || ''}
 			/>
 		{/if}
-		
+
 		{#if field.is_array}
 			<p class="text-xs text-gray-500 dark:text-gray-400">This field supports multiple values</p>
 		{/if}

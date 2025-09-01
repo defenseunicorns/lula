@@ -1,0 +1,100 @@
+control-acronym: "[r5] PS-07"
+control-information: >-
+  Description:
+
+  a. Establish personnel security requirements, including security roles and
+  responsibilities for external providers;
+
+  b. Require external providers to comply with personnel security policies and
+  procedures established by the organization;
+
+  c. Document personnel security requirements;
+
+  d. Require external providers to notify [Assignment: organization-defined
+  personnel or roles] of any personnel transfers or terminations of external
+  personnel who possess organizational credentials and/or badges, or who have
+  system privileges within [Assignment: organization-defined time period]; and
+
+  e. Monitor provider compliance with personnel security requirements.
+
+
+  Supplemental Guidance:
+
+  External provider refers to organizations other than the organization
+  operating or acquiring the system. External providers include service bureaus,
+  contractors, and other organizations that provide system development,
+  information technology services, testing or assessment services, outsourced
+  applications, and network/security management. Organizations explicitly
+  include personnel security requirements in acquisition-related documents.
+  External providers may have personnel working at organizational facilities
+  with credentials, badges, or system privileges issued by organizations.
+  Notifications of external personnel changes ensure the appropriate termination
+  of privileges and credentials. Organizations define the transfers and
+  terminations deemed reportable by security-related characteristics that
+  include functions, roles, and the nature of credentials or privileges
+  associated with transferred or terminated individuals. Related Control(s):
+  AT-2, AT-3, MA-5, PE-3, PS-2, PS-3, PS-4, PS-5, PS-6, SA-5, SA-9, SA-21.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  external personnel security; list of personnel security requirements;
+  acquisition documents; service-level agreements; compliance monitoring
+  process; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; external providers; system/network administrators;
+  organizational personnel with account management responsibilities;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for managing and monitoring
+  external personnel security; mechanisms supporting and/or implementing the
+  monitoring of provider compliance].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PS-07d
+cci: 003041; 003042; 003043
+cci-definition: "003041: Require external providers to notify
+  organization-defined personnel or roles of any personnel transfers or
+  terminations of external personnel who possess organizational credentials
+  and/or badges, or who have system privileges within an organization-defined
+  time period.; 003042: Defines personnel or roles whom external providers are
+  to notify when external personnel who possess organizational credentials and
+  /or badges or who have system privileges are transferred or terminated.;
+  003043: Defines the time period for external providers to notify
+  organization-defined personnel or roles when external personnel who possess
+  organizational credentials and/or badges, or who have system privileges are
+  transferred or terminated."
+implementation-guidance: CCI-003042 and CCI-003043 of this assessment procedure
+  are automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if external providers are required to notify
+  [Assignment: organization-defined personnel or roles] of any personnel
+  transfers or terminations of external personnel who possess organizational
+  credentials and/or badges or who have system privileges within [Assignment:
+  organization-defined time period]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PS-7.4, PS-7.5, PS-7.6."
+mapped-rev4-aps: PS-7.4; PS-7.5; PS-7.6
+family: PS

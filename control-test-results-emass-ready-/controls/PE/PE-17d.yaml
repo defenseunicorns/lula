@@ -1,0 +1,86 @@
+control-acronym: "[r5] PE-17"
+control-information: >-
+  Description:
+
+  a. Determine and document the [Assignment: organization-defined alternate work
+  sites] allowed for use by employees;
+
+  b. Employ the following controls at alternate work sites: [Assignment:
+  organization-defined controls];
+
+  c. Assess the effectiveness of controls at alternate work sites; and
+
+  d. Provide a means for employees to communicate with information security and
+  privacy personnel in case of incidents.
+
+
+  Supplemental Guidance:
+
+  Alternate work sites include government facilities or the private residences
+  of employees. While distinct from alternative processing sites, alternate work
+  sites can provide readily available alternate locations during contingency
+  operations. Organizations can define different sets of controls for specific
+  alternate work sites or types of sites depending on the work-related
+  activities conducted at the sites. Implementing and assessing the
+  effectiveness of organization-defined controls and providing a means to
+  communicate incidents at alternate work sites supports the contingency
+  planning activities of organizations. Related Control(s): AC-17, AC-18, CP-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing alternate work sites for organizational personnel; list
+  of security controls required for alternate work sites; assessments of
+  security controls at alternate work sites; system security plan; privacy plan;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel approving the use of
+  alternate work sites; organizational personnel using alternate work sites;
+  organizational personnel assessing controls at alternate work sites;
+  organizational personnel with information security and privacy
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for security and privacy at
+  alternate work sites; mechanisms supporting alternate work sites; security and
+  privacy controls employed at alternate work sites; means of communication
+  between personnel at alternate work sites and security and privacy personnel].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-17d
+cci: 000988; 004263
+cci-definition: "000988: Provide a means for employees to communicate with
+  information security personnel in case of incidents.; 004263: Provide a means
+  for employees to communicate with information privacy personnel in case of
+  incidents."
+implementation-guidance: "-"
+assessment-procedures: Determine if a means for employees to communicate with
+  information security and privacy personnel in case of incidents is provided.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PE-17.4; as well as the following Rev. 5 security requirements:
+  CCI-004263. The resulting compliance status was set to non-compliant because
+  of the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-004263."
+mapped-rev4-aps: PE-17.4
+family: PE

@@ -1,0 +1,77 @@
+control-acronym: "[r5] SC-07(10)"
+control-information: >-
+  Description:
+
+  (a) Prevent the exfiltration of information; and
+
+  (b) Conduct exfiltration tests [Assignment: organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  Prevention of exfiltration applies to both the intentional and unintentional
+  exfiltration of information. Techniques used to prevent the exfiltration of
+  information from systems may be implemented at internal endpoints, external
+  boundaries, and across managed interfaces and include adherence to protocol
+  formats, monitoring for beaconing activity from systems, disconnecting
+  external network interfaces except when explicitly needed, employing traffic
+  profile analysis to detect deviations from the volume and types of traffic
+  expected, call backs to command and control centers, conducting penetration
+  testing, monitoring for steganography, disassembling and reassembling packet
+  headers, and using data loss and data leakage prevention tools. Devices that
+  enforce strict adherence to protocol formats include deep packet inspection
+  firewalls and Extensible Markup Language (XML) gateways. The devices verify
+  adherence to protocol formats and specifications at the application layer and
+  identify vulnerabilities that cannot be detected by devices that operate at
+  the network or transport layers. The prevention of exfiltration is similar to
+  data loss prevention or data leakage prevention and is closely associated with
+  cross-domain solutions and system guards that enforce information flow
+  requirements. Related Control(s): AC-2, CA-8, SI-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; system design documentation; system
+  configuration settings and associated documentation; system audit records;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms implementing boundary protection capabilities
+  that prevent the unauthorized exfiltration of information across managed
+  interfaces].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-07(10)(a)
+cci: 1116
+cci-definition: "001116: Prevent the unauthorized exfiltration of information."
+implementation-guidance: "-"
+assessment-procedures: Determine if the exfiltration of information is prevented.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-7(10).1."
+mapped-rev4-aps: SC-7(10)
+family: SC

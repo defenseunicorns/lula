@@ -1,0 +1,95 @@
+control-acronym: CP-6(1)
+control-information: >-
+  Description:
+
+  The organization identifies an alternate storage site that is separated from
+  the primary storage site to reduce susceptibility to the same threats.
+
+
+  Supplemental Guidance:
+
+  Threats that affect alternate storage sites are typically defined in
+  organizational assessments of risk and include, for example, natural
+  disasters, structural failures, hostile cyber attacks, and errors of
+  omission/commission. Organizations determine what is considered a sufficient
+  degree of separation between primary and alternate storage sites based on the
+  types of threats that are of concern. For one particular type of threat (i.e.,
+  hostile cyber attack), the degree of separation between sites is less
+  relevant. Related control: RA-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  alternate storage sites; contingency plan; alternate storage site; alternate
+  storage site agreements; primary storage site agreements; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  alternate storage site responsibilities; organizational personnel with
+  information system recovery responsibilities; organizational personnel with
+  information security responsibilities].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: >-
+  Customers can leverage multi-availability zone infrastructure and cross-region
+  replication for services that support it to address alternate storage site
+  controls if required by their organization.
+
+
+  This control may be inheritable if customers choose an AWS region as an
+  alternate storage site. However, if part of any system that is being created
+  has components outside of AWS where this control applies, it is not
+  inheritable....
+ap-acronym: CP-6(1).1
+cci: 507
+cci-definition: '000507: The organization identifies an alternate storage site
+  that is separated from the primary storage site to reduce susceptibility to
+  the same threats.'
+implementation-guidance: >-
+  The organization being inspected/assessed identifies and documents within the
+  contingency plan an alternate storage site not susceptible to the same threats
+  that exist at the primary storage site. The organization must document threats
+  in the risk management strategy IAW PM-9, CCI 000227.
+
+  Recommended Compelling Evidence:
+
+  1.) Risk management strategy
+
+  2.) Contingency plan that identifies an alternate storage site that is
+  separated from the primary storage
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the risk management strategy and the contingency plan to
+  ensure the organization identifies an alternate storage site that is separated
+  from the primary storage site so as not to be susceptible to the same threats
+  identified at the primary site.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: CP

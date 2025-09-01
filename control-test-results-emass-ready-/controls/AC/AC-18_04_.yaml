@@ -1,0 +1,74 @@
+control-acronym: "[r5] AC-18(04)"
+control-information: >-
+  Description:
+
+  Identify and explicitly authorize users allowed to independently configure
+  wireless networking capabilities.
+
+
+  Supplemental Guidance:
+
+  Organizational authorizations to allow selected users to configure wireless
+  networking capabilities are enforced, in part, by the access enforcement
+  mechanisms employed within organizational systems. Related Control(s): SC-7,
+  SC-15.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing wireless
+  implementation and usage (including restrictions); system design
+  documentation; system configuration settings and associated documentation;
+  system audit records; system security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms authorizing independent user configuration of
+  wireless networking capabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-18(04)
+cci: 2324
+cci-definition: "002324: Identify and explicitly authorizes users allowed to
+  independently configure wireless networking capabilities."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - users allowed to independently configure wireless networking capabilities
+  are identified.
+
+  - users allowed to independently configure wireless networking capabilities
+  are explicitly authorized.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (UDS does not inherently
+  control the use of wireless networking. Any wireless access control would be
+  handled by the underlying network infrastructure, not by UDS itself i.e.
+  wireless network adapters and bluetooth would be enabled/disabled at the
+  operating system.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-18(4).1. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: AC-18(4).1."
+mapped-rev4-aps: AC-18(4)
+family: AC

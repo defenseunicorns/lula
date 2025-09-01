@@ -1,0 +1,104 @@
+control-acronym: "[r5] AU-05(01)"
+control-information: >-
+  Description:
+
+  Provide a warning to [Assignment: organization-defined personnel, roles,
+  and/or locations] within [Assignment: organization-defined time period] when
+  allocated audit log storage volume reaches [Assignment: organization-defined
+  percentage] of repository maximum audit log storage capacity.
+
+
+  Supplemental Guidance:
+
+  Organizations may have multiple audit log storage repositories distributed
+  across multiple system components with each repository having different
+  storage volume capacities. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  response to audit processing failures; system design documentation; system
+  security plan; privacy system configuration settings and associated
+  documentation; system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security and privacy responsibilities; system/network administrators; system
+  developers].
+
+
+  Test: [SELECT FROM: Mechanisms implementing audit storage limit warnings].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-05(01)
+cci: 001852; 001853; 001854; 001855
+cci-definition: "001852: Defines the personnel, roles and/or locations to
+  receive a warning when allocated audit log storage volume reaches a defined
+  percentage of maximum audit log storage capacity.; 001853: Defines the time
+  period within which organization-defined personnel, roles, and/or locations
+  are to receive warnings when allocated audit log storage volume reaches an
+  organization-defined percentage of maximum audit log storage capacity.;
+  001854: Defines the percentage of maximum audit log storage capacity that is
+  to be reached, at which time the system will provide a warning to
+  organization-defined personnel, roles, and/or locations.; 001855: Provide a
+  warning to organization-defined personnel, roles, and/or locations within an
+  organization-defined time period when allocated audit log storage volume
+  reaches an organization-defined percentage of repository maximum audit log
+  storage capacity."
+implementation-guidance: CCI-001852, CCI-001853, and CCI-001854 of this
+  assessment procedure are automatically compliant because of coverage by DoD
+  Enterprise.
+assessment-procedures: "Determine if a warning is provided to [Assignment:
+  organization-defined personnel, roles, and/or locations] within [Assignment:
+  organization-defined time period] when allocated audit log storage volume
+  reaches [Assignment: organization-defined percentage] of repository maximum
+  audit log storage capacity."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  The UDS monitoring components (Prometheus/Grafana) keep an eye on system
+  health, including the logging pipeline. If the log collector (Vector) or log
+  store (Loki) fails or fills up, this would generate alerts (e.g., a Prometheus
+  alert if Loki is unreachable or if disk usage for logs is high).
+  Administrators would be notified to take action (such as allocate more space
+  or restart services). While UDS does not automatically switch to an alternate
+  logging mechanism upon failure, it does ensure that failures are detected and
+  can be responded to in a timely manner
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  UDS warning and notifications are immediate once they are triggered. To meet
+  the requirement of providing a warning when allocated audit record storage
+  nears capacity, you can configure a threshold-based alert in your monitoring
+  stack (e.g., Grafana + Loki) that checks repository utilization and triggers
+  once it surpasses an organization-defined percentage. In Grafana, create an
+  alert rule that queries storage metrics (or log volume usage) and compares
+  them against your defined threshold (e.g., 75% of maximum capacity per DoD
+  defined percentage). Then, use notification policies and contact points to
+  route the alert to the appropriate personnel, roles, or locations (such as a
+  security team’s Mattermost channel or a compliance officer’s email) within the
+  specified time period. This ensures the system automatically provides advance
+  warning, giving staff adequate time to manage storage capacity and maintain
+  audit record integrity.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AU-5(1).1, AU-5(1).2, AU-5(1).3, AU-5(1).4."
+mapped-rev4-aps: AU-5(1)
+family: AU

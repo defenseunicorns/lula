@@ -1,0 +1,97 @@
+control-acronym: CP-8(1)
+control-information: >-
+  Description:
+
+  The organization
+
+  (a) Develops primary and alternate telecommunications service agreements that
+  contain priority-of-service provisions in accordance with organizational
+  availability requirements (including recovery time objectives); and
+
+  (b) Requests Telecommunications Service Priority for all telecommunications
+  services used for national security emergency preparedness in the event that
+  the primary and/or alternate telecommunications services are provided by a
+  common carrier.
+
+
+  Supplemental Guidance:
+
+  Organizations consider the potential mission/business impact in situations
+  where telecommunications service providers are servicing other organizations
+  with similar priority-of-service provisions.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  primary and alternate telecommunications services; contingency plan; primary
+  and alternate telecommunications service agreements; Telecommunications
+  Service Priority documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  telecommunications responsibilities; organizational personnel with information
+  system recovery responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with responsibility for
+  acquisitions/contractual agreements].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting telecommunications].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Local access is not available in AWS
+  datacenters. This control is not applicable to AWS. The customer's system must
+  run entirely in AWS for this control to be inheritable....
+ap-acronym: CP-8(1).4
+cci: 529
+cci-definition: '000529: The organization requests Telecommunications Service
+  Priority for all telecommunications services used for national security
+  emergency preparedness in the event that the alternate telecommunications
+  services are provided by a common carrier.'
+implementation-guidance: >-
+  The organization being inspected/assessed identifies and documents within the
+  contingency plan telecommunications services used for national security
+  emergency preparedness in the event the alternate telecommunications services
+  are provided by a common carrier. For each service, the organization formally
+  requests Telecommunications Service Priority, IAW the DHS Telecommunications
+  Service Priority Process http://tsp.ncs.gov/request.html.
+
+  Recommended Compelling Evidence:
+
+  1.) SLA for telecommunication systems
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the contingency plan, the telecommunication service
+  agreement, and any existing formal requests for Telecommunications Service
+  Priority. The purpose of the review is to ensure the organization has
+  requested Telecommunications Service Priority for all telecommunications
+  services used for national security emergency preparedness in the event the
+  alternate telecommunications services are provided by a common carrier.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: CP

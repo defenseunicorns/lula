@@ -1,0 +1,63 @@
+control-acronym: "[r5] PE-08(03)"
+control-information: >-
+  Description:
+
+  Limit personally identifiable information contained in visitor access records
+  to the following elements identified in the privacy risk assessment:
+  [Assignment: organization-defined elements].
+
+
+  Supplemental Guidance:
+
+  Organizations may have requirements that specify the contents of visitor
+  access records. Limiting personally identifiable information in visitor access
+  records when such information is not needed for operational purposes helps
+  reduce the level of privacy risk created by a system. Related Control(s):
+  RA-3, SA-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  personally identifiable information processing policy; privacy risk assessment
+  documentation; privacy impact assessment; visitor access records; personally
+  identifiable information inventory; system security plan; privacy plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with visitor access records
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for maintaining and reviewing
+  visitor access records].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-08(03)
+cci: 004254; 004255
+cci-definition: "004254: Limit personally identifiable information contained in
+  visitor access records to the organization-defined elements identified in the
+  privacy risk assessment.; 004255: Defines the elements identified in the
+  privacy risk assessment for limiting personally identifiable information
+  contained in visitor access records."
+implementation-guidance: "-"
+assessment-procedures: "Determine if personally identifiable information
+  contained in visitor access records is limited to [Assignment:
+  organization-defined elements] identified in the privacy risk assessment."
+inherited: Local
+remote-inheritance-instance: "-"
+family: PE

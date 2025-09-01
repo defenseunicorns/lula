@@ -1,0 +1,82 @@
+control-acronym: "[r5] CM-14"
+control-information: >-
+  Description:
+
+  Prevent the installation of [Assignment: organization-defined software and
+  firmware components] without verification that the component has been
+  digitally signed using a certificate that is recognized and approved by the
+  organization.
+
+
+  Supplemental Guidance:
+
+  Software and firmware components prevented from installation unless signed
+  with recognized and approved certificates include software and firmware
+  version updates, patches, service packs, device drivers, and basic
+  input/output system updates. Organizations can identify applicable software
+  and firmware components by type, by specific items, or a combination of both.
+  Digital signatures and organizational verification of such signatures is a
+  method of code authentication. Related Control(s): CM-7, SC-12, SC-13, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  digitally signed certificates for software and firmware components;
+  configuration management plan; system security plan; system design
+  documentation; change control records; system component inventory; system
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  verifying digitally signed certificates for software and firmware component
+  installation; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes governing information location;
+  mechanisms enforcing policies and methods for governing information location;
+  automated tools supporting or implementing digitally signatures for software
+  and firmware components; automated tools supporting or implementing
+  verification of digital signatures for software and firmware component
+  installation].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-14
+cci: 003992; 003993
+cci-definition: "003992: Prevent the installation of organization-defined
+  software and firmware components without verification that the component has
+  been digitally signed using a certificate that is recognized and approved by
+  the organization.; 003993: Defines the software and firmware for preventing
+  installation without verification that the component has been digitally
+  signed."
+implementation-guidance: CCI-003993 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - the installation of [Assignment: organization-defined software and firmware
+  components] is prevented unless it is verified that the software has been
+  digitally signed using a certificate recognized and approved by the
+  organization.
+
+  - the installation of [Assignment: organization-defined software and firmware
+  components] is prevented unless it is verified that the firmware has been
+  digitally signed using a certificate recognized and approved by the
+  organization.
+inherited: Local
+remote-inheritance-instance: "-"
+family: CM

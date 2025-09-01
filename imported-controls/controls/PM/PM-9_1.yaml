@@ -1,0 +1,92 @@
+control-acronym: PM-9
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Develops a comprehensive strategy to manage risk to organizational
+  operations and assets, individuals, other organizations, and the Nation
+  associated with the operation and use of information systems;
+
+  b. Implements the risk management strategy consistently across the
+  organization; and
+
+  c. Reviews and updates the risk management strategy [Assignment:
+  organization-defined frequency] or as required, to address organizational
+  changes.
+
+
+  Supplemental Guidance:
+
+  An organization-wide risk management strategy includes, for example, an
+  unambiguous expression of the risk tolerance for the organization, acceptable
+  risk assessment methodologies, risk mitigation strategies, a process for
+  consistently evaluating risk across the organization with respect to the
+  organization's risk tolerance, and approaches for monitoring risk over time.
+  The use of a risk executive function can facilitate consistent,
+  organization-wide application of the risk management strategy. The
+  organization-wide risk management strategy can be informed by risk-related
+  inputs from other sources both internal and external to the organization to
+  ensure the strategy is both broad-based and comprehensive. Related control:
+  RA-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information security program plan; risk management
+  strategy; procedures addressing development, implementation, review, and
+  update of the risk management strategy; risk assessment results relevant to
+  the risk management strategy; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  program planning and plan implementation responsibilities; organizational
+  personnel responsible for development, implementation, review, and update of
+  the risk management strategy; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for development, implementation,
+  review, and update of the risk management strategy; automated mechanisms
+  supporting the development, implementation, review, and update of the risk
+  management strategy].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: ...
+ap-acronym: PM-9.1
+cci: 227
+cci-definition: '000227: The organization develops a comprehensive strategy to
+  manage risk to organizational operations and assets, individuals, other
+  organizations, and the Nation associated with the operation and use of
+  information systems.'
+implementation-guidance: >-
+  DoD Risk Management Framework meets the requirement for a comprehensive
+  organizational risk strategy.
+
+
+  DoD components are automatically compliant with this CCI because they are
+  covered by the DoD Risk Management Framework (DoDI 8510.01).
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per DoDI 8510.01.
+assessment-procedures: >-
+  DoD Risk Management Framework meets the requirement for a comprehensive
+  organizational risk strategy.
+
+
+  DoD components are automatically compliant with this CCI because they are
+  covered by DoD Risk Management Framework (DoDI 8510.01).
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PM

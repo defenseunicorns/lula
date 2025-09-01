@@ -1,0 +1,110 @@
+control-acronym: "[r5] IA-02"
+control-information: >-
+  Description:
+
+  Uniquely identify and authenticate organizational users and associate that
+  unique identification with processes acting on behalf of those users.
+
+
+  Supplemental Guidance:
+
+  Organizations can satisfy the identification and authentication requirements
+  by complying with the requirements in HSPD 12. Organizational users include
+  employees or individuals who organizations consider to have an equivalent
+  status to employees (e.g., contractors and guest researchers). Unique
+  identification and authentication of users applies to all accesses other than
+  those that are explicitly identified in AC-14 and that occur through the
+  authorized use of group authenticators without individual authentication.
+  Since processes execute on behalf of groups and roles, organizations may
+  require unique identification of individuals in group accounts or for detailed
+  accountability of individual activity.
+
+
+  Organizations employ passwords, physical authenticators, or biometrics to
+  authenticate user identities or, in the case of multi-factor authentication,
+  some combination thereof. Access to organizational systems is defined as
+  either local access or network access. Local access is any access to
+  organizational systems by users or processes acting on behalf of users, where
+  access is obtained through direct connections without the use of networks.
+  Network access is access to organizational systems by users (or processes
+  acting on behalf of users) where access is obtained through network
+  connections (i.e., nonlocal accesses). Remote access is a type of network
+  access that involves communication through external networks. Internal
+  networks include local area networks and wide area networks.
+
+
+  The use of encrypted virtual private networks for network connections between
+  organization-controlled endpoints and non-organization-controlled endpoints
+  may be treated as internal networks with respect to protecting the
+  confidentiality and integrity of information traversing the network.
+  Identification and authentication requirements for non-organizational users
+  are described in IA-8. Related Control(s): AC-2, AC-3, AC-4, AC-14, AC-17,
+  AC-18, AU-1, AU-6, IA-4, IA-5, IA-8, MA-4, MA-5, PE-2, PL-4, SA-4, SA-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing user identification and authentication; system security plan,
+  system design documentation; system configuration settings and associated
+  documentation; system audit records; list of system accounts; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system operations
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; organizational personnel with
+  account management responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes for uniquely identifying and
+  authenticating users; mechanisms supporting and/or implementing identification
+  and authentication capabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-02
+cci: 764
+cci-definition: "000764: Uniquely identify and authenticate organizational users
+  and associate that unique identification with processes acting on behalf of
+  those users."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - organizational users are uniquely identified and authenticated.
+
+  - the unique identification of authenticated organizational users is
+  associated with processes acting on behalf of those users.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS provides robust user identification and authentication via
+  Keycloak, which serves as the central Identity Provider. Every user must
+  authenticate with unique credentials (username/password, or certificates,
+  etc.), and Keycloak verifies their identity before granting access to JWT
+  tokens. This means the system positively identifies each user. Keycloak
+  supports a variety of authentication mechanisms (from passwords to two-factor
+  to smart cards), ensuring users are strongly authenticated before access.
+  Moreover, for internal components, Istio mutual TLS ensures that even services
+  identify each other with certificates. So whether it’s a human user or a
+  service account, the stack has mechanisms to require proper authentication. By
+  using Keycloak across all applications (single sign-on), UDS ensures
+  consistent enforcement of user auth for all entry points.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IA-2.1."
+mapped-rev4-aps: IA-2.1
+family: IA

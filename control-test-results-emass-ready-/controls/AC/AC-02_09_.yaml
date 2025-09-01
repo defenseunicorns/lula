@@ -1,0 +1,68 @@
+control-acronym: "[r5] AC-02(09)"
+control-information: >-
+  Description:
+
+  Only permit the use of shared and group accounts that meet [Assignment:
+  organization-defined conditions for establishing shared and group accounts].
+
+
+  Supplemental Guidance:
+
+  Before permitting the use of shared or group accounts, organizations consider
+  the increased risk due to the lack of accountability with such accounts.
+  Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; system design documentation; system configuration settings and
+  associated documentation; system-generated list of shared/group accounts and
+  associated roles; system audit records; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms implementing management of shared/group
+  accounts].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-02(09)
+cci: 002140; 002141
+cci-definition: "002140: Defines the conditions for establishing shared/group
+  accounts.; 002141: Only permit the use of shared and group accounts that meet
+  organization-defined conditions for establishing shared and group accounts."
+implementation-guidance: "-"
+assessment-procedures: "Determine if the use of shared and group accounts is
+  only permitted if [Assignment: organization-defined conditions for
+  establishing shared and group accounts] are met."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not applicable to UDS technology stack. (It should be an
+  organizational decision on if shared/group accounts are required. It is best
+  practice to avoid the use of shared/group accounts in most scenarios.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-2(9).1, AC-2(9).2. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: AC-2(9).1, AC-2(9).2."
+mapped-rev4-aps: AC-2(9)
+family: AC

@@ -1,0 +1,96 @@
+control-acronym: "[r5] IA-03"
+control-information: >-
+  Description:
+
+  Uniquely identify and authenticate [Assignment: organization-defined devices
+  and/or types of devices] before establishing a [Selection (one or more):
+  local; remote; network] connection.
+
+
+  Supplemental Guidance:
+
+  Devices that require unique device-to-device identification and authentication
+  are defined by type, device, or a combination of type and device.
+  Organization-defined device types include devices that are not owned by the
+  organization. Systems use shared known information (e.g., Media Access Control
+  [MAC], Transmission Control Protocol/Internet Protocol [TCP/IP] addresses) for
+  device identification or organizational authentication solutions (e.g.,
+  Institute of Electrical and Electronics Engineers (IEEE) 802.1x and Extensible
+  Authentication Protocol [EAP], RADIUS server with EAP-Transport Layer Security
+  [TLS] authentication, Kerberos) to identify and authenticate devices on local
+  and wide area networks. Organizations determine the required strength of
+  authentication mechanisms based on the security categories of systems and
+  mission or business requirements. Because of the challenges of implementing
+  device authentication on a large scale, organizations can restrict the
+  application of the control to a limited number/type of devices based on
+  mission or business needs. Related Control(s): AC-17, AC-18, AC-19, AU-6,
+  CA-3, CA-9, IA-4, IA-5, IA-9, IA-11, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; system
+  security plan; procedures addressing device identification and authentication;
+  system design documentation; list of devices requiring unique identification
+  and authentication; device connection reports; system configuration settings
+  and associated documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with operational
+  responsibilities for device identification and authentication; organizational
+  personnel with information security responsibilities; system/network
+  administrators; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing device
+  identification and authentication capabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-03
+cci: 000777; 000778; 001958
+cci-definition: "000777: Defines devices and/or types of devices for which
+  identification and authentication is required before establishing a
+  connection.; 000778: Uniquely identify organization-defined devices and/or
+  types of devices before establishing a local, remote, and/or network
+  connection.; 001958: Authenticate organization-defined devices and/or types of
+  devices before establishing a local, remote, and/or network connection."
+implementation-guidance: CCI-000777 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if [Assignment: organization-defined devices
+  and/or types of devices] are uniquely identified and authenticated before
+  establishing a [Selection (one or more): local; remote; network] connection."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  Device authentication is handled in UDS through mutual TLS and
+  certificate-based trust between components. Each server/node in the Kubernetes
+  cluster has its own credentials (certificates for the kubelet, etc.) and each
+  service in the service mesh has a certificate identity (issued by Istio’s
+  Citadel). These certificates are used to authenticate machines and services to
+  each other. For example, when Service A connects to Service B within the mesh,
+  it presents its certificate and B’s sidecar verifies it only if it’s a valid
+  known service cert will communication proceed. This means that devices and
+  applications are being authenticated at the network layer without user
+  involvement.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IA-3.1, IA-3.2, IA-3.3."
+mapped-rev4-aps: IA-3.1; IA-3.2; IA-3.3
+family: IA

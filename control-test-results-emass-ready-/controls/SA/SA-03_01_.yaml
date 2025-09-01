@@ -1,0 +1,67 @@
+control-acronym: "[r5] SA-03(01)"
+control-information: >-
+  Description:
+
+  Protect system preproduction environments commensurate with risk throughout
+  the system development life cycle for the system, system component, or system
+  service.
+
+
+  Supplemental Guidance:
+
+  The preproduction environment includes development, test, and integration
+  environments. The program protection planning processes established by the
+  Department of Defense are examples of managing the preproduction environment
+  for defense contractors. Criticality analysis and the application of controls
+  on developers also contribute to a more secure system development environment.
+  Related Control(s): CM-2, CM-4, RA-3, RA-9, SA-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing the integration of security and supply chain risk management into
+  the system development life cycle process; system development life cycle
+  documentation; procedures addressing program protection planning; criticality
+  analysis results; security and supply chain risk management strategy/program
+  documentation; system security plan; supply chain risk management plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security and system
+  life cycle development responsibilities; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for defining and documenting the
+  system development life cycle; organizational processes for identifying system
+  development life cycle roles and responsibilities; organizational process for
+  integrating security risk management into the system development life cycle;
+  mechanisms supporting and/or implementing the system development life cycle].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-03(01)
+cci: 4679
+cci-definition: "004679: Protect system preproduction environments commensurate
+  with risk throughout the system development life cycle for the system, system
+  component, or system service."
+implementation-guidance: "-"
+assessment-procedures: Determine if system pre-production environments are
+  protected commensurate with risk throughout the system development life cycle
+  for the system, system component, or system service.
+inherited: Local
+remote-inheritance-instance: "-"
+family: SA

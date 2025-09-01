@@ -1,0 +1,75 @@
+control-acronym: "[r5] PE-11"
+control-information: >-
+  Description:
+
+  Provide an uninterruptible power supply to facilitate [Selection (one or
+  more): an orderly shutdown of the system; transition of the system to
+  long-term alternate power] in the event of a primary power source loss.
+
+
+  Supplemental Guidance:
+
+  An uninterruptible power supply (UPS) is an electrical system or mechanism
+  that provides emergency power when there is a failure of the main power
+  source. A UPS is typically used to protect computers, data centers,
+  telecommunication equipment, or other electrical equipment where an unexpected
+  power disruption could cause injuries, fatalities, serious mission or business
+  disruption, or loss of data or information. A UPS differs from an emergency
+  power system or backup generator in that the UPS provides near-instantaneous
+  protection from unanticipated power interruptions from the main power source
+  by providing energy stored in batteries, supercapacitors, or flywheels. The
+  battery duration of a UPS is relatively short but provides sufficient time to
+  start a standby power source, such as a backup generator, or properly shut
+  down the system. Related Control(s): AT-3, CP-2, CP-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing emergency power; uninterruptible power supply;
+  uninterruptible power supply documentation; uninterruptible power supply test
+  records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with the responsibility for
+  emergency power and/or planning; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing an
+  uninterruptible power supply; the uninterruptable power supply].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-11
+cci: 2955
+cci-definition: "002955: Provide an uninterruptible power supply to facilitate
+  an orderly shutdown of the system, and/or transition of the system to
+  long-term alternate power in the event of a primary power source loss."
+implementation-guidance: "-"
+assessment-procedures: "Determine if an uninterruptible power supply is provided
+  to facilitate [Selection (one or more): an orderly shutdown of the system;
+  transition of the system to long-term alternate power] in the event of a
+  primary power source loss."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PE-11.1."
+mapped-rev4-aps: PE-11.1
+family: PE

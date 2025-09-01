@@ -1,0 +1,73 @@
+control-acronym: "[r5] SC-07(03)"
+control-information: >-
+  Description:
+
+  Limit the number of external network connections to the system.
+
+
+  Supplemental Guidance:
+
+  Limiting the number of external network connections facilitates monitoring of
+  inbound and outbound communications traffic. The Trusted Internet Connection
+  DHS TIC initiative is an example of a federal guideline that requires limits
+  on the number of external network connections. Limiting the number of external
+  network connections to the system is  important during transition periods from
+  older to newer technologies (e.g., transitioning from IPv4 to IPv6 network
+  protocols). Such transitions may require implementing the older and newer
+  technologies simultaneously during the transition period and thus increase the
+  number of access points to the system. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; system design documentation; boundary
+  protection hardware and software; system architecture and configuration
+  documentation; system configuration settings and associated documentation;
+  communications and network traffic monitoring logs; system audit records;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms implementing boundary protection capabilities;
+  mechanisms limiting the number of external network connections to the system].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-07(03)
+cci: 1101
+cci-definition: "001101: Limit the number of external network connections to the system."
+implementation-guidance: "-"
+assessment-procedures: Determine if the number of external network connections
+  to the system is limited.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS uses dedicated gateways and proxies as the only access points
+  into the cluster. For example, the Istio ingress gateway is the only component
+  listening for external requests; it’s configured to allow only specific ports
+  and protocols. There are no other open ports on the cluster nodes for UDS
+  services unless declared. Management access (SSH/Kubernetes API) is similarly
+  limited to admin interfaces. This single chokepoint design means the external
+  exposure is minimal and well-defended
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-7(3).1."
+mapped-rev4-aps: SC-7(3)
+family: SC

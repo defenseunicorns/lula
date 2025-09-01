@@ -1,0 +1,76 @@
+control-acronym: "[r5] CA-07(05)"
+control-information: >-
+  Description:
+
+  Employ the following actions to validate that policies are established and
+  implemented controls are operating in a consistent manner: [Assignment:
+  organization-defined actions].
+
+
+  Supplemental Guidance:
+
+  Security and privacy controls are often added incrementally to a system. As a
+  result, policies for selecting and implementing controls may be inconsistent,
+  and the controls could fail to work together in a consistent or coordinated
+  manner. At a minimum, the lack of consistency and coordination could mean that
+  there are unacceptable security and privacy gaps in the system. At worst, it
+  could mean that some of the controls implemented in one location or by one
+  component are actually impeding the functionality of other controls (e.g.,
+  encrypting internal network traffic can impede monitoring). In other
+  situations, failing to consistently monitor all implemented network protocols
+  (e.g., a dual stack of IPv4 and IPv6) may create unintended vulnerabilities in
+  the system that could be exploited by adversaries. It is important to
+  validate—through testing, monitoring, and analysis—that the implemented
+  controls are operating in a consistent, coordinated, non-interfering manner.
+  Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Assessment, authorization, and monitoring policy;
+  organizational continuous monitoring strategy; system-level continuous
+  monitoring strategy; procedures addressing continuous monitoring of system
+  security controls; assessment report; plan of action and milestones; system
+  monitoring records; security impact analyses; status reports; system security
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with continuous monitoring
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting consistency analyses].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CA-07(05)
+cci: 003884; 003885; 003886
+cci-definition: "003884: Employ organization-defined actions to validate that
+  policies are established.; 003885: Employ organization-defined actions to
+  validate that implemented controls are operating in a consistent manner.;
+  003886: Defines the actions used to validate policies."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - [Assignment: organization-defined actions] are employed to validate that
+  policies are established.
+
+  - [Assignment: organization-defined automated mechanisms] are employed to
+  validate that implemented controls are operating in a consistent manner.
+inherited: Local
+remote-inheritance-instance: "-"
+family: CA

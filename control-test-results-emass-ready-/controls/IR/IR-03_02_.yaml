@@ -1,0 +1,63 @@
+control-acronym: "[r5] IR-03(02)"
+control-information: >-
+  Description:
+
+  Coordinate incident response testing with organizational elements responsible
+  for related plans.
+
+
+  Supplemental Guidance:
+
+  Organizational plans related to incident response testing include business
+  continuity plans, disaster recovery plans, continuity of operations plans,
+  contingency plans, crisis communications plans, critical infrastructure plans,
+  and occupant emergency plans. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Incident response policy; contingency planning policy;
+  procedures addressing incident response testing; incident response testing
+  documentation; incident response plan; business continuity plans; contingency
+  plans; disaster recovery plans; continuity of operations plans; crisis
+  communications plans; critical infrastructure plans; occupant emergency plans;
+  system security plan; privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  testing responsibilities; organizational personnel with responsibilities for
+  testing organizational plans related to incident response testing;
+  organizational personnel with information security and privacy
+  responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IR-03(02)
+cci: 2780
+cci-definition: "002780: Coordinate incident response testing with
+  organizational elements responsible for related plans."
+implementation-guidance: "-"
+assessment-procedures: Determine if incident response testing is coordinated
+  with organizational elements responsible for related plans.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IR-3(2).1."
+mapped-rev4-aps: IR-3(2)
+family: IR

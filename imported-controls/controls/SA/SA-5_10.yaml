@@ -1,0 +1,141 @@
+control-acronym: SA-5
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Obtains administrator documentation for the information system, system
+  component, or information system service that describes:
+
+  1. Secure configuration, installation, and operation of the system, component,
+  or service;
+
+  2. Effective use and maintenance of security functions/mechanisms; and
+
+  3. Known vulnerabilities regarding configuration and use of administrative
+  (i.e., privileged) functions;
+
+  b. Obtains user documentation for the information system, system component, or
+  information system service that describes:
+
+  1. User-accessible security functions/mechanisms and how to effectively use
+  those security functions/mechanisms;
+
+  2. Methods for user interaction, which enables individuals to use the system,
+  component, or service in a more secure manner; and
+
+  3. User responsibilities in maintaining the security of the system, component,
+  or service;
+
+  c. Documents attempts to obtain information system, system component, or
+  information system service documentation when such documentation is either
+  unavailable or nonexistent and [Assignment: organization-defined actions] in
+  response;
+
+  d. Protects documentation as required, in accordance with the risk management
+  strategy; and
+
+  e. Distributes documentation to [Assignment: organization-defined personnel or
+  roles].
+
+
+  Supplemental Guidance:
+
+  This control helps organizational personnel understand the implementation and
+  operation of security controls associated with information systems, system
+  components, and information system services. Organizations consider
+  establishing specific measures to determine the quality/completeness of the
+  content provided. The inability to obtain needed documentation may occur, for
+  example, due to the age of the information system/component or lack of support
+  from developers and contractors. In those situations, organizations may need
+  to recreate selected documentation if such documentation is essential to the
+  effective implementation or operation of security controls. The level of
+  protection provided for selected information system, component, or service
+  documentation is commensurate with the security category or classification of
+  the system. For example, documentation associated with a key DoD weapons
+  system or command and control system would typically require a higher level of
+  protection than a routine administrative system. Documentation that addresses
+  information system vulnerabilities may also require an increased level of
+  protection. Secure operation of the information system, includes, for example,
+  initially starting the system and resuming secure system operation after any
+  lapse in system operation. Related controls: CM-6, CM-8, PL-2, PL-4, PS-2,
+  SA-3, SA-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing information system documentation; information system documentation
+  including administrator and user guides; records documenting attempts to
+  obtain unavailable or nonexistent information system documentation; list of
+  actions to be taken in response to documented attempts to obtain information
+  system, system component, or information system service documentation; risk
+  management strategy documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with acquisition/contracting
+  responsibilities; organizational personnel with responsibility for determining
+  information system security requirements; system administrators;
+  organizational personnel operating, using, and/or maintaining the information
+  system; information system developers; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for obtaining, protecting, and
+  distributing information system administrator and user documentation].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SA-5.1,CCI-003124,Local
+  SA-5.2,CCI-003125,Local
+  SA-5.3,CCI-003126,Local
+  SA-5.4,CCI-003127,Local
+  SA-5.5,CCI-003128,Local
+  SA-5.6,CCI-003129,Local
+  SA-5.7,CCI-003130,Local
+  SA-5.8,CCI-003131,Local
+  SA-5.9,CCI-003132,Local
+  SA-5.10,CCI-003133,Local
+  SA-5.11,CCI-000642,Local
+  SA-5.12,CCI-003134,Local
+  SA-5.13,CCI-003135,Local
+  SA-5.14,CCI-003136,DoD Organization or Service Common Control Package...
+ap-acronym: SA-5.10
+cci: 3133
+cci-definition: '003133: The organization defines actions to be taken in
+  response to attempts to obtain either unavailable or nonexistent documentation
+  for information system, system component, or information system service.'
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents actions to be
+  taken in response to attempts to obtain either unavailable or nonexistent
+  documentation for information system, system component, or information system
+  service.
+
+  DoD has determined the actions are not appropriate to define at the Enterprise
+  level.
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP) or Incident response plan must document
+  organization defined actions to be taken in the event of attempt to obtain
+  unavailable or nonexistent information.
+assessment-procedures: >-
+  The organization conducting inspection/assessment obtains and examines the
+  documented actions to ensure the organization being inspected/assessed defines
+  action to be taken in response to attempts to obtain either unavailable or
+  nonexistent documentation for information system, system component, or
+  information system service.
+
+  DoD has determined the actions are not appropriate to define at the Enterprise
+  level.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (These actions and
+  response must be managed at the organizational level.)
+family: SA

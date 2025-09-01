@@ -1,0 +1,65 @@
+control-acronym: SI-8(1)
+control-information: >-
+  Description:
+
+  The organization centrally manages spam protection mechanisms.
+
+
+  Supplemental Guidance:
+
+  Central management is the organization-wide management and implementation of
+  spam protection mechanisms. Central management includes planning,
+  implementing, assessing, authorizing, and monitoring the organization-defined,
+  centrally managed spam protection security controls. Related controls: AU-3,
+  SI-2, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing spam protection; spam protection mechanisms; information system
+  design documentation; information system configuration settings and associated
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for spam
+  protection; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for central management of spam
+  protection; automated mechanisms supporting and/or implementing central
+  management of spam protection].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-8(1).1
+cci: 1307
+cci-definition: '001307: The organization centrally manages spam protection mechanisms.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to centrally manage spam protection mechanisms.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System security plan documents central management of spam
+  protection mechanisms.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process to ensure the organization being
+  inspected/assessed centrally manages spam protection mechanisms.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: 'Not Applicable to UDS technology stack. (Spam protection â
+  relates to filtering spam in email or inputs. UDS doesnât have an email
+  system or user-generated content filtering; thatâs outside scope. If an app
+  on UDS was an email server, that app would need spam filtering, but the
+  platform itself is neutral here.)'
+family: SI

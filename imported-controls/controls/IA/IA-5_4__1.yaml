@@ -1,0 +1,68 @@
+control-acronym: IA-5(4)
+control-information: >-
+  Description:
+
+  The organization employs automated tools to determine if password
+  authenticators are sufficiently strong to satisfy [Assignment:
+  organization-defined requirements].
+
+
+  Supplemental Guidance:
+
+  This control enhancement focuses on the creation of strong passwords and the
+  characteristics of such passwords (e.g., complexity) prior to use, the
+  enforcement of which is carried out by organizational information systems in
+  IA-5 (1). Related controls: CA-2, CA-7, RA-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing authenticator management; information system design documentation;
+  information system configuration settings and associated documentation;
+  automated tools for evaluating password authenticators; password strength
+  assessment results; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with authenticator
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  password-based authenticator management capability; automated tools for
+  determining password strength].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IA-5(4).1,CCI-001996,DoD Organization or Service Common Control Package
+  IA-5(4).2,CCI-001997,Local...
+ap-acronym: IA-5(4).1
+cci: 1996
+cci-definition: '001996: The organization defines the requirements required by
+  the automated tools to determine if password authenticators are sufficiently
+  strong.'
+implementation-guidance: >-
+  DoD has defined the requirements as the complexity as identified in IA-5 (1)
+  Part A.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically Compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the requirements as the complexity as identified in
+  IA-5 (1) Part A.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IA

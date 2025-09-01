@@ -1,0 +1,68 @@
+control-acronym: "[r5] PE-09"
+control-information: >-
+  Description:
+
+  Protect power equipment and power cabling for the system from damage and
+  destruction.
+
+
+  Supplemental Guidance:
+
+  Organizations determine the types of protection necessary for the power
+  equipment and cabling employed at different locations that are both internal
+  and external to organizational facilities and environments of operation. Types
+  of power equipment and cabling include internal cabling and uninterruptable
+  power sources in offices or data centers, generators and power cabling outside
+  of buildings, and power sources for self-contained components such as
+  satellites, vehicles, and other deployable systems. Related Control(s): PE-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing power equipment/cabling protection; facilities housing
+  power equipment/cabling; system security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with the responsibility to
+  protect power equipment/cabling; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing the protection
+  of power equipment/cabling].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-09
+cci: 952
+cci-definition: "000952: Protect power equipment and power cabling for the
+  system from damage and destruction."
+implementation-guidance: "-"
+assessment-procedures: |-
+  Determine if:
+  - power equipment for the system is protected from damage and destruction.
+  - power cabling for the system is protected from damage and destruction.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PE-9.1."
+mapped-rev4-aps: PE-9.1
+family: PE

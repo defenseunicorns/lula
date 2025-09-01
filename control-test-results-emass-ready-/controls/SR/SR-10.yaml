@@ -1,0 +1,75 @@
+control-acronym: "[r5] SR-10"
+control-information: >-
+  Description:
+
+  Inspect the following systems or system components [Selection (one or more):
+  at random; at [Assignment: organization-defined frequency], upon [Assignment:
+  organization-defined indications of need for inspection]] to detect tampering:
+  [Assignment: organization-defined systems or system components].
+
+
+  Supplemental Guidance:
+
+  The inspection of systems or systems components for tamper resistance and
+  detection addresses physical and logical tampering and is applied to systems
+  and system components removed from organization-controlled areas. Indications
+  of a need for inspection include changes in packaging, specifications, factory
+  location, or entity in which the part is purchased, and when individuals
+  return from travel to high-risk locations. Related Control(s): AT-3, PM-30,
+  SI-4, SI-7, SR-3, SR-4, SR-5, SR-9, SR-11.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Supply chain risk management policy and procedures;
+  supply chain risk management plan; system and services acquisition policy;
+  records of random inspections; inspection reports/results; assessment
+  reports/results; acquisition documentation; service level agreements;
+  acquisition contracts for the system, system component, or system service;
+  inter-organizational agreements and procedures; system security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and services
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with supply chain risk
+  management responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for establishing
+  inter-organizational agreements and procedures with supply chain entities;
+  organizational processes to inspect for tampering].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SR-10
+cci: 005128; 005129; 005130; 005131
+cci-definition: "005128: Inspect the following systems or system components at
+  random, at organization-defined frequency, and/or upon organization-defined
+  indications of need for inspection to detect tampering.; 005129: Defines the
+  frequency for inspecting systems or system components.; 005130: Defines the
+  indications of need for inspection for detecting tampering.; 005131: Defines
+  the system or system components which will be inspected at random, at
+  organization-defined frequency, and/or upon organization-defined indications
+  of need for inspection to detect tampering."
+implementation-guidance: "-"
+assessment-procedures: "Determine if [Assignment: organization-defined systems
+  or system components] are inspected [Selection (one or more): at random; at
+  [Assignment: organization-defined frequency], upon [Assignment:
+  organization-defined indications of need for inspection]] to detect
+  tampering."
+inherited: Local
+remote-inheritance-instance: "-"
+family: SR

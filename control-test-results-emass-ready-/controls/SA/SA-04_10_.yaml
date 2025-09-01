@@ -1,0 +1,82 @@
+control-acronym: "[r5] SA-04(10)"
+control-information: >-
+  Description:
+
+  Employ only information technology products on the FIPS 201-approved products
+  list for Personal Identity Verification (PIV) capability implemented within
+  organizational systems.
+
+
+  Supplemental Guidance:
+
+  Products on the FIPS 201-approved products list meet NIST requirements for
+  Personal Identity Verification (PIV) of Federal Employees and Contractors. PIV
+  cards are used for multi-factor authentication in systems and organizations.
+  Related Control(s): IA-2, IA-8, PM-9.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Supply chain risk management plan; system and services
+  acquisition policy; procedures addressing the integration of security
+  requirements, descriptions, and criteria into the acquisition process;
+  solicitation documentation; acquisition documentation; acquisition contracts
+  for the system, system component, or system service; service level agreements;
+  FIPS 201 approved products list; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with acquisition/contracting
+  responsibilities; organizational personnel with the responsibility for
+  determining system security requirements; organizational personnel with the
+  responsibility for ensuring that only FIPS 201- approved products are
+  implemented; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for selecting and employing FIPS
+  201-approved products].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-04(10)
+cci: 3116
+cci-definition: "003116: Employ only information technology products on the FIPS
+  201-approved products list for Personal Identity Verification (PIV) capability
+  implemented within organizational systems."
+implementation-guidance: "-"
+assessment-procedures: Determine if only information technology products on the
+  FIPS 201-approved products list for the Personal Identity Verification (PIV)
+  capability implemented within organizational systems are employed.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: SA-4(10).1. The
+  resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: SA-4(10).1.
+
+
+  Not Applicable to UDS technology stack. (Approved products for physical access
+  control systems and PIV cards are out of scope for UDS.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SA-4(10).1. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: SA-4(10).1."
+mapped-rev4-aps: SA-4(10)
+family: SA

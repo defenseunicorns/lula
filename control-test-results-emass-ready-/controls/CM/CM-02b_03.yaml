@@ -1,0 +1,111 @@
+control-acronym: "[r5] CM-02"
+control-information: >-
+  Description:
+
+  a. Develop, document, and maintain under configuration control, a current
+  baseline configuration of the system; and
+
+  b. Review and update the baseline configuration of the system:
+
+  1. [Assignment: organization-defined frequency];
+
+  2. When required due to [Assignment: organization-defined circumstances]; and
+
+  3. When system components are installed or upgraded.
+
+
+  Supplemental Guidance:
+
+  Baseline configurations for systems and system components include
+  connectivity, operational, and communications aspects of systems. Baseline
+  configurations are documented, formally reviewed, and agreed-upon
+  specifications for systems or configuration items within those systems.
+  Baseline configurations serve as a basis for future builds, releases, or
+  changes to systems and include security and privacy control implementations,
+  operational procedures, information about system components, network topology,
+  and logical placement of components in the system architecture. Maintaining
+  baseline configurations requires creating new baselines as organizational
+  systems change over time. Baseline configurations of systems reflect the
+  current enterprise architecture. Related Control(s): AC-19, AU-6, CA-9, CM-1,
+  CM-3, CM-5, CM-6, CM-8, CM-9, CP-9, CP-10, CP-12, MA-2, PL-8, PM-5, SA-8,
+  SA-10, SA-15, SC-18.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  the baseline configuration of the system; configuration management plan;
+  enterprise architecture documentation; system design documentation; system
+  security plan; privacy plan; system architecture and configuration
+  documentation; system configuration settings and associated documentation;
+  system component inventory; change control records; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with configuration
+  management responsibilities; organizational personnel with information
+  security and privacy responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing baseline
+  configurations; mechanisms supporting configuration control of the baseline
+  configuration].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-02b.03
+cci: 3910
+cci-definition: "003910: Review and update the baseline configuration of the
+  system when system components are installed or upgraded."
+implementation-guidance: "-"
+assessment-procedures: Determine if the baseline configuration of the system is
+  reviewed and updated when system components are installed or upgraded.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  UDS inherently ensures baseline configurations are reviewed, updated, and
+  maintained as an integral part of every information system component
+  installation through its Infrastructure as Code (IaC) approach using OpenTofu,
+  combined with secure, version-controlled software and infrastructure
+  deployment via signed Zarf packages. Each time new components, updates, or
+  patches are installed, the baseline configuration is automatically documented,
+  version-controlled, and updated accordingly. Automated enforcement by Pepr
+  further ensure these configurations remain consistent and accurately reflect
+  current system state, promptly detecting deviations or unauthorized changes.
+  Collectively, these mechanisms ensure baseline configuration management is
+  seamlessly integrated into system component installations, fully satisfying
+  the intent of this control.
+
+  UDS inherently ensures baseline configurations are reviewed, updated, and
+  maintained as an integral part of each information system component upgrade.
+  Utilizing Infrastructure as Code (IaC) via OpenTofu, coupled with secure and
+  controlled software deployments using signed Zarf packages, UDS automatically
+  captures and documents any configuration updates, component changes, or
+  upgrades within version-controlled repositories. These baseline configurations
+  are immediately updated and consistently reflected across all deployments.
+  Automated policy enforcement through Pepr further validate and ensure
+  compliance with the defined baseline, rapidly detecting and responding to any
+  configuration deviations. Thus, UDS fully meets the requirements of this
+  control, providing seamless, integrated baseline configuration management
+  during system component upgrades.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-2(1).5, CM-2(1).6; as well as the following Rev. 5 security
+  requirements: CCI-003910. The resulting compliance status was set to
+  non-compliant because of the addition of a new security requirement to the
+  assessment procedure that has not been previously assessed: CCI-003910."
+mapped-rev4-aps: CM-2(1)
+family: CM

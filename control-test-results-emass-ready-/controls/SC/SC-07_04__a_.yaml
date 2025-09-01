@@ -1,0 +1,90 @@
+control-acronym: "[r5] SC-07(04)"
+control-information: >-
+  Description:
+
+  (a) Implement a managed interface for each external telecommunication service;
+
+  (b) Establish a traffic flow policy for each managed interface;
+
+  (c) Protect the confidentiality and integrity of the information being
+  transmitted across each interface;
+
+  (d) Document each exception to the traffic flow policy with a supporting
+  mission or business need and duration of that need;
+
+  (e) Review exceptions to the traffic flow policy [Assignment:
+  organization-defined frequency] and remove exceptions that are no longer
+  supported by an explicit mission or business need;
+
+  (f) Prevent unauthorized exchange of control plane traffic with external
+  networks;
+
+  (g) Publish information to enable remote networks to detect unauthorized
+  control plane traffic from internal networks; and
+
+  (h) Filter unauthorized control plane traffic from external networks.
+
+
+  Supplemental Guidance:
+
+  External telecommunications services can provide data and/or voice
+  communications services. Examples of control plane traffic include Border
+  Gateway Protocol (BGP) routing, Domain Name System (DNS), and management
+  protocols. See SP 800-189 for additional information on the use of the
+  resource public key infrastructure (RPKI) to protect BGP routes and detect
+  unauthorized BGP announcements. Related Control(s): AC-3, SC-8, SC-20, SC-21,
+  SC-22.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; traffic
+  flow policy; information flow control policy; procedures addressing boundary
+  protection; system security architecture; system design documentation;
+  boundary protection hardware and software; system architecture and
+  configuration documentation; system configuration settings and associated
+  documentation; records of traffic flow policy exceptions; system audit
+  records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for documenting and reviewing
+  exceptions to the traffic flow policy; organizational processes for removing
+  exceptions to the traffic flow policy; mechanisms implementing boundary
+  protection capabilities; managed interfaces implementing traffic flow policy].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-07(04)(a)
+cci: 1102
+cci-definition: "001102: Implement a managed interface for each external
+  telecommunication service."
+implementation-guidance: "-"
+assessment-procedures: Determine if a managed interface is implemented for each
+  external telecommunication service.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-7(4).1."
+mapped-rev4-aps: SC-7(4)
+family: SC

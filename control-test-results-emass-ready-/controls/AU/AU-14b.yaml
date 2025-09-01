@@ -1,0 +1,84 @@
+control-acronym: "[r5] AU-14"
+control-information: >-
+  Description:
+
+  a. Provide and implement the capability for [Assignment: organization-defined
+  users or roles] to [Selection (one or more): record; view; hear; log] the
+  content of a user session under [Assignment: organization-defined
+  circumstances]; and
+
+  b. Develop, integrate, and use session auditing activities in consultation
+  with legal counsel and in accordance with applicable laws, executive orders,
+  directives, regulations, policies, standards, and guidelines.
+
+
+  Supplemental Guidance:
+
+  Session audits can include monitoring keystrokes, tracking websites visited,
+  and recording information and/or file transfers. Session audit capability is
+  implemented in addition to event logging and may involve implementation of
+  specialized session capture technology. Organizations consider how session
+  auditing can reveal information about individuals that may give rise to
+  privacy risk as well as how to mitigate those risks. Because session auditing
+  can impact system and network performance, organizations activate the
+  capability under well-defined situations (e.g., the organization is suspicious
+  of a specific individual). Organizations consult with legal counsel, civil
+  liberties officials, and privacy officials to ensure that any legal, privacy,
+  civil rights, or civil liberties issues, including the use of personally
+  identifiable information, are appropriately addressed. Related Control(s):
+  AC-3, AC-8, AU-2, AU-3, AU-4, AU-5, AU-8, AU-9, AU-11, AU-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; system security plan;
+  privacy plan; procedures addressing user session auditing; system design
+  documentation; system configuration settings and associated documentation;
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  and privacy responsibilities; system/network administrators; system
+  developers; legal counsel; personnel with civil liberties responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms implementing user session auditing capability].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-14b
+cci: 3847
+cci-definition: "003847: Develop, integrate, and use session auditing activities
+  in consultation with legal counsel and in accordance with applicable laws,
+  executive orders, directives, regulations, policies, standards, and
+  guidelines."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - session auditing activities are developed in consultation with legal counsel
+  and in accordance with applicable laws, executive orders, directives,
+  regulations, policies, standards, and guidelines.
+
+  - session auditing activities are integrated in consultation with legal
+  counsel and in accordance with applicable laws, executive orders, directives,
+  regulations, policies, standards, and guidelines.
+
+  - session auditing activities are used in consultation with legal counsel and
+  in accordance with applicable laws, executive orders, directives, regulations,
+  policies, standards, and guidelines.
+inherited: Local
+remote-inheritance-instance: "-"
+family: AU

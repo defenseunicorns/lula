@@ -1,0 +1,93 @@
+control-acronym: "[r5] CP-03"
+control-information: >-
+  Description:
+
+  a. Provide contingency training to system users consistent with assigned roles
+  and responsibilities:
+
+  1. Within [Assignment: organization-defined time period] of assuming a
+  contingency role or responsibility;
+
+  2. When required by system changes; and
+
+  3. [Assignment: organization-defined frequency] thereafter; and
+
+  b. Review and update contingency training content [Assignment:
+  organization-defined frequency] and following [Assignment:
+  organization-defined events].
+
+
+  Supplemental Guidance:
+
+  Contingency training provided by organizations is linked to the assigned roles
+  and responsibilities of organizational personnel to ensure that the
+  appropriate content and level of detail is included in such training. For
+  example, some individuals may only need to know when and where to report for
+  duty during contingency operations and if normal duties are affected; system
+  administrators may require additional training on how to establish systems at
+  alternate processing and storage sites; and organizational officials may
+  receive more specific training on how to conduct mission-essential functions
+  in designated off-site locations and how to establish communications with
+  other governmental entities for purposes of coordination on
+  contingency-related activities. Training for contingency roles or
+  responsibilities reflects the specific continuity requirements in the
+  contingency plan. Events that may precipitate an update to contingency
+  training content include, but are not limited to, contingency plan testing or
+  an actual contingency (lessons learned), assessment or audit findings,
+  security incidents or breaches, or changes in laws, executive orders,
+  directives, regulations, policies, standards, and guidelines. At the
+  discretion of the organization, participation in a contingency plan test or
+  exercise, including lessons learned sessions subsequent to the test or
+  exercise, may satisfy contingency plan training requirements. Related
+  Control(s): AT-2, AT-3, AT-4, CP-2, CP-4, CP-8, IR-2, IR-4, IR-9.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  contingency training; contingency plan; contingency training curriculum;
+  contingency training material; contingency training records; system security
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency planning,
+  plan implementation, and training responsibilities; organizational personnel
+  with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for contingency training].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CP-03a.02
+cci: 2834
+cci-definition: "002834: Provide contingency training to system users consistent
+  with assigned roles and responsibilities when required by system changes."
+implementation-guidance: "-"
+assessment-procedures: Determine if contingency training is provided to system
+  users consistent with assigned roles and responsibilities when required by
+  system changes.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (Organizational
+  contingency plans training must managed by the training program not by UDS.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CP-3.3. The resulting compliance status was set to non-compliant
+  because the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: CP-3.3."
+mapped-rev4-aps: CP-3.3
+family: CP

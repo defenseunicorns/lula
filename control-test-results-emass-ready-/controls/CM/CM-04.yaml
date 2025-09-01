@@ -1,0 +1,96 @@
+control-acronym: "[r5] CM-04"
+control-information: >-
+  Description:
+
+  Analyze changes to the system to determine potential security and privacy
+  impacts prior to change implementation.
+
+
+  Supplemental Guidance:
+
+  Organizational personnel with security or privacy responsibilities conduct
+  impact analyses. Individuals conducting impact analyses possess the necessary
+  skills and technical expertise to analyze the changes to systems as well as
+  the security or privacy ramifications. Impact analyses include reviewing
+  security and privacy plans, policies, and procedures to understand control
+  requirements; reviewing system design documentation and operational procedures
+  to understand control implementation and how specific system changes might
+  affect the controls; reviewing the impact of changes on organizational supply
+  chain partners with stakeholders; and determining how potential changes to a
+  system create new risks to the privacy of individuals and the ability of
+  implemented controls to mitigate those risks. Impact analyses also include
+  risk assessments to understand the impact of the changes and determine if
+  additional controls are required. Related Control(s): CA-7, CM-3, CM-8, CM-9,
+  MA-2, RA-3, RA-5, RA-8, SA-5, SA-8, SA-10, SI-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  security impact analyses for changes to the system; procedures addressing
+  privacy impact analyses for changes to the system; configuration management
+  plan; security impact analysis documentation; privacy impact analysis
+  documentation; privacy impact assessment; privacy risk assessment
+  documentation, system design documentation; analysis tools and associated
+  outputs; change control records; system audit records; system security plan;
+  privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  conducting security impact analyses; organizational personnel with
+  responsibility for conducting privacy impact analyses; organizational
+  personnel with information security and privacy responsibilities; system
+  developer; system/network administrators; members of change control board or
+  similar].
+
+
+  Test: [SELECT FROM: Organizational processes for security impact analyses;
+  organizational processes for privacy impact analyses].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-04
+cci: 000333; 003930
+cci-definition: "000333: Analyze changes to the system to determine potential
+  security impacts prior to change implementation.; 003930: Analyze changes to
+  the system to determine potential privacy impacts prior to change
+  implementation."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - changes to the system are analyzed to determine potential security impacts
+  prior to change implementation.
+
+  - changes to the system are analyzed to determine potential privacy impacts
+  prior to change implementation.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: UDS provides technical capabilities to support the analysis of
+  potential security impacts of changes to the information system prior to
+  implementation. Using Infrastructure as Code (IaC) with OpenTofu and secure,
+  version-controlled deployments via signed Zarf packages, UDS allows
+  comprehensive visibility into proposed changes, facilitating detailed security
+  impact analyses. Zarf provides detailed SBOMs and Defense Unicorns provides
+  CVE scans through grype.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CM-4.1; as well as the following Rev. 5 security requirements:
+  CCI-003930. The resulting compliance status was set to non-compliant because
+  of the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-003930."
+mapped-rev4-aps: CM-4.1
+family: CM

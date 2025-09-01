@@ -1,0 +1,73 @@
+control-acronym: "[r5] IR-05"
+control-information: >-
+  Description:
+
+  Track and document incidents.
+
+
+  Supplemental Guidance:
+
+  Documenting incidents includes maintaining records about each incident, the
+  status of the incident, and other pertinent information necessary for
+  forensics as well as evaluating incident details, trends, and handling.
+  Incident information can be obtained from a variety of sources, including
+  network monitoring, incident reports, incident response teams, user
+  complaints, supply chain partners, audit monitoring, physical access
+  monitoring, and user and administrator reports. IR-4 provides information on
+  the types of incidents that are appropriate for monitoring. Related
+  Control(s): AU-6, AU-7, IR-4, IR-6, IR-8, PE-6, PM-5, SC-5, SC-7, SI-3, SI-4,
+  SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident monitoring; incident response records and documentation; incident
+  response plan; system security plan; privacy plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident monitoring
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities].
+
+
+  Test: [SELECT FROM: Incident monitoring capability for the organization;
+  mechanisms supporting and/or implementing the tracking and documenting of
+  system security incidents].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IR-05
+cci: 832
+cci-definition: "000832: Track and document incidents."
+implementation-guidance: "-"
+assessment-procedures: |-
+  Determine if:
+  - incidents are tracked.
+  - incidents are documented.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (This must be managed by
+  the organization through their reporting channels though UDS does support
+  integration with SIEM tools.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IR-5.1. The resulting compliance status was set to non-compliant
+  because the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: IR-5.1."
+mapped-rev4-aps: IR-5.1
+family: IR

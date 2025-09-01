@@ -8,9 +8,9 @@
  * Now uses isomorphic-git for better reliability and cross-platform support
  */
 
-import * as git from 'isomorphic-git';
 import * as fs from 'fs';
-import { relative, join } from 'path';
+import * as git from 'isomorphic-git';
+import { relative } from 'path';
 import { createYamlDiff, type YamlDiffResult } from './yamlDiff';
 
 export interface GitCommit {

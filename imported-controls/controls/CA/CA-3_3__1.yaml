@@ -1,0 +1,88 @@
+control-acronym: CA-3(3)
+control-information: >-
+  Description:
+
+  The organization prohibits the direct connection of an [Assignment:
+  organization-defined unclassified, non-national security system] to an
+  external network without the use of [Assignment: organization-defined boundary
+  protection device].
+
+
+  Supplemental Guidance:
+
+  Organizations typically do not have control over external networks (e.g., the
+  Internet). Approved boundary protection devices (e.g., routers, firewalls)
+  mediate communications (i.e., information flows) between unclassified
+  non-national security systems and external networks. This control enhancement
+  is required for organizations processing, storing, or transmitting Controlled
+  Unclassified Information (CUI).
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing
+  information system connections; system and communications protection policy;
+  information system interconnection security agreements; security plan;
+  information system design documentation; information system configuration
+  settings and associated documentation; security assessment report; information
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  managing direct connections to external networks; network administrators;
+  organizational personnel with information security responsibilities; personnel
+  managing directly connected external networks].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting the management of external
+  network connections].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay:
+  Boundary protection devices protect systems containing PII from unauthorized
+  access by individuals outside the organization. A firewall is such a boundary
+  protection device.
+
+
+  Regulatory Statutory Reference: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: 5
+  U.S.C. Section: 552a(e)(10); OMB M-07-16
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CA-3(3).1
+cci: 2075
+cci-definition: '002075: The organization prohibits the direct connection of an
+  organization-defined unclassified, non-national security system to an external
+  network without the use of organization-defined boundary protection device.'
+implementation-guidance: >-
+  The organization being inspected/assessed does not connect any national
+  security systems to an external network without the use of protection devices
+  defined in CA-3 (3), CCI 2077.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Network topology diagram
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines network topology diagrams and examines the information
+  system to ensure the organization being inspected/assessed does not connect
+  any national security systems to an external network without the use of
+  protection devices defined in CA-3 (3), CCI 2077.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: CA

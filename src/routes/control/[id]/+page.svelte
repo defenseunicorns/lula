@@ -5,25 +5,50 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { ControlDetailsPanel, ControlsList } from '$components/controls';
-	import { controls, selectedControl } from '$stores/compliance';
+	import { selectedControl } from '$stores/compliance';
+	import { appState, wsClient } from '$lib/websocket';
 	import { Document } from 'carbon-icons-svelte';
+	import { onMount } from 'svelte';
 
-	// React to URL parameter changes
+	// React to URL parameter changes and fetch control details
 	$effect(() => {
 		const controlId = $page.params.id;
 		if (!controlId) return;
 
 		const decodedControlId = decodeURIComponent(controlId);
 
-		if (decodedControlId && $controls.length > 0) {
-			const control = $controls.find((c) => c.id === decodedControlId);
+		// Always fetch full control details when navigating to a control
+		// The summary data in $appState.controls is not enough for the details view
+		if (decodedControlId && $appState.isConnected) {
+			// Fetch full control details from backend
+			wsClient.getControlDetails(decodedControlId);
+
+			// Also set a temporary placeholder from summary if available
+			const summaryControl = $appState.controls?.find((c) => c.id === decodedControlId);
+			if (summaryControl) {
+				// This gives immediate feedback while full data loads
+				selectedControl.set(summaryControl);
+			}
+		}
+	});
+
+	// Listen for control details from WebSocket
+	onMount(() => {
+		const handleControlDetails = (event: CustomEvent) => {
+			const control = event.detail;
 			if (control) {
 				selectedControl.set(control);
 			} else {
 				// Control not found, redirect to home
 				goto('/');
 			}
-		}
+		};
+
+		window.addEventListener('control-details', handleControlDetails as EventListener);
+
+		return () => {
+			window.removeEventListener('control-details', handleControlDetails as EventListener);
+		};
 	});
 </script>
 

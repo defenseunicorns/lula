@@ -1,0 +1,154 @@
+control-acronym: "[r5] SA-08"
+control-information: >-
+  Description:
+
+  Apply the following systems security and privacy engineering principles in the
+  specification, design, development, implementation, and modification of the
+  system and system components: [Assignment: organization-defined systems
+  security and privacy engineering principles].
+
+
+  Supplemental Guidance:
+
+  Systems security and privacy engineering principles are closely related to and
+  implemented throughout the system development life cycle (see SA-3).
+  Organizations can apply systems security and privacy engineering principles to
+  new systems under development or to systems undergoing upgrades. For existing
+  systems, organizations apply systems security and privacy engineering
+  principles to system upgrades and modifications to the extent feasible, given
+  the current state of hardware, software, and firmware components within those
+  systems.
+
+
+  The application of systems security and privacy engineering principles helps
+  organizations develop trustworthy, secure, and resilient systems and reduces
+  the susceptibility to disruptions, hazards, threats, and the creation of
+  privacy problems for individuals. Examples of system security engineering
+  principles include: developing layered protections; establishing security and
+  privacy policies, architecture, and controls as the foundation for design and
+  development; incorporating security and privacy requirements into the system
+  development life cycle; delineating physical and logical security boundaries;
+  ensuring that developers are trained on how to build secure software;
+  tailoring controls to meet organizational needs; and performing threat
+  modeling to identify use cases, threat agents, attack vectors and patterns,
+  design patterns, and compensating controls needed to mitigate risk.
+
+
+  Organizations that apply systems security and privacy engineering concepts and
+  principles can facilitate the development of trustworthy, secure systems,
+  system components, and system services; reduce risk to acceptable levels; and
+  make informed risk management decisions. System security engineering
+  principles can also be used to protect against certain supply chain risks,
+  including incorporating tamper-resistant hardware into a design. Related
+  Control(s): PL-8, PM-7, RA-2, RA-3, RA-9, SA-3, SA-4, SA-15, SA-17, SA-20,
+  SC-2, SC-3, SC-32, SC-39, SR-2, SR-3, SR-4, SR-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; system and
+  services acquisition procedures; assessment and authorization procedures;
+  procedures addressing security and privacy engineering principles used in the
+  specification, design, development, implementation, and modification of the
+  system; system design documentation; security and privacy requirements and
+  specifications for the system; system security plan; privacy plan; privacy
+  impact assessment; privacy risk assessment documentation; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with acquisition/contracting
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities; organizational personnel with system specification,
+  design, development, implementation, and modification responsibilities; system
+  developers].
+
+
+  Test: [SELECT FROM: Organizational processes for applying security and privacy
+  engineering principles in system specification, design, development,
+  implementation, and modification; mechanisms supporting the application of
+  security and privacy engineering principles in system specification, design,
+  development, implementation, and modification].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-08
+cci: 000664; 000665; 000666; 000667; 000668; 004712; 004713; 004714; 004715; 004716
+cci-definition: "000664: Apply organization-defined systems security and privacy
+  engineering principles in the specification of the system and system
+  components.; 000665: Apply organization-defined systems security and privacy
+  engineering principles in the design of the system and system components.;
+  000666: Apply organization-defined systems security and privacy engineering
+  principles in the development of the system and system components.; 000667:
+  Apply organization-defined systems security and privacy engineering principles
+  in the implementation of the system and system components.; 000668: Apply
+  organization-defined systems security and privacy engineering principles in
+  the modification of the system and system components.; 004712: Defines the
+  systems security and privacy engineering principles applied to the
+  specification of the system and system components.; 004713: Defines the
+  systems security engineering principles applied to the design of the system
+  and system components.; 004714: Defines the systems security engineering
+  principles applied to the development of the system and system components.;
+  004715: Defines the systems security engineering principles applied to the
+  implementation of the system and system components.; 004716: Defines the
+  systems security engineering principles applied to the modification of the
+  system and system components."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:  
+
+  - [Assignment: organization-defined systems security and privacy engineering
+  principles] are applied in the specification of the system and system
+  components.  
+
+  - [Assignment: organization-defined systems security and privacy engineering
+  principles] are applied in the design of the system and system components.  
+
+  - [Assignment: organization-defined systems security and privacy engineering
+  principles] are applied in the development of the system and system
+  components.  
+
+  - [Assignment: organization-defined systems security and privacy engineering
+  principles] are applied in the implementation of the system and system
+  components.  
+
+  - [Assignment: organization-defined systems security and privacy engineering
+  principles] are applied in the modification of the system and system
+  components.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: "UDS was designed with security engineering principles (like least
+  privilege, defense-in-depth, fail-safe defaults) from the ground up. For
+  instance, zero trust networking (all internal comms encrypted and
+  authenticated) is implemented via Istio, least privilege via RBAC and minimal
+  container images, segmentation via NeuVector, and so on. By using UDS, an
+  organization is effectively implementing a system that adheres to robust
+  security best practices by default. This addresses SA-8, which calls for
+  applying security design principles in the implementation of the system.
+  Instead of building a system from scratch, the organization adopts UDS which
+  already incorporates those principles. Therefore, UDS strongly supports SA-8:
+  its architecture is an embodiment of secure design (modularity, layering,
+  least privilege, etc.), ensuring the system is resilient and easier to
+  protect."
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SA-8.1, SA-8.2, SA-8.3, SA-8.4, SA-8.5; as well as the following
+  Rev. 5 security requirements: CCI-004712, CCI-004713, CCI-004714, CCI-004715,
+  CCI-004716. The resulting compliance status was set to non-compliant because
+  of the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-004712, CCI-004713, CCI-004714,
+  CCI-004715, CCI-004716."
+mapped-rev4-aps: SA-8.1; SA-8.2; SA-8.3; SA-8.4; SA-8.5
+family: SA

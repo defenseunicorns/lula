@@ -1,0 +1,88 @@
+control-acronym: "[r5] SI-04(10)"
+control-information: >-
+  Description:
+
+  Make provisions so that [Assignment: organization-defined encrypted
+  communications traffic] is visible to [Assignment: organization-defined system
+  monitoring tools and mechanisms].
+
+
+  Supplemental Guidance:
+
+  Organizations balance the need to encrypt communications traffic to protect
+  data confidentiality with the need to maintain visibility into such traffic
+  from a monitoring perspective. Organizations determine whether the visibility
+  requirement applies to internal encrypted traffic, encrypted traffic intended
+  for external destinations, or a subset of the traffic types. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and information integrity policy; system and
+  information integrity procedures; procedures addressing system monitoring
+  tools and techniques; system design documentation; system monitoring tools and
+  techniques documentation; system configuration settings and associated
+  documentation; system protocols; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the system; organizational
+  personnel responsible for monitoring the system; organizational personnel
+  responsible for the intrusion detection system].
+
+
+  Test: [SELECT FROM: Organizational processes for intrusion detection and
+  system monitoring; mechanisms supporting and/or implementing intrusion
+  detection and system monitoring capabilities; mechanisms supporting and/or
+  implementing the visibility of encrypted communications traffic to monitoring
+  tools].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-04(10)
+cci: 002665; 002666; 002667; 004977; 004978; 004979
+cci-definition: "002665: Defines the encrypted communications traffic that is to
+  be visible to organization-defined system monitoring tools.; 002666: Defines
+  the system monitoring tools that will have visibility into
+  organization-defined encrypted communications traffic.; 002667: Make
+  provisions so that organization-defined encrypted communications traffic is
+  visible to organization-defined system monitoring tools.; 004977: Defines the
+  encrypted communications traffic that is to be visible to organization-defined
+  system monitoring mechanisms.; 004978: Defines the system monitoring
+  mechanisms that will have visibility into organization-defined encrypted
+  communications traffic.; 004979: Make provisions so that organization-defined
+  encrypted communications traffic is visible to organization-defined system
+  monitoring mechanisms."
+implementation-guidance: "-"
+assessment-procedures: "Determine if provisions are made so that [Assignment:
+  organization-defined encrypted communications traffic] is visible to
+  [Assignment: organization-defined system monitoring tools and mechanisms]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SI-4(10).1, SI-4(10).2, SI-4(10).3; as well as the following Rev.
+  5 security requirements: CCI-004977, CCI-004978, CCI-004979. The resulting
+  compliance status was set to non-compliant because of the addition of a new
+  security requirement to the assessment procedure that has not been previously
+  assessed: CCI-004977, CCI-004978, CCI-004979."
+mapped-rev4-aps: SI-4(10)
+family: SI

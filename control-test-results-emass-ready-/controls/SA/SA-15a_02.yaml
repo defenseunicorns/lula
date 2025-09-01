@@ -1,0 +1,114 @@
+control-acronym: "[r5] SA-15"
+control-information: >-
+  Description:
+
+  a. Require the developer of the system, system component, or system service to
+  follow a documented development process that:
+
+  1. Explicitly addresses security and privacy requirements;
+
+  2. Identifies the standards and tools used in the development process;
+
+  3. Documents the specific tool options and tool configurations used in the
+  development process; and
+
+  4. Documents, manages, and ensures the integrity of changes to the process
+  and/or tools used in development; and
+
+  b. Review the development process, standards, tools, tool options, and tool
+  configurations [Assignment: organization-defined frequency] to determine if
+  the process, standards, tools, tool options and tool configurations selected
+  and employed can satisfy the following security and privacy requirements:
+  [Assignment: organization-defined security and privacy requirements].
+
+
+  Supplemental Guidance:
+
+  Development tools include programming languages and computer-aided design
+  systems. Reviews of development processes include the use of maturity models
+  to determine the potential effectiveness of such processes. Maintaining the
+  integrity of changes to tools and processes facilitates effective supply chain
+  risk assessment and mitigation. Such integrity requires configuration control
+  throughout the system development life cycle to track authorized changes and
+  prevent unauthorized changes. Related Control(s): MA-6, SA-3, SA-4, SA-8,
+  SA-10, SA-11, SR-3, SR-4, SR-5, SR-6, SR-9.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; system and
+  services acquisition procedures; procedures addressing development process,
+  standards, and tools; procedures addressing the integration of security and
+  privacy requirements during the development process; solicitation
+  documentation; acquisition documentation; critical component inventory
+  documentation; service level agreements; acquisition contracts for the system,
+  system component, or system service; system developer documentation listing
+  tool options/configuration guides; configuration management policy;
+  configuration management records; documentation of development process reviews
+  using maturity models; change control records; configuration control records;
+  documented reviews of the development process, standards, tools, and tool
+  options/configurations; system security plan; privacy plan; privacy impact
+  assessment; privacy risk assessment documentation; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and service
+  acquisition responsibilities; organizational personnel with information
+  security and privacy responsibilities; system developer].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-15a.02
+cci: 003233; 003235; 003236
+cci-definition: "003233: Require the developer of the system, system component,
+  or system service to follow a documented development process.; 003235: Require
+  the developer of the system, system component, or system service to follow a
+  documented development process that identifies the standards used in the
+  development process.; 003236: Require the developer of the system, system
+  component, or system service to follow a documented development process that
+  identifies the tools used in the development process."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the developer of the system, system component, or system service is required
+  to follow a documented development process that identifies the standards used
+  in the development process.
+
+  - the developer of the system, system component, or system service is required
+  to follow a documented development process that identifies the tools used in
+  the development process.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: SA-15.1, SA-15.3,
+  SA-15.4. The resulting compliance status was set to non-compliant because the
+  following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: SA-15.1, SA-15.3, SA-15.4.
+
+
+  Not Applicable to UDS technology stack. (UDS users benefit from secure
+  development practices of UDS, but they don't enforce them. If the organization
+  builds anything on top of UDS, they should apply their own secure SDLC
+  standards.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SA-15.1, SA-15.3, SA-15.4. The resulting compliance status was set
+  to non-compliant because the following Rev. 4 assessment procedure had no
+  locally entered test result/compliance statement: SA-15.1, SA-15.3, SA-15.4."
+mapped-rev4-aps: SA-15.1; SA-15.3; SA-15.4
+family: SA

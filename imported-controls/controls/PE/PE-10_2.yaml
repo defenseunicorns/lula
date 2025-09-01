@@ -1,0 +1,88 @@
+control-acronym: PE-10
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Provides the capability of shutting off power to the information system or
+  individual system components in emergency situations;
+
+  b. Places emergency shutoff switches or devices in [Assignment:
+  organization-defined location by information system or system component] to
+  facilitate safe and easy access for personnel; and
+
+  c. Protects emergency power shutoff capability from unauthorized activation.
+
+
+  Supplemental Guidance:
+
+  This control applies primarily to facilities containing concentrations of
+  information system resources including, for example, data centers, server
+  rooms, and mainframe computer rooms. Related control: PE-15.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing power source emergency shutoff; security plan; emergency
+  shutoff controls or switches; locations housing emergency shutoff switches and
+  devices; security safeguards protecting emergency power shutoff capability
+  from unauthorized activation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  emergency power shutoff capability (both implementing and using the
+  capability); organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  emergency power shutoff].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PE-10.1,CCI-000956,AWS GovCloud L5 Cloud Service Provider Package
+  PE-10.2,CCI-000957,AWS GovCloud L5 Cloud Service Provider Package
+  PE-10.3,CCI-000958,DoD Organization or Service Common Control Package
+  PE-10.4,CCI-000959,AWS GovCloud L5 Cloud Service Provider Package...
+ap-acronym: PE-10.2
+cci: 957
+cci-definition: '000957: The organization places emergency shutoff switches or
+  devices in an organization-defined location by information system or system
+  component to facilitate safe and easy access for personnel.'
+implementation-guidance: >-
+  This control does not apply to individual workstations, laptops, printers,
+  etc. This control only applies to facilities containing concentrations of
+  information system resources (e.g., datacenters, server rooms, mainframe
+  computer rooms). The organization being inspected/assessed places emergency
+  shutoff switches or devices near more than one egress point of the IT area and
+  ensure it is labeled and protected by a cover to prevent accidental shut-off
+  to facilitate safe and easy access for personnel. DoD has defined the location
+  as near more than one egress point of the IT area and ensure it is labeled and
+  protected by a cover to prevent accidental shut-off.
+
+  Recommended Compelling Evidence:
+
+  1.) Documented method of procedure
+
+  2.) List of emergency shutoff switch locations
+assessment-procedures: The organization conducting the inspection/assessment
+  will physically inspect emergency shutoff switches or devices for placement to
+  validate the organization has installed the emergency shutoff switches or
+  devices near more than one egress point of the IT area and ensure it is
+  labeled and protected by a cover to prevent accidental shut-off to facilitate
+  safe and easy access for personnel. DoD has defined the location as near more
+  than one egress point of the IT area and ensure it is labeled and protected by
+  a cover to prevent accidental shut-off.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PE

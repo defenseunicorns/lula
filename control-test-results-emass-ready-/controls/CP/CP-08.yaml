@@ -1,0 +1,105 @@
+control-acronym: "[r5] CP-08"
+control-information: >-
+  Description:
+
+  Establish alternate telecommunications services, including necessary
+  agreements to permit the resumption of [Assignment: organization-defined
+  system operations] for essential mission and business functions within
+  [Assignment: organization-defined time period] when the primary
+  telecommunications capabilities are unavailable at either the primary or
+  alternate processing or storage sites.
+
+
+  Supplemental Guidance:
+
+  Telecommunications services (for data and voice) for primary and alternate
+  processing and storage sites are in scope for CP-8. Alternate
+  telecommunications services reflect the continuity requirements in contingency
+  plans to maintain essential mission and business functions despite the loss of
+  primary telecommunications services. Organizations may specify different time
+  periods for primary or alternate sites. Alternate telecommunications services
+  include additional organizational or commercial ground-based circuits or
+  lines, network-based approaches to telecommunications, or the use of
+  satellites. Organizations consider factors such as availability, quality of
+  service, and access when entering into alternate telecommunications
+  agreements. Related Control(s): CP-2, CP-6, CP-7, CP-11, SC-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  alternate telecommunications services; contingency plan; primary and alternate
+  telecommunications service agreements; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  telecommunications responsibilities; organizational personnel with system
+  recovery responsibilities; organizational personnel with knowledge of
+  requirements for mission and business functions; organizational personnel with
+  information security responsibilities; organizational personnel with
+  responsibility for acquisitions/contractual agreements].
+
+
+  Test: [SELECT FROM: Mechanisms supporting telecommunications].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CP-08
+cci: 000522; 000523; 000524; 000525; 002840; 002841
+cci-definition: "000522: Defines the time-period within which to permit the
+  resumption of organization-defined system operations for essential mission
+  functions when the primary telecommunications capabilities are unavailable at
+  either the primary or alternate processing or storage sites.; 000523: Defines
+  the time-period within which to permit the resumption of organization-defined
+  system operations for essential business functions when the primary
+  telecommunications capabilities are unavailable at either the primary or
+  alternate processing or storage sites.; 000524: Establish alternate
+  telecommunication services, including necessary agreements to permit the
+  resumption of organization-defined system operations for essential mission
+  functions within an organization-defined time period when the primary
+  telecommunications capabilities are unavailable at either the primary or
+  alternate processing or storage sites.; 000525: Establish alternate
+  telecommunication services, including necessary agreements to permit the
+  resumption of organization-defined system operations for essential business
+  functions within an organization-defined time period when the primary
+  telecommunications capabilities are unavailable at either the primary or
+  alternate processing or storage sites.; 002840: Defines the system operations
+  to be resumed for essential mission functions within the organization-defined
+  time period when the primary telecommunications capabilities are unavailable
+  at either the primary or alternate processing or storage sites.; 002841:
+  Defines the system operations to be resumed for essential business functions
+  within the organization-defined time period when the primary
+  telecommunications capabilities are unavailable at either the primary or
+  alternate processing or storage sites."
+implementation-guidance: CCI-000522, CCI-000523, CCI-002840, and CCI-002841 of
+  this assessment procedure are automatically compliant because of coverage by
+  DoD Enterprise.
+assessment-procedures: "Determine if alternate telecommunications services,
+  including necessary agreements to permit the resumption of [Assignment:
+  organization-defined system operations], are established for essential mission
+  and business functions within [Assignment: organization-defined time period]
+  when the primary telecommunications capabilities are unavailable at either the
+  primary or alternate processing or storage sites."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CP-8.1, CP-8.2, CP-8.3, CP-8.4, CP-8.5, CP-8.6."
+mapped-rev4-aps: CP-8.1; CP-8.2; CP-8.3; CP-8.4; CP-8.5; CP-8.6
+family: CP

@@ -1,0 +1,71 @@
+control-acronym: "[r5] PE-05"
+control-information: >-
+  Description:
+
+  Control physical access to output from [Assignment: organization-defined
+  output devices] to prevent unauthorized individuals from obtaining the output.
+
+
+  Supplemental Guidance:
+
+  Controlling physical access to output devices includes placing output devices
+  in locked rooms or other secured areas with keypad or card reader access
+  controls and allowing access to authorized individuals only, placing output
+  devices in locations that can be monitored by personnel, installing monitor or
+  screen filters, and using headphones. Examples of output devices include
+  monitors, printers, scanners, audio devices, facsimile machines, and copiers.
+  Related Control(s): PE-2, PE-3, PE-4, PE-18.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing access control for display medium; facility layout of
+  system components; actual displays from system components; list of output
+  devices and associated outputs requiring physical access controls; physical
+  access control logs or records for areas containing output devices and related
+  outputs; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access control
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for access control to output
+  devices; mechanisms supporting and/or implementing access control to output
+  devices].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-05
+cci: 937
+cci-definition: "000937: Control physical access to output from
+  organization-defined output devices to prevent unauthorized individuals from
+  obtaining the output."
+implementation-guidance: "-"
+assessment-procedures: "Determine if physical access to output from [Assignment:
+  organization-defined output devices] is controlled to prevent unauthorized
+  individuals from obtaining the output."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PE-5.1."
+mapped-rev4-aps: PE-5.1
+family: PE

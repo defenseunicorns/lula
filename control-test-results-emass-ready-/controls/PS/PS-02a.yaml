@@ -1,0 +1,86 @@
+control-acronym: "[r5] PS-02"
+control-information: >-
+  Description:
+
+  a. Assign a risk designation to all organizational positions;
+
+  b. Establish screening criteria for individuals filling those positions; and
+
+  c. Review and update position risk designations [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  Position risk designations reflect Office of Personnel Management (OPM) policy
+  and guidance. Proper position designation is the foundation of an effective
+  and consistent suitability and personnel security program. The Position
+  Designation System (PDS) assesses the duties and responsibilities of a
+  position to determine the degree of potential damage to the efficiency or
+  integrity of the service due to misconduct of an incumbent of a position and
+  establishes the risk level of that position. The PDS assessment also
+  determines if the duties and responsibilities of the position present the
+  potential for position incumbents to bring about a material adverse effect on
+  national security and the degree of that potential effect, which establishes
+  the sensitivity level of a position. The results of the assessment determine
+  what level of investigation is conducted for a position. Risk designations can
+  guide and inform the types of authorizations that individuals receive when
+  accessing organizational information and information systems. Position
+  screening criteria include explicit information security role appointment
+  requirements. Parts 1400 and 731 of Title 5, Code of Federal Regulations,
+  establish the requirements for organizations to evaluate relevant covered
+  positions for a position sensitivity and position risk designation
+  commensurate with the duties and responsibilities of those positions. Related
+  Control(s): AC-5, AT-3, PE-2, PE-3, PL-2, PS-3, PS-6, SA-5, SA-21, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  position categorization; appropriate codes of federal regulations; list of
+  risk designations for organizational positions; records of position risk
+  designation reviews and updates; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for assigning, reviewing, and
+  updating position risk designations; organizational processes for establishing
+  screening criteria].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PS-02a
+cci: 1512
+cci-definition: "001512: Assign a risk designation to all organizational positions."
+implementation-guidance: "-"
+assessment-procedures: Determine if a risk designation is assigned to all organizational positions.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (UDS is unrelated to
+  personnel security controls, which cover hiring, transfer, agreements,
+  termination, etc.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PS-2.1. The resulting compliance status was set to non-compliant
+  because the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: PS-2.1."
+mapped-rev4-aps: PS-2.1
+family: PS

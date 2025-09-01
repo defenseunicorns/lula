@@ -1,0 +1,71 @@
+control-acronym: PS-3
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Screens individuals prior to authorizing access to the information system;
+  and
+
+  b. Rescreens individuals according to [Assignment: organization-defined
+  conditions requiring rescreening and, where rescreening is so indicated, the
+  frequency of such rescreening].
+
+
+  Supplemental Guidance:
+
+  Personnel screening and rescreening activities reflect applicable federal
+  laws, Executive Orders, directives, regulations, policies, standards,
+  guidance, and specific criteria established for the risk designations of
+  assigned positions. Organizations may define different rescreening conditions
+  and frequencies for personnel accessing information systems based on types of
+  information processed, stored, or transmitted by the systems. Related
+  controls: AC-2, IA-4, PE-2, PS-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  personnel screening; records of screened personnel; security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for personnel screening].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: PS-3.3
+cci: 1518
+cci-definition: '001518: The organization defines the conditions requiring
+  rescreening of individuals with authorized access to the information system.'
+implementation-guidance: >-
+  The information system owner will develop and document the list of conditions
+  requiring rescreening individuals for access to the information system. DoD
+  has determined the list of conditions is not appropriate to define at the
+  Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) SOP/TTP list of conditions required for rescreening of individuals for
+  access to the information system.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documentation of conditions requiring rescreening of
+  individuals for access to the information system. DoD has determined the list
+  of conditions is not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (UDS is unrelated to
+  personnel security controls, which cover hiring, transfer, agreements,
+  termination, etc.)
+family: PS

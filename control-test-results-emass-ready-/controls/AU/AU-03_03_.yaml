@@ -1,0 +1,62 @@
+control-acronym: "[r5] AU-03(03)"
+control-information: >-
+  Description:
+
+  Limit personally identifiable information contained in audit records to the
+  following elements identified in the privacy risk assessment: [Assignment:
+  organization-defined elements].
+
+
+  Supplemental Guidance:
+
+  Limiting personally identifiable information in audit records when such
+  information is not needed for operational purposes helps reduce the level of
+  privacy risk created by a system. Related Control(s): RA-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; system security plan;
+  privacy plan; privacy risk assessment; privacy risk assessment results;
+  procedures addressing content of audit records; system design documentation;
+  system configuration settings and associated documentation; list of
+  organization-defined auditable events; system audit records; third party
+  contracts; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security and privacy responsibilities; system/network administrators; system
+  developers].
+
+
+  Test: [SELECT FROM: system audit capability].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-03(03)
+cci: 003812; 003813
+cci-definition: "003812: Limit personally identifiable information contained in
+  audit records to organization-defined elements identified in the privacy risk
+  assessment.; 003813: Defines the elements identified in the privacy risk
+  assessment for limiting personally identifiable information contained in audit
+  records."
+implementation-guidance: "-"
+assessment-procedures: "Determine if personally identifiable information
+  contained in audit records is limited to [Assignment: organization-defined
+  elements] identified in the privacy risk assessment."
+inherited: Local
+remote-inheritance-instance: "-"
+family: AU

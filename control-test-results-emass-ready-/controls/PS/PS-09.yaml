@@ -1,0 +1,64 @@
+control-acronym: "[r5] PS-09"
+control-information: >-
+  Description:
+
+  Incorporate security and privacy roles and responsibilities into
+  organizational position descriptions.
+
+
+  Supplemental Guidance:
+
+  Specification of security and privacy roles in individual organizational
+  position descriptions facilitates clarity in understanding the security or
+  privacy responsibilities associated with the roles and the role-based security
+  and privacy training requirements for the roles. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Personnel security policy; personnel security
+  procedures; procedures addressing position descriptions; security and privacy
+  position descriptions; system security plan; privacy plan; privacy program
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; organizational personnel with information security and
+  privacy responsibilities; organizational personnel with human capital
+  management responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for managing position
+  descriptions].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PS-09
+cci: 004523; 004524
+cci-definition: "004523: Incorporate security roles and responsibilities into
+  organizational position descriptions.; 004524: Incorporate privacy roles and
+  responsibilities into organizational position descriptions."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - security roles and responsibilities are incorporated into organizational
+  position descriptions.
+
+  - privacy roles and responsibilities are incorporated into organizational
+  position descriptions.
+inherited: Local
+remote-inheritance-instance: "-"
+family: PS

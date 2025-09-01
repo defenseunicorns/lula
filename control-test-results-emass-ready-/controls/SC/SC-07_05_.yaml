@@ -1,0 +1,79 @@
+control-acronym: "[r5] SC-07(05)"
+control-information: >-
+  Description:
+
+  Deny network communications traffic by default and allow network
+  communications traffic by exception [Selection (one or more): at managed
+  interfaces; for [Assignment: organization-defined systems]].
+
+
+  Supplemental Guidance:
+
+  Denying by default and allowing by exception applies to inbound and outbound
+  network communications traffic. A deny-all, permit-by-exception network
+  communications traffic policy ensures that only those system connections that
+  are essential and approved are allowed. Deny by default, allow by exception
+  also applies to a system that is connected to an external system. Related
+  Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; system design documentation; system
+  configuration settings and associated documentation; system audit records;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms implementing traffic management at managed
+  interfaces].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-07(05)
+cci: 001109; 004872
+cci-definition: "001109: Deny network communications traffic by default and
+  allow network communications traffic by exception at managed interfaces;
+  and/or for organization-defined systems.; 004872: Defines the systems that
+  will deny network communications traffic by default and allow network
+  communications traffic by exception."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - network communications traffic is denied by default [Selection (one or
+  more): at managed interfaces; for [Assignment: organization-defined systems]].
+
+  - network communications traffic is allowed by exception [Selection (one or
+  more): at managed interfaces; for [Assignment: organization-defined systems]].
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CA-3(5).1, CA-3(5).2, CA-3(5).3, SC-7(5).1; as well as the
+  following Rev. 5 security requirements: CCI-004872. The resulting compliance
+  status was set to non-compliant because of the addition of a new security
+  requirement to the assessment procedure that has not been previously assessed:
+  CCI-004872."
+mapped-rev4-aps: CA-3(5); SC-7(5)
+family: SC

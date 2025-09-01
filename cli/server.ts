@@ -3,12 +3,12 @@
 import cors from 'cors';
 import express from 'express';
 import { existsSync, mkdirSync } from 'fs';
+import { createServer as createHttpServer } from 'http';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import apiRoutes from './apiRoutes';
-import gitRoutes from './gitRoutes';
-import spreadsheetRoutes from './spreadsheetRoutes';
 import { initializeServerState, loadAllData, saveMappingsToFile } from './serverState';
+import spreadsheetRoutes from './spreadsheetRoutes';
+import { wsManager } from './websocketServer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,7 +20,7 @@ export interface ServerOptions {
 }
 
 export async function createServer(options: ServerOptions) {
-	const { controlSetDir, port, wizardMode = false } = options;
+	const { controlSetDir, port } = options;
 
 	// Ensure control set directory exists
 	if (!existsSync(controlSetDir)) {
@@ -45,8 +45,6 @@ export async function createServer(options: ServerOptions) {
 	app.use(express.static(distPath));
 
 	// API Routes
-	app.use('/api', apiRoutes);
-	app.use('/api', gitRoutes);
 	app.use('/api', spreadsheetRoutes);
 
 	// Serve frontend for all other routes (SPA fallback)
@@ -54,14 +52,21 @@ export async function createServer(options: ServerOptions) {
 		res.sendFile(join(distPath, 'index.html'));
 	});
 
+	// Create HTTP server for both Express and WebSocket
+	const httpServer = createHttpServer(app);
+
+	// Initialize WebSocket server
+	wsManager.initialize(httpServer);
+
 	return {
 		app,
 		start: () => {
 			return new Promise<void>((resolve) => {
-				app.listen(port, () => {
+				httpServer.listen(port, () => {
 					console.log(`Lula running on http://localhost:${port}`);
 					console.log(`Control set directory: ${controlSetDir}`);
 					console.log(`Using individual control files in: ${controlSetDir}/controls/`);
+					console.log(`WebSocket server listening on ws://localhost:${port}/ws`);
 					resolve();
 				});
 			});
@@ -69,7 +74,11 @@ export async function createServer(options: ServerOptions) {
 	};
 }
 
-export async function startServer(controlSetDir: string, port: number, options: { wizardMode?: boolean } = {}) {
+export async function startServer(
+	controlSetDir: string,
+	port: number,
+	options: { wizardMode?: boolean } = {}
+) {
 	const server = await createServer({ controlSetDir, port, ...options });
 	await server.start();
 

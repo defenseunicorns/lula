@@ -1,0 +1,78 @@
+control-acronym: AC-18
+control-information: >-
+  Description:
+
+  The organization
+
+  a. Establishes usage restrictions, configuration/connection requirements, and
+  implementation guidance for wireless access; and
+
+  b. Authorizes wireless access to the information system prior to allowing such
+  connections.
+
+
+  Supplemental Guidance:
+
+  Wireless technologies include, for example, microwave, packet radio (UHF/VHF),
+  802.11x, and Bluetooth. Wireless networks use authentication protocols (e.g.,
+  EAP/TLS, PEAP), which provide credential protection and mutual authentication.
+  Related controls: AC-2, AC-3, AC-17, AC-19, CA-3, CA-7, CM-8, IA-2, IA-3,
+  IA-8, PL-4, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing wireless
+  access implementation and usage (including restrictions); configuration
+  management plan; security plan; information system design documentation;
+  information system configuration settings and associated documentation;
+  wireless access authorizations; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  managing wireless access connections; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Wireless access management capability for the information
+  system].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-18.1,CCI-001438,Organization AWS Cloud Brokerage Package
+  AC-18.2,CCI-001439,Organization AWS Cloud Brokerage Package
+  AC-18.3,CCI-002323,Organization AWS Cloud Brokerage Package
+  AC-18.4,CCI-001441,Local...
+ap-acronym: AC-18.4
+cci: 1441
+cci-definition: '001441: The organization authorizes wireless access to the
+  information system prior to allowing such connections.'
+implementation-guidance: >-
+  The organization being inspected/assessed authorizes wireless access to the
+  information system prior to allowing such connections. The organization must
+  maintain an audit trail of authorizations.
+
+  Recommended Compelling Evidence:
+
+  1.) Audit trail of authorizations and denials
+
+  2.) Signed and dated wireless access policy
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the audit trail of authorizations to ensure the
+  organization being inspected/assessed authorizes wireless access to the
+  information system prior to allowing such connections.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (Wireless access control
+  pertains to use of wireless networks, which is outside the scope of a
+  container platform stack. UDS runs on underlying infrastructure that could be
+  on wired networks or cloud; any wireless networking controls would be handled
+  by the environment, not UDS itself.)
+family: AC

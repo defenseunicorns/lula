@@ -1,0 +1,98 @@
+control-acronym: "[r5] MP-07"
+control-information: >-
+  Description:
+
+  a. [Selection: Restrict; Prohibit] the use of [Assignment:
+  organization-defined types of system media] on [Assignment:
+  organization-defined systems or system components] using [Assignment:
+  organization-defined controls]; and
+
+  b. Prohibit the use of portable storage devices in organizational systems when
+  such devices have no identifiable owner.
+
+
+  Supplemental Guidance:
+
+  System media includes both digital and non-digital media. Digital media
+  includes diskettes, magnetic tapes, flash drives, compact discs, digital
+  versatile discs, and removable hard disk drives. Non-digital media includes
+  paper and microfilm. Media use protections also apply to mobile devices with
+  information storage capabilities. In contrast to MP-2, which restricts user
+  access to media, MP-7 restricts the use of certain types of media on systems,
+  for example, restricting or prohibiting the use of flash drives or external
+  hard disk drives. Organizations use technical and nontechnical controls to
+  restrict the use of system media. Organizations may restrict the use of
+  portable storage devices, for example, by using physical cages on workstations
+  to prohibit access to certain external ports or disabling or removing the
+  ability to insert, read, or write to such devices. Organizations may also
+  limit the use of portable storage devices to only approved devices, including
+  devices provided by the organization, devices provided by other approved
+  organizations, and devices that are not personally owned. Finally,
+  organizations may restrict the use of portable storage devices based on the
+  type of device, such as by prohibiting the use of writeable, portable storage
+  devices and implementing this restriction by disabling or removing the
+  capability to write to such devices. Requiring identifiable owners for storage
+  devices reduces the risk of using such devices by allowing organizations to
+  assign responsibility for addressing known vulnerabilities in the devices.
+  Related Control(s): AC-19, AC-20, PL-4, PM-12, SC-34, SC-41.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System media protection policy; system use policy;
+  procedures addressing media usage restrictions; rules of behavior; system
+  design documentation; system configuration settings and associated
+  documentation; audit records; system security plan; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system media use
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for media use; mechanisms
+  restricting or prohibiting the use of system media on systems or system
+  components].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: MP-07a
+cci: 002581; 002582; 002583; 002584
+cci-definition: "002581: Defines the types of system media to restrict or
+  prohibit on organization-defined systems or system components using
+  organization-defined controls.; 002582: Defines the systems or system
+  components on which to restrict or prohibit the use of organization-defined
+  types of system media using organization-defined controls.; 002583: Defines
+  the controls to use for restricting or prohibiting the use of
+  organization-defined types of system media on organization-defined systems or
+  system components.; 002584: Restrict or prohibit the use of
+  organization-defined types of system media on organization-defined systems or
+  system components using organization-defined controls."
+implementation-guidance: "-"
+assessment-procedures: "Determine if the use of [Assignment:
+  organization-defined types of system media] is [Selection: Restrict; Prohibit]
+  on [Assignment: organization-defined systems or system components] using
+  [Assignment: organization-defined controls]."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: MP-7.1, MP-7.2, MP-7.3, MP-7.4."
+mapped-rev4-aps: MP-7.1; MP-7.2; MP-7.3; MP-7.4
+family: MP

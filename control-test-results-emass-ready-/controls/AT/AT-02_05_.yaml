@@ -1,0 +1,59 @@
+control-acronym: "[r5] AT-02(05)"
+control-information: >-
+  Description:
+
+  Provide literacy training on the advanced persistent threat.
+
+
+  Supplemental Guidance:
+
+  An effective way to detect advanced persistent threats (APT) and to preclude
+  successful attacks is to provide specific literacy training for individuals.
+  Threat literacy training includes educating individuals on the various ways
+  that APTs can infiltrate the organization (e.g., through websites, emails,
+  advertisement pop-ups, articles, and social engineering). Effective training
+  includes techniques for recognizing suspicious emails, use of removable
+  systems in non-secure settings, and the potential targeting of individuals at
+  home. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System security plan; privacy plan; literacy training
+  and awareness policy; procedures addressing literacy training and awareness
+  implementation; literacy training and awareness curriculum; literacy training
+  and awareness materials; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel who receive literacy
+  training and awareness; organizational personnel with responsibilities for
+  basic literacy training and awareness; organizational personnel with
+  information security and privacy responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AT-02(05)
+cci: 3779
+cci-definition: "003779: Provide literacy training on the advanced persistent threat."
+implementation-guidance: This assessment procedure is automatically compliant
+  because of coverage by DoD Enterprise.
+assessment-procedures: Determine if literacy training on the advanced persistent threat is provided.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: 'This control has been inherited and will receive test results
+  from the providing system or Common Control Package. Level 1 Common Control:
+  The Cybersecurity CBT "Cyber Awareness Challenge".'
+family: AT

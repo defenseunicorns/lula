@@ -1,0 +1,72 @@
+control-acronym: CM-5(1)
+control-information: >-
+  Description:
+
+  The information system enforces access restrictions and supports auditing of
+  the enforcement actions.
+
+
+  Supplemental Guidance:
+
+  Related controls: AU-2, AU-12, AU-6, CM-3, CM-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  access restrictions for changes to the information system; information system
+  design documentation; information system architecture and configuration
+  documentation; information system configuration settings and associated
+  documentation; change control records; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes for managing access restrictions
+  to change; automated mechanisms implementing enforcement of access
+  restrictions for changes to the information system; automated mechanisms
+  supporting auditing of enforcement actions].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CM-5(1).1
+cci: 1813
+cci-definition: '001813: The information system enforces access restrictions.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to enforce access restrictions provided by the information system.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation of a process to enforce access restrictions
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process as well as the configuration of
+  the information system to ensure access restrictions are implemented.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: UDS effectively enforces access restrictions throughout the
+  platform using multiple integrated technical mechanisms. Centralized
+  authentication and authorization are managed by Keycloak, ensuring strict
+  enforcement of user and role-based access controls. Kubernetes RBAC explicitly
+  restricts permissions for users, applications, and services within the cluster
+  environment, limiting access strictly to authorized resources and actions.
+  Istio Service Mesh enhances this enforcement through fine-grained
+  authorization policies and mutual TLS (mTLS) authentication, strictly
+  controlling service-to-service communications. Additionally, the policy
+  enforcement engine Pepr and runtime monitoring by NeuVector proactively detect
+  and prevent unauthorized access attempts or policy deviations, ensuring
+  continuous enforcement of access restrictions. These comprehensive security
+  measures collectively fulfill the intent of this control.
+uds-alignment: Keycloak, Kubernetes, Istio, Zarf, Pepr, Neuvector
+family: CM

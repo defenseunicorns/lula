@@ -1,0 +1,84 @@
+control-acronym: "[r5] SA-15(03)"
+control-information: >-
+  Description:
+
+  Require the developer of the system, system component, or system service to
+  perform a criticality analysis:
+
+  (a) At the following decision points in the system development life cycle:
+  [Assignment: organization-defined decision points in the system development
+  life cycle]; and
+
+  (b) At the following level of rigor: [Assignment: organization-defined breadth
+  and depth of criticality analysis].
+
+
+  Supplemental Guidance:
+
+  Criticality analysis performed by the developer provides input to the
+  criticality analysis performed by organizations. Developer input is essential
+  to organizational criticality analysis because organizations may not have
+  access to detailed design documentation for system components that are
+  developed as commercial off-the-shelf products. Such design documentation
+  includes functional specifications, high-level designs, low-level designs,
+  source code, and hardware schematics. Criticality analysis is important for
+  organizational systems that are designated as high value assets. High value
+  assets can be moderate- or high-impact systems due to heightened adversarial
+  interest or potential adverse effects on the federal enterprise. Developer
+  input is especially important when organizations conduct supply chain
+  criticality analyses. Related Control(s): RA-9.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Supply chain risk management plan; system and services
+  acquisition policy; procedures addressing development process, standards, and
+  tools; procedures addressing criticality analysis requirements for the system,
+  system component, or system service; solicitation documentation; acquisition
+  documentation; service level agreements; acquisition contracts for the system,
+  system component, or system service; criticality analysis documentation;
+  business impact analysis documentation; software development life cycle
+  documentation; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and service
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel responsible for performing
+  criticality analysis; system developer; organizational personnel with supply
+  chain risk management responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for performing criticality
+  analysis; mechanisms supporting and/or implementing criticality analysis].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-15(03)(b)
+cci: 003254; 004826
+cci-definition: "003254: Defines the breadth/depth of criticality analysis at
+  which the developer of the system, system component, or system service is
+  required to perform a criticality analysis.; 004826: Require the developer of
+  the system, system component, or system service to perform a criticality
+  analysis at an organization-defined breadth/depth of criticality analysis."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the developer of the system, system component, or system service is required
+  to perform a criticality analysis at the following rigor level: [Assignment:
+  organization-defined breadth and depth of criticality analysis].
+inherited: Local
+remote-inheritance-instance: "-"
+family: SA

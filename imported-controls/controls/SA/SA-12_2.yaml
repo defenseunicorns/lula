@@ -1,0 +1,148 @@
+control-acronym: SA-12
+control-information: >-
+  Description:
+
+  The organization protects against supply chain threats to the information
+  system, system component, or information system service by employing
+  [Assignment: organization-defined security safeguards] as part of a
+  comprehensive, defense-in-breadth information security strategy.
+
+
+  Supplemental Guidance:
+
+  Information systems (including system components that compose those systems)
+  need to be protected throughout the system development life cycle (i.e.,
+  during design, development, manufacturing, packaging, assembly, distribution,
+  system integration, operations, maintenance, and retirement). Protection of
+  organizational information systems is accomplished through threat awareness,
+  by the identification, management, and reduction of vulnerabilities at each
+  phase of the life cycle and the use of complementary, mutually reinforcing
+  strategies to respond to risk. Organizations consider implementing a
+  standardized process to address supply chain risk with respect to information
+  systems and system components, and to educate the acquisition workforce on
+  threats, risk, and required security controls. Organizations use the
+  acquisition/procurement processes to require supply chain entities to
+  implement necessary security safeguards to: (i) reduce the likelihood of
+  unauthorized modifications at each stage in the supply chain; and (ii) protect
+  information systems and information system components, prior to taking
+  delivery of such systems/components. This control enhancement also applies to
+  information system services. Security safeguards include, for example: (i)
+  security controls for development systems, development facilities, and
+  external connections to development systems; (ii) vetting development
+  personnel; and (iii) use of tamper-evident packaging during
+  shipping/warehousing. Methods for reviewing and protecting development plans,
+  evidence, and documentation are commensurate with the security category or
+  classification level of the information system. Contracts may specify
+  documentation protection requirements. Related controls: AT-3, CM-8, IR-4,
+  PE-16, PL-8, SA-3, SA-4, SA-8, SA-10, SA-14, SA-15, SA-18, SA-19, SC-29,
+  SC-30, SC-38, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing supply chain protection; procedures addressing the integration of
+  information security requirements into the acquisition process; solicitation
+  documentation; acquisition documentation; service-level agreements;
+  acquisition contracts for the information system, system component, or
+  information system service; list of supply chain threats; list of security
+  safeguards to be taken against supply chain threats; system development life
+  cycle documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and services
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with supply chain
+  protection responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for defining safeguards for and
+  protecting against supply chain threats; automated mechanisms supporting
+  and/or implementing safeguards for supply chain threats].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SA-12.1,CCI-000722,DoD Organization or Service Common Control Package
+  SA-12.2,CCI-000723,Local...
+ap-acronym: SA-12.2
+cci: 723
+cci-definition: '000723: The organization protects against supply chain threats
+  to the information system, system component, or information system service by
+  employing organization-defined security safeguards as part of a comprehensive,
+  defense-in-breadth information security strategy.'
+implementation-guidance: 'The organization being inspected/assessed must
+  identify and document in the Security Plan whether the system is a âcovered
+  systemâ IAW DoDI 5200.44. If it is a covered system, the organization must
+  implement the requirements below:
+
+  1. Conduct a criticality analysis to identify mission critical functions and
+  critical components and reduce the vulnerability of such functions and
+  components through secure system design;
+
+  2. Request threat analysis of suppliers of critical components from the TSN
+  focal point and manage access to and control of threat analysis products
+  containing U.S. person information;
+
+  3. Engage TSN focal points for guidance on managing identified risk using DoD
+  Components and Enterprise risk management resources; and
+
+  4. Apply TSN best practices, processes, techniques, and procurement tools
+  prior to the acquisition of critical components or their integration into
+  applicable systems, at any point in the system lifecycle. Such tools and
+  practices include contract requirements and the SCRM key practices Guide.
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP).
+
+  2.) System development life cycle (SDLC) documentation.
+
+  3.) Continuous monitoring plan must show organization-defined protections
+  against supply chain threats.'
+assessment-procedures: 'The organization conducting the inspection/assessment
+  obtains and examines the Security Plan for the system to determine whether the
+  system is a âcovered systemâ IAW DoDI 5200.44.
+
+
+  If it is a covered system, the organization conducting the
+  inspection/assessment obtains and examines documentation of compliance with
+  DoDI 5200.44, to ensure the organization being inspected/assessed has:
+
+  1. Conducted a criticality analysis to identify mission critical functions and
+  critical components and reduced the vulnerability of such functions and
+  components through secure system design;
+
+  2. Requested threat analysis of suppliers of critical components from the TSN
+  focal point and managed access to and control of threat analysis products
+  containing U.S. person information;
+
+  3. Engaged TSN focal points for guidance on managing identified risk using DoD
+  Components and Enterprise risk management resources; and
+
+  4. Applied TSN best practices, processes, techniques, and procurement tools
+  prior to the acquisition of critical components or their integration into
+  applicable systems, at any point in the system lifecycle. Such tools and
+  practices include contract requirements and the SCRM key practices Guide.'
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "UDS excels at supply chain protection. By using Zarf for
+  deployment, all software components (containers, manifests) are packaged in a
+  controlled, versioned archive. Zarf supports cryptographic signing of packages
+  with cosign, and verification of signatures before deploymentâ. This means
+  the organization can be confident that the UDS package they deploy is exactly
+  what was released by the provider and hasn't been tampered with. Additionally,
+  Zarfâs SBOM generationâ provides a list of all components and their
+  hashes, aiding in verifying provenance. NeuVector ensures no unvetted
+  container images slip in. Most components in UDS are open source, so it can be
+  scrutinized for malicious code (transparency). The net effect is a
+  significantly reduced risk of supply chain attacks: only approved images from
+  the Zarf package run."
+uds-alignment: Zarf, Neuvector
+family: SA

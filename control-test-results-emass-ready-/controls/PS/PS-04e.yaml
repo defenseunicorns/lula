@@ -1,0 +1,95 @@
+control-acronym: "[r5] PS-04"
+control-information: >-
+  Description:
+
+  Upon termination of individual employment:
+
+  a. Disable system access within [Assignment: organization-defined time
+  period];
+
+  b. Terminate or revoke any authenticators and credentials associated with the
+  individual;
+
+  c. Conduct exit interviews that include a discussion of [Assignment:
+  organization-defined information security topics];
+
+  d. Retrieve all security-related organizational system-related property; and
+
+  e. Retain access to organizational information and systems formerly controlled
+  by terminated individual.
+
+
+  Supplemental Guidance:
+
+  System property includes hardware authentication tokens, system administration
+  technical manuals, keys, identification cards, and building passes. Exit
+  interviews ensure that terminated individuals understand the security
+  constraints imposed by being former employees and that proper accountability
+  is achieved for system-related property. Security topics at exit interviews
+  include reminding individuals of nondisclosure agreements and potential
+  limitations on future employment. Exit interviews may not always be possible
+  for some individuals, including in cases related to the unavailability of
+  supervisors, illnesses, or job abandonment. Exit interviews are important for
+  individuals with security clearances. The timely execution of termination
+  actions is essential for individuals who have been terminated for cause. In
+  certain situations, organizations consider disabling the system accounts of
+  individuals who are being terminated prior to the individuals being notified.
+  Related Control(s): AC-2, IA-4, PE-2, PM-12, PS-6, PS-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  personnel termination; records of personnel termination actions; list of
+  system accounts; records of terminated or revoked authenticators/credentials;
+  records of exit interviews; system security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for personnel termination;
+  mechanisms supporting and/or implementing personnel termination notifications;
+  mechanisms for disabling system access/revoking authenticators].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PS-04e
+cci: 001525; 001526
+cci-definition: "001525: Upon termination of individual employment, retain
+  access to organizational information formerly controlled by the terminated
+  individual.; 001526: Upon termination of individual employment, retain access
+  to organizational systems formerly controlled by the terminated individual."
+implementation-guidance: "-"
+assessment-procedures: Determine if upon termination of individual employment,
+  access to organizational information and systems formerly controlled by the
+  terminated individual are retained.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (UDS is unrelated to
+  personnel security controls, which cover hiring, transfer, agreements,
+  termination, etc.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PS-4.7, PS-4.8. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: PS-4.7, PS-4.8."
+mapped-rev4-aps: PS-4.7; PS-4.8
+family: PS

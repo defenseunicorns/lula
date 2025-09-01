@@ -1,0 +1,94 @@
+control-acronym: SI-1
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Develops, documents, and disseminates to [Assignment: organization-defined
+  personnel or roles]:
+
+  1. A system and information integrity policy that addresses purpose, scope,
+  roles, responsibilities, management commitment, coordination among
+  organizational entities, and compliance; and
+
+  2. Procedures to facilitate the implementation of the system and information
+  integrity policy and associated system and information integrity controls; and
+
+  b. Reviews and updates the current:
+
+  1. System and information integrity policy [Assignment: organization-defined
+  frequency]; and
+
+  2. System and information integrity procedures [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  This control addresses the establishment of policy and procedures for the
+  effective implementation of selected security controls and control
+  enhancements in the SI family. Policy and procedures reflect applicable
+  federal laws, Executive Orders, directives, regulations, policies, standards,
+  and guidance. Security program policies and procedures at the organization
+  level may make the need for system-specific policies and procedures
+  unnecessary. The policy can be included as part of the general information
+  security policy for organizations or conversely, can be represented by
+  multiple policies reflecting the complex nature of certain organizations. The
+  procedures can be established for the security program in general and for
+  particular information systems, if needed. The organizational risk management
+  strategy is a key factor in establishing policy and procedures. Related
+  control: PM-9.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy and procedures;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and information
+  integrity responsibilities; organizational personnel with information security
+  responsibilities].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: ...
+ap-acronym: SI-1.6
+cci: 1219
+cci-definition: '001219: The organization reviews and updates system and
+  information integrity policy in accordance with organization-defined
+  frequency.'
+implementation-guidance: >-
+  Documenting and implementing the Risk Management Framework (RMF) for DoD IT
+  (DoDI 8510.01) meets the DoD requirement for a system and information
+  integrity policy.
+
+
+  DoD Components are automatically compliant with this CCI because they are
+  covered by the DoD level policy, Risk Management Framework (RMF) for DoD IT
+  (DoDI 8510.01).
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per DoDI 8501.01.
+assessment-procedures: >-
+  Documenting and implementing the Risk Management Framework (RMF) for DoD IT
+  (DoDI 8510.01) meets the DoD requirement for a system and information
+  integrity policy.
+
+
+  DoD Components are automatically compliant with this CCI because they are
+  covered by the DoD level policy, Risk Management Framework (RMF) for DoD IT
+  (DoDI 8510.01).
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SI

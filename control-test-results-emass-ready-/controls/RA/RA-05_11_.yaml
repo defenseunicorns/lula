@@ -1,0 +1,61 @@
+control-acronym: "[r5] RA-05(11)"
+control-information: >-
+  Description:
+
+  Establish a public reporting channel for receiving reports of vulnerabilities
+  in organizational systems and system components.
+
+
+  Supplemental Guidance:
+
+  The reporting channel is publicly discoverable and contains clear language
+  authorizing good-faith research and the disclosure of vulnerabilities to the
+  organization. The organization does not condition its authorization on an
+  expectation of indefinite non-disclosure to the public by the reporting entity
+  but may request a specific time period to properly remediate the
+  vulnerability. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Risk assessment policy; procedures addressing
+  vulnerability scanning; risk assessment; vulnerability scanning tools and
+  techniques documentation; vulnerability scanning results; vulnerability
+  management records; audit records; public reporting channel; system security
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with vulnerability scanning
+  responsibilities; organizational personnel with vulnerability scan analysis
+  responsibilities; organizational personnel with security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for vulnerability scanning;
+  mechanisms/tools supporting and/or implementing vulnerability scanning;
+  mechanisms implementing the public reporting of vulnerabilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: RA-05(11)
+cci: 4640
+cci-definition: "004640: Establish a public reporting channel for receiving
+  reports of vulnerabilities in organizational systems and system components."
+implementation-guidance: "-"
+assessment-procedures: Determine if a public reporting channel is established
+  for receiving reports of vulnerabilities in organizational systems and system
+  components.
+inherited: Local
+remote-inheritance-instance: "-"
+family: RA

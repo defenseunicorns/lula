@@ -1,0 +1,76 @@
+control-acronym: "[r5] CP-04"
+control-information: >-
+  Description:
+
+  a. Test the contingency plan for the system [Assignment: organization-defined
+  frequency] using the following tests to determine the effectiveness of the
+  plan and the readiness to execute the plan: [Assignment: organization-defined
+  tests].
+
+  b. Review the contingency plan test results; and
+
+  c. Initiate corrective actions, if needed.
+
+
+  Supplemental Guidance:
+
+  Methods for testing contingency plans to determine the effectiveness of the
+  plans and identify potential weaknesses include checklists, walk-through and
+  tabletop exercises, simulations (parallel or full interrupt), and
+  comprehensive exercises. Organizations conduct testing based on the
+  requirements in contingency plans and include a determination of the effects
+  on organizational operations, assets, and individuals due to contingency
+  operations. Organizations have flexibility and discretion in the breadth,
+  depth, and timelines of corrective actions. Related Control(s): AT-3, CP-2,
+  CP-3, CP-8, CP-9, IR-3, IR-4, PL-2, PM-14, SR-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  contingency plan testing; contingency plan; contingency plan test
+  documentation; contingency plan test results; system security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  contingency plan testing, reviewing, or responding to contingency plan tests;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for contingency plan testing;
+  mechanisms supporting the contingency plan and/or contingency plan testing].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CP-04b
+cci: 496
+cci-definition: "000496: Review the contingency plan test results."
+implementation-guidance: "-"
+assessment-procedures: Determine if the contingency plan test results are reviewed.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (Organizational
+  contingency plans are outside the scope of UDS. UDS provides tools to execute
+  recovery but the plan documentation is an organizational responsibility as it
+  is custom to their mission.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CP-4.4. The resulting compliance status was set to non-compliant
+  because the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: CP-4.4."
+mapped-rev4-aps: CP-4.4
+family: CP

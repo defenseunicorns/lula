@@ -1,0 +1,102 @@
+control-acronym: SC-1
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Develops, documents, and disseminates to [Assignment: organization-defined
+  personnel or roles]:
+
+  1. A system and communications protection policy that addresses purpose,
+  scope, roles, responsibilities, management commitment, coordination among
+  organizational entities, and compliance; and
+
+  2. Procedures to facilitate the implementation of the system and
+  communications protection policy and associated system and communications
+  protection controls; and
+
+  b. Reviews and updates the current:
+
+  1. System and communications protection policy [Assignment:
+  organization-defined frequency]; and
+
+  2. System and communications protection procedures [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  This control addresses the establishment of policy and procedures for the
+  effective implementation of selected security controls and control
+  enhancements in the SC family. Policy and procedures reflect applicable
+  federal laws, Executive Orders, directives, regulations, policies, standards,
+  and guidance. Security program policies and procedures at the organization
+  level may make the need for system-specific policies and procedures
+  unnecessary. The policy can be included as part of the general information
+  security policy for organizations or conversely, can be represented by
+  multiple policies reflecting the complex nature of certain organizations. The
+  procedures can be established for the security program in general and for
+  particular information systems, if needed. The organizational risk management
+  strategy is a key factor in establishing policy and procedures. Related
+  control: PM-9.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy and
+  procedures; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and
+  communications protection responsibilities; organizational personnel with
+  information security responsibilities].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-1.1,CCI-002378,Local
+  SC-1.2,CCI-002380,Local
+  SC-1.3,CCI-001074,DoD Organization or Service Common Control Package
+  SC-1.4,CCI-001075,DoD Organization or Service Common Control Package
+  SC-1.5,CCI-001078,DoD Organization or Service Common Control Package
+  SC-1.6,CCI-001079,DoD Organization or Service Common Control Package
+  SC-1.7,CCI-001076,DoD Organization or Service Common Control Package
+  SC-1.8,CCI-001077,DoD Organization or Service Common Control Package
+  SC-1.9,CCI-001080,DoD Organization or Service Common Control Package
+  SC-1.10,CCI-001081,DoD Organization or Service Common Control Package...
+ap-acronym: SC-1.5
+cci: 1078
+cci-definition: '001078: The organization develops and documents system and
+  communications protection procedures to facilitate the implementation of the
+  system and communications protection policy and communications protection
+  controls and associated system and communications protection controls.'
+implementation-guidance: >-
+  DoDI 8523.01 "Communications Security (COMSEC)" meets the DoD requirement for
+  developing system and communications protection procedures.
+
+
+  DoD Components are automatically compliant with this CCI because they are
+  covered by the DoD level policy, DoDI 8523.01.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per DoDI 8523.01.
+assessment-procedures: >-
+  DoDI 8523.01 "Communications Security (COMSEC)" meets the DoD requirement for
+  developing system and communications protection procedures.
+
+
+  DoD Components are automatically compliant with this CCI because they are
+  covered by the DoD level policy, DoDI 8523.01.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SC

@@ -1,0 +1,75 @@
+control-acronym: "[r5] PE-13(02)"
+control-information: >-
+  Description:
+
+  (a) Employ fire suppression systems that activate automatically and notify
+  [Assignment: organization-defined personnel or roles] and [Assignment:
+  organization-defined emergency responders]; and
+
+  (b) Employ an automatic fire suppression capability when the facility is not
+  staffed on a continuous basis.
+
+
+  Supplemental Guidance:
+
+  Organizations can identify specific personnel, roles, and emergency responders
+  if individuals on the notification list need to have appropriate access
+  authorizations and/or clearances (e.g., to enter to facilities where access is
+  restricted due to the impact level or classification of information within the
+  facility). Notification mechanisms may require independent energy sources to
+  ensure that the notification capability is not adversely affected by the fire.
+  Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing fire protection; fire suppression and detection
+  devices/systems documentation; facility housing the system; alarm
+  service-level agreements; test records of fire suppression and detection
+  devices/systems; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  fire detection and suppression devices/systems; organizational personnel with
+  responsibilities for providing automatic notifications of any activation of
+  fire suppression devices/systems to appropriate personnel, roles, and
+  emergency responders; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing fire
+  suppression devices/systems; activation of fire suppression devices/systems
+  (simulated); automated notifications].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PE-13(02)(b)
+cci: 968
+cci-definition: "000968: Employ an automatic fire suppression capability for the
+  system when the facility is not staffed on a continuous basis."
+implementation-guidance: "-"
+assessment-procedures: Determine if an automatic fire suppression capability is
+  employed when the facility is not staffed on a continuous basis.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PE-13(3).1."
+mapped-rev4-aps: PE-13(3)
+family: PE

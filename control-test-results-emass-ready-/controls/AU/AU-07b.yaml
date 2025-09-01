@@ -1,0 +1,94 @@
+control-acronym: "[r5] AU-07"
+control-information: >-
+  Description:
+
+  Provide and implement an audit record reduction and report generation
+  capability that:
+
+  a. Supports on-demand audit record review, analysis, and reporting
+  requirements and after-the-fact investigations of incidents; and
+
+  b. Does not alter the original content or time ordering of audit records.
+
+
+  Supplemental Guidance:
+
+  Audit record reduction is a process that manipulates collected audit log
+  information and organizes it into a summary format that is more meaningful to
+  analysts. Audit record reduction and report generation capabilities do not
+  always emanate from the same system or from the same organizational entities
+  that conduct audit logging activities. The audit record reduction capability
+  includes modern data mining techniques with advanced data filters to identify
+  anomalous behavior in audit records. The report generation capability provided
+  by the system can generate customizable reports. Time ordering of audit
+  records can be an issue if the granularity of the timestamp in the record is
+  insufficient. Related Control(s): AC-2, AU-2, AU-3, AU-4, AU-5, AU-6, AU-12,
+  AU-16, CM-5, IA-5, IR-4, PM-12, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; system security plan;
+  privacy plan; procedures addressing audit reduction and report generation;
+  system design documentation; system configuration settings and associated
+  documentation; audit reduction, review, analysis, and reporting tools; system
+  audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit reduction and
+  report generation responsibilities; organizational personnel with information
+  security and privacy responsibilities].
+
+
+  Test: [SELECT FROM: Audit reduction and report generation capability].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-07b
+cci: 001881; 001882; 003828; 003829
+cci-definition: "001881: Provide an audit reduction capability that does not
+  alter original content or time ordering of audit records.; 001882: Provide a
+  report generation capability that does not alter original content or time
+  ordering of audit records.; 003828: Implement an audit reduction capability
+  that does not alter original content or time ordering of audit records.;
+  003829: Implement a report generation capability that does not alter original
+  content or time ordering of audit records."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - an audit record reduction and report generation capability is provided that
+  does not alter the original content or time ordering of audit records.
+
+  - an audit record reduction and report generation capability is implemented
+  that does not alter the original content or time ordering of audit records.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: The UDS platform ensures that its audit reduction capability
+  maintains the integrity of original audit records, preserving both content and
+  time ordering, through its Vector, Loki, and Grafana stack. Vector collects
+  and processes logs without modifying their original structure, ensuring that
+  data remains unaltered. Loki stores logs in a time-sequenced manner,
+  maintaining chronological integrity and enabling accurate forensic analysis.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AU-7.7, AU-7.8; as well as the following Rev. 5 security
+  requirements: CCI-003828, CCI-003829. The resulting compliance status was set
+  to non-compliant because of the addition of a new security requirement to the
+  assessment procedure that has not been previously assessed: CCI-003828,
+  CCI-003829."
+mapped-rev4-aps: AU-7.7; AU-7.8
+family: AU

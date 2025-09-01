@@ -1,0 +1,88 @@
+control-acronym: MP-6(1)
+control-information: >-
+  Description:
+
+  The organization reviews, approves, tracks, documents, and verifies media
+  sanitization and disposal actions.
+
+
+  Supplemental Guidance:
+
+  Organizations review and approve media to be sanitized to ensure compliance
+  with records-retention policies. Tracking/documenting actions include, for
+  example, listing personnel who reviewed and approved sanitization and disposal
+  actions, types of media sanitized, specific files stored on the media,
+  sanitization methods used, date and time of the sanitization actions,
+  personnel who performed the sanitization, verification actions taken,
+  personnel who performed the verification, and disposal action taken.
+  Organizations verify that the sanitization of the media was effective prior to
+  disposal. Related control: SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information system media protection policy; procedures
+  addressing media sanitization and disposal; media sanitization and disposal
+  records; review records for media sanitization and disposal actions; approvals
+  for media sanitization and disposal actions; tracking records; verification
+  records; audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  media sanitization and disposal responsibilities; organizational personnel
+  with information security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for media sanitization; automated
+  mechanisms supporting and/or implementing media sanitization].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, but NOT included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: MP-6(1).5
+cci: 2571
+cci-definition: '002571: The organization tracks and documents media disposal actions.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  for tracking media disposal. The process must include procedures for tracking
+  disposal actions. The organization must maintain a record of media disposal
+  actions.
+
+  Recommended Compelling Evidence:
+
+  1.) TTP, SOP, or Audit Trail showing review, approval, and record of media
+  disposal actions
+
+  2.) System Security Plan (SSP), if necessary, referencing sections which apply
+  to review, approval, and record of media disposal actions.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process as well as the record of media
+  disposal actions to ensure the organization being inspected/assessed tracks
+  and documents media disposal actions.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: MP

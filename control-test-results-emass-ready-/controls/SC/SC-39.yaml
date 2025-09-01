@@ -1,0 +1,76 @@
+control-acronym: "[r5] SC-39"
+control-information: >-
+  Description:
+
+  Maintain a separate execution domain for each executing system process.
+
+
+  Supplemental Guidance:
+
+  Systems can maintain separate execution domains for each executing process by
+  assigning each process a separate address space. Each system process has a
+  distinct address space so that communication between processes is performed in
+  a manner controlled through the security functions, and one process cannot
+  modify the executing code of another process. Maintaining separate execution
+  domains for executing processes can be achieved, for example, by implementing
+  separate address spaces. Process isolation technologies, including sandboxing
+  or virtualization, logically separate software and firmware from other
+  software, firmware, and data. Process isolation helps limit the access of
+  potentially untrusted software to other system resources. The capability to
+  maintain separate execution domains is available in commercial operating
+  systems that employ multi-state processor technologies. Related Control(s):
+  AC-3, AC-4, AC-6, AC-25, SA-8, SC-2, SC-3, SI-16.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System design documentation; system architecture;
+  independent verification and validation documentation; testing and evaluation
+  documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System developers/integrators; system security
+  architect].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing separate
+  execution domains for each executing process].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-39
+cci: 2530
+cci-definition: "002530: Maintain a separate execution domain for each executing
+  system process."
+implementation-guidance: "-"
+assessment-procedures: Determine if a separate execution domain is maintained
+  for each executing system process.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS leverages containerization which inherently provides process
+  isolation. Each container has its own isolated process space, and the Linux
+  kernel prevents processes in different containers from interacting except
+  through defined interfaces (like network calls which are mediated by the
+  service mesh). The container runtime and Kubernetes ensure that one container
+  cannot directly read/write the memory of another. Namespaces, cgroups, and
+  seccomp profiles can be used to further isolate processes. So, one
+  application’s processes cannot interfere with or spy on another. This is a
+  fundamental security benefit of the UDS’s architecture.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SC-39.1."
+mapped-rev4-aps: SC-39.1
+family: SC

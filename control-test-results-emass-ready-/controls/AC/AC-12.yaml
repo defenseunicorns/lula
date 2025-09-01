@@ -1,0 +1,86 @@
+control-acronym: "[r5] AC-12"
+control-information: >-
+  Description:
+
+  Automatically terminate a user session after [Assignment: organization-defined
+  conditions or trigger events requiring session disconnect].
+
+
+  Supplemental Guidance:
+
+  Session termination addresses the termination of user-initiated logical
+  sessions (in contrast to SC-10, which addresses the termination of network
+  connections associated with communications sessions (i.e., network
+  disconnect)). A logical session (for local, network, and remote access) is
+  initiated whenever a user (or process acting on behalf of a user) accesses an
+  organizational system. Such user sessions can be terminated without
+  terminating network sessions. Session termination ends all processes
+  associated with a user’s logical session except for those processes that are
+  specifically created by the user (i.e., session owner) to continue after the
+  session is terminated. Conditions or trigger events that require automatic
+  termination of the session include organization-defined periods of user
+  inactivity, targeted responses to certain types of incidents, or time-of-day
+  restrictions on system use. Related Control(s): MA-4, SC-10, SC-23.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing session
+  termination; system design documentation; system configuration settings and
+  associated documentation; list of conditions or trigger events requiring
+  session disconnect; system audit records; system security plan; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing user session
+  termination].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-12
+cci: 002360; 002361
+cci-definition: "002360: Defines the conditions or trigger events requiring
+  session disconnect when automatically terminating a user session.; 002361:
+  Automatically terminate a user session after organization-defined conditions
+  or trigger events requiring session disconnect."
+implementation-guidance: "-"
+assessment-procedures: "Determine if a user session is automatically terminated
+  after [Assignment: organization-defined conditions or trigger events requiring
+  session disconnect]."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS supports reliable session termination. When a user logs out of
+  an application (or out of Keycloak), Keycloak’s single sign-out functionality
+  ends the user’s session for all client applications logged in via that token.
+  This ensures that all associated sessions are invalidated upon user logout​.
+  Also, sessions are terminated when their allotted time expires (as
+  configured). On the administrative side, an admin can explicitly revoke a
+  user’s sessions in Keycloak at any time (for example, if a user is suspected
+  compromised, an admin can force-log-out that account from all services). In
+  the service mesh, if a token is no longer valid, AuthService will reject
+  further requests with that token. Thus, whether the session ends normally
+  (user logout) or abnormally (token expiration or manual revocation), UDS
+  cleanly terminates the session and prevents further use of those credentials.
+  This behavior satisfies the requirement for session termination.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-12.1, AC-12.2."
+mapped-rev4-aps: AC-12.1; AC-12.2
+family: AC

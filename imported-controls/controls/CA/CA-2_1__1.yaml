@@ -1,0 +1,91 @@
+control-acronym: CA-2(1)
+control-information: >-
+  Description:
+
+  The organization employs assessors or assessment teams with [Assignment:
+  organization-defined level of independence] to conduct security control
+  assessments.
+
+
+  Supplemental Guidance:
+
+  Independent assessors or assessment teams are individuals or groups who
+  conduct impartial assessments of organizational information systems.
+  Impartiality implies that assessors are free from any perceived or actual
+  conflicts of interest with regard to the development, operation, or management
+  of the organizational information systems under assessment or to the
+  determination of security control effectiveness. To achieve impartiality,
+  assessors should not: (i) create a mutual or conflicting interest with the
+  organizations where the assessments are being conducted; (ii) assess their own
+  work; (iii) act as management or employees of the organizations they are
+  serving; or (iv) place themselves in positions of advocacy for the
+  organizations acquiring their services. Independent assessments can be
+  obtained from elements within organizations or can be contracted to public or
+  private sector entities outside of organizations. Authorizing officials
+  determine the required level of independence based on the security categories
+  of information systems and/or the ultimate risk to organizational operations,
+  organizational assets, or individuals. Authorizing officials also determine if
+  the level of assessor independence provides sufficient assurance that the
+  results are sound and can be used to make credible, risk-based decisions. This
+  includes determining whether contracted security assessment services have
+  sufficient independence, for example, when information system owners are not
+  directly involved in contracting processes or cannot unduly influence the
+  impartiality of assessors conducting assessments. In special situations, for
+  example, when organizations that own the information systems are small or
+  organizational structures require that assessments are conducted by
+  individuals that are in the developmental, operational, or management chain of
+  system owners, independence in assessment processes can be achieved by
+  ensuring that assessment results are carefully reviewed and analyzed by
+  independent teams of experts to validate the completeness, accuracy,
+  integrity, and reliability of the results. Organizations recognize that
+  assessments performed for purposes other than direct support to authorization
+  decisions are, when performed by assessors with sufficient independence, more
+  likely to be useable for such decisions, thereby reducing the need to repeat
+  assessments.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Security assessment and authorization policy;
+  procedures addressing security assessments; security authorization package
+  (including security plan, security assessment plan, security assessment
+  report, plan of action and milestones, authorization statement); other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security assessment
+  responsibilities; organizational personnel with information security
+  responsibilities].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CA-2(1).1
+cci: 255
+cci-definition: '000255: The organization employs assessors or assessment teams
+  with organization-defined level of independence to conduct security control
+  assessments of organizational information systems.'
+implementation-guidance: >-
+  The organization being inspected/assessed will employ assessors and assessor
+  teams with the level of independence defined in CA-2 (1), CCI 2064 to conduct
+  security control assessments of organizational information systems.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Security Assessment and Authorization Policy
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the level of independence defined in CA-2 (1), CCI 2064
+  to ensure that they, as the assessor, meet the required level of independence.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: 'Not Applicable to UDS technology stack. (Performing security
+  assessments is an organizational task. While UDS provides logs and scan
+  results that facilitate assessments, the actual assessment process is outside
+  the stackâs functionality.)'
+family: CA

@@ -1,0 +1,81 @@
+control-acronym: SC-7(22)
+control-information: >-
+  Description:
+
+  The information system implements separate network addresses (i.e., different
+  subnets) to connect to systems in different security domains.
+
+
+  Supplemental Guidance:
+
+  Decomposition of information systems into subnets helps to provide the
+  appropriate level of protection for network connections to different security
+  domains containing information with different security categories or
+  classification levels.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; information system design documentation;
+  information system hardware and software; information system architecture;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  separate network addresses/different subnets].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-7(22).1
+cci: 2416
+cci-definition: '002416: The information system implements separate network
+  addresses (i.e., different subnets) to connect to systems in different
+  security domains.'
+implementation-guidance: >-
+  The organization being inspected/assessed designs the information system to
+  implement separate network addresses (i.e., different subnets) to connect to
+  systems in different security domains.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Current network topology diagrams.
+
+  2.) Architecture documentation.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines network topology diagrams, architecture documentation, or
+  any other documentation identifying component partitioning to ensure the
+  organization being inspected/assessed implements separate network addresses
+  (i.e., different subnets) to connect to systems in different security domains.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: UDS leverages the underlying Kubernetes networking model and the
+  Istio service mesh to logically separate connections to different security
+  domains by assigning distinct network addresses and subnetworks (via
+  Kubernetes namespaces, service CIDR ranges, and network policies). Kubernetes
+  Namespaces are assigned distinct logical subnet ranges, effectively segmenting
+  workloads associated with different security domains. Istio enforces strong
+  boundary controls through its ingress and egress gateways, controlling
+  communication flow between namespaces (subnets) and external networks. Istio
+  gateways explicitly define which systems can communicate across security
+  domains. While UDS inherently implements logical network segmentation at the
+  software-defined networking layer (rather than at the traditional physical
+  subnet layer), the intent of isolating different security domains via
+  separate, clearly defined network addressing is effectively satisfied through
+  these combined Kubernetes and Istio mechanisms.
+uds-alignment: Kubernetes, Istio
+family: SC

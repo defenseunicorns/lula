@@ -1,0 +1,70 @@
+control-acronym: SC-7(12)
+control-information: >-
+  Description:
+
+  The organization implements [Assignment: organization-defined host-based
+  boundary protection mechanisms] at [Assignment: organization-defined
+  information system components].
+
+
+  Supplemental Guidance:
+
+  Host-based boundary protection mechanisms include, for example, host-based
+  firewalls. Information system components employing host-based boundary
+  protection mechanisms include, for example, servers, workstations, and mobile
+  devices.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; information system design documentation;
+  boundary protection hardware and software; information system configuration
+  settings and associated documentation; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with boundary protection responsibilities; information system users].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing host-based boundary
+  protection capabilities].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: |-
+  SC-7(12).1,CCI-002404,DoD Organization or Service Common Control Package
+  SC-7(12).2,CCI-002405,DoD Organization or Service Common Control Package
+  SC-7(12).3,CCI-002406,Organization AWS Cloud Brokerage Package...
+ap-acronym: SC-7(12).1
+cci: 2404
+cci-definition: '002404: The organization defines the host-based boundary
+  protection mechanisms that are to be implemented at organization-defined
+  information system components.'
+implementation-guidance: >-
+  DoD has defined the information system components as McAfee Host Intrusion
+  Prevention (HIPS).
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant.
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the information system components as McAfee Host
+  Intrusion Prevention (HIPS).
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: All UDS components that require a host-based boundary protection
+  mechanisms are documented in the Security Assessment Plan (SAP) which
+  identifies the test targets and test methods.
+uds-alignment: Neuvector, Pepr, Istio
+family: SC

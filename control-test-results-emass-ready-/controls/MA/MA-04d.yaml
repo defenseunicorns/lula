@@ -1,0 +1,86 @@
+control-acronym: "[r5] MA-04"
+control-information: >-
+  Description:
+
+  a. Approve and monitor nonlocal maintenance and diagnostic activities;
+
+  b. Allow the use of nonlocal maintenance and diagnostic tools only as
+  consistent with organizational policy and documented in the security plan for
+  the system;
+
+  c. Employ strong authentication in the establishment of nonlocal maintenance
+  and diagnostic sessions;
+
+  d. Maintain records for nonlocal maintenance and diagnostic activities; and
+
+  e. Terminate session and network connections when nonlocal maintenance is
+  completed.
+
+
+  Supplemental Guidance:
+
+  Nonlocal maintenance and diagnostic activities are conducted by individuals
+  who communicate through either an external or internal network. Local
+  maintenance and diagnostic activities are carried out by individuals who are
+  physically present at the system location and not communicating across a
+  network connection. Authentication techniques used to establish nonlocal
+  maintenance and diagnostic sessions reflect the network access requirements in
+  IA-2. Strong authentication requires authenticators that are resistant to
+  replay attacks and employ multi-factor authentication. Strong authenticators
+  include PKI where certificates are stored on a token protected by a password,
+  passphrase, or biometric. Enforcing requirements in MA-4 is accomplished, in
+  part, by other controls. SP 800-63B provides additional guidance on strong
+  authentication and authenticators. Related Control(s): AC-2, AC-3, AC-6,
+  AC-17, AU-2, AU-3, IA-2, IA-4, IA-5, IA-8, MA-2, MA-5, PL-2, SC-7, SC-10.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Maintenance policy; procedures addressing nonlocal
+  system maintenance; remote access policy; remote access procedures; system
+  design documentation; system configuration settings and associated
+  documentation; maintenance records; records of remote access; diagnostic
+  records; system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system maintenance
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing nonlocal
+  maintenance; mechanisms implementing, supporting, and/or managing nonlocal
+  maintenance; mechanisms for strong authentication of nonlocal maintenance
+  diagnostic sessions; mechanisms for terminating nonlocal maintenance sessions
+  and network connections].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: MA-04d
+cci: 878
+cci-definition: "000878: Maintain records for nonlocal maintenance and diagnostic activities."
+implementation-guidance: "-"
+assessment-procedures: Determine if records for nonlocal maintenance and
+  diagnostic activities are maintained.
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: MA-4.5."
+mapped-rev4-aps: MA-4.5
+family: MA

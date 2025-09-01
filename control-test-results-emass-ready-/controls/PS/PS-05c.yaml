@@ -1,0 +1,87 @@
+control-acronym: "[r5] PS-05"
+control-information: >-
+  Description:
+
+  a. Review and confirm ongoing operational need for current logical and
+  physical access authorizations to systems and facilities when individuals are
+  reassigned or transferred to other positions within the organization;
+
+  b. Initiate [Assignment: organization-defined transfer or reassignment
+  actions] within [Assignment: organization-defined time period following the
+  formal transfer action];
+
+  c. Modify access authorization as needed to correspond with any changes in
+  operational need due to reassignment or transfer; and
+
+  d. Notify [Assignment: organization-defined personnel or roles] within
+  [Assignment: organization-defined time period].
+
+
+  Supplemental Guidance:
+
+  Personnel transfer applies when reassignments or transfers of individuals are
+  permanent or of such extended duration as to make the actions warranted.
+  Organizations define actions appropriate for the types of reassignments or
+  transfers, whether permanent or extended. Actions that may be required for
+  personnel transfers or reassignments to other positions within organizations
+  include returning old and issuing new keys, identification cards, and building
+  passes; closing system accounts and establishing new accounts; changing system
+  access authorizations (i.e., privileges); and providing for access to official
+  records to which individuals had access at previous work locations and in
+  previous system accounts. Related Control(s): AC-2, IA-4, PE-2, PM-12, PS-4,
+  PS-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  personnel transfer; records of personnel transfer actions; list of system and
+  facility access authorizations; system security plan; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for personnel transfer;
+  mechanisms supporting and/or implementing personnel transfer notifications;
+  mechanisms for disabling system access/revoking authenticators].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PS-05c
+cci: 3031
+cci-definition: "003031: Modify access authorization as needed to correspond
+  with any changes in operational need due to reassignment or transfer."
+implementation-guidance: "-"
+assessment-procedures: Determine if access authorization is modified as needed
+  to correspond with any changes in operational need due to reassignment or
+  transfer.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (UDS is unrelated to
+  personnel security controls, which cover hiring, transfer, agreements,
+  termination, etc.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: PS-5.5. The resulting compliance status was set to non-compliant
+  because the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: PS-5.5."
+mapped-rev4-aps: PS-5.5
+family: PS

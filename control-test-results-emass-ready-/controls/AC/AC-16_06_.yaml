@@ -1,0 +1,144 @@
+control-acronym: "[r5] AC-16(06)"
+control-information: >-
+  Description:
+
+  Require personnel to associate and maintain the association of [Assignment:
+  organization-defined security and privacy attributes] with [Assignment:
+  organization-defined subjects and objects] in accordance with [Assignment:
+  organization-defined security and privacy policies].
+
+
+  Supplemental Guidance:
+
+  Maintaining attribute association requires individual users (as opposed to the
+  system) to maintain associations of defined security and privacy attributes
+  with subjects and objects. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing
+  association of security and privacy attributes with subjects and objects;
+  system security plan; privacy plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  associating and maintaining association of security and privacy attributes
+  with subjects and objects; organizational personnel with information security
+  and privacy responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms supporting associations of security and privacy
+  attributes to subjects and objects].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-16(06)
+cci: 002291; 002292; 002293; 002294; 002295; 002296; 002297; 002298; 003730;
+  003731; 003732; 003733; 003734; 003735; 003736; 003737
+cci-definition: "002291: Defines the security policies to be followed by
+  personnel when associating organization-defined security attributes with
+  organization-defined subjects and objects.; 002292: Defines the security
+  attributes which are to be associated with organization-defined subjects and
+  objects.; 002293: Defines the subjects to be associated, and that association
+  maintained, with organization-defined security attributes in accordance with
+  organization-defined security policies.; 002294: Defines the objects to be
+  associated, and that association maintained, with organization-defined
+  security attributes in accordance with organization-defined security
+  policies.; 002295: Require personnel to associate organization-defined
+  security attributes with organization-defined subjects in accordance with
+  organization-defined security policies.; 002296: Require personnel to
+  associate organization-defined security attributes with organization-defined
+  objects in accordance with organization-defined security policies.; 002297:
+  Require personnel to maintain the association of organization-defined security
+  attributes with organization-defined subjects in accordance with
+  organization-defined security policies.; 002298: Require personnel to maintain
+  the association of organization-defined security attributes with
+  organization-defined objects in accordance with organization-defined security
+  policies.; 003730: Defines the privacy policies to be followed by personnel
+  when associating organization-defined privacy attributes with
+  organization-defined subjects and objects.; 003731: Defines the privacy
+  attributes which are to be associated with organization-defined subjects and
+  objects.; 003732: Defines the subjects to be associated, and that association
+  maintained, with organization-defined privacy attributes in accordance with
+  organization-defined privacy policies.; 003733: Defines the objects to be
+  associated, and that association maintained, with organization-defined privacy
+  attributes in accordance with organization-defined privacy policies.; 003734:
+  Require personnel to associate organization-defined privacy attributes with
+  organization-defined subjects in accordance with organization-defined privacy
+  policies.; 003735: Require personnel to associate organization-defined privacy
+  attributes with organization-defined objects in accordance with
+  organization-defined privacy policies.; 003736: Require personnel to maintain
+  the association of organization-defined privacy attributes with
+  organization-defined subjects in accordance with organization-defined privacy
+  policies.; 003737: Require personnel to maintain the association of
+  organization-defined privacy attributes with organization-defined objects in
+  accordance with organization-defined privacy policies."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - personnel are required to associate and maintain the association of
+  [Assignment: organization-defined security and privacy attributes] with
+  [Assignment: organization-defined subjects and objects] in accordance with
+  [Assignment: organization-defined security and privacy policies].
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: AC-16(6).1,
+  AC-16(6).2, AC-16(6).3, AC-16(6).4, AC-16(6).5, AC-16(6).6, AC-16(6).7,
+  AC-16(6).8; as well as the following Rev. 5 security requirements: CCI-003730,
+  CCI-003731, CCI-003732, CCI-003733, CCI-003734, CCI-003735, CCI-003736,
+  CCI-003737. The resulting compliance status was set to non-compliant because
+  the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: AC-16(6).1, AC-16(6).2, AC-16(6).3, AC-16(6).4,
+  AC-16(6).5, AC-16(6).6, AC-16(6).7, AC-16(6).8. The resulting compliance
+  status was set to non-compliant because of the addition of a new security
+  requirement to the assessment procedure that has not been previously assessed:
+  CCI-003730, CCI-003731, CCI-003732, CCI-003733, CCI-003734, CCI-003735,
+  CCI-003736, CCI-003737.
+
+
+  Not Applicable to UDS technology stack. (UDS inherently supports the
+  association and management of security attributes for stored, processed, and
+  transmitted information through integrated infrastructure capabilities.
+  However, explicitly displaying security attributes in human-readable form such
+  as special dissemination, handling, or distribution instructions—on output
+  devices is typically managed at the application or client endpoint layer,
+  rather than within the UDS platform itself.)
+
+  Not Applicable to UDS technology stack. (UDS enables dynamic association and
+  enforcement of organizationally defined security attributes (e.g., sensitivity
+  levels, classification labels, and handling instructions) with subjects and
+  objects. However, explicitly defining, documenting, and enforcing the specific
+  security policies that personnel must follow when assigning and managing these
+  attributes remains an organizational administrative responsibility.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AC-16(6).1, AC-16(6).2, AC-16(6).3, AC-16(6).4, AC-16(6).5,
+  AC-16(6).6, AC-16(6).7, AC-16(6).8; as well as the following Rev. 5 security
+  requirements: CCI-003730, CCI-003731, CCI-003732, CCI-003733, CCI-003734,
+  CCI-003735, CCI-003736, CCI-003737. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: AC-16(6).1, AC-16(6).2, AC-16(6).3,
+  AC-16(6).4, AC-16(6).5, AC-16(6).6, AC-16(6).7, AC-16(6).8. The resulting
+  compliance status was set to non-compliant because of the addition of a new
+  security requirement to the assessment procedure that has not been previously
+  assessed: CCI-003730, CCI-003731, CCI-003732, CCI-003733, CCI-003734,
+  CCI-003735, CCI-003736, CCI-003737."
+mapped-rev4-aps: AC-16(6)
+family: AC

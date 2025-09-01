@@ -1,0 +1,88 @@
+control-acronym: "[r5] IA-02(08)"
+control-information: >-
+  Description:
+
+  Implement replay-resistant authentication mechanisms for access to [Selection
+  (one or more): privileged accounts; non-privileged accounts].
+
+
+  Supplemental Guidance:
+
+  Authentication processes resist replay attacks if it is impractical to achieve
+  successful authentications by replaying previous authentication messages.
+  Replay-resistant techniques include protocols that use nonces or challenges
+  such as time synchronous or cryptographic authenticators. Related Control(s):
+  None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; system
+  security plan; procedures addressing user identification and authentication;
+  system design documentation; system configuration settings and associated
+  documentation; system audit records; list of privileged system accounts; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system operations
+  responsibilities; organizational personnel with account management
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing identification
+  and authentication capabilities; Mechanisms supporting and/or implementing
+  replay-resistant authentication mechanisms].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-02(08)
+cci: 1941
+cci-definition: "001941: Implement replay-resistant authentication mechanisms
+  for access to privileged accounts and/or non-privileged accounts."
+implementation-guidance: "-"
+assessment-procedures: "Determine if replay-resistant authentication mechanisms
+  for access to [Selection (one or more): privileged accounts; non-privileged
+  accounts] are implemented."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: >-
+  UDS implements replay-resistant authentication mechanisms for network access
+  to privileged accounts through its centralized identity management solution,
+  Keycloak. Authentication to privileged accounts leverages cryptographically
+  signed JSON Web Tokens (JWT) that include unique, timestamped session
+  information, making replay attacks infeasible. Additionally, authentication
+  sessions are secured via Transport Layer Security (TLS) with mutual TLS (mTLS)
+  provided by the Istio Service Mesh, ensuring strong encryption and session
+  integrity. The combination of secure token issuance, validation processes, and
+  encrypted communication effectively prevents replay attacks, fully meeting the
+  intent of this control requirement.
+
+  UDS implements replay-resistant authentication mechanisms for network access
+  to non-privileged accounts through its centralized identity management
+  solution, Keycloak. Authentication to privileged accounts leverages
+  cryptographically signed JSON Web Tokens (JWT) that include unique,
+  timestamped session information, making replay attacks infeasible.
+  Additionally, authentication sessions are secured via Transport Layer Security
+  (TLS) with mutual TLS (mTLS) provided by the Istio Service Mesh, ensuring
+  strong encryption and session integrity. The combination of secure token
+  issuance, validation processes, and encrypted communication effectively
+  prevents replay attacks, fully meeting the intent of this control requirement.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IA-2(8).1, IA-2(9).1."
+mapped-rev4-aps: IA-2(8); IA-2(9)
+family: IA

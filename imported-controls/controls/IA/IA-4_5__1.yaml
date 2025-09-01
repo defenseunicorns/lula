@@ -1,0 +1,84 @@
+control-acronym: IA-4(5)
+control-information: >-
+  Description:
+
+  The information system dynamically manages identifiers.
+
+
+  Supplemental Guidance:
+
+  In contrast to conventional approaches to identification which presume static
+  accounts for preregistered users, many distributed information systems
+  including, for example, service-oriented architectures, rely on establishing
+  identifiers at run time for entities that were previously unknown. In these
+  situations, organizations anticipate and provision for the dynamic
+  establishment of identifiers. Preestablished trust relationships and
+  mechanisms with appropriate authorities to validate identities and related
+  credentials are essential. Related control: AC-16.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing identifier management; procedures addressing account management;
+  information system design documentation; information system configuration
+  settings and associated documentation; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with identifier management
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  dynamic identifier management].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-4(5).1
+cci: 1976
+cci-definition: '001976: The information system dynamically manages identifiers.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  dynamically manage identifiers. For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 1976.
+
+  Recommended Compelling Evidence:
+
+  1.) SOP/TTP referencing dynamically managed identifiers.
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to dynamically manage
+  identifiers. For information system components that have applicable STIGs or
+  SRGs, the organization conducting the inspection/assessment evaluates the
+  components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 1976.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: In UDS, identifier management is dynamically automated and
+  integrated across multiple components. Keycloak dynamically creates and
+  manages unique user and service identifiers as accounts are provisioned, while
+  Kubernetes through its service accounts and RBAC mechanisms automatically
+  assigns unique identifiers to each microservice during deployment via
+  Infrastructure as Code (OpenTofu). Istio further supports this dynamic
+  identity framework by issuing and regularly rotating SPIFFE IDs for secure
+  mutual TLS between services. Pepr policies ensure that any scaling or
+  configuration changes trigger updates to these identifiers, and comprehensive
+  audit logs maintained by Loki and Prometheus provide traceability and
+  compliance. This coordinated, automated approach ensures that identifiers
+  remain current, unique, and correctly mapped to authentication and
+  authorization attributes throughout the UDS environment.
+uds-alignment: Keycloak, Istio, Kubernetes, Pepr, Loki, Prometheus, OpenTofu
+family: IA

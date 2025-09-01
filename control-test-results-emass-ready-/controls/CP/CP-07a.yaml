@@ -1,0 +1,123 @@
+control-acronym: "[r5] CP-07"
+control-information: >-
+  Description:
+
+  a. Establish an alternate processing site, including necessary agreements to
+  permit the transfer and resumption of [Assignment: organization-defined system
+  operations] for essential mission and business functions within [Assignment:
+  organization-defined time period consistent with recovery time and recovery
+  point objectives] when the primary processing capabilities are unavailable;
+
+  b. Make available at the alternate processing site, the equipment and supplies
+  required to transfer and resume operations or put contracts in place to
+  support delivery to the site within the organization-defined time period for
+  transfer and resumption; and
+
+  c. Provide controls at the alternate processing site that are equivalent to
+  those at the primary site.
+
+
+  Supplemental Guidance:
+
+  Alternate processing sites are geographically distinct from primary processing
+  sites and provide processing capability if the primary processing site is not
+  available. The alternate processing capability may be addressed using a
+  physical processing site or other alternatives, such as failover to a
+  cloud-based service provider or other internally or externally provided
+  processing service. Geographically distributed architectures that support
+  contingency requirements may also be considered alternate processing sites.
+  Controls that are covered by alternate processing site agreements include the
+  environmental conditions at alternate sites, access rules, physical and
+  environmental protection requirements, and the coordination for the transfer
+  and assignment of personnel. Requirements are allocated to alternate
+  processing sites that reflect the requirements in contingency plans to
+  maintain essential mission and business functions despite disruption,
+  compromise, or failure in organizational systems. Related Control(s): CP-2,
+  CP-6, CP-8, CP-9, CP-10, MA-6, PE-3, PE-11, PE-12, PE-17, SC-36, SI-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  alternate processing sites; contingency plan; alternate processing site
+  agreements; primary processing site agreements; spare equipment and supplies
+  inventory at alternate processing site; equipment and supply contracts;
+  service-level agreements; system security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  contingency planning and/or alternate site arrangements; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for recovery at the alternate
+  site; mechanisms supporting and/or implementing recovery at the alternate
+  processing site].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CP-07a
+cci: 000510; 000513; 000514; 002839
+cci-definition: "000510: Defines the time-period consistent with recovery time
+  and recovery point objectives for essential missions/business functions to
+  permit the transfer and resumption of organization-defined system operations
+  at an alternate processing site when the primary processing capabilities are
+  unavailable.; 000513: Establish an alternate processing site including
+  necessary agreements to permit the transfer and resumption of
+  organization-defined system operations for essential mission functions within
+  an organization-defined time period consistent with recovery time and recovery
+  point objectives when the primary processing capabilities are unavailable.;
+  000514: Establish an alternate processing site including necessary agreements
+  to permit the transfer and resumption of organization-defined system
+  operations for essential business functions within an organization-defined
+  time period consistent with recovery time and recovery point objectives when
+  the primary processing capabilities are unavailable.; 002839: Defines system
+  operations that are permitted to transfer and resume at an alternate
+  processing site for essential missions/business functions when the primary
+  processing capabilities are unavailable."
+implementation-guidance: CCI-000510 and CCI-002839 of this assessment procedure
+  are automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if an alternate processing site, including
+  necessary agreements to permit the transfer and resumption of [Assignment:
+  organization-defined system operations] for essential mission and business
+  functions, is established within [Assignment: organization-defined time period
+  consistent with recovery time and recovery point objectives] when the primary
+  processing capabilities are unavailable."
+inherited: Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: CP-7.1, CP-7.2,
+  CP-7.3, CP-7.4. The resulting compliance status was set to non-compliant
+  because the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: CP-7.4.
+
+
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.
+
+  Not Applicable to UDS technology stack. (Similar to CP-6, having an alternate
+  processing environment is an enterprise consideration. UDS could be
+  re-deployed to an alternate site if needed, but managing that site is outside
+  UDS’s domain.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: CP-7.1, CP-7.2, CP-7.3, CP-7.4. The resulting compliance status
+  was set to non-compliant because the following Rev. 4 assessment procedure had
+  no locally entered test result/compliance statement: CP-7.4."
+mapped-rev4-aps: CP-7.1; CP-7.2; CP-7.3; CP-7.4
+family: CP

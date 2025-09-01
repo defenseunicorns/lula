@@ -1,0 +1,90 @@
+control-acronym: AC-2(4)
+control-information: >-
+  Description:
+
+  The information system automatically audits account creation, modification,
+  enabling, disabling, and removal actions, and notifies [Assignment:
+  organization-defined personnel or roles].
+
+
+  Supplemental Guidance:
+
+  Related controls: AU-2, AU-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; information system design documentation; information system
+  configuration settings and associated documentation; notifications/alerts of
+  account creation, modification, enabling, disabling, and removal actions;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing account management
+  functions].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-2(4).1,CCI-000018,Local
+  AC-2(4).2,CCI-001403,Local
+  AC-2(4).3,CCI-001404,Local
+  AC-2(4).4,CCI-001405,Local
+  AC-2(4).5,CCI-001683,Local
+  AC-2(4).6,CCI-001684,Local
+  AC-2(4).7,CCI-001685,Local
+  AC-2(4).8,CCI-001686,Local
+  AC-2(4).9,CCI-002130,Local
+  AC-2(4).10,CCI-002131,DoD Organization or Service Common Control Package
+  AC-2(4).11,CCI-002132,Local...
+ap-acronym: AC-2(4).8
+cci: 1686
+cci-definition: '001686: The information system notifies organization-defined
+  personnel or roles for account removal actions.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  notify the system administrator and ISSO for account removal actions. For
+  information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 1686. DoD has defined the personnel or roles as the
+  system administrator and ISSO.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation which defines the process for notifying the
+  system administrator and ISSO of account removal actions.
+
+  2.) Applicable STIG/SRG checks.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to notify the system
+  administrator and ISSO for account removal actions. For information system
+  components that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 1686. DoD has defined the
+  personnel or roles as the system administrator and ISSO.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: 'Keycloak provides all account lifecycle events â account
+  creation, modification, enabling/disabling, and deletions are recorded as
+  admin eventsâ. These audit records are forwarded to UDSâs centralized
+  logging (Loki), preserving a history of account actions. Notifications to
+  personnel can be configured. Keycloak supports event listeners if required
+  (e.g., sending an email to administrators when an account is created or
+  deleted)â. With these capabilities, UDS meets the intent by auditing account
+  changes and (optionally) alerting administrators of those changes.'
+uds-alignment: Keycloak
+family: AC

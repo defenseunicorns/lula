@@ -1,0 +1,108 @@
+control-acronym: "[r5] AT-03"
+control-information: >-
+  Description:
+
+  a. Provide role-based security and privacy training to personnel with the
+  following roles and responsibilities: [Assignment: organization-defined roles
+  and responsibilities]:
+
+  1. Before authorizing access to the system, information, or performing
+  assigned duties, and [Assignment: organization-defined frequency] thereafter;
+  and
+
+  2. When required by system changes;
+
+  b. Update role-based training content [Assignment: organization-defined
+  frequency] and following [Assignment: organization-defined events]; and
+
+  c. Incorporate lessons learned from internal or external security incidents or
+  breaches into role-based training.
+
+
+  Supplemental Guidance:
+
+  Organizations determine the content of training based on the assigned roles
+  and responsibilities of individuals as well as the security and privacy
+  requirements of organizations and the systems to which personnel have
+  authorized access, including technical training specifically tailored for
+  assigned duties. Roles that may require role-based training include senior
+  leaders or management officials (e.g., head of agency/chief executive officer,
+  chief information officer, senior accountable official for risk management,
+  senior agency information security officer, senior agency official for
+  privacy), system owners; authorizing officials; system security officers;
+  privacy officers; acquisition and procurement officials; enterprise
+  architects; systems engineers; software developers; systems security
+  engineers; privacy engineers; system, network, and database administrators;
+  auditors; personnel conducting configuration management activities; personnel
+  performing verification and validation activities; personnel with access to
+  system-level software; control assessors; personnel with contingency planning
+  and incident response duties; personnel with privacy management
+  responsibilities; and personnel with access to personally identifiable
+  information.
+
+
+  Comprehensive role-based training addresses management, operational, and
+  technical roles and responsibilities covering physical, personnel, and
+  technical controls. Role-based training also includes policies, procedures,
+  tools, methods, and artifacts for the security and privacy roles defined.
+  Organizations provide the training necessary for individuals to fulfill their
+  responsibilities related to operations and supply chain risk management within
+  the context of organizational security and privacy programs. Role-based
+  training also applies to contractors who provide services to federal agencies.
+  Types of training include web-based and computer-based training,
+  classroom-style training, and hands-on training (including micro-training).
+  Updating role-based training on a regular basis helps to ensure that the
+  content remains relevant and effective. Events that may precipitate an update
+  to role-based training content include, but are not limited to, assessment or
+  audit findings, security incidents or breaches, or changes in applicable laws,
+  executive orders, directives, regulations, policies, standards, and
+  guidelines. Related Control(s): AC-3, AC-17, AC-22, AT-2, AT-4, CP-3, IR-2,
+  IR-4, IR-7, IR-9, PL-4, PM-13, PM-23, PS-7, PS-9, SA-3, SA-8, SA-11, SA-16,
+  SR-5, SR-6, SR-11.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System security plan; privacy plan; security and
+  privacy awareness and training policy; procedures addressing security and
+  privacy training implementation; codes of federal regulations; security and
+  privacy training curriculum; security and privacy training materials; training
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  role-based security and privacy training; organizational personnel with
+  assigned system security and privacy roles and responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms managing role-based security and privacy
+  training].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AT-03c
+cci: 3789
+cci-definition: "003789: Incorporate lessons learned from internal or external
+  security incidents or breaches into role-based training."
+implementation-guidance: "-"
+assessment-procedures: Determine if lessons learned from internal or external
+  security incidents or breaches are incorporated into role-based training.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Not Applicable
+test-results: Not Applicable to UDS technology stack. (UDS does not provide
+  personnel training or awareness programs which must be addressed at the
+  organizational level.)
+family: AT

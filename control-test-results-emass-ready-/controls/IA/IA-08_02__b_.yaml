@@ -1,0 +1,100 @@
+control-acronym: "[r5] IA-08(02)"
+control-information: >-
+  Description:
+
+  (a) Accept only external authenticators that are NIST-compliant; and
+
+  (b) Document and maintain a list of accepted external authenticators.
+
+
+  Supplemental Guidance:
+
+  Acceptance of only NIST-compliant external authenticators applies to
+  organizational systems that are accessible to the public (e.g., public-facing
+  websites). External authenticators are issued by nonfederal government
+  entities and are compliant with SP 800-63B. Approved external authenticators
+  meet or exceed the minimum Federal Government-wide technical, security,
+  privacy, and organizational maturity requirements. Meeting or exceeding
+  Federal requirements allows Federal Government relying parties to trust
+  external authenticators in connection with an authentication transaction at a
+  specified authenticator assurance level. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Identification and authentication policy; system
+  security plan; procedures addressing user identification and authentication;
+  system design documentation; system configuration settings and associated
+  documentation; system audit records; list of third-party credentialing
+  products, components, or services procured and implemented by organization;
+  third-party credential verification records; evidence of third-party
+  credentials; third-party credential authorizations; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system operations
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers;
+  organizational personnel with account management responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing identification
+  and authentication capabilities; mechanisms that accept external credentials].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: IA-08(02)(b)
+cci: 4084
+cci-definition: "004084: Document and maintain a list of accepted external authenticators."
+implementation-guidance: "-"
+assessment-procedures: |-
+  Determine if:
+  - a list of accepted external authenticators is documented.
+  - a list of accepted external authenticators is maintained.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: IA-8(3).1,
+  IA-8(3).2; as well as the following Rev. 5 security requirements: CCI-004084.
+  The resulting compliance status was set to non-compliant because the following
+  Rev. 4 assessment procedure had no locally entered test result/compliance
+  statement: IA-8(3).1, IA-8(3).2. The resulting compliance status was set to
+  non-compliant because of the addition of a new security requirement to the
+  assessment procedure that has not been previously assessed: CCI-004084.
+
+
+  Not Applicable to UDS technology stack. (UDS employs the Keycloak identity
+  management component, which supports authentication integration with
+  FICAM-approved identity and credentialing solutions, including DoD-approved
+  PKI (such as CAC and PIV) and other FICAM-approved external credential
+  providers. Keycloak itself provides the necessary technical capabilities—such
+  as certificate-based authentication, validation, and federation with approved
+  identity providers to meet FICAM compliance requirements. However, explicit
+  verification and formal documentation of Keycloak as a FICAM-approved
+  component, or integrating it explicitly with approved FICAM-compliant identity
+  services, remain organizational responsibilities.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: IA-8(3).1, IA-8(3).2; as well as the following Rev. 5 security
+  requirements: CCI-004084. The resulting compliance status was set to
+  non-compliant because the following Rev. 4 assessment procedure had no locally
+  entered test result/compliance statement: IA-8(3).1, IA-8(3).2. The resulting
+  compliance status was set to non-compliant because of the addition of a new
+  security requirement to the assessment procedure that has not been previously
+  assessed: CCI-004084."
+mapped-rev4-aps: IA-8(3)
+family: IA

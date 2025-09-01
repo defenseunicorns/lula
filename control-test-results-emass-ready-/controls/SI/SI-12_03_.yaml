@@ -1,0 +1,74 @@
+control-acronym: "[r5] SI-12(03)"
+control-information: >-
+  Description:
+
+  Use the following techniques to dispose of, destroy, or erase information
+  following the retention period: [Assignment: organization-defined techniques].
+
+
+  Supplemental Guidance:
+
+  Organizations can minimize both security and privacy risks by disposing of
+  information when it is no longer needed. The disposal or destruction of
+  information applies to originals as well as copies and archived records,
+  including system logs that may contain personally identifiable information.
+  Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and information integrity policy; system and
+  information integrity procedures; personally identifiable information
+  processing policy; personally identifiable information processing procedures;
+  records retention and disposition policy; records retention and disposition
+  procedures; laws, Executive Orders, directives, policies, regulations,
+  standards, and operational requirements applicable to information disposal;
+  media protection policy; media protection procedures; system audit records;
+  audit findings; information disposal records; system security plan; privacy
+  plan; privacy impact assessment; privacy risk assessment documentation; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information and records
+  management, retention, and disposition responsibilities; organizational
+  personnel with information security and privacy responsibilities; network
+  administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for information disposition;
+  automated mechanisms supporting and/or implementing information disposition].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SI-12(03)
+cci: 5008
+cci-definition: "005008: Use organization-defined techniques to dispose of,
+  destroy, or erase information following the retention period."
+implementation-guidance: This assessment procedure is automatically compliant
+  because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - [Assignment: organization-defined techniques] are used to dispose of
+  information following the retention period.
+
+  - [Assignment: organization-defined techniques] are used to destroy
+  information following the retention period.
+
+  - [Assignment: organization-defined techniques] are used to erase information
+  following the retention period.
+inherited: Local
+remote-inheritance-instance: "-"
+family: SI

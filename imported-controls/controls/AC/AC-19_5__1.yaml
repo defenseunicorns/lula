@@ -1,0 +1,72 @@
+control-acronym: AC-19(5)
+control-information: >-
+  Description:
+
+  The organization employs [Selection: full-device encryption; container
+  encryption] to protect the confidentiality and integrity of information on
+  [Assignment: organization-defined mobile devices].
+
+
+  Supplemental Guidance:
+
+  Container-based encryption provides a more fine-grained approach to the
+  encryption of data/information on mobile devices, including for example,
+  encrypting selected data structures such as files, records, or fields. Related
+  controls: MP-5, SC-13, SC-28.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing access
+  control for mobile devices; information system design documentation;
+  information system configuration settings and associated documentation;
+  encryption mechanism s and associated configuration documentation; information
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with access control
+  responsibilities for mobile devices; system/network administrators;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Encryption mechanisms protecting confidentiality and
+  integrity of information on mobile devices].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-19(5).1
+cci: 2331
+cci-definition: '002331: Employs full-device encryption or container encryption
+  to protect the integrity of information on organization-defined mobile
+  devices.'
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  for full-device encryption or container encryption to protect the integrity of
+  information on mobile devices defined in AC-19 (5), CCI 2329.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan (SSP)
+
+  2.) Signed and dated mobile devices policy that describes how the organization
+  employs full-device encryption or container encryption to protect the
+  integrity of information on mobile devices defined in AC-19 (5), CCI 2329.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process to ensure the organization being
+  inspected/assessed employs full-device encryption or container encryption to
+  protect the integrity of information on mobile devices defined in AC-19 (5),
+  CCI 2329.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: Not Applicable to UDS technology stack. (Though UDS support FIPS
+  encryption this control refers to policies for mobile device access. UDS is
+  accessed via standard information systems; any mobile device management or
+  controls are outside the scope of the UDS technology stack.)
+family: AC

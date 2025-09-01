@@ -1,0 +1,90 @@
+control-acronym: "[r5] SA-04(09)"
+control-information: >-
+  Description:
+
+  Require the developer of the system, system component, or system service to
+  identify the functions, ports, protocols, and services intended for
+  organizational use.
+
+
+  Supplemental Guidance:
+
+  The identification of functions, ports, protocols, and services early in the
+  system development life cycle (e.g., during the initial requirements
+  definition and design stages) allows organizations to influence the design of
+  the system, system component, or system service. This early involvement in the
+  system development life cycle helps organizations avoid or minimize the use of
+  functions, ports, protocols, or services that pose unnecessarily high risks
+  and understand the trade-offs involved in blocking specific ports, protocols,
+  or services or requiring system service providers to do so. Early
+  identification of functions, ports, protocols, and services avoids costly
+  retrofitting of controls after the system, component, or system service has
+  been implemented. SA-9 describes the requirements for external system
+  services. Organizations identify which functions, ports, protocols, and
+  services are provided from external sources. Related Control(s): CM-7, SA-9.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing the integration of security requirements, descriptions, and
+  criteria into the acquisition process; system design documentation; system
+  documentation, including functions, ports, protocols, and services intended
+  for organizational use; acquisition contracts for systems or services;
+  acquisition documentation; solicitation documentation; service level
+  agreements; organizational security requirements, descriptions, and criteria
+  for developers of systems, system components, and system services; system
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with acquisition/contracting
+  responsibilities; organizational personnel with the responsibility for
+  determining system security requirements; system/network administrators;
+  organizational personnel operating, using, and/or maintaining the system;
+  system developers; organizational personnel with information security
+  responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SA-04(09)
+cci: 3114
+cci-definition: "003114: Require the developer of the system, system component,
+  or system service to identify the functions, ports, protocols, and services
+  intended for organizational use."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the developer of the system, system component, or system service is required
+  to identify the functions intended for organizational use.
+
+  - the developer of the system, system component, or system service is required
+  to identify the ports intended for organizational use.
+
+  - the developer of the system, system component, or system service is required
+  to identify the protocols intended for organizational use.
+
+  - the developer of the system, system component, or system service is required
+  to identify the services intended for organizational use.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: Defense Unicorns provides a detailed Ports, Protocols, and
+  Services List deliverable to the organization.
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: SA-4(9).1."
+mapped-rev4-aps: SA-4(9)
+family: SA

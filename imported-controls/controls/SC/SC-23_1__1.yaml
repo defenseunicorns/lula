@@ -1,0 +1,73 @@
+control-acronym: SC-23(1)
+control-information: >-
+  Description:
+
+  The information system invalidates session identifiers upon user logout or
+  other session termination.
+
+
+  Supplemental Guidance:
+
+  This control enhancement curtails the ability of adversaries from capturing
+  and continuing to employ previously valid session IDs.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing session authenticity; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  session identifier invalidation upon session termination].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-23(1).1
+cci: 1185
+cci-definition: '001185: The information system invalidates session identifiers
+  upon user logout or other session termination.'
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  invalidate session identifiers upon user logout or other session termination.
+  For information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 1185.
+
+  Recommended Compelling Evidence:
+
+  1.) Applicable STIG/SRG checks.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to invalidate session
+  identifiers upon user logout or other session termination. For information
+  system components that have applicable STIGs or SRGs, the organization
+  conducting the inspection/assessment evaluates the components to ensure that
+  the organization being inspected/assessed has configured the information
+  system in compliance with the applicable STIGs and SRGs pertaining to CCI
+  1185.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: UDS leverages Keycloak, integrated with AuthService, to manage
+  user sessions securely. Keycloak automatically invalidates session identifiers
+  upon explicit user logout, session timeout, or administrator-initiated
+  termination of sessions. Upon invalidation, JWT tokens and associated session
+  cookies become unusable, effectively preventing reuse or replay attacks. The
+  Istio Service Mesh enforces token validation on each request, ensuring that
+  terminated or invalidated sessions cannot access system resources after
+  termination.
+uds-alignment: Keycloak, Authservice, Istio
+family: SC

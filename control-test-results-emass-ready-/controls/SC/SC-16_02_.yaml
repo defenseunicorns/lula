@@ -1,0 +1,61 @@
+control-acronym: "[r5] SC-16(02)"
+control-information: >-
+  Description:
+
+  Implement anti-spoofing mechanisms to prevent adversaries from falsifying the
+  security attributes indicating the successful application of the security
+  process.
+
+
+  Supplemental Guidance:
+
+  Some attack vectors operate by altering the security attributes of an
+  information system to intentionally and maliciously implement an insufficient
+  level of security within the system. The alteration of attributes leads
+  organizations to believe that a greater number of security functions are in
+  place and operational than have actually been implemented. Related Control(s):
+  SI-3, SI-4, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing the transmission of security and privacy attributes; access control
+  policy and procedures; system design documentation; system configuration
+  settings and associated documentation; system audit records; system security
+  plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing anti-spoofing
+  mechanisms].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-16(02)
+cci: 4905
+cci-definition: "004905: Implement anti-spoofing mechanisms to prevent
+  adversaries from falsifying the security attributes indicating the successful
+  application of the security process."
+implementation-guidance: "-"
+assessment-procedures: Determine if anti-spoofing mechanisms are implemented to
+  prevent adversaries from falsifying the security attributes indicating the
+  successful application of the security process.
+inherited: Local
+remote-inheritance-instance: "-"
+family: SC

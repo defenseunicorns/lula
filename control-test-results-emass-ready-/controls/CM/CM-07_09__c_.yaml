@@ -1,0 +1,65 @@
+control-acronym: "[r5] CM-07(09)"
+control-information: >-
+  Description:
+
+  (a) Identify [Assignment: organization-defined hardware components authorized
+  for system use];
+
+  (b) Prohibit the use or connection of unauthorized hardware components;
+
+  (c) Review and update the list of authorized hardware components [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  Hardware components provide the foundation for organizational systems and the
+  platform for the execution of authorized software programs. Managing the
+  inventory of hardware components and controlling which hardware components are
+  permitted to be installed or connected to organizational systems is essential
+  in order to provide adequate security. Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Configuration management policy; network connection
+  policy and procedures; configuration management plan; system security plan;
+  system design documentation; system component inventory; system audit records;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system hardware
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational process for approving execution of binary
+  or machine-executable code; mechanisms supporting and/or implementing the
+  prohibition of binary or machine-executable code].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: CM-07(09)(c)
+cci: 003960; 003961
+cci-definition: "003960: Review and update the list of authorized hardware
+  components on an organization-defined frequency.; 003961: Defines the
+  frequency the hardware components are reviewed and updated."
+implementation-guidance: CCI-003961 of this assessment procedure is
+  automatically compliant because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if the list of authorized hardware components
+  is reviewed and updated [Assignment: organization-defined frequency]."
+inherited: Local
+remote-inheritance-instance: "-"
+family: CM

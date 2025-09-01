@@ -1,0 +1,81 @@
+control-acronym: AC-16(5)
+control-information: >-
+  Description:
+
+  The information system displays security attributes in human-readable form on
+  each object that the system transmits to output devices to identify
+  [Assignment: organization-identified special dissemination, handling, or
+  distribution instructions] using [Assignment: organization-identified
+  human-readable, standard naming conventions].
+
+
+  Supplemental Guidance:
+
+  Information system outputs include, for example, pages, screens, or
+  equivalent. Information system output devices include, for example, printers
+  and video displays on computer workstations, notebook computers, and personal
+  digital assistants.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing display of
+  security attributes in human-readable form; special dissemination, handling,
+  or distribution instructions; types of human-readable, standard naming
+  conventions; information system design documentation; information system
+  configuration settings and associated documentation; information system audit
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system developers].
+
+
+  Test: [SELECT FROM: System output devices displaying security attributes in
+  human-readable form on each object].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-16(5).3
+cci: 1430
+cci-definition: '001430: Identifies human-readable, standard naming conventions
+  for identifying security attributes on output.'
+implementation-guidance: >-
+  DoD has defined the human readable, standard naming conventions for security
+  attributes relating to classification as human readable, standard naming
+  conventions IAW DODI 5200.1R; for TS SCI, IAW Controlled Access Program
+  Coordination Office (CAPCO) register. For all other security attributes, not
+  appropriate to define at the Enterprise level. The organization being
+  inspected/assessed defines and documents all other security attributes not
+  relating to classification.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation of security attributes for identification
+  of human readable, standard naming conventions for identifying security
+  attributes on output.
+assessment-procedures: DoD has defined the human readable, standard naming
+  conventions for security attributes relating to classification as human
+  readable, standard naming conventions IAW DODI 5200.1R; for TS SCI, IAW
+  Controlled Access Program Coordination Office (CAPCO) register. For all other
+  security attributes, not appropriate to define at the Enterprise level. The
+  organization conducting the inspection/assessment obtains and examines the
+  documented security attributes not relating to classification to ensure the
+  organization being inspected/assessed identifies human readable, standard
+  naming conventions for identifying security attributes on output.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: 'Not Applicable to UDS technology stack. (UDS inherently supports
+  the association and management of security attributes for stored, processed,
+  and transmitted information through integrated infrastructure capabilities.
+  However, explicitly displaying security attributes in human-readable form such
+  as special dissemination, handling, or distribution instructionsâon output
+  devices is typically managed at the application or client endpoint layer,
+  rather than within the UDS platform itself.)'
+family: AC

@@ -1,0 +1,72 @@
+control-acronym: "[r5] PM-23"
+control-information: >-
+  Description:
+
+  Establish a Data Governance Body consisting of [Assignment:
+  organization-defined roles] with [Assignment: organization-defined
+  responsibilities].
+
+
+  Supplemental Guidance:
+
+  A Data Governance Body can help ensure that the organization has coherent
+  policies and the ability to balance the utility of data with security and
+  privacy requirements. The Data Governance Body establishes policies,
+  procedures, and standards that facilitate data governance so that data,
+  including personally identifiable information, is effectively managed and
+  maintained in accordance with applicable laws, executive orders, directives,
+  regulations, policies, standards, and guidance. Responsibilities can include
+  developing and implementing guidelines that support data modeling, quality,
+  integrity, and the de-identification needs of personally identifiable
+  information across the information life cycle as well as reviewing and
+  approving applications to release data outside of the organization, archiving
+  the applications and the released data, and performing post-release monitoring
+  to ensure that the assumptions made as part of the data release continue to be
+  valid. Members include the chief information officer, senior agency
+  information security officer, and senior agency official for privacy. Federal
+  agencies are required to establish a Data Governance Body with specific roles
+  and responsibilities in accordance with the EVIDACT and policies set forth
+  under OMB M-19-23. Related Control(s): AT-2, AT-3, PM-19, PM-22, PM-24, PT-7,
+  SI-4, SI-19.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Privacy program plan; documentation relating to the
+  Data Governance Body, including documents establishing such a body, its
+  charter of operations, and any plans and reports; records of board meetings
+  and decisions; records of requests to review data; policies, procedures, and
+  standards that facilitate data governance].
+
+
+  Interview: [SELECT FROM: Officials serving on the Data Governance Body (e.g.,
+  chief information officer, senior agency information security officer, and
+  senior agency official for privacy)].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PM-23
+cci: 004420; 004421; 004422
+cci-definition: "004420: Establish a Data Governance Body consisting of
+  organization-defined roles with organization-defined responsibilities.;
+  004421: Defines the roles that are established by the Data Governance Body.;
+  004422: Defines the responsibilities the Data Governance Body establishes."
+implementation-guidance: "-"
+assessment-procedures: "Determine if a Data Governance Body consisting of
+  [Assignment: organization-defined roles] with [Assignment:
+  organization-defined responsibilities] is established."
+inherited: Local
+remote-inheritance-instance: "-"
+family: PM

@@ -1,0 +1,90 @@
+control-acronym: "[r5] PM-11"
+control-information: >-
+  Description:
+
+  a. Define organizational mission and business processes with consideration for
+  information security and privacy and the resulting risk to organizational
+  operations, organizational assets, individuals, other organizations, and the
+  Nation; and
+
+  b. Determine information protection and personally identifiable information
+  processing needs arising from the defined mission and business processes; and
+
+  c. Review and revise the mission and business processes [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  Protection needs are technology-independent capabilities that are required to
+  counter threats to organizations, individuals, systems, and the Nation through
+  the compromise of information (i.e., loss of confidentiality, integrity,
+  availability, or privacy). Information protection and personally identifiable
+  information processing needs are derived from the mission and business needs
+  defined by organizational stakeholders, the mission and business processes
+  designed to meet those needs, and the organizational risk management strategy.
+  Information protection and personally identifiable information processing
+  needs determine the required controls for the organization and the systems.
+  Inherent to defining protection and personally identifiable information
+  processing needs is an understanding of the adverse impact that could result
+  if a compromise or breach of information occurs. The categorization process is
+  used to make such potential impact determinations. Privacy risks to
+  individuals can arise from the compromise of personally identifiable
+  information, but they can also arise as unintended consequences or a byproduct
+  of the processing of personally identifiable information at any stage of the
+  information life cycle. Privacy risk assessments are used to prioritize the
+  risks that are created for individuals from system processing of personally
+  identifiable information. These risk assessments enable the selection of the
+  required privacy controls for the organization and systems. Mission and
+  business process definitions and the associated protection requirements are
+  documented in accordance with organizational policies and procedures. Related
+  Control(s): CP-2, PL-2, PM-7, PM-8, RA-2, RA-3, RA-9, SA-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Information security program plan; privacy program
+  plan; risk management strategy; procedures for determining mission and
+  business protection needs; information security and privacy risk assessment
+  results relevant to the determination of mission and business protection
+  needs; personally identifiable information processing policy; personally
+  identifiable information inventory; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  and privacy program planning and plan implementation responsibilities;
+  organizational personnel responsible for enterprise risk management;
+  organizational personnel responsible for determining information protection
+  needs for mission and business processes; organizational personnel with
+  information security and privacy responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for defining mission and business
+  processes and their information protection needs].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PM-11c
+cci: 004350; 004351
+cci-definition: "004350: Review and revise the mission and business processes on
+  an organization-defined frequency.; 004351: Defines the frequency at which the
+  mission and business processes are reviewed and revised."
+implementation-guidance: This assessment procedure is automatically compliant
+  because of coverage by DoD Enterprise.
+assessment-procedures: "Determine if the mission and business processes are
+  reviewed and revised [Assignment: organization-defined frequency]."
+inherited: Local
+remote-inheritance-instance: "-"
+family: PM

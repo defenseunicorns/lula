@@ -1,0 +1,65 @@
+control-acronym: "[r5] SC-07(29)"
+control-information: >-
+  Description:
+
+  Implement [Selection: physically; logically] separate subnetworks to isolate
+  the following critical system components and functions: [Assignment:
+  organization-defined critical system components and functions].
+
+
+  Supplemental Guidance:
+
+  Separating critical system components and functions from other noncritical
+  system components and functions through separate subnetworks may be necessary
+  to reduce susceptibility to a catastrophic or debilitating breach or
+  compromise that results in system failure. For example, physically separating
+  the command and control function from the in-flight entertainment function
+  through separate subnetworks in a commercial aircraft provides an increased
+  level of assurance in the trustworthiness of critical system functions.
+  Related Control(s): None.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; system design documentation; system hardware
+  and software; system architecture; system configuration settings and
+  associated documentation; criticality analysis; system audit records; system
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms separating critical system components and
+  functions].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-07(29)
+cci: 004891; 004892
+cci-definition: "004891: Implement physically or logically separate subnetworks
+  to isolate organization-defined critical system components and functions.;
+  004892: Defines the critical system components to implement physically or
+  logically separate subnetworks."
+implementation-guidance: "-"
+assessment-procedures: "Determine if subnetworks are separated [Selection:
+  physically; logically] to isolate [Assignment: organization-defined critical
+  system components and functions]."
+inherited: Local
+remote-inheritance-instance: "-"
+family: SC

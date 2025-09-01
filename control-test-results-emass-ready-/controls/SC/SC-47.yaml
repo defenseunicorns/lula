@@ -1,0 +1,65 @@
+control-acronym: "[r5] SC-47"
+control-information: >-
+  Description:
+
+  Establish [Assignment: organization-defined alternate communications paths]
+  for system operations organizational command and control.
+
+
+  Supplemental Guidance:
+
+  An incident, whether adversarial- or nonadversarial-based, can disrupt
+  established communications paths used for system operations and organizational
+  command and control. Alternate communications paths reduce the risk of all
+  communications paths being affected by the same incident. To compound the
+  problem, the inability of organizational officials to obtain timely
+  information about disruptions or to provide timely direction to operational
+  elements after a communications path incident, can impact the ability of the
+  organization to respond to such incidents in a timely manner. Establishing
+  alternate communications paths for command and control purposes, including
+  designating alternative decision makers if primary decision makers are
+  unavailable and establishing the extent and limitations of their actions, can
+  greatly facilitate the organization’s ability to continue to operate and take
+  appropriate actions during an incident. Related Control(s): CP-2, CP-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing communication paths; system design documentation; system
+  configuration settings and associated documentation; system audit records;
+  system security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Mechanisms supporting and/or implementing alternate
+  communication paths for system operations].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: SC-47
+cci: 4931
+cci-definition: "004931: Establish organization-defined alternate communications
+  paths for system operations organizational command and control."
+implementation-guidance: "-"
+assessment-procedures: "Determine if [Assignment: organization-defined alternate
+  communications paths] are established for system operations and operational
+  command and control."
+inherited: Local
+remote-inheritance-instance: "-"
+family: SC

@@ -1,0 +1,70 @@
+control-acronym: "[r5] PM-29"
+control-information: >-
+  Description:
+
+  a. Appoint a Senior Accountable Official for Risk Management to align
+  organizational information security and privacy management processes with
+  strategic, operational, and budgetary planning processes; and
+
+  b. Establish a Risk Executive (function) to view and analyze risk from an
+  organization-wide perspective and ensure management of risk is consistent
+  across the organization.
+
+
+  Supplemental Guidance:
+
+  The senior accountable official for risk management leads the risk executive
+  (function) in organization-wide risk management activities. Related
+  Control(s): PM-2, PM-19.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Information security program plan; privacy program
+  plan; risk management strategy; supply chain risk management strategy;
+  documentation of appointment, roles, and responsibilities of a Senior
+  Accountable Official for Risk Management; documentation of actions taken by
+  the Official; documentation of the establishment, policies, and procedures of
+  a Risk Executive (function)].
+
+
+  Interview: [SELECT FROM: Senior Accountable Official for Risk Management;
+  chief information officer; senior agency information security officer; senior
+  agency official for privacy; organizational personnel with information
+  security and privacy program responsibilities].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: PM-29a
+cci: 004462; 004463
+cci-definition: "004462: Appoint a Senior Accountable Official for Risk
+  Management to align organizational information security management processes
+  with strategic, operational, and budgetary planning processes.; 004463:
+  Appoint a Senior Accountable Official for Risk Management to align
+  organizational information privacy management processes with strategic,
+  operational, and budgetary planning processes."
+implementation-guidance: This assessment procedure is automatically compliant
+  because of coverage by DoD Enterprise.
+assessment-procedures: >-
+  Determine if:
+
+  - a Senior Accountable Official for Risk Management is appointed.
+
+  - a Senior Accountable Official for Risk Management aligns information
+  security and privacy management processes with strategic, operational, and
+  budgetary planning processes.
+inherited: Local
+remote-inheritance-instance: "-"
+family: PM

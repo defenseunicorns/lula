@@ -1,0 +1,69 @@
+control-acronym: PE-8
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Maintains visitor access records to the facility where the information
+  system resides for [Assignment: organization-defined time period]; and
+
+  b. Reviews visitor access records [Assignment: organization-defined
+  frequency].
+
+
+  Supplemental Guidance:
+
+  Visitor access records include, for example, names and organizations of
+  persons visiting, visitor signatures, forms of identification, dates of
+  access, entry and departure times, purposes of visits, and names and
+  organizations of persons visited. Visitor access records are not required for
+  publicly accessible areas.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing visitor access records; security plan; visitor access
+  control logs or records; visitor access record or log reviews; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with visitor access records
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for maintaining and reviewing
+  visitor access records; automated mechanisms supporting and/or implementing
+  maintenance and review of visitor access records].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PE-8.1,CCI-000947,AWS GovCloud L5 Cloud Service Provider Package
+  PE-8.2,CCI-002952,DoD Organization or Service Common Control Package
+  PE-8.3,CCI-000948,AWS GovCloud L5 Cloud Service Provider Package
+  PE-8.4,CCI-000949,DoD Organization or Service Common Control Package...
+ap-acronym: PE-8.2
+cci: 2952
+cci-definition: '002952: The organization defines the time period to maintain
+  visitor access records to the facility where the information system resides.'
+implementation-guidance: |-
+  DoD has defined the time period as at least one year.
+
+  Recommended Compelling Evidence:
+  Automatically Compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the time period as at least one year.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PE

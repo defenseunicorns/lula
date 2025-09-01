@@ -1,0 +1,88 @@
+control-acronym: "[r5] AU-14(03)"
+control-information: >-
+  Description:
+
+  Provide and implement the capability for authorized users to remotely view and
+  hear content related to an established user session in real time.
+
+
+  Supplemental Guidance:
+
+  None. Related Control(s): AC-17.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 5 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+
+  Examine: [SELECT FROM: Audit and accountability policy; system security plan;
+  privacy plan; procedures addressing user session auditing; system design
+  documentation; system configuration settings and associated documentation;
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  and privacy responsibilities; system/network administrators; system
+  developers; legal counsel; personnel with civil liberties responsibilities].
+
+
+  Test: [SELECT FROM: Mechanisms implementing user session auditing capability].
+
+
+  Statement of Weakness:
+
+  None
+control-implementation-status: Planned
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AU-14(03)
+cci: 001920; 003848
+cci-definition: "001920: Provide the capability for authorized users to remotely
+  view and hear content related to an established user session in real time.;
+  003848: Implement the capability for authorized users to remotely view and
+  hear content related to an established user session in real time."
+implementation-guidance: "-"
+assessment-procedures: >-
+  Determine if:
+
+  - the capability for authorized users to remotely view and hear content
+  related to an established user session in real time is provided.
+
+  - the capability for authorized users to remotely view and hear content
+  related to an established user session in real time is implemented.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Need Review
+test-results: >-
+  Automatically generated test result during Revision 5 control set migration
+  based on the following mapped Rev. 4 assessment procedures: AU-14(3).1; as
+  well as the following Rev. 5 security requirements: CCI-003848. The resulting
+  compliance status was set to non-compliant because the following Rev. 4
+  assessment procedure had no locally entered test result/compliance statement:
+  AU-14(3).1. The resulting compliance status was set to non-compliant because
+  of the addition of a new security requirement to the assessment procedure that
+  has not been previously assessed: CCI-003848.
+
+
+  Not Applicable to UDS technology stack. (UDS itself does not inherently
+  provide or support remote, real-time viewing or listening to user session
+  content (e.g., session mirroring, remote desktop viewing, or real-time session
+  monitoring). Such functionality, if required, would typically be provided by
+  specialized endpoint monitoring or auditing tools external to the UDS
+  environment. Therefore, this control is considered not applicable directly to
+  the UDS platform.)
+rev-4-migration-notes: "Automatically generated test result during Revision 5
+  control set migration based on the following mapped Rev. 4 assessment
+  procedures: AU-14(3).1; as well as the following Rev. 5 security requirements:
+  CCI-003848. The resulting compliance status was set to non-compliant because
+  the following Rev. 4 assessment procedure had no locally entered test
+  result/compliance statement: AU-14(3).1. The resulting compliance status was
+  set to non-compliant because of the addition of a new security requirement to
+  the assessment procedure that has not been previously assessed: CCI-003848."
+mapped-rev4-aps: AU-14(3)
+family: AU
