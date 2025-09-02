@@ -59,7 +59,11 @@ type YamlArray = YamlValue[];
  * }
  * ```
  */
-export function createYamlDiff(oldYaml: string, newYaml: string, isArrayFile: boolean = false): YamlDiffResult {
+export function createYamlDiff(
+	oldYaml: string,
+	newYaml: string,
+	isArrayFile: boolean = false
+): YamlDiffResult {
 	try {
 		// For array files (like mappings), default to empty array instead of empty object
 		const emptyDefault = isArrayFile ? '[]' : '{}';
@@ -275,10 +279,12 @@ function compareArrays(
 function isMappingArray(arr: YamlArray): boolean {
 	if (!Array.isArray(arr) || arr.length === 0) return false;
 	const firstItem = arr[0];
-	return typeof firstItem === 'object' && 
-		   firstItem !== null && 
-		   'control_id' in firstItem && 
-		   'uuid' in firstItem;
+	return (
+		typeof firstItem === 'object' &&
+		firstItem !== null &&
+		'control_id' in firstItem &&
+		'uuid' in firstItem
+	);
 }
 
 /**
@@ -290,23 +296,23 @@ function compareMappingArrays(
 	basePath: string
 ): YamlDiffChange[] {
 	const changes: YamlDiffChange[] = [];
-	
+
 	// Build maps by UUID for efficient comparison
 	const oldMappings = new Map<string, any>();
 	const newMappings = new Map<string, any>();
-	
+
 	for (const item of oldArr) {
 		if (typeof item === 'object' && item !== null && 'uuid' in item) {
 			oldMappings.set(item.uuid as string, item);
 		}
 	}
-	
+
 	for (const item of newArr) {
 		if (typeof item === 'object' && item !== null && 'uuid' in item) {
 			newMappings.set(item.uuid as string, item);
 		}
 	}
-	
+
 	// Find added mappings
 	for (const [uuid, mapping] of newMappings) {
 		if (!oldMappings.has(uuid)) {
@@ -318,7 +324,7 @@ function compareMappingArrays(
 			});
 		}
 	}
-	
+
 	// Find removed mappings
 	for (const [uuid, mapping] of oldMappings) {
 		if (!newMappings.has(uuid)) {
@@ -330,7 +336,7 @@ function compareMappingArrays(
 			});
 		}
 	}
-	
+
 	// Find modified mappings
 	for (const [uuid, oldMapping] of oldMappings) {
 		if (newMappings.has(uuid)) {
@@ -346,7 +352,7 @@ function compareMappingArrays(
 			}
 		}
 	}
-	
+
 	// If no specific changes but counts differ, add a summary
 	if (changes.length === 0 && oldArr.length !== newArr.length) {
 		changes.push({
@@ -357,7 +363,7 @@ function compareMappingArrays(
 			description: `Mappings changed from ${oldArr.length} to ${newArr.length} items`
 		});
 	}
-	
+
 	return changes;
 }
 

@@ -19,15 +19,15 @@
 		if (!controlId) return;
 
 		const decodedControlId = decodeURIComponent(controlId);
-		
+
 		// Check if we need to fetch - only when control ID changes
 		if (decodedControlId && decodedControlId !== lastFetchedControlId) {
 			// Check connection status without subscribing to full appState
 			const isConnected = wsClient.isConnected();
-			
+
 			if (isConnected) {
 				lastFetchedControlId = decodedControlId;
-				
+
 				// Fetch full control details from backend
 				wsClient.getControlDetails(decodedControlId);
 			}

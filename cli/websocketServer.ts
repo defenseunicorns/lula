@@ -84,16 +84,16 @@ class WebSocketManager {
 							console.error('Control not found:', payload.id);
 							return;
 						}
-						
+
 						// Merge partial update with existing control (payload contains only changed fields)
 						const updatedControl = { ...existingControl, ...payload } as Control;
-						
+
 						// Save the merged control
 						await state.fileStore.saveControl(updatedControl);
 
 						// Update just this control in the cache
 						state.controlsCache.set(updatedControl.id, updatedControl);
-						
+
 						// Update the family grouping if needed
 						const family = updatedControl.family || updatedControl.id.split('-')[0];
 						if (!state.controlsByFamily.has(family)) {
@@ -105,7 +105,7 @@ class WebSocketManager {
 							familyControlIds.add(updatedControl.id);
 						}
 
-						// Send success response 
+						// Send success response
 						ws.send(
 							JSON.stringify({
 								type: 'control-updated',
@@ -155,31 +155,31 @@ class WebSocketManager {
 					const state = getServerState();
 					if (payload && payload.control_id) {
 						const mapping = payload as unknown as Mapping;
-						
+
 						// Generate a UUID if not provided
 						if (!mapping.uuid) {
 							const crypto = await import('crypto');
 							mapping.uuid = crypto.randomUUID();
 						}
-						
+
 						// Save the mapping
 						await state.fileStore.saveMapping(mapping);
-						
+
 						// Update the cache
 						state.mappingsCache.set(mapping.uuid, mapping);
-						
+
 						// Update indexes
 						const family = mapping.control_id.split('-')[0];
 						if (!state.mappingsByFamily.has(family)) {
 							state.mappingsByFamily.set(family, new Set<string>());
 						}
 						state.mappingsByFamily.get(family)?.add(mapping.uuid);
-						
+
 						if (!state.mappingsByControl.has(mapping.control_id)) {
 							state.mappingsByControl.set(mapping.control_id, new Set<string>());
 						}
 						state.mappingsByControl.get(mapping.control_id)?.add(mapping.uuid);
-						
+
 						// Send success response
 						ws.send(
 							JSON.stringify({
@@ -187,7 +187,7 @@ class WebSocketManager {
 								payload: { uuid: mapping.uuid, success: true }
 							})
 						);
-						
+
 						// Broadcast the updated state to all clients
 						this.broadcastState();
 					}
@@ -199,13 +199,13 @@ class WebSocketManager {
 					const state = getServerState();
 					if (payload && payload.uuid) {
 						const mapping = payload as unknown as Mapping;
-						
+
 						// Save the mapping
 						await state.fileStore.saveMapping(mapping);
-						
+
 						// Update the cache
 						state.mappingsCache.set(mapping.uuid, mapping);
-						
+
 						// Send success response
 						ws.send(
 							JSON.stringify({
@@ -213,7 +213,7 @@ class WebSocketManager {
 								payload: { uuid: mapping.uuid, success: true }
 							})
 						);
-						
+
 						// Broadcast the updated state to all clients
 						this.broadcastState();
 					}
@@ -226,19 +226,19 @@ class WebSocketManager {
 					if (payload && payload.uuid) {
 						const uuid = payload.uuid as string;
 						const mapping = state.mappingsCache.get(uuid);
-						
+
 						if (mapping) {
 							// Delete the mapping file
 							await state.fileStore.deleteMapping(uuid);
-							
+
 							// Remove from cache
 							state.mappingsCache.delete(uuid);
-							
+
 							// Remove from indexes
 							const family = mapping.control_id.split('-')[0];
 							state.mappingsByFamily.get(family)?.delete(uuid);
 							state.mappingsByControl.get(mapping.control_id)?.delete(uuid);
-							
+
 							// Send success response
 							ws.send(
 								JSON.stringify({
@@ -246,7 +246,7 @@ class WebSocketManager {
 									payload: { uuid, success: true }
 								})
 							);
-							
+
 							// Broadcast the updated state to all clients
 							this.broadcastState();
 						}
@@ -351,12 +351,12 @@ class WebSocketManager {
 										totalCommits: controlHistory.totalCommits,
 										commits: controlHistory.commits?.length || 0
 									});
-									
+
 									// Also get mapping file history
 									const mappingFilename = `${control.id.replace(/\./g, '_')}-mappings.yaml`;
 									const mappingPath = join(currentPath, 'mappings', family, mappingFilename);
 									let mappingHistory: any = { commits: [], totalCommits: 0 };
-									
+
 									if (existsSync(mappingPath)) {
 										mappingHistory = await gitUtil.getFileHistory(mappingPath);
 										console.log(`Mapping history for ${control.id}:`, {
@@ -369,7 +369,7 @@ class WebSocketManager {
 									// Check git status for uncommitted changes (both control and mapping files)
 									let hasPendingChanges = false;
 									let mappingHasPending = false;
-									
+
 									// Check control file
 									try {
 										// Check if file is tracked by git
@@ -403,7 +403,7 @@ class WebSocketManager {
 									} catch {
 										// Error checking file/git status - silently continue
 									}
-									
+
 									// Check mapping file if it exists
 									if (existsSync(mappingPath)) {
 										try {
@@ -413,15 +413,17 @@ class WebSocketManager {
 													cwd: process.cwd(),
 													stdio: 'pipe'
 												});
-												
+
 												const gitStatus = execSync(`git status --porcelain "${mappingPath}"`, {
 													encoding: 'utf8',
 													cwd: process.cwd()
 												}).trim();
-												
+
 												mappingHasPending = gitStatus.length > 0;
 												if (mappingHasPending) {
-													console.log(`Mapping file has pending changes: ${gitStatus.substring(0, 2)}`);
+													console.log(
+														`Mapping file has pending changes: ${gitStatus.substring(0, 2)}`
+													);
 												}
 											} catch {
 												mappingHasPending = true;
@@ -431,18 +433,23 @@ class WebSocketManager {
 											// Error checking mapping file status
 										}
 									}
-									
+
 									const hasAnyPendingChanges = hasPendingChanges || mappingHasPending;
 
 									// Merge control and mapping commits, marking each with its source
 									const allCommits = [
-										...(controlHistory.commits || []).map((c: any) => ({ ...c, source: 'control' })),
+										...(controlHistory.commits || []).map((c: any) => ({
+											...c,
+											source: 'control'
+										})),
 										...(mappingHistory.commits || []).map((c: any) => ({ ...c, source: 'mapping' }))
 									];
-									
+
 									// Sort by date (newest first)
-									allCommits.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-									
+									allCommits.sort(
+										(a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+									);
+
 									// Convert to the format expected by frontend
 									timeline = {
 										commits: allCommits,

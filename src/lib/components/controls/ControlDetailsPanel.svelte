@@ -486,7 +486,6 @@
 			{@const overviewFields = getFieldsForTab('overview')}
 			{#if overviewFields.length > 0}
 				<div class="space-y-4">
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Overview</h3>
 					<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
 						<div class="space-y-8">
 							{#each groupFieldsForLayout(overviewFields) as fieldGroup}

@@ -55,7 +55,10 @@
 				<div class="flex items-center justify-between">
 					<div class="flex items-center space-x-3">
 						<h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
-							{commit.fileType || (commit.source === 'mapping' || commit.type === 'mapping' ? 'Mappings' : 'Control File')}
+							{commit.fileType ||
+								(commit.source === 'mapping' || commit.type === 'mapping'
+									? 'Mappings'
+									: 'Control File')}
 						</h4>
 						{#if commit.isPending}
 							<span

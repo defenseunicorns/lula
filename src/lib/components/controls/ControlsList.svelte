@@ -4,11 +4,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { Dropdown, SearchBar } from '$components/ui';
+	import { Dropdown, SearchBar, Tooltip } from '$components/ui';
 	import type { Control, FieldSchema } from '$lib/types';
 	import { appState } from '$lib/websocket';
 	import { complianceStore, searchTerm, selectedFamily } from '$stores/compliance';
-	import { Filter } from 'carbon-icons-svelte';
+	import { Filter, Information } from 'carbon-icons-svelte';
 	import { derived, writable } from 'svelte/store';
 
 	// Derive controls and families from appState
@@ -73,10 +73,11 @@
 						}
 					};
 
-			// Combine ID first, then other fields (limit to 5 total for good layout)
+			// Combine ID first, then other fields sorted by display_order
+			// Take up to 5 additional fields after the ID for a total of 6 columns
 			tableColumns = [
 				idColumn,
-				...otherFields.slice(0, 4).map(([fieldName, field]) => ({ fieldName, field }))
+				...otherFields.slice(0, 5).map(([fieldName, field]) => ({ fieldName, field }))
 			];
 		}
 		schemaLoading = false;
@@ -179,6 +180,40 @@
 		}
 		return 'No description available';
 	}
+
+	// Helper to determine if a field should be truncated and show tooltip
+	function shouldTruncateField(field: FieldSchema | undefined, value: string): boolean {
+		if (!value) return false;
+		
+		// Always show tooltip for textarea fields if content is long
+		if (field?.ui_type === 'textarea' || field?.ui_type === 'long_text') {
+			return value.length > 100; // Lower threshold for long text fields
+		}
+		
+		// For short_text fields, only show if really long
+		if (field?.ui_type === 'short_text') {
+			return value.length > 200;
+		}
+		
+		// Default for unknown field types
+		return value.length > 150;
+	}
+
+	// Get truncation length based on field type
+	function getTruncationLength(field: FieldSchema | undefined): number {
+		if (field?.ui_type === 'textarea' || field?.ui_type === 'long_text') {
+			return 100;
+		}
+		if (field?.ui_type === 'short_text') {
+			return 200;
+		}
+		return 150;
+	}
+	
+	// Check if field should show only icon (for textarea/long_text fields)
+	function isLongTextField(field: FieldSchema | undefined): boolean {
+		return field?.ui_type === 'textarea' || field?.ui_type === 'long_text';
+	}
 </script>
 
 <div class="h-full flex flex-col">
@@ -271,7 +306,7 @@
 					<!-- Dynamic columns based on field schema -->
 					<div
 						class="grid gap-4 px-6 py-3"
-						style="grid-template-columns: repeat({tableColumns.length + 1}, minmax(0, 1fr))"
+						style="grid-template-columns: repeat({tableColumns.length + 1}, minmax(0, 1fr)); max-width: 100%;"
 					>
 						{#each tableColumns as { fieldName, field }}
 							<div
@@ -357,7 +392,7 @@
 								control.id
 									? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 shadow-sm'
 									: ''}"
-								style="grid-template-columns: repeat({tableColumns.length + 1}, minmax(0, 1fr))"
+								style="grid-template-columns: repeat({tableColumns.length + 1}, minmax(0, 1fr)); max-width: 100%;"
 								onclick={() => selectControl(control)}
 								onkeydown={(e) =>
 									e.key === 'Enter' || e.key === ' ' ? selectControl(control) : null}
@@ -379,13 +414,64 @@
 												{value ? 'Yes' : 'No'}
 											</span>
 										{:else if typeof value === 'string' && value}
-											<div class="text-sm text-gray-900 dark:text-white line-clamp-2">
-												{value.substring(0, 150)}{value.length > 150 ? '...' : ''}
-											</div>
+											{@const isLongField = isLongTextField(field)}
+											{@const truncLength = getTruncationLength(field)}
+											{@const needsTruncation = value.length > truncLength}
+											{@const displayValue = needsTruncation ? value.substring(0, truncLength) + '...' : value}
+											{@const previewText = value.substring(0, 600) + (value.length > 600 ? '...' : '')}
+											{#if isLongField && value}
+												<!-- For textarea/long_text fields, show only icon with tooltip -->
+												<div class="flex items-center">
+													<Tooltip content={previewText} placement="bottom" maxWidth="500px" multiline={true}>
+														<Information size={20} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 cursor-help" />
+													</Tooltip>
+												</div>
+											{:else if needsTruncation}
+												<!-- For other fields that are truncated, show text with icon -->
+												<div class="flex items-start gap-1">
+													<div class="text-sm text-gray-900 dark:text-white line-clamp-2 flex-1">
+														{displayValue}
+													</div>
+													<Tooltip content={previewText} placement="bottom" maxWidth="500px" multiline={true}>
+														<Information size={16} class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0 mt-0.5 cursor-help" />
+													</Tooltip>
+												</div>
+											{:else}
+												<!-- For short text, show as is -->
+												<div class="text-sm text-gray-900 dark:text-white line-clamp-2">
+													{value}
+												</div>
+											{/if}
 										{:else if Array.isArray(value)}
-											<div class="text-sm text-gray-900 dark:text-white line-clamp-2">
-												{extractDescriptionFromNested(value).substring(0, 150)}
-											</div>
+											{@const extractedText = extractDescriptionFromNested(value)}
+											{@const isLongField = isLongTextField(field)}
+											{@const truncLength = getTruncationLength(field)}
+											{@const needsTruncation = extractedText.length > truncLength}
+											{@const displayValue = needsTruncation ? extractedText.substring(0, truncLength) + '...' : extractedText}
+											{@const previewText = extractedText.substring(0, 600) + (extractedText.length > 600 ? '...' : '')}
+											{#if isLongField && extractedText}
+												<!-- For textarea/long_text fields, show only icon with tooltip -->
+												<div class="flex items-center">
+													<Tooltip content={previewText} placement="bottom" maxWidth="500px" multiline={true}>
+														<Information size={20} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 cursor-help" />
+													</Tooltip>
+												</div>
+											{:else if needsTruncation}
+												<!-- For other fields that are truncated, show text with icon -->
+												<div class="flex items-start gap-1">
+													<div class="text-sm text-gray-900 dark:text-white line-clamp-2 flex-1">
+														{displayValue}
+													</div>
+													<Tooltip content={previewText} placement="bottom" maxWidth="500px" multiline={true}>
+														<Information size={16} class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0 mt-0.5 cursor-help" />
+													</Tooltip>
+												</div>
+											{:else}
+												<!-- For short text, show as is -->
+												<div class="text-sm text-gray-900 dark:text-white line-clamp-2">
+													{extractedText}
+												</div>
+											{/if}
 										{:else if value}
 											<div class="text-sm text-gray-900 dark:text-white">
 												{JSON.stringify(value)}
@@ -405,6 +491,7 @@
 								</div>
 							</div>
 						{:else}
+							{@const statementIsLongText = cleanDescription.length > 120}
 							<!-- Fallback to default columns -->
 							<div
 								class="grid grid-cols-5 gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-all duration-150 {selectedControlId ===
@@ -432,9 +519,20 @@
 								</div>
 								<!-- Statement Column -->
 								<div class="flex flex-col justify-center">
-									<div class="text-sm text-gray-900 dark:text-white line-clamp-2">
-										{cleanDescription.substring(0, 120)}{cleanDescription.length > 120 ? '...' : ''}
-									</div>
+									{#if statementIsLongText}
+										<div class="flex items-start gap-1">
+											<div class="text-sm text-gray-900 dark:text-white line-clamp-2 flex-1">
+												{cleanDescription.substring(0, 120)}...
+											</div>
+											<Tooltip content={cleanDescription.substring(0, 400) + (cleanDescription.length > 400 ? '...' : '')} placement="bottom" maxWidth="400px" multiline={true}>
+												<Information size={16} class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex-shrink-0 mt-0.5 cursor-help" />
+											</Tooltip>
+										</div>
+									{:else}
+										<div class="text-sm text-gray-900 dark:text-white line-clamp-2">
+											{cleanDescription}
+										</div>
+									{/if}
 								</div>
 								<!-- Family Column -->
 								<div class="flex items-center justify-center">

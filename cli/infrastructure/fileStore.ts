@@ -202,7 +202,7 @@ export class FileStore {
 						key === 'timeline' ||
 						key === 'unifiedHistory' ||
 						key === '_metadata' ||
-						key === 'id'  // Don't save the 'id' field - it's derived from ap-acronym or control_id_field
+						key === 'id' // Don't save the 'id' field - it's derived from ap-acronym or control_id_field
 					) {
 						continue; // Skip runtime-only fields
 					}
@@ -407,7 +407,7 @@ export class FileStore {
 		}
 
 		// Update or add the mapping
-		const existingIndex = existingMappings.findIndex(m => m.uuid === mapping.uuid);
+		const existingIndex = existingMappings.findIndex((m) => m.uuid === mapping.uuid);
 		if (existingIndex >= 0) {
 			existingMappings[existingIndex] = mapping;
 		} else {
@@ -436,15 +436,15 @@ export class FileStore {
 	async deleteMapping(uuid: string): Promise<void> {
 		// Find the mapping in all mapping files
 		const mappingFiles = this.getAllMappingFiles();
-		
+
 		for (const file of mappingFiles) {
 			try {
 				const content = readFileSync(file, 'utf8');
 				let mappings: Mapping[] = YAML.parse(content) || [];
-				
+
 				const originalLength = mappings.length;
-				mappings = mappings.filter(m => m.uuid !== uuid);
-				
+				mappings = mappings.filter((m) => m.uuid !== uuid);
+
 				// If we removed a mapping, save the file
 				if (mappings.length < originalLength) {
 					if (mappings.length === 0) {
@@ -472,29 +472,29 @@ export class FileStore {
 	 */
 	private getAllMappingFiles(): string[] {
 		const files: string[] = [];
-		
+
 		if (!existsSync(this.mappingsDir)) {
 			return files;
 		}
-		
+
 		// Check for flat structure
 		const flatFiles = readdirSync(this.mappingsDir)
-			.filter(file => file.endsWith('-mappings.yaml'))
-			.map(file => join(this.mappingsDir, file));
+			.filter((file) => file.endsWith('-mappings.yaml'))
+			.map((file) => join(this.mappingsDir, file));
 		files.push(...flatFiles);
-		
+
 		// Check for family directories
 		const entries = readdirSync(this.mappingsDir, { withFileTypes: true });
 		for (const entry of entries) {
 			if (entry.isDirectory()) {
 				const familyDir = join(this.mappingsDir, entry.name);
 				const familyFiles = readdirSync(familyDir)
-					.filter(file => file.endsWith('-mappings.yaml'))
-					.map(file => join(familyDir, file));
+					.filter((file) => file.endsWith('-mappings.yaml'))
+					.map((file) => join(familyDir, file));
 				files.push(...familyFiles);
 			}
 		}
-		
+
 		return files;
 	}
 

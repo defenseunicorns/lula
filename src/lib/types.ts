@@ -62,7 +62,15 @@ export interface Stats {
 
 export interface FieldSchema {
 	type: string;
-	ui_type: 'short_text' | 'medium_text' | 'textarea' | 'select' | 'date' | 'number' | 'boolean' | 'long_text';
+	ui_type:
+		| 'short_text'
+		| 'medium_text'
+		| 'textarea'
+		| 'select'
+		| 'date'
+		| 'number'
+		| 'boolean'
+		| 'long_text';
 	is_array: boolean;
 	max_length?: number;
 	usage_count?: number;

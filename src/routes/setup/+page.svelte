@@ -38,11 +38,15 @@
 				// Check if we should auto-load
 				if (controlSets.length === 1) {
 					const singleControlSet = controlSets[0];
-					const isAlreadyLoaded = currentControlSetPath && currentControlSetPath.includes(singleControlSet.path);
-					
+					const isAlreadyLoaded =
+						currentControlSetPath && currentControlSetPath.includes(singleControlSet.path);
+
 					// Only auto-load if it's not already the current control set
 					if (!isAlreadyLoaded && !currentControlSetPath) {
-						console.log('Only one control set found and none loaded, auto-loading:', singleControlSet.path);
+						console.log(
+							'Only one control set found and none loaded, auto-loading:',
+							singleControlSet.path
+						);
 						await switchControlSet(singleControlSet.path);
 						return;
 					}
@@ -66,7 +70,10 @@
 
 		return () => {
 			unsubscribe();
-			window.removeEventListener('control-sets-list', handleControlSetsList as unknown as EventListener);
+			window.removeEventListener(
+				'control-sets-list',
+				handleControlSetsList as unknown as EventListener
+			);
 		};
 	});
 
@@ -233,6 +240,5 @@
 				</div>
 			{/if}
 		</div>
-
 	</div>
 </div>
