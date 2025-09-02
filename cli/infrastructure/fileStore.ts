@@ -201,7 +201,8 @@ export class FileStore {
 					if (
 						key === 'timeline' ||
 						key === 'unifiedHistory' ||
-						key === '_metadata'
+						key === '_metadata' ||
+						key === 'id'  // Don't save the 'id' field - it's derived from ap-acronym or control_id_field
 					) {
 						continue; // Skip runtime-only fields
 					}
@@ -233,7 +234,7 @@ export class FileStore {
 				delete controlToSave.timeline;
 				delete controlToSave.unifiedHistory;
 				delete controlToSave._metadata;
-				// Keep the id field - it's needed for control identification
+				delete controlToSave.id; // Don't save the 'id' field - it's derived from ap-acronym or control_id_field
 
 				yamlContent = YAML.stringify(controlToSave, {
 					indent: 2,

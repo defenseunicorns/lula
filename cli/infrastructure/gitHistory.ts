@@ -260,7 +260,9 @@ export class GitHistoryUtil {
 				const currentContent = await this.getFileAtCommit(commitOid, relativePath, gitRoot);
 				if (currentContent) {
 					const lines = currentContent.split('\n');
-					const yamlDiff = createYamlDiff('', currentContent);
+					// Check if this is a mapping file
+					const isMappingFile = relativePath.includes('-mappings.yaml');
+					const yamlDiff = createYamlDiff('', currentContent, isMappingFile);
 					return {
 						changes: { insertions: lines.length, deletions: 0, files: 1 },
 						diff:
@@ -289,7 +291,9 @@ export class GitHistoryUtil {
 			const { insertions, deletions } = this.countChanges(parentLines, currentLines);
 
 			// Create intelligent YAML diff
-			const yamlDiff = createYamlDiff(parentContent || '', currentContent || '');
+			// Check if this is a mapping file
+			const isMappingFile = relativePath.includes('-mappings.yaml');
+			const yamlDiff = createYamlDiff(parentContent || '', currentContent || '', isMappingFile);
 
 			return {
 				changes: { insertions, deletions, files: 1 },

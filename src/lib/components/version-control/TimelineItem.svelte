@@ -6,7 +6,7 @@
 	import { YamlDiffViewer, DiffViewer } from '.';
 
 	interface Props {
-		commit: GitCommit & { type?: string; fileType?: string };
+		commit: GitCommit & { type?: string; fileType?: string; source?: 'control' | 'mapping' };
 		showConnector?: boolean;
 	}
 
@@ -37,7 +37,7 @@
 		>
 			{#if commit.isPending}
 				<div class="w-3 h-3 rounded-full bg-amber-400 animate-pulse"></div>
-			{:else if commit.type === 'mapping'}
+			{:else if commit.source === 'mapping' || commit.type === 'mapping'}
 				<div class="w-3 h-3 rounded-full bg-green-500"></div>
 			{:else}
 				<div class="w-3 h-3 rounded-full bg-blue-500"></div>
@@ -55,7 +55,7 @@
 				<div class="flex items-center justify-between">
 					<div class="flex items-center space-x-3">
 						<h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100">
-							{commit.fileType || (commit.type === 'mapping' ? 'Mappings' : 'Control File')}
+							{commit.fileType || (commit.source === 'mapping' || commit.type === 'mapping' ? 'Mappings' : 'Control File')}
 						</h4>
 						{#if commit.isPending}
 							<span

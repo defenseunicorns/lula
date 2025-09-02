@@ -59,10 +59,12 @@ type YamlArray = YamlValue[];
  * }
  * ```
  */
-export function createYamlDiff(oldYaml: string, newYaml: string): YamlDiffResult {
+export function createYamlDiff(oldYaml: string, newYaml: string, isArrayFile: boolean = false): YamlDiffResult {
 	try {
-		const oldData = YAML.parse(oldYaml || '{}') as YamlValue;
-		const newData = YAML.parse(newYaml || '{}') as YamlValue;
+		// For array files (like mappings), default to empty array instead of empty object
+		const emptyDefault = isArrayFile ? '[]' : '{}';
+		const oldData = YAML.parse(oldYaml || emptyDefault) as YamlValue;
+		const newData = YAML.parse(newYaml || emptyDefault) as YamlValue;
 
 		const changes = compareValues(oldData, newData, '');
 
@@ -240,6 +242,12 @@ function compareArrays(
 	const oldArray = oldArr as YamlArray;
 	const newArray = newArr as YamlArray;
 
+	// For mapping arrays, provide better descriptions
+	if (isMappingArray(oldArray) || isMappingArray(newArray)) {
+		return compareMappingArrays(oldArray, newArray, basePath);
+	}
+
+	// Generic array comparison
 	if (oldArray.length !== newArray.length) {
 		changes.push({
 			type: 'modified',
@@ -258,6 +266,111 @@ function compareArrays(
 		}
 	}
 
+	return changes;
+}
+
+/**
+ * Check if an array is a mapping array
+ */
+function isMappingArray(arr: YamlArray): boolean {
+	if (!Array.isArray(arr) || arr.length === 0) return false;
+	const firstItem = arr[0];
+	return typeof firstItem === 'object' && 
+		   firstItem !== null && 
+		   'control_id' in firstItem && 
+		   'uuid' in firstItem;
+}
+
+/**
+ * Compare mapping arrays with better descriptions
+ */
+function compareMappingArrays(
+	oldArr: YamlArray,
+	newArr: YamlArray,
+	basePath: string
+): YamlDiffChange[] {
+	const changes: YamlDiffChange[] = [];
+	
+	// Build maps by UUID for efficient comparison
+	const oldMappings = new Map<string, any>();
+	const newMappings = new Map<string, any>();
+	
+	for (const item of oldArr) {
+		if (typeof item === 'object' && item !== null && 'uuid' in item) {
+			oldMappings.set(item.uuid as string, item);
+		}
+	}
+	
+	for (const item of newArr) {
+		if (typeof item === 'object' && item !== null && 'uuid' in item) {
+			newMappings.set(item.uuid as string, item);
+		}
+	}
+	
+	// Find added mappings
+	for (const [uuid, mapping] of newMappings) {
+		if (!oldMappings.has(uuid)) {
+			const justification = mapping.justification || 'No justification';
+			const status = mapping.status || 'unknown';
+			changes.push({
+				type: 'added',
+				path: `mapping[${uuid}]`,
+				newValue: mapping,
+				description: `Added mapping: "${justification.substring(0, 50)}..." (${status})`
+			});
+		}
+	}
+	
+	// Find removed mappings
+	for (const [uuid, mapping] of oldMappings) {
+		if (!newMappings.has(uuid)) {
+			const justification = mapping.justification || 'No justification';
+			const status = mapping.status || 'unknown';
+			changes.push({
+				type: 'removed',
+				path: `mapping[${uuid}]`,
+				oldValue: mapping,
+				description: `Removed mapping: "${justification.substring(0, 50)}..." (${status})`
+			});
+		}
+	}
+	
+	// Find modified mappings
+	for (const [uuid, oldMapping] of oldMappings) {
+		if (newMappings.has(uuid)) {
+			const newMapping = newMappings.get(uuid);
+			if (!deepEqual(oldMapping, newMapping)) {
+				// Describe what changed
+				const descriptions: string[] = [];
+				if (oldMapping.status !== newMapping.status) {
+					descriptions.push(`status: ${oldMapping.status} → ${newMapping.status}`);
+				}
+				if (oldMapping.justification !== newMapping.justification) {
+					descriptions.push('justification updated');
+				}
+				
+				changes.push({
+					type: 'modified',
+					path: `mapping[${uuid}]`,
+					oldValue: oldMapping,
+					newValue: newMapping,
+					description: `Modified mapping: ${descriptions.join(', ')}`
+				});
+			}
+		}
+	}
+	
+	// If no specific changes but counts differ, add a summary
+	if (changes.length === 0 && oldArr.length !== newArr.length) {
+		changes.push({
+			type: 'modified',
+			path: basePath || 'mappings',
+			oldValue: oldArr,
+			newValue: newArr,
+			description: `Mappings changed from ${oldArr.length} to ${newArr.length} items`
+		});
+	}
+	
 	return changes;
 }
 

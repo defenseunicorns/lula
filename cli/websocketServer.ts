@@ -344,61 +344,112 @@ class WebSocketManager {
 								} else {
 									// Create GitHistoryUtil instance and get file history
 									const gitUtil = new GitHistoryUtil(currentPath);
-									const history = await gitUtil.getFileHistory(controlPath);
+									const controlHistory = await gitUtil.getFileHistory(controlPath);
 
 									console.log(`Git history for ${control.id}:`, {
 										path: controlPath,
-										totalCommits: history.totalCommits,
-										commits: history.commits?.length || 0
+										totalCommits: controlHistory.totalCommits,
+										commits: controlHistory.commits?.length || 0
 									});
+									
+									// Also get mapping file history
+									const mappingFilename = `${control.id.replace(/\./g, '_')}-mappings.yaml`;
+									const mappingPath = join(currentPath, 'mappings', family, mappingFilename);
+									let mappingHistory: any = { commits: [], totalCommits: 0 };
+									
+									if (existsSync(mappingPath)) {
+										mappingHistory = await gitUtil.getFileHistory(mappingPath);
+										console.log(`Mapping history for ${control.id}:`, {
+											path: mappingPath,
+											totalCommits: mappingHistory.totalCommits,
+											commits: mappingHistory.commits?.length || 0
+										});
+									}
 
-									// Check git status for uncommitted changes
+									// Check git status for uncommitted changes (both control and mapping files)
 									let hasPendingChanges = false;
+									let mappingHasPending = false;
+									
+									// Check control file
 									try {
-										// File exists since we found it above
-										const fileExists = true;
+										// Check if file is tracked by git
+										try {
+											// This will throw if file is not tracked
+											// cspell:ignore unmatch
+											execSync(`git ls-files --error-unmatch "${controlPath}"`, {
+												encoding: 'utf8',
+												cwd: process.cwd(),
+												stdio: 'pipe'
+											});
 
-										if (fileExists) {
-											// Check if file is tracked by git
-											try {
-												// This will throw if file is not tracked
-												// cspell:ignore unmatch
-												execSync(`git ls-files --error-unmatch "${controlPath}"`, {
-													encoding: 'utf8',
-													cwd: process.cwd(),
-													stdio: 'pipe'
-												});
+											// File is tracked, check for modifications
+											const gitStatus = execSync(`git status --porcelain "${controlPath}"`, {
+												encoding: 'utf8',
+												cwd: process.cwd()
+											}).trim();
 
-												// File is tracked, check for modifications
-												const gitStatus = execSync(`git status --porcelain "${controlPath}"`, {
-													encoding: 'utf8',
-													cwd: process.cwd()
-												}).trim();
-
-												// Git status codes: M = modified, A = added (staged)
-												hasPendingChanges = gitStatus.length > 0;
-												if (hasPendingChanges) {
-													console.log(
-														`Control ${payload.id} has pending changes: ${gitStatus.substring(0, 2)}`
-													);
-												}
-											} catch {
-												// File is not tracked - it's new/untracked
-												hasPendingChanges = true;
-												console.log(`Control ${payload.id} is untracked (new file)`);
+											// Git status codes: M = modified, A = added (staged)
+											hasPendingChanges = gitStatus.length > 0;
+											if (hasPendingChanges) {
+												console.log(
+													`Control ${payload.id} has pending changes: ${gitStatus.substring(0, 2)}`
+												);
 											}
+										} catch {
+											// File is not tracked - it's new/untracked
+											hasPendingChanges = true;
+											console.log(`Control ${payload.id} is untracked (new file)`);
 										}
 									} catch {
 										// Error checking file/git status - silently continue
 									}
+									
+									// Check mapping file if it exists
+									if (existsSync(mappingPath)) {
+										try {
+											try {
+												execSync(`git ls-files --error-unmatch "${mappingPath}"`, {
+													encoding: 'utf8',
+													cwd: process.cwd(),
+													stdio: 'pipe'
+												});
+												
+												const gitStatus = execSync(`git status --porcelain "${mappingPath}"`, {
+													encoding: 'utf8',
+													cwd: process.cwd()
+												}).trim();
+												
+												mappingHasPending = gitStatus.length > 0;
+												if (mappingHasPending) {
+													console.log(`Mapping file has pending changes: ${gitStatus.substring(0, 2)}`);
+												}
+											} catch {
+												mappingHasPending = true;
+												console.log(`Mapping file is untracked`);
+											}
+										} catch {
+											// Error checking mapping file status
+										}
+									}
+									
+									const hasAnyPendingChanges = hasPendingChanges || mappingHasPending;
 
+									// Merge control and mapping commits, marking each with its source
+									const allCommits = [
+										...(controlHistory.commits || []).map((c: any) => ({ ...c, source: 'control' })),
+										...(mappingHistory.commits || []).map((c: any) => ({ ...c, source: 'mapping' }))
+									];
+									
+									// Sort by date (newest first)
+									allCommits.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+									
 									// Convert to the format expected by frontend
 									timeline = {
-										commits: history.commits || [],
-										totalCommits: history.totalCommits || 0,
-										controlCommits: history.totalCommits || 0,
-										mappingCommits: 0,
-										hasPendingChanges
+										commits: allCommits,
+										totalCommits: controlHistory.totalCommits + mappingHistory.totalCommits,
+										controlCommits: controlHistory.totalCommits || 0,
+										mappingCommits: mappingHistory.totalCommits || 0,
+										hasPendingChanges: hasAnyPendingChanges
 									};
 
 									// If no history but file exists, create a pending entry

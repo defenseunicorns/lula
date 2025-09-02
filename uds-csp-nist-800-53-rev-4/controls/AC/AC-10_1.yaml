@@ -73,7 +73,7 @@ assessment-procedures: The organization conducting the inspection/assessment
   with the applicable STIGs and SRGs pertaining to CCI 54. DoD has defined the
   account types and/or accounts as all account types and/or accounts.
 inherited: Local
-remote-inheritance-instance: "-"
+remote-inheritance-instance: ""
 compliance-status: Compliant
 test-results: "UDS effectively limits the number of concurrent user sessions
   through its centralized identity management solution, Keycloak. Administrators
@@ -88,4 +88,4 @@ test-results: "UDS effectively limits the number of concurrent user sessions
 uds-alignment: Keycloak
 family: AC
 id: AC-10_1
-tested-by: jawe foija wei awef test jawioe fj awjioe fjawoef
+tested-by: jawe foija wei awe
