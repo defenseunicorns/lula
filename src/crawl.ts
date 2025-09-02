@@ -4,6 +4,7 @@
 import fs from "fs";
 import { Octokit } from "@octokit/rest";
 import { Command } from "commander";
+import { createHash } from "crypto";
 
 type FileContentResponse = {
   content: string;
@@ -91,7 +92,7 @@ export async function fetchRawFileViaAPI({
 }
 
 /**
- * Extracts all @mapStart and @mapEnd blocks from the given content.
+ * Extracts all @lulaStart and @lulaEnd blocks from the given content.
  *
  * @param content - The content to extract blocks from.
  *
@@ -112,8 +113,8 @@ export function extractMapBlocks(content: string): {
   const stack: { uuid: string; line: number }[] = [];
 
   lines.forEach((line, idx) => {
-    const start = line.match(/@mapStart\s+([a-f0-9-]+)/);
-    const end = line.match(/@mapEnd\s+([a-f0-9-]+)/);
+    const start = line.match(/@lulaStart\s+([a-f0-9-]+)/);
+    const end = line.match(/@lulaEnd\s+([a-f0-9-]+)/);
 
     if (start) {
       stack.push({ uuid: start[1], line: idx });
@@ -171,7 +172,7 @@ export function getChangedBlocks(
 export default function (): Command {
   return new Command()
     .command("crawl")
-    .description("Detect compliance-related changes between @mapStart and @mapEnd in PR files")
+    .description("Detect compliance-related changes between @lulaStart and @lulaEnd in PR files")
     .action(async () => {
       const { owner, repo, pull_number } = getPRContext();
       const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
@@ -192,7 +193,17 @@ export default function (): Command {
           const changedBlocks = getChangedBlocks(oldText, newText);
 
           for (const block of changedBlocks) {
-            const commentBody = `**Compliance Alert**: \`${file.filename}\` changed between lines ${block.startLine + 1}–${block.endLine}.\nUUID \`${block.uuid}\` may be out of compliance. Please review.`;
+              const newBlockText = newText
+              .split("\n")
+              .slice(block.startLine, block.endLine)
+              .join("\n");
+
+            const blockSha256 = createHash("sha256").update(newBlockText).digest("hex");
+            const commentBody =
+              `**Compliance Alert**:\`${file.filename}\` changed between lines ${block.startLine + 1}–${block.endLine}.` +
+              `\nUUID \`${block.uuid}\` may be out of compliance.` +
+              `\nSHA-256 of block contents: \`${blockSha256}\`.` + 
+              `\n\n Please review the changes to ensure they meet compliance standards.`;
             console.log(`Commenting on ${file.filename}: ${commentBody}`);
             await octokit.issues.createComment({
               owner,
