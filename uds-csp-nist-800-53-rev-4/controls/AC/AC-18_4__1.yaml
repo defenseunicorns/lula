@@ -1,0 +1,68 @@
+control-acronym: AC-18(4)
+control-information: >-
+  Description:
+
+  The organization identifies and explicitly authorizes users allowed to
+  independently configure wireless networking capabilities.
+
+
+  Supplemental Guidance:
+
+  Organizational authorizations to allow selected users to configure wireless
+  networking capability are enforced in part, by the access enforcement
+  mechanisms employed within organizational information systems. Related
+  controls: AC-3, SC-15.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing wireless
+  implementation and usage (including restrictions); information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms authorizing independent user
+  configuration of wireless networking capabilities].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-18(4).1
+cci: 2324
+cci-definition: "002324: Identify and explicitly authorizes users allowed to
+  independently configure wireless networking capabilities."
+implementation-guidance: >-
+  The organization being inspected/assessed identifies and explicitly authorizes
+  users allowed to independently configure wireless networking capabilities. The
+  organization must maintain an audit trail of authorizations.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated access control policy and/or account maintenance policy.
+
+  2.) Audit trail of authorizations that shows that the site identifies and
+  explicitly authorizes users (names and titles) allowed to independently
+  configure wireless networking capabilities.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the audit trail of authorizations to ensure the
+  organization being inspected/assessed identifies and explicitly authorizes
+  users allowed to independently configure wireless networking capabilities.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (UDS does not inherently
+  control the use of wireless networking. Any wireless access control would be
+  handled by the underlying network infrastructure, not by UDS itself i.e.
+  wireless network adapters and bluetooth would be enabled/disabled at the
+  operating system.)
+family: AC

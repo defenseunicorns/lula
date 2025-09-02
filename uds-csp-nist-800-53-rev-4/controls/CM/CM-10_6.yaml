@@ -1,0 +1,78 @@
+control-acronym: CM-10
+control-information: >-
+  Description:
+
+  The organization
+
+  a. Uses software and associated documentation in accordance with contract
+  agreements and copyright laws;
+
+  b. Tracks the use of software and associated documentation protected by
+  quantity licenses to control copying and distribution; and
+
+  c. Controls and documents the use of peer-to-peer file sharing technology to
+  ensure that this capability is not used for the unauthorized distribution,
+  display, performance, or reproduction of copyrighted work.
+
+
+  Supplemental Guidance:
+
+  Software license tracking can be accomplished by manual methods (e.g., simple
+  spreadsheets) or automated methods (e.g., specialized tracking applications)
+  depending on organizational needs. Related controls: AC-17, CM-8, SC-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  software usage restrictions; configuration management plan; security plan;
+  software contract agreements and copyright laws; site license documentation;
+  list of software usage restrictions; software license tracking reports; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators; organizational personnel
+  operating, using, and/or maintaining the information system; organizational
+  personnel with software license management responsibilities].
+
+
+  Test: [SELECT FROM: Organizational process for tracking the use of software
+  protected by quantity licenses; organization process for
+  controlling/documenting the use of peer-to-peer file sharing technology;
+  automated mechanisms implementing software license tracking; automated
+  mechanisms implementing and controlling the use of peer-to-peer files sharing
+  technology].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CM-10.6
+cci: 1731
+cci-definition: "001731: The organization tracks the use of software
+  documentation protected by quantity licenses to control distribution of the
+  software documentation."
+implementation-guidance: >-
+  The organization being inspected/assessed tracks the use of software
+  documentation protected by quantity licenses to control distribution of the
+  software documentation. Software license tracking can be accomplished by
+  manual methods (e.g., simple spreadsheets) or automated methods (e.g.,
+  specialized tracking applications) depending on organizational needs.
+
+  Recommended Compelling Evidence:
+
+  1.) Supporting evidence concerning the usage of software documentation
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the tracking records to ensure the organization being
+  inspected/assessed tracks the use of software documentation protected by
+  quantity licenses to control distribution of the software documentation.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (The organization must
+  manage software licenses outside of UDS.)
+family: CM

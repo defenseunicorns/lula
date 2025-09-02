@@ -1,0 +1,73 @@
+control-acronym: CP-6(3)
+control-information: >-
+  Description:
+
+  The organization identifies potential accessibility problems to the alternate
+  storage site in the event of an area-wide disruption or disaster and outlines
+  explicit mitigation actions.
+
+
+  Supplemental Guidance:
+
+  Area-wide disruptions refer to those types of disruptions that are broad in
+  geographic scope (e.g., hurricane, regional power outage) with such
+  determinations made by organizations based on organizational assessments of
+  risk. Explicit mitigation actions include, for example: (i) duplicating backup
+  information at other alternate storage sites if access problems occur at
+  originally designated alternate sites; or (ii) planning for physical access to
+  retrieve backup information if electronic accessibility to the alternate site
+  is disrupted. Related control: RA-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  alternate storage sites; contingency plan; alternate storage site; list of
+  potential accessibility problems to alternate storage site; mitigation actions
+  for accessibility problems to alternate storage site; organizational risk
+  assessments; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  alternate storage site responsibilities; organizational personnel with
+  information system recovery responsibilities; organizational personnel with
+  information security responsibilities].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CP-6(3).1,CCI-000509,Organization AWS Cloud Brokerage Package
+  CP-6(3).2,CCI-001604,Local...
+ap-acronym: CP-6(3).2
+cci: 1604
+cci-definition: "001604: The organization outlines explicit mitigation actions
+  for organization identified accessibility problems to the alternate storage
+  site in the event of an area-wide disruption or disaster."
+implementation-guidance: >-
+  The organization being inspected/assessed must identify and document in the
+  contingency plan explicit mitigation actions for accessibility problems
+  identified in CP-6 (3), CCI 509 to the alternate storage site in the event of
+  an area-wide disruption or disaster.
+
+  Recommended Compelling Evidence:
+
+  1.) Contingency plan, which includes documented explicit mitigation actions
+  for accessibility problems identified in CP-6 (3), CCI 509 to the alternate
+  storage site
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the contingency plan to ensure the organization has
+  documented explicit mitigation actions for accessibility problems identified
+  in CP-6 (3), CCI 509 to the alternate storage site in the event of an
+  area-wide disruption or disaster.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: "Not Applicable to UDS technology stack. (If an alternate storage
+  site is needed for data, thatâs an organizational decision. UDS can send
+  backups offsite via Velero if configured, but selection and preparation of an
+  alternate site is organizational.)"
+family: CP

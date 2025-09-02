@@ -1,0 +1,98 @@
+control-acronym: PS-7
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Establishes personnel security requirements including security roles and
+  responsibilities for third-party providers;
+
+  b. Requires third-party providers to comply with personnel security policies
+  and procedures established by the organization;
+
+  c. Documents personnel security requirements;
+
+  d. Requires third-party providers to notify [Assignment: organization-defined
+  personnel or roles] of any personnel transfers or terminations of third-party
+  personnel who possess organizational credentials and/or badges, or who have
+  information system privileges within [Assignment: organization-defined time
+  period]; and
+
+  e. Monitors provider compliance.
+
+
+  Supplemental Guidance:
+
+  Third-party providers include, for example, service bureaus, contractors, and
+  other organizations providing information system development, information
+  technology services, outsourced applications, and network and security
+  management. Organizations explicitly include personnel security requirements
+  in acquisition-related documents. Third-party providers may have personnel
+  working at organizational facilities with credentials, badges, or information
+  system privileges issued by organizations. Notifications of third-party
+  personnel changes ensure appropriate termination of privileges and
+  credentials. Organizations define the transfers and terminations deemed
+  reportable by security-related characteristics that include, for example,
+  functions, roles, and nature of credentials/privileges associated with
+  individuals transferred or terminated. Related controls: PS-2, PS-3, PS-4,
+  PS-5, PS-6, SA-9, SA-21.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  third-party personnel security; list of personnel security requirements;
+  acquisition documents; service-level agreements; compliance monitoring
+  process; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; third-party providers; system/network administrators;
+  organizational personnel with account management responsibilities;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for managing and monitoring
+  third-party personnel security; automated mechanisms supporting and/or
+  implementing monitoring of provider compliance].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PS-7.1,CCI-001539,DoD Organization or Service Common Control Package
+  PS-7.2,CCI-003040,Organization AWS Cloud Brokerage Package
+  PS-7.3,CCI-001540,Organization AWS Cloud Brokerage Package
+  PS-7.4,CCI-003041,Organization AWS Cloud Brokerage Package
+  PS-7.5,CCI-003042,DoD Organization or Service Common Control Package
+  PS-7.6,CCI-003043,DoD Organization or Service Common Control Package
+  PS-7.7,CCI-001541,Organization AWS Cloud Brokerage Package...
+ap-acronym: PS-7.2
+cci: 3040
+cci-definition: "003040: The organization requires third-party providers to
+  comply with personnel security policies and procedures established by the
+  organization."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to require third-party providers to comply with personnel security policies
+  and procedures established by the organization.
+
+
+  Recommended Compelling Evidence:
+
+  1.) SOP/TTP documentation defining third party providers to comply with
+  personnel security policies and procedures established by the organization.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process to ensure the organization being
+  inspected/assessed requires third-party providers to comply with personnel
+  security policies and procedures established by the organization.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PS

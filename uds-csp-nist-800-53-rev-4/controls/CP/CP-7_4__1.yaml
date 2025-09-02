@@ -1,0 +1,67 @@
+control-acronym: CP-7(4)
+control-information: >-
+  Description:
+
+  The organization prepares the alternate processing site so that the site is
+  ready to be used as the operational site supporting essential missions and
+  business functions.
+
+
+  Supplemental Guidance:
+
+  Site preparation includes, for example, establishing configuration settings
+  for information system components at the alternate processing site consistent
+  with the requirements for such settings at the primary site and ensuring that
+  essential supplies and other logistical considerations are in place. Related
+  controls: CM-2, CM-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  alternate processing sites; contingency plan; alternate processing site;
+  alternate processing site agreements; alternate processing site
+  configurations; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  alternate processing site responsibilities; organizational personnel with
+  information system recovery responsibilities; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  recovery at the alternate processing site].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CP-7(4).1
+cci: 519
+cci-definition: "000519: The organization prepares the alternate processing site
+  so that it is ready to be used as the operational site supporting essential
+  missions."
+implementation-guidance: >-
+  The organization being inspected/assessed prepares the alternate processing
+  site so that it is ready to be used as the operational site supporting
+  essential missions IAW CP-2, CCI 443.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Test procedures
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the contingency plan and conducts a walk-through of the
+  alternate processing site to ensure it is ready to be used as the operational
+  site supporting essential missions.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: CP

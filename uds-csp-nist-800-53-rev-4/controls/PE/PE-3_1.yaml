@@ -1,0 +1,142 @@
+control-acronym: PE-3
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Enforces physical access authorizations at [Assignment:
+  organization-defined entry/exit points to the facility where the information
+  system resides] by;
+
+  1. Verifying individual access authorizations before granting access to the
+  facility; and
+
+  2. Controlling ingress/egress to the facility using [Selection (one or more):
+  [Assignment: organization-defined physical access control systems/devices];
+  guards];
+
+  b. Maintains physical access audit logs for [Assignment: organization-defined
+  entry/exit points];
+
+  c. Provides [Assignment: organization-defined security safeguards] to control
+  access to areas within the facility officially designated as publicly
+  accessible;
+
+  d. Escorts visitors and monitors visitor activity [Assignment:
+  organization-defined circumstances requiring visitor escorts and monitoring];
+
+  e. Secures keys, combinations, and other physical access devices;
+
+  f. Inventories [Assignment: organization-defined physical access devices]
+  every [Assignment: organization-defined frequency]; and
+
+  g. Changes combinations and keys [Assignment: organization-defined frequency]
+  and/or when keys are lost, combinations are compromised, or individuals are
+  transferred or terminated.
+
+
+  Supplemental Guidance:
+
+  This control applies to organizational employees and visitors. Individuals
+  (e.g., employees, contractors, and others) with permanent physical access
+  authorization credentials are not considered visitors. Organizations determine
+  the types of facility guards needed including, for example, professional
+  physical security staff or other personnel such as administrative staff or
+  information system users. Physical access devices include, for example, keys,
+  locks, combinations, and card readers. Safeguards for publicly accessible
+  areas within organizational facilities include, for example, cameras,
+  monitoring by guards, and isolating selected information systems and/or system
+  components in secured areas. Physical access control systems comply with
+  applicable federal laws, Executive Orders, directives, policies, regulations,
+  standards, and guidance. The Federal Identity, Credential, and Access
+  Management Program provides implementation guidance for identity, credential,
+  and access management capabilities for physical access control systems.
+  Organizations have flexibility in the types of audit logs employed. Audit logs
+  can be procedural (e.g., a written log of individuals accessing the facility
+  and when such access occurred), automated (e.g., capturing ID provided by a
+  PIV card), or some combination thereof. Physical access points can include
+  facility access points, interior access points to information systems and/or
+  components requiring supplemental access controls, or both. Components of
+  organizational information systems (e.g., workstations, terminals) may be
+  located in areas designated as publicly accessible with organizations
+  safeguarding access to such devices. Related controls: AU-2, AU-6, MP-2, MP-4,
+  PE-2, PE-4, PE-5, PS-3, RA-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing physical access control; security plan; physical access
+  control logs or records; inventory records of physical access control devices;
+  information system entry and exit points; records of key and lock combination
+  changes; storage locations for physical access control devices; physical
+  access control devices; list of security safeguards controlling access to
+  designated publicly accessible areas within facility; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access control
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for physical access control;
+  automated mechanisms supporting and/or implementing physical access control;
+  physical access control devices].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PE-3.1,CCI-000919,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.2,CCI-002915,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.3,CCI-000920,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.4,CCI-000921,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.5,CCI-002916,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.6,CCI-002917,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.7,CCI-002918,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.8,CCI-002919,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.9,CCI-002920,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.10,CCI-002921,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.11,CCI-002922,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.12,CCI-002923,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.13,CCI-002924,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.14,CCI-000923,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.15,CCI-000924,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.16,CCI-000925,DoD Organization or Service Common Control Package
+  PE-3.17,CCI-002925,DoD Organization or Service Common Control Package
+  PE-3.18,CCI-000926,AWS GovCloud L5 Cloud Service Provider Package
+  PE-3.19,CCI-000927,DoD Organization or Service Common Control Package...
+ap-acronym: PE-3.1
+cci: 919
+cci-definition: "000919: The organization enforces physical access
+  authorizations at organization-defined entry/exit points to the facility where
+  the information system resides."
+implementation-guidance: >-
+  The organization being inspected/assessed will implement physical access
+  authorizations at entry/exit points defined in PE-3, CCI 2915 and secure those
+  physical access points (i.e. doors and/or windows) that are not intended for
+  normal access.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Building/floor plan showing all entry/exit points, or a document that
+  describes in detail the entry /exit points, door construct/access controls
+  (badge swipe etc.), locking mechanisms.
+assessment-procedures: The organization conducting the inspection/assessment
+  performs a physical inspection of facility entry/exit points defined in PE-3,
+  CCI 2915 to ensure that either physical access authorization controls are in
+  place for those access points considered normal access points or are properly
+  secured. Physical access points that are not documented or are not secured
+  would be a failure of this control.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PE

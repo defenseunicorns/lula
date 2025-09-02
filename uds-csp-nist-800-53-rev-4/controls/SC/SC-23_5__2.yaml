@@ -1,0 +1,85 @@
+control-acronym: SC-23(5)
+control-information: >-
+  Description:
+
+  The information system only allows the use of [Assignment:
+  organization-defined certificate authorities] for verification of the
+  establishment of protected sessions.
+
+
+  Supplemental Guidance:
+
+  Reliance on certificate authorities (CAs) for the establishment of secure
+  sessions includes, for example, the use of Secure Socket Layer (SSL) and/or
+  Transport Layer Security (TLS) certificates. These certificates, after
+  verification by the respective certificate authorities, facilitate the
+  establishment of protected sessions between web clients and web servers.
+  Related control: SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing session authenticity; information system design documentation;
+  information system configuration settings and associated documentation; list
+  of certificate authorities allowed for verification of the establishment of
+  protected sessions; information system audit records; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  management of certificate authorities].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-23(5).1,CCI-002469,DoD Organization or Service Common Control Package
+  SC-23(5).2,CCI-002470,Local...
+ap-acronym: SC-23(5).2
+cci: 2470
+cci-definition: "002470: The information system only allows the use of
+  organization-defined certificate authorities for verification of the
+  establishment of protected sessions."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  allow the use of DoD PKI established certificate authorities for verification
+  of the establishment of protected sessions. For information system components
+  that have applicable STIGs or SRGs, the organization being inspected/assessed
+  must comply with the STIG/SRG guidance that pertains to CCI 2470. DoD has
+  defined the certificate authorities as DoD PKI established certificate
+  authorities.
+
+  Recommended Compelling Evidence:
+
+  1.) STIG/SRG guidance that pertains to CCI 2470.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to allow the use of DoD
+  PKI established certificate authorities for verification of the establishment
+  of protected sessions. For information system components that have applicable
+  STIGs or SRGs, the organization conducting the inspection/assessment evaluates
+  the components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 2470. DoD has defined the certificate authorities as
+  DoD PKI established certificate authorities.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: "UDS platform uses the Istio Service Mesh, which includes an
+  internal certificate authority (Citadel) to manage mutual TLS (mTLS)
+  certificates for internal service-to-service sessions. By default, Istioâs
+  built-in certificate authority generates certificates to securely verify
+  internal communications. However, to fully align with this control
+  organizations typically configure Istio to utilize certificates issued by an
+  approved certificate authority compliant with DoDI 8520.02."
+uds-alignment: Istio
+family: SC

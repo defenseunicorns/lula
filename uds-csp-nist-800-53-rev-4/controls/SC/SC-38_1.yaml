@@ -1,0 +1,100 @@
+control-acronym: SC-38
+control-information: >-
+  Description:
+
+  The organization employs [Assignment: organization-defined operations security
+  safeguards] to protect key organizational information throughout the system
+  development life cycle.
+
+
+  Supplemental Guidance:
+
+  Operations security (OPSEC) is a systematic process by which potential
+  adversaries can be denied information about the capabilities and intentions of
+  organizations by identifying, controlling, and protecting generally
+  unclassified information that specifically relates to the planning and
+  execution of sensitive organizational activities. The OPSEC process involves
+  five steps: (i) identification of critical information (e.g., the security
+  categorization process); (ii) analysis of threats; (iii) analysis of
+  vulnerabilities; (iv) assessment of risks; and (v) the application of
+  appropriate countermeasures. OPSEC safeguards are applied to both
+  organizational information systems and the environments in which those systems
+  operate. OPSEC safeguards help to protect the confidentiality of key
+  information including, for example, limiting the sharing of information with
+  suppliers and potential suppliers of information system components,
+  information technology products and services, and with other
+  non-organizational elements and individuals. Information critical to
+  mission/business success includes, for example, user identities, element uses,
+  suppliers, supply chain processes, functional and security requirements,
+  system design specifications, testing protocols, and security control
+  implementation details. Related controls: RA-2, RA-5, SA-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing operations security; security plan; list of operations security
+  safeguards; security control assessments; risk assessments; threat and
+  vulnerability assessments; plans of action and milestones; system development
+  life cycle documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system;
+  information system developers/integrators].
+
+
+  Test: [SELECT FROM: Organizational processes for protecting organizational
+  information throughout the SDLC; automated mechanisms supporting and/or
+  implementing safeguards to protect organizational information throughout the
+  SDLC].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-38.1
+cci: 2528
+cci-definition: "002528: The organization defines the operations security
+  safeguards to be employed to protect key organizational information throughout
+  the system development life cycle."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the operations
+  security safeguards to be employed to protect key organizational information
+  throughout the system development life cycle. DoD has determined the
+  operations security safeguards are not appropriate to define at the Enterprise
+  level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Standard Operating Procedure (SOP).
+
+  2.) Concept of Operations (CONOP).
+
+  3.) System security plan (SSP) (reference "security" section).
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented operations security safeguards to ensure
+  the organization being inspected/assessed defines the operations security
+  safeguards to be employed to protect key organizational information throughout
+  the system development life cycle. DoD has determined the operations security
+  safeguards are not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (These controls pertain to
+  organizational policies, procedures, and processes implemented throughout the
+  system development life cycle (SDLC), rather than specific technical
+  safeguards provided by the UDS platform itself. While UDS facilitates secure
+  development through secure components and best practices (such as IaC, secure
+  deployment with Zarf, and integrated security tools like NeuVector), defining
+  and employing operational security (OPSEC) safeguards during the development
+  lifecycle (e.g., personnel procedures, secure coding practices, information
+  handling policies) remains an organizational responsibility. UDS provides a
+  secure deployment and operational foundation, but actual OPSEC safeguards must
+  be defined, implemented, and documented at the organizational policy and
+  procedural level outside the UDS core platform.
+family: SC

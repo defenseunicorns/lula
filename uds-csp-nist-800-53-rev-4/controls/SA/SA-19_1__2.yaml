@@ -1,0 +1,66 @@
+control-acronym: SA-19(1)
+control-information: >-
+  Description:
+
+  The organization trains [Assignment: organization-defined personnel or roles]
+  to detect counterfeit information system components (including hardware,
+  software, and firmware).
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy;
+  anti-counterfeit policy and procedures; media disposal policy; media
+  protection policy; incident response policy; training materials addressing
+  counterfeit information system components; training records on detection of
+  counterfeit information system components; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and services
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with responsibility for
+  anti-counterfeit policy, procedures, and training].
+
+
+  Test: [SELECT FROM: Organizational processes for anti-counterfeit training].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SA-19(1).2
+cci: 3368
+cci-definition: "003368: The organization defines the personnel or roles to be
+  trained to detect counterfeit information system components (including
+  hardware, software, and firmware)."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the personnel
+  or roles to be trained to detect counterfeit information system components
+  (including hardware, software, and firmware). DoD has determined the personnel
+  or roles are not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP).
+
+  2.) System development life cycle (SDLC) documentation.
+
+  3.) Continuous monitoring plan for defining the organization-defined personnel
+  or roles to detect counterfeit information system components (including
+  hardware, software, and firmware).
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented personnel or roles to ensure the
+  organization being inspected/assessed defines the personnel or roles to be
+  trained to detect counterfeit information system components (including
+  hardware, software, and firmware). DoD has determined the personnel or roles
+  are not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (The organization is
+  responsible for training.)
+family: SA

@@ -1,0 +1,87 @@
+control-acronym: CM-3(2)
+control-information: >-
+  Description:
+
+  The organization tests, validates, and documents changes to the information
+  system before implementing the changes on the operational system.
+
+
+  Supplemental Guidance:
+
+  Changes to information systems include modifications to hardware, software, or
+  firmware components and configuration settings defined in CM-6. Organizations
+  ensure that testing does not interfere with information system operations.
+  Individuals/groups conducting tests understand organizational security
+  policies and procedures, information system security policies and procedures,
+  and the specific health, safety, and environmental risks associated with
+  particular facilities/processes. Operational systems may need to be taken
+  off-line, or replicated to the extent feasible, before testing can be
+  conducted. If information systems must be taken off-line for testing, the
+  tests are scheduled to occur during planned system outages whenever possible.
+  If testing cannot be conducted on operational systems, organizations employ
+  compensating controls (e.g., testing on replicated systems).
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; configuration
+  management plan; procedures addressing information system configuration change
+  control; information system design documentation; information system
+  architecture and configuration documentation; information system configuration
+  settings and associated documentation; test records; validation records;
+  change control records; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with configuration change
+  control responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for configuration change control;
+  automated mechanisms supporting and/or implementing testing, validating, and
+  documenting information system changes].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CM-3(2).2
+cci: 328
+cci-definition: "000328: The organization validates changes to the information
+  system before implementing the changes on the operational system."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to validate changes to the information system before implementing the changes
+  on the operational system. The organization must maintain an audit trail of
+  validation activity.
+
+  Recommended Compelling Evidence:
+
+  1.) Change management testing procedures
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process as well as the audit trail of
+  validation activity to ensure the organization being inspected/assessed
+  validates changes to the information system before implementing the changes on
+  the operational system.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS fully supports validation of information system changes prior
+  to operational deployment. Leveraging Infrastructure as Code (IaC) through
+  OpenTofu and secure software deployments via signed Zarf packages, UDS ensures
+  that all proposed system changes are consistently documented, validated, and
+  version-controlled in dedicated pre-production environments. Automated
+  security compliance checks and validations provided by Pepr ensure that
+  proposed changes align with established organizational baselines and security
+  policies before reaching the operational environment. Additionally, detailed
+  audit trails provided by Vector and Loki record all validation activities,
+  facilitating review and compliance audits. Collectively, these capabilities
+  fully satisfy the requirement to validate all system changes prior to
+  implementation in the operational environment.
+uds-alignment: OpenTofu, Zarf, Pepr, Vector, Loki
+family: CM

@@ -145,7 +145,7 @@ control-implementation-status: Not Implemented
 
 ```
 control-set/
-├── control-set.yaml         # Control set metadata
+├── lula.yaml                # Control set metadata
 ├── controls/                # Individual control files
 │   ├── AC/                  # Access Control family
 │   │   ├── AC-1_SHORT.yaml

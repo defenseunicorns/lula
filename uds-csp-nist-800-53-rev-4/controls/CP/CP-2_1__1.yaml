@@ -1,0 +1,66 @@
+control-acronym: CP-2(1)
+control-information: >-
+  Description:
+
+  The organization coordinates contingency plan development with organizational
+  elements responsible for related plans.
+
+
+  Supplemental Guidance:
+
+  Plans related to contingency plans for organizational information systems
+  include, for example, Business Continuity Plans, Disaster Recovery Plans,
+  Continuity of Operations Plans, Crisis Communications Plans, Critical
+  Infrastructure Plans, Cyber Incident Response Plans, Insider Threat
+  Implementation Plan, and Occupant Emergency Plans.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  contingency operations for the information system; contingency plan; business
+  contingency plans; disaster recovery plans; continuity of operations plans;
+  crisis communications plans; critical infrastructure plans; cyber incident
+  response plan; insider threat implementation plans; occupant emergency plans;
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency planning
+  and plan implementation responsibilities; organizational personnel with
+  information security responsibilities; personnel with responsibility for
+  related plans].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CP-2(1).1
+cci: 469
+cci-definition: "000469: The organization coordinates contingency plan
+  development with organizational elements responsible for related plans."
+implementation-guidance: >-
+  The organization being inspected/assessed coordinates the development of its
+  contingency plan with other organizational elements responsible for related
+  plans. The organization documents any applicable agreements with responsible
+  internal or external entities. For external entities the agreements could
+  entail MOUs, MOAs, SLAs or contracts.
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation of agreements with entities responsible for the contingency
+  or related plans
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines documentation of agreements with entities responsible for
+  the contingency or related plans to ensure there is evidence of coordination
+  of those plans.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (Organizational
+  contingency plans are outside the scope of UDS. UDS provides tools to execute
+  recovery but the plan documentation is an organizational responsibility as it
+  is custom to their mission.)
+family: CP

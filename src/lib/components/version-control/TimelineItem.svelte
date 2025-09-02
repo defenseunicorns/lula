@@ -83,7 +83,7 @@
 
 			<!-- Content -->
 			<div class="px-6 py-4">
-				<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{commit.message}</p>
+				<pre class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap font-sans">{commit.message}</pre>
 			</div>
 
 			<!-- Always show diff content -->

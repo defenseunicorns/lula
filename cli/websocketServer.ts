@@ -79,9 +79,35 @@ class WebSocketManager {
 					const state = getServerState();
 					if (payload && payload.id) {
 						await state.fileStore.saveControl(payload as Control);
-						state.controlsCache.set(payload.id as string, payload as Control);
-						this.broadcastState();
+						
+						// Invalidate the controls list cache so it reloads on next request
+						// We don't cache individual controls anymore
+						state.controlsCache.clear();
+						
+						// Don't broadcast full state - just send a success response
+						// The client already has the updated data
+						ws.send(
+							JSON.stringify({
+								type: 'control-updated',
+								payload: { id: payload.id, success: true }
+							})
+						);
 					}
+					break;
+				}
+
+				case 'refresh-controls': {
+					// Clear the controls cache and reload from disk
+					const state = getServerState();
+					state.controlsCache.clear();
+					state.controlsByFamily.clear();
+					
+					// Reload all controls from disk
+					const { loadAllData } = await import('./serverState');
+					await loadAllData();
+					
+					// Broadcast updated state to all clients
+					this.broadcastState();
 					break;
 				}
 
@@ -138,84 +164,132 @@ class WebSocketManager {
 
 				case 'get-control': {
 					if (payload && payload.id) {
-						const state = getServerState();
-						const control = state.controlsCache.get(payload.id as string);
+						// Always read fresh from disk instead of using cache
+						const { FileStore } = await import('./infrastructure/fileStore');
+						const currentPath = getCurrentControlSetPath();
+						const fileStore = new FileStore({ baseDir: currentPath });
+						
+						// Load the control fresh from disk
+						const controlId = payload.id as string;
+						const control = await fileStore.loadControl(controlId);
+						
 						if (control) {
-							// Ensure control has id field
+							// Ensure control has id field for frontend
 							if (!control.id) {
-								control.id = payload.id as string;
+								control.id = controlId;
 							}
 							// Get timeline data for this control
 							const { GitHistoryUtil } = await import('./infrastructure/gitHistory');
 							const { execSync } = await import('child_process');
-							let timeline = null;
+							let timeline: any = null;
 
 							try {
 								const currentPath = getCurrentControlSetPath();
-								const controlPath = join(
-									currentPath,
-									'controls',
-									control.family || control.id.split('-')[0],
-									`${control.id}.yaml`
-								);
-
-								// Create GitHistoryUtil instance and get file history
-								const gitUtil = new GitHistoryUtil(currentPath);
-								const history = await gitUtil.getFileHistory(controlPath);
-
-								// Check git status for uncommitted changes
-								let hasPendingChanges = false;
-								try {
-									// First check if the file exists
-									const { existsSync } = await import('fs');
-									const fileExists = existsSync(controlPath);
-
-									if (fileExists) {
-										// Check if file is tracked by git
-										try {
-											// This will throw if file is not tracked
-											execSync(`git ls-files --error-unmatch "${controlPath}"`, {
-												encoding: 'utf8',
-												cwd: process.cwd(),
-												stdio: 'pipe'
-											});
-
-											// File is tracked, check for modifications
-											const gitStatus = execSync(`git status --porcelain "${controlPath}"`, {
-												encoding: 'utf8',
-												cwd: process.cwd()
-											}).trim();
-
-											// Git status codes: M = modified, A = added (staged)
-											hasPendingChanges = gitStatus.length > 0;
-											if (hasPendingChanges) {
-												console.log(
-													`Control ${payload.id} has pending changes: ${gitStatus.substring(0, 2)}`
-												);
-											}
-										} catch {
-											// File is not tracked - it's new/untracked
-											hasPendingChanges = true;
-											console.log(`Control ${payload.id} is untracked (new file)`);
+								const { existsSync } = await import('fs');
+								
+								// Try to find the actual file path - it might be in different formats
+								const family = control.family || control.id.split('-')[0];
+								const familyDir = join(currentPath, 'controls', family);
+								
+								// Try different filename formats
+								const possibleFilenames = [
+									`${control.id}.yaml`,
+									`${control.id.replace(/\./g, '_')}.yaml`,  // AC-1.1 -> AC-1_1.yaml
+									`${control.id.replace(/[^\w\-]/g, '_')}.yaml`  // General sanitization
+								];
+								
+								let controlPath = '';
+								for (const filename of possibleFilenames) {
+									const testPath = join(familyDir, filename);
+									if (existsSync(testPath)) {
+										controlPath = testPath;
+										break;
+									}
+								}
+								
+								// If not found in family dir, try flat structure
+								if (!controlPath) {
+									for (const filename of possibleFilenames) {
+										const testPath = join(currentPath, 'controls', filename);
+										if (existsSync(testPath)) {
+											controlPath = testPath;
+											break;
 										}
 									}
-								} catch {
-									// Error checking file/git status - silently continue
 								}
 
-								// Convert to the format expected by frontend
-								timeline = {
-									commits: history.commits || [],
-									totalCommits: history.totalCommits || 0,
-									controlCommits: history.totalCommits || 0,
-									mappingCommits: 0,
-									hasPendingChanges
-								};
+								console.log(`Getting timeline for control ${control.id}:`);
+								console.log(`  Current path: ${currentPath}`);
+								console.log(`  Control path found: ${controlPath}`);
+								console.log(`  File exists: ${existsSync(controlPath)}`);
 
-								// If no history but file exists, create a pending entry
-								if (timeline.totalCommits === 0 && hasPendingChanges) {
-									console.log(`No git history for control ${payload.id} - showing as pending`);
-									timeline.commits = [
+								if (!controlPath) {
+									console.error(`Could not find file for control ${control.id}`);
+									timeline = null;
+								} else {
+									// Create GitHistoryUtil instance and get file history
+									const gitUtil = new GitHistoryUtil(currentPath);
+									const history = await gitUtil.getFileHistory(controlPath);
+									
+									console.log(`Git history for ${control.id}:`, {
+										path: controlPath,
+										totalCommits: history.totalCommits,
+										commits: history.commits?.length || 0
+									});
+
+									// Check git status for uncommitted changes
+									let hasPendingChanges = false;
+									try {
+										// File exists since we found it above
+										const fileExists = true;
+
+										if (fileExists) {
+											// Check if file is tracked by git
+											try {
+												// This will throw if file is not tracked
+												// cspell:ignore unmatch
+												execSync(`git ls-files --error-unmatch "${controlPath}"`, {
+													encoding: 'utf8',
+													cwd: process.cwd(),
+													stdio: 'pipe'
+												});
+
+												// File is tracked, check for modifications
+												const gitStatus = execSync(`git status --porcelain "${controlPath}"`, {
+													encoding: 'utf8',
+													cwd: process.cwd()
+												}).trim();
+
+												// Git status codes: M = modified, A = added (staged)
+												hasPendingChanges = gitStatus.length > 0;
+												if (hasPendingChanges) {
+													console.log(
+														`Control ${payload.id} has pending changes: ${gitStatus.substring(0, 2)}`
+													);
+												}
+											} catch {
+												// File is not tracked - it's new/untracked
+												hasPendingChanges = true;
+												console.log(`Control ${payload.id} is untracked (new file)`);
+											}
+										}
+									} catch {
+										// Error checking file/git status - silently continue
+									}
+
+									// Convert to the format expected by frontend
+									timeline = {
+										commits: history.commits || [],
+										totalCommits: history.totalCommits || 0,
+										controlCommits: history.totalCommits || 0,
+										mappingCommits: 0,
+										hasPendingChanges
+									};
+
+									// If no history but file exists, create a pending entry
+									if (timeline.totalCommits === 0 && hasPendingChanges) {
+										console.log(`No git history for control ${payload.id} - showing as pending`);
+										timeline.commits = [
 										{
 											hash: 'pending',
 											shortHash: 'pending',
@@ -234,7 +308,7 @@ class WebSocketManager {
 									timeline.totalCommits = 1; // Show we have one "pending" commit
 								}
 								// Also add pending entry if there are uncommitted changes on top of history
-								else if (hasPendingChanges && timeline.commits.length > 0) {
+								else if (hasPendingChanges && timeline.totalCommits > 0) {
 									timeline.commits.unshift({
 										hash: 'pending',
 										shortHash: 'pending',
@@ -251,7 +325,14 @@ class WebSocketManager {
 									});
 									timeline.totalCommits += 1;
 								}
-							} catch (error) {
+								
+								console.log(`Final timeline for ${control.id}:`, {
+									totalCommits: timeline.totalCommits,
+									commits: timeline.commits?.length || 0,
+									hasPending: timeline.hasPendingChanges
+								});
+							}
+						} catch (error) {
 								console.error('Error fetching timeline:', error);
 								// Don't fail the whole request, just set timeline to null
 								timeline = null;
@@ -308,7 +389,7 @@ class WebSocketManager {
 			// Load control set metadata and merge it with the state
 			let controlSetData: ControlSetMetadata = {};
 			try {
-				const controlSetFile = join(currentPath, 'control-set.yaml');
+				const controlSetFile = join(currentPath, 'lula.yaml');
 				const content = readFileSync(controlSetFile, 'utf8');
 				controlSetData = yaml.parse(content) as ControlSetMetadata;
 			} catch {
@@ -356,7 +437,7 @@ class WebSocketManager {
 			// Load control set metadata
 			let controlSetData: ControlSetMetadata = {};
 			try {
-				const controlSetFile = join(currentPath, 'control-set.yaml');
+				const controlSetFile = join(currentPath, 'lula.yaml');
 				const content = readFileSync(controlSetFile, 'utf8');
 				controlSetData = yaml.parse(content) as ControlSetMetadata;
 			} catch {

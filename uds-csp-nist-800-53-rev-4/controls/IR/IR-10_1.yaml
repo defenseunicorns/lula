@@ -1,0 +1,92 @@
+control-acronym: IR-10
+control-information: >-
+  Description:
+
+  The organization establishes an integrated team of forensic/malicious code
+  analysts, tool developers, and real-time operations personnel.
+
+  Supplemental Guidance:
+
+  Having an integrated team for incident response facilitates information
+  sharing. Such capability allows organizational personnel, including
+  developers, implementers, and operators, to leverage the team knowledge of the
+  threat in order to implement defensive measures that will enable organizations
+  to deter intrusions more effectively. Moreover, it promotes the rapid
+  detection of intrusions, development of appropriate mitigations, and the
+  deployment of effective defensive measures. For example, when an intrusion is
+  detected, the integrated security analysis team can rapidly develop an
+  appropriate response for operators to implement, correlate the new incident
+  with information on past intrusions, and augment ongoing intelligence
+  development. This enables the team to identify adversary TTPs that are linked
+  to the operations tempo or to specific missions/business functions, and to
+  define responsive actions in a way that does not disrupt the mission/business
+  operations. Ideally, information security analysis teams are distributed
+  within organizations to make the capability more resilient.
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: The
+  integrated information security analysis team will support the organization's
+  PII incident response team (as specified in OMB M-07-16) in all aspects of
+  response to a security incident involving PII. Related Control: SE-2.
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident response planning and security analysis team integration; incident
+  response plan; other relevant documents or records].
+
+  Interview: [SELECT FROM: Organizational personnel with incident response and
+  information security analysis responsibilities; organizational personnel with
+  information security responsibilities; organizational personnel participating
+  on integrated security analysis teams].
+
+  Justification to Select: Added by [r4] Privacy (Confidentiality Impact Level:
+  Moderate) Overlay: Instances of loss, theft, or compromise of PII may involve
+  an information security related malicious code attack or intrusion. In such
+  cases, the Integrated Information Security Analysis Team is the organization's
+  subject matter experts best able to support the organization's PII incident
+  response team required by OMB M-07-16. In addition to security implementers,
+  developers, and operators; this internal team should also comprise of the
+  Chief Information Officer, Chief Privacy Officer or Senior Official for
+  Privacy among others.
+
+  Regulatory Statutory Reference: Added by [r4] Privacy (Confidentiality Impact
+  Level: Moderate) Overlay: OMB M-07-16, Att. 3, B.
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IR-10.1
+cci: 2822
+cci-definition: "002822: The organization establishes an integrated team of
+  forensic/malicious code analysts, tool developers, and real-time operations
+  personnel."
+implementation-guidance: >-
+  The organization being inspected/assessed establishes an integrated team of
+  forensic/malicious code analysts, tool developers, and real-time operations
+  personnel. The organization appoints team members and defines and documents
+  roles and responsibilities for each member.
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation that appoints team members for an integrated team of
+  forensic/malicious code analysts, tool developers, and real-time operations
+  personnel.
+
+  2.) Documentation that defines roles and responsibilities for each member.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines appointments to the integrated team as well as the
+  documented roles and responsibilities to ensure the organization being
+  inspected/assessed establishes an integrated team of forensic/malicious code
+  analysts, tool developers, and real-time operations personnel.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: "Not Applicable to UDS technology stack. (This control ensures the
+  organization has IR support resources. UDS, as a product, is not an IR team
+  though its vendor or community could provide help on technical issues. The
+  formal IR assistance is outside UDSâs scope.)"
+family: IR

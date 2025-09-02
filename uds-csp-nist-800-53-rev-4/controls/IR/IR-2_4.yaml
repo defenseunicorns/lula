@@ -1,0 +1,73 @@
+control-acronym: IR-2
+control-information: >-
+  Description:
+
+  The organization provides incident response training to information system
+  users consistent with assigned roles and responsibilities:
+
+  a. Within [Assignment: organization-defined time period] of assuming an
+  incident response role or responsibility;
+
+  b. When required by information system changes; and
+
+  c. [Assignment: organization-defined frequency] thereafter.
+
+
+  Supplemental Guidance:
+
+  Incident response training provided by organizations is linked to the assigned
+  roles and responsibilities of organizational personnel to ensure the
+  appropriate content and level of detail is included in such training. For
+  example, regular users may only need to know who to call or how to recognize
+  an incident on the information system; system administrators may require
+  additional training on how to handle/remediate incidents; and incident
+  responders may receive more specific training on forensics, reporting, system
+  recovery, and restoration. Incident response training includes user training
+  in the identification and reporting of suspicious activities, both from
+  external and internal sources. Related controls: AT-3, CP-3, IR-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident response training; incident response training curriculum; incident
+  response training materials; security plan; incident response plan; security
+  plan; incident response training records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  training and operational responsibilities; organizational personnel with
+  information security responsibilities].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IR-2.1,CCI-000813,Organization AWS Cloud Brokerage Package
+  IR-2.2,CCI-002778,DoD Organization or Service Common Control Package
+  IR-2.3,CCI-000814,Organization AWS Cloud Brokerage Package
+  IR-2.4,CCI-000815,DoD Organization or Service Common Control Package
+  IR-2.5,CCI-002779,Organization AWS Cloud Brokerage Package...
+ap-acronym: IR-2.4
+cci: 815
+cci-definition: "000815: The organization defines a frequency for refresher
+  incident response training."
+implementation-guidance: |-
+  DoD has defined the frequency as annually.
+
+  Recommended Compelling Evidence:
+  Automatically compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the frequency as annually.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IR

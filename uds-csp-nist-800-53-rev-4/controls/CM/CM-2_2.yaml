@@ -1,0 +1,88 @@
+control-acronym: CM-2
+control-information: >-
+  Description:
+
+  The organization develops, documents, and maintains under configuration
+  control, a current baseline configuration of the information system.
+
+
+  Supplemental Guidance:
+
+  This control establishes baseline configurations for information systems and
+  system components including communications and connectivity-related aspects of
+  systems. Baseline configurations are documented, formally reviewed and
+  agreed-upon sets of specifications for information systems or configuration
+  items within those systems. Baseline configurations serve as a basis for
+  future builds, releases, and/or changes to information systems. Baseline
+  configurations include information about information system components (e.g.,
+  standard software packages installed on workstations, notebook computers,
+  servers, network components, or mobile devices; current version numbers and
+  patch information on operating systems and applications; and configuration
+  settings/parameters), network topology, and the logical placement of those
+  components within the system architecture. Maintaining baseline configurations
+  requires creating new baselines as organizational information systems change
+  over time. Baseline configurations of information systems reflect the current
+  enterprise architecture. Related controls: CM-3, CM-6, CM-8, CM-9, SA-10,
+  PM-5, PM-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  the baseline configuration of the information system; configuration management
+  plan; enterprise architecture documentation; information system design
+  documentation; information system architecture and configuration
+  documentation; information system configuration settings and associated
+  documentation; change control records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with configuration
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing baseline
+  configurations; automated mechanisms supporting configuration control of the
+  baseline configuration].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CM-2.2
+cci: 295
+cci-definition: "000295: The organization maintains under configuration control,
+  a current baseline configuration of the information system."
+implementation-guidance: >-
+  The organization being inspected/assessed maintains a current baseline
+  configuration of the information system.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Baseline configuration of the information system (hardware and software
+  list)
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the current baseline to ensure the current configuration
+  matches the current documented baseline.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS effectively maintains current baseline configurations under
+  configuration control through robust technical mechanisms. Using
+  Infrastructure as Code (IaC) with OpenTofu, the UDS platform ensures
+  configurations are version-controlled, documented, and securely stored in
+  repositories, enabling consistent deployment, rollback, and auditing. Secure
+  distribution via signed Zarf packages ensures only authorized, vetted
+  configurations are deployed within the environment. Additionally, automated
+  policy enforcement by Pepr, continuously validates the deployed configuration
+  against the documented baseline, promptly detecting and alerting
+  administrators to any deviations. These integrated capabilities ensure the
+  baseline configuration remains current, consistently controlled, and fully
+  auditable, satisfying the intent of this control.
+uds-alignment: OpenTofu, Zarf, Pepr
+family: CM

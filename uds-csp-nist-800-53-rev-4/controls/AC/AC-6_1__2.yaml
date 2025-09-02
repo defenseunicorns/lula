@@ -1,0 +1,76 @@
+control-acronym: AC-6(1)
+control-information: >-
+  Description:
+
+  The organization explicitly authorizes access to [Assignment:
+  organization-defined security functions (deployed in hardware, software, and
+  firmware) and security-relevant information].
+
+
+  Supplemental Guidance:
+
+  Security functions include, for example, establishing system accounts,
+  configuring access authorizations (i.e., permissions, privileges), setting
+  events to be audited, and setting intrusion detection parameters.
+  Security-relevant information includes, for example, filtering rules for
+  routers/firewalls, cryptographic key management information, configuration
+  parameters for security services, and access control lists. Explicitly
+  authorized personnel include, for example, security administrators, system and
+  network administrators, system security officers, system maintenance
+  personnel, system programmers, and other privileged users. Related controls:
+  AC-17, AC-18, AC-19.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing least
+  privilege; list of security functions (deployed in hardware, software, and
+  firmware) and security-relevant information for which access must be
+  explicitly authorized; information system configuration settings and
+  associated documentation; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  defining least privileges necessary to accomplish specified tasks;
+  organizational personnel with information security responsibilities;
+  system/network administrators].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing least privilege
+  functions].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-6(1).1,CCI-001558,DoD Organization or Service Common Control Package
+  AC-6(1).2,CCI-002221,DoD Organization or Service Common Control Package
+  AC-6(1).3,CCI-002222,Local
+  AC-6(1).4,CCI-002223,Local...
+ap-acronym: AC-6(1).2
+cci: 2221
+cci-definition: "002221: The organization defines the security-relevant
+  information for which access must be explicitly authorized."
+implementation-guidance: >-
+  DoD has defined the security-relevant information as all security-relevant
+  information not publicly available.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the security-relevant information as all
+  security-relevant information not publicly available.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AC

@@ -1,0 +1,73 @@
+control-acronym: IA-5(4)
+control-information: >-
+  Description:
+
+  The organization employs automated tools to determine if password
+  authenticators are sufficiently strong to satisfy [Assignment:
+  organization-defined requirements].
+
+
+  Supplemental Guidance:
+
+  This control enhancement focuses on the creation of strong passwords and the
+  characteristics of such passwords (e.g., complexity) prior to use, the
+  enforcement of which is carried out by organizational information systems in
+  IA-5 (1). Related controls: CA-2, CA-7, RA-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing authenticator management; information system design documentation;
+  information system configuration settings and associated documentation;
+  automated tools for evaluating password authenticators; password strength
+  assessment results; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with authenticator
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  password-based authenticator management capability; automated tools for
+  determining password strength].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IA-5(4).1,CCI-001996,DoD Organization or Service Common Control Package
+  IA-5(4).2,CCI-001997,Local...
+ap-acronym: IA-5(4).2
+cci: 1997
+cci-definition: "001997: The organization employs automated tools to determine
+  if password authenticators are sufficiently strong to satisfy
+  organization-defined requirements."
+implementation-guidance: >-
+  The organization being inspected/assessed implements automated tools to check
+  passwords strength per the complexity requirements defined in IA-5 (1) Part A.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated SOP/TTP implementing automated tools to check password
+  strength per the complexity requirements defined in IA-5 (1) Part A.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the automated tools and inspects the configuration of the automated
+  tools to ensure that they are implemented to check password strength per the
+  complexity requirements defined in IA-5 (1) Part A.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS provides built-in password strength enforcement through its
+  centralized identity management solution, Keycloak. Keycloak allows
+  administrators to define detailed, configurable password complexity policies,
+  including minimum length, required special characters, numeric characters,
+  uppercase, and lowercase letters.
+uds-alignment: Keycloak
+family: IA

@@ -51,7 +51,7 @@ let metadataPath: string | null = null;
  * Load control set metadata from disk
  * Caches the metadata to avoid repeated file reads
  *
- * @param baseDir - Base directory containing control-set.yaml
+ * @param baseDir - Base directory containing lula.yaml
  * @returns The loaded control set metadata
  *
  * @example
@@ -61,7 +61,7 @@ let metadataPath: string | null = null;
  * ```
  */
 export function loadControlSetMetadata(baseDir: string): ControlSetMetadata {
-	const path = join(baseDir, 'control-set.yaml');
+	const path = join(baseDir, 'lula.yaml');
 
 	// Only reload if path changed or not loaded yet
 	if (metadataPath !== path || !controlSetMetadata) {
@@ -71,7 +71,7 @@ export function loadControlSetMetadata(baseDir: string): ControlSetMetadata {
 				controlSetMetadata = yaml.parse(content) as ControlSetMetadata;
 				metadataPath = path;
 			} catch (error) {
-				console.error(`Failed to parse control-set.yaml at ${path}:`, error);
+				console.error(`Failed to parse lula.yaml at ${path}:`, error);
 				// Use empty metadata as fallback
 				controlSetMetadata = {};
 				metadataPath = path;

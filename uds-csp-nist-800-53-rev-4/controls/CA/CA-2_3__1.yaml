@@ -1,0 +1,83 @@
+control-acronym: CA-2(3)
+control-information: >-
+  Description:
+
+  The organization accepts the results of an assessment of [Assignment:
+  organization-defined information system] performed by [Assignment:
+  organization-defined external organization] when the assessment meets
+  [Assignment: organization-defined requirements].
+
+
+  Supplemental Guidance:
+
+  Organizations may often rely on assessments of specific information systems by
+  other (external) organizations. Utilizing such existing assessments (i.e.,
+  reusing existing assessment evidence) can significantly decrease the time and
+  resources required for organizational assessments by limiting the amount of
+  independent assessment activities that organizations need to perform. The
+  factors that organizations may consider in determining whether to accept
+  assessment results from external organizations can vary. Determinations for
+  accepting assessment results can be based on, for example, past assessment
+  experiences one organization has had with another organization, the reputation
+  that organizations have with regard to assessments, the level of detail of
+  supporting assessment documentation provided, or mandates imposed upon
+  organizations by federal legislation, policies, or directives.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Security assessment and authorization policy;
+  procedures addressing security assessments; security plan; security assessment
+  requirements; security assessment plan; security assessment report; security
+  assessment evidence; plan of action and milestones; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security assessment
+  responsibilities; organizational personnel with information security
+  responsibilities; personnel performing security assessments for the specified
+  external organization].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CA-2(3).1
+cci: 2066
+cci-definition: "002066: The organization accepts the results of an assessment
+  of the organization-defined information system performed by
+  organization-defined external organization when the assessment meets
+  organization-defined requirements."
+implementation-guidance: >-
+  The organization being inspected/assessed accepts the results of an assessment
+  of the information system defined in CA-2 (3), CCI 2067 performed by external
+  organization defined in CA-2 (3), CCI 2068 when the assessment meets
+  requirements defined in CA-2 (3), CCI 2069. The organization must maintain
+  records of acceptance or rejection of external organization assessment
+  results.
+
+  Recommended Compelling Evidence:
+
+  1.) Audit records to determine acceptance or rejection of external
+  organization assessment results to ensure organization accepts the results of
+  an assessment of the information system defined in CA-2 (3), CCI 2067
+  performed by external organization defined in CA-2 (3), CCI 2068 when the
+  assessment meets requirements defined in CA-2 (3), CCI 2069.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines a sampling of records of acceptance or rejection of
+  external organization assessment results to ensure the organization being
+  inspected/assessed accepts the results of an assessment of the information
+  system defined in CA-2 (3), CCI 2067 performed by external organization
+  defined in CA-2 (3), CCI 2068 when the assessment meets requirements defined
+  in CA-2 (3), CCI 2069.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: "Not Applicable to UDS technology stack. (Performing security
+  assessments is an organizational task. While UDS provides logs and scan
+  results that facilitate assessments, the actual assessment process is outside
+  the stackâs functionality.)"
+family: CA

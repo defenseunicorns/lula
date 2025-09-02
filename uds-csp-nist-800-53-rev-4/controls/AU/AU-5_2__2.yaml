@@ -1,0 +1,66 @@
+control-acronym: AU-5(2)
+control-information: >-
+  Description:
+
+  The information system provides an alert in [Assignment: organization-defined
+  real-time period] to [Assignment: organization-defined personnel, roles,
+  and/or locations] when the following audit failure events occur: [Assignment:
+  organization-defined audit failure events requiring real-time alerts].
+
+
+  Supplemental Guidance:
+
+  Alerts provide organizations with urgent messages. Real-time alerts provide
+  these messages at information technology speed (i.e., the time from event
+  detection to alert occurs in seconds or less).
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  response to audit processing failures; information system design
+  documentation; security plan; information system configuration settings and
+  associated documentation; records of notifications or real-time alerts when
+  audit processing failures occur; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing real-time audit alerts
+  when organization-defined audit failure events occur].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AU-5(2).1,CCI-000147,DoD Organization or Service Common Control Package
+  AU-5(2).2,CCI-001856,DoD Organization or Service Common Control Package
+  AU-5(2).3,CCI-001857,Local
+  AU-5(2).4,CCI-001858,Local...
+ap-acronym: AU-5(2).2
+cci: 1856
+cci-definition: "001856: The organization defines the real-time period within
+  which the information system is to provide an alert when organization-defined
+  audit failure events occur."
+implementation-guidance: |-
+  DoD has defined the real-time period as immediate.
+
+  Recommended Compelling Evidence:
+  Automatically Compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the real-time period as immediate.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AU

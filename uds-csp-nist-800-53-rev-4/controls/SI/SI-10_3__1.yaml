@@ -1,0 +1,92 @@
+control-acronym: SI-10(3)
+control-information: >-
+  Description:
+
+  The information system behaves in a predictable and documented manner that
+  reflects organizational and system objectives when invalid inputs are
+  received.
+
+
+  Supplemental Guidance:
+
+  A common vulnerability in organizational information systems is unpredictable
+  behavior when invalid inputs are received. This control enhancement ensures
+  that there is predictable behavior in the face of invalid inputs by specifying
+  information system responses that facilitate transitioning the system to known
+  states without adverse, unintended side effects.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing information input validation; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  information input validation; organizational personnel with information
+  security responsibilities; system/network administrators; system developer].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  predictable behavior when invalid inputs are received].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SI-10(3).1
+cci: 2754
+cci-definition: "002754: The information system behaves in a predictable and
+  documented manner that reflects organizational and system objectives when
+  invalid inputs are received."
+implementation-guidance: >-
+  The organization being inspected/assessed documents proper behavior that
+  reflects organizational and system objectives for when invalid inputs are
+  received. The organization being inspected/assessed configures the information
+  system to behave in the documented manner when invalid inputs are received.
+  For information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 2754.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System security plan documents proper behavior that
+  reflects organizational and system objectives for when invalid inputs are
+  received.
+
+  2.) Configuration documentation that the information system behaves in the
+  documented manner when invalid inputs are received.
+
+  3.) Applicable STIG/SRG checks pertaining to CCI 2754.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented behavior to ensure the organization being
+  inspected/assessed documents proper behavior that reflects organizational and
+  system objectives for when invalid inputs are received. The organization
+  conducting the inspection/assessment examines the information system to ensure
+  the organization being inspected/assessed configures the information system to
+  behave in the documented manner when invalid inputs are received. For
+  information system components that have applicable STIGs or SRGs, the
+  organization conducting the inspection/assessment evaluates the components to
+  ensure that the organization being inspected/assessed has configured the
+  information system in compliance with the applicable STIGs and SRGs pertaining
+  to CCI 2754.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: "Within UDS, Keycloak ensures the system responds predictably and
+  consistently when invalid inputs are received. Specifically, when
+  authentication or authorization inputs (such as malformed usernames, incorrect
+  passwords, or invalid tokens) are submitted, Keycloak responds with
+  standardized, generic error messages, avoiding detailed disclosures that could
+  aid attackers. All invalid attempts are clearly recorded within Keycloakâs
+  detailed audit logs, enabling administrative monitoring and forensic
+  analysis."
+uds-alignment: Keycloak
+family: SI

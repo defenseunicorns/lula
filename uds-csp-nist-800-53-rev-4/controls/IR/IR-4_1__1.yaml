@@ -1,0 +1,61 @@
+control-acronym: IR-4(1)
+control-information: >-
+  Description:
+
+  The organization employs automated mechanisms to support the incident handling
+  process.
+
+
+  Supplemental Guidance:
+
+  Automated mechanisms supporting incident handling processes include, for
+  example, online incident management systems.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident handling; automated mechanisms supporting incident handling;
+  information system design documentation; information system configuration
+  settings and associated documentation; information system audit records;
+  incident response plan; security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident handling
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms that support and/or implement the
+  incident handling process].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IR-4(1).1
+cci: 825
+cci-definition: "000825: The organization employs automated mechanisms to
+  support the incident handling process."
+implementation-guidance: >-
+  The organization being inspected/assessed will document within their incident
+  handling plan, procedures to leverage the Joint Incident Management System
+  (JIMS). For the DoD, JIMS is the automated mechanism.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Incident Response Plan, referencing automated mechanisms
+  section
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the incident handling plan to ensure that there are
+  procedures identified to leverage the JIMS.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IR

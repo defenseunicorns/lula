@@ -1,0 +1,88 @@
+control-acronym: AU-10(3)
+control-information: >-
+  Description:
+
+  The information system maintains reviewer/releaser identity and credentials
+  within the established chain of custody for all information reviewed or
+  released.
+
+
+  Supplemental Guidance:
+
+  Chain of custody is a process that tracks the movement of evidence through its
+  collection, safeguarding, and analysis life cycle by documenting each person
+  who handled the evidence, the date and time it was collected or transferred,
+  and the purpose for the transfer. If the reviewer is a human or if the review
+  function is automated but separate from the release/transfer function, the
+  information system associates the identity of the reviewer of the information
+  to be released with the information and the information label. In the case of
+  human reviews, this control enhancement provides organizational officials the
+  means to identify who reviewed and released the information. In the case of
+  automated reviews, this control enhancement ensures that only approved review
+  functions are employed. Related controls: AC-4, AC-16.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  non-repudiation; information system design documentation; information system
+  configuration settings and associated documentation; records of information
+  reviews and releases; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing non-repudiation
+  capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-10(3).1
+cci: 1340
+cci-definition: "001340: The information system maintains reviewer/releaser
+  identity and credentials within the established chain of custody for all
+  information reviewed or released."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  maintain reviewer/releaser identity and credentials within the established
+  chain of custody for all information reviewed or released. For information
+  system components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  1340.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to maintain
+  reviewer/releaser identity and credentials within the established chain of
+  custody for all information reviewed or released. For information system
+  components that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 1340.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS supports maintaining reviewer/releaser identity and
+  credentials within an established chain of custody through robust identity
+  management and audit logging mechanisms. Specifically, user identities and
+  credentials validated via Keycloak leveraging strong PKI-based authentication
+  (CAC/PIV) are recorded in detailed audit logs collected by Vector and securely
+  stored within Loki. These audit logs capture reviewer or releaser identity,
+  timestamped actions, and associated events, providing an accurate, auditable
+  trail to establish clear chains of custody.
+uds-alignment: Keycloak, Vector, Loki
+family: AU

@@ -1,0 +1,78 @@
+control-acronym: AC-23
+control-information: >-
+  Description:
+
+  The organization employs [Assignment: organization-defined data mining
+  prevention and detection techniques] for [Assignment: organization-defined
+  data storage objects] to adequately detect and protect against data mining.
+
+
+  Supplemental Guidance:
+
+  Data storage objects include, for example, databases, database records, and
+  database fields. Data mining prevention and detection techniques include, for
+  example: (i) limiting the types of responses provided to database queries;
+  (ii) limiting the number/frequency of database queries to increase the work
+  factor needed to determine the contents of such databases; and (iii) notifying
+  organizational personnel when atypical database queries or accesses occur.
+  This control focuses on the protection of organizational information from data
+  mining while such information resides in organizational data stores. In
+  contrast, AU-13 focuses on monitoring for organizational information that may
+  have been mined or otherwise obtained from data stores and is now available as
+  open source information residing on external sites, for example, through
+  social networking or social media websites.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing data
+  mining techniques; procedures addressing protection of data storage objects
+  against data mining; information system design documentation; information
+  system configuration settings and associated documentation; information system
+  audit logs; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  implementing data mining detection and prevention techniques for data storage
+  objects; organizational personnel with information security responsibilities;
+  system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing data mining prevention
+  and detection].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-23.3
+cci: 2345
+cci-definition: "002345: The organization defines the data storage objects that
+  are to be protected against data mining attempts."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the data
+  storage objects that are to be protected against data mining attempts. DoD has
+  determined the data storage objects are not appropriate to define at the
+  Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan (SSP)/standard operating procedure
+  (SOP) or concept of operations (CONOP) that defines and describes the data
+  storage objects that are to be protected against data mining attempts.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented data storage objects to ensure the
+  organization being inspected/assessed defines the data storage objects that
+  are to be protected against data mining attempts. DoD has determined the data
+  storage objects are not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (Though UDS provided
+  robust monitoring capabilities it does not provide specific data mining
+  prevention.)
+family: AC

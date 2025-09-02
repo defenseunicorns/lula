@@ -31,8 +31,11 @@
 	let activeTab = $state<'details' | 'narrative' | 'custom' | 'mappings' | 'history'>('details');
 	let showNewMappingForm = $state(false);
 	let editingMapping = $state<any>(null);
-	let autoSaveInterval: ReturnType<typeof setInterval> | null = null;
+	let saveDebounceTimeout: ReturnType<typeof setTimeout> | null = null;
 	let fieldSchema = $state<Record<string, FieldSchema> | null>(null);
+	let isSaving = $state(false);
+	let showSavedMessage = $state(false);
+	let savedMessageTimeout: ReturnType<typeof setTimeout> | null = null;
 
 	// Data loading state
 	let completeData: ControlCompleteData | null = $state(null);
@@ -54,8 +57,9 @@
 	const unifiedTimeline = $derived(
 		(completeData as ControlCompleteData | null)?.unifiedHistory.commits || []
 	);
-	const saveStatus = $derived(hasChanges ? 'unsaved' : 'saved');
-	const isAutoSaving = $derived(false); // We'll keep this simple for now
+	const saveStatus = $derived(
+		isSaving ? 'saving' : (hasChanges ? 'unsaved' : (showSavedMessage ? 'just-saved' : 'clean'))
+	);
 
 	// Helper to get implementation status icon and color
 	const getImplementationStatus = $derived.by(() => {
@@ -106,93 +110,127 @@
 
 	// Effects
 	$effect(() => {
-		// Reset component state when control changes
-		// Clear any existing auto-save interval
-		if (autoSaveInterval) {
-			clearInterval(autoSaveInterval);
+		// Only run when control prop actually changes
+		const controlIdChanged = control.id !== originalControl?.id;
+		
+		// If we're just getting the same control back (like after a save), don't reset
+		// Check if the incoming control is essentially the same as what we already have
+		if (!controlIdChanged) {
+			// If we have pending changes, don't overwrite them with incoming data
+			if (hasChanges) {
+				return; // Keep our local edits
+			}
+			
+			// If no local changes and the data is the same, skip update
+			if (JSON.stringify(control) === JSON.stringify(originalControl)) {
+				return;
+			}
 		}
-
-		editedControl = { ...control };
-		originalControl = { ...control };
-		completeData = null;
-		loadingCompleteData = false;
-		activeTab = 'details';
-		editingMapping = null;
+		
+		// Reset component state when control changes
+		// Clear any existing save timeout
+		if (saveDebounceTimeout) {
+			clearTimeout(saveDebounceTimeout);
+		}
+		
+		// Only update if this is a different control or significant change
+		if (controlIdChanged) {
+			editedControl = { ...control };
+			originalControl = { ...control };
+			completeData = null;
+			loadingCompleteData = false;
+			activeTab = 'details';
+			editingMapping = null;
+		} else if (!hasChanges) {
+			// Only update if we don't have local changes
+			editedControl = { ...control };
+			originalControl = { ...control };
+		}
 
 		// Load field schema on mount
 		loadFieldSchema();
 
 		// Cleanup on component unmount
 		return () => {
-			if (autoSaveInterval) {
-				clearInterval(autoSaveInterval);
+			if (saveDebounceTimeout) {
+				clearTimeout(saveDebounceTimeout);
 			}
 		};
 	});
 
-	// Separate effect for auto-save interval based on edit mode
+	// Effect to auto-save when editedControl changes
 	$effect(() => {
-		if (autoSaveInterval) {
-			clearInterval(autoSaveInterval);
+		// Skip if no changes or if this is the initial load
+		if (!hasChanges || JSON.stringify(editedControl) === JSON.stringify(control)) {
+			return;
 		}
-
-		// Start auto-save interval
-		autoSaveInterval = setInterval(checkAndSave, 10000); // Check every 10 seconds
-
+		
+		// Clear any existing save timeout
+		if (saveDebounceTimeout) {
+			clearTimeout(saveDebounceTimeout);
+		}
+		
+		// Debounce the save by 500ms to avoid too many saves while typing
+		saveDebounceTimeout = setTimeout(() => {
+			performSave();
+		}, 500);
+		
 		return () => {
-			if (autoSaveInterval) {
-				clearInterval(autoSaveInterval);
+			if (saveDebounceTimeout) {
+				clearTimeout(saveDebounceTimeout);
 			}
 		};
 	});
 
-	// Auto-save function that runs periodically
-	async function checkAndSave() {
-		if (hasChanges) {
-			try {
-				await wsClient.updateControl(editedControl);
-				originalControl = { ...editedControl };
-				console.log('Auto-saved control changes');
-			} catch (error) {
-				console.error('Auto-save failed:', error);
-			}
+	// Perform the actual save
+	async function performSave() {
+		if (!hasChanges || isSaving) return;
+		
+		isSaving = true;
+		try {
+			// Create a clean copy without runtime data like timeline
+			const controlToSave = { ...editedControl };
+			delete controlToSave.timeline;
+			delete controlToSave.unifiedHistory;
+			delete controlToSave._metadata;  // Remove any other runtime metadata
+			
+			await wsClient.updateControl(controlToSave);
+			originalControl = { ...editedControl };
+			showTemporarySavedMessage();
+			console.log('Saved control changes');
+		} catch (error) {
+			console.error('Save failed:', error);
+		} finally {
+			isSaving = false;
 		}
 	}
-
-	// Keyboard shortcut for manual save
-	$effect(() => {
-		function handleKeydown(event: KeyboardEvent) {
-			if ((event.ctrlKey || event.metaKey) && event.key === 's') {
-				event.preventDefault();
-				if (hasChanges) {
-					handleSave();
-				}
-			}
+	
+	// Show the saved message temporarily
+	function showTemporarySavedMessage() {
+		// Clear any existing timeout
+		if (savedMessageTimeout) {
+			clearTimeout(savedMessageTimeout);
 		}
+		
+		// Show the message
+		showSavedMessage = true;
+		
+		// Hide it after 3 seconds
+		savedMessageTimeout = setTimeout(() => {
+			showSavedMessage = false;
+			savedMessageTimeout = null;
+		}, 3000);
+	}
 
-		document.addEventListener('keydown', handleKeydown);
-		return () => document.removeEventListener('keydown', handleKeydown);
-	});
 
 	$effect(() => {
-		// Load complete data when history tab is selected or control changes
-		if (activeTab === 'history' || control.timeline) {
+		// Load complete data when history tab is selected
+		if ((activeTab === 'history' || control.timeline) && !completeData && !loadingCompleteData) {
 			loadCompleteData();
 		}
 	});
 
 	// Event handlers
-	async function handleSave() {
-		// No need to cancel anything for manual save
-
-		try {
-			await wsClient.updateControl(editedControl);
-			originalControl = { ...editedControl };
-			console.log('Manual save completed');
-		} catch (error) {
-			console.error('Manual save failed:', error);
-		}
-	}
 
 	async function handleCreateMapping(data: typeof newMappingData) {
 		try {
@@ -426,53 +464,48 @@
 					</div>
 				</div>
 			</div>
-			<div class="flex items-center space-x-4">
-				<!-- Save status indicator -->
-				<div class="flex items-center text-sm text-gray-500 dark:text-gray-400">
-					{#if isAutoSaving || saveStatus === 'unsaved'}
-						<div
-							class="flex items-center px-3 py-1.5 bg-amber-50 dark:bg-amber-900/20 rounded-full"
-						>
-							<svg
-								class="w-4 h-4 mr-2 text-amber-500 animate-pulse"
-								fill="currentColor"
-								viewBox="0 0 20 20"
-							>
-								<path
-									fill-rule="evenodd"
-									d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z"
-									clip-rule="evenodd"
-								/>
-							</svg>
-							<span class="text-amber-700 dark:text-amber-300 font-medium">
-								{isAutoSaving ? 'Auto-saving...' : 'Changes pending...'}
-							</span>
-						</div>
-					{:else}
-						<div
-							class="flex items-center px-3 py-1.5 bg-green-50 dark:bg-green-900/20 rounded-full"
-						>
-							<svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-								<path
-									fill-rule="evenodd"
-									d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.236 4.53L8.083 10.5a.75.75 0 00-1.166 1.166l1.714 1.714a.75.75 0 001.19-.236l3.857-5.389z"
-									clip-rule="evenodd"
-								/>
-							</svg>
-							<span class="text-green-700 dark:text-green-300 font-medium">
-								All changes saved
-							</span>
-						</div>
-					{/if}
-				</div>
-				{#if hasChanges}
-					<button
-						onclick={handleSave}
-						class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 rounded-lg transition-colors duration-200"
-						title="Save changes now (Ctrl+S)"
+			<div class="flex items-center">
+				<!-- Save status icon indicator -->
+				{#if saveStatus === 'saving'}
+					<div
+						class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30"
+						title="Saving..."
 					>
-						Save Now
-					</button>
+						<svg
+							class="w-5 h-5 text-blue-600 dark:text-blue-400 animate-spin"
+							fill="none"
+							viewBox="0 0 24 24"
+						>
+							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+							<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+						</svg>
+					</div>
+				{:else if saveStatus === 'unsaved'}
+					<div
+						class="w-8 h-8 flex items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30"
+						title="Unsaved changes"
+					>
+						<svg
+							class="w-5 h-5 text-amber-600 dark:text-amber-400"
+							fill="currentColor"
+							viewBox="0 0 20 20"
+						>
+							<path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 5h2v6H9V5zm0 8h2v2H9v-2z" />
+						</svg>
+					</div>
+				{:else if saveStatus === 'just-saved'}
+					<div
+						class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 animate-fade-in"
+						title="Saved"
+					>
+						<svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+							<path
+								fill-rule="evenodd"
+								d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+								clip-rule="evenodd"
+							/>
+						</svg>
+					</div>
 				{/if}
 			</div>
 		</div>
@@ -519,187 +552,125 @@
 </main>
 
 {#snippet detailsTab()}
-	<!-- Edit Mode: Custom form matching view layout -->
-	<div class="space-y-6">
+	<!-- Readonly Overview Tab with Clean Styling -->
+	<div class="space-y-8">
 		<!-- Dynamic Fields based on Schema (Overview Tab) -->
 		{#if fieldSchema}
 			{@const overviewFields = getFieldsForTab('overview')}
 			{#if overviewFields.length > 0}
-				<div
-					class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-				>
-					<div class="flex items-center justify-between mb-4">
-						<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Control Overview</h2>
-					</div>
-
-					<div class="space-y-6">
-						{#each groupFieldsForLayout(overviewFields) as fieldGroup}
-							<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-								{#each fieldGroup as [fieldName, field]}
-									<div class={getFieldLayoutClass(field)}>
-										{@render renderField(fieldName, field)}
-									</div>
-								{/each}
-							</div>
-						{/each}
+				<div class="space-y-4">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Control Details</h3>
+					<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+						<div class="space-y-8">
+							{#each groupFieldsForLayout(overviewFields) as fieldGroup}
+								<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+									{#each fieldGroup as [fieldName, field]}
+										<div class={getFieldLayoutClass(field)}>
+											{@render renderReadonlyField(fieldName, field, editedControl[fieldName])}
+										</div>
+									{/each}
+								</div>
+							{/each}
+						</div>
 					</div>
 				</div>
 			{/if}
 		{:else}
 			<!-- Fallback to static fields if no schema -->
-			<div
-				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-			>
-				<div class="flex items-center justify-between mb-4">
-					<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Control Overview</h2>
-					<div class="flex items-center space-x-3">
-						<!-- Implementation Status Editor -->
-						<div class="flex flex-col space-y-1">
-							<label class="text-xs font-medium text-gray-500 dark:text-gray-400"
-								>Implementation Status</label
-							>
-							<select
-								bind:value={editedControl['control-implementation-status']}
-								class="text-xs font-medium rounded-full px-3 py-1 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-							>
-								<option value="Not Implemented">Not Implemented</option>
-								<option value="Partially Implemented">Partially Implemented</option>
-								<option value="Implemented">Implemented</option>
-								<option value="Planned">Planned</option>
-							</select>
+			<div class="space-y-8">
+				<!-- Implementation Status Display -->
+				<div class="space-y-4">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Implementation Status</h3>
+					<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+						<div class="flex items-center space-x-4">
+							{#if getImplementationStatus}
+								{@const IconComponent = getImplementationStatus.icon}
+								<div class="inline-flex items-center px-4 py-2 rounded-lg {getImplementationStatus.bg}">
+									<IconComponent class="w-5 h-5 {getImplementationStatus.color} mr-2" />
+									<span class="text-sm font-medium {getImplementationStatus.text}">
+										{getImplementationStatus.label}
+									</span>
+								</div>
+							{/if}
+							{#if editedControl.priority !== undefined}
+								<div class="inline-flex items-center px-3 py-1 rounded-lg bg-gray-100 dark:bg-gray-700">
+									<span class="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">
+										{editedControl.priority} Priority
+									</span>
+								</div>
+							{/if}
 						</div>
-
-						{#if editedControl.priority !== undefined}
-							<div class="flex flex-col space-y-1">
-								<label class="text-xs font-medium text-gray-500 dark:text-gray-400">Priority</label>
-								<select
-									bind:value={editedControl.priority}
-									class="text-xs font-medium rounded-full px-3 py-1 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-								>
-									<option value="low">Low</option>
-									<option value="medium">Medium</option>
-									<option value="high">High</option>
-								</select>
-							</div>
-						{/if}
 					</div>
 				</div>
 
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-					<div class="space-y-3">
-						<div class="flex justify-between">
-							<span class="text-sm font-medium text-gray-500 dark:text-gray-400">CCI:</span>
-							<span class="text-sm font-semibold text-gray-900 dark:text-white"
-								>CCI-{editedControl.cci || 'N/A'}</span
-							>
-						</div>
-
-						<div class="flex justify-between">
-							<span class="text-sm font-medium text-gray-500 dark:text-gray-400"
-								>Security Control Designation:</span
-							>
-							<span class="text-sm font-semibold text-gray-900 dark:text-white"
-								>{editedControl['security-control-designation'] || 'System'}</span
-							>
-						</div>
-
-						{#if editedControl['control-acronym']}
-							<div class="flex justify-between">
-								<span class="text-sm font-medium text-gray-500 dark:text-gray-400"
-									>Control Acronym:</span
-								>
-								<span class="text-sm font-semibold text-gray-900 dark:text-white uppercase"
-									>{editedControl['control-acronym']}</span
-								>
+				<!-- Control Metadata -->
+				<div class="space-y-4">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Control Metadata</h3>
+					<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+						<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+							<div class="space-y-6">
+								{@render renderReadonlyField('CCI', null, `CCI-${editedControl.cci || 'N/A'}`)}
+								{@render renderReadonlyField('Security Control Designation', null, editedControl['security-control-designation'] || 'System')}
+								{#if editedControl['control-acronym']}
+									{@render renderReadonlyField('Control Acronym', null, editedControl['control-acronym'].toUpperCase())}
+								{/if}
 							</div>
-						{/if}
-					</div>
 
-					<div class="space-y-3">
-						<div class="flex justify-between">
-							<span class="text-sm font-medium text-gray-500 dark:text-gray-400">Status:</span>
-							<span class="text-sm font-semibold text-gray-900 dark:text-white capitalize"
-								>{editedControl.status}</span
-							>
+							<div class="space-y-6">
+								{@render renderReadonlyField('Status', null, editedControl.status)}
+								{#if editedControl.cci_type}
+									{@render renderReadonlyField('CCI Type', null, editedControl.cci_type)}
+								{/if}
+								{#if editedControl.publish_date}
+									{@render renderReadonlyField('Published', null, editedControl.publish_date)}
+								{/if}
+							</div>
 						</div>
-
-						{#if editedControl.cci_type}
-							<div class="flex justify-between">
-								<span class="text-sm font-medium text-gray-500 dark:text-gray-400">CCI Type:</span>
-								<span class="text-sm font-semibold text-gray-900 dark:text-white capitalize"
-									>{editedControl.cci_type}</span
-								>
-							</div>
-						{/if}
-
-						{#if editedControl.publish_date}
-							<div class="flex justify-between">
-								<span class="text-sm font-medium text-gray-500 dark:text-gray-400">Published:</span>
-								<span class="text-sm font-semibold text-gray-900 dark:text-white"
-									>{editedControl.publish_date}</span
-								>
-							</div>
-						{/if}
 					</div>
 				</div>
 			</div>
 
-			<!-- Control Information Editor -->
-			<div
-				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-			>
-				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+			<!-- Control Information -->
+			<div class="space-y-4">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">
 					Control Information
 				</h3>
-				<div class="space-y-3">
+				<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6 space-y-4">
 					{#if Array.isArray(editedControl['control-information'])}
 						{#each editedControl['control-information'] as part}
 							{@render renderControlPart(part, 0)}
 						{/each}
 					{:else if typeof editedControl['control-information'] === 'string'}
-						<!-- Legacy string format -->
-						<div class="whitespace-pre-wrap text-gray-700 dark:text-gray-300">
+						<div class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
 							{editedControl['control-information']}
 						</div>
 					{/if}
 				</div>
 			</div>
 
-			<!-- CCI Definition (read-only) -->
+			<!-- CCI Definition -->
 			{#if editedControl['cci-definition']}
-				<div
-					class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-				>
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">CCI Definition</h3>
-					<div class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
-						{editedControl['cci-definition']}
+				<div class="space-y-4">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">CCI Definition</h3>
+					<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+						<div class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
+							{editedControl['cci-definition']}
+						</div>
 					</div>
 				</div>
 			{/if}
 		{/if}
 
-		<!-- Control Properties Editor -->
+		<!-- Control Properties -->
 		{#if editedControl.properties && Object.keys(editedControl.properties).length > 0}
-			<div
-				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-			>
-				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Control Properties</h3>
-				<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-					Read-only metadata and properties
-				</p>
-				<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-					{#each Object.entries(editedControl.properties) as [key, value]}
-						<div
-							class="flex justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0"
-						>
-							<span class="text-sm font-medium text-gray-500 dark:text-gray-400 capitalize">
-								{key.replace(/_/g, ' ')}:
-							</span>
-							<span class="text-sm text-gray-900 dark:text-white font-medium">
-								{typeof value === 'object' ? JSON.stringify(value, null, 2) : value}
-							</span>
-						</div>
-					{/each}
+			<div class="space-y-4">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Control Properties</h3>
+				<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+						{#each Object.entries(editedControl.properties) as [key, value]}
+							{@render renderReadonlyField(key.replace(/_/g, ' '), null, typeof value === 'object' ? JSON.stringify(value, null, 2) : value)}
+						{/each}
+					</div>
 				</div>
 			</div>
 		{/if}
@@ -707,104 +678,70 @@
 {/snippet}
 
 {#snippet narrativeTab()}
-	<!-- Edit Mode: Custom implementation form -->
-	<div class="space-y-6">
+	<!-- Readonly Implementation Tab with Clean Styling -->
+	<div class="space-y-8">
 		<!-- Dynamic Fields based on Schema (Implementation Tab) -->
 		{#if fieldSchema}
 			{@const implementationFields = getFieldsForTab('implementation')}
 			{#if implementationFields.length > 0}
-				<div
-					class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-				>
-					<div class="flex items-center justify-between mb-4">
-						<h2 class="text-lg font-semibold text-gray-900 dark:text-white">
-							Implementation Details
-						</h2>
-					</div>
-
-					<div class="space-y-6">
-						{#each groupFieldsForLayout(implementationFields) as fieldGroup}
-							<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-								{#each fieldGroup as [fieldName, field]}
-									<div class={getFieldLayoutClass(field)}>
-										{@render renderField(fieldName, field)}
-									</div>
-								{/each}
-							</div>
-						{/each}
+				<div class="space-y-4">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Implementation Details</h3>
+					<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+						<div class="space-y-8">
+							{#each groupFieldsForLayout(implementationFields) as fieldGroup}
+								<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+									{#each fieldGroup as [fieldName, field]}
+										<div class={getFieldLayoutClass(field)}>
+											{@render renderReadonlyField(fieldName, field, editedControl[fieldName])}
+										</div>
+									{/each}
+								</div>
+							{/each}
+						</div>
 					</div>
 				</div>
 			{/if}
 		{:else}
 			<!-- Fallback to static fields if no schema -->
-			<div
-				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-			>
-				<div class="flex items-center justify-between mb-4">
-					<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Implementation Status</h2>
-					<div class="flex flex-col space-y-1">
-						<label class="text-xs font-medium text-gray-500 dark:text-gray-400">Status</label>
-						<select
-							bind:value={editedControl['control-implementation-status']}
-							class="text-sm font-medium rounded-full px-4 py-2 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-						>
-							<option value="Not Implemented">Not Implemented</option>
-							<option value="Partially Implemented">Partially Implemented</option>
-							<option value="Implemented">Implemented</option>
-							<option value="Planned">Planned</option>
-						</select>
+			<div class="space-y-4">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Implementation Details</h3>
+				<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+					<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+						{@render renderReadonlyField('control-implementation-status', null, editedControl['control-implementation-status'])}
+						{@render renderReadonlyField('control-implementation-narrative', null, editedControl['control-implementation-narrative'])}
 					</div>
 				</div>
-
-				<div class="mt-4">
-					<label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
-						>Implementation Narrative</label
-					>
-					<textarea
-						bind:value={editedControl['control-implementation-narrative']}
-						rows="4"
-						class="w-full text-gray-600 dark:text-gray-400 leading-relaxed bg-transparent border border-gray-200 dark:border-gray-600 rounded-lg p-3 focus:ring-2 focus:ring-green-500 focus:border-green-500"
-						placeholder="Add implementation narrative, progress updates, or current status details..."
-					></textarea>
-				</div>
 			</div>
 		{/if}
 
-		<!-- Implementation Guidance Editor -->
+		<!-- Implementation Guidance -->
 		{#if editedControl['implementation-guidance']}
-			<div
-				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-			>
-				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-					Implementation Guidance
-				</h3>
-				<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-					Guidance from the control framework
-				</p>
-				<div class="prose prose-sm dark:prose-invert max-w-none">
-					<p class="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+			<div class="space-y-4">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Implementation Guidance</h3>
+				<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+					<div class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+						Guidance from the control framework
+					</div>
+					<div class="text-gray-900 dark:text-white font-medium whitespace-pre-wrap">
 						{editedControl['implementation-guidance']}
-					</p>
+					</div>
 				</div>
 			</div>
 		{/if}
 
-		<!-- Assessment Objectives (Read-only) -->
+		<!-- Assessment Objectives -->
 		{#if hasAssessmentObjectives(editedControl['assessment-objectives'])}
-			<div
-				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-			>
-				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-					Assessment Objectives
-				</h3>
-				<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-					A set of determination statements that expresses the desired outcome for the assessment of
-					a security control, privacy control, or control enhancement.
-				</p>
-				<div class="space-y-3">
-					{#each editedControl['assessment-objectives'] as objective}
-						{#if typeof objective === 'string'}
-							<!-- Simple string objective -->
+			<div class="space-y-4">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Assessment Objectives</h3>
+				<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+					<div class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+						A set of determination statements that expresses the desired outcome for the assessment of
+						a security control, privacy control, or control enhancement.
+					</div>
+					<div class="space-y-3">
+						{#each editedControl['assessment-objectives'] as objective}
+							{#if typeof objective === 'string'}
+								<!-- Simple string objective -->
 							<div class="flex items-start space-x-3">
 								<div class="flex-shrink-0 w-2 h-2 bg-blue-600 rounded-full mt-2"></div>
 								<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
@@ -839,29 +776,28 @@
 							{/each}
 						{/if}
 					{/each}
+					</div>
 				</div>
 			</div>
 		{/if}
 
-		<!-- Assessment Procedures (Read-only) -->
+		<!-- Assessment Procedures -->
 		{#if editedControl['assessment-procedures'] && Array.isArray(editedControl['assessment-procedures']) && editedControl['assessment-procedures'].length > 0}
-			<div
-				class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-			>
-				<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-					Assessment Procedures
-				</h3>
-				<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-					A set of assessment objectives and an associated set of assessment methods and assessment
-					objects.
-				</p>
-				<div class="space-y-3">
-					{#each editedControl['assessment-procedures'] as procedure}
-						<div class="flex items-start space-x-3">
-							<div class="flex-shrink-0 w-2 h-2 bg-green-600 rounded-full mt-2"></div>
-							<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{procedure}</p>
-						</div>
-					{/each}
+			<div class="space-y-4">
+				<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Assessment Procedures</h3>
+				<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+					<div class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+						A set of assessment objectives and an associated set of assessment methods and assessment
+						objects.
+					</div>
+					<div class="space-y-3">
+						{#each editedControl['assessment-procedures'] as procedure}
+							<div class="flex items-start space-x-3">
+								<div class="flex-shrink-0 w-2 h-2 bg-green-600 rounded-full mt-2"></div>
+								<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{procedure}</p>
+							</div>
+						{/each}
+					</div>
 				</div>
 			</div>
 		{/if}
@@ -913,27 +849,27 @@
 {/snippet}
 
 {#snippet customTab()}
-	<div class="space-y-6">
+	<div class="space-y-8">
 		{#if fieldSchema}
 			{@const customFields = getFieldsForTab('custom')}
 			{#if customFields.length > 0}
-				<div
-					class="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 shadow-sm"
-				>
-					<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Custom Fields</h3>
-					<p class="text-sm text-gray-500 dark:text-gray-400 mb-4">
-						Additional fields specific to your organization
-					</p>
-					<div class="space-y-6">
-						{#each groupFieldsForLayout(customFields) as fieldGroup}
-							<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-								{#each fieldGroup as [fieldName, field]}
-									<div class={getFieldLayoutClass(field)}>
-										{@render renderField(fieldName, field)}
-									</div>
-								{/each}
-							</div>
-						{/each}
+				<div class="space-y-4">
+					<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Custom Fields</h3>
+					<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
+						<div class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+							Additional fields specific to your organization
+						</div>
+						<div class="space-y-8">
+							{#each groupFieldsForLayout(customFields) as fieldGroup}
+								<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+									{#each fieldGroup as [fieldName, field]}
+										<div class={getFieldLayoutClass(field)}>
+											{@render renderField(fieldName, field)}
+										</div>
+									{/each}
+								</div>
+							{/each}
+						</div>
 					</div>
 				</div>
 			{:else}
@@ -1077,6 +1013,25 @@
 	{/if}
 {/snippet}
 
+{#snippet renderReadonlyField(fieldName: string, field: FieldSchema | null, value: any)}
+	<div class="space-y-2">
+		<div class="text-sm font-medium text-gray-500 dark:text-gray-400">
+			{field?.original_name || fieldName.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+		</div>
+		<div class="text-gray-900 dark:text-white font-medium">
+			{#if value === null || value === undefined || value === ''}
+				<span class="text-gray-400 dark:text-gray-500 italic">Not specified</span>
+			{:else if typeof value === 'boolean'}
+				<span class="capitalize">{value ? 'Yes' : 'No'}</span>
+			{:else if Array.isArray(value)}
+				<span>{value.join(', ')}</span>
+			{:else}
+				<span class="whitespace-pre-wrap">{value}</span>
+			{/if}
+		</div>
+	</div>
+{/snippet}
+
 {#snippet renderField(fieldName: string, field: FieldSchema)}
 	<div class="space-y-2">
 		<label class="text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -1090,19 +1045,19 @@
 			<select
 				bind:value={editedControl[fieldName]}
 				disabled={!field.editable}
-				class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+				class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400"
 			>
 				<option value="">-- Select --</option>
 				{#each field.options as option}
 					<option value={option}>{option}</option>
 				{/each}
 			</select>
-		{:else if field.ui_type === 'textarea'}
+		{:else if field.ui_type === 'textarea' || field.ui_type === 'long_text'}
 			<textarea
 				bind:value={editedControl[fieldName]}
 				disabled={!field.editable}
-				rows="4"
-				class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+				rows="8"
+				class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed resize-y min-h-[120px] focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400"
 				placeholder={field.examples?.[0] || ''}
 			></textarea>
 		{:else if field.ui_type === 'boolean'}
@@ -1122,14 +1077,14 @@
 				type="date"
 				bind:value={editedControl[fieldName]}
 				disabled={!field.editable}
-				class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+				class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400"
 			/>
 		{:else if field.ui_type === 'number'}
 			<input
 				type="number"
 				bind:value={editedControl[fieldName]}
 				disabled={!field.editable}
-				class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+				class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400"
 			/>
 		{:else}
 			<!-- Default to text input -->
@@ -1137,7 +1092,7 @@
 				type="text"
 				bind:value={editedControl[fieldName]}
 				disabled={!field.editable}
-				class="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+				class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400"
 				placeholder={field.examples?.[0] || ''}
 			/>
 		{/if}

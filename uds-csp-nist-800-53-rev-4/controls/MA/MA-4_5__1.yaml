@@ -1,0 +1,75 @@
+control-acronym: MA-4(5)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Requires the approval of each nonlocal maintenance session by [Assignment:
+  organization-defined personnel or roles]; and
+
+  (b) Notifies [Assignment: organization-defined personnel or roles] of the date
+  and time of planned nonlocal maintenance.
+
+
+  Supplemental Guidance:
+
+  Notification may be performed by maintenance personnel. Approval of nonlocal
+  maintenance sessions is accomplished by organizational personnel with
+  sufficient information security and information system knowledge to determine
+  the appropriateness of the proposed maintenance.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information system maintenance policy; procedures
+  addressing non-local information system maintenance; security plan;
+  notifications supporting nonlocal maintenance sessions; maintenance records;
+  audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  maintenance responsibilities; organizational personnel with notification
+  responsibilities; organizational personnel with approval responsibilities;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for approving and notifying
+  personnel regarding nonlocal maintenance; automated mechanisms supporting
+  notification and approval of nonlocal maintenance].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  MA-4(5).1,CCI-000887,Local
+  MA-4(5).2,CCI-002888,DoD Organization or Service Common Control Package
+  MA-4(5).3,CCI-000886,DoD Organization or Service Common Control Package
+  MA-4(5).4,CCI-002889,Local...
+ap-acronym: MA-4(5).1
+cci: 887
+cci-definition: "000887: The organization requires the approval of each nonlocal
+  maintenance session by organization-defined personnel or roles."
+implementation-guidance: >-
+  The organization being inspected/assessed defines within their maintenance
+  procedures a process for the ISSO to approve the non-local maintenance.
+  Written approval must be maintained. DoD has defined the personnel or roles as
+  the ISSO.
+
+  Recommended Compelling Evidence:
+
+  1.) Policy that details the requirement for remote maintenance and digital
+  sessions to be approved
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the maintenance procedures and historical approvals to
+  ensure that the ISSO approves the non-local maintenance. DoD has defined the
+  personnel or roles as the ISSO.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (All maintenance would be
+  considered local maintenance as admins would either be provided by the
+  organization or contracted.)
+family: MA

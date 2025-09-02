@@ -1,0 +1,151 @@
+control-acronym: SI-4
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Monitors the information system to detect:
+
+  1. Attacks and indicators of potential attacks in accordance with [Assignment:
+  organization-defined monitoring objectives]; and
+
+  2. Unauthorized local, network, and remote connections;
+
+  b. Identifies unauthorized use of the information system through [Assignment:
+  organization-defined techniques and methods];
+
+  c. Deploys monitoring devices: (i) strategically within the information system
+  to collect organization-determined essential information; and (ii) at ad hoc
+  locations within the system to track specific types of transactions of
+  interest to the organization;
+
+  d. Protects information obtained from intrusion-monitoring tools from
+  unauthorized access, modification, and deletion;
+
+  e. Heightens the level of information system monitoring activity whenever
+  there is an indication of increased risk to organizational operations and
+  assets, individuals, other organizations, or the Nation based on law
+  enforcement information, intelligence information, or other credible sources
+  of information;
+
+  f. Obtains legal opinion with regard to information system monitoring
+  activities in accordance with applicable federal laws, Executive Orders,
+  directives, policies, or regulations; and
+
+  g. Provides [Assignment: organization-defined information system monitoring
+  information] to [Assignment: organization-defined personnel or roles]
+  [Selection (one or more): as needed; [Assignment: organization-defined
+  frequency]].
+
+
+  Supplemental Guidance:
+
+  Information system monitoring includes external and internal monitoring.
+  External monitoring includes the observation of events occurring at the
+  information system boundary (i.e., part of perimeter defense and boundary
+  protection). Internal monitoring includes the observation of events occurring
+  within the information system. Organizations can monitor information systems,
+  for example, by observing audit activities in real time or by observing other
+  system aspects such as access patterns, characteristics of access, and other
+  actions. The monitoring objectives may guide determination of the events.
+  Information system monitoring capability is achieved through a variety of
+  tools and techniques (e.g., intrusion detection systems, intrusion prevention
+  systems, malicious code protection software, scanning tools, audit record
+  monitoring software, network monitoring software). Strategic locations for
+  monitoring devices include, for example, selected perimeter locations and near
+  server farms supporting critical applications, with such devices typically
+  being employed at the managed interfaces associated with controls SC-7 and
+  AC-17. Einstein network monitoring devices from the Department of Homeland
+  Security can also be included as monitoring devices. The granularity of
+  monitoring information collected is based on organizational monitoring
+  objectives and the capability of information systems to support such
+  objectives. Specific types of transactions of interest include, for example,
+  Hyper Text Transfer Protocol (HTTP) traffic that bypasses HTTP proxies.
+  Information system monitoring is an integral part of organizational continuous
+  monitoring and incident response programs. Output from system monitoring
+  serves as input to continuous monitoring and incident response programs. A
+  network connection is any connection with a device that communicates through a
+  network (e.g., local area network, Internet). A remote connection is any
+  connection with a device communicating through an external network (e.g., the
+  Internet). Local, network, and remote connections can be either wired or
+  wireless. Related controls: AC-3, AC-4, AC-8, AC-17, AU-2, AU-6, AU-7, AU-9,
+  AU-12, CA-7, IR-4, PE-3, RA-5, SC-7, SC-26, SC-35, SI-3, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Continuous monitoring strategy; system and information
+  integrity policy; procedures addressing information system monitoring tools
+  and techniques; facility diagram/layout; information system design
+  documentation; information system monitoring tools and techniques
+  documentation; locations within information system where monitoring devices
+  are deployed; information system configuration settings and associated
+  documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system;
+  organizational personnel with responsibility monitoring the information
+  system].
+
+
+  Test: [SELECT FROM: Organizational processes for information system
+  monitoring; automated mechanisms supporting and/or implementing information
+  system monitoring capability].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SI-4.1,CCI-001253,DoD Organization or Service Common Control Package
+  SI-4.2,CCI-002641,Organization AWS Cloud Brokerage Package
+  SI-4.3,CCI-002642,Organization AWS Cloud Brokerage Package
+  SI-4.4,CCI-002643,Organization AWS Cloud Brokerage Package
+  SI-4.5,CCI-002644,Organization AWS Cloud Brokerage Package
+  SI-4.6,CCI-002645,Organization AWS Cloud Brokerage Package
+  SI-4.7,CCI-002646,Organization AWS Cloud Brokerage Package
+  SI-4.8,CCI-001255,Organization AWS Cloud Brokerage Package
+  SI-4.9,CCI-001256,Organization AWS Cloud Brokerage Package
+  SI-4.10,CCI-002647,Organization AWS Cloud Brokerage Package
+  SI-4.11,CCI-002648,Organization AWS Cloud Brokerage Package
+  SI-4.12,CCI-002649,Organization AWS Cloud Brokerage Package
+  SI-4.13,CCI-001257,Organization AWS Cloud Brokerage Package
+  SI-4.14,CCI-001258,Organization AWS Cloud Brokerage Package
+  SI-4.15,CCI-002650,Organization AWS Cloud Brokerage Package
+  SI-4.16,CCI-002651,Organization AWS Cloud Brokerage Package
+  SI-4.17,CCI-002652,Organization AWS Cloud Brokerage Package
+  SI-4.18,CCI-002654,Organization AWS Cloud Brokerage Package...
+ap-acronym: SI-4.2
+cci: 2641
+cci-definition: "002641: The organization monitors the information system to
+  detect attacks and indicators of potential attacks in accordance with
+  organization-defined monitoring objectives."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to monitor the information system to detect attacks and indicators of
+  potential attacks in accordance with sensor placement and monitoring
+  requirements within CJCSI 6510.01F. The organization must maintain an audit
+  trail of monitoring. DoD has defined the monitoring objectives as sensor
+  placement and monitoring requirements within CJCSI 6510.01F.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan that defines objectives of
+  monitoring, sensor placement for monitoring, how monitoring is performed.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process as well as the audit trail of
+  monitoring to ensure the organization being inspected/assessed monitors the
+  information system to detect attacks and indicators of potential attacks in
+  accordance with sensor placement and monitoring requirements within CJCSI
+  6510.01F.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SI

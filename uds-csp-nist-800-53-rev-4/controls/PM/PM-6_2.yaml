@@ -1,0 +1,72 @@
+control-acronym: PM-6
+control-information: >-
+  Description:
+
+  The organization develops, monitors, and reports on the results of information
+  security measures of performance.
+
+
+  Supplemental Guidance:
+
+  Measures of performance are outcome-based metrics used by an organization to
+  measure the effectiveness or efficiency of the information security program
+  and the security controls employed in support of the program.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information security program plan; information security
+  measures of performance; procedures addressing development, monitoring, and
+  reporting of information security measures of performance; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  program planning and plan implementation responsibilities; organizational
+  personnel responsible for developing, monitoring, and reporting information
+  security measures of performance; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for developing, monitoring, and
+  reporting information security measures of performance; automated mechanisms
+  supporting the development, monitoring, and reporting of information security
+  measures of performance].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PM-6.1,CCI-000209,DoD Organization or Service Common Control Package
+  PM-6.2,CCI-000210,DoD Organization or Service Common Control Package
+  PM-6.3,CCI-000211,Local...
+ap-acronym: PM-6.2
+cci: 210
+cci-definition: "000210: The organization monitors the results of information
+  security measures of performance."
+implementation-guidance: >-
+  The Federal Information Systems Management Act (FISMA) meets the DoD
+  requirements for information security performance measures of performance.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per Federal Information Systems Management Act
+  (FISMA).
+assessment-procedures: >-
+  The Federal Information Systems Management Act (FISMA) meets the DoD
+  requirements for information security performance measures of performance.
+
+
+  DoD organizations are automatically compliant with this CCI as they are
+  covered at the DoD level by FISMA.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PM

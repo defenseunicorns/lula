@@ -1,0 +1,69 @@
+control-acronym: AC-4(9)
+control-information: >-
+  Description:
+
+  The information system enforces the use of human reviews for [Assignment:
+  organization-defined information flows] under the following conditions:
+  [Assignment: organization-defined conditions].
+
+
+  Supplemental Guidance:
+
+  Organizations define security policy filters for all situations where
+  automated flow control decisions are possible. When a fully automated flow
+  control decision is not possible, then a human review may be employed in lieu
+  of, or as a complement to, automated security policy filtering. Human reviews
+  may also be employed as deemed necessary by organizations.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; information flow control
+  policies; procedures addressing information flow enforcement; information
+  system design documentation; information system configuration settings and
+  associated documentation; records of human reviews regarding information
+  flows; list of conditions requiring human reviews for information flows;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with information flow enforcement responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms enforcing the use of human reviews].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-4(9).3
+cci: 2198
+cci-definition: "002198: The information system enforces the use of human
+  reviews for organization-defined information flows under organization-defined
+  conditions."
+implementation-guidance: The organization being inspected/assessed configures
+  the information system to enforce the use of human reviews for information
+  flows defined in AC-4 (9), CCI 2196 under conditions defined in AC-4 (9), CCI
+  2197. For information system components that have applicable STIGs or SRGs,
+  the organization being inspected/assessed must comply with the STIG/SRG
+  guidance that pertains to CCI 2198.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to enforce the use of
+  human reviews for information flows defined in AC-4 (9), CCI 2196 under
+  conditions defined in AC-4 (9), CCI 2197. For information system components
+  that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 2198.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack and most likely not
+  applicable to environment. (Most organization do not deem human reviews of
+  automated flow control decisions.)
+family: AC

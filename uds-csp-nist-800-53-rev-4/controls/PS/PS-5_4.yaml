@@ -1,0 +1,90 @@
+control-acronym: PS-5
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Reviews and confirms ongoing operational need for current logical and
+  physical access authorizations to information systems/facilities when
+  individuals are reassigned or transferred to other positions within the
+  organization;
+
+  b. Initiates [Assignment: organization-defined transfer or reassignment
+  actions] within [Assignment: organization-defined time period following the
+  formal transfer action];
+
+  c. Modifies access authorization as needed to correspond with any changes in
+  operational need due to reassignment or transfer; and
+
+  d. Notifies [Assignment: organization-defined personnel or roles] within
+  [Assignment: organization-defined time period].
+
+
+  Supplemental Guidance:
+
+  This control applies when reassignments or transfers of individuals are
+  permanent or of such extended durations as to make the actions warranted.
+  Organizations define actions appropriate for the types of reassignments or
+  transfers, whether permanent or extended. Actions that may be required for
+  personnel transfers or reassignments to other positions within organizations
+  include, for example: (i) returning old and issuing new keys, identification
+  cards, and building passes; (ii) closing information system accounts and
+  establishing new accounts; (iii) changing information system access
+  authorizations (i.e., privileges); and (iv) providing for access to official
+  records to which individuals had access at previous work locations and in
+  previous information system accounts. Related controls: AC-2, IA-4, PE-2,
+  PS-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  personnel transfer; security plan; records of personnel transfer actions; list
+  of information system and facility access authorizations; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for personnel transfer; automated
+  mechanisms supporting and/or implementing personnel transfer notifications;
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PS-5.1,CCI-001527,Local
+  PS-5.2,CCI-001528,Local
+  PS-5.3,CCI-001529,DoD Organization or Service Common Control Package
+  PS-5.4,CCI-001530,DoD Organization or Service Common Control Package
+  PS-5.5,CCI-003031,Local
+  PS-5.6,CCI-003032,Local
+  PS-5.7,CCI-003033,DoD Organization or Service Common Control Package
+  PS-5.8,CCI-003034,DoD Organization or Service Common Control Package...
+ap-acronym: PS-5.4
+cci: 1530
+cci-definition: "001530: The organization defines the time period within which
+  the organization initiates organization-defined transfer or reassignment
+  actions, following the formal personnel transfer action."
+implementation-guidance: |-
+  DoD defines the time period as immediately.
+
+  Recommended Compelling Evidence:
+  Automatically compliant.
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD defines the time period as immediately.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PS

@@ -30,6 +30,8 @@
 	// Options
 	let headerRow = 1;
 	let controlIdField = ''; // Start empty to force selection
+	let controlSetName = '';
+	let controlSetDescription = '';
 
 	// UI State
 	let isLoading = false;
@@ -72,6 +74,12 @@
 	async function handleFile(file: File) {
 		fileName = file.name;
 		errorMessage = '';
+		
+		// Auto-populate control set name from filename (remove extension)
+		if (!controlSetName) {
+			controlSetName = fileName.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+			controlSetDescription = `Imported from ${fileName}`;
+		}
 
 		const reader = new FileReader();
 		reader.onload = (e) => {
@@ -371,6 +379,11 @@
 			errorMessage = 'Please select a Control ID field before importing';
 			return;
 		}
+		
+		if (!controlSetName || controlSetName.trim() === '') {
+			errorMessage = 'Please enter a Control Set Name before importing';
+			return;
+		}
 
 		isLoading = true;
 		errorMessage = '';
@@ -390,9 +403,9 @@
 			formData.append('namingConvention', 'kebab-case');
 			formData.append('skipEmpty', 'true');
 			formData.append('skipEmptyRows', 'true');
-			// Auto-generate control set name and description from filename
-			formData.append('controlSetName', fileName.replace(/\.[^.]+$/, ''));
-			formData.append('controlSetDescription', 'Imported from ' + fileName);
+			// Use the editable control set name and description
+			formData.append('controlSetName', controlSetName || fileName.replace(/\.[^.]+$/, ''));
+			formData.append('controlSetDescription', controlSetDescription || `Imported from ${fileName}`);
 
 			// Add field schema configuration - include all fields that are assigned to a tab
 			const fieldSchema = Array.from(fieldConfigs.entries())
@@ -544,6 +557,42 @@
 			class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
 		>
 			<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Import Options</h3>
+
+			<!-- Control Set Details -->
+			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+				<div>
+					<label for="controlSetName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+						Control Set Name <span class="text-red-500">*</span>
+					</label>
+					<input
+						type="text"
+						id="controlSetName"
+						bind:value={controlSetName}
+						placeholder="e.g., NIST 800-53 Rev 4"
+						class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+						required
+					/>
+					<p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+						This will be used as the display name and folder name
+					</p>
+				</div>
+
+				<div>
+					<label for="controlSetDescription" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+						Description
+					</label>
+					<input
+						type="text"
+						id="controlSetDescription"
+						bind:value={controlSetDescription}
+						placeholder="Optional description"
+						class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
+					/>
+					<p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+						Brief description of this control set
+					</p>
+				</div>
+			</div>
 
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div>

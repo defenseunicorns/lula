@@ -1,0 +1,95 @@
+control-acronym: SA-9(5)
+control-information: >-
+  Description:
+
+  The organization restricts the location of [Selection (one or more):
+  information processing; information/data; information system services] to
+  [Assignment: organization-defined locations] based on [Assignment:
+  organization-defined requirements or conditions].
+
+
+  Supplemental Guidance:
+
+  The location of information processing, information/data storage, or
+  information system services that are critical to organizations can have a
+  direct impact on the ability of those organizations to successfully execute
+  their missions/business functions. This situation exists when external
+  providers control the location of processing, storage or services. The
+  criteria external providers use for the selection of processing, storage, or
+  service locations may be different from organizational criteria. For example,
+  organizations may want to ensure that data/information storage locations are
+  restricted to certain locations to facilitate incident response activities
+  (e.g., forensic analyses, after-the-fact investigations) in case of
+  information security breaches/compromises. Such incident response activities
+  may be adversely affected by the governing laws or protocols in the locations
+  where processing and storage occur and/or the locations from which information
+  system services emanate.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing external information system services; acquisition contracts for the
+  information system, system component, or information system service;
+  solicitation documentation; acquisition documentation; service-level
+  agreements; restricted locations for information processing; information/data
+  and/or information system services; information processing, information/data,
+  and/or information system services to be maintained in restricted locations;
+  organizational security requirements or conditions for external providers;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and services
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; external providers of information system services].
+
+
+  Test: [SELECT FROM: Organizational processes for defining requirements to
+  restrict locations of information processing, information/data, or information
+  services; organizational processes for ensuring the location is restricted in
+  accordance with requirements or conditions].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SA-9(5).2
+cci: 3153
+cci-definition: "003153: The organization defines the locations to restrict
+  information processing, information/data, and/or information system services
+  based on organization-defined requirements or conditions."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the locations
+  to restrict information processing, information/data, and/or information
+  system services based on organization-defined requirements or conditions.
+
+
+  Definitions should take into account regulatory guidelines in place to protect
+  the data being stored or processed.
+   
+  DoD has determined the location is not appropriate to define at the Enterprise
+  level.
+
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP) will define the locations of information
+  processing, information/data, and/or information system services to
+  organization-defined locations based on organization-defined requirements or
+  conditions.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented locations to ensure the organization being
+  inspected/assessed defines the locations to restrict information processing,
+  information/data, and/or information system services based on
+  organization-defined requirements or conditions. DoD has determined the
+  location is not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (Organization restrictions
+  to location must be defined at the organizational level; typically done in the
+  eMASS locations tab.)
+family: SA

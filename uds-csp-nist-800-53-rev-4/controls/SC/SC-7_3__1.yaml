@@ -1,0 +1,76 @@
+control-acronym: SC-7(3)
+control-information: >-
+  Description:
+
+  The organization limits the number of external network connections to the
+  information system.
+
+
+  Supplemental Guidance:
+
+  Limiting the number of external network connections facilitates more
+  comprehensive monitoring of inbound and outbound communications traffic. The
+  Trusted Internet Connection (TIC) initiative is an example of limiting the
+  number of external network connections.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; information system design documentation;
+  boundary protection hardware and software; information system architecture and
+  configuration documentation; information system configuration settings and
+  associated documentation; communications and network traffic monitoring logs;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing boundary protection
+  capability; automated mechanisms limiting the number of external network
+  connections to the information system].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-7(3).1
+cci: 1101
+cci-definition: "001101: The organization limits the number of external network
+  connections to the information system."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements information
+  system access control mechanisms to limit the number of external connections
+  to the information system.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system communications protection policy.
+
+  2.) Current network topology diagrams.
+
+  3.) Architecture documentation or any other relevant documentation.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented access control mechanisms to ensure that
+  the organization being inspected/assessed limits the number of external
+  network connections to the information system.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: "UDS uses dedicated gateways and proxies as the only access points
+  into the cluster. For example, the Istio ingress gateway is the only component
+  listening for external requests; itâs configured to allow only specific
+  ports and protocols. There are no other open ports on the cluster nodes for
+  UDS services unless declared. Management access (SSH/Kubernetes API) is
+  similarly limited to admin interfaces. This single chokepoint design means the
+  external exposure is minimal and well-defended"
+uds-alignment: Istio
+family: SC

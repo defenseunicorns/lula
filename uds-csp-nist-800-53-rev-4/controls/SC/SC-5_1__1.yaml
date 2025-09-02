@@ -1,0 +1,86 @@
+control-acronym: SC-5(1)
+control-information: >-
+  Description:
+
+  The information system restricts the ability of individuals to launch
+  [Assignment: organization-defined denial of service attacks] against other
+  information systems.
+
+
+  Supplemental Guidance:
+
+  Restricting the ability of individuals to launch denial of service attacks
+  requires that the mechanisms used for such attacks are unavailable.
+  Individuals of concern can include, for example, hostile insiders or external
+  adversaries that have successfully breached the information system and are
+  using the system as a platform to launch cyber attacks on third parties.
+  Organizations can restrict the ability of individuals to connect and transmit
+  arbitrary information on the transport medium (i.e., network, wireless
+  spectrum). Organizations can also limit the ability of individuals to use
+  excessive information system resources. Protection against individuals having
+  the ability to launch denial of service attacks may be implemented on specific
+  information systems or on boundary devices prohibiting egress to potential
+  target systems.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing denial of service protection; information system design
+  documentation; security plan; list of denial of service attacks launched by
+  individuals against information systems; information system configuration
+  settings and associated documentation; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with incident response responsibilities; system developer].
+
+
+  Test: [SELECT FROM: Automated mechanisms restricting the ability to launch
+  denial of service attacks against other information systems].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-5(1).1
+cci: 1094
+cci-definition: "001094: The information system restricts the ability of
+  individuals to launch organization-defined denial of service attacks against
+  other information systems."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  restrict the ability of individuals to launch denial of service attacks
+  defined in SC-5 (1), CCI 2387 against other information systems. For
+  information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 1094.
+
+  Recommended Compelling Evidence:
+
+  1.) Configuration documentation on how organization configures the information
+  system to restrict the ability of individuals to launch DoS attacks defined in
+  SC-5 (1), CCI 2387 against other information systems.
+
+  2.) Applicable STIG/SRG checks.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to restrict the ability
+  of individuals to launch denial of service attacks defined in SC-5 (1), CCI
+  2387 against other information systems. For information system components that
+  have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 1094.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SC

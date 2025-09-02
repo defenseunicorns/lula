@@ -1,0 +1,85 @@
+control-acronym: SI-2(6)
+control-information: >-
+  Description:
+
+  The organization removes [Assignment: organization-defined software and
+  firmware components] after updated versions have been installed.
+
+
+  Supplemental Guidance:
+
+  Previous versions of software and/or firmware components that are not removed
+  from the information system after updates have been installed may be exploited
+  by adversaries. Some information technology products may remove older versions
+  of software and/or firmware automatically from the information system.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing flaw remediation; automated mechanisms supporting flaw remediation;
+  information system design documentation; information system configuration
+  settings and associated documentation; records of software and firmware
+  component removals after updated versions are installed; information system
+  audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system;
+  organizational personnel with responsibility for flaw remediation].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  removal of previous versions of software/firmware].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SI-2(6).1,CCI-002615,DoD Organization or Service Common Control Package
+  SI-2(6).2,CCI-002616,DoD Organization or Service Common Control Package
+  SI-2(6).3,CCI-002617,Local
+  SI-2(6).4,CCI-002618,Organization AWS Cloud Brokerage Package...
+ap-acronym: SI-2(6).4
+cci: 2618
+cci-definition: "002618: The organization removes organization-defined firmware
+  components (e.g., previous versions) after updated versions have been
+  installed."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  remove all upgraded/replaced firmware components that are no longer required
+  for operation e.g., previous versions) after updated versions have been
+  installed. For information system components that have applicable STIGs or
+  SRGs, the organization being inspected/assessed must comply with the STIG/SRG
+  guidance that pertains to CCI 2618. DoD has defined the firmware components as
+  all upgraded/replaced firmware components that are no longer required for
+  operation.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan.
+
+  2.) Applicable STIG/SRG checks pertaining to CCI 2618.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to remove all
+  upgraded/replaced firmware components that are no longer required for
+  operation (e.g., previous versions) after updated versions have been
+  installed. For information system components that have applicable STIGs or
+  SRGs, the organization conducting the inspection/assessment evaluates the
+  components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 2618. DoD has defined the firmware components as all
+  upgraded/replaced firmware components that are no longer required for
+  operation.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SI

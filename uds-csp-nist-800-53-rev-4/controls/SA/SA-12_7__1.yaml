@@ -1,0 +1,99 @@
+control-acronym: SA-12(7)
+control-information: >-
+  Description:
+
+  The organization conducts an assessment of the information system, system
+  component, or information system service prior to selection, acceptance, or
+  update.
+
+
+  Supplemental Guidance:
+
+  Assessments include, for example, testing, evaluations, reviews, and analyses.
+  Independent, third-party entities or organizational personnel conduct
+  assessments of systems, components, products, tools, and services.
+  Organizations conduct assessments to uncover unintentional vulnerabilities and
+  intentional vulnerabilities including, for example, malicious code, malicious
+  processes, defective software, and counterfeits. Assessments can include, for
+  example, static analyses, dynamic analyses, simulations, white, gray, and
+  black box testing, fuzz testing, penetration testing, and ensuring that
+  components or services are genuine (e.g., using tags, cryptographic hash
+  verifications, or digital signatures). Evidence generated during security
+  assessments is documented for follow-on actions carried out by organizations.
+  Related controls: CA-2, SA-11.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing supply chain protection; procedures addressing the integration of
+  information security requirements into the acquisition process; security test
+  and evaluation results; vulnerability assessment results; penetration testing
+  results; organizational risk assessment results; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and services
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with supply chain
+  protection responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for conducting assessments prior
+  to selection, acceptance, or update; automated mechanisms supporting and/or
+  implementing the conducting of assessments prior to selection, acceptance, or
+  update].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SA-12(7).1
+cci: 3203
+cci-definition: "003203: The organization conducts an assessment of the
+  information system, system component, or information system service prior to
+  selection, acceptance, or update."
+implementation-guidance: >-
+  The organization being inspected/assessed or an independent, third-party
+  entity must perform and document assessments that may include static analyses,
+  dynamic analyses, simulations, white, gray, and black box testing, fuzz
+  testing, penetration testing, and ensure that components or services are
+  genuine (e.g., using tags, cryptographic hash verifications, or digital
+  signatures). Where possible, testing should employ threat profiles based on
+  the threats that the system is likely to face in the operational environment.
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP).
+
+  2.) System development life cycle (SDLC) documentation.
+
+  3.) Continuous monitoring plan for assessment of the information system,
+  system components or information systems services prior to selection,
+  acceptance or updates.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines documented assessment(s) that were conducted by the
+  organization prior to selection, acceptance, or update to ensure that the
+  organization being inspected/assessed is assessing information systems, system
+  components, or information system services prior to selection, acceptance, or
+  update.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: "Though the majority of this control would require an external
+  assessment i.e. penetration testing on UDS. UDS does provide the functionality
+  to ensure components are genuine. Integrity validation of the software
+  components is a core part of UDS deployment. As mentioned, Zarf packages can
+  be signed and Zarf will verify the package signature and contents before
+  deploying. Each container image has a cryptographic hash (digest); Zarf and
+  Kubernetes ensure that the exact images (by digest) are deployed, preventing
+  tampering. Additionally, the UDS CLI and Zarf have features to verify package
+  checksums and signatures using keysâ. If any component were altered, the
+  signature check would fail or the hash wouldn't match, and UDS wouldn't
+  install it. This ensures the softwareâs integrity at installation."
+uds-alignment: Zarf
+family: SA

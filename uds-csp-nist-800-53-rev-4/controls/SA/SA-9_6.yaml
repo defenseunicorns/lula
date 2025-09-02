@@ -1,0 +1,117 @@
+control-acronym: SA-9
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Requires that providers of external information system services comply with
+  organizational information security requirements and employ [Assignment:
+  organization-defined security controls] in accordance with applicable federal
+  laws, Executive Orders, directives, policies, regulations, standards, and
+  guidance;
+
+  b. Defines and documents government oversight and user roles and
+  responsibilities with regard to external information system services; and
+
+  c. Employs [Assignment: organization-defined processes, methods, and
+  techniques] to monitor security control compliance by external service
+  providers on an ongoing basis.
+
+
+  Supplemental Guidance:
+
+  External information system services are services that are implemented outside
+  of the authorization boundaries of organizational information systems. This
+  includes services that are used by, but not a part of, organizational
+  information systems. FISMA and OMB policy require that organizations using
+  external service providers that are processing, storing, or transmitting
+  federal information or operating information systems on behalf of the federal
+  government ensure that such providers meet the same security requirements that
+  federal agencies are required to meet. Organizations establish relationships
+  with external service providers in a variety of ways including, for example,
+  through joint ventures, business partnerships, contracts, interagency
+  agreements, lines of business arrangements, licensing agreements, and supply
+  chain exchanges. The responsibility for managing risks from the use of
+  external information system services remains with authorizing officials. For
+  services external to organizations, a chain of trust requires that
+  organizations establish and retain a level of confidence that each
+  participating provider in the potentially complex consumer-provider
+  relationship provides adequate protection for the services rendered. The
+  extent and nature of this chain of trust varies based on the relationships
+  between organizations and the external providers. Organizations document the
+  basis for trust relationships so the relationships can be monitored over time.
+  External information system services documentation includes government,
+  service providers, end user security roles and responsibilities, and
+  service-level agreements. Service-level agreements define expectations of
+  performance for security controls, describe measurable outcomes, and identify
+  remedies and response requirements for identified instances of noncompliance.
+  Related controls: CA-3, IR-7, PS-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing external information system services; procedures addressing methods
+  and techniques for monitoring security control compliance by external service
+  providers of information system services; acquisition contracts, service-level
+  agreements; organizational security requirements and security specifications
+  for external provider services; security control assessment evidence from
+  external providers of information system services; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and services
+  acquisition responsibilities; external providers of information system
+  services; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for monitoring security control
+  compliance by external service providers on an ongoing basis; automated
+  mechanisms for monitoring security control compliance by external service
+  providers on an ongoing basis].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SA-9.1,CCI-000669,Organization AWS Cloud Brokerage Package
+  SA-9.2,CCI-000670,Organization AWS Cloud Brokerage Package
+  SA-9.3,CCI-003137,DoD Organization or Service Common Control Package
+  SA-9.4,CCI-000671,Organization AWS Cloud Brokerage Package
+  SA-9.5,CCI-000672,Organization AWS Cloud Brokerage Package
+  SA-9.6,CCI-000673,Organization AWS Cloud Brokerage Package
+  SA-9.7,CCI-000674,Organization AWS Cloud Brokerage Package
+  SA-9.8,CCI-003138,Organization AWS Cloud Brokerage Package
+  SA-9.9,CCI-003139,Organization AWS Cloud Brokerage Package...
+ap-acronym: SA-9.6
+cci: 673
+cci-definition: "000673: The organization defines user roles and
+  responsibilities with regard to external information system services."
+implementation-guidance: >-
+  The organization being inspected/assessed must define in the official
+  documentation governing the provision of the external IT services (e.g.
+  contract, MOU, MOA, SLA, etc.) the roles and responsibilities of all types of
+  users of the external information system services.
+
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP) must define user roles and responsibilities
+  with regards to external information services (includes contracts, MOUs, MOAs,
+  SLAs).
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the official documentation governing the provision of the
+  external IT services (e.g. contract, MOU, MOA, SLA, etc.) to confirm the
+  organization has clearly defined the roles and responsibilities of all types
+  of users of the external information system services.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SA

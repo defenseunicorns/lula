@@ -1,0 +1,79 @@
+control-acronym: SC-7(4)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Implements a managed interface for each external telecommunication
+  service;
+
+  (b) Establishes a traffic flow policy for each managed interface;
+
+  (c) Protects the confidentiality and integrity of the information being
+  transmitted across each interface;
+
+  (d) Documents each exception to the traffic flow policy with a supporting
+  mission/business need and duration of that need; and
+
+  (e) Reviews exceptions to the traffic flow policy [Assignment:
+  organization-defined frequency] and removes exceptions that are no longer
+  supported by an explicit mission/business need.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; traffic
+  flow policy; information flow control policy; procedures addressing boundary
+  protection; information system security architecture; information system
+  design documentation; boundary protection hardware and software; information
+  system architecture and configuration documentation; information system
+  configuration settings and associated documentation; records of traffic flow
+  policy exceptions; information system audit records; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for documenting and reviewing
+  exceptions to the traffic flow policy; organizational processes for removing
+  exceptions to the traffic flow policy; automated mechanisms implementing
+  boundary protection capability; managed interfaces implementing traffic flow
+  policy].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-7(4).1,CCI-001102,Organization AWS Cloud Brokerage Package
+  SC-7(4).2,CCI-001103,Organization AWS Cloud Brokerage Package
+  SC-7(4).3,CCI-002396,Organization AWS Cloud Brokerage Package
+  SC-7(4).4,CCI-001105,Organization AWS Cloud Brokerage Package
+  SC-7(4).5,CCI-001106,Organization AWS Cloud Brokerage Package
+  SC-7(4).6,CCI-001107,DoD Organization or Service Common Control Package
+  SC-7(4).7,CCI-001108,Organization AWS Cloud Brokerage Package...
+ap-acronym: SC-7(4).6
+cci: 1107
+cci-definition: "001107: The organization defines a frequency for the review of
+  exceptions to the traffic flow policy for each external telecommunication
+  service."
+implementation-guidance: |-
+  DoD has defined the frequency as every 180 days.
+
+  Recommended Compelling Evidence:
+  Automatically compliant.
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the frequency as every 180 days.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SC

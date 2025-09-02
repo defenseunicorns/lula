@@ -1,0 +1,91 @@
+control-acronym: IA-8(2)
+control-information: >-
+  Description:
+
+  The information system accepts only FICAM-approved third-party credentials.
+
+
+  Supplemental Guidance:
+
+  This control enhancement typically applies to organizational information
+  systems that are accessible to the general public, for example, public-facing
+  websites. Third-party credentials are those credentials issued by nonfederal
+  government entities approved by the Federal Identity, Credential, and Access
+  Management (FICAM) Trust Framework Solutions initiative. Approved third-party
+  credentials meet or exceed the set of minimum federal government-wide
+  technical, security, privacy, and organizational maturity requirements. This
+  allows federal government relying parties to trust such credentials at their
+  approved assurance levels. Related control: AU-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing user identification and authentication; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; list of FICAM-approved,
+  third-party credentialing products, components, or services procured and
+  implemented by organization; third-party credential verification records;
+  evidence of FICAM-approved third-party credentials; third-party credential
+  authorizations; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  operations responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers;
+  organizational personnel with account management responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  identification and authentication capability; automated mechanisms that accept
+  FICAM-approved credentials].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-8(2).1
+cci: 2011
+cci-definition: "002011: The information system accepts FICAM-approved
+  third-party credentials."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  accept Federal Identity, Credential, and Access Management (FICAM)-approved
+  third-party credentials. For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 2011. FICAM Guidance is
+  available at http://www.idmanagement.gov.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated SOP/TTP documentation configuring the information system
+  to accept Federal Identify, Credential, and Access Management (FICAM)-approved
+  third-party credentials.
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to accept FICAM-approved
+  third-party credentials For information system components that have applicable
+  STIGs or SRGs, the organization conducting the inspection/assessment evaluates
+  the components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 2011.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: "Not Applicable to UDS technology stack. (UDS employs the Keycloak
+  identity management component, which supports authentication integration with
+  FICAM-approved identity and credentialing solutions, including DoD-approved
+  PKI (such as CAC and PIV) and other FICAM-approved external credential
+  providers. Keycloak itself provides the necessary technical
+  capabilitiesâsuch as certificate-based authentication, validation, and
+  federation with approved identity providers to meet FICAM compliance
+  requirements. However, explicit verification and formal documentation of
+  Keycloak as a FICAM-approved component, or integrating it explicitly with
+  approved FICAM-compliant identity services, remain organizational
+  responsibilities.)"
+family: IA

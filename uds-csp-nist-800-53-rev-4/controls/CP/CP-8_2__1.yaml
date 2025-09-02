@@ -1,0 +1,77 @@
+control-acronym: CP-8(2)
+control-information: >-
+  Description:
+
+  The organization obtains alternate telecommunications services to reduce the
+  likelihood of sharing a single point of failure with primary
+  telecommunications services.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  primary and alternate telecommunications services; contingency plan; primary
+  and alternate telecommunications service agreements; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  telecommunications responsibilities; organizational personnel with information
+  system recovery responsibilities; primary and alternate telecommunications
+  service providers; organizational personnel with information security
+  responsibilities].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Local access is not available in AWS
+  datacenters. This control is not applicable to AWS. The customer's system must
+  run entirely in AWS for this control to be inheritable....
+ap-acronym: CP-8(2).1
+cci: 530
+cci-definition: "000530: The organization obtains alternate telecommunications
+  services to reduce the likelihood of sharing a single point of failure with
+  primary telecommunications services."
+implementation-guidance: >-
+  The organization being inspected/assessed obtains alternate telecommunications
+  services to reduce the likelihood of sharing a single point of failure with
+  primary telecommunications services IAW DoDI 8100.04.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated contingency plan, referencing telecommunications section
+
+  2.) Cable diagrams
+
+  3.) Service Level Agreements (SLAs) with telecommunications services
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines agreements with their service providers to ensure that a
+  single point of failure is not shared.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: CP

@@ -1,0 +1,112 @@
+control-acronym: SC-12
+control-information: >-
+  Description:
+
+  The organization establishes and manages cryptographic keys for required
+  cryptography employed within the information system in accordance with
+  [Assignment: organization-defined requirements for key generation,
+  distribution, storage, access, and destruction].
+
+
+  Supplemental Guidance:
+
+  Cryptographic key management and establishment can be performed using manual
+  procedures or automated mechanisms with supporting manual procedures.
+  Organizations define key management requirements in accordance with applicable
+  federal laws, Executive Orders, directives, regulations, policies, standards,
+  and guidance, specifying appropriate options, levels, and parameters.
+  Organizations manage trust stores to ensure that only approved trust anchors
+  are in such trust stores. This includes certificates with visibility external
+  to organizational information systems and certificates related to the internal
+  operations of systems. Related controls: SC-13, SC-17.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing cryptographic key establishment and management; information system
+  design documentation; cryptographic mechanisms; information system
+  configuration settings and associated documentation; information system audit
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with responsibilities for cryptographic key establishment and/or management].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  cryptographic key establishment and management].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-12.1,CCI-002428,DoD Organization or Service Common Control Package
+  SC-12.2,CCI-002429,DoD Organization or Service Common Control Package
+  SC-12.3,CCI-002430,DoD Organization or Service Common Control Package
+  SC-12.4,CCI-002431,DoD Organization or Service Common Control Package
+  SC-12.5,CCI-002432,DoD Organization or Service Common Control Package
+  SC-12.6,CCI-002433,Local
+  SC-12.7,CCI-002434,Local
+  SC-12.8,CCI-002435,Local
+  SC-12.9,CCI-002436,Local
+  SC-12.10,CCI-002437,Local
+  SC-12.11,CCI-002438,Local
+  SC-12.12,CCI-002439,Local
+  SC-12.13,CCI-002440,Local
+  SC-12.14,CCI-002441,Local
+  SC-12.15,CCI-002442,Local...
+ap-acronym: SC-12.12
+cci: 2439
+cci-definition: "002439: The organization manages cryptographic keys for
+  required cryptography employed within the information system in accordance
+  with organization-defined requirements for key distribution."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to manage cryptographic keys for required cryptography employed within the
+  information system in accordance with requirements for key distribution
+  defined in DoDI 8520.02 "Public Key Infrastructure and Public Key Enabling"
+  and DoDI 8520.03 "Identity Authentication for Information Systems." DoD has
+  defined the requirements for key distribution as requirements for key
+  distribution defined in DoDI 8520.02 "Public Key Infrastructure and Public Key
+  Enabling" and DoDI 8520.03 "Identity Authentication for Information Systems."
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system protection policy.
+
+  2.) Communications protection policy (reference encryption section).
+
+  3.) Key requirements used for key generation aligned with DoDI 8520.02 "Public
+  Key Infrastructure and Public Key Enabling" and DoDI 8520.03 "Identity
+  Authentication for Information Systems."
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process to ensure the organization being
+  inspected/assessed manages cryptographic keys for required cryptography
+  employed within the information system in accordance with requirements for key
+  distribution defined in DoDI 8520.02 "Public Key Infrastructure and Public Key
+  Enabling" and DoDI 8520.03 "Identity Authentication for Information Systems."
+  DoD has defined the requirements for key distribution as requirements for key
+  distribution defined in DoDI 8520.02 "Public Key Infrastructure and Public Key
+  Enabling" and DoDI 8520.03 "Identity Authentication for Information Systems."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: "In the UDS architecture, cryptographic key distribution is
+  managed through an integrated process that meets organization-defined
+  requirements. Istioâs built-in certificate authority automatically generates
+  and securely distributes mTLS certificates among microservices, ensuring that
+  keys are transmitted over encrypted channels and tied to authenticated
+  identities. Additionally, Zarfâs packaging process employs cryptographic
+  signing (using tools like cosign) to verify the integrity and authenticity of
+  distributed software components, while Keycloak securely handles key
+  distribution for token signing and authentication. Kubernetes Secrets further
+  protect sensitive cryptographic material, and the documented procedures ensure
+  that keys are distributed and rotated"
+uds-alignment: Zarf, Istio, Keycloak, Velero, Kubernetes
+family: SC

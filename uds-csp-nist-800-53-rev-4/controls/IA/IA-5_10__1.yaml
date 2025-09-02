@@ -1,0 +1,89 @@
+control-acronym: IA-5(10)
+control-information: >-
+  Description:
+
+  The information system dynamically provisions identities.
+
+
+  Supplemental Guidance:
+
+  Authentication requires some form of binding between an identity and the
+  authenticator used to confirm the identity. In conventional approaches, this
+  binding is established by pre-provisioning both the identity and the
+  authenticator to the information system. For example, the binding between a
+  username (i.e., identity) and a password (i.e., authenticator) is accomplished
+  by provisioning the identity and authenticator as a pair in the information
+  system. New authentication techniques allow the binding between the identity
+  and the authenticator to be implemented outside an information system. For
+  example, with smartcard credentials, the identity and the authenticator are
+  bound together on the card. Using these credentials, information systems can
+  authenticate identities that have not been pre-provisioned, dynamically
+  provisioning the identity after authentication. In these situations,
+  organizations can anticipate the dynamic provisioning of identities.
+  Preestablished trust relationships and mechanisms with appropriate authorities
+  to validate identities and related credentials are essential.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing identifier management; security plan; information system design
+  documentation; automated mechanisms providing dynamic binding of identifiers
+  and authenticators; information system configuration settings and associated
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with identifier management
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing identifier management
+  capability; automated mechanisms implementing dynamic provisioning of
+  identifiers].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-5(10).1
+cci: 2001
+cci-definition: "002001: The information system dynamically provisions identities."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  dynamically provision identities. For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 2001.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated SOP/TTP configuring the information system to dynamically
+  provision identities.
+
+  2.) Applicable STIG/SRG checks.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to dynamically provision
+  identities. For information system components that have applicable STIGs or
+  SRGs, the organization conducting the inspection/assessment evaluates the
+  components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 2001.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS supports dynamic identity provisioning through its integrated
+  identity management platform, Keycloak. Keycloak enables automated, dynamic
+  provisioning and de-provisioning of user identities, roles, and associated
+  permissions via integration with organizational identity sources (e.g.,
+  LDAP/Active Directory or DoD-approved identity providers). Keycloak can
+  provision identities dynamically using federation or automated synchronization
+  mechanisms, ensuring identities and permissions are immediately available
+  across the UDS platform upon user onboarding or changes in user status.
+uds-alignment: Keycloak
+family: IA

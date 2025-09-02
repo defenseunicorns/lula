@@ -1,0 +1,94 @@
+control-acronym: AC-14
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Identifies [Assignment: organization-defined user actions] that can be
+  performed on the information system without identification or authentication
+  consistent with organizational missions/business functions; and
+
+  b. Documents and provides supporting rationale in the security plan for the
+  information system, user actions not requiring identification or
+  authentication.
+
+
+  Supplemental Guidance:
+
+  This control addresses situations in which organizations determine that no
+  identification or authentication is required in organizational information
+  systems. Organizations may allow a limited number of user actions without
+  identification or authentication including, for example, when individuals
+  access public websites or other publicly accessible federal information
+  systems, when individuals use mobile phones to receive calls, or when
+  facsimiles are received. Organizations also identify actions that normally
+  require identification or authentication but may under certain circumstances
+  (e.g., emergencies), allow identification or authentication mechanisms to be
+  bypassed. Such bypasses may occur, for example, via a software-readable
+  physical switch that commands bypass of the logon functionality and is
+  protected from accidental or unmonitored use. This control does not apply to
+  situations where identification and authentication have already occurred and
+  are not repeated, but rather to situations where identification and
+  authentication have not yet occurred. Organizations may decide that there are
+  no user actions that can be performed on organizational information systems
+  without identification and authentication and thus, the values for assignment
+  statements can be none. Related controls: CP-2, IA-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing permitted
+  actions without identification or authentication; information system
+  configuration settings and associated documentation; security plan; list of
+  user actions that can be performed without identification or authentication;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-14.2
+cci: 232
+cci-definition: "000232: The organization documents and provides supporting
+  rationale in the security plan for the information system, user actions not
+  requiring identification and authentication."
+implementation-guidance: >-
+  The organization being inspected/assessed documents supporting rationale in
+  the security plan for the actions defined in AC-14, CCI 61 to not require
+  identification and authentication.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that defines the supporting rationale in
+  the security plan for the actions defined in AC-14, CCI 61 to not require
+  identification and authentication.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the security plan to ensure the organization being
+  inspected/assessed documents the supporting rationale for the actions defined
+  in AC-14, CCI 61 to not require identification and authentication.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (UDS inherently enforces
+  strong authentication and identification through its centralized identity
+  management system, Keycloak, ensuring all interactions with sensitive or
+  protected resources require identification and authentication. While the
+  platform supports granular access control and typically mandates
+  authentication for most actions, explicitly defining which specific user
+  actions (such as accessing public-facing status pages or health-check
+  endpoints) may be permitted without authentication is an organizational
+  decision. Organizations deploying UDS must formally define, document, and
+  explicitly approve any exceptions to authentication requirements, clearly
+  specifying permissible unauthenticated actions (e.g., public API health checks
+  or metrics endpoints) within their security policies or Standard Operating
+  Procedures (SOPs). Although UDS technically supports enforcing strong
+  authentication standards, the explicit definition of allowed unauthenticated
+  interactions remains an organizational responsibility.)
+family: AC

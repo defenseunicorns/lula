@@ -1,0 +1,75 @@
+control-acronym: PL-8(2)
+control-information: >-
+  Description:
+
+  The organization requires that [Assignment: organization-defined security
+  safeguards] allocated to [Assignment: organization-defined locations and
+  architectural layers] are obtained from different suppliers.
+
+
+  Supplemental Guidance:
+
+  Different information technology products have different strengths and
+  weaknesses. Providing a broad spectrum of products complements the individual
+  offerings. For example, vendors offering malicious code protection typically
+  update their products at different times, often developing solutions for known
+  viruses, Trojans, or worms according to their priorities and development
+  schedules. By having different products at different locations (e.g., server,
+  boundary, desktop) there is an increased likelihood that at least one will
+  detect the malicious code. Related control: SA-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Security planning policy; procedures addressing
+  information security architecture development; enterprise architecture
+  documentation; information security architecture documentation; security plan
+  for the information system; security CONOPS for the information system; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security planning and
+  plan implementation responsibilities; organizational personnel with
+  information security architecture development responsibilities; organizational
+  personnel with acquisition responsibilities; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for obtaining information
+  security safeguards from different suppliers].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: PL-8(2).1
+cci: 3088
+cci-definition: "003088: The organization requires that organization-defined
+  security safeguards allocated to organization-defined locations and
+  architectural layers are obtained from different suppliers."
+implementation-guidance: >-
+  The organization being inspected/assessed obtains from different suppliers
+  security safeguards defined in PL-8 (1), CCIs 3083 and 3084 allocated to
+  locations and architectural layers defined in PL-8 (1) CCIs 3085 and 3086.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Evidence of procurement records defined in PL-8 (1), CCIs 3083 and 3084
+  allocated to locations and architectural layers defined in PL-8 (1) CCIs 3085
+  and 3086.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines procurement records to ensure that different suppliers
+  are used to procure security safeguards defined in PL-8 (1), CCIs 3083 and
+  3084 allocated to locations and architectural layers defined in PL-8 (1) CCIs
+  3085 and 3086.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PL

@@ -7,20 +7,25 @@ import * as XLSX from 'xlsx';
 import * as yaml from 'yaml';
 import { getServerState } from './serverState';
 
+// Type definitions
+interface SpreadsheetRow {
+	[key: string]: any;
+}
+
 const router = express.Router();
 const upload = multer({
 	storage: multer.memoryStorage(),
 	limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
 });
 
-// Scan for existing control-set.yaml files
+// Scan for existing lula.yaml files
 // Export the scan function for reuse
 export async function scanControlSets() {
 	const state = getServerState();
 	const baseDir = state.CONTROL_SET_DIR; // Always scan from the root
 
-	// Search for control-set.yaml files in subdirectories
-	const pattern = '**/control-set.yaml';
+	// Search for lula.yaml files in subdirectories
+	const pattern = '**/lula.yaml';
 	const files = await glob(pattern, {
 		cwd: baseDir,
 		ignore: ['node_modules/**', 'dist/**', 'build/**'],
@@ -53,7 +58,7 @@ export async function scanControlSets() {
 			} catch (_err) {
 				return {
 					path: relativePath,
-					name: 'Invalid control-set.yaml',
+					name: 'Invalid lula.yaml',
 					description: 'Could not parse file',
 					controlCount: 0,
 					file: file
@@ -68,7 +73,7 @@ export async function scanControlSets() {
 // Process spreadsheet upload
 router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 	try {
-		if (!req.file) {
+		if (!(req as any).file) {
 			return res.status(400).json({ error: 'No file uploaded' });
 		}
 
@@ -92,7 +97,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 		const skipEmptyRows = true;
 
 		// Parse the spreadsheet
-		const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+		const workbook = XLSX.read((req as any).file.buffer, { type: 'buffer' });
 		const sheetName = workbook.SheetNames[0];
 		const sheet = workbook.Sheets[sheetName];
 
@@ -254,7 +259,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			mkdirSync(baseDir, { recursive: true });
 		}
 
-		// Create control-set.yaml with enhanced field metadata
+		// Create lula.yaml with enhanced field metadata
 		const uniqueFamilies = Array.from(families.keys()).filter((f) => f && f !== 'UNKNOWN');
 		console.log(`Found ${uniqueFamilies.length} unique families:`, uniqueFamilies);
 		console.log(`Total controls: ${controls.length}`);
@@ -265,6 +270,10 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			fieldName: string;
 			tab?: string;
 			displayTab?: string;
+			category?: string;
+			required?: boolean;
+			displayOrder?: number;
+			originalName?: string;
 		}> | null = null;
 		if (req.body.fieldSchema) {
 			try {
@@ -302,7 +311,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 
 		// Add options for family field if it's a select
 		if (familyOptions.length <= 50) {
-			fields['family'].options = familyOptions;
+			(fields['family'] as any).options = familyOptions;
 		}
 
 		// Add other fields from metadata
@@ -413,7 +422,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			fieldSchema: fieldSchema
 		};
 
-		writeFileSync(join(baseDir, 'control-set.yaml'), yaml.stringify(controlSetData));
+		writeFileSync(join(baseDir, 'lula.yaml'), yaml.stringify(controlSetData));
 
 		// Create controls directory and write individual control files
 		const controlsDir = join(baseDir, 'controls');

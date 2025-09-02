@@ -1,0 +1,93 @@
+control-acronym: CM-2(7)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Issues [Assignment: organization-defined information systems, system
+  components, or devices] with [Assignment: organization-defined configurations]
+  to individuals traveling to locations that the organization deems to be of
+  significant risk; and
+
+  (b) Applies [Assignment: organization-defined security safeguards] to the
+  devices when the individuals return.
+
+
+  Supplemental Guidance:
+
+  When it is known that information systems, system components, or devices
+  (e.g., notebook computers, mobile devices) will be located in high-risk areas,
+  additional security controls may be implemented to counter the greater threat
+  in such areas coupled with the lack of physical security relative to
+  organizational-controlled areas. For example, organizational policies and
+  procedures for notebook computers used by individuals departing on and
+  returning from travel include, for example, determining which locations are of
+  concern, defining required configurations for the devices, ensuring that the
+  devices are configured as intended before travel is initiated, and applying
+  specific safeguards to the device after travel is completed. Specially
+  configured notebook computers include, for example, computers with sanitized
+  hard drives, limited applications, and additional hardening (e.g., more
+  stringent configuration settings). Specified safeguards applied to mobile
+  devices upon return from travel include, for example, examining the device for
+  signs of physical tampering and purging/reimaging the hard disk drive.
+  Protecting information residing on mobile devices is covered in the media
+  protection family.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; configuration
+  management plan; procedures addressing the baseline configuration of the
+  information system; procedures addressing information system component
+  installations and upgrades; information system architecture and configuration
+  documentation; information system configuration settings and associated
+  documentation; records of information system baseline configuration reviews
+  and updates; information system component installations/upgrades and
+  associated records; change control records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with configuration
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing baseline
+  configurations].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CM-2(7).2
+cci: 1738
+cci-definition: "001738: The organization defines the security configurations to
+  be implemented on information systems, system components, or devices when they
+  are located in areas of significant risk."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents, in the
+  configuration management policy, the security configurations to be implemented
+  on information systems, system components, or devices when they are located in
+  areas of significant risk. DoD has determined that this value is not
+  appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated network diagram
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the configuration management policy to ensure the
+  organization being inspected/assessed defines the security configurations to
+  be implemented on information systems, system components, or devices when they
+  are located in areas of significant risk. DoD has determined that this value
+  is not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: Defense Unicorns provides an architecture diagram which documents
+  the protections in place for the boundary.
+uds-alignment: Diagram
+family: CM

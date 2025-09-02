@@ -1,0 +1,90 @@
+control-acronym: SI-2(2)
+control-information: >-
+  Description:
+
+  The organization employs automated mechanisms [Assignment:
+  organization-defined frequency] to determine the state of information system
+  components with regard to flaw remediation.
+
+
+  Supplemental Guidance:
+
+  Related controls: CM-6, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing flaw remediation; automated mechanisms supporting centralized
+  management of flaw remediation; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system;
+  organizational personnel with responsibility for flaw remediation].
+
+
+  Test: [SELECT FROM: Automated mechanisms used to determine the state of
+  information system components with regard to flaw remediation].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: |-
+  SI-2(2).1,CCI-001233,Organization AWS Cloud Brokerage Package
+  SI-2(2).2,CCI-001234,DoD Organization or Service Common Control Package...
+ap-acronym: SI-2(2).1
+cci: 1233
+cci-definition: "001233: The organization employs automated mechanisms on an
+  organization-defined frequency to determine the state of information system
+  components with regard to flaw remediation."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  employ automated mechanisms continuously with HBSS; 30 days for any additional
+  internal network scans not covered by HBSS; annually for external scans by
+  (Computer Network Defense Service Provider) CNDSP to determine the state of
+  information system components with regard to flaw remediation. For information
+  system components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  1233. DoD has defined the frequency as continuously with HBSS; 30 days for any
+  additional internal network scans not covered by HBSS; annually for external
+  scans by (Computer Network Defense Service Provider) CNDSP.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan.
+
+  2.) Reports and results from annual Computer Network Defense Service Provider
+  scans (System security plan must document Computer Network Defense Service
+  Plan information for comparison to scan results).
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to employ automated
+  mechanisms continuously with HBSS; 30 days for any additional internal network
+  scans not covered by HBSS; annually for external scans by (Computer Network
+  Defense Service Provider) CNDSP to determine the state of information system
+  components with regard to flaw remediation. For information system components
+  that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 1233. DoD has defined the
+  frequency as continuously with HBSS; 30 days for any additional internal
+  network scans not covered by HBSS; annually for external scans by (Computer
+  Network Defense Service Provider) CNDSP.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: Defense Unicorns will provide updated and hardened images at a
+  frequency according to the SLA between the organization. Defense Unicorns
+  provides this as a service to organizations and is automated. Defense Unicorns
+  provides updated vulnerability databases according to the agreed frequency per
+  the SLA to easily determine the flaw remediation state in the UDS UI.
+uds-alignment: UDS UI, Grype
+family: SI

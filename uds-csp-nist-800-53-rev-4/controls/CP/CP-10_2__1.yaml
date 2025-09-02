@@ -1,0 +1,69 @@
+control-acronym: CP-10(2)
+control-information: >-
+  Description:
+
+  The information system implements transaction recovery for systems that are
+  transaction-based.
+
+
+  Supplemental Guidance:
+
+  Transaction-based information systems include, for example, database
+  management systems and transaction processing systems. Mechanisms supporting
+  transaction recovery include, for example, transaction rollback and
+  transaction journaling.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  information system recovery and reconstitution; contingency plan; information
+  system design documentation; information system configuration settings and
+  associated documentation; contingency plan test documentation; contingency
+  plan test results; information system transaction recovery records;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  transaction recovery; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  transaction recovery capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CP-10(2).1
+cci: 553
+cci-definition: "000553: The information system implements transaction recovery
+  for systems that are transaction-based."
+implementation-guidance: >-
+  The organization being inspected/assessed identifies, documents, and
+  implements transaction recovery capability for systems that are
+  transaction-based. The organization must document transaction recovery results
+  as part of contingency plan testing.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated contingency plan, referencing transaction recovery
+  section
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the contingency plan test results to verify transaction
+  recovery.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (UDS is primarily a
+  containerized DevSecOps deployment environment and infrastructure management
+  solution. It does not inherently implement or manage transactional database
+  operations or other transactional processing systems requiring explicit
+  transaction recovery mechanisms. Transaction recovery, if required, would
+  typically be addressed at the individual application or database component
+  level, outside the core functionality provided by UDS itself.)
+family: CP

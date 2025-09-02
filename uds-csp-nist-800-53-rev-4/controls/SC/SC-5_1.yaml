@@ -1,0 +1,80 @@
+control-acronym: SC-5
+control-information: >-
+  Description:
+
+  The information system protects against or limits the effects of the following
+  types of denial of service attacks: [Assignment: organization-defined types of
+  denial of service attacks or reference to source for such information] by
+  employing [Assignment: organization-defined security safeguards].
+
+
+  Supplemental Guidance:
+
+  A variety of technologies exist to limit, or in some cases, eliminate the
+  effects of denial of service attacks. For example, boundary protection devices
+  can filter certain types of packets to protect information system components
+  on internal organizational networks from being directly affected by denial of
+  service attacks. Employing increased capacity and bandwidth combined with
+  service redundancy may also reduce the susceptibility to denial of service
+  attacks. Related controls: SC-6, SC-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing denial of service protection; information system design
+  documentation; security plan; list of denial of services attacks requiring
+  employment of security safeguards to protect against or limit effects of such
+  attacks; list of security safeguards protecting against or limiting the
+  effects of denial of service attacks; information system configuration
+  settings and associated documentation; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with incident response responsibilities; system developer].
+
+
+  Test: [SELECT FROM: Automated mechanisms protecting against or limiting the
+  effects of denial of service attacks].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-5.1
+cci: 1093
+cci-definition: "001093: Defines the types of denial of service events for
+  protecting against or limiting the effects of the denial-of-service events."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the types of
+  denial of service attacks (or provides references to sources of current denial
+  of service attacks) that can be addressed by the information system. DoD has
+  determined the types of denial of service attacks are not appropriate to
+  define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Threat Model.
+
+  2.) Signed and dated System Security Plan (SSP) or any other documentation
+  that defines the types of DoS attacks that can be addressed by the information
+  system.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented types of denial of service attacks to
+  ensure the organization being inspected/assessed defines the types of denial
+  of service attacks (or provides references to sources of current denial of
+  service attacks) that can be addressed by the information system. DoD has
+  determined the types of denial of service attacks are not appropriate to
+  define at the Enterprise level.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SC

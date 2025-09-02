@@ -1,0 +1,63 @@
+control-acronym: AC-17(9)
+control-information: >-
+  Description:
+
+  The organization provides the capability to expeditiously disconnect or
+  disable remote access to the information system within [Assignment:
+  organization-defined time period].
+
+
+  Supplemental Guidance:
+
+  This control enhancement requires organizations to have the capability to
+  rapidly disconnect current users remotely accessing the information system
+  and/or disable further remote access. The speed of disconnect or disablement
+  varies based on the criticality of missions/business functions and the need to
+  eliminate immediate or future remote access to organizational information
+  systems.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing
+  disconnecting or disabling remote access to the information system;
+  information system design documentation; information system configuration
+  settings and associated documentation; security plan, information system audit
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing capability to disconnect
+  or disable remote access to information system].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-17(9).1,CCI-002321,DoD Organization or Service Common Control Package
+  AC-17(9).2,CCI-002322,Organization AWS Cloud Brokerage Package...
+ap-acronym: AC-17(9).1
+cci: 2321
+cci-definition: "002321: The organization defines the time period within which
+  it disconnects or disables remote access to the information system."
+implementation-guidance: |-
+  DoD has defined the time period as immediately.
+
+  Recommended Compelling Evidence:
+  Automatically compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the time period as immediately.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AC

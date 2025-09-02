@@ -1,0 +1,54 @@
+control-acronym: IR-9(1)
+control-information: >-
+  Description:
+
+  The organization assigns [Assignment: organization-defined personnel or roles]
+  with responsibility for responding to information spills.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  information spillage; incident response plan; list of personnel responsible
+  for responding to information spillage; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  responsibilities; organizational personnel with information security
+  responsibilities].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IR-9(1).2
+cci: 2815
+cci-definition: "002815: The organization defines personnel or roles to whom
+  responsibility for responding to information spills will be assigned."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents personnel or
+  roles to whom responsibility for responding to information spills will be
+  assigned. The personnel must include the ISSO and ISSM. DoD has determined the
+  personnel or roles are not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation that defines personnel or roles to whom responsibility for
+  responding to information spills will be assigned, including the ISSO and
+  ISSM.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented personnel or roles to ensure the
+  organization being inspected/assessed defines personnel or roles to whom
+  responsibility for responding to information spills will be assigned, which
+  must include the ISSO and ISSM. DoD has determined the personnel or roles are
+  not appropriate to define at the Enterprise level.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IR

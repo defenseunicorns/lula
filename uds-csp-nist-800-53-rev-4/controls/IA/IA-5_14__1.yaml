@@ -1,0 +1,70 @@
+control-acronym: IA-5(14)
+control-information: >-
+  Description:
+
+  The organization, for PKI-based authentication, employs a deliberate
+  organization-wide methodology for managing the content of PKI trust stores
+  installed across all platforms including networks, operating systems,
+  browsers, and applications.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing authenticator management; security plan; organizational methodology
+  for managing content of PKI trust stores across installed all platforms;
+  information system design documentation; information system configuration
+  settings and associated documentation; enterprise security architecture
+  documentation; enterprise architecture documentation; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with authenticator
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  PKI-based authenticator management capability; automated mechanisms supporting
+  and/or implementing the PKI trust store capability].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: ...
+ap-acronym: IA-5(14).1
+cci: 2008
+cci-definition: "002008: The organization, for PKI-based authentication, employs
+  a deliberate organization-wide methodology for managing the content of PKI
+  trust stores installed across all platforms including networks, operating
+  systems, browsers, and applications."
+implementation-guidance: "DoD trust store management requirements are defined in
+  information system componentsâ applicable STIGs and SRGs. All information
+  systems are required to undergo a STIG compliance review as part of their
+  certification and accreditation process prior to being granted an authority to
+  operate.
+
+  DoD Components are automatically compliant with this CCI because they are
+  covered by the DoD-level STIGs and SRGs.
+
+  Recommended Compelling Evidence:
+
+  Automatically Compliant"
+assessment-procedures: "DoD trust store management requirements are defined in
+  information system componentsâ applicable STIGs and SRGs. All information
+  systems are required to undergo a STIG compliance review as part of their
+  certification and accreditation process prior to being granted an authority to
+  operate.
+
+  DoD Components are automatically compliant with this CCI because they are
+  covered by the DoD-level STIGs and SRGs."
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IA

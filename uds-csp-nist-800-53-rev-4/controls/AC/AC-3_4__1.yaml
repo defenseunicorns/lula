@@ -1,0 +1,98 @@
+control-acronym: AC-3(4)
+control-information: >-
+  Description:
+
+  The information system enforces [Assignment: organization-defined
+  discretionary access control policies] over defined subjects and objects where
+  the policy specifies that a subject that has been granted access to
+  information can do one or more of the following:
+
+  (a) Pass the information to any other subjects or objects;
+
+  (b) Grant its privileges to other subjects;
+
+  (c) Change security attributes on subjects, objects, the information system,
+  or the information system's components;
+
+  (d) Choose the security attributes to be associated with newly created or
+  revised objects; or
+
+  (e) Change the rules governing access control.
+
+
+  Supplemental Guidance:
+
+  When discretionary access control policies are implemented, subjects are not
+  constrained with regard to what actions they can take with information for
+  which they have already been granted access. Thus, subjects that have been
+  granted access to information are not prevented from passing (i.e., the
+  subjects have the discretion to pass) the information to other subjects or
+  objects. This control enhancement can operate in conjunction with AC-3 (3). A
+  subject that is constrained in its operation by policies governed by AC-3 (3)
+  is still able to operate under the less rigorous constraints of this control
+  enhancement. Thus, while AC-3(3) imposes constraints preventing a subject from
+  passing information to another subject operating at a different sensitivity
+  level, AC-3 (4) permits the subject to pass the information to any subject at
+  the same sensitivity level. The policy is bounded by the information system
+  boundary. Once the information is passed outside of the control of the
+  information system, additional means may be required to ensure that the
+  constraints remain in effect. While the older, more traditional definitions of
+  discretionary access control require identity-based access control, that
+  limitation is not required for this use of discretionary access control.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; discretionary access control
+  policies; procedures addressing access enforcement; security plan; information
+  system design documentation; information system configuration settings and
+  associated documentation; list of subjects and objects (i.e., users and
+  resources) requiring enforcement of discretionary access control policies;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with access enforcement
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing discretionary access
+  control policy].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-3(4).1
+cci: 2163
+cci-definition: "002163: The organization defines the discretionary access
+  control policies the information system is to enforce over subjects and
+  objects."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the
+  discretionary access control policies the information system is to enforce
+  over subjects and objects. DoD has determined that the discretionary access
+  control policies are not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation which defines the discretionary access
+  control policies the information system is to enforce over subjects and
+  objects.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented access control policies to ensure they
+  have been defined. DoD has determined that the discretionary access control
+  policies are not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (UDS primarily implements
+  role-based access control (RBAC) rather than discretionary access control
+  (DAC). There is no user-driven file permission model within the container
+  platform for end-users; access decisions are centrally enforced by system
+  policy (Keycloak/Istio), not at the discretion of individual users. Thus, DAC
+  policies are not applicable to this stack.)
+family: AC

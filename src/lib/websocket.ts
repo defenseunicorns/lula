@@ -14,7 +14,8 @@ export interface WSMessage {
 		| 'controls-update'
 		| 'mappings-update'
 		| 'control-details'
-		| 'control-sets-list';
+		| 'control-sets-list'
+		| 'control-updated';
 	payload?: any;
 }
 
@@ -188,6 +189,12 @@ class WebSocketClient {
 						})
 					);
 				}
+				break;
+
+			case 'control-updated':
+				console.log('Control updated successfully:', message.payload);
+				// Don't trigger any state updates - the component already has the updated data
+				// This just confirms the save was successful
 				break;
 
 			case 'error':

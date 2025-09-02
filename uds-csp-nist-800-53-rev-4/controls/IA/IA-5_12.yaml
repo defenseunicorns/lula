@@ -1,0 +1,143 @@
+control-acronym: IA-5
+control-information: >-
+  Description:
+
+  The organization manages information system authenticators by:
+
+  a. Verifying, as part of the initial authenticator distribution, the identity
+  of the individual, group, role, or device receiving the authenticator;
+
+  b. Establishing initial authenticator content for authenticators defined by
+  the organization;
+
+  c. Ensuring that authenticators have sufficient strength of mechanism for
+  their intended use;
+
+  d. Establishing and implementing administrative procedures for initial
+  authenticator distribution, for lost/compromised or damaged authenticators,
+  and for revoking authenticators;
+
+  e. Changing default content of authenticators prior to information system
+  installation;
+
+  f. Establishing minimum and maximum lifetime restrictions and reuse conditions
+  for authenticators;
+
+  g. Changing/refreshing authenticators [Assignment: organization-defined time
+  period by authenticator type];
+
+  h. Protecting authenticator content from unauthorized disclosure and
+  modification;
+
+  i. Requiring individuals to take, and having devices implement, specific
+  security safeguards to protect authenticators; and
+
+  j. Changing authenticators for group/role accounts when membership to those
+  accounts changes.
+
+
+  Supplemental Guidance:
+
+  Individual authenticators include, for example, passwords, tokens, biometrics,
+  PKI certificates, and key cards. Initial authenticator content is the actual
+  content (e.g., the initial password) as opposed to requirements about
+  authenticator content (e.g., minimum password length). In many cases,
+  developers ship information system components with factory default
+  authentication credentials to allow for initial installation and
+  configuration. Default authentication credentials are often well known, easily
+  discoverable, and present a significant security risk. The requirement to
+  protect individual authenticators may be implemented via control PL-4 or PS-6
+  for authenticators in the possession of individuals and by controls AC-3,
+  AC-6, and SC-28 for authenticators stored within organizational information
+  systems (e.g., passwords stored in hashed or encrypted formats, files
+  containing encrypted or hashed passwords accessible with administrator
+  privileges). Information systems support individual authenticator management
+  by organization-defined settings and restrictions for various authenticator
+  characteristics including, for example, minimum password length, password
+  composition, validation time window for time synchronous one-time tokens, and
+  number of allowed rejections during the verification stage of biometric
+  authentication. Specific actions that can be taken to safeguard authenticators
+  include, for example, maintaining possession of individual authenticators, not
+  loaning or sharing individual authenticators with others, and reporting lost,
+  stolen, or compromised authenticators immediately. Authenticator management
+  includes issuing and revoking, when no longer needed, authenticators for
+  temporary access such as that required for remote maintenance. Device
+  authenticators include, for example, certificates and passwords. Related
+  controls: AC-2, AC-3, AC-6, CM-6, IA-2, IA-4, IA-8, PL-4, PS-5, PS-6, SC-12,
+  SC-13, SC-17, SC-28.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing authenticator management; information system design documentation;
+  information system configuration settings and associated documentation; list
+  of information system authenticator types; change control records associated
+  with managing information system authenticators; information system audit
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with authenticator
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  authenticator management capability].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IA-5.1,CCI-001980,Local
+  IA-5.2,CCI-000176,Local
+  IA-5.3,CCI-001544,Local
+  IA-5.4,CCI-001981,Local
+  IA-5.5,CCI-001982,Local
+  IA-5.6,CCI-001983,Local
+  IA-5.7,CCI-001984,Local
+  IA-5.8,CCI-001985,Local
+  IA-5.9,CCI-001986,Local
+  IA-5.10,CCI-001987,Local
+  IA-5.11,CCI-001988,Local
+  IA-5.12,CCI-001989,Local
+  IA-5.13,CCI-000179,Local
+  IA-5.14,CCI-000180,Local
+  IA-5.15,CCI-000181,Local
+  IA-5.16,CCI-000182,Local
+  IA-5.17,CCI-001610,DoD Organization or Service Common Control Package
+  IA-5.18,CCI-002042,Local
+  IA-5.19,CCI-000183,Local
+  IA-5.20,CCI-002365,Local
+  IA-5.21,CCI-002366,Local
+  IA-5.22,CCI-001990,Local...
+ap-acronym: IA-5.12
+cci: 1989
+cci-definition: "001989: The organization manages information system
+  authenticators by changing default content of authenticators prior to
+  information system installation."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a
+  procedures to change default authenticators prior to information system
+  installation.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Key Management Policy implementing procedures to change
+  default authenticators prior to information system installation.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented procedures to change default
+  authenticators to ensure the procedures are defined. The organization
+  conducting the inspection/assessment obtains and examines a sampling of
+  authenticator age data for default accounts to ensure that default
+  authenticators are changed prior to installation.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (This must be managed by
+  the organization to change any default passwords.)
+family: IA

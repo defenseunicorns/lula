@@ -1,0 +1,95 @@
+control-acronym: SI-11
+control-information: >-
+  Description:
+
+  The information system:
+
+  a. Generates error messages that provide information necessary for corrective
+  actions without revealing information that could be exploited by adversaries;
+  and
+
+  b. Reveals error messages only to [Assignment: organization-defined personnel
+  or roles].
+
+
+  Supplemental Guidance:
+
+  Organizations carefully consider the structure/content of error messages. The
+  extent to which information systems are able to identify and handle error
+  conditions is guided by organizational policy and operational requirements.
+  Information that could be exploited by adversaries includes, for example,
+  erroneous logon attempts with passwords entered by mistake as the username,
+  mission/business information that can be derived from (if not stated
+  explicitly by) information recorded, and personal information such as account
+  numbers, social security numbers, and credit card numbers. In addition, error
+  messages may provide a covert channel for transmitting information. Related
+  controls: AU-2, AU-3, SC-31.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing information system error handling; information system design
+  documentation; information system configuration settings and associated
+  documentation; documentation providing structure/content of error messages;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  information input validation; organizational personnel with information
+  security responsibilities; system/network administrators; system developer].
+
+
+  Test: [SELECT FROM: Organizational processes for error handling; automated
+  mechanisms supporting and/or implementing error handling; automated mechanisms
+  supporting and/or implementing management of error messages].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SI-11.1,CCI-001312,Local
+  SI-11.2,CCI-001314,Local
+  SI-11.3,CCI-002759,DoD Organization or Service Common Control Package...
+ap-acronym: SI-11.2
+cci: 1314
+cci-definition: "001314: The information system reveals error messages only to
+  organization-defined personnel or roles."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  reveal error messages only to the ISSO, ISSM, and SCA. For information system
+  components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  1314. DoD has defined the personnel or roles as the ISSO, ISSM, and SCA.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System security plan defines who is authorized to receive
+  error messages.
+
+  2.) Protection software configuration documentation only transmits error
+  message alerts to authorized personnel.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to reveal error messages
+  only to the ISSO, ISSM, and SCA. For information system components that have
+  applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 1314. DoD has defined the
+  personnel or roles as the ISSO, ISSM, and SCA.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: On the UDS infrastructure side, system component errors (like a
+  stack trace in Keycloak) are not exposed to end users in a way that would leak
+  security-critical info. UDS logs errors internally for debugging but those are
+  protected by systems administrator access through RBAC which ensures critical
+  error information is only available to organization-defined personnel or
+  roles.
+uds-alignment: Keycloak
+family: SI

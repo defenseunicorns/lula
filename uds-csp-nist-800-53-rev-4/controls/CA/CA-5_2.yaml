@@ -1,0 +1,67 @@
+control-acronym: CA-5
+control-information: "Description:
+
+  The organization:
+
+  a. Develops a plan of action and milestones for the information system to
+  document the organizationâs planned remedial actions to correct weaknesses
+  or deficiencies noted during the assessment of the security controls and to
+  reduce or eliminate known vulnerabilities in the system; and
+
+  b. Updates existing plan of action and milestones [Assignment:
+  organization-defined frequency] based on the findings from security controls
+  assessments, security impact analyses, and continuous monitoring activities.
+
+
+  Supplemental Guidance:
+
+  Plans of action and milestones are key documents in security authorization
+  packages and are subject to federal reporting requirements established by OMB.
+  Related controls: CA-2, CA-7, CM-4, PM-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Security assessment and authorization policy;
+  procedures addressing plan of action and milestones; security plan; security
+  assessment plan; security assessment report; security assessment evidence;
+  plan of action and milestones; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with plan of action and
+  milestones development and implementation responsibilities; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms for developing, implementing, and
+  maintaining plan of action and milestones]."
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CA-5.1,CCI-000264,Local
+  CA-5.2,CCI-000265,DoD Organization or Service Common Control Package
+  CA-5.3,CCI-000266,Local...
+ap-acronym: CA-5.2
+cci: 265
+cci-definition: "000265: The organization defines the frequency to update
+  existing plan of action and milestones for the information system."
+implementation-guidance: |-
+  DoD has defined the frequency as at least every 90 days.
+
+  Recommended Compelling Evidence:
+  Automatically Compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the frequency as at least every 90 days.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: CA

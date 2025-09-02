@@ -1,0 +1,65 @@
+control-acronym: SI-4(1)
+control-information: >-
+  Description:
+
+  The organization connects and configures individual intrusion detection tools
+  into an information system-wide intrusion detection system.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing information system monitoring tools and techniques; information
+  system design documentation; information system monitoring tools and
+  techniques documentation; information system configuration settings and
+  associated documentation; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system;
+  organizational personnel with responsibility for monitoring the information
+  system; organizational personnel with responsibility for the intrusion
+  detection system].
+
+
+  Test: [SELECT FROM: Organizational processes for intrusion
+  detection/information system monitoring; automated mechanisms supporting
+  and/or implementing intrusion detection capability].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SI-4(1).1
+cci: 2655
+cci-definition: "002655: Connects individual intrusion detection tools into an
+  system-wide intrusion detection system."
+implementation-guidance: >-
+  The organization being inspected/assessed connects individual intrusion
+  detection tools into an information system-wide intrusion detection system.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Logs from individual intrusion detection tools from information system
+  wide intrusion detection system.
+
+  2.) Architecture documentation of intrusion detection system and individual
+  tools.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system-wide intrusion detection system architecture
+  and individuals tools to ensure the organization being inspected/assessed
+  connects individual intrusion detection tools into an information system-wide
+  intrusion detection system.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SI

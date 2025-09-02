@@ -1,0 +1,76 @@
+control-acronym: SA-2
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Determines information security requirements for the information system or
+  information system service in mission/business process planning;
+
+  b. Determines, documents, and allocates the resources required to protect the
+  information system or information system service as part of its capital
+  planning and investment control process; and
+
+  c. Establishes a discrete line item for information security in organizational
+  programming and budgeting documentation.
+
+
+  Supplemental Guidance:
+
+  Resource allocation for information security includes funding for the initial
+  information system or information system service acquisition and funding for
+  the sustainment of the system/service. Related controls: PM-3, PM-11.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing the allocation of resources to information security requirements;
+  procedures addressing capital planning and investment control; organizational
+  programming and budgeting documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with capital planning,
+  investment control, organizational programming and budgeting responsibilities;
+  organizational personnel responsible for determining information security
+  requirements for information systems/services; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for determining information
+  security requirements; organizational processes for capital planning,
+  programming, and budgeting; automated mechanisms supporting and/or
+  implementing organizational capital planning, programming, and budgeting].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SA-2.6
+cci: 614
+cci-definition: "000614: The organization establishes a discrete line item for
+  information security in organizational budgeting documentation."
+implementation-guidance: >-
+  The organization being inspected/assessed identifies and establishes an
+  individual line item for cybersecurity requirements to protect the information
+  system as part of the planning, programming, and budget process (PPBE).
+
+  Recommended Compelling Evidence:
+
+  1.) Planning, programming and budget process (PPBE) documentation has a
+  discrete individual line item for cybersecurity requirements.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the planning, programming, and budget documentation to
+  ensure the organization being inspected/assessed has identified and
+  established an individual line item for cybersecurity requirements to protect
+  the information system.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (This is an organizational
+  level control that is related to mission resource planning which happens
+  outside of the UDS boundary.)
+family: SA

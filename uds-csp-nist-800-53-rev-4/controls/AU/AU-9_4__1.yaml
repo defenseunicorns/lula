@@ -1,0 +1,88 @@
+control-acronym: AU-9(4)
+control-information: >-
+  Description:
+
+  The organization authorizes access to management of audit functionality to
+  only [Assignment: organization-defined subset of privileged users].
+
+
+  Supplemental Guidance:
+
+  Individuals with privileged access to an information system and who are also
+  the subject of an audit by that system, may affect the reliability of audit
+  information by inhibiting audit activities or modifying audit records. This
+  control enhancement requires that privileged access be further defined between
+  audit-related privileges and other privileges, thus limiting the users with
+  audit-related privileges. Related control: AC-5.
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: When
+  audit information contains PII, the requirement for access to that audit
+  information is the same as for access to PII generally. As such, access to PII
+  in audit logs requires a need-to-know and privacy training commensurate with
+  level of responsibility and access. Privileged users must be evaluated to
+  determine if they have such a need-to-know as part of his or her security
+  function. Related Control: AR-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; access control policy
+  and procedures; procedures addressing protection of audit information;
+  information system design documentation; information system configuration
+  settings and associated documentation, system-generated list of privileged
+  users with access to management of audit functionality; access authorizations;
+  access control list; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Automated mechanisms managing access to audit
+  functionality].
+
+
+  Regulatory Statutory Reference: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: 5
+  U.S.C. Section: 552a(b)(1)
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-9(4).1
+cci: 1894
+cci-definition: "001894: The organization defines the subset of privileged users
+  who will be authorized access to the management of audit functionality."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the subset of
+  privileged users to be authorized access to the management of audit
+  functionality. DoD has determined the subset of privileged users is not
+  appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) List of privileged users who will be authorized access to the management
+  of audit functionality
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented subset of privileged users to be
+  authorized access to the management of audit functionality, to ensure the
+  organization being inspected/assessed defines and documents the subset of
+  privileged users to be authorized access to the management of audit
+  functionality. DoD has determined the subset of privileged users is not
+  appropriate to define at the Enterprise level.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AU

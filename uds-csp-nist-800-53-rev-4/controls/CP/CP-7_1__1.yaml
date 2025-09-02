@@ -1,0 +1,105 @@
+control-acronym: CP-7(1)
+control-information: >-
+  Description:
+
+  The organization identifies an alternate processing site that is separated
+  from the primary processing site to reduce susceptibility to the same threats.
+
+
+  Supplemental Guidance:
+
+  Threats that affect alternate processing sites are typically defined in
+  organizational assessments of risk and include, for example, natural
+  disasters, structural failures, hostile cyber attacks, and errors of
+  omission/commission. Organizations determine what is considered a sufficient
+  degree of separation between primary and alternate processing sites based on
+  the types of threats that are of concern. For one particular type of threat
+  (i.e., hostile cyber attack), the degree of separation between sites is less
+  relevant. Related control: RA-3.
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: CP-7 (1) Guidance:
+  The service provider may determine what is considered a sufficient degree of
+  separation between the primary and alternate processing sites, based on the
+  types of threats that are of concern. For one particular type of threat (i.e.,
+  hostile cyber attack), the degree of separation between sites will be less
+  relevant.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  alternate processing sites; contingency plan; alternate processing site;
+  alternate processing site agreements; primary processing site agreements;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  alternate processing site responsibilities; organizational personnel with
+  information system recovery responsibilities; organizational personnel with
+  information security responsibilities].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: >-
+  Customers can leverage multi-availability zone infrastructure and cross-region
+  replication to address alternate storage site controls if required by their
+  organization. Customers choosing to use AWS for primary and alternate
+  processing sites should determine if the sites meet their organization's
+  geographical separation requirements.
+
+
+  This control may be inheritable if customers choose an AWS region as an
+  alternate storage site. However, if part of any system that is being created
+  has components outside of AWS where this control applies, it is not
+  inheritable....
+ap-acronym: CP-7(1).1
+cci: 516
+cci-definition: "000516: The organization identifies an alternate processing
+  site that is separated from the primary processing site to reduce
+  susceptibility to the same threats."
+implementation-guidance: >-
+  The organization being inspected/assessed identifies and documents within the
+  contingency plan an alternate processing site not susceptible to the same
+  threats that exist at the primary processing site. The organization must
+  document threats in the risk management strategy IAW PM-9, CCI 000227.
+
+  Recommended Compelling Evidence:
+
+  1.) Risk management strategy
+
+  2.) Contingency plan that identifies an alternate processing site that is
+  separated from the processing site
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the risk management strategy and the contingency plan to
+  ensure the organization identifies an alternate processing site that is
+  separated from the primary processing site so as not to be susceptible to the
+  same threats identified at the primary site.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: CP

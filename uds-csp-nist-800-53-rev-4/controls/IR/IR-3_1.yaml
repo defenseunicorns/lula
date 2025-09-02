@@ -1,0 +1,80 @@
+control-acronym: IR-3
+control-information: >-
+  Description:
+
+  The organization tests the incident response capability for the information
+  system [Assignment: organization-defined frequency] using [Assignment:
+  organization-defined tests] to determine the incident response effectiveness
+  and documents the results.
+
+
+  Supplemental Guidance:
+
+  Organizations test incident response capabilities to determine the overall
+  effectiveness of the capabilities and to identify potential weaknesses or
+  deficiencies. Incident response testing includes, for example, the use of
+  checklists, walk-through or tabletop exercises, simulations (parallel/full
+  interrupt), and comprehensive exercises. Incident response testing can also
+  include a determination of the effects on organizational operations (e.g.,
+  reduction in mission capabilities), organizational assets, and individuals due
+  to incident response. Related controls: CP-4, IR-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; contingency planning policy;
+  procedures addressing incident response testing; procedures addressing
+  contingency plan testing; incident response testing material; incident
+  response test results; incident response test plan; incident response plan;
+  contingency plan; security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  testing responsibilities; organizational personnel with information security
+  responsibilities].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IR-3.1,CCI-000818,Organization AWS Cloud Brokerage Package
+  IR-3.2,CCI-000819,DoD Organization or Service Common Control Package
+  IR-3.3,CCI-000820,DoD Organization or Service Common Control Package
+  IR-3.4,CCI-001624,Organization AWS Cloud Brokerage Package...
+ap-acronym: IR-3.1
+cci: 818
+cci-definition: "000818: The organization tests the incident response capability
+  for the information system on an organization-defined frequency using
+  organization-defined tests to determine the incident response effectiveness."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to test its incident response capability for the information system at least
+  every six months for high availability and at least annually for low/med
+  availability using tests and as defined in the incident response plan. The
+  organization must maintain a record of test results. DoD has defined the
+  frequency as at least every six months for high availability and at least
+  annually for low/med availability. DoD has defined the tests as tests as
+  defined in the incident response plan.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Incident Response Test and/or after action reports
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process as well as the record of test
+  results to ensure the organization being inspected/assessed tests its incident
+  response capability for the information system at least every six months for
+  high availability and at least annually for low/med availability using tests
+  and as defined in the incident response plan. DoD has defined the frequency as
+  at least every six months for high availability and at least annually for
+  low/med availability. DoD has defined the tests as tests as defined in the
+  incident response plan.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IR

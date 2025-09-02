@@ -65,8 +65,9 @@ export class FileStore {
 	 * Get simple filename from control ID
 	 */
 	private getControlFilename(controlId: string): string {
-		// Sanitize control ID for filename (replace invalid characters)
-		const sanitized = controlId.replace(/[^\w\-.]/g, '_');
+		// Sanitize control ID for filename (replace invalid characters including dots)
+		// This ensures consistency with imported files that use underscores
+		const sanitized = controlId.replace(/[^\w\-]/g, '_');
 		return `${sanitized}.yaml`;
 	}
 
@@ -100,51 +101,71 @@ export class FileStore {
 	 * Load a control by ID
 	 */
 	async loadControl(controlId: string): Promise<Control | null> {
+		// controlId might be either the actual control ID (AC-1.1) or the filename without extension (AC-1_1)
+		// We need to handle both cases
+		
+		// Convert control ID to filename format (AC-1.1 -> AC-1_1)
+		const sanitizedId = controlId.replace(/[^\w\-]/g, '_');
+		
 		// Try flat structure first (atomic controls)
-		const flatFilename = `${controlId}.yaml`;
-		const flatFilePath = join(this.controlsDir, flatFilename);
-
-		if (existsSync(flatFilePath)) {
-			try {
-				const content = readFileSync(flatFilePath, 'utf8');
-				const parsed = YAML.parse(content);
-				// Ensure the control has an 'id' field
-				if (!parsed.id) {
-					parsed.id = getControlId(parsed, this.baseDir);
+		// Try both the original ID and sanitized version
+		const possibleFlatPaths = [
+			join(this.controlsDir, `${controlId}.yaml`),
+			join(this.controlsDir, `${sanitizedId}.yaml`)
+		];
+		
+		for (const flatFilePath of possibleFlatPaths) {
+			if (existsSync(flatFilePath)) {
+				try {
+					const content = readFileSync(flatFilePath, 'utf8');
+					const parsed = YAML.parse(content);
+					// Ensure the control has an 'id' field
+					// Always use the original control ID format (with dots)
+					if (!parsed.id) {
+						parsed.id = controlId;
+					}
+					return parsed as Control;
+				} catch (error) {
+					console.error(`Failed to load control ${controlId} from flat structure:`, error);
+					throw new Error(
+						`Failed to load control ${controlId}: ${error instanceof Error ? error.message : String(error)}`
+					);
 				}
-				return parsed as Control;
-			} catch (error) {
-				console.error(`Failed to load control ${controlId} from flat structure:`, error);
-				throw new Error(
-					`Failed to load control ${controlId}: ${error instanceof Error ? error.message : String(error)}`
-				);
 			}
 		}
 
 		// Fallback to family-based structure
 		const family = this.getControlFamily(controlId);
-		const filename = this.getControlFilename(controlId);
 		const familyDir = join(this.controlsDir, family);
-		const filePath = join(familyDir, filename);
-
-		if (!existsSync(filePath)) {
-			return null;
-		}
-
-		try {
-			const content = readFileSync(filePath, 'utf8');
-			const parsed = YAML.parse(content);
-			// Ensure the control has an 'id' field
-			if (!parsed.id) {
-				parsed.id = getControlId(parsed, this.baseDir);
+		
+		// Try both formats in family directory
+		const possibleFamilyPaths = [
+			join(familyDir, `${controlId}.yaml`),
+			join(familyDir, `${sanitizedId}.yaml`)
+		];
+		
+		for (const filePath of possibleFamilyPaths) {
+			if (existsSync(filePath)) {
+				try {
+					const content = readFileSync(filePath, 'utf8');
+					const parsed = YAML.parse(content);
+					// Ensure the control has an 'id' field
+					// Always use the original control ID format (with dots)
+					if (!parsed.id) {
+						parsed.id = controlId;
+					}
+					return parsed as Control;
+				} catch (error) {
+					console.error(`Failed to load control ${controlId}:`, error);
+					throw new Error(
+						`Failed to load control ${controlId}: ${error instanceof Error ? error.message : String(error)}`
+					);
+				}
 			}
-			return parsed as Control;
-		} catch (error) {
-			console.error(`Failed to load control ${controlId}:`, error);
-			throw new Error(
-				`Failed to load control ${controlId}: ${error instanceof Error ? error.message : String(error)}`
-			);
 		}
+		
+		// Control not found in any location
+		return null;
 	}
 
 	/**
@@ -166,20 +187,57 @@ export class FileStore {
 		}
 
 		try {
-			// Create control data with simple metadata
-			const controlWithMetadata = {
-				_metadata: {
-					controlId,
-					family
-				},
-				...control
-			};
-
-			const yamlContent = YAML.stringify(controlWithMetadata, {
-				indent: 2,
-				lineWidth: 0,
-				minContentWidth: 0
-			});
+			// If file exists, only update changed fields to preserve format
+			let yamlContent: string;
+			if (existsSync(filePath)) {
+				// Read existing file content as text to preserve exact format
+				const existingContent = readFileSync(filePath, 'utf8');
+				const existingControl = YAML.parse(existingContent);
+				
+				// Only update fields that actually changed from the control object
+				// Remove runtime fields that should never be persisted
+				const fieldsToUpdate: any = {};
+				for (const key in control) {
+					if (key === 'timeline' || key === 'unifiedHistory' || key === '_metadata' || key === 'id') {
+						continue; // Skip runtime fields
+					}
+					// Only include fields that are different from existing
+					if (JSON.stringify(control[key]) !== JSON.stringify(existingControl[key])) {
+						fieldsToUpdate[key] = control[key];
+					}
+				}
+				
+				// If there are changes, update only those fields
+				if (Object.keys(fieldsToUpdate).length > 0) {
+					const updatedControl = { ...existingControl, ...fieldsToUpdate };
+					
+					// Parse and re-stringify to maintain consistent format
+					// But use more conservative settings to preserve existing style
+					yamlContent = YAML.stringify(updatedControl, {
+						indent: 2,
+						lineWidth: 80,  // Standard line width
+						defaultStringType: 'PLAIN',  // Use plain strings by default
+						defaultKeyType: 'PLAIN'
+					});
+				} else {
+					// No changes, keep existing content
+					yamlContent = existingContent;
+				}
+			} else {
+				// New file - create with standard format
+				const controlToSave: any = { ...control };
+				delete controlToSave.timeline;
+				delete controlToSave.unifiedHistory;
+				delete controlToSave._metadata;
+				delete controlToSave.id;
+				
+				yamlContent = YAML.stringify(controlToSave, {
+					indent: 2,
+					lineWidth: 80,
+					defaultStringType: 'PLAIN',
+					defaultKeyType: 'PLAIN'
+				});
+			}
 
 			writeFileSync(filePath, yamlContent, 'utf8');
 
@@ -257,7 +315,8 @@ export class FileStore {
 			for (const file of files) {
 				try {
 					// Extract control ID from filename
-					const controlId = file.replace('.yaml', '').replace(/_/g, '/'); // Handle sanitized names
+					// Keep the original filename format (AC-1_1.yaml means control ID AC-1.1)
+					const controlId = file.replace('.yaml', '');
 
 					const control = await this.loadControl(controlId);
 					if (control) {

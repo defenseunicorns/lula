@@ -1,0 +1,79 @@
+control-acronym: IA-5(7)
+control-information: >-
+  Description:
+
+  The organization ensures that unencrypted static authenticators are not
+  embedded in applications or access scripts or stored on function keys.
+
+
+  Supplemental Guidance:
+
+  Organizations exercise caution in determining whether embedded or stored
+  authenticators are in encrypted or unencrypted form. If authenticators are
+  used in the manner stored, then those representations are considered
+  unencrypted authenticators. This is irrespective of whether that
+  representation is perhaps an encrypted version of something else (e.g., a
+  password).
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing authenticator management; information system design documentation;
+  information system configuration settings and associated documentation;
+  logical access scripts; application code reviews for detecting unencrypted
+  static authenticators; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with authenticator
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  authenticator management capability; automated mechanisms implementing
+  authentication in applications].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-5(7).3
+cci: 2367
+cci-definition: "002367: The organization ensures unencrypted static
+  authenticators are not embedded in applications."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements
+  requirements that static authenticators are not embedded in applications.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated SOP/TTP requiring that static authenticators are not
+  embedded in applications.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the requirements that static authenticators are not
+  embedded in applications to ensure the organization being inspected/assessed
+  ensures unencrypted static authenticators are not embedded in applications.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: "In UDS, unencrypted static authenticators are explicitly
+  disallowed from being hard-coded into application binaries or source code.
+  Instead, sensitive authentication credentials are centrally managed using
+  Kubernetes Secrets, which can be configured to store secrets in base64-encoded
+  form and optionally encrypt them at rest using an encryption provider in etcd.
+  These credentials are dynamically injected into application pods at runtime
+  through environment variables or mounted as secret volumes, ensuring that no
+  plaintext values are included in the application image. Additionally, UDS
+  integrates with secure vault solutions that provide API-driven access to
+  secrets with fine-grained access controls and audit logging. Keycloakâs
+  credential management further enforces secure storage and retrieval of
+  authentication data by using token-based authentication flows and
+  certificate-based validation, ensuring that credentials are never statically
+  embedded."
+uds-alignment: Kubernetes, Keycloak
+family: IA

@@ -1,0 +1,76 @@
+control-acronym: AC-11(1)
+control-information: >-
+  Description:
+
+  The information system conceals, via the session lock, information previously
+  visible on the display with a publicly viewable image.
+
+
+  Supplemental Guidance:
+
+  Publicly viewable images can include static or dynamic images, for example,
+  patterns used with screen savers, photographic images, solid colors, clock,
+  battery life indicator, or a blank screen, with the additional caveat that
+  none of the images convey sensitive information.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing session
+  lock; display screen with session lock activated; information system design
+  documentation; information system configuration settings and associated
+  documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Information system session lock mechanisms].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-11(1).1
+cci: 60
+cci-definition: "000060: The information system conceals, via the session lock,
+  information previously visible on the display with a publicly viewable image."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  conceal, via the session lock, information previously visible on the display
+  with a publicly viewable image. For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 60.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan (SSP)
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to conceal, via the
+  session lock, information previously visible on the display with a publicly
+  viewable image. For information system components that have applicable STIGs
+  or SRGs, the organization conducting the inspection/assessment evaluates the
+  components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 60.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (By default, Keycloak
+  doesn't automatically change the user's screen when a session expires due to
+  inactivity. Instead, the current page remains displayed, and the session
+  timeout occurs silently on the server side. Only when the user attempts
+  another interaction, like navigating or submitting a form, will the session
+  expiration become apparent, prompting a redirect to Keycloak's login screen
+  for reauthentication. To proactively handle this, applications can implement
+  custom logic, such as client-side timers or periodic background checks, to
+  detect inactivity and prompt the user accordingly, but this behavior isn't
+  provided automatically by Keycloak.)
+family: AC

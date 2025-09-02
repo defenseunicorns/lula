@@ -1,0 +1,73 @@
+control-acronym: AC-20(2)
+control-information: >-
+  Description:
+
+  The organization [Selection: restricts; prohibits] the use of
+  organization-controlled portable storage devices by authorized individuals on
+  external information systems.
+
+
+  Supplemental Guidance:
+
+  Limits on the use of organization-controlled portable storage devices in
+  external information systems include, for example, complete prohibition of the
+  use of such devices or restrictions on how the devices may be used and under
+  what conditions the devices may be used.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing the use of
+  external information systems; security plan; information system configuration
+  settings and associated documentation; information system connection or
+  processing agreements; account management documents; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  restricting or prohibiting use of organization-controlled storage devices on
+  external information systems; system/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing restrictions on use of
+  portable storage devices].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: ...
+ap-acronym: AC-20(2).1
+cci: 97
+cci-definition: "000097: The organization restricts or prohibits the use of
+  organization-controlled portable storage devices by authorized individuals on
+  external information systems."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to restrict or policy to prohibit the use of organization-controlled portable
+  storage devices by authorized individuals on external information systems.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security (SSP)
+
+  2.) Signed and dated MOU/MOA with any external information systems
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process or policy to ensure the
+  organization being inspected/assessed restricts or prohibits the use of
+  organization-controlled portable storage devices by authorized individuals on
+  external information systems.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: "Not Applicable to UDS technology stack. (Any restrictions on
+  using UDS from personal or external devices, or terms of use for external
+  system connections, must be handled by policy. UDS does not inherently enforce
+  device-specific rules beyond standard network access control. The expectation
+  is that the hosting environmentâs policies prevent unauthorized external
+  system use.)"
+family: AC

@@ -1,0 +1,91 @@
+control-acronym: MA-1
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Develops, documents, and disseminates to [Assignment: organization-defined
+  personnel or roles]:
+
+  1. A system maintenance policy that addresses purpose, scope, roles,
+  responsibilities, management commitment, coordination among organizational
+  entities, and compliance; and
+
+  2. Procedures to facilitate the implementation of the system maintenance
+  policy and associated system maintenance controls; and
+
+  b. Reviews and updates the current:
+
+  1. System maintenance policy [Assignment: organization-defined frequency]; and
+
+  2. System maintenance procedures [Assignment: organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  This control addresses the establishment of policy and procedures for the
+  effective implementation of selected security controls and control
+  enhancements in the MA family. Policy and procedures reflect applicable
+  federal laws, Executive Orders, directives, regulations, policies, standards,
+  and guidance. Security program policies and procedures at the organization
+  level may make the need for system-specific policies and procedures
+  unnecessary. The policy can be included as part of the general information
+  security policy for organizations or conversely, can be represented by
+  multiple policies reflecting the complex nature of certain organizations. The
+  procedures can be established for the security program in general and for
+  particular information systems, if needed. The organizational risk management
+  strategy is a key factor in establishing policy and procedures. Related
+  control: PM-9.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Maintenance policy and procedures; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with maintenance
+  responsibilities; organizational personnel with information security
+  responsibilities].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  MA-1.1,CCI-002861,DoD Organization or Service Common Control Package
+  MA-1.2,CCI-002862,DoD Organization or Service Common Control Package
+  MA-1.3,CCI-000852,Organization AWS Cloud Brokerage Package
+  MA-1.4,CCI-000853,Organization AWS Cloud Brokerage Package
+  MA-1.5,CCI-000855,Organization AWS Cloud Brokerage Package
+  MA-1.6,CCI-000856,Organization AWS Cloud Brokerage Package
+  MA-1.7,CCI-000851,DoD Organization or Service Common Control Package
+  MA-1.8,CCI-000854,Organization AWS Cloud Brokerage Package
+  MA-1.9,CCI-000857,Organization AWS Cloud Brokerage Package
+  MA-1.10,CCI-001628,DoD Organization or Service Common Control Package...
+ap-acronym: MA-1.5
+cci: 855
+cci-definition: "000855: The organization develops and documents procedures to
+  facilitate the implementation of the system maintenance policy and associated
+  system maintenance controls."
+implementation-guidance: >-
+  The organization being inspected/assessed documents the maintenance procedures
+  within the Security Plan. The maintenance procedures shall be developed IAW
+  maintenance policy provided in DoDI 8500.01..
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Security Plan, including maintenance procedures that are
+  developed IAW maintenance policy provided in CCI 000852.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the Security Plan to ensure maintenance procedures are
+  documented and are developed IAW maintenance policy provided in DoDI 8500.01..
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: MA

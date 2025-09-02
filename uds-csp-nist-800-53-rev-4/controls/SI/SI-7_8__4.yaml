@@ -1,0 +1,106 @@
+control-acronym: SI-7(8)
+control-information: >-
+  Description:
+
+  The information system, upon detection of a potential integrity violation,
+  provides the capability to audit the event and initiates the following
+  actions: [Selection (one or more): generates an audit record; alerts current
+  user; alerts [Assignment: organization-defined personnel or roles];
+  [Assignment: organization-defined other actions]].
+
+
+  Supplemental Guidance:
+
+  Organizations select response actions based on types of software, specific
+  software, or information for which there are potential integrity violations.
+  Related controls: AU-2, AU-6, AU-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing software, firmware, and information integrity; information system
+  design documentation; information system configuration settings and associated
+  documentation; integrity verification tools and associated documentation;
+  records of integrity scans; incident response records, list of
+  security-relevant changes to the information system; automated tools
+  supporting alerts and notifications if unauthorized security changes are
+  detected; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  software, firmware, and/or information integrity; organizational personnel
+  with information security responsibilities; system/network administrators;
+  system developer].
+
+
+  Test: [SELECT FROM: Software, firmware, and information integrity verification
+  tools; automated mechanisms supporting and/or implementing the capability to
+  audit potential integrity violations; automated mechanisms supporting and/or
+  implementing alerts about potential integrity violations].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SI-7(8).1,CCI-002721,DoD Organization or Service Common Control Package
+  SI-7(8).2,CCI-002722,Local
+  SI-7(8).3,CCI-002723,Local
+  SI-7(8).4,CCI-002724,Local...
+ap-acronym: SI-7(8).4
+cci: 2724
+cci-definition: "002724: The information system, upon detection of a potential
+  integrity violation, initiates one or more of following actions: generates an
+  audit record; alerts current user; alerts organization-defined personnel or
+  roles; and/or organization-defined other actions."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  initiate one or more of following actions: generates an audit record; alerts
+  current user; alerts at a minimum, the ISSO and ISSM; and/or other actions
+  defined in SI-7 (8), CCI 2722 upon detection of a potential integrity
+  violation. For information system components that have applicable STIGs or
+  SRGs, the organization being inspected/assessed must comply with the STIG/SRG
+  guidance that pertains to CCI 2724. DoD has defined the personnel or roles as
+  at a minimum, the ISSO and ISSM.
+
+  Recommended Compelling Evidence:
+
+  1.) Configuration documentation for the information system to initiate one or
+  more of following actions: generates an audit record; alerts current user;
+  alerts at a minimum, the ISSO and ISSM; and/or other actions defined in SI-7
+  (8), CCI 2722 upon detection of a potential integrity violation.
+
+  2.) Audit records of alerts or other actions defined in SI-7(8), CCI 2722.
+assessment-procedures: "The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to initiate one or more
+  of following actions: generates an audit record; alerts current user; alerts
+  at a minimum, the ISSO and ISSM; and/or other actions defined in SI-7 (8), CCI
+  2722 upon detection of a potential integrity violation. For information system
+  components that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 2724. DoD has defined the
+  personnel or roles as at a minimum, the ISSO and ISSM."
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS actively responds to potential integrity violations through
+  its integrated security tools. Specifically, NeuVector immediately detects
+  unauthorized container modifications, runtime anomalies, and integrity
+  deviations, automatically generating detailed audit records and real-time
+  alerts to designated security administrators. Additionally, Vector and Loki
+  aggregate these security event logs, preserving detailed audit trails. Alerts
+  generated by NeuVector and metrics monitored via Prometheus and Grafana ensure
+  rapid visibility of potential integrity violations, notifying defined
+  organizational personnel or security roles to facilitate timely incident
+  response. Collectively, these capabilities meet the requirement by promptly
+  initiating audit logging and alerting actions upon detection of potential
+  integrity violations.
+uds-alignment: Neuvector, Vector, Loki, Prometheus, Grafana
+family: SI

@@ -1,0 +1,87 @@
+control-acronym: AU-12(3)
+control-information: >-
+  Description:
+
+  The information system provides the capability for [Assignment:
+  organization-defined individuals or roles] to change the auditing to be
+  performed on [Assignment: organization-defined information system components]
+  based on [Assignment: organization-defined selectable event criteria] within
+  [Assignment: organization-defined time thresholds].
+
+
+  Supplemental Guidance:
+
+  This control enhancement enables organizations to extend or limit auditing as
+  necessary to meet organizational requirements. Auditing that is limited to
+  conserve information system resources may be extended to address certain
+  threat situations. In addition, auditing may be limited to a specific set of
+  events to facilitate audit reduction, analysis, and reporting. Organizations
+  can establish time thresholds in which audit actions are changed, for example,
+  near real-time, within minutes, or within hours. Related control: AU-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit record generation; information system design documentation; information
+  system configuration settings and associated documentation; system-generated
+  list of individuals or roles authorized to change auditing to be performed;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit record generation
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing audit record generation
+  capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-12(3).2
+cci: 1912
+cci-definition: "001912: The organization defines the time thresholds for
+  organizational-defined individuals or roles to change the auditing to be
+  performed based on organization-defined selectable event criteria."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the time
+  thresholds for individuals or roles to change the auditing to be performed on
+  information system components based on selectable event criteria defined in
+  AU-12 (3), CCI 1911 occurs. DoD has determined the time thresholds are not
+  appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy, referencing section
+  defining the time threshold for organizational-defined individuals or roles to
+  change the auditing
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented time thresholds to ensure the organization
+  being inspected/assessed defines the time thresholds for individuals or roles
+  to change the auditing to be performed on information system components based
+  on selectable event criteria defined in AU-12 (3), CCI 1911 occurs. DoD has
+  determined the time thresholds are not appropriate to define at the Enterprise
+  level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (UDS supports dynamic
+  changes to auditing configurations through its integrated logging solutions
+  (Vector, Loki, and Grafana), enabling authorized personnel to adjust audit
+  settings rapidly in response to selectable event criteria (e.g., security
+  incidents, unusual system activity, or compliance requirements). These tools
+  allow for real-time or near-real-time modification of audit configurations by
+  designated administrative roles defined through centralized identity
+  management (Keycloak) and Kubernetes RBAC policies. However, explicitly
+  defining and formally documenting specific time thresholds for authorized
+  personnel to implement changes to auditing based on selectable event criteria
+  is an organizational responsibility.)
+family: AU

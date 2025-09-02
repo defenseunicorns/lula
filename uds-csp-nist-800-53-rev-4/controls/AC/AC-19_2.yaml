@@ -1,0 +1,107 @@
+control-acronym: AC-19
+control-information: >-
+  Description:
+
+  The organization
+
+  a. Establishes usage restrictions, configuration requirements, connection
+  requirements, and implementation guidance for organization-controlled mobile
+  devices; and
+
+  b. Authorizes the connection of mobile devices to organizational information
+  systems.
+
+
+  Supplemental Guidance:
+
+  A mobile device is a computing device that: (i) has a small form factor such
+  that it can easily be carried by a single individual; (ii) is designed to
+  operate without a physical connection (e.g., wirelessly transmit or receive
+  information); (iii) possesses local, non-removable or removable data storage;
+  and (iv) includes a self-contained power source. Mobile devices may also
+  include voice communication capabilities, on-board sensors that allow the
+  device to capture information, and/or built-in features for synchronizing
+  local data with remote locations. Examples include smart phones, E-readers,
+  and tablets. Mobile devices are typically associated with a single individual
+  and the device is usually in close proximity to the individual; however, the
+  degree of proximity can vary depending upon on the form factor and size of the
+  device. The processing, storage, and transmission capability of the mobile
+  device may be comparable to or merely a subset of desktop systems, depending
+  upon the nature and intended purpose of the device. Due to the large variety
+  of mobile devices with different technical characteristics and capabilities,
+  organizational restrictions may vary for the different classes/types of such
+  devices. Usage restrictions and specific implementation guidance for mobile
+  devices include, for example, configuration management, device identification
+  and authentication, implementation of mandatory protective software (e.g.,
+  malicious code detection, firewall), scanning devices for malicious code,
+  updating virus protection software, scanning for critical software updates and
+  patches, conducting primary operating system (and possibly other resident
+  software) integrity checks, and disabling unnecessary hardware (e.g.,
+  wireless, infrared). Organizations are cautioned that the need to provide
+  adequate security for mobile devices goes beyond the requirements in this
+  control. Many safeguards and countermeasures for mobile devices are reflected
+  in other security controls in the catalog allocated in the initial control
+  baselines as starting points for the development of security plans and
+  overlays using the tailoring process. There may also be some degree of overlap
+  in the requirements articulated by the security controls within the different
+  families of controls. AC-20 addresses mobile devices that are not
+  organization-controlled. Related controls: AC-3, AC-7, AC-18, AC-20, CA-9,
+  CM-2, IA-2, IA-3, MP-2, MP-4, MP-5, PL-4, SC-7, SC-43, SI-3, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing access
+  control for mobile device usage (including restrictions); configuration
+  management plan; security plan; information system design documentation;
+  information system configuration settings and associated documentation;
+  authorizations for mobile device connections to organizational information
+  systems; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel using mobile devices to
+  access organizational information systems; system/network administrators;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Access control capability authorizing mobile device
+  connections to organizational information systems].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-19.1,CCI-000082,Local
+  AC-19.2,CCI-000083,Local
+  AC-19.3,CCI-002325,DoD Organization or Service Common Control Package
+  AC-19.4,CCI-002326,Local
+  AC-19.5,CCI-000084,Local...
+ap-acronym: AC-19.2
+cci: 83
+cci-definition: "000083: The organization establishes implementation guidance
+  for organization controlled mobile devices."
+implementation-guidance: >-
+  The organization being inspected/assessed establishes and documents
+  implementation guidance for organization controlled mobile devices.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan (SSP)
+
+  2.) Signed and dated mobile devices policy
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented implementation guidance to ensure the
+  organization being inspected/assessed establishes implementation guidance for
+  organization controlled mobile devices.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: "Not Applicable to UDS technology stack. (Control of mobile
+  devices is outside UDSâs domain. UDS doesnât manage mobile device
+  security; that would be handled by mobile device management or policies on
+  client side.)"
+family: AC

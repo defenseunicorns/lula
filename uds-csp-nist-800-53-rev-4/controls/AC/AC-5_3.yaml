@@ -1,0 +1,90 @@
+control-acronym: AC-5
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Separates [Assignment: organization-defined duties of individuals];
+
+  b. Documents separation of duties of individuals; and
+
+  c. Defines information system access authorizations to support separation of
+  duties.
+
+
+  Supplemental Guidance:
+
+  Separation of duties addresses the potential for abuse of authorized
+  privileges and helps to reduce the risk of malevolent activity without
+  collusion. Separation of duties includes, for example: (i) dividing mission
+  functions and information system support functions among different individuals
+  and/or roles; (ii) conducting information system support functions with
+  different individuals (e.g., system management, programming, configuration
+  management, quality assurance and testing, and network security); and (iii)
+  ensuring security personnel administering access control functions do not also
+  administer audit functions. Related controls: AC-3, AC-6, PE-3, PE-4, PS-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing divisions
+  of responsibility and separation of duties; information system configuration
+  settings and associated documentation; list of divisions of responsibility and
+  separation of duties; information system access authorizations; information
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  defining appropriate divisions of responsibility and separation of duties;
+  organizational personnel with information security responsibilities;
+  system/network administrators].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing separation of duties
+  policy].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-5.3
+cci: 1380
+cci-definition: "001380: The organization documents separation of duties of individuals."
+implementation-guidance: >-
+  The organization being inspected/assessed documents separation of duties of
+  individuals.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated access control policy
+
+  2.) Job description documentation
+
+  3.) Signed and dated documentation that define the separation of duties of
+  individuals
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented separation of duties to ensure the
+  organization being inspected/assessed documents separation of duties of
+  individuals.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS provides technical capabilities to enforce documented
+  organizational requirements for separation of duties through its integrated
+  Role-Based Access Control (RBAC) mechanisms. Specifically, Keycloak supports
+  clearly defined and documented administrator roles such as system
+  administration, security auditing, and application management ensuring
+  responsibilities are explicitly separated and documented in accordance with
+  organizational policies. Additionally, Kubernetes RBAC provides granular
+  control to clearly document and enforce the distinct responsibilities of
+  personnel or service accounts related to system management, application
+  deployment, and security configuration. Istio Service Mesh further complements
+  this by enabling documented traffic management policies, clearly
+  distinguishing administrative functions from operational user traffic.
+uds-alignment: Keycloak, Istio, Kubernetes
+family: AC

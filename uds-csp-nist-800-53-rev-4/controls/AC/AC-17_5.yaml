@@ -1,0 +1,117 @@
+control-acronym: AC-17
+control-information: >-
+  Description:
+
+  The organization
+
+  a. Establishes and documents usage restrictions, configuration/connection
+  requirements, and implementation guidance for each type of remote access
+  allowed; and
+
+  b. Authorizes remote access to the information system prior to allowing such
+  connections.
+
+
+  Supplemental Guidance:
+
+  Remote access is access to organizational information systems by users (or
+  processes acting on behalf of users) communicating through external networks
+  (e.g., the Internet). Remote access methods include, for example, dial-up,
+  broadband, and wireless. Organizations often employ encrypted virtual private
+  networks (VPNs) to enhance confidentiality and integrity over remote
+  connections. The use of encrypted VPNs does not make the access non-remote;
+  however, the use of VPNs, when adequately provisioned with appropriate
+  security controls (e.g., employing appropriate encryption techniques for
+  confidentiality and integrity protection) may provide sufficient assurance to
+  the organization that it can effectively treat such connections as internal
+  networks. Still, VPN connections traverse external networks, and the encrypted
+  VPN does not enhance the availability of remote connections. Also, VPNs with
+  encrypted tunnels can affect the organizational capability to adequately
+  monitor network communications traffic for malicious code. Remote access
+  controls apply to information systems other than public web servers or systems
+  designed for public access. This control addresses authorization prior to
+  allowing remote access without specifying the formats for such authorization.
+  While organizations may use interconnection security agreements to authorize
+  remote access connections, such agreements are not required by this control.
+  Enforcing access restrictions for remote connections is addressed in AC-3.
+  Related controls: AC-2, AC-3, AC-18, AC-19, AC-20, CA-3, CA-7, CM-8, IA-2,
+  IA-3, IA-8, MA-4, PE-17, PL-4, SC-10, SI-4.
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: Allow
+  remote access to PII only with two-factor authentication where one of the
+  factors is provided by a device separate from the computer gaining access.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing remote
+  access implementation and usage (including restrictions); configuration
+  management plan; security plan; information system configuration settings and
+  associated documentation; remote access authorizations; information system
+  audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  managing remote access connections; system/network administrators;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Remote access management capability for the information
+  system].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay:
+  Limiting access to PII from remote networks and/or restricting activities that
+  can be conducted with PII remotely reduces the risk of intentional and
+  unintentional disclosures of PII that may not exist on an internal network.
+
+
+  Regulatory Statutory Reference: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: OMB
+  M-06-16; OMB M-07-16
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-17.5
+cci: 65
+cci-definition: "000065: The organization authorizes remote access to the
+  information system prior to allowing such connections"
+implementation-guidance: >-
+  The organization being inspected/assessed authorizes remote access to the
+  information system prior to allowing such connections. The organization must
+  maintain an audit trail of authorizations.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Access Control Policy (ACL's).
+
+  2.) Signed and dated SSP.
+
+  3.) Signed and dated Standard user agreements.
+
+  4.) Signed and dated Privileged user agreement.
+
+  5.) Site's audit trail of authorizations that shows/describes authorizing
+  remote access to the information system prior to allowing such connections.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the audit trail of authorizations to ensure the
+  organization being inspected/assessed authorizes remote access to the
+  information system prior to allowing such connections.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AC

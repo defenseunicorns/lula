@@ -1,0 +1,110 @@
+control-acronym: CP-6
+control-information: >-
+  Description:
+
+  The organization
+
+  a. Establishes an alternate storage site including necessary agreements to
+  permit the storage and retrieval of information system backup information; and
+
+  b. Ensures that the alternate storage site provides information security
+  safeguards equivalent to that of the primary site.
+
+
+  Supplemental Guidance:
+
+  Alternate storage sites are sites that are geographically distinct from
+  primary storage sites. An alternate storage site maintains duplicate copies of
+  information and data in the event that the primary storage site is not
+  available. Items covered by alternate storage site agreements include, for
+  example, environmental conditions at alternate sites, access rules, physical
+  and environmental protection requirements, and coordination of
+  delivery/retrieval of backup media. Alternate storage sites reflect the
+  requirements in contingency plans so that organizations can maintain essential
+  missions/business functions despite disruption, compromise, or failure in
+  organizational information systems. Related controls: CP-2, CP-7, CP-9, CP-10,
+  MP-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  alternate storage sites; contingency plan; alternate storage site agreements;
+  primary storage site agreements; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  alternate storage site responsibilities; organizational personnel with
+  information system recovery responsibilities; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for storing and retrieving
+  information system backup information at the alternate storage site; automated
+  mechanisms supporting and/or implementing storage and retrieval of information
+  system backup information at the alternate storage site].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: >-
+  Customers can leverage multi-availability zone infrastructure and cross-region
+  replication for services that support it to address alternate storage site
+  controls if required by their organization.
+
+
+  This control may be inheritable if customers choose an AWS region as an
+  alternate storage site. However, if part of any system that is being created
+  has components outside of AWS where this control applies, it is not
+  inheritable....
+ap-acronym: CP-6.2
+cci: 2836
+cci-definition: "002836: The organization ensures that the alternate storage
+  site provides information security safeguards equivalent to that of the
+  primary site."
+implementation-guidance: >-
+  The organization being inspected/assessed documents the information security
+  safeguards that are in place at both the primary and alternate sites and
+  evidence that the alternate site was approved based on an assessment that
+  security is equivalent at the alternate site.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation of the primary/alternate site information security
+  safeguards that are in place
+
+  2.) Signed documentation that the alternate site was approved based on an
+  assessment that security is equivalent at the alternate site.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documentation of the primary/alternate site
+  information security safeguards that are in place as well as evidence that the
+  alternate site was approved based on an assessment that security is equivalent
+  at the alternate site.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: CP

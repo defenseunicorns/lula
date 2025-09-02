@@ -1,0 +1,91 @@
+control-acronym: SC-43
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Establishes usage restrictions and implementation guidance for [Assignment:
+  organization-defined information system components] based on the potential to
+  cause damage to the information system if used maliciously; and
+
+  b. Authorizes, monitors, and controls the use of such components within the
+  information system.
+
+
+  Supplemental Guidance:
+
+  Information system components include hardware, software, or firmware
+  components (e.g., Voice Over Internet Protocol, mobile code, digital copiers,
+  printers, scanners, optical devices, wireless technologies, mobile devices).
+  Related controls: CM-6, SC-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing usage restrictions; usage restrictions; implementation policy and
+  procedures; authorization records; information system monitoring records;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system].
+
+
+  Test: [SELECT FROM: Organizational processes for authorizing, monitoring, and
+  controlling use of components with usage restrictions; Automated mechanisms
+  supporting and/or implementing authorizing, monitoring, and controlling use of
+  components with usage restrictions].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-43.1,CCI-002559,DoD Organization or Service Common Control Package
+  SC-43.2,CCI-002560,Local
+  SC-43.3,CCI-002561,Local
+  SC-43.4,CCI-002562,Local
+  SC-43.5,CCI-002563,Local...
+ap-acronym: SC-43.5
+cci: 2563
+cci-definition: "002563: The organization controls the use of
+  organization-defined information system components which have the potential to
+  cause damage to the information system if used maliciously."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to control the use of all information system components (through the use of an
+  acceptable use agreement) which have the potential to cause damage to the
+  information system if used maliciously. DoD has defined the information system
+  components as all information system components (through the use of an
+  acceptable use agreement). Recommended Compelling Evidence:
+
+  1.) Signed and dated user agreement.
+
+  2.) System security plan (SSP) (reference "usage" section).
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process to ensure the organization being
+  inspected/assessed controls the use of all information system components
+  (through the use of an acceptable use agreement). DoD has defined the
+  information system components as all information system components (through
+  the use of an acceptable use agreement).
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS strictly enforces software usage restrictions and usage of
+  approved software components. Through the use of Zarf packages and
+  Infrastructure as Code (OpenTofu), only vetted and explicitly defined
+  components are included and deployed. Unauthorized or unapproved software
+  cannot run on the platform due to enforcement mechanisms provided by Pepr
+  policy engine and container-level security with NeuVector, which continuously
+  scans for unauthorized images or software components. NeuVector will identify
+  and block any malicious or unauthorized images, preventing execution of
+  components outside the defined security boundary. These measures ensure strict
+  adherence to organizational software usage policies, effectively mitigating
+  risk from components or software not authorized by the organization,
+uds-alignment: Zarf, OpenTofu, Pepr, Neuvector
+family: SC

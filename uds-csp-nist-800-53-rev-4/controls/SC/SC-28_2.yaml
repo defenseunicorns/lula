@@ -1,0 +1,78 @@
+control-acronym: SC-28
+control-information: >-
+  Description:
+
+  The information system protects the [Selection (one or more): confidentiality;
+  integrity] of [Assignment: organization-defined information at rest].
+
+
+  Supplemental Guidance:
+
+  This control addresses the confidentiality and integrity of information at
+  rest and covers user information and system information. Information at rest
+  refers to the state of information when it is located on storage devices as
+  specific components of information systems. System-related information
+  requiring protection includes, for example, configurations or rule sets for
+  firewalls, gateways, intrusion detection/prevention systems, filtering
+  routers, and authenticator content. Organizations may employ different
+  mechanisms to achieve confidentiality and integrity protections, including the
+  use of cryptographic mechanisms and file share scanning. Integrity protection
+  can be achieved, for example, by implementing Write-Once-Read-Many (WORM)
+  technologies. Organizations may also employ other security controls including,
+  for example, secure off-line storage in lieu of online storage when adequate
+  protection of information at rest cannot otherwise be achieved and/or
+  continuous monitoring to identify malicious code at rest. Related controls:
+  AC-3, AC-6, CA-7, CM-3, CM-5, CM-6, PE-3, SC-8, SC-13, SI-3, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing protection of information at rest; information system design
+  documentation; information system configuration settings and associated
+  documentation; cryptographic mechanisms and associated configuration
+  documentation; list of information at rest requiring confidentiality and
+  integrity protections; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  confidentiality and integrity protections for information at rest].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-28.2
+cci: 2472
+cci-definition: "002472: The organization defines the information at rest that
+  is to be protected by the information system."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the
+  information at rest that is to be protected by the information system which
+  must include, at a minimum, PII and classified information. DoD has determined
+  the information at rest is not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System Security Plan (SSP) should define the information
+  at rest that is to be protected by the information system.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented information at rest to ensure the
+  organization being inspected/assessed defines and documents the information at
+  rest that is to be protected by the information system which must include, at
+  a minimum, PII and classified information. DoD has determined the information
+  at rest is not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (UDS encrypts all data at
+  rest within the platform but the organization must still define according to
+  their needs or requirements.)
+family: SC

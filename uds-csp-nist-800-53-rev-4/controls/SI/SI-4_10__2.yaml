@@ -1,0 +1,81 @@
+control-acronym: SI-4(10)
+control-information: >-
+  Description:
+
+  The organization makes provisions so that [Assignment: organization-defined
+  encrypted communications traffic] is visible to [Assignment:
+  organization-defined information system monitoring tools].
+
+
+  Supplemental Guidance:
+
+  Organizations balance the potentially conflicting needs for encrypting
+  communications traffic and for having insight into such traffic from a
+  monitoring perspective. For some organizations, the need to ensure the
+  confidentiality of communications traffic is paramount; for others,
+  mission-assurance is of greater concern. Organizations determine whether the
+  visibility requirement applies to internal encrypted traffic, encrypted
+  traffic intended for external destinations, or a subset of the traffic types.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing information system monitoring tools and techniques; information
+  system design documentation; information system monitoring tools and
+  techniques documentation; information system configuration settings and
+  associated documentation; information system protocols; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system;
+  organizational personnel with responsibility for monitoring the information
+  system; organizational personnel with responsibility for the intrusion
+  detection system].
+
+
+  Test: [SELECT FROM: Organizational processes for intrusion
+  detection/information system monitoring; automated mechanisms supporting
+  and/or implementing intrusion detection/information system monitoring
+  capability; automated mechanisms supporting and/or implementing visibility of
+  encrypted communications traffic to monitoring tools].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SI-4(10).2
+cci: 2666
+cci-definition: "002666: The organization defines the information system
+  monitoring tools that will have visibility into organization-defined encrypted
+  communications traffic."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the
+  information system monitoring tools that will have visibility into
+  organization-defined encrypted communications traffic. DoD has determined the
+  information system monitoring tools are not appropriate to define at the
+  Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan defines the information system
+  monitoring tools that will have visibility into organization-defined encrypted
+  communications traffic.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented information system monitoring tools to
+  ensure the organization being inspected/assessed defines the information
+  system monitoring tools that will have visibility into organization-defined
+  encrypted communications traffic. DoD has determined the information system
+  monitoring tools are not appropriate to define at the Enterprise level.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SI

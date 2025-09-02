@@ -66,7 +66,7 @@ against a local git repo.
 
 ```
 examples/nist-800-53-v4-moderate/
-├── control-set.yaml          # Control set metadata
+├── lula.yaml                 # Control set metadata
 ├── controls/                 # Individual control files
 │   ├── AC/                   # Access Control family
 │   ├── AU/                   # Audit family

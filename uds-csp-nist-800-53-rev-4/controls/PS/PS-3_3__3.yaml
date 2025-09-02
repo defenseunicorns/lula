@@ -1,0 +1,78 @@
+control-acronym: PS-3(3)
+control-information: >-
+  Description:
+
+  The organization ensures that individuals accessing an information system
+  processing, storing, or transmitting information requiring special protection:
+
+  (a) Have valid access authorizations that are demonstrated by assigned
+  official government duties; and
+
+  (b) Satisfy [Assignment: organization-defined additional personnel screening
+  criteria].
+
+
+  Supplemental Guidance:
+
+  Organizational information requiring special protection includes, for example,
+  Controlled Unclassified Information (CUI) and Sources and Methods Information
+  (SAMI). Personnel security criteria include, for example, position sensitivity
+  background screening requirements.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Personnel security policy; access control policy,
+  procedures addressing personnel screening; records of screened personnel;
+  screening criteria; records of access authorizations; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for ensuring valid access
+  authorizations for information requiring special protection; organizational
+  process for additional personnel screening for information requiring special
+  protection].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: PS-3(3).3
+cci: 3021
+cci-definition: "003021: The organization defines additional personnel screening
+  criteria that individuals accessing an information system processing, storing,
+  or transmitting information requiring protection must satisfy."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents additional
+  personnel screening criteria that individuals accessing an information system
+  processing, storing, or transmitting information requiring protection must
+  satisfy. DoD has determined the additional personnel screening criteria is not
+  appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) SOP/TTP that defines additional personnel screening criteria that
+  individuals accessing an information system processing, storing, or
+  transmitting information requiring protection must satisfy.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented additional personnel screening criteria to
+  ensure the organization being inspected/assessed defines additional personnel
+  screening criteria that individuals accessing an information system
+  processing, storing, or transmitting information requiring protection must
+  satisfy. DoD has determined the additional personnel screening criteria is not
+  appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (UDS is unrelated to
+  personnel security controls, which cover hiring, transfer, agreements,
+  termination, etc.)
+family: PS

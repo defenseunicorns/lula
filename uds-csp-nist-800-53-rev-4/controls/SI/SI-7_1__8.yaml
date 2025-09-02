@@ -1,0 +1,97 @@
+control-acronym: SI-7(1)
+control-information: >-
+  Description:
+
+  The information system performs an integrity check of [Assignment:
+  organization-defined software, firmware, and information] [Selection (one or
+  more): at startup; at [Assignment: organization-defined transitional states or
+  security-relevant events]; [Assignment: organization-defined frequency]].
+
+
+  Supplemental Guidance:
+
+  Security-relevant events include, for example, the identification of a new
+  threat to which organizational information systems are susceptible, and the
+  installation of new hardware, software, or firmware. Transitional states
+  include, for example, system startup, restart, shutdown, and abort.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing software, firmware, and information integrity; information system
+  design documentation; information system configuration settings and associated
+  documentation; integrity verification tools and associated documentation;
+  records of integrity scans; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  software, firmware, and/or information integrity; organizational personnel
+  with information security responsibilities; system/network administrators;
+  system developer].
+
+
+  Test: [SELECT FROM: Software, firmware, and information integrity verification
+  tools].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SI-7(1).1,CCI-002705,Local
+  SI-7(1).2,CCI-002706,Organization AWS Cloud Brokerage Package
+  SI-7(1).3,CCI-002707,Local
+  SI-7(1).4,CCI-002708,Local
+  SI-7(1).5,CCI-002709,DoD Organization or Service Common Control Package
+  SI-7(1).6,CCI-002710,Local
+  SI-7(1).7,CCI-002711,Organization AWS Cloud Brokerage Package
+  SI-7(1).8,CCI-002712,Local...
+ap-acronym: SI-7(1).8
+cci: 2712
+cci-definition: "002712: The information system performs an integrity check of
+  organization-defined information at startup, at organization-defined
+  transitional states or security-relevant events, or on organization-defined
+  frequency."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  perform an integrity check of information defined in SI-7 (1), CCI 2707 at
+  startup, at transitional states or security-relevant events defined in SI-7
+  (1), CCI 2708, or annually. For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 2712. DoD has defined
+  the frequency as annually.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System security plan lists the organization-defined
+  frequency at which integrity verification is performed on software.
+
+  2.) Trail of records (containing valid date/time stamps) to confirm frequency
+  of integrity validation.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to perform an integrity
+  check of information defined in SI-7 (1), CCI 2707 at startup, at transitional
+  states or security-relevant events defined in SI-7 (1), CCI 2708, or annually.
+  For information system components that have applicable STIGs or SRGs, the
+  organization conducting the inspection/assessment evaluates the components to
+  ensure that the organization being inspected/assessed has configured the
+  information system in compliance with the applicable STIGs and SRGs pertaining
+  to CCI 2712. DoD has defined the frequency as annually.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: In UDS, integrity checks for organization-defined software are
+  performed at multiple points throughout the system lifecycle. At startup, each
+  container image or Zarf package is validated using cryptographic signatures
+  and baseline comparisons via OpenTofu to ensure that only approved software is
+  deployed. Transitional states such as during deployments, configuration
+  changes, or security-relevant events trigger automated integrity checks
+  through Pepr policies, which promptly revalidate the affected components and
+  flag any deviations.
+uds-alignment: Zarf, OpenTofu, Pepr
+family: SI

@@ -1,0 +1,75 @@
+control-acronym: PE-2(3)
+control-information: >-
+  Description:
+
+  The organization restricts unescorted access to the facility where the
+  information system resides to personnel with [Selection (one or more):
+  security clearances for all information contained within the system; formal
+  access authorizations for all information contained within the system; need
+  for access to all information contained within the system; [Assignment:
+  organization-defined credentials]].
+
+
+  Supplemental Guidance:
+
+  Due to the highly sensitive nature of classified information stored within
+  certain facilities, it is important that individuals lacking sufficient
+  security clearances, access approvals, or need to know, be escorted by
+  individuals with appropriate credentials to ensure that such information is
+  not exposed or otherwise compromised. Related controls: PS-2, PS-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing physical access authorizations; authorized personnel
+  access list; security clearances; access authorizations; access credentials;
+  physical access control logs or records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access
+  authorization responsibilities; organizational personnel with physical access
+  to information system facility; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for physical access
+  authorizations; automated mechanisms supporting and/or implementing physical
+  access authorizations].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: PE-2(3).2
+cci: 2914
+cci-definition: "002914: The organization defines the credentials required for
+  personnel to have unescorted access to the facility where the information
+  system resides."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the
+  credentials required for personnel to have unescorted access to the facility
+  where the information system resides. DoD has determined the credentials are
+  not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation on the credentials required for personnel to have unescorted
+  access to facility
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented credentials to ensure the organization
+  being inspected/assessed defines the credentials required for personnel to
+  have unescorted access to the facility where the information system resides.
+  DoD has determined the credentials are not appropriate to define at the
+  Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (Physical access controls,
+  monitoring, device protection, etc., must be managed in the data center, cloud
+  facility, or on-premise environment and are not functions of UDS. UDS assumes
+  the physical environment is secured per organizational policy.)
+family: PE

@@ -1,0 +1,113 @@
+control-acronym: SA-10(1)
+control-information: >-
+  Description:
+
+  The organization requires the developer of the information system, system
+  component, or information system service to enable integrity verification of
+  software and firmware components.
+
+
+  Supplemental Guidance:
+
+  This control enhancement allows organizations to detect unauthorized changes
+  to software and firmware components through the use of tools, techniques,
+  and/or mechanisms provided by developers. Integrity checking mechanisms can
+  also address counterfeiting of software and firmware components. Organizations
+  verify the integrity of software and firmware components, for example, through
+  secure one-way hashes provided by developers. Delivered software and firmware
+  components also include any updates to such components. Related control: SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing system developer configuration management; solicitation
+  documentation; acquisition documentation; service-level agreements;
+  acquisition contracts for the information system; system component, or
+  information system service; system developer configuration management plan;
+  software and firmware integrity verification records; system change
+  authorization records; change control records; configuration management
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and services
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with configuration
+  management responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Organizational processes for monitoring developer
+  configuration management; automated mechanisms supporting and/or implementing
+  the monitoring of developer configuration management].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SA-10(1).1
+cci: 698
+cci-definition: "000698: The organization requires the developer of the
+  information system, system component, or information system service to enable
+  integrity verification of software and firmware components."
+implementation-guidance: "The organization being inspected/assessed requires
+  within contracts/agreements that the developer of the information system,
+  system component, or information system service enable integrity verification
+  of software and firmware components.
+
+
+  The organization being inspected/assessed requires the developer to enable
+  integrity verification of software and firmware that may include:
+
+  1. Stipulating and monitoring logical delivery of products and services,
+  requiring downloading from approved, verification-enhanced sites;
+
+  2. Encrypting elements (software, software patches, etc.) and supply chain
+  process data in transit (motion) and at rest throughout delivery;
+
+  3. Requiring suppliers to provide their elements âsecure by defaultâ, so
+  that additional configuration is required to make the element insecure;
+
+  4. Implementing software designs using programming languages and tools that
+  reduce the likelihood of weaknesses;
+
+  5. Implementing cryptographic hash verification; and
+
+  6. Establishing performance and sub-element baseline for the system and system
+  elements to help detect unauthorized tampering/modification during
+  repairs/refurbishing.
+
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP).
+
+  2.) System development life cycle (SDLC) documentation.
+
+  3.) Continuous monitoring plan must document developer integrity verification
+  of software and firmware components."
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the contracts/agreements to ensure the organization being
+  inspected/assessed requires that the developer of the information system,
+  system component, or information system service enable integrity verification
+  of software and firmware components.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS implements integrity verification mechanisms for software and
+  firmware components across several layers of the stack. Grype performs
+  vulnerability scanning and software composition analysis, while OpenTofu
+  ensures infrastructure-as-code (IaC) integrity. Zarf secures the supply chain
+  by cryptographically signing software bundles and verifying authenticity
+  before deployment, with SBOM tracking to detect unauthorized modifications.
+  Istio enforces mutual TLS (mTLS) for secure service communication, and
+  NeuVector provides runtime security by blocking unsigned or tampered
+  workloads. Vector and Loki enable immutable logging and tamper detection.
+  Velero ensures secure backup integrity with cryptographic hashing for tamper
+  detection before restoration. These combined controls safeguard the integrity
+  of software and firmware, ensuring a secure and compliant deployment.
+uds-alignment: Gype, Zarf, OpenTofu, Istio, Velero, Vector, Loki
+family: SA

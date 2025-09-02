@@ -1,0 +1,77 @@
+control-acronym: AC-2(3)
+control-information: >-
+  Description:
+
+  The information system automatically disables inactive accounts after
+  [Assignment: organization-defined time period].
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; security plan; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system-generated list of temporary accounts removed and/or
+  disabled; information system-generated list of emergency accounts removed
+  and/or disabled; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing account management
+  functions].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-2(3).1,CCI-000017,Local
+  AC-2(3).2,CCI-000217,DoD Organization or Service Common Control Package...
+ap-acronym: AC-2(3).1
+cci: 17
+cci-definition: "000017: The information system automatically disables inactive
+  accounts after an organization-defined time period."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  disable inactive accounts after 35 days. For information system components
+  that have applicable STIGs or SRGs, the organization being inspected/assessed
+  must comply with the STIG/SRG guidance that pertains to CCI 000017. DoD has
+  defined the time period as 35 days.
+
+  Recommended Compelling Evidence:
+
+  1.) Access control policy which defines the process for disabling inactive
+  accounts after 35 days.
+
+  2.) Applicable STIG/SRG checks.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to disable inactive
+  accounts after 35 days. For information system components that have applicable
+  STIGs or SRGs, the organization conducting the inspection/assessment evaluates
+  the components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 000017. DoD has defined the time period as 35 days.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: "Not Applicable to tech stack. (This control calls for
+  automatically disabling inactive accounts after an organization-defined time.
+  Out-of-the-box, Keycloak does not automatically lock or remove user accounts
+  purely due to inactivity over a long period. Administrators would have to
+  periodically review login activity (which Keycloak records per user) and
+  manually disable accounts that haven't been used within the threshold. Itâs
+  possible to extend Keycloak or use scripts to implement this (e.g., a
+  scheduled job that queries for users who haven't logged in within 60 days and
+  disables them), but UDS doesnât include that automation by default. Thus,
+  while the data is available (last login timestamps, etc., are accessible and
+  could be acted on), UDS only partially meets this control: inactive account
+  disabling must be handled via administrative process or additional tooling.)"
+family: AC

@@ -1,0 +1,101 @@
+control-acronym: PM-4
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Implements a process for ensuring that plans of action and milestones for
+  the security program and associated organizational information systems:
+
+  1. Are developed and maintained;
+
+  2. Document the remedial information security actions to adequately respond to
+  risk to organizational operations and assets, individuals, other
+  organizations, and the Nation; and
+
+  3. Are reported in accordance with OMB FISMA reporting requirements.
+
+  b. Reviews plans of action and milestones for consistency with the
+  organizational risk management strategy and organization-wide priorities for
+  risk response actions.
+
+
+  Supplemental Guidance:
+
+  The plan of action and milestones is a key document in the information
+  security program and is subject to federal reporting requirements established
+  by OMB. With the increasing emphasis on organization-wide risk management
+  across all three tiers in the risk management hierarchy (i.e., organization,
+  mission/business process, and information system), organizations view plans of
+  action and milestones from an organizational perspective, prioritizing risk
+  response actions and ensuring consistency with the goals and objectives of the
+  organization. Plan of action and milestones updates are based on findings from
+  security control assessments and continuous monitoring activities. OMB FISMA
+  reporting guidance contains instructions regarding organizational plans of
+  action and milestones. Related control: CA-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information security program plan; plans of action and
+  milestones; procedures addressing plans of action and milestones development
+  and maintenance; procedures addressing plans of action and milestones
+  reporting; procedures for review of plans of action and milestones for
+  consistency with risk management strategy and risk response priorities;
+  results of risk assessments associated with plans of action and milestones;
+  OMB FISMA reporting requirements; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  developing, maintaining, reviewing, and reporting plans of action and
+  milestones; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for plan of action and milestones
+  development, review, maintenance, reporting; automated mechanisms supporting
+  plans of action and milestones].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PM-4.1,CCI-000142,DoD Organization or Service Common Control Package
+  PM-4.2,CCI-002991,DoD Organization or Service Common Control Package
+  PM-4.3,CCI-000170,DoD Organization or Service Common Control Package
+  PM-4.4,CCI-002992,DoD Organization or Service Common Control Package
+  PM-4.5,CCI-002993,Local...
+ap-acronym: PM-4.4
+cci: 2992
+cci-definition: "002992: The organization implements a process for ensuring that
+  plans of action and milestones for the security program and associated
+  organizational information systems are reported in accordance with OMB FISMA
+  reporting requirements."
+implementation-guidance: >-
+  DoDI 8510.01 and the Knowledge Service meet the DoD requirements to implement
+  a process ensuring that the plans of action and milestones for the security
+  program are reported in accordance with OMB FISMA reporting requirements.
+
+  DoD Components are automatically compliant with this CCI because they are
+  covered by the DoD level policy, DoDI 8510.01 and the Knowledge Service.
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per DoDI 8510.01.
+assessment-procedures: >-
+  DoDI 8510.01 and the Knowledge Service meet the DoD requirements to implement
+  a process ensuring that the plans of action and milestones for the security
+  program are reported in accordance with OMB FISMA reporting requirements.
+
+  DoD Components are automatically compliant with this CCI because they are
+  covered by the DoD level policy, DoDI 8510.01 and the Knowledge Service.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PM

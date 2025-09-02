@@ -1,0 +1,76 @@
+control-acronym: SC-23(3)
+control-information: >-
+  Description:
+
+  The information system generates a unique session identifier for each session
+  with [Assignment: organization-defined randomness requirements] and recognizes
+  only session identifiers that are system-generated.
+
+
+  Supplemental Guidance:
+
+  This control enhancement curtails the ability of adversaries from reusing
+  previously valid session IDs. Employing the concept of randomness in the
+  generation of unique session identifiers helps to protect against brute-force
+  attacks to determine future session identifiers. Related control: SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing session authenticity; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  generating and monitoring unique session identifiers; automated mechanisms
+  supporting and/or implementing randomness requirements].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-23(3).3
+cci: 1664
+cci-definition: "001664: The information system recognizes only session
+  identifiers that are system-generated."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  recognize only session identifiers that are system-generated. For information
+  system components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  1664.
+
+  Recommended Compelling Evidence:
+
+  1.) System-generated session identifiers.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to recognize only session
+  identifiers that are system-generated. For information system components that
+  have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 1664.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS utilizes Keycloak for managing authentication sessions, which
+  exclusively accepts session identifiers generated internally through its
+  cryptographic mechanisms (JWT tokens and session cookies). Keycloak validates
+  tokens and rejects any externally supplied or user-manipulated session
+  identifiers that are not cryptographically verified.  Istio Service Mesh
+  employs mutual TLS certificates issued internally through the embedded
+  certificate authority (Citadel), strictly accepting only internally generated
+  session credentials for secure inter-service communication.
+uds-alignment: Keycloak, Istio
+family: SC

@@ -1,0 +1,81 @@
+control-acronym: IA-3
+control-information: >-
+  Description:
+
+  The information system uniquely identifies and authenticates [Assignment:
+  organization-defined specific and/or types of devices] before establishing a
+  [Selection (one or more): local; remote; network] connection.
+
+
+  Supplemental Guidance:
+
+  Organizational devices requiring unique device-to-device identification and
+  authentication may be defined by type, by device, or by a combination of
+  type/device. Information systems typically use either shared known information
+  (e.g., Media Access Control [MAC] or Transmission Control Protocol/Internet
+  Protocol [TCP/IP] addresses) for device identification or organizational
+  authentication solutions (e.g., IEEE 802.1x and Extensible Authentication
+  Protocol [EAP], Radius server with EAP-Transport Layer Security [TLS]
+  authentication, Kerberos) to identify/authenticate devices on local and/or
+  wide area networks. Organizations determine the required strength of
+  authentication mechanisms by the security categories of information systems.
+  Because of the challenges of applying this control on large scale,
+  organizations are encouraged to only apply the control to those limited number
+  (and type) of devices that truly need to support this capability. Related
+  controls: AC-17, AC-18, AC-19, CA-3, IA-4, IA-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing device identification and authentication; information system design
+  documentation; list of devices requiring unique identification and
+  authentication; device connection reports; information system configuration
+  settings and associated documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with operational
+  responsibilities for device identification and authentication; organizational
+  personnel with information security responsibilities; system/network
+  administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing device
+  identification and authentication capability].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IA-3.1,CCI-000777,DoD Organization or Service Common Control Package
+  IA-3.2,CCI-000778,Local
+  IA-3.3,CCI-001958,Local...
+ap-acronym: IA-3.1
+cci: 777
+cci-definition: "000777: The organization defines a list of specific and/or
+  types of devices for which identification and authentication is required
+  before establishing a connection to the information system."
+implementation-guidance: >-
+  DoD has defined the value as all mobile devices and network connected endpoint
+  devices (including but not limited to: workstations, printers, servers
+  (outside a datacenter), VoIP Phones, VTC CODECs).
+
+
+  Recommended Compelling Evidence:
+
+  Automatically Compliant
+assessment-procedures: "The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the value as all mobile devices and network connected
+  endpoint devices (including but not limited to: workstations, printers,
+  servers (outside a datacenter), VoIP Phones, VTC CODECs)."
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: IA

@@ -1,0 +1,97 @@
+control-acronym: MP-6(3)
+control-information: >-
+  Description:
+
+  The organization applies nondestructive sanitization techniques to portable
+  storage devices prior to connecting such devices to the information system
+  under the following circumstances: [Assignment: organization-defined
+  circumstances requiring sanitization of portable storage devices].
+
+
+  Supplemental Guidance:
+
+  This control enhancement applies to digital media containing classified
+  information and Controlled Unclassified Information (CUI). Portable storage
+  devices can be the source of malicious code insertions into organizational
+  information systems. Many of these devices are obtained from unknown and
+  potentially untrustworthy sources and may contain malicious code that can be
+  readily transferred to information systems through USB ports or other entry
+  portals. While scanning such storage devices is always recommended,
+  sanitization provides additional assurance that the devices are free of
+  malicious code to include code capable of initiating zero-day attacks.
+  Organizations consider nondestructive sanitization of portable storage devices
+  when such devices are first purchased from the manufacturer or vendor prior to
+  initial use or when organizations lose a positive chain of custody for the
+  devices. Related control: SI-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information system media protection policy; procedures
+  addressing media sanitization and disposal; list of circumstances requiring
+  sanitization of portable storage devices; media sanitization records; audit
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  media sanitization responsibilities; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for media sanitization of
+  portable storage devices; automated mechanisms supporting and/or implementing
+  media sanitization].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, but NOT included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: MP-6(3).2
+cci: 1033
+cci-definition: "001033: The organization defines circumstances requiring
+  sanitization of portable storage devices prior to connecting such devices to
+  the information system."
+implementation-guidance: >-
+  DoD has defined the list circumstances as when such devices are first
+  purchased from the manufacturer or vendor prior to initial use, when being
+  considered for reuse, or when the organization loses a positive chain of
+  custody for the device. Media obtained from unknown sources shall not be
+  sanitized and reused.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the circumstances as when such devices are first
+  purchased from the manufacturer or vendor prior to initial use, when being
+  considered for reuse, or when the organization loses a positive chain of
+  custody for the device. Media obtained from unknown sources shall not be
+  sanitized and reused.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: MP

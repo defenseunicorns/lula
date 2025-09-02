@@ -1,0 +1,89 @@
+control-acronym: AC-17(1)
+control-information: >-
+  Description:
+
+  The information system monitors and controls remote access methods.
+
+
+  Supplemental Guidance:
+
+  Automated monitoring and control of remote access sessions allows
+  organizations to detect cyber attacks and also ensure ongoing compliance with
+  remote access policies by auditing connection activities of remote users on a
+  variety of information system components (e.g., servers, workstations,
+  notebook computers, smart phones, and tablets). Related controls: AU-2, AU-12.
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: Audit
+  all remote access to, and actions on, resources containing PII. Related
+  Control: AU-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing remote
+  access to the information system; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system audit records; information system monitoring records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms monitoring and controlling remote
+  access methods].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay:
+  Auditing remote access ensures unauthorized connections to information systems
+  containing PII can be detected across all information system platforms (e.g.,
+  servers, mobile devices, work stations).
+
+
+  Regulatory Statutory Reference: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: OMB
+  M-06-16; OMB M-07-16
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-17(1).1
+cci: 67
+cci-definition: "000067: The information system monitors remote access methods."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  monitor remote access methods. For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 67.
+
+  Recommended Compelling Evidence:
+
+  1.) Log files that record remote access and blocks
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to monitor remote access
+  methods. For information system components that have applicable STIGs or SRGs,
+  the organization conducting the inspection/assessment evaluates the components
+  to ensure that the organization being inspected/assessed has configured the
+  information system in compliance with the applicable STIGs and SRGs pertaining
+  to CCI 67.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AC

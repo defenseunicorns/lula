@@ -1,0 +1,88 @@
+control-acronym: AU-4
+control-information: >-
+  Description:
+
+  The organization allocates audit record storage capacity in accordance with
+  [Assignment: organization-defined audit record storage requirements].
+
+
+  Supplemental Guidance:
+
+  Organizations consider the types of auditing to be performed and the audit
+  processing requirements when allocating audit storage capacity. Allocating
+  sufficient audit storage capacity reduces the likelihood of such capacity
+  being exceeded and resulting in the potential loss or reduction of auditing
+  capability. Related controls: AU-2, AU-5, AU-6, AU-7, AU-11, SI-4.
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay:
+  Related Controls: AR-4, AU-5(1), AU-9, AU-9(2), AU-11.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit storage capacity; information system design documentation; information
+  system configuration settings and associated documentation; audit record
+  storage requirements; audit record storage capability for information system
+  components; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Audit record storage capacity and related configuration
+  settings].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay:
+  Adequate storage capacity for logs used to audit privacy-related controls
+  reduces the likelihood of the logs exceeding available storage space and
+  potentially losing log information or reducing auditing capability. Audit
+  information could be necessary to enforce criminal or civil penalties under
+  the Privacy Act, and providing adequate storage capacity allows for preserving
+  complete audit information for these purposes.
+
+
+  Regulatory Statutory Reference: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: 5
+  U.S.C. Section: 552a(i); OMB M-07-16; OMB Circular A-130, 7.g. and Appendix II
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-4.1
+cci: 1848
+cci-definition: "001848: The organization defines the audit record storage requirements."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the required
+  audit record storage capacity. DoD has determined the audit record storage
+  requirements are not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented audit record storage requirements to
+  ensure the organization being inspected/assessed has defined those
+  requirements. DoD has determined the audit record storage requirements are not
+  appropriate to define at the Enterprise level.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AU

@@ -1,0 +1,91 @@
+control-acronym: PM-7
+control-information: >-
+  Description:
+
+  The organization develops an enterprise architecture with consideration for
+  information security and the resulting risk to organizational operations,
+  organizational assets, individuals, other organizations, and the Nation.
+
+
+  Supplemental Guidance:
+
+  The enterprise architecture developed by the organization is aligned with the
+  Federal Enterprise Architecture. The integration of information security
+  requirements and associated security controls into the organization's
+  enterprise architecture helps to ensure that security considerations are
+  addressed by organizations early in the system development life cycle and are
+  directly and explicitly related to the organization's mission/business
+  processes. This process of security requirements integration also embeds into
+  the enterprise architecture, an integral information security architecture
+  consistent with organizational risk management and information security
+  strategies. For PM-7, the information security architecture is developed at a
+  system-of-systems level (organization-wide), representing all of the
+  organizational information systems. For PL-8, the information security
+  architecture is developed at a level representing an individual information
+  system but at the same time, is consistent with the information security
+  architecture defined for the organization. Security requirements and security
+  control integration are most effectively accomplished through the application
+  of the Risk Management Framework and supporting security standards and
+  guidelines. The Federal Segment Architecture Methodology provides guidance on
+  integrating information security requirements and security controls into
+  enterprise architectures. Related controls: PL-2, PL-8, PM-11, RA-2, SA-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information security program plan; enterprise
+  architecture documentation; procedures addressing enterprise architecture
+  development; results of risk assessment of enterprise architecture; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  program planning and plan implementation responsibilities; organizational
+  personnel responsible for developing enterprise architecture; organizational
+  personnel responsible for risk assessment of enterprise architecture;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for enterprise architecture
+  development; automated mechanisms supporting the enterprise architecture and
+  its development].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: ...
+ap-acronym: PM-7.1
+cci: 212
+cci-definition: "000212: The organization develops an enterprise architecture
+  with consideration for information security and the resulting risk to
+  organizational operations, organizational assets, individuals, other
+  organizations, and the Nation."
+implementation-guidance: >-
+  The GIG IA Architecture meets the DoD requirements for enterprise
+  architecture.
+
+
+  DoD components are automatically compliant with this CCI as they covered at
+  the DoD level.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per GIG IA Architecture.
+assessment-procedures: >-
+  The GIG IA Architecture meets the DoD requirements for enterprise
+  architecture.
+
+
+  DoD components are automatically compliant with this CCI as they covered at
+  the DoD level.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: PM

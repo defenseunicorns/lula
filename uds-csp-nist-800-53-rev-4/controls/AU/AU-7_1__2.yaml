@@ -1,0 +1,78 @@
+control-acronym: AU-7(1)
+control-information: >-
+  Description:
+
+  The information system provides the capability to process audit records for
+  events of interest based on [Assignment: organization-defined audit fields
+  within audit records].
+
+
+  Supplemental Guidance:
+
+  Events of interest can be identified by the content of specific audit record
+  fields including, for example, identities of individuals, event types, event
+  locations, event times, event dates, system resources involved, IP addresses
+  involved, or information objects accessed. Organizations may define audit
+  event criteria to any degree of granularity required, for example, locations
+  selectable by general networking location (e.g., by network or subnetwork) or
+  selectable by specific information system component. Related controls: AU-2,
+  AU-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit reduction and report generation; information system design
+  documentation; information system configuration settings and associated
+  documentation; audit reduction, review, analysis, and reporting tools; audit
+  record criteria (fields) establishing events of interest; information system
+  audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit reduction and
+  report generation responsibilities; organizational personnel with information
+  security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Audit reduction and report generation capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-7(1).2
+cci: 1883
+cci-definition: "001883: The organization defines the audit fields within audit
+  records to be processed for events of interest by the information system."
+implementation-guidance: >-
+  The organization being inspected/assessed must define and document the audit
+  fields within audit records to be processed for events of interest by the
+  information system. DoD has determined that the audit fields are not
+  appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+
+  2.) Example of audit log report based on events of interest
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented audit fields to ensure the organization
+  being inspected/assessed defines the audit fields within audit records to be
+  processed for events of interest by the information system. DoD has determined
+  that the audit fields are not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS provides extensive audit logging capabilities through its
+  integrated logging and monitoring components (Vector and Loki), enabling
+  comprehensive capture of audit fields including user identity, timestamps,
+  source/destination addresses, actions performed, and authentication outcomes.
+  UDS allows administrators to configure and define precisely which audit fields
+  are collected, processed, and analyzed, ensuring logs contain sufficient
+  details to investigate security events thoroughly.
+uds-alignment: Loki, Vector
+family: AU

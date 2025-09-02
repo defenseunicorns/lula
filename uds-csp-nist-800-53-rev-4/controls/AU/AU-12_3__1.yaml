@@ -1,0 +1,90 @@
+control-acronym: AU-12(3)
+control-information: >-
+  Description:
+
+  The information system provides the capability for [Assignment:
+  organization-defined individuals or roles] to change the auditing to be
+  performed on [Assignment: organization-defined information system components]
+  based on [Assignment: organization-defined selectable event criteria] within
+  [Assignment: organization-defined time thresholds].
+
+
+  Supplemental Guidance:
+
+  This control enhancement enables organizations to extend or limit auditing as
+  necessary to meet organizational requirements. Auditing that is limited to
+  conserve information system resources may be extended to address certain
+  threat situations. In addition, auditing may be limited to a specific set of
+  events to facilitate audit reduction, analysis, and reporting. Organizations
+  can establish time thresholds in which audit actions are changed, for example,
+  near real-time, within minutes, or within hours. Related control: AU-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit record generation; information system design documentation; information
+  system configuration settings and associated documentation; system-generated
+  list of individuals or roles authorized to change auditing to be performed;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit record generation
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing audit record generation
+  capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-12(3).1
+cci: 1911
+cci-definition: "001911: The organization defines the selectable event criteria
+  to be used as the basis for changes to the auditing to be performed on
+  organization-defined information system components, by organization-defined
+  individuals or roles, within organization-defined time thresholds."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the selectable
+  event criteria for which changed auditing is to be performed. DoD has
+  determined the selectable event criteria is not appropriate to define at the
+  Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy, referencing section
+  pertaining to selectable event criteria to be used as the basis for changes to
+  the auditing
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented selectable event criteria to ensure the
+  organization being inspected/assessed defines the selectable event criteria
+  for which changed auditing is to be performed. DoD has determined the
+  selectable event criteria is not appropriate to define at the Enterprise
+  level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (UDS provides flexible and
+  dynamic auditing capabilities through its integrated logging and monitoring
+  solutions (Vector, Loki, and Grafana). These solutions enable administrators
+  or designated organizational roles to dynamically adjust audit configurations
+  based on selectable event criteria, such as user authentication events, access
+  violations, administrative changes, or specific system alerts. The
+  configurable nature of these tools supports rapid updates to auditing rules
+  and criteria, facilitating real-time adaptation to emerging threats or
+  organizational requirements. However, explicitly defining and documenting the
+  precise selectable event criteria, authorized individuals or roles permitted
+  to change auditing configurations, and specific time thresholds for
+  implementing these changes remains an organizational responsibility.
+  Organizations deploying UDS must clearly establish these criteria within
+  internal security policies or audit procedures to fully comply with this
+  control.)
+family: AU

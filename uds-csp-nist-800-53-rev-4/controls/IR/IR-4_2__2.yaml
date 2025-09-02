@@ -1,0 +1,75 @@
+control-acronym: IR-4(2)
+control-information: >-
+  Description:
+
+  The organization includes dynamic reconfiguration of [Assignment:
+  organization-defined information system components] as part of the incident
+  response capability.
+
+
+  Supplemental Guidance:
+
+  Dynamic reconfiguration includes, for example, changes to router rules, access
+  control lists, intrusion detection/prevention system parameters, and filter
+  rules for firewalls and gateways. Organizations perform dynamic
+  reconfiguration of information systems, for example, to stop attacks, to
+  misdirect attackers, and to isolate components of systems, thus limiting the
+  extent of the damage from breaches or compromises. Organizations include time
+  frames for achieving the reconfiguration of information systems in the
+  definition of the reconfiguration capability, considering the potential need
+  for rapid response in order to effectively address sophisticated cyber
+  threats. Related controls: AC-2, AC-4, AC-16, CM-2, CM-3, CM-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident handling; automated mechanisms supporting incident handling; list of
+  system components to be dynamically reconfigured as part of incident response
+  capability; information system design documentation; information system
+  configuration settings and associated documentation; information system audit
+  records; incident response plan; security plan; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident handling
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms that support and/or implement dynamic
+  reconfiguration of components as part of incident response].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IR-4(2).2
+cci: 2781
+cci-definition: "002781: The organization defines the information system
+  components for dynamic reconfiguration as part of the incident response
+  capability."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the
+  information system components for dynamic reconfiguration as part of the
+  incident response capability. DoD has determined the information system
+  components are not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Incident Response Plan, referencing dynamic
+  reconfiguration section
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented information system components to ensure
+  the organization being inspected/assessed defines the information system
+  components for dynamic reconfiguration as part of the incident response
+  capability.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (Configuration changes
+  that stem from an IR activity must be managed by the organization.)
+family: IR

@@ -1,0 +1,89 @@
+control-acronym: AU-3(1)
+control-information: >-
+  Description:
+
+  The information system generates audit records containing the following
+  additional information: [Assignment: organization-defined additional, more
+  detailed information].
+
+
+  Supplemental Guidance:
+
+  Detailed information that organizations may consider in audit records
+  includes, for example, full text recording of privileged commands or the
+  individual identities of group account users. Organizations consider limiting
+  the additional audit information to only that information explicitly needed
+  for specific audit requirements. This facilitates the use of audit trails and
+  audit logs by not including information that could potentially be misleading
+  or could make it more difficult to locate information of interest.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  content of audit records; information system design documentation; information
+  system configuration settings and associated documentation; list of
+  organization-defined auditable events; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Information system audit capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-3(1).2
+cci: 1488
+cci-definition: "001488: The organization defines additional, more detailed
+  information to be included in the audit records."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents additional,
+  more detailed information to be included in the audit records. The additional
+  information must include at a minimum, full-text recording of privileged
+  commands or the individual identities of group account users. The additional
+  information must provide sufficient detail to reconstruct events to determine
+  cause of compromise and magnitude of damage, malfunction, or security
+  violation.
+
+  DoD has determined that additional, more detailed information must include, at
+  a minimum, full-text recording of privileged commands or the individual
+  identities of group account users. DoD has determined that all additional,
+  more detailed information is not appropriate to define at the Enterprise
+  level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy and/or procedures
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented list of additional more detailed information to be included in the
+  audit records to ensure that:
+
+  1. The list is defined; and
+
+  2. The list includes full-text recording of privileged commands or the
+  individual identities of group account users.
+
+  DoD has determined that additional, more detailed information must include, at
+  a minimum, full-text recording of privileged commands or the individual
+  identities of group account users. DoD has determined that it is not
+  appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS can generate additional custom audit records tailored to
+  organization defined data requirements. To meet this CCI the organization must
+  define any additional audit record requirements before implementation. By
+  default UDS does at a minimum provide recording of privileged commands.
+uds-alignment: Loki
+family: AU

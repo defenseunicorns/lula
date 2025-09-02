@@ -1,0 +1,94 @@
+control-acronym: CP-9
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Conducts backups of user-level information contained in the information
+  system [Assignment: organization-defined frequency consistent with recovery
+  time and recovery point objectives];
+
+  b. Conducts backups of system-level information contained in the information
+  system [Assignment: organization-defined frequency consistent with recovery
+  time and recovery point objectives];
+
+  c. Conducts backups of information system documentation including
+  security-related documentation [Assignment: organization-defined frequency
+  consistent with recovery time and recovery point objectives]; and
+
+  d. Protects the confidentiality, integrity, and availability of backup
+  information at storage locations.
+
+
+  Supplemental Guidance:
+
+  System-level information includes, for example, system-state information,
+  operating system and application software, and licenses. User-level
+  information includes any information other than system-level information.
+  Mechanisms employed by organizations to protect the integrity of information
+  system backups include, for example, digital signatures and cryptographic
+  hashes. Protection of system backup information while in transit is beyond the
+  scope of this control. Information system backups reflect the requirements in
+  contingency plans as well as other organizational requirements for backing up
+  information. Related controls: CP-2, CP-6, MP-4, MP-5, SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  information system backup; contingency plan; backup storage location(s);
+  information system backup logs or records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  backup responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for conducting information system
+  backups; automated mechanisms supporting and/or implementing information
+  system backups].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CP-9.1,CCI-000534,DoD Organization or Service Common Control Package
+  CP-9.2,CCI-000535,Organization AWS Cloud Brokerage Package
+  CP-9.3,CCI-000536,DoD Organization or Service Common Control Package
+  CP-9.4,CCI-000537,Local
+  CP-9.5,CCI-000538,DoD Organization or Service Common Control Package
+  CP-9.6,CCI-000539,Organization AWS Cloud Brokerage Package
+  CP-9.7,CCI-000540,Organization AWS Cloud Brokerage Package...
+ap-acronym: CP-9.2
+cci: 535
+cci-definition: "000535: The organization conducts backups of user-level
+  information contained in the information system per organization-defined
+  frequency that is consistent with recovery time and recovery point
+  objectives."
+implementation-guidance: >-
+  The organization being inspected/assessed must identify user level information
+  within the backup strategy and configure the system to perform backups at
+  least weekly as defined in the contingency plan.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Backup Strategy for user-level information
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and reviews the backup strategy, and examines a sample of systems to
+  ensure they are configured to perform back ups at least weekly as defined in
+  the contingency plan.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: CP

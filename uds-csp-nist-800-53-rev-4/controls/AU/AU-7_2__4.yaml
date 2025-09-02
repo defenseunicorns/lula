@@ -1,0 +1,87 @@
+control-acronym: AU-7(2)
+control-information: >-
+  Description:
+
+  The information system provides the capability to sort and search audit
+  records for events of interest based on the content of [Assignment:
+  organization-defined audit fields within audit records].
+
+
+  Supplemental Guidance:
+
+  Sorting and searching of audit records may be based upon the contents of audit
+  record fields, for example: (i) date/time of events; (ii) user identifiers;
+  (iii) Internet Protocol (IP) addresses involved in the event; (iv) type of
+  event; or (v) event success/failure.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit reduction and report generation; information system design
+  documentation; information system configuration settings and associated
+  documentation; audit reduction, review, analysis, and reporting tools; audit
+  record criteria (fields) establishing events of interest; information system
+  audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit reduction and
+  report generation responsibilities; organizational personnel with information
+  security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Audit reduction and report generation capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-7(2).4
+cci: 1887
+cci-definition: "001887: The information system provides the capability to
+  search audit records for events of interest based on the content of
+  organization-defined audit fields within audit records."
+implementation-guidance: >-
+  The organization being inspected/assessed must employ information systems that
+  provide the capability to search audit records for events of interest based on
+  the content of audit fields within audit records as defined in AU-7 (2), CCI
+  1885. For information system components that have applicable STIGs or SRGs,
+  the organization being inspected/assessed must comply with the STIG/SRG
+  guidance that pertains to CCI 1887.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+
+  2.) Example of audit log report based on events of interest
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure that the organization being
+  inspected/assessed employs information systems that provide the capability to
+  search audit records for events of interest based on the content of audit
+  fields within audit records as defined in AU-7 (2), CCI 1885. For information
+  system components that have applicable STIGs or SRGs, the organization
+  conducting the inspection/assessment evaluates the components to ensure that
+  the organization being inspected/assessed has configured the information
+  system in compliance with the applicable STIGs and SRGs pertaining to CCI
+  1887.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS fully provides the capability to search audit records based on
+  organizationally defined audit fields through its integrated logging and
+  analytics solutions (Vector, Loki, and Grafana). Audit logs are systematically
+  captured, indexed, and stored within Loki, enabling administrators to perform
+  powerful, structured searches across a wide range of organizationally defined
+  audit fields, including timestamps, user identities, IP addresses, event
+  types, actions performed, and authentication outcomes. Grafana's intuitive
+  dashboards further simplify and enhance this capability by allowing targeted,
+  real-time searches and visual analysis of security events. Thus, UDS
+  completely satisfies the requirement for searching audit records based on
+  defined audit fields, fully aligning with organizational security monitoring
+  and investigative needs.
+uds-alignment: Loki, Vector, Grafana
+family: AU

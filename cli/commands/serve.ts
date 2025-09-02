@@ -13,8 +13,8 @@ export class ServeCommand {
 	async run(options: ServeOptions): Promise<void> {
 		const { dir, port, openBrowser } = options;
 
-		// Check if control-set.yaml exists in the directory
-		const controlSetPath = join(dir, 'control-set.yaml');
+		// Check if lula.yaml exists in the directory
+		const controlSetPath = join(dir, 'lula.yaml');
 		const hasControlSet = existsSync(controlSetPath);
 
 		// Start server with wizard mode if no control set exists

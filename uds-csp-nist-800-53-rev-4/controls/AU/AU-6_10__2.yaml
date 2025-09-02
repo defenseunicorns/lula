@@ -1,0 +1,75 @@
+control-acronym: AU-6(10)
+control-information: >-
+  Description:
+
+  The organization adjusts the level of audit review, analysis, and reporting
+  within the information system when there is a change in risk based on law
+  enforcement information, intelligence information, or other credible sources
+  of information.
+
+
+  Supplemental Guidance:
+
+  The frequency, scope, and/or depth of the audit review, analysis, and
+  reporting may be adjusted to meet organizational needs based on new
+  information received.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit review, analysis, and reporting; organizational risk assessment;
+  security control assessment; vulnerability assessment; security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit review, analysis,
+  and reporting responsibilities; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting review, analysis, and
+  reporting of audit information].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-6(10).2
+cci: 1874
+cci-definition: "001874: The organization adjusts the level of audit reporting
+  within the information system when there is a change in risk based on law
+  enforcement information, intelligence information, or other credible sources
+  of information."
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  for adjusting the level of audit reporting within the information system when
+  there is a change in risk based on law enforcement information, intelligence
+  information, or other credible sources of information (e.g., INFOCON).
+
+
+  Recommended Compelling Evidence:
+
+  1.) A policy with a section pertaining to changing level of audit reporting
+  when there is a change in risk based on law enforcement information,
+  intelligence information, or other credible sources of information.
+
+  2.) Examples of organization adjustments of audit review, analysis, and
+  reporting within the information system when there is a change in risk.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented process and supporting records to ensure
+  the organization being inspected/assessed adjusts the level of audit reporting
+  within the information system when there is a change in risk based on law
+  enforcement information, intelligence information, or other credible sources
+  of information.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (Adjusting the level of
+  audit review based on risk based information from law enforcement information,
+  intelligence information, or other credible sources is accomplished at the
+  organizational level.)
+family: AU

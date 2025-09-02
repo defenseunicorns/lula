@@ -1,0 +1,84 @@
+control-acronym: CP-4
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Tests the contingency plan for the information system [Assignment:
+  organization-defined frequency] using [Assignment: organization-defined tests]
+  to determine the effectiveness of the plan and the organizational readiness to
+  execute the plan;
+
+  b. Reviews the contingency plan test results; and
+
+  c. Initiates corrective actions, if needed.
+
+
+  Supplemental Guidance:
+
+  Methods for testing contingency plans to determine the effectiveness of the
+  plans and to identify potential weaknesses in the plans include, for example,
+  walk-through and tabletop exercises, checklists, simulations (parallel, full
+  interrupt), and comprehensive exercises. Organizations conduct testing based
+  on the continuity requirements in contingency plans and include a
+  determination of the effects on organizational operations, assets, and
+  individuals arising due to contingency operations. Organizations have
+  flexibility and discretion in the breadth, depth, and timelines of corrective
+  actions. Related controls: CP-2, CP-3, IR-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  contingency plan testing; contingency plan; security plan; contingency plan
+  test documentation; contingency plan test results; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  contingency plan testing, reviewing or responding to contingency plan tests;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for contingency plan testing;
+  automated mechanisms supporting the contingency plan and/or contingency plan
+  testing].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CP-4.1,CCI-000490,DoD Organization or Service Common Control Package
+  CP-4.2,CCI-000492,Local
+  CP-4.3,CCI-000494,Local
+  CP-4.4,CCI-000496,Local
+  CP-4.5,CCI-000497,Local...
+ap-acronym: CP-4.4
+cci: 496
+cci-definition: "000496: The organization reviews the contingency plan test results."
+implementation-guidance: >-
+  The organization being inspected/assessed will review the contingency plan
+  test results. The organization must maintain an audit trail of issues
+  identified during the reviews of the contingency plan test results.
+
+  Recommended Compelling Evidence:
+
+  1.) Audit trails of issues identified during the reviews of the contingency
+  plan test results
+
+  2.) Contingency plan after action reports
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the audit trail of issues identified during the reviews
+  of the contingency plan test results to ensure the organization being
+  inspected/assessed reviews the contingency plan test results.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not Applicable to UDS technology stack. (Organizational
+  contingency plans are outside the scope of UDS. UDS provides tools to execute
+  recovery but the plan documentation is an organizational responsibility as it
+  is custom to their mission.)
+family: CP

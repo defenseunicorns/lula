@@ -1,0 +1,60 @@
+control-acronym: AC-2(9)
+control-information: >-
+  Description:
+
+  The organization only permits the use of shared/group accounts that meet
+  [Assignment: organization-defined conditions for establishing shared/group
+  accounts].
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; information system design documentation; information system
+  configuration settings and associated documentation; system-generated list of
+  shared/group accounts and associated role; information system audit records;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing management of
+  shared/group accounts].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-2(9).2
+cci: 2141
+cci-definition: "002141: The organization only permits the use of shared/group
+  accounts that meet organization-defined conditions for establishing
+  shared/group accounts."
+implementation-guidance: >-
+  The organization being inspected/assessed only permits the use of shared/group
+  accounts that meet the conditions for establishing shared/group accounts
+  defined in AC-2 (9), CCI 2140.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that defines the requirements of creating a
+  shared/group account.
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the shared/group accounts to ensure the organization being
+  inspected/assessed only permits the use of shared/group accounts that meet the
+  conditions for establishing shared/group accounts defined in AC-2 (9), CCI
+  2140.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not applicable to UDS technology stack. (It should be an
+  organizational decision on if shared/group accounts are required. It is best
+  practice to avoid the use of shared/group accounts in most scenarios.)
+family: AC

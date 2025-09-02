@@ -1,0 +1,77 @@
+control-acronym: AU-6(1)
+control-information: >-
+  Description:
+
+  The organization employs automated mechanisms to integrate audit review,
+  analysis, and reporting processes to support organizational processes for
+  investigation and response to suspicious activities.
+
+
+  Supplemental Guidance:
+
+  Organizational processes benefiting from integrated audit review, analysis,
+  and reporting include, for example, incident response, continuous monitoring,
+  contingency planning, and Inspector General audits. Related controls: AU-12,
+  PM-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit review, analysis, and reporting; procedures addressing investigation and
+  response to suspicious activities; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit review, analysis,
+  and reporting responsibilities; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms integrating audit review, analysis,
+  and reporting processes].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-6(1).1
+cci: 1864
+cci-definition: "001864: The organization employs automated mechanisms to
+  integrate audit review and analysis to support organizational processes for
+  investigation of response to suspicious activities."
+implementation-guidance: >-
+  The organization being inspected/assessed identifies and implements automated
+  mechanisms to integrate audit review and analysis. The goal is to support
+  organizational investigation of and response to suspicious activities.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines documentation identifying automated mechanisms to
+  integrate audit review and analysis to ensure such mechanisms have been
+  identified. The organization conducting the inspection/assessment examines the
+  identified automated mechanisms to ensure they have been implemented.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: "With UDS, you can automate certain aspects of audit analysis
+  using Prometheus/Grafana. For instance, you can create Grafana alerts that
+  trigger when certain audit events occur, such as âalert me if more than 5
+  failed admin logins happen in 1 hourâ or âif a normally inactive account
+  suddenly logs in.â NeuVector adds automated security analysis as well it
+  monitors runtime events and flags suspicious behaviors (which is an automated
+  analysis of system events for live traffic). By leveraging these tools, the
+  system does perform initial analysis and can notify security personnel of
+  potential issues. Essentially, UDS provides a form of continuous monitoring
+  that goes hand-in-hand with audit logs and events are not just recorded but
+  can prompt automatic responses (like alerts) when they meet certain criteria.
+  This satisfies the idea of ongoing automated audit analysis."
+uds-alignment: Prometheus, Grafana
+family: AU

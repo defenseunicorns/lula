@@ -1,0 +1,74 @@
+control-acronym: AC-2(12)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Monitors information system accounts for [Assignment: organization-defined
+  atypical use]; and
+
+  (b) Reports atypical usage of information system accounts to [Assignment:
+  organization-defined personnel or roles].
+
+
+  Supplemental Guidance:
+
+  A typical usage includes, for example, accessing information systems at
+  certain times of the day and from locations that are not consistent with the
+  normal usage patterns of individuals working in organizations. Related
+  control: CA-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; information system design documentation; information system
+  configuration settings and associated documentation; information system
+  monitoring records; information system audit records; audit tracking and
+  monitoring reports; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing account management
+  functions].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-2(12).1,CCI-002146,Local
+  AC-2(12).2,CCI-002147,Local
+  AC-2(12).3,CCI-002148,DoD Organization or Service Common Control Package
+  AC-2(12).4,CCI-002149,Local...
+ap-acronym: AC-2(12).1
+cci: 2146
+cci-definition: "002146: The organization defines atypical usage for which the
+  information system accounts are to be monitored."
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents atypical usage
+  for which the information system accounts are to be monitored. DoD has
+  determined atypical usage is not appropriate to define at the Enterprise
+  level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation which defines atypical usage for which the
+  information system accounts are to be monitored.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented atypical usage to ensure it has been
+  defined. DoD has determined atypical usage is not appropriate to define at the
+  Enterprise level.
+inherited: Local
+remote-inheritance-instance: "-"
+test-results: Not applicable to UDS technology stack. (It should be an
+  organizational decision on how to define atypical usage for the monitored
+  system though UDS provides the monitoring capabilities.)
+family: AC

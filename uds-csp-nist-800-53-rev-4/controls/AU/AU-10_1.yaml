@@ -1,0 +1,93 @@
+control-acronym: AU-10
+control-information: >-
+  Description:
+
+  The information system protects against an individual (or process acting on
+  behalf of an individual) falsely denying having performed [Assignment:
+  organization-defined actions to be covered by non-repudiation].
+
+
+  Supplemental Guidance:
+
+  Types of individual actions covered by non-repudiation include, for example,
+  creating information, sending and receiving messages, approving information
+  (e.g., indicating concurrence or signing a contract). Non-repudiation protects
+  individuals against later claims by: (i) authors of not having authored
+  particular documents; (ii) senders of not having transmitted messages; (iii)
+  receivers of not having received messages; or (iv) signatories of not having
+  signed documents. Non-repudiation services can be used to determine if
+  information originated from a particular individual, or if an individual took
+  specific actions (e.g., sending an email, signing a contract, approving a
+  procurement request) or received specific information. Organizations obtain
+  non-repudiation services by employing various techniques or mechanisms (e.g.,
+  digital signatures, digital message receipts). Related controls: SC-12, SC-8,
+  SC-13, SC-16, SC-17, SC-23.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  non-repudiation; information system design documentation; information system
+  configuration settings and associated documentation; information system audit
+  records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing non-repudiation
+  capability].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AU-10.1,CCI-000166,Local
+  AU-10.2,CCI-001899,DoD Organization or Service Common Control Package...
+ap-acronym: AU-10.1
+cci: 166
+cci-definition: "000166: The information system protects against an individual
+  (or process acting on behalf of an individual) falsely denying having
+  performed organization-defined actions to be covered by non-repudiation."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  protect against an individual falsely denying having performed actions to be
+  covered by non-repudiation defined in DoDI 8520.02 and DoDI 8520.03. DoDI
+  8520.02 and DoDI 8520.03 meet the DoD requirement to define the actions to be
+  covered by non-repudiation. For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 166.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed protects against an individual falsely denying having
+  performed actions to be covered by non-repudiation defined in DoDI 8520.02 and
+  DoDI 8520.03. DoDI 8520.02 and DoDI 8520.03 meet the DoD requirement to define
+  the actions to be covered by non-repudiation. For information system
+  components that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 166.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: UDS provides strong technical mechanisms to protect against false
+  denial (non-repudiation) through comprehensive audit logging and identity
+  management solutions. Specifically, UDS leverages centralized identity
+  management (Keycloak) to reliably authenticate user identities using PKI-based
+  credentials (such as CAC/PIV), which provide cryptographically strong proof of
+  identity. Detailed audit logs captured via Vector and centrally stored in Loki
+  provide immutable, timestamped records of user activities, ensuring
+  traceability of critical actions. Additionally, the use of mutual TLS (mTLS)
+  within Istio Service Mesh provides cryptographic validation of transactions
+  between microservices.
+uds-alignment: Keycloak, Vector, Loki, Istio
+family: AU

@@ -1,0 +1,79 @@
+control-acronym: AC-7
+control-information: >-
+  Description:
+
+  The information system:
+
+  a. Enforces a limit of [Assignment: organization-defined number] consecutive
+  invalid logon attempts by a user during a [Assignment: organization-defined
+  time period]; and
+
+  b. Automatically [Selection: locks the account/node for an [Assignment:
+  organization-defined time period]; locks the account/node until released by an
+  administrator; delays next logon prompt according to [Assignment:
+  organization-defined delay algorithm]] when the maximum number of unsuccessful
+  attempts is exceeded.
+
+
+  Supplemental Guidance:
+
+  This control applies regardless of whether the logon occurs via a local or
+  network connection. Due to the potential for denial of service, automatic
+  lockouts initiated by information systems are usually temporary and
+  automatically release after a predetermined time period established by
+  organizations. If a delay algorithm is selected, organizations may choose to
+  employ different algorithms for different information system components based
+  on the capabilities of those components. Responses to unsuccessful logon
+  attempts may be implemented at both the operating system and the application
+  levels. Related controls: AC-2, AC-9, AC-14, IA-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing
+  unsuccessful logon attempts; security plan; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system developers; system/network administrators].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing access control policy
+  for unsuccessful logon attempts].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-7.1,CCI-000043,DoD Organization or Service Common Control Package
+  AC-7.2,CCI-000044,Local
+  AC-7.3,CCI-001423,DoD Organization or Service Common Control Package
+  AC-7.4,CCI-002236,DoD Organization or Service Common Control Package
+  AC-7.5,CCI-002237,DoD Organization or Service Common Control Package
+  AC-7.6,CCI-002238,Local...
+ap-acronym: AC-7.5
+cci: 2237
+cci-definition: "002237: The organization defines the delay algorithm to be
+  employed by the information system to delay the next login prompt when the
+  maximum number of unsuccessful attempts is exceeded."
+implementation-guidance: |-
+  DoD has defined the delay algorithm as a minimum of 5 seconds.
+
+  Recommended Compelling Evidence:
+  Automatically compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the delay algorithm as a minimum of 5 seconds.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AC

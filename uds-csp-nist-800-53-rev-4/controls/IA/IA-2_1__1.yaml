@@ -1,0 +1,77 @@
+control-acronym: IA-2(1)
+control-information: >-
+  Description:
+
+  The information system implements multifactor authentication for network
+  access to privileged accounts.
+
+
+  Supplemental Guidance:
+
+  Related control: AC-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing user identification and authentication; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; list of information system
+  accounts; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  operations responsibilities; organizational personnel with account management
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  multifactor authentication capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-2(1).1
+cci: 765
+cci-definition: "000765: Implement multifactor authentication for network access
+  to privileged accounts."
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  implement multifactor authentication for network access to privileged
+  accounts. For information system components that have applicable STIGs or
+  SRGs, the organization being inspected/assessed must comply with the STIG/SRG
+  guidance that pertains to CCI 765.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Access Control Policy
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: The organization conducting the inspection/assessment
+  examines the information system to ensure the organization being
+  inspected/assessed configures the information system to implement multifactor
+  authentication for network access to privileged accounts. For information
+  system components that have applicable STIGs or SRGs, the organization
+  conducting the inspection/assessment evaluates the components to ensure that
+  the organization being inspected/assessed has configured the information
+  system in compliance with the applicable STIGs and SRGs pertaining to CCI 765.
+inherited: Local
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: "Keycloak supports MFA (such as OTP, mobile push, or U2F keys),
+  and administrators can enforce that any user with admin roles must use MFA to
+  login. Itâs straightforward to configure a realm such that realm
+  administrators or any user in a privileged group must perform an extra
+  authentication step (for example, Keycloak can be set up to require a one-time
+  password from an authenticator app after password entry for admins). Given
+  that privileged users (like cluster admins, Keycloak admins) would
+  authenticate via Keycloak as well with a CAC, this meets the requirement that
+  these accounts use MFA for network access."
+uds-alignment: Keycloak
+family: IA

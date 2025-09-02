@@ -1,0 +1,83 @@
+control-acronym: SC-5(3)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Employs [Assignment: organization-defined monitoring tools] to detect
+  indicators of denial of service attacks against the information system; and
+
+  (b) Monitors [Assignment: organization-defined information system resources]
+  to determine if sufficient resources exist to prevent effective denial of
+  service attacks.
+
+
+  Supplemental Guidance:
+
+  Organizations consider utilization and capacity of information system
+  resources when managing risk from denial of service due to malicious attacks.
+  Denial of service attacks can originate from external or internal sources.
+  Information system resources sensitive to denial of service include, for
+  example, physical disk storage, memory, and CPU cycles. Common safeguards to
+  prevent denial of service attacks related to storage utilization and capacity
+  include, for example, instituting disk quotas, configuring information systems
+  to automatically alert administrators when specific storage capacity
+  thresholds are reached, using file compression technologies to maximize
+  available storage space, and imposing separate partitions for system and user
+  data. Related controls: CA-7, SI-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing denial of service protection; information system design
+  documentation; information system monitoring tools and techniques
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with detection and monitoring responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms/tools implementing information system
+  monitoring for denial of service attacks].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-5(3).4
+cci: 2391
+cci-definition: "002391: Monitor organization-defined system resources to
+  determine if sufficient resources exist to prevent effective denial of service
+  attacks."
+implementation-guidance: >-
+  The organization being inspected/assessed monitors information system
+  resources defined in SC-5 (3), CCI 2390 to determine if sufficient resources
+  exist to prevent effective denial of service attacks.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that defines monitoring procedures.
+
+  2.) Monitoring process artifacts.
+assessment-procedures: The organization conducting the inspection/assessment
+  obtains and examines the documented monitoring procedures and any available
+  artifacts from the monitoring process to ensure the organization being
+  inspected/assessed monitors information system resources defined in SC-5 (3),
+  CCI 2390 to determine if sufficient resources exist to prevent effective
+  denial of service attacks.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SC

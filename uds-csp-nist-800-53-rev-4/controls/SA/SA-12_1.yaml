@@ -1,0 +1,100 @@
+control-acronym: SA-12
+control-information: >-
+  Description:
+
+  The organization protects against supply chain threats to the information
+  system, system component, or information system service by employing
+  [Assignment: organization-defined security safeguards] as part of a
+  comprehensive, defense-in-breadth information security strategy.
+
+
+  Supplemental Guidance:
+
+  Information systems (including system components that compose those systems)
+  need to be protected throughout the system development life cycle (i.e.,
+  during design, development, manufacturing, packaging, assembly, distribution,
+  system integration, operations, maintenance, and retirement). Protection of
+  organizational information systems is accomplished through threat awareness,
+  by the identification, management, and reduction of vulnerabilities at each
+  phase of the life cycle and the use of complementary, mutually reinforcing
+  strategies to respond to risk. Organizations consider implementing a
+  standardized process to address supply chain risk with respect to information
+  systems and system components, and to educate the acquisition workforce on
+  threats, risk, and required security controls. Organizations use the
+  acquisition/procurement processes to require supply chain entities to
+  implement necessary security safeguards to: (i) reduce the likelihood of
+  unauthorized modifications at each stage in the supply chain; and (ii) protect
+  information systems and information system components, prior to taking
+  delivery of such systems/components. This control enhancement also applies to
+  information system services. Security safeguards include, for example: (i)
+  security controls for development systems, development facilities, and
+  external connections to development systems; (ii) vetting development
+  personnel; and (iii) use of tamper-evident packaging during
+  shipping/warehousing. Methods for reviewing and protecting development plans,
+  evidence, and documentation are commensurate with the security category or
+  classification level of the information system. Contracts may specify
+  documentation protection requirements. Related controls: AT-3, CM-8, IR-4,
+  PE-16, PL-8, SA-3, SA-4, SA-8, SA-10, SA-14, SA-15, SA-18, SA-19, SC-29,
+  SC-30, SC-38, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing supply chain protection; procedures addressing the integration of
+  information security requirements into the acquisition process; solicitation
+  documentation; acquisition documentation; service-level agreements;
+  acquisition contracts for the information system, system component, or
+  information system service; list of supply chain threats; list of security
+  safeguards to be taken against supply chain threats; system development life
+  cycle documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and services
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with supply chain
+  protection responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for defining safeguards for and
+  protecting against supply chain threats; automated mechanisms supporting
+  and/or implementing safeguards for supply chain threats].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SA-12.1,CCI-000722,DoD Organization or Service Common Control Package
+  SA-12.2,CCI-000723,Local...
+ap-acronym: SA-12.1
+cci: 722
+cci-definition: "000722: The organization defines the security safeguards to
+  employ to protect against supply chain threats to the information system,
+  system component, or information system service."
+implementation-guidance: >-
+  DoD has defined the requirements to protect against supply chain threats in
+  DoDI 5200.44, "Protection of Mission Critical Functions to Achieve Trusted
+  Systems and Networks (TSN)."
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per DoDI 5200.44.
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level.
+
+
+  DoD has defined the requirements to protect against supply chain threats in
+  DoDI 5200.44, "Protection of Mission Critical Functions to Achieve Trusted
+  Systems and Networks (TSN)."
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: SA

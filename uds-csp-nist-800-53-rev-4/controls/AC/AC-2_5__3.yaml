@@ -1,0 +1,61 @@
+control-acronym: AC-2(5)
+control-information: >-
+  Description:
+
+  The organization requires that users log out when [Assignment:
+  organization-defined time-period of expected inactivity or description of when
+  to log out].
+
+
+  Supplemental Guidance:
+
+  Related control: SC-23.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; security plan; information system design documentation;
+  information system configuration settings and associated documentation;
+  security violation reports; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities; users that must comply with inactivity
+  logout policy].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-2(5).1,CCI-002133,Local
+  AC-2(5).2,CCI-000019,Local
+  AC-2(5).3,CCI-001406,DoD Organization or Service Common Control Package...
+ap-acronym: AC-2(5).3
+cci: 1406
+cci-definition: "001406: The organization defines a time period of expected
+  inactivity when users are required to log out."
+implementation-guidance: >-
+  DoD has defined the time period as at the end of the users standard work
+  period unless otherwise defined in formal organizational policy.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the time period as at the end of the users standard
+  work period unless otherwise defined in formal organizational policy.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AC

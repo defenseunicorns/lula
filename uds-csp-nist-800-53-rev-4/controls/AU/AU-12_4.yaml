@@ -1,0 +1,81 @@
+control-acronym: AU-12
+control-information: >-
+  Description:
+
+  The information system:
+
+  a. Provides audit record generation capability for the auditable events
+  defined in AU-2 a. at [Assignment: organization-defined information system
+  components];
+
+  b. Allows [Assignment: organization-defined personnel or roles] to select
+  which auditable events are to be audited by specific components of the
+  information system; and
+
+  c. Generates audit records for the events defined in AU-2
+
+  d. with the content defined in AU-3.
+
+
+  Supplemental Guidance:
+
+  Audit records can be generated from many different information system
+  components. The list of audited events is the set of events for which audits
+  are to be generated. These events are typically a subset of all events for
+  which the information system is capable of generating audit records. Related
+  controls: AC-3, AU-2, AU-3, AU-6, AU-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit record generation; security plan; information system design
+  documentation; information system configuration settings and associated
+  documentation; list of auditable events; information system audit records;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit record generation
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing audit record generation
+  capability].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AU-12.1,CCI-000169,Local
+  AU-12.2,CCI-001459,Local
+  AU-12.3,CCI-000171,Local
+  AU-12.4,CCI-001910,DoD Organization or Service Common Control Package
+  AU-12.5,CCI-000172,Local...
+ap-acronym: AU-12.4
+cci: 1910
+cci-definition: "001910: The organization defines the personnel or roles allowed
+  to select which auditable events are to be audited by specific components of
+  the information system."
+implementation-guidance: >-
+  DoD has defined the personnel or roles as the ISSM or individuals appointed by
+  the ISSM.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically Compliant
+assessment-procedures: The organization being inspected/assessed is
+  automatically compliant with this CCI because they are covered at the DoD
+  level. DoD has defined the personnel or roles as the ISSM or individuals
+  appointed by the ISSM.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: "-"
+compliance-status: Compliant
+test-results: This control has been inherited and will receive test results from
+  the providing system or Common Control Package.
+family: AU
