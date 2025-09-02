@@ -6,9 +6,8 @@
 	import { onMount } from 'svelte';
 
 	let activeTab: 'import' | 'existing' = 'import'; // Default to import
-	let hasExistingControlSet = false;
+	let currentControlSetPath = '';
 	let hasAnyControlSets = false;
-	let isLoading = true;
 	let isSwitching = false;
 	let controlSets: { path: string; name: string; description?: string }[] = [];
 
@@ -24,38 +23,50 @@
 				state.id !== 'unknown' &&
 				state.id !== 'default'
 			) {
-				hasExistingControlSet = true;
+				// Store the current path if a control set is loaded
+				currentControlSetPath = state.currentPath || '';
 			}
 		});
 
 		// Listen for control sets list
-		const handleControlSetsList = (event: CustomEvent) => {
+		const handleControlSetsList = async (event: CustomEvent) => {
 			const data = event.detail;
 			if (data && data.controlSets) {
 				controlSets = data.controlSets || [];
 				hasAnyControlSets = controlSets.length > 0;
+
+				// Check if we should auto-load
+				if (controlSets.length === 1) {
+					const singleControlSet = controlSets[0];
+					const isAlreadyLoaded = currentControlSetPath && currentControlSetPath.includes(singleControlSet.path);
+					
+					// Only auto-load if it's not already the current control set
+					if (!isAlreadyLoaded && !currentControlSetPath) {
+						console.log('Only one control set found and none loaded, auto-loading:', singleControlSet.path);
+						await switchControlSet(singleControlSet.path);
+						return;
+					}
+				}
 
 				// Only switch to existing tab if there are control sets
 				if (hasAnyControlSets) {
 					activeTab = 'existing';
 				}
 			}
-			isLoading = false;
 		};
 
-		window.addEventListener('control-sets-list', handleControlSetsList as EventListener);
+		window.addEventListener('control-sets-list', handleControlSetsList as unknown as EventListener);
 
 		// Request control sets scan via WebSocket
 		try {
 			await wsClient.scanControlSets();
 		} catch (err) {
 			console.error('Error scanning control sets:', err);
-			isLoading = false;
 		}
 
 		return () => {
 			unsubscribe();
-			window.removeEventListener('control-sets-list', handleControlSetsList as EventListener);
+			window.removeEventListener('control-sets-list', handleControlSetsList as unknown as EventListener);
 		};
 	});
 
@@ -142,7 +153,7 @@
 				<span>Lula</span>
 			</h1>
 			<p class="text-lg text-gray-600 dark:text-gray-400">
-				{#if hasExistingControlSet}
+				{#if currentControlSetPath}
 					You have an existing control set. You can continue using it or create a new one.
 				{:else if hasAnyControlSets}
 					Select an existing control set or import a new one from a spreadsheet.
@@ -223,12 +234,5 @@
 			{/if}
 		</div>
 
-		{#if hasExistingControlSet}
-			<div class="mt-4 text-center">
-				<a href="/" class="text-sm text-blue-600 dark:text-blue-400 hover:underline">
-					Continue with current control set →
-				</a>
-			</div>
-		{/if}
 	</div>
 </div>

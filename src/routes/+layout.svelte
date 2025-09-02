@@ -21,7 +21,7 @@
 		// We need to wait for the WebSocket to connect and send initial state
 		let checkTimeoutId: number | null = null;
 
-		const checkForRedirect = () => {
+		const checkForRedirect = async () => {
 			// Skip if we've already checked, we're on the setup page, or switching control sets
 			if (
 				hasCheckedInitialRedirect ||
@@ -46,8 +46,32 @@
 				) {
 					// Only redirect if we don't have controls (not just switching)
 					if (!state.controls || state.controls.length === 0) {
-						// Redirect to setup wizard if no valid control set
-						goto('/setup');
+						// Scan for available control sets
+						await wsClient.scanControlSets();
+						
+						// Wait for the control sets list to arrive
+						const controlSets = await new Promise((resolve) => {
+							const handler = (event: CustomEvent) => {
+								window.removeEventListener('control-sets-list', handler as EventListener);
+								resolve(event.detail);
+							};
+							window.addEventListener('control-sets-list', handler as EventListener);
+							
+							// Timeout after 2 seconds
+							setTimeout(() => {
+								window.removeEventListener('control-sets-list', handler as EventListener);
+								resolve(null);
+							}, 2000);
+						});
+						
+						if (controlSets && Array.isArray(controlSets) && controlSets.length === 1) {
+							// Only one control set available - auto-load it
+							console.log('Auto-loading single control set:', controlSets[0].path);
+							await wsClient.switchControlSet(controlSets[0].path);
+						} else {
+							// Multiple control sets or none - show setup
+							goto('/setup');
+						}
 					}
 				}
 			} else {

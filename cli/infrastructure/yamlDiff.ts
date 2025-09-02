@@ -138,7 +138,7 @@ function compareValues(
 			path: basePath || 'root',
 			oldValue,
 			newValue,
-			description: `Changed ${basePath || 'value'} from "${oldValue}" to "${newValue}"`
+			description: `Changed ${basePath || 'value'}`
 		});
 	}
 
@@ -191,7 +191,7 @@ function compareObjects(
 					path: currentPath,
 					oldValue,
 					newValue,
-					description: formatChangeDescription(key, oldValue, newValue)
+					description: `Changed ${key}`
 				});
 			}
 		}
@@ -310,13 +310,11 @@ function compareMappingArrays(
 	// Find added mappings
 	for (const [uuid, mapping] of newMappings) {
 		if (!oldMappings.has(uuid)) {
-			const justification = mapping.justification || 'No justification';
-			const status = mapping.status || 'unknown';
 			changes.push({
 				type: 'added',
-				path: `mapping[${uuid}]`,
+				path: `mapping`,
 				newValue: mapping,
-				description: `Added mapping: "${justification.substring(0, 50)}..." (${status})`
+				description: `Added mapping`
 			});
 		}
 	}
@@ -324,13 +322,11 @@ function compareMappingArrays(
 	// Find removed mappings
 	for (const [uuid, mapping] of oldMappings) {
 		if (!newMappings.has(uuid)) {
-			const justification = mapping.justification || 'No justification';
-			const status = mapping.status || 'unknown';
 			changes.push({
 				type: 'removed',
-				path: `mapping[${uuid}]`,
+				path: `mapping`,
 				oldValue: mapping,
-				description: `Removed mapping: "${justification.substring(0, 50)}..." (${status})`
+				description: `Removed mapping`
 			});
 		}
 	}
@@ -340,21 +336,12 @@ function compareMappingArrays(
 		if (newMappings.has(uuid)) {
 			const newMapping = newMappings.get(uuid);
 			if (!deepEqual(oldMapping, newMapping)) {
-				// Describe what changed
-				const descriptions: string[] = [];
-				if (oldMapping.status !== newMapping.status) {
-					descriptions.push(`status: ${oldMapping.status} → ${newMapping.status}`);
-				}
-				if (oldMapping.justification !== newMapping.justification) {
-					descriptions.push('justification updated');
-				}
-				
 				changes.push({
 					type: 'modified',
-					path: `mapping[${uuid}]`,
+					path: `mapping`,
 					oldValue: oldMapping,
 					newValue: newMapping,
-					description: `Modified mapping: ${descriptions.join(', ')}`
+					description: `Modified mapping`
 				});
 			}
 		}
@@ -410,35 +397,6 @@ function deepEqual(a: YamlValue, b: YamlValue): boolean {
 	}
 
 	return false;
-}
-
-/**
- * Format a change description for display
- *
- * @param key - The field name
- * @param oldValue - The original value
- * @param newValue - The new value
- * @returns Human-readable description
- */
-function formatChangeDescription(key: string, oldValue: unknown, newValue: unknown): string {
-	// Special handling for common control fields
-	if (key === 'status' || key === 'implementation_status') {
-		return `Changed ${key} from "${oldValue}" to "${newValue}"`;
-	}
-
-	if (key === 'last_updated' || key === 'updated_at' || key === 'modified') {
-		return `Updated ${key}`;
-	}
-
-	// Handle long strings
-	const oldStr = String(oldValue);
-	const newStr = String(newValue);
-
-	if (oldStr.length > 50 || newStr.length > 50) {
-		return `Modified ${key}`;
-	}
-
-	return `Changed ${key} from "${oldStr}" to "${newStr}"`;
 }
 
 /**
