@@ -50,7 +50,7 @@ export async function scanControlSets() {
 					controlCount: data.controlCount || 0,
 					file: file
 				};
-			} catch (err) {
+			} catch (_err) {
 				return {
 					path: relativePath,
 					name: 'Invalid control-set.yaml',
@@ -120,8 +120,8 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 		);
 
 		// Process rows into controls
-		const controls: any[] = [];
-		const families = new Map<string, any[]>();
+		const controls: SpreadsheetRow[] = [];
+		const families = new Map<string, SpreadsheetRow[]>();
 
 		// Field metadata collection
 		const fieldMetadata = new Map<
@@ -132,10 +132,10 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				type: 'string' | 'number' | 'boolean' | 'date' | 'mixed';
 				maxLength: number;
 				hasMultipleLines: boolean;
-				uniqueValues: Set<any>;
+				uniqueValues: Set<unknown>;
 				emptyCount: number;
 				totalCount: number;
-				examples: any[];
+				examples: unknown[];
 			}
 		>();
 
@@ -158,10 +158,10 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 		});
 
 		for (let i = startRowIndex + 1; i < rawData.length; i++) {
-			const row = rawData[i] as any[];
+			const row = rawData[i] as unknown[];
 			if (!row || row.length === 0) continue;
 
-			const control: any = {};
+			const control: SpreadsheetRow = {};
 			let hasData = false;
 
 			headers.forEach((header, index) => {
@@ -261,7 +261,11 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 
 		// Build field schema from metadata in the expected format
 		// Check if frontend provided field schema with tab assignments
-		let frontendFieldSchema: any = null;
+		let frontendFieldSchema: Array<{
+			fieldName: string;
+			tab?: string;
+			displayTab?: string;
+		}> | null = null;
 		if (req.body.fieldSchema) {
 			try {
 				frontendFieldSchema = JSON.parse(req.body.fieldSchema);
@@ -270,7 +274,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			}
 		}
 
-		const fields: any = {};
+		const fields: Record<string, unknown> = {};
 		let displayOrder = 1;
 
 		// Store the control ID field name for the control-set metadata
@@ -343,7 +347,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			}
 
 			// Find frontend config for this field if provided
-			const frontendConfig = frontendFieldSchema?.find((f: any) => f.fieldName === fieldName);
+			const frontendConfig = frontendFieldSchema?.find((f) => f.fieldName === fieldName);
 
 			// Determine category based on field name and usage or use frontend config
 			let category = frontendConfig?.category || 'custom';
@@ -364,7 +368,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			// Special handling for the control ID field
 			const isControlIdField = fieldName === controlIdFieldNameClean;
 
-			const fieldDef: any = {
+			const fieldDef: Record<string, unknown> = {
 				type: metadata.type,
 				ui_type: uiType,
 				is_array: false,
@@ -487,7 +491,7 @@ function toKebabCase(str: string): string {
 		.join('-');
 }
 
-function detectValueType(value: any): 'string' | 'number' | 'boolean' | 'date' {
+function detectValueType(value: unknown): 'string' | 'number' | 'boolean' | 'date' {
 	if (typeof value === 'boolean') return 'boolean';
 	if (typeof value === 'number') return 'number';
 

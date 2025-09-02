@@ -387,7 +387,10 @@ class WebSocketManager {
 				const controlId = control.id || getControlId(control, currentPath);
 				const summary: Record<string, unknown> = {
 					id: controlId,
-					family: control.family || (control as Record<string, unknown>)['control-acronym']?.toString().split('-')[0] || ''
+					family:
+						control.family ||
+						(control as Record<string, unknown>)['control-acronym']?.toString().split('-')[0] ||
+						''
 				};
 
 				// Include all fields defined in the field schema

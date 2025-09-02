@@ -106,9 +106,10 @@ export class GitHistoryUtil {
 				firstCommit: gitCommits[gitCommits.length - 1] || null,
 				lastCommit: gitCommits[0] || null
 			};
-		} catch (error: any) {
+		} catch (error) {
 			// Handle specific case of files not found in git history (new/untracked files)
-			if (error?.code === 'NotFoundError' || error?.message?.includes('Could not find file')) {
+			const err = error as { code?: string; message?: string };
+			if (err?.code === 'NotFoundError' || err?.message?.includes('Could not find file')) {
 				console.log(`File not in git history (new/untracked file): ${filePath}`);
 				return {
 					filePath,
@@ -185,14 +186,21 @@ export class GitHistoryUtil {
 	 * Convert isomorphic-git commits to our GitCommit format
 	 */
 	private async convertIsomorphicCommits(
-		commits: any[],
+		commits: Array<{
+			oid: string;
+			commit: {
+				author: {
+					name: string;
+					email: string;
+					timestamp: number;
+				};
+				message: string;
+			};
+		}>,
 		relativePath: string,
 		gitRoot: string
 	): Promise<GitCommit[]> {
 		const gitCommits: GitCommit[] = [];
-
-		// Process up to the first 5 commits for diffs to avoid performance issues
-		const commitsToProcess = commits.slice(0, Math.min(5, commits.length));
 
 		for (let i = 0; i < commits.length; i++) {
 			const commit = commits[i];
@@ -310,7 +318,7 @@ export class GitHistoryUtil {
 				filepath
 			});
 			return new TextDecoder().decode(blob);
-		} catch (error) {
+		} catch (_error) {
 			// File might not exist at this commit
 			return null;
 		}

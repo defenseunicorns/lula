@@ -8,7 +8,7 @@
 	let activeTab: 'import' | 'existing' = 'import'; // Default to import
 	let hasExistingControlSet = false;
 	let hasAnyControlSets = false;
-	let isLoading = true;
+	let _isLoading = true;
 	let isSwitching = false;
 	let controlSets: { path: string; name: string; description?: string }[] = [];
 

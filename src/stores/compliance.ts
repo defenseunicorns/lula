@@ -81,7 +81,7 @@ export const complianceStore = {
 	setSelectedControl(control: Control | null) {
 		// Strip mappings property if it exists to prevent it from being saved to control files
 		if (control && 'mappings' in control) {
-			const { mappings, ...controlWithoutMappings } = control as any;
+			const { mappings: _mappings, ...controlWithoutMappings } = control as any;
 			selectedControl.set(controlWithoutMappings);
 		} else {
 			selectedControl.set(control);

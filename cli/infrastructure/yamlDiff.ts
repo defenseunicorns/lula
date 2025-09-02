@@ -1,31 +1,70 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
+/**
+ * YAML diff utilities for creating intelligent diffs between YAML documents
+ * Provides structured change detection and human-readable summaries
+ */
+
 import * as YAML from 'yaml';
 
+/**
+ * Represents a single change between two YAML documents
+ */
 export interface YamlDiffChange {
+	/** Type of change */
 	type: 'added' | 'removed' | 'modified';
+	/** Path to the changed field (dot notation) */
 	path: string;
-	oldValue?: any;
-	newValue?: any;
+	/** Previous value (for removed/modified) */
+	oldValue?: unknown;
+	/** New value (for added/modified) */
+	newValue?: unknown;
+	/** Human-readable description of the change */
 	description: string;
 }
 
+/**
+ * Result of comparing two YAML documents
+ */
 export interface YamlDiffResult {
+	/** Whether any changes were detected */
 	hasChanges: boolean;
+	/** List of all changes */
 	changes: YamlDiffChange[];
+	/** Human-readable summary of changes */
 	summary: string;
 }
 
 /**
+ * Valid YAML value types
+ */
+type YamlValue = string | number | boolean | null | YamlObject | YamlArray;
+type YamlObject = { [key: string]: YamlValue };
+type YamlArray = YamlValue[];
+
+/**
  * Create an intelligent YAML-aware diff between two YAML strings
+ *
+ * @param oldYaml - The original YAML string
+ * @param newYaml - The modified YAML string
+ * @returns A structured diff result with changes and summary
+ *
+ * @example
+ * ```typescript
+ * const diff = createYamlDiff(oldYamlStr, newYamlStr);
+ * console.log(diff.summary);
+ * for (const change of diff.changes) {
+ *   console.log(`${change.type}: ${change.path}`);
+ * }
+ * ```
  */
 export function createYamlDiff(oldYaml: string, newYaml: string): YamlDiffResult {
 	try {
-		const oldData = YAML.parse(oldYaml || '{}');
-		const newData = YAML.parse(newYaml || '{}');
+		const oldData = YAML.parse(oldYaml || '{}') as YamlValue;
+		const newData = YAML.parse(newYaml || '{}') as YamlValue;
 
-		const changes = compareObjects(oldData, newData, '');
+		const changes = compareValues(oldData, newData, '');
 
 		return {
 			hasChanges: changes.length > 0,
@@ -42,186 +81,116 @@ export function createYamlDiff(oldYaml: string, newYaml: string): YamlDiffResult
 	}
 }
 
-function compareObjects(oldObj: any, newObj: any, basePath: string): YamlDiffChange[] {
+/**
+ * Compare two YAML values recursively
+ *
+ * @param oldValue - The original value
+ * @param newValue - The modified value
+ * @param basePath - The current path in dot notation
+ * @returns List of changes detected
+ */
+function compareValues(
+	oldValue: YamlValue,
+	newValue: YamlValue,
+	basePath: string
+): YamlDiffChange[] {
 	const changes: YamlDiffChange[] = [];
 
 	// Handle null/undefined cases
-	if (oldObj === null || oldObj === undefined) {
-		if (newObj !== null && newObj !== undefined) {
+	if (oldValue === null || oldValue === undefined) {
+		if (newValue !== null && newValue !== undefined) {
 			changes.push({
 				type: 'added',
 				path: basePath || 'root',
-				newValue: newObj,
+				newValue,
 				description: `Added ${basePath || 'content'}`
 			});
 		}
 		return changes;
 	}
 
-	if (newObj === null || newObj === undefined) {
+	if (newValue === null || newValue === undefined) {
 		changes.push({
 			type: 'removed',
 			path: basePath || 'root',
-			oldValue: oldObj,
+			oldValue,
 			description: `Removed ${basePath || 'content'}`
 		});
 		return changes;
 	}
 
 	// Handle arrays
-	if (Array.isArray(oldObj) || Array.isArray(newObj)) {
-		return compareArrays(oldObj, newObj, basePath);
+	if (Array.isArray(oldValue) || Array.isArray(newValue)) {
+		return compareArrays(oldValue as YamlArray, newValue as YamlArray, basePath);
 	}
 
 	// Handle objects
-	if (typeof oldObj === 'object' && typeof newObj === 'object') {
-		const allKeys = new Set([...Object.keys(oldObj), ...Object.keys(newObj)]);
-
-		for (const key of allKeys) {
-			const currentPath = basePath ? `${basePath}.${key}` : key;
-			const oldValue = oldObj[key];
-			const newValue = newObj[key];
-
-			if (!(key in oldObj)) {
-				changes.push({
-					type: 'added',
-					path: currentPath,
-					newValue,
-					description: `Added ${key}`
-				});
-			} else if (!(key in newObj)) {
-				changes.push({
-					type: 'removed',
-					path: currentPath,
-					oldValue,
-					description: `Removed ${key}`
-				});
-			} else if (!deepEqual(oldValue, newValue)) {
-				if (typeof oldValue === 'object' && typeof newValue === 'object') {
-					changes.push(...compareObjects(oldValue, newValue, currentPath));
-				} else {
-					changes.push({
-						type: 'modified',
-						path: currentPath,
-						oldValue,
-						newValue,
-						description: `Changed ${key}`
-					});
-				}
-			}
-		}
-
-		return changes;
+	if (typeof oldValue === 'object' && typeof newValue === 'object') {
+		return compareObjects(oldValue as YamlObject, newValue as YamlObject, basePath);
 	}
 
-	// Handle primitive values
-	if (oldObj !== newObj) {
+	// Handle primitives
+	if (oldValue !== newValue) {
 		changes.push({
 			type: 'modified',
-			path: basePath,
-			oldValue: oldObj,
-			newValue: newObj,
-			description: `Changed ${basePath || 'value'}`
+			path: basePath || 'root',
+			oldValue,
+			newValue,
+			description: `Changed ${basePath || 'value'} from "${oldValue}" to "${newValue}"`
 		});
 	}
 
 	return changes;
 }
 
-function compareArrays(oldArray: any[], newArray: any[], basePath: string): YamlDiffChange[] {
-	const changes: YamlDiffChange[] = [];
-
-	if (!Array.isArray(oldArray)) oldArray = [];
-	if (!Array.isArray(newArray)) newArray = [];
-
-	// For mappings and similar arrays, try to match by uuid or other identifier
-	if (basePath.includes('mappings')) {
-		return compareMappingsArrays(oldArray, newArray, basePath);
-	}
-
-	// Simple array comparison
-	const maxLength = Math.max(oldArray.length, newArray.length);
-
-	for (let i = 0; i < maxLength; i++) {
-		const currentPath = `${basePath}[${i}]`;
-		const oldItem = i < oldArray.length ? oldArray[i] : undefined;
-		const newItem = i < newArray.length ? newArray[i] : undefined;
-
-		if (oldItem === undefined) {
-			changes.push({
-				type: 'added',
-				path: currentPath,
-				newValue: newItem,
-				description: `Added item at index ${i}`
-			});
-		} else if (newItem === undefined) {
-			changes.push({
-				type: 'removed',
-				path: currentPath,
-				oldValue: oldItem,
-				description: `Removed item at index ${i}`
-			});
-		} else if (!deepEqual(oldItem, newItem)) {
-			changes.push(...compareObjects(oldItem, newItem, currentPath));
-		}
-	}
-
-	return changes;
-}
-
-function compareMappingsArrays(
-	oldMappings: any[],
-	newMappings: any[],
+/**
+ * Compare two objects and detect changes
+ *
+ * @param oldObj - The original object
+ * @param newObj - The modified object
+ * @param basePath - The current path in dot notation
+ * @returns List of changes detected
+ */
+function compareObjects(
+	oldObj: YamlObject,
+	newObj: YamlObject,
 	basePath: string
 ): YamlDiffChange[] {
 	const changes: YamlDiffChange[] = [];
+	const allKeys = new Set([...Object.keys(oldObj), ...Object.keys(newObj)]);
 
-	// Create maps by UUID for efficient lookup
-	const oldMap = new Map();
-	const newMap = new Map();
+	for (const key of allKeys) {
+		const currentPath = basePath ? `${basePath}.${key}` : key;
+		const oldValue = oldObj[key];
+		const newValue = newObj[key];
 
-	oldMappings.forEach((mapping, index) => {
-		if (mapping && mapping.uuid) {
-			oldMap.set(mapping.uuid, { mapping, index });
-		}
-	});
-
-	newMappings.forEach((mapping, index) => {
-		if (mapping && mapping.uuid) {
-			newMap.set(mapping.uuid, { mapping, index });
-		}
-	});
-
-	// Find added mappings
-	for (const [uuid, { mapping }] of newMap) {
-		if (!oldMap.has(uuid)) {
+		if (!(key in oldObj)) {
 			changes.push({
 				type: 'added',
-				path: `${basePath}[uuid=${uuid}]`,
-				newValue: mapping,
-				description: `Added mapping for ${mapping.control_id || 'control'}`
+				path: currentPath,
+				newValue,
+				description: `Added ${key}`
 			});
-		}
-	}
-
-	// Find removed mappings
-	for (const [uuid, { mapping }] of oldMap) {
-		if (!newMap.has(uuid)) {
+		} else if (!(key in newObj)) {
 			changes.push({
 				type: 'removed',
-				path: `${basePath}[uuid=${uuid}]`,
-				oldValue: mapping,
-				description: `Removed mapping for ${mapping.control_id || 'control'}`
+				path: currentPath,
+				oldValue,
+				description: `Removed ${key}`
 			});
-		}
-	}
-
-	// Find modified mappings
-	for (const [uuid, { mapping: newMapping }] of newMap) {
-		if (oldMap.has(uuid)) {
-			const { mapping: oldMapping } = oldMap.get(uuid);
-			if (!deepEqual(oldMapping, newMapping)) {
-				changes.push(...compareObjects(oldMapping, newMapping, `${basePath}[uuid=${uuid}]`));
+		} else if (!deepEqual(oldValue, newValue)) {
+			if (typeof oldValue === 'object' && typeof newValue === 'object') {
+				// Recursively compare nested objects
+				changes.push(...compareValues(oldValue, newValue, currentPath));
+			} else {
+				// For primitive values or type changes
+				changes.push({
+					type: 'modified',
+					path: currentPath,
+					oldValue,
+					newValue,
+					description: formatChangeDescription(key, oldValue, newValue)
+				});
 			}
 		}
 	}
@@ -229,32 +198,146 @@ function compareMappingsArrays(
 	return changes;
 }
 
-function deepEqual(obj1: any, obj2: any): boolean {
-	if (obj1 === obj2) return true;
+/**
+ * Compare two arrays and detect changes
+ *
+ * @param oldArr - The original array
+ * @param newArr - The modified array
+ * @param basePath - The current path in dot notation
+ * @returns List of changes detected
+ */
+function compareArrays(
+	oldArr: YamlArray | unknown,
+	newArr: YamlArray | unknown,
+	basePath: string
+): YamlDiffChange[] {
+	const changes: YamlDiffChange[] = [];
 
-	if (obj1 == null || obj2 == null) return obj1 === obj2;
-
-	if (typeof obj1 !== typeof obj2) return false;
-
-	if (typeof obj1 !== 'object') return obj1 === obj2;
-
-	if (Array.isArray(obj1) !== Array.isArray(obj2)) return false;
-
-	const keys1 = Object.keys(obj1);
-	const keys2 = Object.keys(obj2);
-
-	if (keys1.length !== keys2.length) return false;
-
-	for (const key of keys1) {
-		if (!keys2.includes(key)) return false;
-		if (!deepEqual(obj1[key], obj2[key])) return false;
+	// Handle case where one is not an array
+	if (!Array.isArray(oldArr) && Array.isArray(newArr)) {
+		changes.push({
+			type: 'modified',
+			path: basePath || 'root',
+			oldValue: oldArr,
+			newValue: newArr,
+			description: `Changed ${basePath || 'value'} from non-array to array`
+		});
+		return changes;
 	}
 
-	return true;
+	if (Array.isArray(oldArr) && !Array.isArray(newArr)) {
+		changes.push({
+			type: 'modified',
+			path: basePath || 'root',
+			oldValue: oldArr,
+			newValue: newArr,
+			description: `Changed ${basePath || 'value'} from array to non-array`
+		});
+		return changes;
+	}
+
+	// Both are arrays - compare them
+	const oldArray = oldArr as YamlArray;
+	const newArray = newArr as YamlArray;
+
+	if (oldArray.length !== newArray.length) {
+		changes.push({
+			type: 'modified',
+			path: basePath || 'root',
+			oldValue: oldArray,
+			newValue: newArray,
+			description: `Array ${basePath || 'items'} changed from ${oldArray.length} to ${newArray.length} items`
+		});
+	} else {
+		// Compare each element
+		for (let i = 0; i < oldArray.length; i++) {
+			const elementPath = `${basePath}[${i}]`;
+			if (!deepEqual(oldArray[i], newArray[i])) {
+				changes.push(...compareValues(oldArray[i], newArray[i], elementPath));
+			}
+		}
+	}
+
+	return changes;
 }
 
+/**
+ * Deep equality check for YAML values
+ *
+ * @param a - First value
+ * @param b - Second value
+ * @returns True if values are deeply equal
+ */
+function deepEqual(a: YamlValue, b: YamlValue): boolean {
+	if (a === b) return true;
+	if (a === null || b === null) return false;
+	if (typeof a !== typeof b) return false;
+
+	if (Array.isArray(a) && Array.isArray(b)) {
+		if (a.length !== b.length) return false;
+		for (let i = 0; i < a.length; i++) {
+			if (!deepEqual(a[i], b[i])) return false;
+		}
+		return true;
+	}
+
+	if (typeof a === 'object' && typeof b === 'object') {
+		const aObj = a as YamlObject;
+		const bObj = b as YamlObject;
+		const aKeys = Object.keys(aObj);
+		const bKeys = Object.keys(bObj);
+
+		if (aKeys.length !== bKeys.length) return false;
+
+		for (const key of aKeys) {
+			if (!bKeys.includes(key)) return false;
+			if (!deepEqual(aObj[key], bObj[key])) return false;
+		}
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Format a change description for display
+ *
+ * @param key - The field name
+ * @param oldValue - The original value
+ * @param newValue - The new value
+ * @returns Human-readable description
+ */
+function formatChangeDescription(key: string, oldValue: unknown, newValue: unknown): string {
+	// Special handling for common control fields
+	if (key === 'status' || key === 'implementation_status') {
+		return `Changed ${key} from "${oldValue}" to "${newValue}"`;
+	}
+
+	if (key === 'last_updated' || key === 'updated_at' || key === 'modified') {
+		return `Updated ${key}`;
+	}
+
+	// Handle long strings
+	const oldStr = String(oldValue);
+	const newStr = String(newValue);
+
+	if (oldStr.length > 50 || newStr.length > 50) {
+		return `Modified ${key}`;
+	}
+
+	return `Changed ${key} from "${oldStr}" to "${newStr}"`;
+}
+
+/**
+ * Generate a human-readable summary of changes
+ *
+ * @param changes - List of changes
+ * @returns Summary string
+ */
 function generateSummary(changes: YamlDiffChange[]): string {
-	if (changes.length === 0) return 'No changes';
+	if (changes.length === 0) {
+		return 'No changes detected';
+	}
 
 	const added = changes.filter((c) => c.type === 'added').length;
 	const removed = changes.filter((c) => c.type === 'removed').length;
@@ -266,17 +349,4 @@ function generateSummary(changes: YamlDiffChange[]): string {
 	if (modified > 0) parts.push(`${modified} modified`);
 
 	return parts.join(', ');
-}
-
-/**
- * Format a value for display in diffs
- */
-export function formatValue(value: any): string {
-	if (value === null) return 'null';
-	if (value === undefined) return 'undefined';
-	if (typeof value === 'string') return `"${value}"`;
-	if (typeof value === 'object') {
-		return YAML.stringify(value).trim();
-	}
-	return String(value);
 }
