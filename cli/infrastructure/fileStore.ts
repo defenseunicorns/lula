@@ -103,17 +103,17 @@ export class FileStore {
 	async loadControl(controlId: string): Promise<Control | null> {
 		// controlId might be either the actual control ID (AC-1.1) or the filename without extension (AC-1_1)
 		// We need to handle both cases
-		
+
 		// Convert control ID to filename format (AC-1.1 -> AC-1_1)
 		const sanitizedId = controlId.replace(/[^\w\-]/g, '_');
-		
+
 		// Try flat structure first (atomic controls)
 		// Try both the original ID and sanitized version
 		const possibleFlatPaths = [
 			join(this.controlsDir, `${controlId}.yaml`),
 			join(this.controlsDir, `${sanitizedId}.yaml`)
 		];
-		
+
 		for (const flatFilePath of possibleFlatPaths) {
 			if (existsSync(flatFilePath)) {
 				try {
@@ -137,13 +137,13 @@ export class FileStore {
 		// Fallback to family-based structure
 		const family = this.getControlFamily(controlId);
 		const familyDir = join(this.controlsDir, family);
-		
+
 		// Try both formats in family directory
 		const possibleFamilyPaths = [
 			join(familyDir, `${controlId}.yaml`),
 			join(familyDir, `${sanitizedId}.yaml`)
 		];
-		
+
 		for (const filePath of possibleFamilyPaths) {
 			if (existsSync(filePath)) {
 				try {
@@ -163,7 +163,7 @@ export class FileStore {
 				}
 			}
 		}
-		
+
 		// Control not found in any location
 		return null;
 	}
@@ -193,30 +193,34 @@ export class FileStore {
 				// Read existing file content as text to preserve exact format
 				const existingContent = readFileSync(filePath, 'utf8');
 				const existingControl = YAML.parse(existingContent);
-				
+
 				// Only update fields that actually changed from the control object
 				// Remove runtime fields that should never be persisted
 				const fieldsToUpdate: any = {};
 				for (const key in control) {
-					if (key === 'timeline' || key === 'unifiedHistory' || key === '_metadata' || key === 'id') {
-						continue; // Skip runtime fields
+					if (
+						key === 'timeline' ||
+						key === 'unifiedHistory' ||
+						key === '_metadata'
+					) {
+						continue; // Skip runtime-only fields
 					}
 					// Only include fields that are different from existing
 					if (JSON.stringify(control[key]) !== JSON.stringify(existingControl[key])) {
 						fieldsToUpdate[key] = control[key];
 					}
 				}
-				
+
 				// If there are changes, update only those fields
 				if (Object.keys(fieldsToUpdate).length > 0) {
 					const updatedControl = { ...existingControl, ...fieldsToUpdate };
-					
+
 					// Parse and re-stringify to maintain consistent format
 					// But use more conservative settings to preserve existing style
 					yamlContent = YAML.stringify(updatedControl, {
 						indent: 2,
-						lineWidth: 80,  // Standard line width
-						defaultStringType: 'PLAIN',  // Use plain strings by default
+						lineWidth: 80, // Standard line width
+						defaultStringType: 'PLAIN', // Use plain strings by default
 						defaultKeyType: 'PLAIN'
 					});
 				} else {
@@ -229,8 +233,8 @@ export class FileStore {
 				delete controlToSave.timeline;
 				delete controlToSave.unifiedHistory;
 				delete controlToSave._metadata;
-				delete controlToSave.id;
-				
+				// Keep the id field - it's needed for control identification
+
 				yamlContent = YAML.stringify(controlToSave, {
 					indent: 2,
 					lineWidth: 80,
@@ -370,6 +374,127 @@ export class FileStore {
 		}
 
 		return mappings;
+	}
+
+	/**
+	 * Save a single mapping
+	 */
+	async saveMapping(mapping: Mapping): Promise<void> {
+		// Ensure base directories exist when saving
+		this.ensureDirectories();
+
+		const controlId = mapping.control_id;
+		const family = this.getControlFamily(controlId);
+		const familyDir = join(this.mappingsDir, family);
+		const mappingFile = join(familyDir, `${controlId}-mappings.yaml`);
+
+		// Ensure family directory exists
+		if (!existsSync(familyDir)) {
+			mkdirSync(familyDir, { recursive: true });
+		}
+
+		// Load existing mappings for this control
+		let existingMappings: Mapping[] = [];
+		if (existsSync(mappingFile)) {
+			try {
+				const content = readFileSync(mappingFile, 'utf8');
+				existingMappings = YAML.parse(content) || [];
+			} catch (error) {
+				console.error(`Failed to parse existing mappings file: ${mappingFile}`, error);
+				existingMappings = [];
+			}
+		}
+
+		// Update or add the mapping
+		const existingIndex = existingMappings.findIndex(m => m.uuid === mapping.uuid);
+		if (existingIndex >= 0) {
+			existingMappings[existingIndex] = mapping;
+		} else {
+			existingMappings.push(mapping);
+		}
+
+		// Save back to file
+		try {
+			const yamlContent = YAML.stringify(existingMappings, {
+				indent: 2,
+				lineWidth: 0,
+				minContentWidth: 0
+			});
+
+			writeFileSync(mappingFile, yamlContent, 'utf8');
+		} catch (error) {
+			throw new Error(
+				`Failed to save mapping for control ${controlId}: ${error instanceof Error ? error.message : String(error)}`
+			);
+		}
+	}
+
+	/**
+	 * Delete a single mapping
+	 */
+	async deleteMapping(uuid: string): Promise<void> {
+		// Find the mapping in all mapping files
+		const mappingFiles = this.getAllMappingFiles();
+		
+		for (const file of mappingFiles) {
+			try {
+				const content = readFileSync(file, 'utf8');
+				let mappings: Mapping[] = YAML.parse(content) || [];
+				
+				const originalLength = mappings.length;
+				mappings = mappings.filter(m => m.uuid !== uuid);
+				
+				// If we removed a mapping, save the file
+				if (mappings.length < originalLength) {
+					if (mappings.length === 0) {
+						// Delete the file if no mappings remain
+						unlinkSync(file);
+					} else {
+						// Save the remaining mappings
+						const yamlContent = YAML.stringify(mappings, {
+							indent: 2,
+							lineWidth: 0,
+							minContentWidth: 0
+						});
+						writeFileSync(file, yamlContent, 'utf8');
+					}
+					return; // Found and deleted, we're done
+				}
+			} catch (error) {
+				console.error(`Error processing mapping file ${file}:`, error);
+			}
+		}
+	}
+
+	/**
+	 * Get all mapping files
+	 */
+	private getAllMappingFiles(): string[] {
+		const files: string[] = [];
+		
+		if (!existsSync(this.mappingsDir)) {
+			return files;
+		}
+		
+		// Check for flat structure
+		const flatFiles = readdirSync(this.mappingsDir)
+			.filter(file => file.endsWith('-mappings.yaml'))
+			.map(file => join(this.mappingsDir, file));
+		files.push(...flatFiles);
+		
+		// Check for family directories
+		const entries = readdirSync(this.mappingsDir, { withFileTypes: true });
+		for (const entry of entries) {
+			if (entry.isDirectory()) {
+				const familyDir = join(this.mappingsDir, entry.name);
+				const familyFiles = readdirSync(familyDir)
+					.filter(file => file.endsWith('-mappings.yaml'))
+					.map(file => join(familyDir, file));
+				files.push(...familyFiles);
+			}
+		}
+		
+		return files;
 	}
 
 	/**

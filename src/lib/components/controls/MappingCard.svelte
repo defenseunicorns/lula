@@ -22,7 +22,7 @@
 	let { mapping, onEdit, onDelete, showActions = false }: Props = $props();
 
 	function handleCopyUuid() {
-		navigator.clipboard.writeText(`@mapControl ${mapping.uuid}`);
+		navigator.clipboard.writeText(`@lula ${mapping.uuid}`);
 	}
 
 	function handleEdit() {
@@ -47,7 +47,7 @@
 			<span
 				class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-mono font-medium bg-gray-900 dark:bg-gray-900 text-gray-100 dark:text-gray-200 shadow-sm"
 			>
-				@mapControl {mapping.uuid}
+				@lula {mapping.uuid}
 			</span>
 			<div class="flex items-center space-x-2">
 				<button

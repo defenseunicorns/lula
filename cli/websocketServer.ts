@@ -13,7 +13,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as yaml from 'yaml';
 import { getControlId } from './infrastructure/controlHelpers';
-import type { Control } from './types';
+import type { Control, Mapping } from './types';
 
 /**
  * WebSocket message types for client-server communication
@@ -78,20 +78,43 @@ class WebSocketManager {
 					// Update control in backend
 					const state = getServerState();
 					if (payload && payload.id) {
-						await state.fileStore.saveControl(payload as Control);
+						// Get existing control to merge with
+						const existingControl = state.controlsCache.get(payload.id);
+						if (!existingControl) {
+							console.error('Control not found:', payload.id);
+							return;
+						}
 						
-						// Invalidate the controls list cache so it reloads on next request
-						// We don't cache individual controls anymore
-						state.controlsCache.clear();
+						// Merge partial update with existing control (payload contains only changed fields)
+						const updatedControl = { ...existingControl, ...payload } as Control;
 						
-						// Don't broadcast full state - just send a success response
-						// The client already has the updated data
+						// Save the merged control
+						await state.fileStore.saveControl(updatedControl);
+
+						// Update just this control in the cache
+						state.controlsCache.set(updatedControl.id, updatedControl);
+						
+						// Update the family grouping if needed
+						const family = updatedControl.family || updatedControl.id.split('-')[0];
+						if (!state.controlsByFamily.has(family)) {
+							state.controlsByFamily.set(family, new Set<string>());
+						}
+						const familyControlIds = state.controlsByFamily.get(family);
+						if (familyControlIds) {
+							// Ensure the control ID is in the family set
+							familyControlIds.add(updatedControl.id);
+						}
+
+						// Send success response 
 						ws.send(
 							JSON.stringify({
 								type: 'control-updated',
 								payload: { id: payload.id, success: true }
 							})
 						);
+
+						// Don't broadcast full state - it causes unnecessary re-renders
+						// The client already has the updated data
 					}
 					break;
 				}
@@ -101,11 +124,11 @@ class WebSocketManager {
 					const state = getServerState();
 					state.controlsCache.clear();
 					state.controlsByFamily.clear();
-					
+
 					// Reload all controls from disk
 					const { loadAllData } = await import('./serverState');
 					await loadAllData();
-					
+
 					// Broadcast updated state to all clients
 					this.broadcastState();
 					break;
@@ -127,17 +150,109 @@ class WebSocketManager {
 					break;
 				}
 
-				case 'create-mapping':
-					// TODO: Implement mapping creation
+				case 'create-mapping': {
+					// Create a new mapping
+					const state = getServerState();
+					if (payload && payload.control_id) {
+						const mapping = payload as unknown as Mapping;
+						
+						// Generate a UUID if not provided
+						if (!mapping.uuid) {
+							const crypto = await import('crypto');
+							mapping.uuid = crypto.randomUUID();
+						}
+						
+						// Save the mapping
+						await state.fileStore.saveMapping(mapping);
+						
+						// Update the cache
+						state.mappingsCache.set(mapping.uuid, mapping);
+						
+						// Update indexes
+						const family = mapping.control_id.split('-')[0];
+						if (!state.mappingsByFamily.has(family)) {
+							state.mappingsByFamily.set(family, new Set<string>());
+						}
+						state.mappingsByFamily.get(family)?.add(mapping.uuid);
+						
+						if (!state.mappingsByControl.has(mapping.control_id)) {
+							state.mappingsByControl.set(mapping.control_id, new Set<string>());
+						}
+						state.mappingsByControl.get(mapping.control_id)?.add(mapping.uuid);
+						
+						// Send success response
+						ws.send(
+							JSON.stringify({
+								type: 'mapping-created',
+								payload: { uuid: mapping.uuid, success: true }
+							})
+						);
+						
+						// Broadcast the updated state to all clients
+						this.broadcastState();
+					}
 					break;
+				}
 
-				case 'update-mapping':
-					// TODO: Implement mapping update
+				case 'update-mapping': {
+					// Update an existing mapping
+					const state = getServerState();
+					if (payload && payload.uuid) {
+						const mapping = payload as unknown as Mapping;
+						
+						// Save the mapping
+						await state.fileStore.saveMapping(mapping);
+						
+						// Update the cache
+						state.mappingsCache.set(mapping.uuid, mapping);
+						
+						// Send success response
+						ws.send(
+							JSON.stringify({
+								type: 'mapping-updated',
+								payload: { uuid: mapping.uuid, success: true }
+							})
+						);
+						
+						// Broadcast the updated state to all clients
+						this.broadcastState();
+					}
 					break;
+				}
 
-				case 'delete-mapping':
-					// TODO: Implement mapping deletion
+				case 'delete-mapping': {
+					// Delete a mapping
+					const state = getServerState();
+					if (payload && payload.uuid) {
+						const uuid = payload.uuid as string;
+						const mapping = state.mappingsCache.get(uuid);
+						
+						if (mapping) {
+							// Delete the mapping file
+							await state.fileStore.deleteMapping(uuid);
+							
+							// Remove from cache
+							state.mappingsCache.delete(uuid);
+							
+							// Remove from indexes
+							const family = mapping.control_id.split('-')[0];
+							state.mappingsByFamily.get(family)?.delete(uuid);
+							state.mappingsByControl.get(mapping.control_id)?.delete(uuid);
+							
+							// Send success response
+							ws.send(
+								JSON.stringify({
+									type: 'mapping-deleted',
+									payload: { uuid, success: true }
+								})
+							);
+							
+							// Broadcast the updated state to all clients
+							this.broadcastState();
+						}
+					}
 					break;
+				}
 
 				case 'scan-control-sets': {
 					// Scan for available control sets
@@ -168,11 +283,11 @@ class WebSocketManager {
 						const { FileStore } = await import('./infrastructure/fileStore');
 						const currentPath = getCurrentControlSetPath();
 						const fileStore = new FileStore({ baseDir: currentPath });
-						
+
 						// Load the control fresh from disk
 						const controlId = payload.id as string;
 						const control = await fileStore.loadControl(controlId);
-						
+
 						if (control) {
 							// Ensure control has id field for frontend
 							if (!control.id) {
@@ -186,18 +301,18 @@ class WebSocketManager {
 							try {
 								const currentPath = getCurrentControlSetPath();
 								const { existsSync } = await import('fs');
-								
+
 								// Try to find the actual file path - it might be in different formats
 								const family = control.family || control.id.split('-')[0];
 								const familyDir = join(currentPath, 'controls', family);
-								
+
 								// Try different filename formats
 								const possibleFilenames = [
 									`${control.id}.yaml`,
-									`${control.id.replace(/\./g, '_')}.yaml`,  // AC-1.1 -> AC-1_1.yaml
-									`${control.id.replace(/[^\w\-]/g, '_')}.yaml`  // General sanitization
+									`${control.id.replace(/\./g, '_')}.yaml`, // AC-1.1 -> AC-1_1.yaml
+									`${control.id.replace(/[^\w\-]/g, '_')}.yaml` // General sanitization
 								];
-								
+
 								let controlPath = '';
 								for (const filename of possibleFilenames) {
 									const testPath = join(familyDir, filename);
@@ -206,7 +321,7 @@ class WebSocketManager {
 										break;
 									}
 								}
-								
+
 								// If not found in family dir, try flat structure
 								if (!controlPath) {
 									for (const filename of possibleFilenames) {
@@ -230,7 +345,7 @@ class WebSocketManager {
 									// Create GitHistoryUtil instance and get file history
 									const gitUtil = new GitHistoryUtil(currentPath);
 									const history = await gitUtil.getFileHistory(controlPath);
-									
+
 									console.log(`Git history for ${control.id}:`, {
 										path: controlPath,
 										totalCommits: history.totalCommits,
@@ -290,49 +405,49 @@ class WebSocketManager {
 									if (timeline.totalCommits === 0 && hasPendingChanges) {
 										console.log(`No git history for control ${payload.id} - showing as pending`);
 										timeline.commits = [
-										{
+											{
+												hash: 'pending',
+												shortHash: 'pending',
+												author: 'Current User',
+												authorEmail: '',
+												date: new Date().toISOString(),
+												message: 'Pending changes (uncommitted)',
+												isPending: true, // Add this flag for the frontend
+												changes: {
+													insertions: 0,
+													deletions: 0,
+													files: 1
+												}
+											}
+										];
+										timeline.totalCommits = 1; // Show we have one "pending" commit
+									}
+									// Also add pending entry if there are uncommitted changes on top of history
+									else if (hasPendingChanges && timeline.totalCommits > 0) {
+										timeline.commits.unshift({
 											hash: 'pending',
 											shortHash: 'pending',
 											author: 'Current User',
 											authorEmail: '',
 											date: new Date().toISOString(),
 											message: 'Pending changes (uncommitted)',
-											isPending: true, // Add this flag for the frontend
+											isPending: true,
 											changes: {
 												insertions: 0,
 												deletions: 0,
 												files: 1
 											}
-										}
-									];
-									timeline.totalCommits = 1; // Show we have one "pending" commit
-								}
-								// Also add pending entry if there are uncommitted changes on top of history
-								else if (hasPendingChanges && timeline.totalCommits > 0) {
-									timeline.commits.unshift({
-										hash: 'pending',
-										shortHash: 'pending',
-										author: 'Current User',
-										authorEmail: '',
-										date: new Date().toISOString(),
-										message: 'Pending changes (uncommitted)',
-										isPending: true,
-										changes: {
-											insertions: 0,
-											deletions: 0,
-											files: 1
-										}
+										});
+										timeline.totalCommits += 1;
+									}
+
+									console.log(`Final timeline for ${control.id}:`, {
+										totalCommits: timeline.totalCommits,
+										commits: timeline.commits?.length || 0,
+										hasPending: timeline.hasPendingChanges
 									});
-									timeline.totalCommits += 1;
 								}
-								
-								console.log(`Final timeline for ${control.id}:`, {
-									totalCommits: timeline.totalCommits,
-									commits: timeline.commits?.length || 0,
-									hasPending: timeline.hasPendingChanges
-								});
-							}
-						} catch (error) {
+							} catch (error) {
 								console.error('Error fetching timeline:', error);
 								// Don't fail the whole request, just set timeline to null
 								timeline = null;

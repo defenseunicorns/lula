@@ -225,10 +225,10 @@
 							>
 								<div class="flex justify-between items-start mb-2">
 									<span class="text-sm font-medium text-gray-900 dark:text-white"
-										>@mapControl {mapping.uuid}</span
+										>@lula {mapping.uuid}</span
 									>
 									<button
-										onclick={() => navigator.clipboard.writeText(`@mapControl ${mapping.uuid}`)}
+										onclick={() => navigator.clipboard.writeText(`@lula ${mapping.uuid}`)}
 										class="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
 									>
 										Copy UUID

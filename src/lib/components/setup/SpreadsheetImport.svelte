@@ -74,7 +74,7 @@
 	async function handleFile(file: File) {
 		fileName = file.name;
 		errorMessage = '';
-		
+
 		// Auto-populate control set name from filename (remove extension)
 		if (!controlSetName) {
 			controlSetName = fileName.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
@@ -379,7 +379,7 @@
 			errorMessage = 'Please select a Control ID field before importing';
 			return;
 		}
-		
+
 		if (!controlSetName || controlSetName.trim() === '') {
 			errorMessage = 'Please enter a Control Set Name before importing';
 			return;
@@ -405,7 +405,10 @@
 			formData.append('skipEmptyRows', 'true');
 			// Use the editable control set name and description
 			formData.append('controlSetName', controlSetName || fileName.replace(/\.[^.]+$/, ''));
-			formData.append('controlSetDescription', controlSetDescription || `Imported from ${fileName}`);
+			formData.append(
+				'controlSetDescription',
+				controlSetDescription || `Imported from ${fileName}`
+			);
 
 			// Add field schema configuration - include all fields that are assigned to a tab
 			const fieldSchema = Array.from(fieldConfigs.entries())
@@ -561,7 +564,10 @@
 			<!-- Control Set Details -->
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 				<div>
-					<label for="controlSetName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+					<label
+						for="controlSetName"
+						class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+					>
 						Control Set Name <span class="text-red-500">*</span>
 					</label>
 					<input
@@ -578,7 +584,10 @@
 				</div>
 
 				<div>
-					<label for="controlSetDescription" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+					<label
+						for="controlSetDescription"
+						class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+					>
 						Description
 					</label>
 					<input

@@ -6,9 +6,12 @@
 	import { page } from '$app/stores';
 	import { ControlDetailsPanel, ControlsList } from '$components/controls';
 	import { selectedControl } from '$stores/compliance';
-	import { appState, wsClient } from '$lib/websocket';
+	import { wsClient } from '$lib/websocket';
 	import { Document } from 'carbon-icons-svelte';
 	import { onMount } from 'svelte';
+
+	// Track the last fetched control ID to avoid refetching
+	let lastFetchedControlId = '';
 
 	// React to URL parameter changes and fetch control details
 	$effect(() => {
@@ -16,18 +19,17 @@
 		if (!controlId) return;
 
 		const decodedControlId = decodeURIComponent(controlId);
-
-		// Always fetch full control details when navigating to a control
-		// The summary data in $appState.controls is not enough for the details view
-		if (decodedControlId && $appState.isConnected) {
-			// Fetch full control details from backend
-			wsClient.getControlDetails(decodedControlId);
-
-			// Also set a temporary placeholder from summary if available
-			const summaryControl = $appState.controls?.find((c) => c.id === decodedControlId);
-			if (summaryControl) {
-				// This gives immediate feedback while full data loads
-				selectedControl.set(summaryControl);
+		
+		// Check if we need to fetch - only when control ID changes
+		if (decodedControlId && decodedControlId !== lastFetchedControlId) {
+			// Check connection status without subscribing to full appState
+			const isConnected = wsClient.isConnected();
+			
+			if (isConnected) {
+				lastFetchedControlId = decodedControlId;
+				
+				// Fetch full control details from backend
+				wsClient.getControlDetails(decodedControlId);
 			}
 		}
 	});

@@ -14,6 +14,8 @@ export default defineConfig({
 				'**/coverage/**',
 				'**/.git/**',
 				'**/examples/**',
+				'**/*.yaml', // Ignore all YAML files
+				'**/*.yml', // Ignore all YML files too
 				'**/*.log',
 				'**/.env*',
 				'**/README.md',

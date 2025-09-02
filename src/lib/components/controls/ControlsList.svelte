@@ -3,13 +3,13 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { Dropdown, SearchBar } from '$components/ui';
-	import { tooltip } from '$lib/actions/tooltip';
 	import type { Control, FieldSchema } from '$lib/types';
 	import { appState } from '$lib/websocket';
+	import { complianceStore, searchTerm, selectedFamily } from '$stores/compliance';
 	import { Filter } from 'carbon-icons-svelte';
 	import { derived, writable } from 'svelte/store';
-	import { onMount } from 'svelte';
 
 	// Derive controls and families from appState
 	const controls = derived(appState, ($state) => $state.controls || []);
@@ -24,13 +24,14 @@
 		}));
 	});
 
-	// Local state for search and selection (using stores for reactivity)
-	const searchTerm = writable('');
-	const selectedFamily = writable('');
-	let selectedControl: Control | null = null;
+	// Use compliance store for search and family filter - stores are imported directly
+	
+	// Track selected control based on current route
+	let selectedControlId: string | null = null;
+	$: selectedControlId = $page.params.id || null;
 
 	// Dynamic field schema for table columns
-	let fieldSchema: Record<string, FieldSchema> | null = null;
+	let fieldSchema: Record<string, FieldSchema> = {};
 	let tableColumns: Array<{ fieldName: string; field: FieldSchema }> = [];
 	let schemaLoading = true;
 
@@ -322,12 +323,25 @@
 			<div class="flex-1 overflow-auto">
 				<div class="divide-y divide-gray-200 dark:divide-gray-700">
 					{#each $filteredControlsWithMappings as control}
-						{@const rawDescription =
-							control['control-information'] ||
-							control['cci-definition'] ||
-							control['implementation-guidance'] ||
-							control.title ||
-							'No description available'}
+						{@const rawDescription = (() => {
+							// Cast control to any to allow dynamic field access
+							const anyControl = control as any;
+							// Try to find a description from any text field in the schema
+							if (fieldSchema) {
+								for (const [fieldName, field] of Object.entries(fieldSchema)) {
+									if ((field.ui_type === 'long_text' || field.ui_type === 'short_text') && anyControl[fieldName]) {
+										return anyControl[fieldName];
+									}
+								}
+							}
+							// Fallback to any field that contains text
+							for (const [key, value] of Object.entries(control)) {
+								if (typeof value === 'string' && value.length > 20 && !key.startsWith('_')) {
+									return value;
+								}
+							}
+							return 'No description available';
+						})()}
 						{@const description = extractDescriptionFromNested(rawDescription) || ''}
 						{@const cleanDescription = description
 							? description
@@ -339,7 +353,7 @@
 						{#if tableColumns.length > 0}
 							<!-- Dynamic columns based on field schema -->
 							<div
-								class="grid gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-all duration-150 {$selectedControl?.id ===
+								class="grid gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-all duration-150 {selectedControlId ===
 								control.id
 									? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 shadow-sm'
 									: ''}"
@@ -352,7 +366,7 @@
 								aria-label="Select control {control.id}"
 							>
 								{#each tableColumns as { fieldName, field }}
-									{@const value = control[fieldName]}
+									{@const value = (control as any)[fieldName]}
 									<div class="flex flex-col justify-center">
 										{#if field.ui_type === 'select' && value}
 											<span
@@ -393,7 +407,7 @@
 						{:else}
 							<!-- Fallback to default columns -->
 							<div
-								class="grid grid-cols-5 gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-all duration-150 {$selectedControl?.id ===
+								class="grid grid-cols-5 gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 cursor-pointer transition-all duration-150 {selectedControlId ===
 								control.id
 									? 'bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 shadow-sm'
 									: ''}"
@@ -413,19 +427,7 @@
 								<!-- Title Column -->
 								<div class="flex flex-col justify-center">
 									<div class="text-sm text-gray-900 dark:text-white font-medium">
-										{control.title ||
-											(control['control-information']
-												? Array.isArray(control['control-information'])
-													? typeof control['control-information'][0] === 'string'
-														? control['control-information'][0]?.trim() || 'No Title'
-														: typeof control['control-information'][0] === 'object'
-															? Object.keys(control['control-information'][0])[0]?.replace(
-																	/:$/,
-																	''
-																) || 'No Title'
-															: 'No Title'
-													: control['control-information'].split('\n')[0].trim()
-												: 'No Title')}
+										{control.title || 'No Title'}
 									</div>
 								</div>
 								<!-- Statement Column -->
@@ -439,11 +441,7 @@
 									<span
 										class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
 									>
-										{(
-											control.family ||
-											control['control-acronym']?.split('-')[0] ||
-											''
-										).toUpperCase()}
+										{(control.family || control.id?.split('-')[0] || '').toUpperCase()}
 									</span>
 								</div>
 								<!-- Mappings Column -->

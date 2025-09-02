@@ -15,7 +15,10 @@ export interface WSMessage {
 		| 'mappings-update'
 		| 'control-details'
 		| 'control-sets-list'
-		| 'control-updated';
+		| 'control-updated'
+		| 'mapping-created'
+		| 'mapping-updated'
+		| 'mapping-deleted';
 	payload?: any;
 }
 
@@ -197,6 +200,18 @@ class WebSocketClient {
 				// This just confirms the save was successful
 				break;
 
+			case 'mapping-created':
+			case 'mapping-updated':
+			case 'mapping-deleted':
+				console.log(`Mapping operation successful: ${message.type}`, message.payload);
+				// Emit an event so the control details panel can refresh its mappings
+				window.dispatchEvent(
+					new CustomEvent('mappings-changed', {
+						detail: message.payload
+					})
+				);
+				break;
+
 			case 'error':
 				console.error('WebSocket error:', message.payload);
 				break;
@@ -241,6 +256,11 @@ class WebSocketClient {
 		}
 
 		appState.update((state) => ({ ...state, isConnected: false }));
+	}
+
+	// Check if WebSocket is connected without subscribing to store
+	isConnected(): boolean {
+		return this.ws !== null && this.ws.readyState === WebSocket.OPEN;
 	}
 
 	// Send a command to the backend
