@@ -193,7 +193,7 @@ export default function (): Command {
           const changedBlocks = getChangedBlocks(oldText, newText);
 
           for (const block of changedBlocks) {
-              const newBlockText = newText
+            const newBlockText = newText
               .split("\n")
               .slice(block.startLine, block.endLine)
               .join("\n");
@@ -202,7 +202,7 @@ export default function (): Command {
             const commentBody =
               `**Compliance Alert**:\`${file.filename}\` changed between lines ${block.startLine + 1}–${block.endLine}.` +
               `\nUUID \`${block.uuid}\` may be out of compliance.` +
-              `\nSHA-256 of block contents: \`${blockSha256}\`.` + 
+              `\nSHA-256 of block contents: \`${blockSha256}\`.` +
               `\n\n Please review the changes to ensure they meet compliance standards.`;
             console.log(`Commenting on ${file.filename}: ${commentBody}`);
             await octokit.issues.createComment({
