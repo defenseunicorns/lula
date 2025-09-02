@@ -368,7 +368,6 @@ class WebSocketManager {
 
 									// Check git status for uncommitted changes (both control and mapping files)
 									let hasPendingChanges = false;
-									let mappingHasPending = false;
 
 									// Check control file
 									try {
@@ -419,22 +418,20 @@ class WebSocketManager {
 													cwd: process.cwd()
 												}).trim();
 
-												mappingHasPending = gitStatus.length > 0;
-												if (mappingHasPending) {
+												if (gitStatus.length > 0) {
+													hasPendingChanges = true;
 													console.log(
 														`Mapping file has pending changes: ${gitStatus.substring(0, 2)}`
 													);
 												}
 											} catch {
-												mappingHasPending = true;
+												hasPendingChanges = true;
 												console.log(`Mapping file is untracked`);
 											}
 										} catch {
 											// Error checking mapping file status
 										}
 									}
-
-									const hasAnyPendingChanges = hasPendingChanges || mappingHasPending;
 
 									// Merge control and mapping commits, marking each with its source
 									const allCommits = [
@@ -456,7 +453,7 @@ class WebSocketManager {
 										totalCommits: controlHistory.totalCommits + mappingHistory.totalCommits,
 										controlCommits: controlHistory.totalCommits || 0,
 										mappingCommits: mappingHistory.totalCommits || 0,
-										hasPendingChanges: hasAnyPendingChanges
+										hasPendingChanges
 									};
 
 									// If no history but file exists, create a pending entry
@@ -470,15 +467,16 @@ class WebSocketManager {
 												authorEmail: '',
 												date: new Date().toISOString(),
 												message: 'Pending changes (uncommitted)',
-												isPending: true, // Add this flag for the frontend
+												isPending: true,
 												changes: {
 													insertions: 0,
 													deletions: 0,
 													files: 1
-												}
+												},
+												source: 'control'
 											}
 										];
-										timeline.totalCommits = 1; // Show we have one "pending" commit
+										timeline.totalCommits = 1;
 									}
 									// Also add pending entry if there are uncommitted changes on top of history
 									else if (hasPendingChanges && timeline.totalCommits > 0) {
@@ -494,7 +492,8 @@ class WebSocketManager {
 												insertions: 0,
 												deletions: 0,
 												files: 1
-											}
+											},
+											source: 'control'
 										});
 										timeline.totalCommits += 1;
 									}
