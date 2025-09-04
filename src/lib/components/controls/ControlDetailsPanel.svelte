@@ -43,6 +43,17 @@
 	const saveStatus = $derived(
 		isSaving ? 'saving' : (hasChanges ? 'unsaved' : (showSavedMessage ? 'just-saved' : 'clean'))
 	);
+	
+	// Check if tabs have any fields
+	const hasCustomFields = $derived(() => {
+		if (!fieldSchema) return false;
+		return Object.values(fieldSchema).some((field: any) => field.tab === 'custom');
+	});
+	
+	const hasImplementationFields = $derived(() => {
+		if (!fieldSchema) return false;
+		return Object.values(fieldSchema).some((field: any) => field.tab === 'implementation');
+	});
 
 	// Watch for control changes - only reset when ID changes
 	$effect(() => {
@@ -198,8 +209,8 @@
 		active={activeTab}
 		tabs={[
 			{ id: 'details', label: 'Overview', icon: Information },
-			{ id: 'narrative', label: 'Implementation', icon: Edit },
-			{ id: 'custom', label: 'Custom', icon: Edit },
+			...(hasImplementationFields() ? [{ id: 'narrative', label: 'Implementation', icon: Edit }] : []),
+			...(hasCustomFields() ? [{ id: 'custom', label: 'Custom', icon: Edit }] : []),
 			{ id: 'mappings', label: 'Mappings', icon: Connect, count: associatedMappings.length },
 			{
 				id: 'history',

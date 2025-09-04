@@ -82,6 +82,20 @@ export class FileStore {
 	 * Ensure required directories exist
 	 */
 	private ensureDirectories(): void {
+		// Only create directories if baseDir is a valid control set path
+		// Avoid creating directories in project root
+		if (!this.baseDir || this.baseDir === '.' || this.baseDir === process.cwd()) {
+			console.warn('Skipping directory creation - baseDir appears to be project root:', this.baseDir);
+			return;
+		}
+		
+		// Check if baseDir contains a lula.yaml file (indicating it's a valid control set directory)
+		const lulaConfigPath = join(this.baseDir, 'lula.yaml');
+		if (!existsSync(lulaConfigPath)) {
+			console.warn('Skipping directory creation - no lula.yaml found in:', this.baseDir);
+			return;
+		}
+		
 		if (!existsSync(this.controlsDir)) {
 			mkdirSync(this.controlsDir, { recursive: true });
 		}

@@ -320,6 +320,13 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			if (fieldName === 'family' || (fieldName === 'id' && controlIdFieldNameClean !== 'id')) {
 				return;
 			}
+			
+			// Check if this field was excluded in the frontend (not assigned to any tab)
+			const frontendConfig = frontendFieldSchema?.find((f) => f.fieldName === fieldName);
+			// If we have frontend schema and this field isn't in it, skip it (it was excluded)
+			if (frontendFieldSchema && !frontendConfig) {
+				return;
+			}
 
 			const usageCount = metadata.totalCount - metadata.emptyCount;
 			const usagePercentage =
@@ -354,9 +361,6 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			} else {
 				uiType = 'long_text';
 			}
-
-			// Find frontend config for this field if provided
-			const frontendConfig = frontendFieldSchema?.find((f) => f.fieldName === fieldName);
 
 			// Determine category based on field name and usage or use frontend config
 			let category = frontendConfig?.category || 'custom';
@@ -438,7 +442,33 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				const controlId = control[controlIdFieldNameClean];
 				const fileName = `${controlId.replace(/[^a-zA-Z0-9-]/g, '_')}.yaml`;
 				const filePath = join(familyDir, fileName);
-				writeFileSync(filePath, yaml.stringify(control));
+				
+				// Filter control to only include fields that are in the field schema (not excluded)
+				const filteredControl: SpreadsheetRow = {};
+				
+				// Always include family
+				if (control.family !== undefined) {
+					filteredControl.family = control.family;
+				}
+				
+				// Include fields that are in the frontend schema or in the fields metadata
+				Object.keys(control).forEach((fieldName) => {
+					// Skip family as it's already added
+					if (fieldName === 'family') return;
+					
+					// Check if field is in the frontend schema (meaning it was assigned to a tab)
+					const isInFrontendSchema = frontendFieldSchema?.some(f => f.fieldName === fieldName);
+					
+					// Check if field is in the fields metadata (core fields)
+					const isInFieldsMetadata = fields.hasOwnProperty(fieldName);
+					
+					// Include the field if it's either in frontend schema or fields metadata
+					if (isInFrontendSchema || isInFieldsMetadata) {
+						filteredControl[fieldName] = control[fieldName];
+					}
+				});
+				
+				writeFileSync(filePath, yaml.stringify(filteredControl));
 			});
 		});
 
