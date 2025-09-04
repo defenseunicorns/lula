@@ -2,8 +2,8 @@
 <!-- SPDX-FileCopyrightText: 2023-Present The Lula Authors -->
 
 <script lang="ts">
-	import type { Control } from '$lib/types';
 	import { TimelineItem } from '$components/version-control';
+	import type { Control } from '$lib/types';
 	import { EmptyState } from '../../ui';
 
 	interface Props {

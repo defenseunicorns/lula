@@ -130,7 +130,8 @@ class WebSocketClient {
 				if (message.payload) {
 					appState.set({
 						...message.payload,
-						isConnected: true
+						isConnected: true,
+						isSwitchingControlSet: false // Clear switching flag after state update
 					});
 				}
 				break;

@@ -139,16 +139,9 @@
 					<h1 class="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
 						{control.id}
 					</h1>
-					<div class="flex items-center space-x-3 mt-1">
-						<p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
-							{control.title}
-						</p>
-						<span
-							class="inline-flex px-2.5 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300"
-						>
-							{control.family?.toUpperCase()}
-						</span>
-					</div>
+					<p class="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1">
+						{control.title}
+					</p>
 				</div>
 			</div>
 			<div class="flex items-center">

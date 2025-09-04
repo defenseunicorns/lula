@@ -55,11 +55,14 @@
 
 	function isCurrentControlSet(controlSet: ControlSet): boolean {
 		// Check if this is the currently active control set
-		return (
-			currentPath &&
-			(currentPath === controlSet.path ||
-				currentPath.includes(controlSet.path) ||
-				controlSet.path.includes(currentPath.split('/').pop() || ''))
+		// Normalize paths for comparison (remove trailing slashes)
+		const normalizedCurrentPath = currentPath?.replace(/\/$/, '');
+		const normalizedControlSetPath = controlSet.path?.replace(/\/$/, '');
+		
+		return !!(
+			normalizedCurrentPath &&
+			normalizedControlSetPath &&
+			normalizedCurrentPath === normalizedControlSetPath
 		);
 	}
 </script>

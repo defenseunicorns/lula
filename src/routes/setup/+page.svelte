@@ -96,28 +96,30 @@
 
 			// Wait for the state to update via WebSocket
 			let hasUpdated = false;
-			const unsubscribe = appState.subscribe((state: any) => {
+			let unsubscribe: (() => void) | null = null;
+			
+			unsubscribe = appState.subscribe((state: any) => {
 				console.log('State check - currentPath:', state.currentPath, 'looking for:', path);
-				// Check if the state has been updated with new control set
-				if (
-					state.currentPath &&
-					state.currentPath !== initialPath &&
-					state.currentPath.includes(path)
-				) {
-					if (!hasUpdated) {
-						hasUpdated = true;
-						console.log('Control set switch successful, navigating home...');
-						unsubscribe();
-						isSwitching = false;
-						// Use SvelteKit navigation instead of hard reload
-						goto('/');
+				// Check if we're already on this control set or if the switch completed
+				if (state.currentPath && state.currentPath.includes(path)) {
+					// If initialPath already contains the path, we're already on this control set
+					// If isSwitchingControlSet is false, the switch completed
+					if (initialPath.includes(path) || !state.isSwitchingControlSet) {
+						if (!hasUpdated) {
+							hasUpdated = true;
+							console.log('Control set switch successful, navigating home...');
+							if (unsubscribe) unsubscribe();
+							isSwitching = false;
+							// Use SvelteKit navigation instead of hard reload
+							goto('/');
+						}
 					}
 				}
 			});
 
 			// Add a timeout to prevent hanging forever
 			setTimeout(() => {
-				unsubscribe();
+				if (unsubscribe) unsubscribe();
 				if (isSwitching) {
 					console.error('Control set switch timed out');
 					isSwitching = false;

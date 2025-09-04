@@ -120,9 +120,11 @@ export class FileStore {
 					const content = readFileSync(flatFilePath, 'utf8');
 					const parsed = YAML.parse(content);
 					// Ensure the control has an 'id' field
-					// Always use the original control ID format (with dots)
+					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
-						parsed.id = controlId;
+						// If the filename has underscores, convert back to dots
+						// AC-10_3 -> AC-10.3, but leave AC-10 as-is
+						parsed.id = controlId.replace(/_(\d)/g, '.$1');
 					}
 					return parsed as Control;
 				} catch (error) {
@@ -150,9 +152,11 @@ export class FileStore {
 					const content = readFileSync(filePath, 'utf8');
 					const parsed = YAML.parse(content);
 					// Ensure the control has an 'id' field
-					// Always use the original control ID format (with dots)
+					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
-						parsed.id = controlId;
+						// If the filename has underscores, convert back to dots
+						// AC-10_3 -> AC-10.3, but leave AC-10 as-is
+						parsed.id = controlId.replace(/_(\d)/g, '.$1');
 					}
 					return parsed as Control;
 				} catch (error) {

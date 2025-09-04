@@ -3,6 +3,7 @@
 
 <script lang="ts">
 	import type { FieldSchema } from '$lib/types';
+	import ProcessedTextRenderer from '../utils/ProcessedTextRenderer.svelte';
 
 	interface Props {
 		fieldName: string;
@@ -15,6 +16,14 @@
 
 	const displayName = $derived(
 		field?.original_name || fieldName.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
+	);
+	
+	// Determine if this is a multiline text field that should be processed
+	const shouldProcessText = $derived(
+		field && 
+		(field.ui_type === 'textarea' || field.ui_type === 'long_text') &&
+		typeof value === 'string' &&
+		value.includes('\n')
 	);
 </script>
 
@@ -29,6 +38,10 @@
 			<span class="capitalize">{value ? 'Yes' : 'No'}</span>
 		{:else if Array.isArray(value)}
 			<span>{value.join(', ')}</span>
+		{:else if shouldProcessText}
+			<div class="border-l-2 border-gray-200 dark:border-gray-700 pl-4">
+				<ProcessedTextRenderer text={value} />
+			</div>
 		{:else}
 			<span class="whitespace-pre-line">{value}</span>
 		{/if}
