@@ -86,14 +86,14 @@ export class FileStore {
 		// Only create directories if baseDir is a valid control set path
 		// Avoid creating directories in project root
 		if (!this.baseDir || this.baseDir === '.' || this.baseDir === process.cwd()) {
-			console.warn('Skipping directory creation - baseDir appears to be project root:', this.baseDir);
+			// Skipping directory creation - baseDir appears to be project root
 			return;
 		}
 		
 		// Check if baseDir contains a lula.yaml file (indicating it's a valid control set directory)
 		const lulaConfigPath = join(this.baseDir, 'lula.yaml');
 		if (!existsSync(lulaConfigPath)) {
-			console.warn('Skipping directory creation - no lula.yaml found in:', this.baseDir);
+			// Skipping directory creation - no lula.yaml found
 			return;
 		}
 		
@@ -133,7 +133,7 @@ export class FileStore {
 			if (existsSync(flatFilePath)) {
 				try {
 					const content = readFileSync(flatFilePath, 'utf8');
-					const parsed = yaml.load(content);
+					const parsed = yaml.load(content) as any;
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
@@ -165,7 +165,7 @@ export class FileStore {
 			if (existsSync(filePath)) {
 				try {
 					const content = readFileSync(filePath, 'utf8');
-					const parsed = yaml.load(content);
+					const parsed = yaml.load(content) as any;
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
@@ -211,7 +211,7 @@ export class FileStore {
 			if (existsSync(filePath)) {
 				// Read existing file content as text to preserve exact format
 				const existingContent = readFileSync(filePath, 'utf8');
-				const existingControl = yaml.load(existingContent);
+				const existingControl = yaml.load(existingContent) as any;
 
 				// Only update fields that actually changed from the control object
 				// Remove runtime fields that should never be persisted
@@ -311,7 +311,7 @@ export class FileStore {
 				try {
 					const filePath = join(this.controlsDir, file);
 					const content = await fs.readFile(filePath, 'utf8');
-					const parsed = yaml.load(content);
+					const parsed = yaml.load(content) as any;
 					// Ensure the control has an 'id' field
 					if (!parsed.id) {
 						parsed.id = getControlId(parsed, this.baseDir);
@@ -386,7 +386,7 @@ export class FileStore {
 				const mappingFile = join(familyPath, file);
 				try {
 					const content = readFileSync(mappingFile, 'utf8');
-					const parsed = yaml.load(content);
+					const parsed = yaml.load(content) as any;
 
 					if (Array.isArray(parsed)) {
 						mappings.push(...parsed);
@@ -422,7 +422,7 @@ export class FileStore {
 		if (existsSync(mappingFile)) {
 			try {
 				const content = readFileSync(mappingFile, 'utf8');
-				existingMappings = yaml.load(content) || [];
+				existingMappings = yaml.load(content) as Mapping[] || [];
 			} catch (error) {
 				console.error(`Failed to parse existing mappings file: ${mappingFile}`, error);
 				existingMappings = [];
@@ -463,7 +463,7 @@ export class FileStore {
 		for (const file of mappingFiles) {
 			try {
 				const content = readFileSync(file, 'utf8');
-				let mappings: Mapping[] = yaml.load(content) || [];
+				let mappings: Mapping[] = yaml.load(content) as Mapping[] || [];
 
 				const originalLength = mappings.length;
 				mappings = mappings.filter((m) => m.uuid !== uuid);
@@ -610,7 +610,7 @@ export class FileStore {
 					// Read the actual control ID from the file metadata
 					const filePath = join(familyPath, filename);
 					const content = readFileSync(filePath, 'utf8');
-					const parsed = yaml.load(content);
+					const parsed = yaml.load(content) as any;
 
 					// Get control ID from _metadata.controlId or fall back to filename
 					// let controlId: string;

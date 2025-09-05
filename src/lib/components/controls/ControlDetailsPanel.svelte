@@ -8,7 +8,10 @@
 		Connect,
 		Edit,
 		Information,
-		Time
+		Time,
+		InProgress,
+		WarningFilled,
+		CheckmarkFilled
 	} from 'carbon-icons-svelte';
 	import { TabNavigation } from '../ui';
 	import { 
@@ -162,40 +165,21 @@
 						class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30"
 						title="Saving..."
 					>
-						<svg
-							class="w-5 h-5 text-blue-600 dark:text-blue-400 animate-spin"
-							fill="none"
-							viewBox="0 0 24 24"
-						>
-							<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-							<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-						</svg>
+						<InProgress class="w-5 h-5 text-blue-600 dark:text-blue-400" />
 					</div>
 				{:else if saveStatus === 'unsaved'}
 					<div
 						class="w-8 h-8 flex items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30"
 						title="Unsaved changes"
 					>
-						<svg
-							class="w-5 h-5 text-amber-600 dark:text-amber-400"
-							fill="currentColor"
-							viewBox="0 0 20 20"
-						>
-							<path d="M10 2a8 8 0 100 16 8 8 0 000-16zM9 5h2v6H9V5zm0 8h2v2H9v-2z" />
-						</svg>
+						<WarningFilled class="w-5 h-5 text-amber-600 dark:text-amber-400" />
 					</div>
 				{:else if saveStatus === 'just-saved'}
 					<div
 						class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 animate-fade-in"
 						title="Saved"
 					>
-						<svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-							<path
-								fill-rule="evenodd"
-								d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-								clip-rule="evenodd"
-							/>
-						</svg>
+						<CheckmarkFilled class="w-5 h-5 text-green-600 dark:text-green-400" />
 					</div>
 				{/if}
 			</div>

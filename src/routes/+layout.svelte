@@ -5,13 +5,41 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { ControlSetInfo } from '$components/control-sets';
+	import { Dropdown } from '$components/ui';
 	import { appState, wsClient } from '$lib/websocket';
+	import {
+		Download,
+		DocumentExport,
+		Code,
+		Settings,
+		Help,
+		Notification,
+		LogoGithub
+	} from 'carbon-icons-svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import '../app.css';
 
 	let { children } = $props();
 
 	let hasCheckedInitialRedirect = false;
+
+	// Export controls function
+	async function exportControls(format: string) {
+		try {
+			// Build the export URL
+			const exportUrl = `/api/export-controls?format=${format}`;
+
+			// Create a temporary link and trigger download
+			const link = document.createElement('a');
+			link.href = exportUrl;
+			link.download = ''; // Let the server set the filename
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		} catch (error) {
+			console.error('Export failed:', error);
+		}
+	}
 
 	onMount(() => {
 		// Connect WebSocket - this will get the initial state
@@ -102,18 +130,77 @@
 		<header
 			class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 flex-shrink-0"
 		>
-			<div class="w-full px-4 sm:px-6 lg:px-8">
-				<div class="flex justify-between items-center py-4">
-					<a href="/" class="ml-1 flex sm:ml-2 md:mr-4">
-						<img src="/lula.png" class="mr-1 block h-8 sm:mr-4" alt="Logo" />
-						<span
-							class="text-md self-center font-semibold whitespace-nowrap text-gray-100 md:text-2xl"
-						>
-							Lula
-						</span>
-					</a>
+			<div class="w-full px-6 lg:px-8">
+				<div class="flex justify-between items-center h-16">
+					<!-- Left: Logo and Brand -->
+					<div class="flex items-center">
+						<a href="/" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+							<img src="/lula.png" class="h-8 w-8" alt="Lula Logo" />
+							<div class="flex flex-col">
+								<span class="text-xl font-bold text-gray-900 dark:text-white"> Lula </span>
+								<span class="text-xs text-gray-500 dark:text-gray-400 -mt-1">
+									Gitops for Compliance
+								</span>
+							</div>
+						</a>
+					</div>
+
+					<!-- Right: Control Set Info and Actions -->
 					<div class="flex items-center space-x-4">
+						<!-- Control Set Info Badge -->
 						<ControlSetInfo />
+
+						{#if $appState.isConnected && $appState.controls && $appState.controls.length > 0}
+							<!-- Export Dropdown -->
+							<Dropdown
+								buttonLabel="Export"
+								buttonIcon={Download}
+								buttonClass="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+								dropdownClass="w-48"
+							>
+								{#snippet children()}
+									<div class="space-y-1 p-1">
+										<button
+											onclick={() => exportControls('csv')}
+											class="w-full text-left px-3 py-2 text-sm rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+										>
+											<div class="flex items-center gap-2">
+												<DocumentExport class="w-4 h-4" />
+												<span>Export as CSV</span>
+											</div>
+										</button>
+										<button
+											onclick={() => exportControls('excel')}
+											class="w-full text-left px-3 py-2 text-sm rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+										>
+											<div class="flex items-center gap-2">
+												<Download class="w-4 h-4" />
+												<span>Export as Excel</span>
+											</div>
+										</button>
+										<button
+											onclick={() => exportControls('json')}
+											class="w-full text-left px-3 py-2 text-sm rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+										>
+											<div class="flex items-center gap-2">
+												<Code class="w-4 h-4" />
+												<span>Export as JSON</span>
+											</div>
+										</button>
+									</div>
+								{/snippet}
+							</Dropdown>
+						{/if}
+
+						<!-- Github -->
+						<a
+							class="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+							title="Github"
+							href="https://github.com/defenseunicorns/lula"
+							target="_blank"
+						>
+							<LogoGithub class="w-5 h-5" />
+						</a>
 					</div>
 				</div>
 			</div>

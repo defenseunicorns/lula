@@ -13,6 +13,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import * as yaml from 'js-yaml';
 import { getControlId } from './infrastructure/controlHelpers';
+import { debug } from './utils/debug';
 import type { Control, Mapping } from './types';
 
 /**
@@ -79,7 +80,7 @@ class WebSocketManager {
 					const state = getServerState();
 					if (payload && payload.id) {
 						// Get existing control to merge with
-						const existingControl = state.controlsCache.get(payload.id);
+						const existingControl = state.controlsCache.get(payload.id as string);
 						if (!existingControl) {
 							console.error('Control not found:', payload.id);
 							return;
@@ -586,7 +587,7 @@ class WebSocketManager {
 				};
 				
 				// Include all overview tab fields from the field schema
-				const fieldSchema = controlSetData.fieldSchema?.fields || {};
+				const fieldSchema = (controlSetData as any).fieldSchema?.fields || {};
 				for (const [fieldName, fieldConfig] of Object.entries(fieldSchema)) {
 					if ((fieldConfig as any).tab === 'overview' && control[fieldName] !== undefined) {
 						metadata[fieldName] = control[fieldName];
@@ -714,7 +715,7 @@ class WebSocketManager {
 		this.wss = new WebSocketServer({ server, path: '/ws' });
 
 		this.wss.on('connection', (ws: WebSocket) => {
-			console.log('New WebSocket client connected');
+			debug('New WebSocket client connected');
 			this.clients.add(ws);
 			
 			// Send initial state immediately on connection
@@ -729,7 +730,7 @@ class WebSocketManager {
 			ws.on('message', async (message: string) => {
 				try {
 					const data = JSON.parse(message.toString()) as CommandMessage;
-					console.log('Received WebSocket message:', data);
+					debug('Received WebSocket message:', data);
 					await this.handleCommand(data, ws);
 				} catch (error) {
 					console.error('Invalid WebSocket message:', error);
@@ -743,7 +744,7 @@ class WebSocketManager {
 			});
 
 			ws.on('close', () => {
-				console.log('WebSocket client disconnected');
+				debug('WebSocket client disconnected');
 				this.clients.delete(ws);
 			});
 

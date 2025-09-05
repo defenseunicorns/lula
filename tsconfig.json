@@ -13,5 +13,13 @@
 		"moduleResolution": "bundler",
 		"types": ["vitest/globals"],
 		"useUnknownInCatchVariables": false
-	}
+	},
+	"include": [
+		".svelte-kit/**/*.ts",
+		"cli/**/*.ts",
+		"src/**/*.ts",
+		"src/**/*.js",
+		"src/**/*.svelte",
+		"vite.config.ts"
+	]
 }

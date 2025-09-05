@@ -15,7 +15,12 @@ program
 	.description('Start the web server with control management and import wizard')
 	.option('--dir <directory>', 'Control set directory path (alternative to positional argument)')
 	.option('--port <port>', 'Server port', '3000')
+	.option('--debug', 'Enable debug logging')
 	.action(async (directory: string | undefined, options) => {
+		// Set debug mode if flag is present
+		const { setDebugMode } = await import('./cli/utils/debug');
+		setDebugMode(options.debug || false);
+		
 		const serveCommand = new ServeCommand();
 		const controlSetDir = directory || options.dir || process.cwd();
 		await serveCommand.run({

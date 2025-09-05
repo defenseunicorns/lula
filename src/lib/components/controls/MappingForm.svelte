@@ -49,28 +49,28 @@
 	}
 </script>
 
-<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 space-y-4">
+<div class="bg-gray-50 dark:bg-gray-800 rounded-lg px-6 py-4 space-y-4">
 	<h4 class="text-lg font-medium text-gray-900 dark:text-white">
 		{initialData.justification ? 'Edit Mapping' : 'Create New Mapping'}
 	</h4>
 
 	<div class="space-y-4">
 		<FormField
-			id="mapping-status"
-			label="Status"
-			type="select"
-			bind:value={formData.status}
-			options={statusOptions}
-		/>
-
-		<FormField
 			id="mapping-justification"
 			label="Justification"
 			type="textarea"
 			bind:value={formData.justification}
 			rows={4}
-			placeholder="Explain why this mapping is necessary..."
+			placeholder="Explain how this compliance artifact satisfies the control requirements"
 			required
+		/>
+
+		<FormField
+			id="mapping-status"
+			label="Status"
+			type="select"
+			bind:value={formData.status}
+			options={statusOptions}
 		/>
 	</div>
 

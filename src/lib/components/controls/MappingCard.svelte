@@ -2,15 +2,8 @@
 <!-- SPDX-FileCopyrightText: 2023-Present The Lula Authors -->
 
 <script lang="ts">
+	import type { Mapping } from '$lib/types';
 	import { StatusBadge } from '../ui';
-
-	interface Mapping {
-		uuid: string;
-		justification: string;
-		status: 'planned' | 'implemented' | 'verified';
-		control_id?: string;
-		[key: string]: any;
-	}
 
 	interface Props {
 		mapping: Mapping;
@@ -43,11 +36,11 @@
 	<div
 		class="bg-gray-100 dark:bg-gray-900 rounded-t-xl px-6 py-4 border-b border-gray-200 dark:border-gray-700"
 	>
-		<div class="flex justify-between items-start">
+		<div class="flex justify-between items-center">
 			<span
-				class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-mono font-medium bg-gray-900 dark:bg-gray-900 text-gray-100 dark:text-gray-200 shadow-sm"
+				class="text-xs font-mono font-medium text-gray-600 dark:text-gray-300"
 			>
-				@lula {mapping.uuid}
+				{mapping.uuid}
 			</span>
 			<div class="flex items-center space-x-2">
 				<button

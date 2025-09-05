@@ -65,12 +65,17 @@
 				: {
 						fieldName: 'id',
 						field: {
-							display_name: 'Control ID',
-							original_name: 'Control ID',
-							ui_type: 'short_text',
+							type: 'string',
+							ui_type: 'short_text' as const,
+							is_array: false,
+							required: true,
 							visible: true,
-							display_order: 0
-						}
+							editable: false,
+							display_order: 0,
+							category: 'core' as const,
+							display_name: 'Control ID',
+							original_name: 'Control ID'
+						} as FieldSchema
 					};
 
 			// Combine ID first, then other fields sorted by display_order
@@ -230,13 +235,15 @@
 		<div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0 space-y-4">
 			<!-- Title and Count -->
 			<div class="flex items-center justify-between">
-				<h2 class="text-lg font-semibold text-gray-900 dark:text-white">Controls</h2>
+				<h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+					{$appState.title || $appState.name || 'Controls'}
+				</h2>
 				<span class="text-sm text-gray-600 dark:text-gray-400">
 					{$filteredControlsWithMappings.length} of {$controls.length}
 				</span>
 			</div>
 
-			<!-- Search Bar and Family Filter -->
+			<!-- Search Bar, Family Filter, and Export -->
 			<div class="flex gap-3">
 				<div class="flex-1">
 					<SearchBar />

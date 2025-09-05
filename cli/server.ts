@@ -63,10 +63,7 @@ export async function createServer(options: ServerOptions) {
 		start: () => {
 			return new Promise<void>((resolve) => {
 				httpServer.listen(port, () => {
-					console.log(`Lula running on http://localhost:${port}`);
-					console.log(`Control set directory: ${controlSetDir}`);
-					console.log(`Using individual control files in: ${controlSetDir}/controls/`);
-					console.log(`WebSocket server listening on ws://localhost:${port}/ws`);
+					console.log(`\n✨ Lula is running at http://localhost:${port}`);
 					resolve();
 				});
 			});
@@ -84,14 +81,11 @@ export async function startServer(
 
 	// Graceful shutdown
 	process.on('SIGINT', async () => {
-		console.log('\nSaving any pending changes...');
 		try {
 			await saveMappingsToFile();
-			console.log('All changes saved.');
 		} catch (error) {
 			console.error('Error saving changes:', error);
 		}
-		console.log('Shutdown complete.');
 		process.exit(0);
 	});
 }

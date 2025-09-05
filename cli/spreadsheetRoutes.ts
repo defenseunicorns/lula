@@ -6,6 +6,7 @@ import { dirname, join, relative } from 'path';
 import * as XLSX from 'xlsx';
 import * as yaml from 'js-yaml';
 import { getServerState } from './serverState';
+import { debug } from './utils/debug';
 
 // Type definitions
 interface SpreadsheetRow {
@@ -84,7 +85,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			controlSetDescription = 'Imported from spreadsheet'
 		} = req.body;
 
-		console.log('Import parameters received:', {
+		debug('Import parameters received:', {
 			controlIdField,
 			startRow,
 			controlSetName,
@@ -118,8 +119,8 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			return res.status(400).json({ error: 'No headers found at specified row' });
 		}
 
-		console.log('Headers found:', headers);
-		console.log(
+		debug('Headers found:', headers);
+		debug(
 			'After conversion, looking for control ID field:',
 			applyNamingConvention(controlIdField, namingConvention)
 		);
@@ -224,13 +225,10 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			if (hasData && (!skipEmptyRows || Object.keys(control).length > 0)) {
 				// Extract control ID
 				const controlIdFieldName = applyNamingConvention(controlIdField, namingConvention);
-				console.log(
-					`Looking for control ID in field: ${controlIdFieldName}, available fields:`,
-					Object.keys(control)
-				);
+				// Extract control ID
 				const controlId = control[controlIdFieldName];
 				if (!controlId) {
-					console.log(`No control ID found in field ${controlIdFieldName}, skipping row`);
+					// No control ID found, skipping row
 					continue;
 				}
 
@@ -261,8 +259,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 
 		// Create lula.yaml with enhanced field metadata
 		const uniqueFamilies = Array.from(families.keys()).filter((f) => f && f !== 'UNKNOWN');
-		console.log(`Found ${uniqueFamilies.length} unique families:`, uniqueFamilies);
-		console.log(`Total controls: ${controls.length}`);
+		// Process families and controls
 
 		// Build field schema from metadata in the expected format
 		// Check if frontend provided field schema with tab assignments
@@ -279,7 +276,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			try {
 				frontendFieldSchema = JSON.parse(req.body.fieldSchema);
 			} catch (e) {
-				console.error('Failed to parse fieldSchema:', e);
+				// Failed to parse fieldSchema
 			}
 		}
 
@@ -589,5 +586,275 @@ function extractFamilyFromControlId(controlId: string): string {
 	// Last resort: use first two characters
 	return controlId.substring(0, 2).toUpperCase();
 }
+
+// Export controls to various formats
+router.get('/export-controls', async (req, res) => {
+	try {
+		const format = (req.query.format as string) || 'csv';
+		const state = getServerState();
+		const fileStore = state.fileStore;
+		
+		if (!fileStore) {
+			return res.status(500).json({ error: 'No control set loaded' });
+		}
+
+		// Load all controls and mappings
+		const controls = await fileStore.loadAllControls();
+		const mappings = await fileStore.loadMappings();
+		
+		// Load metadata from lula.yaml file
+		let metadata: any = {};
+		try {
+			const metadataPath = join(state.CONTROL_SET_DIR, 'lula.yaml');
+			if (existsSync(metadataPath)) {
+				const metadataContent = readFileSync(metadataPath, 'utf8');
+				metadata = yaml.load(metadataContent) as any;
+			}
+		} catch (err) {
+			debug('Could not load metadata:', err);
+		}
+		
+		if (!controls || controls.length === 0) {
+			return res.status(404).json({ error: 'No controls found' });
+		}
+
+		// Combine controls with their mappings
+		const controlsWithMappings = controls.map(control => {
+			// Use the control_id_field value or fallback to 'id' for mapping lookups
+			const controlIdField = metadata?.control_id_field || 'id';
+			const controlId = control[controlIdField] || control.id;
+			const controlMappings = mappings.filter(m => m.control_id === controlId);
+			return {
+				...control,
+				mappings_count: controlMappings.length,
+				mappings: controlMappings.map(m => ({
+					uuid: m.uuid,
+					status: m.status,
+					description: m.description || (m as any).justification || ''
+				}))
+			};
+		});
+
+		debug(`Exporting ${controlsWithMappings.length} controls as ${format}`);
+
+		switch (format.toLowerCase()) {
+			case 'csv':
+				return exportAsCSV(controlsWithMappings, metadata, res);
+			case 'excel':
+			case 'xlsx':
+				return exportAsExcel(controlsWithMappings, metadata, res);
+			case 'json':
+				return exportAsJSON(controlsWithMappings, metadata, res);
+			default:
+				return res.status(400).json({ error: `Unsupported format: ${format}` });
+		}
+	} catch (error: any) {
+		console.error('Export error:', error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+// Export as CSV
+function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
+	// Get field schema to use original names
+	const fieldSchema = metadata?.fieldSchema?.fields || {};
+	const controlIdField = metadata?.control_id_field || 'id';
+	
+	// Get all unique field names from controls
+	const allFields = new Set<string>();
+	controls.forEach(control => {
+		Object.keys(control).forEach(key => allFields.add(key));
+	});
+	
+	// Build field list with display names
+	const fieldMapping: Array<{ fieldName: string; displayName: string }> = [];
+	
+	// Handle the control ID field first (might be 'control-acronym' or 'ap-acronym' etc)
+	if (allFields.has(controlIdField)) {
+		const idSchema = fieldSchema[controlIdField];
+		fieldMapping.push({ 
+			fieldName: controlIdField, 
+			displayName: idSchema?.original_name || 'Control ID'
+		});
+		allFields.delete(controlIdField); // Remove so we don't add it twice
+	} else if (allFields.has('id')) {
+		// Fallback to 'id' field if control_id_field not found
+		fieldMapping.push({ 
+			fieldName: 'id', 
+			displayName: 'Control ID'
+		});
+		allFields.delete('id');
+	}
+	
+	// Add family field second if it exists
+	if (allFields.has('family')) {
+		const familySchema = fieldSchema['family'];
+		fieldMapping.push({ 
+			fieldName: 'family', 
+			displayName: familySchema?.original_name || 'Family'
+		});
+		allFields.delete('family');
+	}
+	
+	// Add remaining fields using their original names from schema
+	Array.from(allFields)
+		.filter(field => field !== 'mappings' && field !== 'mappings_count') // Skip our added fields for now
+		.sort()
+		.forEach(field => {
+			const schema = fieldSchema[field];
+			// Use original_name if available, otherwise clean up the field name
+			const displayName = schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+			fieldMapping.push({ fieldName: field, displayName });
+		});
+	
+	// Add mappings at the end
+	if (allFields.has('mappings_count')) {
+		fieldMapping.push({ fieldName: 'mappings_count', displayName: 'Mappings Count' });
+	}
+	if (allFields.has('mappings')) {
+		fieldMapping.push({ fieldName: 'mappings', displayName: 'Mappings' });
+	}
+
+	// Create CSV header with display names
+	const csvRows = [];
+	csvRows.push(fieldMapping.map(field => `"${field.displayName}"`).join(','));
+	
+	// Add control rows
+	controls.forEach(control => {
+		const row = fieldMapping.map(({ fieldName }) => {
+			const value = control[fieldName];
+			if (value === undefined || value === null) return '""';
+			
+			// Special handling for mappings
+			if (fieldName === 'mappings' && Array.isArray(value)) {
+				// Format mappings as a readable string
+				const mappingsStr = value.map((m: any) => 
+					`${m.status}: ${m.description.substring(0, 50)}${m.description.length > 50 ? '...' : ''}`
+				).join('; ');
+				return `"${mappingsStr.replace(/"/g, '""')}"`;
+			}
+			
+			if (Array.isArray(value)) return `"${value.join('; ').replace(/"/g, '""')}"`;
+			if (typeof value === 'object') return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
+			return `"${String(value).replace(/"/g, '""')}"`;
+		});
+		csvRows.push(row.join(','));
+	});
+
+	const csvContent = csvRows.join('\n');
+	const fileName = `${metadata?.name || 'controls'}_export_${Date.now()}.csv`;
+	
+	res.setHeader('Content-Type', 'text/csv');
+	res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+	res.send(csvContent);
+}
+
+// Export as Excel
+function exportAsExcel(controls: any[], metadata: any, res: express.Response) {
+	// Get field schema to use original names
+	const fieldSchema = metadata?.fieldSchema?.fields || {};
+	const controlIdField = metadata?.control_id_field || 'id';
+	
+	// Prepare data for Excel with original field names
+	const worksheetData = controls.map(control => {
+		// Create a new object with original field names
+		const exportControl: any = {};
+		
+		// Process control ID field first
+		if (control[controlIdField]) {
+			const idSchema = fieldSchema[controlIdField];
+			const idDisplayName = idSchema?.original_name || 'Control ID';
+			exportControl[idDisplayName] = control[controlIdField];
+		} else if (control.id) {
+			exportControl['Control ID'] = control.id;
+		}
+		
+		// Process family field
+		if (control.family) {
+			const familySchema = fieldSchema['family'];
+			const familyDisplayName = familySchema?.original_name || 'Family';
+			exportControl[familyDisplayName] = control.family;
+		}
+		
+		// Process all other fields
+		Object.keys(control).forEach(key => {
+			// Skip if already processed or is our added field
+			if (key === controlIdField || key === 'id' || key === 'family') return;
+			
+			const schema = fieldSchema[key];
+			const displayName = schema?.original_name || 
+				(key === 'mappings_count' ? 'Mappings Count' : 
+				 key === 'mappings' ? 'Mappings' :
+				 key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+			const value = control[key];
+			
+			// Special handling for mappings
+			if (key === 'mappings' && Array.isArray(value)) {
+				exportControl[displayName] = value.map((m: any) => 
+					`${m.status}: ${m.description.substring(0, 100)}${m.description.length > 100 ? '...' : ''}`
+				).join('\n');
+			} else if (Array.isArray(value)) {
+				exportControl[displayName] = value.join('; ');
+			} else if (typeof value === 'object' && value !== null) {
+				exportControl[displayName] = JSON.stringify(value);
+			} else {
+				exportControl[displayName] = value;
+			}
+		});
+		return exportControl;
+	});
+
+	// Create workbook and worksheet
+	const wb = XLSX.utils.book_new();
+	const ws = XLSX.utils.json_to_sheet(worksheetData);
+	
+	// Auto-size columns
+	const colWidths: { wch: number }[] = [];
+	const headers = Object.keys(worksheetData[0] || {});
+	headers.forEach((header, i) => {
+		const maxLength = Math.max(
+			header.length,
+			...worksheetData.map(row => String(row[header] || '').length)
+		);
+		colWidths[i] = { wch: Math.min(maxLength + 2, 50) }; // Cap at 50 characters
+	});
+	ws['!cols'] = colWidths;
+	
+	// Add worksheet to workbook
+	XLSX.utils.book_append_sheet(wb, ws, 'Controls');
+	
+	// Create metadata sheet if available
+	if (metadata) {
+		const cleanMetadata = { ...metadata };
+		delete cleanMetadata.fieldSchema; // Remove large schema object
+		const metaSheet = XLSX.utils.json_to_sheet([cleanMetadata]);
+		XLSX.utils.book_append_sheet(wb, metaSheet, 'Metadata');
+	}
+
+	// Generate Excel buffer
+	const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' });
+	const fileName = `${metadata?.name || 'controls'}_export_${Date.now()}.xlsx`;
+	
+	res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+	res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+	res.send(buffer);
+}
+
+// Export as JSON
+function exportAsJSON(controls: any[], metadata: any, res: express.Response) {
+	const exportData = {
+		metadata: metadata || {},
+		controlCount: controls.length,
+		exportedAt: new Date().toISOString(),
+		controls: controls
+	};
+
+	const fileName = `${metadata?.name || 'controls'}_export_${Date.now()}.json`;
+	
+	res.setHeader('Content-Type', 'application/json');
+	res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+	res.json(exportData);
+}
+
 
 export default router;

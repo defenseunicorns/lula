@@ -9,11 +9,12 @@
 		placement?: 'top' | 'bottom' | 'left' | 'right';
 		maxWidth?: string;
 		multiline?: boolean;
+		children: () => any;
 	};
 
-	let { content, placement = 'top', maxWidth = '300px', multiline = false }: Props = $props();
+	let { content, placement = 'top', maxWidth = '300px', multiline = false, children }: Props = $props();
 
-	let tooltip: HTMLDivElement;
+	let tooltip: HTMLDivElement | null = $state(null);
 	let trigger: HTMLDivElement;
 	let isVisible = $state(false);
 	let position = $state({ x: 0, y: 0 });
@@ -85,7 +86,7 @@
 	role="button"
 	tabindex="0"
 >
-	<slot />
+	{@render children?.()}
 </div>
 
 {#if isVisible}

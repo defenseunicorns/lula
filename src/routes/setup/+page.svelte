@@ -9,9 +9,15 @@
 	let currentControlSetPath = '';
 	let hasAnyControlSets = false;
 	let isSwitching = false;
-	let controlSets: { path: string; name: string; description?: string }[] = [];
+	let controlSets: { 
+		path: string; 
+		name: string; 
+		description: string;
+		controlCount: number;
+		file: string;
+	}[] = [];
 
-	onMount(async () => {
+	onMount(() => {
 		// Connect WebSocket if not already connected
 		wsClient.connect();
 
@@ -61,12 +67,10 @@
 
 		window.addEventListener('control-sets-list', handleControlSetsList as unknown as EventListener);
 
-		// Request control sets scan via WebSocket
-		try {
-			await wsClient.scanControlSets();
-		} catch (err) {
+		// Request control sets scan via WebSocket (don't await in onMount)
+		wsClient.scanControlSets().catch((err) => {
 			console.error('Error scanning control sets:', err);
-		}
+		});
 
 		return () => {
 			unsubscribe();

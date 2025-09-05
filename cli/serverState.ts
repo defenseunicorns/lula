@@ -4,6 +4,7 @@
 import { join } from 'path';
 import { FileStore } from './infrastructure/fileStore';
 import { GitHistoryUtil } from './infrastructure/gitHistory';
+import { debug } from './utils/debug';
 import type { Control, Mapping } from './types';
 
 /**
@@ -89,7 +90,7 @@ export function addMappingToIndexes(mapping: Mapping): void {
 
 export async function loadAllData(): Promise<void> {
 	const state = getServerState();
-	console.log('Loading data into memory...');
+	debug('Loading data into memory...');
 
 	try {
 		// Load controls from individual files
@@ -98,7 +99,7 @@ export async function loadAllData(): Promise<void> {
 			state.controlsCache.set(control.id, control);
 			addControlToIndexes(control);
 		}
-		console.log(`Loaded ${controls.length} controls from individual files`);
+		debug(`Loaded ${controls.length} controls from individual files`);
 
 		// Load mappings from mappings file
 		const mappings = await state.fileStore.loadMappings();
@@ -106,7 +107,7 @@ export async function loadAllData(): Promise<void> {
 			state.mappingsCache.set(mapping.uuid, mapping);
 			addMappingToIndexes(mapping);
 		}
-		console.log(`Loaded ${mappings.length} mappings`);
+		debug(`Loaded ${mappings.length} mappings`);
 	} catch (error) {
 		console.error('Error loading data:', error);
 	}
@@ -117,7 +118,7 @@ export async function saveMappingsToFile(): Promise<void> {
 	try {
 		const allMappings = Array.from(state.mappingsCache.values());
 		await state.fileStore.saveMappings(allMappings);
-		console.log(`Saved ${allMappings.length} mappings`);
+		debug(`Saved ${allMappings.length} mappings`);
 	} catch (error) {
 		console.error('Error saving mappings:', error);
 	}

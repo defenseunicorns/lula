@@ -60,7 +60,7 @@ export class GitHistoryUtil {
 	async getFileHistory(filePath: string, limit: number = 50): Promise<GitFileHistory> {
 		const isGitRepo = await this.isGitRepository();
 		if (!isGitRepo) {
-			console.log(`Not a git repository: ${this.baseDir}`);
+			// Not a git repository
 			return {
 				filePath,
 				commits: [],
@@ -73,9 +73,7 @@ export class GitHistoryUtil {
 		try {
 			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
 			const relativePath = relative(gitRoot, filePath);
-			console.log(
-				`Getting git history for relative path: ${relativePath} (from git root: ${gitRoot})`
-			);
+			// Getting git history
 
 			// Get commit history using isomorphic-git
 			const commits = await git.log({
@@ -86,7 +84,7 @@ export class GitHistoryUtil {
 			});
 
 			if (!commits || commits.length === 0) {
-				console.log(`No git history found for file: ${relativePath}`);
+				// No git history found
 				return {
 					filePath,
 					commits: [],
@@ -97,7 +95,7 @@ export class GitHistoryUtil {
 			}
 
 			const gitCommits = await this.convertIsomorphicCommits(commits, relativePath, gitRoot);
-			console.log(`Parsed ${gitCommits.length} commits for file: ${relativePath}`);
+			// Parsed commits
 
 			return {
 				filePath,
@@ -110,7 +108,7 @@ export class GitHistoryUtil {
 			// Handle specific case of files not found in git history (new/untracked files)
 			const err = error as { code?: string; message?: string };
 			if (err?.code === 'NotFoundError' || err?.message?.includes('Could not find file')) {
-				console.log(`File not in git history (new/untracked file): ${filePath}`);
+				// File not in git history
 				return {
 					filePath,
 					commits: [],
@@ -218,7 +216,7 @@ export class GitHistoryUtil {
 					diff = diffResult.diff;
 					yamlDiff = diffResult.yamlDiff;
 				} catch (error) {
-					console.warn(`Could not get diff for commit ${commit.oid.substring(0, 7)}:`, error);
+					// Could not get diff for commit
 				}
 			}
 
@@ -301,7 +299,7 @@ export class GitHistoryUtil {
 				yamlDiff
 			};
 		} catch (error) {
-			console.warn(`Error getting diff for commit ${commitOid.substring(0, 7)}:`, error);
+			// Error getting diff
 			return { changes: { insertions: 0, deletions: 0, files: 1 } };
 		}
 	}

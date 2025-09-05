@@ -26,10 +26,17 @@ export interface AppState {
 	// Control set properties are spread at root level
 	id?: string;
 	name?: string;
+	title?: string;
 	version?: string;
 	description?: string;
 	fieldSchema?: any;
 	field_schema?: any;
+	control_id_field?: string;
+	project?: {
+		framework?: {
+			baseline?: string;
+		};
+	};
 	// State properties
 	currentPath: string;
 	controls: Control[];

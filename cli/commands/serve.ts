@@ -1,7 +1,7 @@
 import { existsSync } from 'fs';
 import open from 'open';
 import { join } from 'path';
-import { startServer } from '..';
+import { startServer } from '../server';
 
 export interface ServeOptions {
 	dir: string;
