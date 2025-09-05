@@ -6,7 +6,7 @@
  * Provides structured change detection and human-readable summaries
  */
 
-import * as YAML from 'yaml';
+import * as yaml from 'js-yaml';
 
 /**
  * Represents a single change between two YAML documents
@@ -67,8 +67,8 @@ export function createYamlDiff(
 	try {
 		// For array files (like mappings), default to empty array instead of empty object
 		const emptyDefault = isArrayFile ? '[]' : '{}';
-		const oldData = YAML.parse(oldYaml || emptyDefault) as YamlValue;
-		const newData = YAML.parse(newYaml || emptyDefault) as YamlValue;
+		const oldData = yaml.load(oldYaml || emptyDefault) as YamlValue;
+		const newData = yaml.load(newYaml || emptyDefault) as YamlValue;
 
 		const changes = compareValues(oldData, newData, '');
 

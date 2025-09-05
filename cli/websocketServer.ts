@@ -11,7 +11,7 @@ import { Server } from 'http';
 import { getServerState, getCurrentControlSetPath } from './serverState';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import * as yaml from 'yaml';
+import * as yaml from 'js-yaml';
 import { getControlId } from './infrastructure/controlHelpers';
 import type { Control, Mapping } from './types';
 
@@ -563,7 +563,7 @@ class WebSocketManager {
 			try {
 				const controlSetFile = join(currentPath, 'lula.yaml');
 				const content = readFileSync(controlSetFile, 'utf8');
-				controlSetData = yaml.parse(content) as ControlSetMetadata;
+				controlSetData = yaml.load(content) as ControlSetMetadata;
 			} catch {
 				// No control set file - use defaults
 				controlSetData = {
@@ -572,19 +572,39 @@ class WebSocketManager {
 				};
 			}
 
-			// Build complete state object - merge control set data at top level
-			// Ensure all controls have an id field
-			const controlsWithId = Array.from(state.controlsCache.values()).map((control) => {
+			// For initial state, only send essential control fields for the list view
+			// Full control data will be loaded on demand
+			const controlsMetadata = Array.from(state.controlsCache.values()).map((control) => {
 				if (!control.id) {
 					control.id = getControlId(control, currentPath);
 				}
-				return control;
+				
+				// Extract only the fields needed for overview tab and list display
+				const metadata: any = {
+					id: control.id,
+					family: control.family
+				};
+				
+				// Include all overview tab fields from the field schema
+				const fieldSchema = controlSetData.fieldSchema?.fields || {};
+				for (const [fieldName, fieldConfig] of Object.entries(fieldSchema)) {
+					if ((fieldConfig as any).tab === 'overview' && control[fieldName] !== undefined) {
+						metadata[fieldName] = control[fieldName];
+					}
+				}
+				
+				// Always include commonly needed fields for list display
+				if (control.title !== undefined) metadata.title = control.title;
+				if (control.implementation_status !== undefined) metadata.implementation_status = control.implementation_status;
+				if (control.compliance_status !== undefined) metadata.compliance_status = control.compliance_status;
+				
+				return metadata;
 			});
 
 			return {
 				...controlSetData, // Spread control set properties at root level
 				currentPath: currentPath,
-				controls: controlsWithId,
+				controls: controlsMetadata, // Send lightweight metadata instead of full controls
 				mappings: Array.from(state.mappingsCache.values()),
 				families: Array.from(state.controlsByFamily.keys()).sort(),
 				totalControls: state.controlsCache.size,
@@ -611,7 +631,7 @@ class WebSocketManager {
 			try {
 				const controlSetFile = join(currentPath, 'lula.yaml');
 				const content = readFileSync(controlSetFile, 'utf8');
-				controlSetData = yaml.parse(content) as ControlSetMetadata;
+				controlSetData = yaml.load(content) as ControlSetMetadata;
 			} catch {
 				controlSetData = {
 					id: 'unknown',
@@ -696,6 +716,15 @@ class WebSocketManager {
 		this.wss.on('connection', (ws: WebSocket) => {
 			console.log('New WebSocket client connected');
 			this.clients.add(ws);
+			
+			// Send initial state immediately on connection
+			const initialState = this.getCompleteState();
+			if (initialState) {
+				ws.send(JSON.stringify({
+					type: 'state-update',
+					payload: initialState
+				}));
+			}
 
 			ws.on('message', async (message: string) => {
 				try {

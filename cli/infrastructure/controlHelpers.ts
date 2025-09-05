@@ -8,7 +8,7 @@
 
 import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
-import * as yaml from 'yaml';
+import * as yaml from 'js-yaml';
 
 /**
  * Control set metadata structure
@@ -68,7 +68,7 @@ export function loadControlSetMetadata(baseDir: string): ControlSetMetadata {
 		if (existsSync(path)) {
 			try {
 				const content = readFileSync(path, 'utf8');
-				controlSetMetadata = yaml.parse(content) as ControlSetMetadata;
+				controlSetMetadata = yaml.load(content) as ControlSetMetadata;
 				metadataPath = path;
 			} catch (error) {
 				console.error(`Failed to parse lula.yaml at ${path}:`, error);

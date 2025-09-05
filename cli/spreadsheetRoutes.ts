@@ -4,7 +4,7 @@ import { glob } from 'glob';
 import multer from 'multer';
 import { dirname, join, relative } from 'path';
 import * as XLSX from 'xlsx';
-import * as yaml from 'yaml';
+import * as yaml from 'js-yaml';
 import { getServerState } from './serverState';
 
 // Type definitions
@@ -41,7 +41,7 @@ export async function scanControlSets() {
 
 			try {
 				const content = readFileSync(fullPath, 'utf8');
-				const data = yaml.parse(content);
+				const data = yaml.load(content) as any;
 
 				// Skip default/placeholder control sets
 				if (data.id === 'default') {
@@ -426,7 +426,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			fieldSchema: fieldSchema
 		};
 
-		writeFileSync(join(baseDir, 'lula.yaml'), yaml.stringify(controlSetData));
+		writeFileSync(join(baseDir, 'lula.yaml'), yaml.dump(controlSetData));
 
 		// Create controls directory and write individual control files
 		const controlsDir = join(baseDir, 'controls');
@@ -468,7 +468,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 					}
 				});
 				
-				writeFileSync(filePath, yaml.stringify(filteredControl));
+				writeFileSync(filePath, yaml.dump(filteredControl));
 			});
 		});
 

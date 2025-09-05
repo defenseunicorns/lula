@@ -15,8 +15,9 @@ import {
 	unlinkSync,
 	writeFileSync
 } from 'fs';
+import { promises as fs } from 'fs';
 import { join } from 'path';
-import * as YAML from 'yaml';
+import * as yaml from 'js-yaml';
 import type { Control, Mapping } from '../types';
 import { getControlId } from './controlHelpers';
 
@@ -132,7 +133,7 @@ export class FileStore {
 			if (existsSync(flatFilePath)) {
 				try {
 					const content = readFileSync(flatFilePath, 'utf8');
-					const parsed = YAML.parse(content);
+					const parsed = yaml.load(content);
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
@@ -164,7 +165,7 @@ export class FileStore {
 			if (existsSync(filePath)) {
 				try {
 					const content = readFileSync(filePath, 'utf8');
-					const parsed = YAML.parse(content);
+					const parsed = yaml.load(content);
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
@@ -210,7 +211,7 @@ export class FileStore {
 			if (existsSync(filePath)) {
 				// Read existing file content as text to preserve exact format
 				const existingContent = readFileSync(filePath, 'utf8');
-				const existingControl = YAML.parse(existingContent);
+				const existingControl = yaml.load(existingContent);
 
 				// Only update fields that actually changed from the control object
 				// Remove runtime fields that should never be persisted
@@ -236,11 +237,11 @@ export class FileStore {
 
 					// Parse and re-stringify to maintain consistent format
 					// But use more conservative settings to preserve existing style
-					yamlContent = YAML.stringify(updatedControl, {
+					yamlContent = yaml.dump(updatedControl, {
 						indent: 2,
-						lineWidth: 80, // Standard line width
-						defaultStringType: 'PLAIN', // Use plain strings by default
-						defaultKeyType: 'PLAIN'
+						lineWidth: 80,
+						noRefs: true,
+						sortKeys: false
 					});
 				} else {
 					// No changes, keep existing content
@@ -254,11 +255,11 @@ export class FileStore {
 				delete controlToSave._metadata;
 				delete controlToSave.id; // Don't save the 'id' field - it's derived from ap-acronym or control_id_field
 
-				yamlContent = YAML.stringify(controlToSave, {
+				yamlContent = yaml.dump(controlToSave, {
 					indent: 2,
 					lineWidth: 80,
-					defaultStringType: 'PLAIN',
-					defaultKeyType: 'PLAIN'
+					noRefs: true,
+					sortKeys: false
 				});
 			}
 
@@ -296,10 +297,8 @@ export class FileStore {
 	 * Load all controls
 	 */
 	async loadAllControls(): Promise<Control[]> {
-		const controls: Control[] = [];
-
 		if (!existsSync(this.controlsDir)) {
-			return controls;
+			return [];
 		}
 
 		const entries = readdirSync(this.controlsDir);
@@ -307,22 +306,25 @@ export class FileStore {
 		// Check for flat structure first (atomic controls)
 		const yamlFiles = entries.filter((file) => file.endsWith('.yaml'));
 		if (yamlFiles.length > 0) {
-			// Flat structure - load controls directly from controls/ directory
-			for (const file of yamlFiles) {
+			// Flat structure - load controls in parallel
+			const promises = yamlFiles.map(async (file) => {
 				try {
 					const filePath = join(this.controlsDir, file);
-					const content = readFileSync(filePath, 'utf8');
-					const parsed = YAML.parse(content);
+					const content = await fs.readFile(filePath, 'utf8');
+					const parsed = yaml.load(content);
 					// Ensure the control has an 'id' field
 					if (!parsed.id) {
 						parsed.id = getControlId(parsed, this.baseDir);
 					}
-					controls.push(parsed as Control);
+					return parsed as Control;
 				} catch (error) {
 					console.error(`Failed to load control from file ${file}:`, error);
+					return null;
 				}
-			}
-			return controls;
+			});
+			
+			const results = await Promise.all(promises);
+			return results.filter((c): c is Control => c !== null);
 		}
 
 		// Fallback to family-based directory structure
@@ -331,28 +333,31 @@ export class FileStore {
 			return statSync(familyPath).isDirectory();
 		});
 
+		// Load all controls from all families in parallel
+		const allPromises: Promise<Control | null>[] = [];
+		
 		for (const family of families) {
 			const familyPath = join(this.controlsDir, family);
 			const files = readdirSync(familyPath).filter((file) => file.endsWith('.yaml'));
 
-			for (const file of files) {
+			const familyPromises = files.map(async (file) => {
 				try {
 					// Extract control ID from filename
 					// Keep the original filename format (AC-1_1.yaml means control ID AC-1.1)
 					const controlId = file.replace('.yaml', '');
-
 					const control = await this.loadControl(controlId);
-					if (control) {
-						// The loadControl method now ensures id field exists
-						controls.push(control);
-					}
+					return control;
 				} catch (error) {
 					console.error(`Failed to load control from file ${file}:`, error);
+					return null;
 				}
-			}
+			});
+			
+			allPromises.push(...familyPromises);
 		}
 
-		return controls;
+		const results = await Promise.all(allPromises);
+		return results.filter((c): c is Control => c !== null);
 	}
 
 	/**
@@ -381,7 +386,7 @@ export class FileStore {
 				const mappingFile = join(familyPath, file);
 				try {
 					const content = readFileSync(mappingFile, 'utf8');
-					const parsed = YAML.parse(content);
+					const parsed = yaml.load(content);
 
 					if (Array.isArray(parsed)) {
 						mappings.push(...parsed);
@@ -417,7 +422,7 @@ export class FileStore {
 		if (existsSync(mappingFile)) {
 			try {
 				const content = readFileSync(mappingFile, 'utf8');
-				existingMappings = YAML.parse(content) || [];
+				existingMappings = yaml.load(content) || [];
 			} catch (error) {
 				console.error(`Failed to parse existing mappings file: ${mappingFile}`, error);
 				existingMappings = [];
@@ -434,10 +439,10 @@ export class FileStore {
 
 		// Save back to file
 		try {
-			const yamlContent = YAML.stringify(existingMappings, {
+			const yamlContent = yaml.dump(existingMappings, {
 				indent: 2,
-				lineWidth: 0,
-				minContentWidth: 0
+				lineWidth: -1,
+				noRefs: true
 			});
 
 			writeFileSync(mappingFile, yamlContent, 'utf8');
@@ -458,7 +463,7 @@ export class FileStore {
 		for (const file of mappingFiles) {
 			try {
 				const content = readFileSync(file, 'utf8');
-				let mappings: Mapping[] = YAML.parse(content) || [];
+				let mappings: Mapping[] = yaml.load(content) || [];
 
 				const originalLength = mappings.length;
 				mappings = mappings.filter((m) => m.uuid !== uuid);
@@ -470,10 +475,10 @@ export class FileStore {
 						unlinkSync(file);
 					} else {
 						// Save the remaining mappings
-						const yamlContent = YAML.stringify(mappings, {
+						const yamlContent = yaml.dump(mappings, {
 							indent: 2,
-							lineWidth: 0,
-							minContentWidth: 0
+							lineWidth: -1,
+							noRefs: true
 						});
 						writeFileSync(file, yamlContent, 'utf8');
 					}
@@ -546,10 +551,10 @@ export class FileStore {
 			}
 
 			try {
-				const yamlContent = YAML.stringify(controlMappings, {
+				const yamlContent = yaml.dump(controlMappings, {
 					indent: 2,
-					lineWidth: 0,
-					minContentWidth: 0
+					lineWidth: -1,
+					noRefs: true
 				});
 
 				writeFileSync(mappingFile, yamlContent, 'utf8');
@@ -605,7 +610,7 @@ export class FileStore {
 					// Read the actual control ID from the file metadata
 					const filePath = join(familyPath, filename);
 					const content = readFileSync(filePath, 'utf8');
-					const parsed = YAML.parse(content);
+					const parsed = yaml.load(content);
 
 					// Get control ID from _metadata.controlId or fall back to filename
 					// let controlId: string;
