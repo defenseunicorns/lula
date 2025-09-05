@@ -630,7 +630,7 @@ router.get('/export-controls', async (req, res) => {
 				mappings: controlMappings.map(m => ({
 					uuid: m.uuid,
 					status: m.status,
-					description: m.description || (m as any).justification || ''
+					description: m.justification || ''
 				}))
 			};
 		});

@@ -75,6 +75,29 @@
 		<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
 			{mapping.justification}
 		</p>
+		
+		{#if mapping.source_entries && mapping.source_entries.length > 0}
+			<div class="mb-4">
+				<h4 class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Source References</h4>
+				<div class="space-y-2">
+					{#each mapping.source_entries as entry}
+						<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
+							<div class="flex items-start justify-between">
+								<span class="text-xs font-mono text-blue-600 dark:text-blue-400 break-all">
+									{entry.location}
+								</span>
+								{#if entry.shasum}
+									<span class="text-xs text-gray-500 dark:text-gray-400 ml-2" title="SHA checksum">
+										{entry.shasum.substring(0, 8)}...
+									</span>
+								{/if}
+							</div>
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
+		
 		<div class="flex items-center justify-start">
 			<StatusBadge status={mapping.status} type="mapping" />
 		</div>

@@ -29,9 +29,9 @@
 	}: Props = $props();
 
 	const baseInputClass =
-		'w-full px-4 py-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors';
+		'w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors';
 	const errorClass = error ? 'border-red-400 focus:ring-red-500 focus:border-red-500' : '';
-	const successClass = !error && value ? 'border-green-400 dark:border-green-600' : '';
+	const successClass = '';
 </script>
 
 <div class="space-y-2">

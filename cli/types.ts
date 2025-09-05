@@ -4,9 +4,37 @@
 /**
  * CLI Types Module
  *
- * Defines types used throughout the CLI module to avoid cross-boundary imports
- * from the frontend src/ directory.
+ * Defines CLI-specific types. Core types (Control, Mapping, etc.) are imported
+ * from the frontend to maintain a single source of truth.
  */
+
+// Import shared core types from frontend
+import type {
+	Control as FrontendControl,
+	Mapping as FrontendMapping,
+	SourceEntry,
+	ControlSet,
+	ControlSetInfo,
+	GitCommit,
+	GitFileHistory,
+	UnifiedHistory,
+	ControlWithHistory,
+	ControlCompleteData
+} from '../src/lib/types';
+
+// Re-export for external use
+export type Control = FrontendControl;
+export type Mapping = FrontendMapping;
+export type {
+	SourceEntry,
+	ControlSet,
+	ControlSetInfo,
+	GitCommit,
+	GitFileHistory,
+	UnifiedHistory,
+	ControlWithHistory,
+	ControlCompleteData
+};
 
 /**
  * Parameter value can be string, number, boolean, or array of these
@@ -38,59 +66,6 @@ export interface Enhancement {
 	[key: string]: unknown;
 }
 
-/**
- * Security control definition
- */
-export interface Control {
-	/** Control identifier */
-	id: string;
-	/** Control title */
-	title?: string;
-	/** Control description */
-	description?: string;
-	/** Implementation guidance */
-	guidance?: string;
-	/** Control parameters */
-	parameters?: ControlParameters;
-	/** Control enhancements */
-	enhancements?: Enhancement[];
-	/** Control family (e.g., AC, AU, etc.) */
-	family?: string;
-	/** Control priority (e.g., P1, P2, P3) */
-	priority?: string;
-	/** Responsible party */
-	responsible?: string;
-	/** Additional control properties from various standards */
-	[key: string]: unknown;
-}
-
-/**
- * Mapping of source code to control
- */
-export interface Mapping {
-	/** Unique identifier for the mapping */
-	uuid: string;
-	/** Control identifier this maps to */
-	control_id: string;
-	/** Enhancement identifier if mapping to enhancement */
-	enhancement_id?: string;
-	/** Source file path */
-	source_file: string;
-	/** Line number in source file */
-	line_number?: number;
-	/** Description of the mapping */
-	description: string;
-	/** Type of mapping */
-	type: 'implementation' | 'documentation' | 'test' | 'config';
-	/** Implementation status */
-	status: 'implemented' | 'partial' | 'planned' | 'not-applicable';
-	/** Last update timestamp */
-	last_updated: string;
-	/** Evidence for the mapping */
-	evidence?: string;
-	/** Additional notes */
-	notes?: string;
-}
 
 /**
  * Control set metadata
@@ -108,107 +83,6 @@ export interface ControlSetMetadata {
 	[key: string]: unknown;
 }
 
-/**
- * Control set definition
- */
-export interface ControlSet {
-	/** Control set identifier */
-	id: string;
-	/** Control set name */
-	name: string;
-	/** Control set description */
-	description?: string;
-	/** Control set version */
-	version?: string;
-	/** Last modification time */
-	lastModified?: string;
-	/** File system path */
-	path?: string;
-	/** Available control families */
-	families?: string[];
-	/** Control set metadata */
-	metadata?: ControlSetMetadata;
-}
-
-/**
- * Control set information
- */
-export interface ControlSetInfo {
-	/** Currently active control set */
-	currentSet: ControlSet;
-	/** All available control sets */
-	availableSets: ControlSet[];
-}
-
-/**
- * Git commit information
- */
-export interface GitCommit {
-	/** Commit hash */
-	hash: string;
-	/** Commit author */
-	author: string;
-	/** Commit date */
-	date: string;
-	/** Commit message */
-	message: string;
-}
-
-/**
- * Git file history
- */
-export interface GitFileHistory {
-	/** File path */
-	file: string;
-	/** Commits affecting this file */
-	commits: GitCommit[];
-}
-
-/**
- * Control with git history
- */
-export interface ControlWithHistory extends Control {
-	/** Git history for this control */
-	history: GitCommit[];
-}
-
-/**
- * Complete control data including mappings and history
- */
-export interface ControlCompleteData {
-	/** The control */
-	control: Control;
-	/** Mappings for this control */
-	mappings: Mapping[];
-	/** Git history for this control */
-	history: GitCommit[];
-}
-
-/**
- * Unified history entry
- */
-export interface UnifiedHistory {
-	/** Type of the item */
-	type: 'control' | 'mapping';
-	/** The control or mapping */
-	item: Control | Mapping;
-	/** The commit */
-	commit: GitCommit;
-}
-
-/**
- * Server state
- */
-export interface ServerState {
-	/** Control set directory */
-	controlSetDir: string;
-	/** Map of control IDs to controls */
-	controls: Map<string, Control>;
-	/** Map of control IDs to their mappings */
-	mappings: Map<string, Mapping[]>;
-	/** Last data load time */
-	lastLoaded: Date;
-}
 
 /**
  * Field metadata for spreadsheet import

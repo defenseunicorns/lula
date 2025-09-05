@@ -39,9 +39,8 @@ export interface Mapping {
 }
 
 export interface SourceEntry {
-	file: string;
-	line: number;
-	context?: string;
+	location: string;
+	shasum?: string;
 }
 
 export interface ControlWithMappings extends Control {

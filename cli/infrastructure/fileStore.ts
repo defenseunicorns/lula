@@ -8,6 +8,7 @@
 
 import {
 	existsSync,
+	promises as fs,
 	mkdirSync,
 	readdirSync,
 	readFileSync,
@@ -15,9 +16,8 @@ import {
 	unlinkSync,
 	writeFileSync
 } from 'fs';
-import { promises as fs } from 'fs';
-import { join } from 'path';
 import * as yaml from 'js-yaml';
+import { join } from 'path';
 import type { Control, Mapping } from '../types';
 import { getControlId } from './controlHelpers';
 
@@ -89,14 +89,14 @@ export class FileStore {
 			// Skipping directory creation - baseDir appears to be project root
 			return;
 		}
-		
+
 		// Check if baseDir contains a lula.yaml file (indicating it's a valid control set directory)
 		const lulaConfigPath = join(this.baseDir, 'lula.yaml');
 		if (!existsSync(lulaConfigPath)) {
 			// Skipping directory creation - no lula.yaml found
 			return;
 		}
-		
+
 		if (!existsSync(this.controlsDir)) {
 			mkdirSync(this.controlsDir, { recursive: true });
 		}
@@ -322,7 +322,7 @@ export class FileStore {
 					return null;
 				}
 			});
-			
+
 			const results = await Promise.all(promises);
 			return results.filter((c): c is Control => c !== null);
 		}
@@ -335,7 +335,7 @@ export class FileStore {
 
 		// Load all controls from all families in parallel
 		const allPromises: Promise<Control | null>[] = [];
-		
+
 		for (const family of families) {
 			const familyPath = join(this.controlsDir, family);
 			const files = readdirSync(familyPath).filter((file) => file.endsWith('.yaml'));
@@ -352,7 +352,7 @@ export class FileStore {
 					return null;
 				}
 			});
-			
+
 			allPromises.push(...familyPromises);
 		}
 
