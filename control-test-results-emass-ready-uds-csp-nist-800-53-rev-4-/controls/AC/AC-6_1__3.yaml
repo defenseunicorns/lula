@@ -1,0 +1,85 @@
+family: AC
+control-acronym: AC-6(1)
+control-information: >-
+  Description:
+
+  The organization explicitly authorizes access to [Assignment:
+  organization-defined security functions (deployed in hardware, software, and
+  firmware) and security-relevant information].
+
+
+  Supplemental Guidance:
+
+  Security functions include, for example, establishing system accounts,
+  configuring access authorizations (i.e., permissions, privileges), setting
+  events to be audited, and setting intrusion detection parameters.
+  Security-relevant information includes, for example, filtering rules for
+  routers/firewalls, cryptographic key management information, configuration
+  parameters for security services, and access control lists. Explicitly
+  authorized personnel include, for example, security administrators, system and
+  network administrators, system security officers, system maintenance
+  personnel, system programmers, and other privileged users. Related controls:
+  AC-17, AC-18, AC-19.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing least
+  privilege; list of security functions (deployed in hardware, software, and
+  firmware) and security-relevant information for which access must be
+  explicitly authorized; information system configuration settings and
+  associated documentation; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  defining least privileges necessary to accomplish specified tasks;
+  organizational personnel with information security responsibilities;
+  system/network administrators].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing least privilege
+  functions].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-6(1).1,CCI-001558,DoD Organization or Service Common Control Package
+  AC-6(1).2,CCI-002221,DoD Organization or Service Common Control Package
+  AC-6(1).3,CCI-002222,Local
+  AC-6(1).4,CCI-002223,Local...
+ap-acronym: AC-6(1).3
+cci: 2222
+cci-definition: >-
+  002222: The organization explicitly authorizes access to organization-defined
+  security functions.
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to explicitly authorize access to all functions not publicly accessible.
+  Explicit authorization can be in the form of an acceptable use policy signed
+  by the user at the time of access being granted. DoD has defined the security
+  functions as all functions not publicly accessible.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated access control policy
+
+  2.) Signed and dated system security plan (SSP)
+
+  3.) Signed and dated documentation that defines the process to explicitly
+  authorize access to all functions not publicly accessible
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented process to ensure the organization being inspected/assessed
+  explicitly authorizes access to all functions not publicly accessible. DoD has
+  defined the security functions as all functions not publicly accessible.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "The UDS stack enforces this by requiring that any change to permissions (like adding a user to an admin role in Keycloak or granting a cluster role in Kubernetes) be performed by an account that already has administrative rights. This means privileged functions â\x80\x93 e.g., managing security settings, creating accounts, modifying critical configurations â\x80\x93 are inaccessible to general users. The stackâ\x80\x99s design (central admin console for Keycloak, controlled cluster config via IaC) ensures that granting or adjusting privileges is itself a restricted action."
+uds-alignment: Keycloak

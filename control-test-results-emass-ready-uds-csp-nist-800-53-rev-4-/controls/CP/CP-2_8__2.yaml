@@ -1,0 +1,75 @@
+family: CP
+control-acronym: CP-2(8)
+control-information: >-
+  Description:
+
+  The organization identifies critical information system assets supporting
+  essential missions and business functions.
+
+
+  Supplemental Guidance:
+
+  Organizations may choose to carry out the contingency planning activities in
+  this control enhancement as part of organizational business continuity
+  planning including, for example, as part of business impact analyses.
+  Organizations identify critical information system assets so that additional
+  safeguards and countermeasures can be employed (above and beyond those
+  safeguards and countermeasures routinely implemented) to help ensure that
+  organizational missions/business functions can continue to be conducted during
+  contingency operations. In addition, the identification of critical
+  information assets facilitates the prioritization of organizational resources.
+  Critical information system assets include technical and operational aspects.
+  Technical aspects include, for example, information technology services,
+  information system components, information technology products, and
+  mechanisms. Operational aspects include, for example, procedures (manually
+  executed operations) and personnel (individuals operating technical safeguards
+  and/or executing manual procedures). Organizational program protection plans
+  can provide assistance in identifying critical assets. Related controls:
+  SA-14, SA-15.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  contingency operations for the information system; contingency plan; business
+  impact assessment; security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency planning
+  and plan implementation responsibilities; organizational personnel with
+  information security responsibilities].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CP-2(8).2
+cci: 2829
+cci-definition: >-
+  002829: The organization identifies critical information system assets
+  supporting essential business functions.
+implementation-guidance: >-
+  The organization being inspected/assessed identifies and documents critical
+  information system assets supporting essential business functions.
+
+
+  Recommended Compelling Evidence:
+
+  1.) List of critical information system assets supporting essential missions
+  to ensure the organization being inspected/assessed identifies those assets.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented list of critical information system assets supporting essential
+  business functions to ensure the organization being inspected/assessed
+  identifies those assets.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (Organizational contingency plans are
+  outside the scope of UDS. UDS provides tools to execute recovery but the plan
+  documentation is an organizational responsibility as it is custom to their
+  mission.)

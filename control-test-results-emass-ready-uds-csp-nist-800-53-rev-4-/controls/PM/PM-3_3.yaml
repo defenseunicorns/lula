@@ -1,0 +1,82 @@
+family: PM
+control-acronym: PM-3
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Ensures that all capital planning and investment requests include the
+  resources needed to implement the information security program and documents
+  all exceptions to this requirement;
+
+  b. Employs a business case/Exhibit 300/Exhibit 53 to record the resources
+  required; and
+
+  c. Ensures that information security resources are available for expenditure
+  as planned.
+
+
+  Supplemental Guidance:
+
+  Organizations consider establishing champions for information security efforts
+  and as part of including the necessary resources, assign specialized expertise
+  and resources as needed. Organizations may designate and empower an Investment
+  Review Board (or similar group) to manage and provide oversight for the
+  information security-related aspects of the capital planning and investment
+  control process. Related controls: PM-4, SA-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information security program plan; Exhibits 300;
+  Exhibits 53; business cases for capital planning and investment; procedures
+  for capital planning and investment; documentation of exceptions to capital
+  planning requirements; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  program planning responsibilities; organizational personnel responsible for
+  capital planning and investment; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for capital planning and
+  investment; organizational processes for business case/Exhibit 300/Exhibit 53
+  development; automated mechanisms supporting the capital planning and
+  investment process].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: PM-3.3
+cci: 141
+cci-definition: >-
+  000141: The organization ensures that information security resources are
+  available for expenditure as planned.
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to ensure that information security resources are available for expenditure as
+  planned.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated process implementation documentation that is evidence
+  that information security resources are available for expenditure as planned.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented process to ensure the organization being inspected/assessed ensure
+  that information security resources are available for expenditure as planned.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (The Program Management (PM) family of
+  controls primarily focuses on high-level organizational security governance,
+  including policies, risk management strategies, and enterprise-wide planning.
+  These controls are typically addressed at the organizational level rather than
+  by a specific technology platform like UDS.)

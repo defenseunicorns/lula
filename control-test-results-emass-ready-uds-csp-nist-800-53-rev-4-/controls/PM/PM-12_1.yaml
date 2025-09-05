@@ -1,0 +1,88 @@
+family: PM
+control-acronym: PM-12
+control-information: >-
+  Description:
+
+  The organization implements an insider threat program that includes a
+  cross-discipline insider threat incident handling team.
+
+
+  Supplemental Guidance:
+
+  Organizations handling classified information are required, under Executive
+  Order 13587 and the National Policy on Insider Threat, to establish insider
+  threat programs. The standards and guidelines that apply to insider threat
+  programs in classified environments can also be employed effectively to
+  improve the security of Controlled Unclassified Information in non-national
+  security systems. Insider threat programs include security controls to detect
+  and prevent malicious insider activity through the centralized integration and
+  analysis of both technical and non-technical information to identify potential
+  insider threat concerns. A senior organizational official is designated by the
+  department/agency head as the responsible individual to implement and provide
+  oversight for the program. In addition to the centralized integration and
+  analysis capability, insider threat programs as a minimum, prepare
+  department/agency insider threat policies and implementation plans, conduct
+  host-based user monitoring of individual employee activities on
+  government-owned classified computers, provide insider threat awareness
+  training to employees, receive access to information from all offices within
+  the department/agency (e.g., human resources, legal, physical security,
+  personnel security, information technology, information system security, and
+  law enforcement) for insider threat analysis, and conduct self-assessments of
+  department/agency insider threat posture.
+   Insider threat programs can leverage the existence of incident handling teams organizations may already have in place, such as computer security incident response teams. Human resources records are especially important in this effort, as there is compelling evidence to show that some types of insider crimes are often preceded by nontechnical behaviors in the workplace (e.g., ongoing patterns of disgruntled behavior and conflicts with coworkers and other colleagues). These precursors can better inform and guide organizational officials in more focused, targeted monitoring efforts. The participation of a legal team is important to ensure that all monitoring activities are performed in accordance with appropriate legislation, directives, regulations, policies, standards, and guidelines. Related controls: AC-6, AT-2, AU-6, AU-7- AU-10, AU-12, AU-13, CA-7, IA-4, IR-4, MP-7, PE-2, PS-3, PS-4, PS-5, PS-8, SC-7, SC-38, SI-4, PM-1, PM-14.
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information security program plan; insider threat
+  program documentation; procedures for the insider threat program; risk
+  assessment results relevant to insider threats; list or other documentation on
+  the cross-discipline insider threat incident handling team; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  program planning and plan implementation responsibilities; organizational
+  personnel responsible for the insider threat program; members of the
+  cross-discipline insider threat incident handling team; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for implementing the insider
+  threat program and the cross-discipline insider threat incident handling team;
+  automated mechanisms supporting and/or implementing the insider threat program
+  and the cross-discipline insider threat incident handling team].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: PM-12.1
+cci: 2996
+cci-definition: >-
+  002996: The organization implements an insider threat program that includes a
+  cross-discipline insider threat incident handling team.
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements an insider
+  threat program that includes a cross-discipline insider threat incident
+  handling team.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation of organization's insider threat program.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented insider threat program to ensure the organization being
+  inspected/assessed implements an insider threat program that includes a
+  cross-discipline insider threat incident handling team.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (The Program Management (PM) family of
+  controls primarily focuses on high-level organizational security governance,
+  including policies, risk management strategies, and enterprise-wide planning.
+  These controls are typically addressed at the organizational level rather than
+  by a specific technology platform like UDS.)

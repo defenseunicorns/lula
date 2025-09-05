@@ -1,0 +1,171 @@
+family: AC
+control-acronym: AC-2
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Identifies and selects the following types of information system accounts
+  to support organizational missions/business functions: [Assignment:
+  organization-defined information system account types];
+
+  b. Assigns account managers for information system accounts;
+
+  c. Establishes conditions for group and role membership;
+
+  d. Specifies authorized users of the information system, group and role
+  membership, and access authorizations (i.e., privileges) and other attributes
+  (as required) for each account;
+
+  e. Requires approvals by [Assignment: organization-defined personnel or roles]
+  for requests to create information system accounts;
+
+  f. Creates, enables, modifies, disables, and removes information system
+  accounts in accordance with [Assignment: organization-defined procedures or
+  conditions];
+
+  g. Monitors the use of information system accounts;
+
+  h. Notifies account managers:
+
+  1. When accounts are no longer required;
+
+  2. When users are terminated or transferred; and
+
+  3. When individual information system usage or need-to-know changes;
+
+  i. Authorizes access to the information system based on:
+
+  1. A valid access authorization;
+
+  2. Intended system usage; and
+
+  3. Other attributes as required by the organization or associated
+  missions/business functions;
+
+  j. Reviews accounts for compliance with account management requirements
+  [Assignment: organization-defined frequency]; and
+
+  k. Establishes a process for reissuing shared/group account credentials (if
+  deployed) when individuals are removed from the group.
+
+
+  Supplemental Guidance:
+
+  Information system account types include, for example, individual, shared,
+  group, system, guest/anonymous, emergency, developer/manufacturer/vendor,
+  temporary, and service. Some of the account management requirements listed
+  above can be implemented by organizational information systems. The
+  identification of authorized users of the information system and the
+  specification of access privileges reflects the requirements in other security
+  controls in the security plan. Users requiring administrative privileges on
+  information system accounts receive additional scrutiny by appropriate
+  organizational personnel (e.g., system owner, mission/business owner, or chief
+  information security officer) responsible for approving such accounts and
+  privileged access. Organizations may choose to define access privileges or
+  other attributes by account, by type of account, or a combination of both.
+  Other attributes required for authorizing access include, for example,
+  restrictions on time-of-day, day-of-week, and point-of-origin. In defining
+  other account attributes, organizations consider system-related requirements
+  (e.g., scheduled maintenance, system upgrades) and mission/business
+  requirements, (e.g., time zone differences, customer requirements, remote
+  access to support travel requirements). Failure to consider these factors
+  could affect information system availability. Temporary and emergency accounts
+  are accounts intended for short-term use. Organizations establish temporary
+  accounts as a part of normal account activation procedures when there is a
+  need for short-term accounts without the demand for immediacy in account
+  activation. Organizations establish emergency accounts in response to crisis
+  situations and with the need for rapid account activation. Therefore,
+  emergency account activation may bypass normal account authorization
+  processes. Emergency and temporary accounts are not to be confused with
+  infrequently used accounts (e.g., local logon accounts used for special tasks
+  defined by organizations or when network resources are unavailable). Such
+  accounts remain available and are not subject to automatic disabling or
+  removal dates. Conditions for disabling or deactivating accounts include, for
+  example: (i) when shared/group, emergency, or temporary accounts are no longer
+  required; or (ii) when individuals are transferred or terminated. Some types
+  of information system accounts may require specialized training. Related
+  controls: AC-3, AC-4, AC-5, AC-6, AC-10, AC-17, AC-19, AC-20, AU-9, IA-2,
+  IA-4, IA-5, IA-8, CM-5, CM-6, CM-11, MA-3, MA-4, MA-5, PL-4, SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; security plan; information system design documentation;
+  information system configuration settings and associated documentation; list
+  of active system accounts along with the name of the individual associated
+  with each account; list of conditions for group and role membership;
+  notifications or records of recently transferred, separated, or terminated
+  employees; list of recently disabled information system accounts along with
+  the name of the individual associated with each account; access authorization
+  records; account management compliance reviews; information system monitoring
+  records; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes account management on the
+  information system; automated mechanisms for implementing account management].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-2.1,CCI-002110,Local
+  AC-2.2,CCI-002111,Local
+  AC-2.3,CCI-002112,Local
+  AC-2.4,CCI-000008,Local
+  AC-2.5,CCI-002113,Local
+  AC-2.6,CCI-002115,Local
+  AC-2.7,CCI-002116,Local
+  AC-2.8,CCI-002117,Local
+  AC-2.9,CCI-002118,Local
+  AC-2.10,CCI-002119,Local
+  AC-2.11,CCI-000010,Local
+  AC-2.12,CCI-002120,DoD Organization or Service Common Control Package
+  AC-2.13,CCI-000011,Local
+  AC-2.14,CCI-002121,Local
+  AC-2.15,CCI-002122,Local
+  AC-2.16,CCI-002123,Local
+  AC-2.17,CCI-002124,Local
+  AC-2.18,CCI-002125,Local
+  AC-2.19,CCI-002126,Local
+  AC-2.20,CCI-002127,Local
+  AC-2.21,CCI-002128,Local
+  AC-2.22,CCI-000012,Local
+  AC-2.23,CCI-001547,DoD Organization or Service Common Control Package
+  AC-2.24,CCI-002129,Local...
+ap-acronym: AC-2.8
+cci: 2117
+cci-definition: >-
+  002117: The organization specifies authorized role membership on the
+  information system.
+implementation-guidance: >-
+  The organization being inspected/assessed documents authorized role membership
+  on the information system.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that specifies authorized role membership
+  on the information system.
+
+  2.) Sampling of information system accounts
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented list of authorized roles for a sampling of information system
+  accounts to ensure that the authorized roles are specified
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "Authorized assignments of groups/roles to accounts are enforced through RBAC. In Keycloak, roles and group membership are only assignable by administrators with the proper permissions, ensuring that users can only receive roles they are authorized for. For example, an admin can assign a â\x80\x9CDeveloperâ\x80\x9D or â\x80\x9COperatorâ\x80\x9D role to a user account as appropriate; regular users cannot escalate their privileges. Similarly, in Kubernetes, role bindings (which tie users or service accounts to roles/cluster roles) can only be created by cluster admins. This ensures that accounts are granted access permissions (roles) only through deliberate, authorized administrative action, meeting the intent of controlling role assignment. The system account types sampling for evidence can be shown in Keycloak through the Admin User Interface under each Keycloak realm or via the Keycloak Admin API under the path \"/admin/realms/{realm}/users\" which will output a JSON array of user objects, each representing an account in the realm."
+uds-alignment: Keycloak

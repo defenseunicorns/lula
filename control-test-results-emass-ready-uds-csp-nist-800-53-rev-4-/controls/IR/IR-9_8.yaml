@@ -1,0 +1,119 @@
+family: IR
+control-acronym: IR-9
+control-information: >-
+  Description:
+
+  The organization responds to information spills by:
+
+  a. Identifying the specific information involved in the information system
+  contamination;
+
+  b. Alerting [Assignment: organization-defined personnel or roles] of the
+  information spill using a method of communication not associated with the
+  spill;
+
+  c. Isolating the contaminated information system or system component;
+
+  d. Eradicating the information from the contaminated information system or
+  component;
+
+  e. Identifying other information systems or system components that may have
+  been subsequently contaminated; and
+
+  f. Performing other [Assignment: organization-defined actions].
+
+
+  Supplemental Guidance:
+
+  Information spillage refers to instances where either classified or sensitive
+  information is inadvertently placed on information systems that are not
+  authorized to process such information. Such information spills often occur
+  when information that is initially thought to be of lower sensitivity is
+  transmitted to an information system and then is subsequently determined to be
+  of higher sensitivity. At that point, corrective action is required. The
+  nature of the organizational response is generally based upon the degree of
+  sensitivity of the spilled information (e.g., security category or
+  classification level), the security capabilities of the information system,
+  the specific nature of contaminated storage media, and the access
+  authorizations (e.g., security clearances) of individuals with authorized
+  access to the contaminated system. The methods used to communicate information
+  about the spill after the fact do not involve methods directly associated with
+  the actual spill to minimize the risk of further spreading the contamination
+  before such contamination is isolated and eradicated.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  information spillage; incident response plan; records of information spillage
+  alerts/notifications, list of personnel who should receive alerts of
+  information spillage; list of actions to be performed regarding information
+  spillage; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for information spillage
+  response; automated mechanisms supporting and/or implementing information
+  spillage response actions and related communications].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IR-9.1,CCI-002805,Organization AWS Cloud Brokerage Package
+  IR-9.2,CCI-002806,Organization AWS Cloud Brokerage Package
+  IR-9.3,CCI-002807,DoD Organization or Service Common Control Package
+  IR-9.4,CCI-002808,Organization AWS Cloud Brokerage Package
+  IR-9.5,CCI-002809,Organization AWS Cloud Brokerage Package
+  IR-9.6,CCI-002810,Organization AWS Cloud Brokerage Package
+  IR-9.7,CCI-002811,Organization AWS Cloud Brokerage Package
+  IR-9.8,CCI-002812,Organization AWS Cloud Brokerage Package...
+ap-acronym: IR-9.8
+cci: 2812
+cci-definition: >-
+  002812: The organization defines other actions required to respond to
+  information spills.
+implementation-guidance: >-
+  The organization being inspected/assessed
+
+  defines and documents additional actions to be taken in response to spillage
+  incidents. The actions must include the following: 
+
+  1)consider the information system as classified at the same level as the
+  spilled information until the appropriate remediation processes have been
+  executed and verified;
+
+  2) Include the investigative team members and questions identified in CNSS
+  Instruction 1001 in investigation of the incident; 
+
+  3) Protect information regarding the incident from disclosure.
+
+
+  DoD has determined the actions are not appropriate to define at the Enterprise
+  level.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation that defines additional actions to be taken in response to
+  spillage incidents.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented additional actions to ensure the organization being
+  inspected/assessed defines other actions required to respond to information
+  spills. DoD has determined the actions are not appropriate to define at the
+  Enterprise level
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

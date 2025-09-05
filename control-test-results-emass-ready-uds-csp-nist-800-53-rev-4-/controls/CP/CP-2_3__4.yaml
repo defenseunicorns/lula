@@ -1,0 +1,76 @@
+family: CP
+control-acronym: CP-2(3)
+control-information: >-
+  Description:
+
+  The organization plans for the resumption of essential missions and business
+  functions within [Assignment: organization-defined time period] of contingency
+  plan activation.
+
+
+  Supplemental Guidance:
+
+  Organizations may choose to carry out the contingency planning activities in
+  this control enhancement as part of organizational business continuity
+  planning including, for example, as part of business impact analyses. The time
+  period for resumption of essential missions/business functions may be
+  dependent on the severity/extent of disruptions to the information system and
+  its supporting infrastructure. Related control: PE-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  contingency operations for the information system; contingency plan; security
+  plan; business impact assessment; other related plans; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency planning
+  and plan implementation responsibilities; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for resumption of missions and
+  business functions].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CP-2(3).1,CCI-000473,DoD Organization or Service Common Control Package
+  CP-2(3).2,CCI-000474,DoD Organization or Service Common Control Package
+  CP-2(3).3,CCI-000475,Local
+  CP-2(3).4,CCI-000476,Local...
+ap-acronym: CP-2(3).4
+cci: 476
+cci-definition: >-
+  000476: The organization plans for the resumption of essential business
+  functions within the organization-defined time period of contingency plan
+  activation.
+implementation-guidance: >-
+  The organization being inspected/assessed shall document within their
+  contingency plan, procedures for resumption of essential business functions
+  within 1 hour (Availability High) 12 hours (Availability Moderate) as defined
+  in the contingency plan.
+
+  Recommended Compelling Evidence:
+
+  1.) Policy that defines the time period for planning the resumption of
+  essential missions as a result of contingency plan activation.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains the contingency
+  plan to ensure it contains procedures for resumption of essential business
+  functions within 1 hour (Availability High) 12 hours (Availability Moderate)
+  as defined in the contingency plan.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (Organizational contingency plans are
+  outside the scope of UDS. UDS provides tools to execute recovery but the plan
+  documentation is an organizational responsibility as it is custom to their
+  mission.)

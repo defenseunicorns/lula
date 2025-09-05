@@ -1,0 +1,72 @@
+family: AC
+control-acronym: AC-2(5)
+control-information: >-
+  Description:
+
+  The organization requires that users log out when [Assignment:
+  organization-defined time-period of expected inactivity or description of when
+  to log out].
+
+
+  Supplemental Guidance:
+
+  Related control: SC-23.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; security plan; information system design documentation;
+  information system configuration settings and associated documentation;
+  security violation reports; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities; users that must comply with inactivity
+  logout policy].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-2(5).1,CCI-002133,Local
+  AC-2(5).2,CCI-000019,Local
+  AC-2(5).3,CCI-001406,DoD Organization or Service Common Control Package...
+ap-acronym: AC-2(5).2
+cci: 19
+cci-definition: >-
+  000019: The organization requires that users log out in accordance with the
+  organization-defined time period of inactivity and/or description of when to
+  log out.
+implementation-guidance: >-
+  The organization being inspected/assessed documents in the user policies that
+  users are required to log out at the end of the users standard work period
+  unless otherwise defined in formal organizational policy and IAW conditions
+  defined in AC-2 (5) CCI 2133. DoD has defined the time period as at the end of
+  the users standard work period unless otherwise defined in formal
+  organizational policy.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that defines the other organization-defined
+  requirement when users are supposed to log out
+
+  2.) Audit trail
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  user policies to ensure that users are required to log out at the end of the
+  users standard work period unless otherwise defined in formal organizational
+  policy and IAW conditions defined in AC-2 (5) CCI 2133. DoD has defined the
+  time period as at the end of the users standard work period unless otherwise
+  defined in formal organizational policy.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "Keycloak fully supports session timeouts through configurable settings that manage the lifecycle of sessions. It allows you to set an SSO session idle timeout, which determines how long a session can remain inactive before being automatically terminated, as well as an SSO session max timeout, which imposes an absolute limit on the session's duration regardless of activity. Additionally, for offline sessionsâ\x80\x94such as those used with \"remember me\" functionality separate configurations exist to manage both idle timeouts and maximum lifespans. These settings are accessible and adjustable through the Keycloak admin console under the realm's token settings, enabling you to tailor session management to meet specific security and user experience requirements."
+uds-alignment: Keycloak

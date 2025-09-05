@@ -1,0 +1,74 @@
+family: AC
+control-acronym: AC-11
+control-information: >-
+  Description:
+
+  The information system:
+
+  a. Prevents further access to the system by initiating a session lock after
+  [Assignment: organization-defined time period] of inactivity or upon receiving
+  a request from a user; and
+
+  b. Retains the session lock until the user reestablishes access using
+  established identification and authentication procedures.
+
+
+  Supplemental Guidance:
+
+  Session locks are temporary actions taken when users stop work and move away
+  from the immediate vicinity of information systems but do not want to log out
+  because of the temporary nature of their absences. Session locks are
+  implemented where session activities can be determined. This is typically at
+  the operating system level, but can also be at the application level. Session
+  locks are not an acceptable substitute for logging out of information systems,
+  for example, if organizations require users to log out at the end of workdays.
+  Related control: AC-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing session
+  lock; procedures addressing identification and authentication; information
+  system design documentation; information system configuration settings and
+  associated documentation; security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing access control policy
+  for session lock].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-11.1,CCI-000058,Local
+  AC-11.2,CCI-000059,DoD Organization or Service Common Control Package
+  AC-11.3,CCI-000056,Local
+  AC-11.4,CCI-000057,Local...
+ap-acronym: AC-11.2
+cci: 59
+cci-definition: >-
+  000059: The organization defines the time period of inactivity after which the
+  information system initiates a session lock.
+implementation-guidance: |-
+  DoD has defined the time period as 15 minutes.
+
+  Recommended Compelling Evidence:
+  Automatically compliant
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level. DoD has defined the time period
+  as 15 minutes.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

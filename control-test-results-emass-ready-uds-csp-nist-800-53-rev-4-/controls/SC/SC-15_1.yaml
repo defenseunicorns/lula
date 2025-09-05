@@ -1,0 +1,90 @@
+family: SC
+control-acronym: SC-15
+control-information: >-
+  Description:
+
+  The information system:
+
+  a. Prohibits remote activation of collaborative computing devices with the
+  following exceptions: [Assignment: organization-defined exceptions where
+  remote activation is to be allowed]; and
+
+  b. Provides an explicit indication of use to users physically present at the
+  devices.
+
+
+  Supplemental Guidance:
+
+  Collaborative computing devices include, for example, networked white boards,
+  cameras, and microphones. Explicit indication of use includes, for example,
+  signals to users when collaborative computing devices are activated. Related
+  control: AC-21.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing collaborative computing; access control policy and procedures;
+  information system design documentation; information system configuration
+  settings and associated documentation; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel with responsibilities for managing collaborative
+  computing devices].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  management of remote activation of collaborative computing devices; automated
+  mechanisms providing an indication of use of collaborative computing devices].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-15.1,CCI-001150,Local
+  SC-15.2,CCI-001151,DoD Organization or Service Common Control Package
+  SC-15.3,CCI-001152,Local...
+ap-acronym: SC-15.1
+cci: 1150
+cci-definition: >-
+  001150: The information system prohibits remote activation of collaborative
+  computing devices excluding the organization-defined exceptions where remote
+  activation is to be allowed.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  prohibit remote activation of collaborative computing devices excluding
+  dedicated VTC suites located in approved VTC locations that are centrally
+  managed. For information system components that have applicable STIGs or SRGs,
+  the organization being inspected/assessed must comply with the STIG/SRG
+  guidance that pertains to CCI 1150. DoD has defined the exceptions as
+  dedicated VTC suites located in approved VTC locations that are centrally
+  managed.
+
+  Recommended Compelling Evidence:
+
+  1.) Applicable collaborative computing devices configuration files.
+
+  2.) Applicable STIG/SRG checks pertaining to CCI 1150.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to prohibit remote activation of collaborative computing
+  devices excluding dedicated VTC suites located in approved VTC locations that
+  are centrally managed. For information system components that have applicable
+  STIGs or SRGs, the organization conducting the inspection/assessment evaluates
+  the components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 1150. DoD has defined the exceptions as dedicated VTC
+  suites located in approved VTC locations that are centrally managed.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (UDS does not involve devices like
+  smart whiteboards, VTC, or cameras where indicator lights would be relevant.)

@@ -1,0 +1,69 @@
+family: IA
+control-acronym: IA-2(3)
+control-information: >-
+  Description:
+
+  The information system implements multifactor authentication for local access
+  to privileged accounts.
+
+
+  Supplemental Guidance:
+
+  Related control: AC-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing user identification and authentication; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; list of information system
+  accounts; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  operations responsibilities; organizational personnel with account management
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  multifactor authentication capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-2(3).1
+cci: 767
+cci-definition: >-
+  000767: The information system implements multifactor authentication for local
+  access to privileged accounts.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  implement multifactor authentication for local access to privileged accounts.
+  For information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 767.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Access Control Policy
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to implement multifactor authentication for local access to
+  privileged accounts. For information system components that have applicable
+  STIGs or SRGs, the organization conducting the inspection/assessment evaluates
+  the components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 767.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: "Not Applicable to UDS technology stack. (This enhancement involves multi-factor for local access (like console access to a server). In the context of UDS, there is no â\x80\x9Clocalâ\x80\x9D login to an application all access to UDS services is over the network. The underlying host machines (nodes of the Kubernetes cluster) are not considered part of the UDS application stack from a user perspective; those are managed by sysadmins with their own OS login controls (likely using SSH keys, etc., which indeed can be multi-factor if using PIV cards). But thatâ\x80\x99s outside of UDS. UDS itself doesnâ\x80\x99t have an interactive local console for users.)"

@@ -1,0 +1,98 @@
+family: AU
+control-acronym: AU-9
+control-information: >-
+  Description:
+
+  The information system protects audit information and audit tools from
+  unauthorized access, modification, and deletion.
+
+
+  Supplemental Guidance:
+
+  Audit information includes all information (e.g., audit records, audit
+  settings, and audit reports) needed to successfully audit information system
+  activity. This control focuses on technical protection of audit information.
+  Physical protection of audit information is addressed by media protection
+  controls and physical and environmental protection controls. Related controls:
+  AC-3, AC-6, MP-2, MP-4, PE-2, PE-3, PE-6.
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay:
+  Related Control: AU-4(1).
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; access control policy
+  and procedures; procedures addressing protection of audit information;
+  information system design documentation; information system configuration
+  settings and associated documentation, information system audit records; audit
+  tools; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing audit information
+  protection].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: When
+  audit information contains PII or PHI, it must be protected commensurate with
+  its PII confidentiality impact level. Audit information could be necessary to
+  enforce criminal or civil penalties under the Privacy Act. Protecting audit
+  records from compromise by applying this control enhancement helps ensure
+  their availability when needed.
+
+
+  Regulatory Statutory Reference: 
+
+
+  Added by [r4] Privacy (Confidentiality Impact Level: Moderate) Overlay: 5
+  U.S.C. Section: 552a(i); OMB M-07-16; OMB Circular A-130, 7.g. and Appendix II
+control-implementation-status: Inherited
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-9.3
+cci: 164
+cci-definition: >-
+  000164: The information system protects audit information from unauthorized
+  deletion.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  disallow unauthorized deletion of audit information. For information system
+  components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  164.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure that the organization being inspected/assessed has configured
+  the information system to disallow unauthorized deletion of audit information.
+  For information system components that have applicable STIGs or SRGs, the
+  organization conducting the inspection/assessment evaluates the components to
+  ensure that the organization being inspected/assessed has configured the
+  information system in compliance with the applicable STIGs and SRGs pertaining
+  to CCI 164.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

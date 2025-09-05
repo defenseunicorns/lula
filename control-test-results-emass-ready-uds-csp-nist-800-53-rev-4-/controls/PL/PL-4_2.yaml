@@ -1,0 +1,106 @@
+family: PL
+control-acronym: PL-4
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Establishes and makes readily available to individuals requiring access to
+  the information system, the rules that describe their responsibilities and
+  expected behavior with regard to information and information system usage;
+
+  b. Receives a signed acknowledgment from such individuals, indicating that
+  they have read, understand, and agree to abide by the rules of behavior,
+  before authorizing access to information and the information system;
+
+  c. Reviews and updates the rules of behavior [Assignment: organization-defined
+  frequency]; and
+
+  d. Requires individuals who have signed a previous version of the rules of
+  behavior to read and resign when the rules of behavior are revised/updated.
+
+
+  Supplemental Guidance:
+
+  This control enhancement applies to organizational users. Organizations
+  consider rules of behavior based on individual user roles and
+  responsibilities, differentiating, for example, between rules that apply to
+  privileged users and rules that apply to general users. Establishing rules of
+  behavior for some types of non-organizational users including, for example,
+  individuals who simply receive data/information from federal information
+  systems, is often not feasible given the large number of such users and the
+  limited nature of their interactions with the systems. Rules of behavior for
+  both organizational and non-organizational users can also be established in
+  AC-8, System Use Notification. PL-4 b. (the signed acknowledgement portion of
+  this control) may be satisfied by the security awareness training and
+  role-based security training programs conducted by organizations if such
+  training includes rules of behavior. Organizations can use electronic
+  signatures for acknowledging rules of behavior. Related controls: AC-2, AC-6,
+  AC-8, AC-9, AC-17, AC-18, AC-19, AC-20, AT-2, AT-3, CM-11, IA-2, IA-4, IA-5,
+  MP-7, PS-6, PS-8, SA-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Security planning policy; procedures addressing rules
+  of behavior for information system users; rules of behavior; signed
+  acknowledgements; records for rules of behavior reviews and updates; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  establishing, reviewing, and updating rules of behavior; organizational
+  personnel who are authorized users of the information system and have signed
+  and resigned rules of behavior; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for establishing, reviewing,
+  disseminating, and updating rules of behavior; automated mechanisms supporting
+  and/or implementing the establishment, review, dissemination, and update of
+  rules of behavior].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PL-4.1,CCI-000592,Local
+  PL-4.2,CCI-001639,Local
+  PL-4.3,CCI-000593,Local
+  PL-4.4,CCI-003068,Local
+  PL-4.5,CCI-003069,DoD Organization or Service Common Control Package
+  PL-4.6,CCI-003070,Local...
+ap-acronym: PL-4.2
+cci: 1639
+cci-definition: >-
+  001639: The organization makes readily available to individuals requiring
+  access to the information system, the rules that describe their
+  responsibilities and expected behavior with regard to information and
+  information system usage.
+implementation-guidance: >-
+  The organization being inspected/assessed must disseminate to all information
+  system users, via an information sharing capability, rules that describe
+  information system user responsibilities and expected behavior with regard to
+  information and information system usage, acceptable use policy (AUP).
+  Organizations should disseminate the rules by providing to users and requiring
+  signature of acceptance.
+
+  Recommended Compelling Evidence:
+
+  1.) Acceptable use policy (AUP) rules which describe information system user
+  responsibilities.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines
+  rules that describe information system user responsibilities via the inspected
+  organization's information sharing capability (e.g. portal, intranet, email,
+  etc.) to ensure it has been disseminated.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (The organization typically provides
+  an Acceptable Use Policy that is shared across their organization to meet
+  their security needs in the Systems Security Plan.)

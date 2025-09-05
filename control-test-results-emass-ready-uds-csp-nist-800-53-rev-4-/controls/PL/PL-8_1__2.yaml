@@ -1,0 +1,98 @@
+family: PL
+control-acronym: PL-8(1)
+control-information: >-
+  Description:
+
+  The organization designs its security architecture using a defense-in-depth
+  approach that:
+
+  (a) Allocates [Assignment: organization-defined security safeguards] to
+  [Assignment: organization-defined locations and architectural layers]; and
+
+  (b) Ensures that the allocated security safeguards operate in a coordinated
+  and mutually reinforcing manner.
+
+
+  Supplemental Guidance:
+
+  Organizations strategically allocate security safeguards (procedural,
+  technical, or both) in the security architecture so that adversaries have to
+  overcome multiple safeguards to achieve their objective. Requiring adversaries
+  to defeat multiple mechanisms makes it more difficult to successfully attack
+  critical information resources (i.e., increases adversary work factor) and
+  also increases the likelihood of detection. The coordination of allocated
+  safeguards is essential to ensure that an attack that involves one safeguard
+  does not create adverse unintended consequences (e.g., lockout, cascading
+  alarms) by interfering with another safeguard. Placement of security
+  safeguards is a key activity. Greater asset criticality or information value
+  merits additional layering. Thus, an organization may choose to place
+  anti-virus software at organizational boundary layers, email/web servers,
+  notebook computers, and workstations to maximize the number of related
+  safeguards adversaries must penetrate before compromising the information and
+  information systems. Related controls: SC-29, SC-36.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Security planning policy; procedures addressing
+  information security architecture development; enterprise architecture
+  documentation; information security architecture documentation; security plan
+  for the information system; security CONOPS for the information system; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security planning and
+  plan implementation responsibilities; organizational personnel with
+  information security architecture development responsibilities; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for designing the information
+  security architecture; automated mechanisms supporting and/or implementing the
+  design of the information security architecture].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PL-8(1).1,CCI-003081,Organization AWS Cloud Brokerage Package
+  PL-8(1).2,CCI-003082,Organization AWS Cloud Brokerage Package
+  PL-8(1).3,CCI-003083,Local
+  PL-8(1).4,CCI-003084,DoD Organization or Service Common Control Package
+  PL-8(1).5,CCI-003085,Organization AWS Cloud Brokerage Package
+  PL-8(1).6,CCI-003086,DoD Organization or Service Common Control Package
+  PL-8(1).7,CCI-003087,Organization AWS Cloud Brokerage Package...
+ap-acronym: PL-8(1).2
+cci: 3082
+cci-definition: >-
+  003082: The organization designs its security architecture using a
+  defense-in-depth approach that allocates organization-defined security
+  safeguards to organization-defined architectural layers.
+implementation-guidance: >-
+  The organization being inspected/assessed designs and documents its security
+  architecture using a defense-in-depth approach that allocates security
+  safeguards defined in PL-8 (1), CCI 3084 to architectural layers defined in
+  PL-8 (1), CCI 3086.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and current documented organization security architecture which
+  allocates security safeguards defined in PL-8 (1), CCI 3084 to locations
+  defined in PL-8 (1), CCI 3086.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  security architecture to ensure the organization being inspected/assessed
+  designs its security architecture using a defense-in-depth approach that
+  allocates security safeguards defined in PL-8 (1), CCI 3084 to architectural
+  layers defined in PL-8 (1), CCI 3086.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

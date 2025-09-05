@@ -1,0 +1,105 @@
+family: PE
+control-acronym: PE-17
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Employs [Assignment: organization-defined security controls] at alternate
+  work sites;
+
+  b. Assesses as feasible, the effectiveness of security controls at alternate
+  work sites; and
+
+  c. Provides a means for employees to communicate with information security
+  personnel in case of security incidents or problems.
+
+
+  Supplemental Guidance:
+
+  Alternate work sites may include, for example, government facilities or
+  private residences of employees. While commonly distinct from alternative
+  processing sites, alternate work sites may provide readily available alternate
+  locations as part of contingency operations. Organizations may define
+  different sets of security controls for specific alternate work sites or types
+  of sites depending on the work-related activities conducted at those sites.
+  This control supports the contingency planning activities of organizations and
+  the federal telework initiative. Related controls: AC-17, CP-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing alternate work sites for organizational personnel;
+  security plan; list of security controls required for alternate work sites;
+  assessments of security controls at alternate work sites; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel approving use of alternate
+  work sites; organizational personnel using alternate work sites;
+  organizational personnel assessing controls at alternate work sites;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for security at alternate work
+  sites; automated mechanisms supporting alternate work sites; security controls
+  employed at alternate work sites; means of communications between personnel at
+  alternate work sites and security personnel].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: PE-17.2
+cci: 2975
+cci-definition: >-
+  002975: The organization defines security controls to employ at alternate work
+  sites.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents security
+  controls to employ at alternate work sites, which must include all applicable
+  building and safety codes for the information system's environment DoD has
+  determined the security controls are not appropriate to define at the
+  Enterprise level, but must include all applicable building and safety codes
+  for the information system's environment.
+
+  Recommended Compelling Evidence:
+
+  1.) Telework policy, Telework Agreement, or other similar documentation
+  containing organizationally-defined security controls
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented security controls to ensure the organization being
+  inspected/assessed defines security controls to employ at alternate work
+  sites, which must include all applicable building and safety codes for the
+  information system's environment. DoD has determined the security controls are
+  not appropriate to define at the Enterprise level, but must include all
+  applicable building and safety codes for the information system's environment.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

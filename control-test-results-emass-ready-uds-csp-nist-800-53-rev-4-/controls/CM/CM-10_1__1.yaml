@@ -1,0 +1,73 @@
+family: CM
+control-acronym: CM-10(1)
+control-information: >-
+  Description:
+
+  The organization establishes the following restrictions on the use of open
+  source software: [Assignment: organization-defined restrictions].
+
+
+  Supplemental Guidance:
+
+  Open source software refers to software that is available in source code form.
+  Certain software rights normally reserved for copyright holders are routinely
+  provided under software license agreements that permit individuals to study,
+  change, and improve the software. From a security perspective, the major
+  advantage of open source software is that it provides organizations with the
+  ability to examine the source code. However, there are also various licensing
+  issues associated with open source software including, for example, the
+  constraints on derivative use of such software.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  restrictions on use of open source software; configuration management plan;
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  establishing and enforcing restrictions on use of open source software;
+  organizational personnel with information security responsibilities;
+  system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational process for restricting the use of open
+  source software; automated mechanisms implementing restrictions on the use of
+  open source software].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: ...
+ap-acronym: CM-10(1).1
+cci: 1734
+cci-definition: >-
+  001734: The organization defines the restrictions to be followed on the use of
+  open source software.
+implementation-guidance: >-
+  DoD has defined the restrictions as IAW DoD Memorandum "Clarifying Guidance
+  Regarding Open Source Software (OSS)" 16 Oct 2009
+  (http://dodcio.defense.gov/Portals/0/Documents/FOSS/2009OSS.pdf).
+
+
+  Recommended Compelling Evidence:
+
+  Automatically Compliant
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level.
+
+  DoD has defined the restrictions as IAW DoD Memorandum "Clarifying Guidance
+  Regarding Open Source Software (OSS)" 16 Oct 2009
+  (http://dodcio.defense.gov/Portals/0/Documents/FOSS/2009OSS.pdf).
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

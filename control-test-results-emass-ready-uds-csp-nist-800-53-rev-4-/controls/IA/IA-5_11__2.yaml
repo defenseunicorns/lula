@@ -1,0 +1,86 @@
+family: IA
+control-acronym: IA-5(11)
+control-information: >-
+  Description:
+
+  The information system, for hardware token-based authentication, employs
+  mechanisms that satisfy [Assignment: organization-defined token quality
+  requirements].
+
+
+  Supplemental Guidance:
+
+  Hardware token-based authentication typically refers to the use of PKI-based
+  tokens, such as the U.S. Government Personal Identity Verification (PIV) card.
+  Organizations define specific requirements for tokens, such as working with a
+  particular PKI.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing authenticator management; security plan; information system design
+  documentation; automated mechanisms employing hardware token-based
+  authentication for the information system; list of token quality requirements;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with authenticator
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  hardware token-based authenticator management capability].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IA-5(11).1,CCI-002002,DoD Organization or Service Common Control Package
+  IA-5(11).2,CCI-002003,Local...
+ap-acronym: IA-5(11).2
+cci: 2003
+cci-definition: >-
+  002003: The information system, for token-based authentication, employs
+  mechanisms that satisfy organization-defined token quality requirements.
+implementation-guidance: >-
+  The information system performing hardware token-based authentication must be
+  configured to accept only DoD-approved PKI credentials in accordance with DoDI
+  8520.02 and DoDI 8520.03. For unclassified systems, DoD-approved PKI
+  credentials include DoD PKI credentials, External Certification Authority
+  (ECA) PKI credentials, and DoD-approved external PKI credentials. For SIPRNet,
+  DoD-approved PKI credentials include DoD PKI credentials and NSS PKI
+  credentials. If the information system accepts DoD-approved external PKI
+  credentials, the information system must be configured to accept only
+  certificates at approved assurance levels, as represented by the Certificate
+  Policy Object Identifiers (OIDs) asserted in the certificate. The current list
+  of DoD-approved external PKIs and acceptable Object Identifiers (OIDs) for
+  each approved external PKI is available at
+  http://iase.disa.mil/pki-pke/interoperability.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated SOP/TTP documenting the information system is configured
+  to accept only DoD-approved PKI credentials IAW DoDI 8520.02 and DoDI 8520.03.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed has configured the
+  information system to accept only DoD-approved PKI credentials in accordance
+  with (IAW) DoDI 8520.02 and DoDI 8520.03. If the information system accepts
+  DoD-approved external PKI credentials, the organization conducting the
+  inspection/assessment examines the information system to ensure the
+  organization being inspected/assessed has configured the information system to
+  accept only DoD-approved external PKI credentials that assert an approved
+  Certificate Policy OID and reject credentials issued off of DoD-approved
+  external PKIs that do not assert an approved OID.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "In UDS, token-based authentication is engineered to meet organization-defined token quality requirements by enforcing the use of only DoD-approved PKI credentials. Keycloak is configured to accept and validate certificates in accordance with DoDI 8520.02 and DoDI 8520.03. For unclassified systems, this means accepting DoD PKI credentials, External Certification Authority (ECA) PKI credentials, and other DoD-approved external PKI credentials, while for SIPRNet deployments only DoD PKI and NSS PKI credentials are permitted. When external PKI credentials are accepted, Keycloak verifies that the certificate includes the required Certificate Policy Object Identifiers (OIDs) that represent approved assurance levels. Additionally, Istioâ\x80\x99s mutual TLS is used to secure service-to-service communications by ensuring that only tokens derived from these validated certificates are accepted."
+uds-alignment: Keycloak, Istio

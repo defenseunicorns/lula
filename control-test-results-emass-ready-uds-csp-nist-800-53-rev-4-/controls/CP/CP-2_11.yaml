@@ -1,0 +1,159 @@
+family: CP
+control-acronym: CP-2
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Develops a contingency plan for the information system that:
+
+  1. Identifies essential missions and business functions and associated
+  contingency requirements;
+
+  2. Provides recovery objectives, restoration priorities, and metrics;
+
+  3. Addresses contingency roles, responsibilities, assigned individuals with
+  contact information;
+
+  4. Addresses maintaining essential missions and business functions despite an
+  information system disruption, compromise, or failure;
+
+  5. Addresses eventual, full information system restoration without
+  deterioration of the security safeguards originally planned and implemented;
+  and
+
+  6. Is reviewed and approved by [Assignment: organization-defined personnel or
+  roles];
+
+  b. Distributes copies of the contingency plan to [Assignment:
+  organization-defined key contingency personnel (identified by name and/or by
+  role) and organizational elements];
+
+  c. Coordinates contingency planning activities with incident handling
+  activities;
+
+  d. Reviews the contingency plan for the information system [Assignment:
+  organization-defined frequency];
+
+  e. Updates the contingency plan to address changes to the organization,
+  information system, or environment of operation and problems encountered
+  during contingency plan implementation, execution, or testing;
+
+  f. Communicates contingency plan changes to [Assignment: organization-defined
+  key contingency personnel (identified by name and/or by role) and
+  organizational elements]; and
+
+  g. Protects the contingency plan from unauthorized disclosure and
+  modification.
+
+
+  Supplemental Guidance:
+
+  Contingency planning for information systems is part of an overall
+  organizational program for achieving continuity of operations for
+  mission/business functions. Contingency planning addresses both information
+  system restoration and implementation of alternative mission/business
+  processes when systems are compromised. The effectiveness of contingency
+  planning is maximized by considering such planning throughout the phases of
+  the system development life cycle. Performing contingency planning on
+  hardware, software, and firmware development can be an effective means of
+  achieving information system resiliency. Contingency plans reflect the degree
+  of restoration required for organizational information systems since not all
+  systems may need to fully recover to achieve the level of continuity of
+  operations desired. Information system recovery objectives reflect applicable
+  laws, Executive Orders, directives, policies, standards, regulations, and
+  guidelines. In addition to information system availability, contingency plans
+  also address other security-related events resulting in a reduction in mission
+  and/or business effectiveness, such as malicious attacks compromising the
+  confidentiality or integrity of information systems. Actions addressed in
+  contingency plans include, for example, orderly/graceful degradation,
+  information system shutdown, fallback to a manual mode, alternate information
+  flows, and operating in modes reserved for when systems are under attack. By
+  closely coordinating contingency planning with incident handling activities,
+  organizations can ensure that the necessary contingency planning activities
+  are in place and activated in the event of a security incident. Related
+  controls: AC-14, CP-6, CP-7, CP-8, CP-9, CP-10, IR-4, IR-8, MP-2, MP-4, MP-5,
+  PM-8, PM-11.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  contingency operations for the information system; contingency plan; security
+  plan; evidence of contingency plan reviews and updates; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency planning
+  and plan implementation responsibilities; organizational personnel with
+  incident handling responsibilities; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for contingency plan development,
+  review, update, and protection; automated mechanisms for developing,
+  reviewing, updating and/or protecting the contingency plan].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CP-2.1,CCI-000443,Local
+  CP-2.2,CCI-000444,Local
+  CP-2.3,CCI-000445,Local
+  CP-2.4,CCI-000446,Local
+  CP-2.5,CCI-000447,Local
+  CP-2.6,CCI-000448,Local
+  CP-2.7,CCI-000449,Local
+  CP-2.8,CCI-000450,Local
+  CP-2.9,CCI-000451,Local
+  CP-2.10,CCI-000452,Local
+  CP-2.11,CCI-000453,Local
+  CP-2.12,CCI-000454,Local
+  CP-2.13,CCI-000455,Local
+  CP-2.14,CCI-000456,Local
+  CP-2.15,CCI-000457,Local
+  CP-2.16,CCI-002830,DoD Organization or Service Common Control Package
+  CP-2.17,CCI-000458,DoD Organization or Service Common Control Package
+  CP-2.18,CCI-000459,Local
+  CP-2.19,CCI-000460,Local
+  CP-2.20,CCI-000461,DoD Organization or Service Common Control Package
+  CP-2.21,CCI-000462,Local
+  CP-2.22,CCI-000463,Local
+  CP-2.23,CCI-000464,Local
+  CP-2.24,CCI-000465,Local
+  CP-2.25,CCI-000466,Local
+  CP-2.26,CCI-000468,Local
+  CP-2.27,CCI-002831,DoD Organization or Service Common Control Package
+  CP-2.28,CCI-002832,Local...
+ap-acronym: CP-2.11
+cci: 453
+cci-definition: >-
+  000453: The organization develops a contingency plan for the information
+  system that addresses maintaining essential business functions despite an
+  information system compromise.
+implementation-guidance: >-
+  The organization being inspected/assessed must clearly and accurately document
+  maintaining business functions despite an information system compromise for
+  its information system(s).
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated contingency plan, referencing business functions section
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  contingency plan to ensure it clearly and accurately documents maintaining
+  business functions despite an information system compromise for its
+  information system(s).
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (Organizational contingency plans are
+  outside the scope of UDS. UDS provides tools to execute recovery but the plan
+  documentation is an organizational responsibility as it is custom to their
+  mission.)

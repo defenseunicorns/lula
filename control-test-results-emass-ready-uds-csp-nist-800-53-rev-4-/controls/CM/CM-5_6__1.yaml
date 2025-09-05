@@ -1,0 +1,84 @@
+family: CM
+control-acronym: CM-5(6)
+control-information: >-
+  Description:
+
+  The organization limits privileges to change software resident within software
+  libraries.
+
+
+  Supplemental Guidance:
+
+  Software libraries include privileged programs. Related control: AC-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  access restrictions for changes to the information system; configuration
+  management plan; information system design documentation; information system
+  architecture and configuration documentation; information system configuration
+  settings and associated documentation; change control records; information
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing access restrictions
+  to change; automated mechanisms supporting and/or implementing access
+  restrictions for change].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CM-5(6).1
+cci: 1499
+cci-definition: >-
+  001499: The organization limits privileges to change software resident within
+  software libraries.
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to limit privileges to accounts authorized to change software resident within
+  software libraries. For information system components that have applicable
+  STIGs or SRGs, the organization being inspected/assessed must comply with the
+  STIG/SRG guidance that pertains to CCI 1499.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that defines a process to limit privileges
+  to accounts authorized to change software resident within software libraries
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented process to ensure the organization being inspected/assessed limits
+  privileges to change software resident within software libraries. For
+  information system components that have applicable STIGs or SRGs, the
+  organization conducting the inspection/assessment evaluates the components to
+  ensure that the organization being inspected/assessed has configured the
+  information system in compliance with the applicable STIGs and SRGs pertaining
+  to CCI 1499.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  In UDS, privileges to change software resident within software libraries are
+  strictly controlled through an immutable, version-controlled deployment
+  pipeline. Software libraries are packaged into container images via Zarf and
+  managed as code through OpenTofu, ensuring that any modifications require
+  authorized changes to the source code subject to formal code reviews and
+  approvals rather than direct alteration in production. The immutable nature of
+  container images, combined with robust RBAC enforced by Kubernetes and
+  Keycloak, prevents unauthorized modifications, while cryptographic signing
+  verifies the integrity of the software libraries. This structured process
+  ensures that only a limited set of authorized personnel can update software
+  libraries, maintaining their integrity and minimizing the risk of malicious
+  changes.
+uds-alignment: Zarf, OpenTofu

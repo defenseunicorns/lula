@@ -1,0 +1,69 @@
+family: SI
+control-acronym: SI-4(20)
+control-information: >-
+  Description:
+
+  The organization implements [Assignment: organization-defined additional
+  monitoring] of privileged users.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing information system monitoring tools and techniques; information
+  system design documentation; list of privileged users; information system
+  monitoring tools and techniques documentation; information system
+  configuration settings and associated documentation; information system
+  monitoring logs or records; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system;
+  organizational personnel with responsibility for monitoring the information
+  system].
+
+
+  Test: [SELECT FROM: Organizational processes for information system
+  monitoring; automated mechanisms supporting and/or implementing system
+  monitoring capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SI-4(20).2
+cci: 2677
+cci-definition: >-
+  002677: The organization implements organization-defined additional monitoring
+  of privileged users.
+implementation-guidance: >-
+  The organization being inspected/assessed implements additional monitoring
+  defined in SI-4 (20), CCI 2676 of privileged users. The organization must
+  maintain an audit trail of additional monitoring.
+
+  Recommended Compelling Evidence:
+
+  1.) Audit trail of additional monitoring defined in SI-4 (20), CCI 2676 of
+  privileged users (located in Site's SSP).
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  audit trail of additional monitoring to ensure the organization being
+  inspected/assessed implements additional monitoring defined in SI-4 (20), CCI
+  2676 of privileged users.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  UDS implements robust monitoring of privileged user activities through its
+  integrated logging and security components. Privileged actions performed in
+  Keycloak (e.g., account creation, modification, disabling, or deletion) and
+  administrative activities in Kubernetes are logged comprehensively and
+  aggregated centrally via Vector and Loki, with detailed records including user
+  identities, timestamps, actions performed, and source IP addresses.
+uds-alignment: Keycloak, Kubernetes, Vector, Loki

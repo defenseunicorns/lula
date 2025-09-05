@@ -1,0 +1,117 @@
+family: CM
+control-acronym: CM-3
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Determines the types of changes to the information system that are
+  configuration-controlled;
+
+  b. Reviews proposed configuration-controlled changes to the information system
+  and approves or disapproves such changes with explicit consideration for
+  security impact analyses;
+
+  c. Documents configuration change decisions associated with the information
+  system;
+
+  d. Implements approved configuration-controlled changes to the information
+  system;
+
+  e. Retains records of configuration-controlled changes to the information
+  system for [Assignment: organization-defined time period];
+
+  f. Audits and reviews activities associated with configuration-controlled
+  changes to the information system; and
+
+  g. Coordinates and provides oversight for configuration change control
+  activities through [Assignment: organization-defined configuration change
+  control element (e.g., committee, board)] that convenes [Selection (one or
+  more): [Assignment: organization-defined frequency]; [Assignment:
+  organization-defined configuration change conditions]].
+
+
+  Supplemental Guidance:
+
+  Configuration change controls for organizational information systems involve
+  the systematic proposal, justification, implementation, testing, review, and
+  disposition of changes to the systems, including system upgrades and
+  modifications. Configuration change control includes changes to baseline
+  configurations for components and configuration items of information systems,
+  changes to configuration settings for information technology products (e.g.,
+  operating systems, applications, firewalls, routers, and mobile devices),
+  unscheduled/unauthorized changes, and changes to remediate vulnerabilities.
+  Typical processes for managing configuration changes to information systems
+  include, for example, Configuration Control Boards that approve proposed
+  changes to systems. For new development information systems or systems
+  undergoing major upgrades, organizations consider including representatives
+  from development organizations on the Configuration Control Boards. Auditing
+  of changes includes activities before and after changes are made to
+  organizational information systems and the auditing activities required to
+  implement such changes. Related controls: CA-7, CM-2, CM-4, CM-5, CM-6, CM-9,
+  SA-10, SI-2, SI-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  information system configuration change control; configuration management
+  plan; information system architecture and configuration documentation;
+  security plan; change control records; information system audit records;
+  change control audit and review reports; agenda /minutes from configuration
+  change control oversight meetings; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with configuration change
+  control responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; members of change control
+  board or similar].
+
+
+  Test: [SELECT FROM: Organizational processes for configuration change control;
+  automated mechanisms that implement configuration change control].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CM-3.1,CCI-000313,Local
+  CM-3.2,CCI-000314,Local
+  CM-3.3,CCI-001740,Local
+  CM-3.4,CCI-001741,Local
+  CM-3.5,CCI-001819,Local
+  CM-3.6,CCI-000316,Local
+  CM-3.7,CCI-002056,DoD Organization or Service Common Control Package
+  CM-3.8,CCI-000318,Local
+  CM-3.9,CCI-000319,Local
+  CM-3.10,CCI-000320,Local
+  CM-3.11,CCI-000321,Local
+  CM-3.12,CCI-001586,DoD Organization or Service Common Control Package...
+ap-acronym: CM-3.12
+cci: 1586
+cci-definition: >-
+  001586: The organization defines the configuration change control element
+  (e.g., committee, board) responsible for coordinating and providing oversight
+  for configuration change control activities.
+implementation-guidance: >-
+  DoD has defined the configuration change control element as a configuration
+  control board (CCB).
+
+
+  Recommended Compelling Evidence:
+
+  Automatically Compliant
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level. DoD has defined the
+  configuration change control element as a configuration control board (CCB).
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

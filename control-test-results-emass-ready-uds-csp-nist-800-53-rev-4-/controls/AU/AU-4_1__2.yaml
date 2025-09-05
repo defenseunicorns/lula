@@ -1,0 +1,89 @@
+family: AU
+control-acronym: AU-4(1)
+control-information: >-
+  Description:
+
+  The information system off-loads audit records [Assignment:
+  organization-defined frequency] onto a different system or media than the
+  system being audited.
+
+
+  Supplemental Guidance:
+
+  Off-loading is a process designed to preserve the confidentiality and
+  integrity of audit records by moving the records from the primary information
+  system to a secondary or alternate system. It is a common process in
+  information systems with limited audit storage capacity; the audit storage is
+  used only in a transitory fashion until the system can communicate with the
+  secondary or alternate system designated for storing the audit records, at
+  which point the information is transferred.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit storage capacity; procedures addressing transfer of information system
+  audit records to secondary or alternate systems; information system design
+  documentation; information system configuration settings and associated
+  documentation; logs of audit record transfers to secondary or alternate
+  systems; information system audit records transferred to secondary or
+  alternate systems; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit storage capacity
+  planning responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting transfer of audit records
+  onto a different system].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AU-4(1).1,CCI-001850,DoD Organization or Service Common Control Package
+  AU-4(1).2,CCI-001851,Organization AWS Cloud Brokerage Package...
+ap-acronym: AU-4(1).2
+cci: 1851
+cci-definition: >-
+  001851: The information system off-loads audit records per
+  organization-defined frequency onto a different system or media than the
+  system being audited.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  off-load audit records at a minimum, in real-time for interconnected systems
+  and weekly for stand-alone systems onto a different system or media than the
+  system being audited. DoD has defined the frequency as at a minimum, real-time
+  for interconnected systems and weekly for stand-alone systems. For information
+  system components that have applicable STIGs or SRGs, the organization being
+  inspected/assessed must comply with the STIG/SRG guidance that pertains to CCI
+  1851.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed has configured the
+  information system to off-load audit records at a minimum, in real-time for
+  interconnected systems and weekly for stand-alone systems onto a different
+  system or media than the system being audited. DoD has defined the frequency
+  as at a minimum, real-time for interconnected systems and weekly for
+  stand-alone systems. For information system components that have applicable
+  STIGs or SRGs, the organization conducting the inspection/assessment evaluates
+  the components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 1851.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

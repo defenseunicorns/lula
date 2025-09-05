@@ -1,0 +1,84 @@
+family: CM
+control-acronym: CM-3(6)
+control-information: >-
+  Description:
+
+  The organization ensures that cryptographic mechanisms used to provide
+  [Assignment: organization-defined security safeguards] are under configuration
+  management.
+
+
+  Supplemental Guidance:
+
+  Regardless of the cryptographic means employed (e.g., public key, private key,
+  shared secrets), organizations ensure that there are processes and procedures
+  in place to effectively manage those means. For example, if devices use
+  certificates as a basis for identification and authentication, there needs to
+  be a process in place to address the expiration of those certificates. Related
+  control: SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  information system configuration change control; configuration management
+  plan; security plan; information system design documentation; information
+  system architecture and configuration documentation; information system
+  configuration settings and associated documentation; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with configuration change
+  control responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for configuration change control;
+  cryptographic mechanisms implementing organizational security safeguards].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CM-3(6).1,CCI-001745,DoD Organization or Service Common Control Package
+  CM-3(6).2,CCI-001746,Local...
+ap-acronym: CM-3(6).2
+cci: 1746
+cci-definition: >-
+  001746: The organization ensures that cryptographic mechanisms used to provide
+  organization-defined security safeguards are under configuration management.
+implementation-guidance: >-
+  The organization being inspected/assessed ensures that cryptographic
+  mechanisms used to provide all security safeguards are under configuration
+  management. DoD has defined the security safeguards as all security
+  safeguards.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Configuration management policy which documents the
+  cryptographic mechanisms used to provide all security safeguards
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  configuration management policy to ensure that cryptographic mechanisms used
+  to provide all security safeguards are documented in the policy. DoD has
+  defined the security safeguards as all security safeguards.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  UDS ensures cryptographic mechanisms providing organizational security
+  safeguards are strictly controlled under configuration management through
+  Infrastructure as Code (IaC) using OpenTofu, and secure deployment practices
+  via signed Zarf packages. Cryptographic settings including TLS certificates,
+  mutual TLS (mTLS) configurations within Istio Service Mesh, and identity
+  provider certificates managed by Keycloak are version-controlled, explicitly
+  documented, and securely managed to prevent unauthorized modifications. The
+  UDS technology stack utilizes FIPS modules in the underlying container images
+  to aid in encryption. These cryptographic mechanisms are under configuration
+  management and typically reference a repository that has the image marked as
+  FIPS, ensuring that they are effectively managed and documented.
+uds-alignment: OpenTofu, Zarf

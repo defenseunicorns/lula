@@ -1,0 +1,99 @@
+family: AC
+control-acronym: AC-7(2)
+control-information: >-
+  Description:
+
+  The information system purges/wipes information from [Assignment:
+  organization-defined mobile devices] based on [Assignment:
+  organization-defined purging/wiping requirements/techniques] after
+  [Assignment: organization-defined number] consecutive, unsuccessful device
+  logon attempts.
+
+
+  Supplemental Guidance:
+
+  This control enhancement applies only to mobile devices for which a logon
+  occurs (e.g., personal digital assistants, smart phones, tablets). The logon
+  is to the mobile device, not to any one account on the device. Therefore,
+  successful logons to any accounts on mobile devices reset the unsuccessful
+  logon count to zero. Organizations define information to be purged/wiped
+  carefully in order to avoid over purging/wiping which may result in devices
+  becoming unusable. Purging/wiping may be unnecessary if the information on the
+  device is protected with sufficiently strong encryption mechanisms. Related
+  controls: AC-19, MP-5, MP-6, SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing
+  unsuccessful login attempts on mobile devices; information system design
+  documentation; information system configuration settings and associated
+  documentation; list of mobile devices to be purged/wiped after
+  organization-defined consecutive, unsuccessful device logon attempts; list of
+  purging/wiping requirements or techniques for mobile devices; information
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing access control policy
+  for unsuccessful device logon attempts].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-7(2).1,CCI-002239,Local
+  AC-7(2).2,CCI-002240,DoD Organization or Service Common Control Package
+  AC-7(2).3,CCI-002241,DoD Organization or Service Common Control Package
+  AC-7(2).4,CCI-002242,Local...
+ap-acronym: AC-7(2).4
+cci: 2242
+cci-definition: >-
+  002242: The information system purges/wipes information from
+  organization-defined mobile devices based on organization-defined
+  purging/wiping requirements/techniques after organization-defined number
+  consecutive, unsuccessful device logon attempts.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  purge/wipe information from mobile devices defined in AC-7 (2), CCI 2239 based
+  on requirements and techniques identified in NIST SP 800-88, "Guidelines for
+  Media Sanitization" after 10 consecutive, unsuccessful device logon attempts.
+  For information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 2242. DoD has defined the number as 10. DoD has defined
+  the purging/wiping requirements/techniques as requirements and techniques
+  identified in NIST SP 800-88, "Guidelines for Media Sanitization."
+
+  Recommended Compelling Evidence:
+
+  1.) Applicable STIG/SRG checks
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to purge/wipe information from mobile devices defined in
+  AC-7 (2), CCI 2239 based on requirements and techniques identified in NIST SP
+  800-88, "Guidelines for Media Sanitization" after 10 consecutive, unsuccessful
+  device logon attempts. For information system components that have applicable
+  STIGs or SRGs, the organization conducting the inspection/assessment evaluates
+  the components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 2242. DoD has defined the number as 10. DoD has defined
+  the purging/wiping requirements/techniques as requirements and techniques
+  identified in NIST SP 800-88, "Guidelines for Media Sanitization."
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS Technology Stack. (UDS does not manage, control, or
+  directly interface with mobile endpoint devices (e.g., smartphones, tablets)
+  or their associated device management functions, such as enforcing device
+  lockout or wiping data after unsuccessful logon attempts. Mobile device
+  management (MDM) controls, including device wipe after consecutive failed
+  logins, typically require specialized endpoint management solutions external
+  to the UDS.)

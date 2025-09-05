@@ -1,0 +1,88 @@
+family: PM
+control-acronym: PM-10
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Manages (i.e., documents, tracks, and reports) the security state of
+  organizational information systems and the environments in which those systems
+  operate through security authorization processes;
+
+  b. Designates individuals to fulfill specific roles and responsibilities
+  within the organizational risk management process; and
+
+  c. Fully integrates the security authorization processes into an
+  organization-wide risk management program.
+
+
+  Supplemental Guidance:
+
+  Security authorization processes for information systems and environments of
+  operation require the implementation of an organization-wide risk management
+  process, a Risk Management Framework, and associated security standards and
+  guidelines. Specific roles within the risk management process include an
+  organizational risk executive (function) and designated authorizing officials
+  for each organizational information system and common control provider.
+  Security authorization processes are integrated with organizational continuous
+  monitoring processes to facilitate ongoing understanding and acceptance of
+  risk to organizational operations and assets, individuals, other
+  organizations, and the Nation. Related control: CA-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information security program plan; procedures
+  addressing management (i.e., documentation, tracking, and reporting) of the
+  security authorization process; security authorization documents; lists or
+  other documentation about security authorization process roles and
+  responsibilities; risk assessment results relevant to the security
+  authorization process and the organization-wide risk management program;
+  organizational risk management strategy; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  program planning and plan implementation responsibilities; organizational
+  personnel responsible for management of the security authorization process;
+  authorizing officials; system owners, senior information security officer;
+  organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for security authorization;
+  automated mechanisms supporting the security authorization process].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: ...
+ap-acronym: PM-10.4
+cci: 233
+cci-definition: >-
+  000233: The organization designates individuals to fulfill specific roles and
+  responsibilities within the organizational risk management process.
+implementation-guidance: >-
+  DoDI 8510.01 meets the DoD requirement to designate roles and responsibilities
+  for the risk management process.
+
+  DoD components are automatically compliant with this CCI because they are
+  covered at the DoD level, DoDI 8510.01.
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per DoDI 8510.01.
+assessment-procedures: >-
+  DoDI 8510.01 meets the DoD requirement to designate roles and responsibilities
+  for the risk management process.
+
+  DoD components are automatically compliant with this CCI because they are
+  covered at the DoD level, DoDI 8510.01.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

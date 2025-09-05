@@ -1,0 +1,73 @@
+family: PL
+control-acronym: PL-2(3)
+control-information: >-
+  Description:
+
+  The organization plans and coordinates security-related activities affecting
+  the information system with [Assignment: organization-defined individuals or
+  groups] before conducting such activities in order to reduce the impact on
+  other organizational entities.
+
+
+  Supplemental Guidance:
+
+  Security-related activities include, for example, security assessments,
+  audits, hardware and software maintenance, patch management, and contingency
+  plan testing. Advance planning and coordination includes emergency and
+  nonemergency (i.e., planned or nonurgent unplanned) situations. The process
+  defined by organizations to plan and coordinate security-related activities
+  can be included in security plans for information systems or other documents,
+  as appropriate. Related controls: CP-4, IR-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Security planning policy; access control policy;
+  contingency planning policy; procedures addressing security-related activity
+  planning for the information system; security plan for the information system;
+  contingency plan for the information system; information system design
+  documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security planning and
+  plan implementation responsibilities; organizational individuals or groups
+  with whom security-related activities are to be planned and coordinated;
+  organizational personnel with information security responsibilities].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: PL-2(3).2
+cci: 3067
+cci-definition: >-
+  003067: The organization defines the individuals or groups with whom
+  security-related activities are planned and coordinated.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the
+  individuals or groups with whom security-related activities are planned and
+  coordinated. DoD has determined the individuals or groups are not appropriate
+  to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) List of activities and entities that identifies organizational activity,
+  primary and alternate POCs, and type of security related activity that must be
+  coordinated.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented individuals or groups to ensure the organization being
+  inspected/assessed defines the individuals or groups with whom
+  security-related activities are planned and coordinated. DoD has determined
+  the individuals or groups are not appropriate to define at the Enterprise
+  level.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (The organization must select the
+  personnel and roles applicable to their security needs in the Systems Security
+  Plan as this is tailored to the mission.)

@@ -1,0 +1,77 @@
+family: AU
+control-acronym: AU-7(2)
+control-information: >-
+  Description:
+
+  The information system provides the capability to sort and search audit
+  records for events of interest based on the content of [Assignment:
+  organization-defined audit fields within audit records].
+
+
+  Supplemental Guidance:
+
+  Sorting and searching of audit records may be based upon the contents of audit
+  record fields, for example: (i) date/time of events; (ii) user identifiers;
+  (iii) Internet Protocol (IP) addresses involved in the event; (iv) type of
+  event; or (v) event success/failure.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit reduction and report generation; information system design
+  documentation; information system configuration settings and associated
+  documentation; audit reduction, review, analysis, and reporting tools; audit
+  record criteria (fields) establishing events of interest; information system
+  audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit reduction and
+  report generation responsibilities; organizational personnel with information
+  security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Audit reduction and report generation capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-7(2).2
+cci: 1885
+cci-definition: >-
+  001885: The organization defines the audit fields within audit records to be
+  searched for events of interest by the information system.
+implementation-guidance: >-
+  The organization being inspected/assessed must define and document the audit
+  fields within audit records to be searched for events of interest by the
+  information system. DoD has determined that the audit fields are not
+  appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+
+  2.) Example of audit log report based on events of interest
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented audit fields to ensure the organization being inspected/assessed
+  defines the audit fields within audit records to be searched for events of
+  interest by the information system. DoD has determined that the audit fields
+  are not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  UDS provides robust audit log searching capabilities through its integrated
+  logging and monitoring components (Vector, Loki, and Grafana). These tools
+  allow administrators to define and execute targeted searches across critical
+  audit fields, including timestamps, user identities, IP addresses, event
+  types, actions performed, resource access, and authentication results. Logs
+  collected by Vector and stored in Loki are fully indexed and searchable,
+  enabling rapid identification and analysis of security events.
+uds-alignment: Loki, Vector, Grafana

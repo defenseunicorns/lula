@@ -1,0 +1,73 @@
+family: SC
+control-acronym: SC-8(1)
+control-information: >-
+  Description:
+
+  The information system implements cryptographic mechanisms to [Selection (one
+  or more): prevent unauthorized disclosure of information; detect changes to
+  information] during transmission unless otherwise protected by [Assignment:
+  organization-defined alternative physical safeguards].
+
+
+  Supplemental Guidance:
+
+  Encrypting information for transmission protects information from unauthorized
+  disclosure and modification. Cryptographic mechanisms implemented to protect
+  information integrity include, for example, cryptographic hash functions which
+  have common application in digital signatures, checksums, and message
+  authentication codes. Alternative physical security safeguards include, for
+  example, protected distribution systems. Related control: SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing transmission confidentiality and integrity; information system
+  design documentation; information system configuration settings and associated
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer].
+
+
+  Test: [SELECT FROM: Cryptographic mechanisms supporting and/or implementing
+  transmission confidentiality and/or integrity; automated mechanisms supporting
+  and/or implementing alternative physical safeguards; organizational processes
+  for defining and implementing alternative physical safeguards].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-8(1).1,CCI-002419,DoD Organization or Service Common Control Package
+  SC-8(1).2,CCI-002421,Local...
+ap-acronym: SC-8(1).1
+cci: 2419
+cci-definition: >-
+  002419: The organization defines the alternative physical safeguards to be
+  employed when cryptographic mechanisms are not implemented to protect
+  information during transmission.
+implementation-guidance: >-
+  DoD has defined the alternative physical safeguards as Protected Distribution
+  System (PDS).
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant.
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level. DoD has defined the alternative
+  physical safeguards as Protected Distribution System (PDS).
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

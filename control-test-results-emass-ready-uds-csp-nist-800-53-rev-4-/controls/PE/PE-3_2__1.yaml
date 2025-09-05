@@ -1,0 +1,81 @@
+family: PE
+control-acronym: PE-3(2)
+control-information: >-
+  Description:
+
+  The organization performs security checks [Assignment: organization-defined
+  frequency] at the physical boundary of the facility or information system for
+  unauthorized exfiltration of information or removal of information system
+  components.
+
+
+  Supplemental Guidance:
+
+  Organizations determine the extent, frequency, and/or randomness of security
+  checks to adequately mitigate risk associated with exfiltration. Related
+  controls: AC-4, SC-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing physical access control; physical access control logs or
+  records; records of security checks; security audit reports; security
+  inspection reports; facility layout documentation; information system entry
+  and exit points; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access control
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for physical access control to
+  the facility and/or information system; automated mechanisms supporting and/or
+  implementing physical access control for the facility or information system;
+  automated mechanisms supporting and/or implementing security checks for
+  unauthorized exfiltration of information].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PE-3(2).1,CCI-000929,Local
+  PE-3(2).2,CCI-002927,DoD Organization or Service Common Control Package...
+ap-acronym: PE-3(2).1
+cci: 929
+cci-definition: >-
+  000929: Perform security checks in accordance with organization-defined
+  frequency at the physical boundary of the facility or system for unauthorized
+  exfiltration of information or removal of information system components.
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements procedures
+  to perform security checks at the physical boundary of the facility or
+  information system at a minimum, annually. The organization must maintain an
+  audit trail of security checks at the physical boundary. DoD has defined the
+  frequency as at a minimum, annually.
+
+  Recommended Compelling Evidence:
+
+  1.) Documented procedures for security checks
+
+  2.) Audit trails of security checks
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented procedures as well as the audit trail of security checks at the
+  physical boundary to ensure the organization being inspected/assessed performs
+  security checks at the physical boundary of the facility or information system
+  at a minimum, annually.
+
+  DoD has defined the frequency as at a minimum, annually.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (Physical access controls, monitoring,
+  device protection, etc., must be managed in the data center, cloud facility,
+  or on-premise environment and are not functions of UDS. UDS assumes the
+  physical environment is secured per organizational policy.)

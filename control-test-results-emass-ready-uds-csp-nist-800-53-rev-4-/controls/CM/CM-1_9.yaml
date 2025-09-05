@@ -1,0 +1,109 @@
+family: CM
+control-acronym: CM-1
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Develops, documents, and disseminates to [Assignment: organization-defined
+  personnel or roles]:
+
+  1. A configuration management policy that addresses purpose, scope, roles,
+  responsibilities, management commitment, coordination among organizational
+  entities, and compliance; and
+
+  2. Procedures to facilitate the implementation of the configuration management
+  policy and associated configuration management controls; and
+
+  b. Reviews and updates the current:
+
+  1. Configuration management policy [Assignment: organization-defined
+  frequency]; and
+
+  2. Configuration management procedures [Assignment: organization-defined
+  frequency].
+
+
+  Supplemental Guidance:
+
+  This control addresses the establishment of policy and procedures for the
+  effective implementation of selected security controls and control
+  enhancements in the CM family. Policy and procedures reflect applicable
+  federal laws, Executive Orders, directives, regulations, policies, standards,
+  and guidance. Security program policies and procedures at the organization
+  level may make the need for system-specific policies and procedures
+  unnecessary. The policy can be included as part of the general information
+  security policy for organizations or conversely, can be represented by
+  multiple policies reflecting the complex nature of certain organizations. The
+  procedures can be established for the security program in general and for
+  particular information systems, if needed. The organizational risk management
+  strategy is a key factor in establishing policy and procedures. Related
+  control: PM-9.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy and procedures; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with configuration
+  management responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CM-1.1,CCI-001821,DoD Organization or Service Common Control Package
+  CM-1.2,CCI-001824,DoD Organization or Service Common Control Package
+  CM-1.3,CCI-000287,Local
+  CM-1.4,CCI-001822,Local
+  CM-1.5,CCI-000290,Local
+  CM-1.6,CCI-001825,Local
+  CM-1.7,CCI-000286,DoD Organization or Service Common Control Package
+  CM-1.8,CCI-000289,Local
+  CM-1.9,CCI-000292,Local
+  CM-1.10,CCI-001584,DoD Organization or Service Common Control Package...
+ap-acronym: CM-1.9
+cci: 292
+cci-definition: >-
+  000292: The organization reviews and updates, on an organization defined
+  frequency, the procedures to facilitate the implementation of the
+  configuration management policy and associated configuration management
+  controls.
+implementation-guidance: >-
+  The organization being inspected/assessed reviews and updates, annually, the
+  procedures to facilitate the implementation of the configuration management
+  policy and associated configuration management controls. The organization must
+  document each occurrence of the reviews and update actions as an audit trail.
+  DoD has defined the frequency as annually.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated configuration management policies with change log
+  referenced
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines
+  documentation of occurrence of reviews and update actions for the procedures
+  to facilitate the implementation of the configuration management policy and
+  associated configuration management controls to ensure annual review and
+  necessary updates are occurring. DoD has defined the frequency as annually.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (UDS provides robust technical
+  capabilities supporting the organization's implementation of configuration
+  management controls and procedures. Specifically, UDS utilizes Infrastructure
+  as Code (IaC) via OpenTofu and secure software distribution using signed Zarf
+  packages, facilitating consistent and documented configuration management
+  aligned with organizational policies. The policy enforcement capabilities
+  provided by Pepr, further support procedural compliance and rapid detection of
+  configuration deviations. However, explicitly defining, reviewing,
+  documenting, and updating procedures at regular intervals (e.g., annually or
+  quarterly) to facilitate implementation of configuration management policies
+  remains an organizational responsibility. )

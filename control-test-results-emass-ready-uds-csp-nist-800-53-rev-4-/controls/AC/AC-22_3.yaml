@@ -1,0 +1,94 @@
+family: AC
+control-acronym: AC-22
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Designates individuals authorized to post information onto a publicly
+  accessible information system;
+
+  b. Trains authorized individuals to ensure that publicly accessible
+  information does not contain nonpublic information;
+
+  c. Reviews the proposed content of information prior to posting onto the
+  publicly accessible information system to ensure that nonpublic information is
+  not included; and
+
+  d. Reviews the content on the publicly accessible information system for
+  nonpublic information [Assignment: organization-defined frequency] and removes
+  such information, if discovered.
+
+
+  Supplemental Guidance:
+
+  In accordance with federal laws, Executive Orders, directives, policies,
+  regulations, standards, and/or guidance, the general public is not authorized
+  access to nonpublic information (e.g., information protected under the Privacy
+  Act and proprietary information). This control addresses information systems
+  that are controlled by the organization and accessible to the general public,
+  typically without identification or authentication. The posting of information
+  on non-organization information systems is covered by organizational policy.
+  Related controls: AC-3, AC-4, AT-2, AT-3, AU-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing publicly
+  accessible content; list of users authorized to post publicly accessible
+  content on organizational information systems; training materials and/or
+  records; records of publicly accessible information reviews; records of
+  response to nonpublic information on public websites; system audit logs;
+  security awareness training records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  managing publicly accessible information posted on organizational information
+  systems; organizational personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing management of publicly
+  accessible content].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-22.1,CCI-001473,Local
+  AC-22.2,CCI-001474,Local
+  AC-22.3,CCI-001475,Local
+  AC-22.4,CCI-001476,Local
+  AC-22.5,CCI-001477,DoD Organization or Service Common Control Package
+  AC-22.6,CCI-001478,Local...
+ap-acronym: AC-22.3
+cci: 1475
+cci-definition: >-
+  001475: The organization reviews the proposed content of information prior to
+  posting onto the publicly accessible information system to ensure that
+  nonpublic information is not included.
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to review the proposed content of information prior to posting onto the
+  publicly accessible information system to ensure that nonpublic information is
+  not included.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation showing an internal review of the proposed content prior to
+  publishing
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented process to ensure the organization being inspected/assessed reviews
+  the proposed content of information prior to posting onto the publicly
+  accessible information system to ensure that nonpublic information is not
+  included.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (Publicly accessible information must
+  be managed by the organization.)

@@ -1,0 +1,99 @@
+family: AU
+control-acronym: AU-12(1)
+control-information: >-
+  Description:
+
+  The information system compiles audit records from [Assignment:
+  organization-defined information system components] into a system-wide
+  (logical or physical) audit trail that is time-correlated to within
+  [Assignment: organization-defined level of tolerance for relationship between
+  time stamps of individual records in the audit trail].
+
+
+  Supplemental Guidance:
+
+  Audit trails are time-correlated if the time stamps in the individual audit
+  records can be reliably related to the time stamps in other audit records to
+  achieve a time ordering of the records within organizational tolerances.
+  Related controls: AU-8, AU-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit record generation; information system design documentation; information
+  system configuration settings and associated documentation; system-wide audit
+  trail (logical or physical); information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit record generation
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing audit record generation
+  capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AU-12(1).2
+cci: 174
+cci-definition: >-
+  000174: The information system compiles audit records from
+  organization-defined information system components into a system-wide (logical
+  or physical) audit trail that is time-correlated to within organization
+  defined level of tolerance for relationship between time stamps of individual
+  records in the audit trail.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  compile audit records from information system components defined in AU-12 (1),
+  CCI 1577 into a system-wide (logical or physical) audit trail that is
+  time-correlated to within the level of tolerance defined in AU-12 (1),
+  CCI-000173 for relationship between time stamps of individual records in the
+  audit trail.
+
+
+  For information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 174.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the information system is configured to compile audit records
+  from information system components defined in AU-12 (1), CCI 1577 into a
+  system-wide (logical or physical) audit trail that is time-correlated to
+  within the level of tolerance defined in AU-12 (1), CCI-000173 for
+  relationship between time stamps of individual records in the audit trail.
+
+  For information system components that have applicable STIGs or SRGs, the
+  organization conducting the inspection/assessment evaluates the components to
+  ensure that the organization being inspected/assessed has configured the
+  information system in compliance with the applicable STIGs and SRGs pertaining
+  to CCI 174.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  UDS compiles comprehensive audit records from all critical information system
+  components including Keycloak (identity management), Istio Service Mesh
+  (network traffic and policy enforcement), NeuVector (container security),
+  Kubernetes (system resource management), and infrastructure components into a
+  centralized, unified audit trail. Logs from these components are securely
+  collected and aggregated by Vector, centrally stored and indexed in Loki, and
+  made searchable through Grafana dashboards. All logs are timestamped and
+  synchronized via Network Time Protocol (NTP), ensuring accurate correlation of
+  events across the system within very close tolerances.
+uds-alignment: Vector, Loki, Grafana

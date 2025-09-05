@@ -1,0 +1,97 @@
+family: AT
+control-acronym: AT-3
+control-information: >-
+  Description:
+
+  The organization provides role-based security training to personnel with
+  assigned security roles and responsibilities:
+
+  a. Before authorizing access to the information system or performing assigned
+  duties;
+
+  b. When required by information system changes; and
+
+  c. [Assignment: organization-defined frequency] thereafter.
+
+
+  Supplemental Guidance:
+
+  Organizations determine the appropriate content of security training based on
+  the assigned roles and responsibilities of individuals and the specific
+  security requirements of organizations and the information systems to which
+  personnel have authorized access. In addition, organizations provide
+  enterprise architects, information system developers, software developers,
+  acquisition/procurement officials, information system managers, system/network
+  administrators, personnel conducting configuration management and auditing
+  activities, personnel performing independent verification and validation
+  activities, security control assessors, and other personnel having access to
+  system-level software, adequate security-related technical training
+  specifically tailored for their assigned duties. Comprehensive role-based
+  training addresses management, operational, and technical roles and
+  responsibilities covering physical, personnel, and technical safeguards and
+  countermeasures. Such training can include for example, policies, procedures,
+  tools, and artifacts for the organizational security roles defined.
+  Organizations also provide the training necessary for individuals to carry out
+  their responsibilities related to operations and supply chain security within
+  the context of organizational information security programs. Role-based
+  security training also applies to contractors providing services to federal
+  agencies. Related controls: AT-2, AT-4, PL-4, PS-7, SA-3, SA-12, SA-16.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Security awareness and training policy; procedures
+  addressing security training implementation; codes of federal regulations;
+  security training curriculum; security training materials; security plan;
+  training records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  role-based security training; organizational personnel with assigned
+  information system security roles and responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms managing role-based security
+  training].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AT-3.1,CCI-000108,DoD Organization or Service Common Control Package
+  AT-3.2,CCI-000109,Local
+  AT-3.3,CCI-000110,Local
+  AT-3.4,CCI-000111,DoD Organization or Service Common Control Package...
+ap-acronym: AT-3.2
+cci: 109
+cci-definition: >-
+  000109: The organization provides role-based security training to personnel
+  with assigned security roles and responsibilities when required by information
+  system changes.
+implementation-guidance: >-
+  Privileged user type Security-related education/training available through
+  DISA IASE (e.g. VTE, Skill Soft, other professional sources) meets the
+  provision of this control. The organization being inspected/assessed may
+  define specific requirements within the above listed sources for their
+  personnel.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan (SSP)
+
+  2.) Signed and dated security awareness and training policy
+
+  3.) Sampling of training records of randomly selected individuals
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines
+  documented records (IAW AT-4) of their privileged users training.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (UDS does not provide personnel
+  training or awareness programs which must be addressed at the organizational
+  level.)

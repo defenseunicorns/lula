@@ -1,0 +1,68 @@
+family: RA
+control-acronym: RA-5(2)
+control-information: >-
+  Description:
+
+  The organization updates the information system vulnerabilities scanned
+  [Selection (one or more): [Assignment: organization-defined frequency]; prior
+  to a new scan; when new vulnerabilities are identified and reported].
+
+
+  Supplemental Guidance:
+
+  Related controls: SI-3, SI-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Procedures addressing vulnerability scanning; security
+  plan; security assessment report; vulnerability scanning tools and associated
+  configuration documentation; vulnerability scanning results; patch and
+  vulnerability management records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with vulnerability scanning
+  responsibilities; organizational personnel with vulnerability scan analysis
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for vulnerability scanning;
+  automated mechanisms/tools supporting and/or implementing vulnerability
+  scanning].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  RA-5(2).1,CCI-001063,Organization AWS Cloud Brokerage Package
+  RA-5(2).2,CCI-001064,DoD Organization or Service Common Control Package...
+ap-acronym: RA-5(2).1
+cci: 1063
+cci-definition: >-
+  001063: The organization updates the information system vulnerabilities
+  scanned on an organization-defined frequency, prior to a new scan and/or when
+  new vulnerabilities are identified and reported.
+implementation-guidance: >-
+  The organization being inspected/assessed will update the list of information
+  system vulnerabilities scanned for prior to running scans. The organization
+  must maintain a record of scans including the list of vulnerabilities scanned
+  for. DoD has defined the frequency as prior to running scans.
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation that scanning tool being used is up to date.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  record of scans to ensure the latest most up to date scanning policies are
+  present.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

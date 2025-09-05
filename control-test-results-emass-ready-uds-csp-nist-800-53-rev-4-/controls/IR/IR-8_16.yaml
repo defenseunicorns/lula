@@ -1,0 +1,133 @@
+family: IR
+control-acronym: IR-8
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Develops an incident response plan that:
+
+  1. Provides the organization with a roadmap for implementing its incident
+  response capability;
+
+  2. Describes the structure and organization of the incident response
+  capability;
+
+  3. Provides a high-level approach for how the incident response capability
+  fits into the overall organization;
+
+  4. Meets the unique requirements of the organization, which relate to mission,
+  size, structure, and functions;
+
+  5. Defines reportable incidents;
+
+  6. Provides metrics for measuring the incident response capability within the
+  organization;
+
+  7. Defines the resources and management support needed to effectively maintain
+  and mature an incident response capability; and
+
+  8. Is reviewed and approved by [Assignment: organization-defined personnel or
+  roles];
+
+  b. Distributes copies of the incident response plan to [Assignment:
+  organization-defined incident response personnel (identified by name and/or by
+  role) and organizational elements];
+
+  c. Reviews the incident response plan [Assignment: organization-defined
+  frequency];
+
+  d. Updates the incident response plan to address system/organizational changes
+  or problems encountered during plan implementation, execution, or testing;
+
+  e. Communicates incident response plan changes to [Assignment:
+  organization-defined incident response personnel (identified by name and/or by
+  role) and organizational elements]; and
+
+  f. Protects the incident response plan from unauthorized disclosure and
+  modification.
+
+
+  Supplemental Guidance:
+
+  It is important that organizations develop and implement a coordinated
+  approach to incident response. Organizational missions, business functions,
+  strategies, goals, and objectives for incident response help to determine the
+  structure of incident response capabilities. As part of a comprehensive
+  incident response capability, organizations consider the coordination and
+  sharing of information with external organizations, including, for example,
+  external service providers and organizations involved in the supply chain for
+  organizational information systems. Related controls: MP-2, MP-4, MP-5.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident response planning; incident response plan; records of incident
+  response plan reviews and approvals; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident response
+  planning responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational incident response plan and related
+  organizational processes].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IR-8.1,CCI-002794,Organization AWS Cloud Brokerage Package
+  IR-8.2,CCI-002795,Organization AWS Cloud Brokerage Package
+  IR-8.3,CCI-002796,Organization AWS Cloud Brokerage Package
+  IR-8.4,CCI-002797,Organization AWS Cloud Brokerage Package
+  IR-8.5,CCI-002798,Organization AWS Cloud Brokerage Package
+  IR-8.6,CCI-002799,Organization AWS Cloud Brokerage Package
+  IR-8.7,CCI-002800,Organization AWS Cloud Brokerage Package
+  IR-8.8,CCI-002801,Organization AWS Cloud Brokerage Package
+  IR-8.9,CCI-002802,DoD Organization or Service Common Control Package
+  IR-8.10,CCI-000844,Organization AWS Cloud Brokerage Package
+  IR-8.11,CCI-000845,DoD Organization or Service Common Control Package
+  IR-8.12,CCI-000846,Organization AWS Cloud Brokerage Package
+  IR-8.13,CCI-000847,DoD Organization or Service Common Control Package
+  IR-8.14,CCI-000848,Organization AWS Cloud Brokerage Package
+  IR-8.15,CCI-000849,Organization AWS Cloud Brokerage Package
+  IR-8.16,CCI-000850,Organization AWS Cloud Brokerage Package
+  IR-8.17,CCI-002803,DoD Organization or Service Common Control Package
+  IR-8.18,CCI-002804,Organization AWS Cloud Brokerage Package...
+ap-acronym: IR-8.16
+cci: 850
+cci-definition: >-
+  000850: The organization communicates incident response plan changes to
+  organization-defined incident response personnel (identified by name and/or by
+  role) and organizational elements.
+implementation-guidance: >-
+  The organization being inspected/assessed communicates incident response plan
+  changes to all stakeholders identified in the incident response plan, not
+  later than 30 days after the change is made. DoD has defined the incident
+  response personnel as all stakeholders identified in the incident response
+  plan, not later than 30 days after the change is made.
+
+  Recommended Compelling Evidence:
+
+  1.) List of personnel the incident response plan is distributed to
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the incident
+  response plan via the inspected organization's information sharing capability
+  (e.g. portal, intranet, email, etc.) to ensure it has been communicated to all
+  stakeholders identified in the incident response plan, not later than 30 days
+  after the change is made. DoD has defined the incident response personnel as
+  all stakeholders identified in the incident response plan, not later than 30
+  days after the change is made.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

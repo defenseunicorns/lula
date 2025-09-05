@@ -1,0 +1,64 @@
+family: SI
+control-acronym: SI-4(20)
+control-information: >-
+  Description:
+
+  The organization implements [Assignment: organization-defined additional
+  monitoring] of privileged users.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing information system monitoring tools and techniques; information
+  system design documentation; list of privileged users; information system
+  monitoring tools and techniques documentation; information system
+  configuration settings and associated documentation; information system
+  monitoring logs or records; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system;
+  organizational personnel with responsibility for monitoring the information
+  system].
+
+
+  Test: [SELECT FROM: Organizational processes for information system
+  monitoring; automated mechanisms supporting and/or implementing system
+  monitoring capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SI-4(20).1
+cci: 2676
+cci-definition: >-
+  002676: The organization defines additional monitoring to be implemented for
+  privileged users.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents additional
+  monitoring to be implemented for privileged users. DoD has determined the
+  additional monitoring is not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System security plan defines additional monitoring to be
+  implemented for privileged users.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented additional monitoring to ensure the organization being
+  inspected/assessed defines additional monitoring to be implemented for
+  privileged users. DoD has determined the additional monitoring is not
+  appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (This requires the organization to
+  identify and define.)

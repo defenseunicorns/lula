@@ -1,0 +1,71 @@
+family: CP
+control-acronym: CP-10(6)
+control-information: >-
+  Description:
+
+  The organization protects backup and restoration hardware, firmware, and
+  software.
+
+
+  Supplemental Guidance:
+
+  Protection of backup and restoration hardware, firmware, and software
+  components includes both physical and technical safeguards. Backup and
+  restoration software includes, for example, router tables, compilers, and
+  other security-relevant system software. Related controls: AC-3, AC-6, PE-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  information system recovery and reconstitution; contingency plan; information
+  system design documentation; information system configuration settings and
+  associated documentation; logical access credentials; physical access
+  credentials; logical access authorization records; physical access
+  authorization records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  recovery and reconstitution responsibilities; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for protecting backup and
+  restoration hardware, firmware, and software; automated mechanisms supporting
+  and/or implementing protection of backup and restoration hardware, firmware,
+  and software].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CP-10(6).1,CCI-000560,Local
+  CP-10(6).2,CCI-000561,Organization AWS Cloud Brokerage Package
+  CP-10(6).3,CCI-000562,Local...
+ap-acronym: CP-10(6).1
+cci: 560
+cci-definition: '000560: The organization protects backup and restoration hardware.'
+implementation-guidance: >-
+  The organization being inspected/assessed implements and documents policies
+  and back up procedures designed to protect its backup and restoration
+  hardware.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Documented proof that secondary site exists for operation in the event of
+  a crisis
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines
+  documentation of protection measures to ensure the organization is actively
+  protecting backup and restoration hardware.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (The protection of the physical
+  hardware that UDS uses for backups and restoration is managed by the
+  organization.)

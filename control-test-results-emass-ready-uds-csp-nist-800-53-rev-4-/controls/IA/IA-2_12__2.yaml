@@ -1,0 +1,78 @@
+family: IA
+control-acronym: IA-2(12)
+control-information: >-
+  Description:
+
+  The information system accepts and electronically verifies Personal Identity
+  Verification (PIV) credentials.
+
+
+  Supplemental Guidance:
+
+  This control enhancement applies to organizations implementing logical access
+  control systems (LACS) and physical access control systems (PACS). Personal
+  Identity Verification (PIV) credentials are those credentials issued by
+  federal agencies that conform to FIPS Publication 201 and supporting guidance
+  documents. OMB Memorandum 11-11 requires federal agencies to continue
+  implementing the requirements specified in HSPD-12 to enable agency-wide use
+  of PIV credentials. Related controls: AU-2, PE-3, SA-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing user identification and authentication; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; PIV verification records;
+  evidence of PIV credentials; PIV credential authorizations; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  operations responsibilities; organizational personnel with account management
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  acceptance and verification of PIV credentials].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-2(12).2
+cci: 1954
+cci-definition: >-
+  001954: Electronically verifies Personal Identity Verification-compliant
+  credentials.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  verify PIV/CAC authentication. This control enhancement applies to
+  organizations implementing logical access control systems (LACS) and physical
+  access control systems (PACS). For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 1954.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Access Control Policy
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to verify PIV/CAC authentication. For information system
+  components that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 1954.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "In UDS, Personal Identity Verification (PIV)-compliant credentials are electronically verified using a combination of certificate-based authentication mechanisms within Keycloak and mutual TLS within the Istio service mesh. When a user presents their CAC/PIV card at login, Keycloak reads and validates the embedded x.509 certificateâ\x80\x94checking its signature against trusted DoD Certificate Authorities, ensuring the certificate is within its validity period, and verifying its revocation status."
+uds-alignment: Keycloak

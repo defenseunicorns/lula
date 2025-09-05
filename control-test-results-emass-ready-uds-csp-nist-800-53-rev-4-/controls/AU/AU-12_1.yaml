@@ -1,0 +1,103 @@
+family: AU
+control-acronym: AU-12
+control-information: >-
+  Description:
+
+  The information system:
+
+  a. Provides audit record generation capability for the auditable events
+  defined in AU-2 a. at [Assignment: organization-defined information system
+  components];
+
+  b. Allows [Assignment: organization-defined personnel or roles] to select
+  which auditable events are to be audited by specific components of the
+  information system; and
+
+  c. Generates audit records for the events defined in AU-2
+
+  d. with the content defined in AU-3.
+
+
+  Supplemental Guidance:
+
+  Audit records can be generated from many different information system
+  components. The list of audited events is the set of events for which audits
+  are to be generated. These events are typically a subset of all events for
+  which the information system is capable of generating audit records. Related
+  controls: AC-3, AU-2, AU-3, AU-6, AU-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  audit record generation; security plan; information system design
+  documentation; information system configuration settings and associated
+  documentation; list of auditable events; information system audit records;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit record generation
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing audit record generation
+  capability].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AU-12.1,CCI-000169,Local
+  AU-12.2,CCI-001459,Local
+  AU-12.3,CCI-000171,Local
+  AU-12.4,CCI-001910,DoD Organization or Service Common Control Package
+  AU-12.5,CCI-000172,Local...
+ap-acronym: AU-12.1
+cci: 169
+cci-definition: >-
+  000169: Provide audit record generation capability for the event types the
+  system is capable of auditing as defined in AU-2 a. on organization-defined
+  information system components.
+implementation-guidance: >-
+  The organization being inspected/assessed acquires or designs all information
+  system and network components that provide audit record generation capability
+  for the auditable events defined in AU-2 a. DoD has defined the information
+  system components as all information system and network components.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated audit and accountability policy
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure that all information system and network components provide
+  audit record generation capability for the auditable events defined in AU-2 a.
+  DoD has defined the information system components as all information system
+  and network components.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  The UDS platform provides comprehensive audit record generation capabilities
+  for the auditable events defined in AU-2 across all information system and
+  network components. The platform allows designated personnel or roles to
+  select which auditable events are to be audited by specific components,
+  ensuring flexibility and granularity in audit record generation. Key events
+  that are audited include user authentication and access attempts, system and
+  application access, configuration changes, data and resource access, network
+  activity, security events, system and application errors, and audit and log
+  management activities.
+
+  Logs from various components, such as Keycloak, Kubernetes, and NeuVector, are
+  collected using Vector and aggregated in Loki. These logs are then visualized
+  in Grafana, providing detailed insights into the actions performed within the
+  system. The content of the audit records includes essential details such as
+  timestamps, user IDs, event types, and outcomes, fulfilling the content
+  requirements defined in AU-3. This comprehensive approach ensures that all
+  relevant events are captured and can be reviewed, analyzed, and reported as
+  needed, in compliance with the control requirements.
+uds-alignment: Vector, Loki, Grafana

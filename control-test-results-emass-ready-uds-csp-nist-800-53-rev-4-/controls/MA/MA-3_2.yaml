@@ -1,0 +1,34 @@
+family: MA
+control-acronym: MA-3
+control-information: "Description:\nThe organization approves, controls, and monitors information system maintenance tools.\n\nSupplemental Guidance:\nThis control addresses security-related issues associated with maintenance tools used specifically for diagnostic and repair actions on organizational information systems. Maintenance tools can include hardware, software, and firmware items. Maintenance tools are potential vehicles for transporting malicious code, either intentionally or unintentionally, into a facility and subsequently into organizational information systems. Maintenance tools can include, for example, hardware/software diagnostic test equipment and hardware/software packet sniffers. This control does not cover hardware/software components that may support information system maintenance, yet are a part of the system, for example, the software implementing â\x80\x9Cping,â\x80\x9D â\x80\x9Cls,â\x80\x9D â\x80\x9Cipconfig,â\x80\x9D or the hardware and software implementing the monitoring port of an Ethernet switch. Related controls: MA-2, MA-5, MP-6.\n\nPotential Assessment Methods and Objectives:\nThe below information from the NIST SP 800-53 Revision 4 Security Catalog is intended to provide additional optional mechanisms to take into account when reviewing this Security Control. Assessments of the individual security requirements must still include a response to the specific procedures/guidance stated in the correlated Assessment Procedures.\nExamine: [SELECT FROM: Information system maintenance policy; procedures addressing information system maintenance tools; information system maintenance tools and associated documentation; maintenance records; other relevant documents or records].\n\nInterview: [SELECT FROM: Organizational personnel with information system maintenance responsibilities; organizational personnel with information security responsibilities].\n\nTest: [SELECT FROM: Organizational processes for approving, controlling, and monitoring maintenance tools; automated mechanisms supporting and/or implementing approval, control, and/or monitoring of maintenance tools].\n\nJustification to Select: \n\nAdded by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.\n\nFedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.\n\nCNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.\n\nFedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP Moderate Baseline, Rev 4"
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: >-
+  AWS is responsible for approval, controlling, monitoring of use, maintains on
+  an ongoing basis, permissible GovCloud maintenance tools....
+ap-acronym: MA-3.2
+cci: 866
+cci-definition: '000866: The organization controls information system maintenance tools.'
+implementation-guidance: >-
+  The organization being inspected/assessed controls information system
+  maintenance tools that are approved IAW MA-3, CCI 865.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System Security Plan (SSP), including a list of approved
+  maintenance tools
+assessment-procedures: >-
+  The organization conducting the inspection/assessment:
+
+  1. obtains and examines the Security Plan to identify the list of approved
+  maintenance tools;
+
+  2. ensures the organization being inspected/assessed controls the approved
+  information system maintenance tools.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

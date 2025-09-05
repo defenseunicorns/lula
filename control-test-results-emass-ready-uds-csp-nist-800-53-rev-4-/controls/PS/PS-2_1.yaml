@@ -1,0 +1,78 @@
+family: PS
+control-acronym: PS-2
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Assigns a risk designation to all organizational positions;
+
+  b. Establishes screening criteria for individuals filling those positions; and
+
+  c. Reviews and updates position risk designations [Assignment:
+  organization-defined frequency].
+
+
+  Supplemental Guidance:
+
+  Position risk designations reflect Office of Personnel Management policy and
+  guidance. Risk designations can guide and inform the types of authorizations
+  individuals receive when accessing organizational information and information
+  systems. Position screening criteria include explicit information security
+  role appointment requirements (e.g., training, security clearances). Related
+  controls: AT-3, PL-2, PS-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Personnel security policy; procedures addressing
+  position categorization; appropriate codes of federal regulations; list of
+  risk designations for organizational positions; security plan; records of
+  position risk designation reviews and updates; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with personnel security
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for assigning, reviewing, and
+  updating position risk designations; organizational processes for establishing
+  screening criteria].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PS-2.1,CCI-001512,Local
+  PS-2.2,CCI-001513,DoD Organization or Service Common Control Package
+  PS-2.3,CCI-001514,Local
+  PS-2.4,CCI-001515,DoD Organization or Service Common Control Package...
+ap-acronym: PS-2.1
+cci: 1512
+cci-definition: >-
+  001512: The organization assigns a risk designation to all organizational
+  positions.
+implementation-guidance: >-
+  The organization being inspected/assessed will designate and document all
+  organizational positions, to include government and contract positions, with
+  the appropriate ADP/IT level designation, IAW DoD 5200.2-R.
+
+
+  Recommended Compelling Evidence:
+
+  1.) ADP/IT level designation documentation.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines
+  documentation of the ADP/IT level designations.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (UDS is unrelated to personnel
+  security controls, which cover hiring, transfer, agreements, termination,
+  etc.)

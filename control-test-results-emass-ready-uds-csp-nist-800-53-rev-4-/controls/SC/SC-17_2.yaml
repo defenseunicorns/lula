@@ -1,0 +1,70 @@
+family: SC
+control-acronym: SC-17
+control-information: >-
+  Description:
+
+  The organization issues public key certificates under an [Assignment:
+  organization-defined certificate policy] or obtains public key certificates
+  from an approved service provider.
+
+
+  Supplemental Guidance:
+
+  For all certificates, organizations manage information system trust stores to
+  ensure only approved trust anchors are in the trust stores. This control
+  addresses both certificates with visibility external to organizational
+  information systems and certificates related to the internal operations of
+  systems, for example, application-specific time services. Related control:
+  SC-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing public key infrastructure certificates; public key certificate
+  policy or policies; public key issuing process; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  with responsibilities for issuing public key certificates; service providers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing the
+  management of public key infrastructure certificates].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-17.1,CCI-001159,Local
+  SC-17.2,CCI-002456,DoD Organization or Service Common Control Package...
+ap-acronym: SC-17.2
+cci: 2456
+cci-definition: >-
+  002456: The organization defines the certificate policy employed to issue
+  public key certificates.
+implementation-guidance: >-
+  DoD has defined the certificate policy as DoDI 8520.02, "Public Key
+  Infrastructure (PKI) and Public Key (PK) Enabling."
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per DoDI 8520.02.
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level. DoD has defined the certificate
+  policy as DoDI 8520.02, "Public Key Infrastructure (PKI) and Public Key (PK)
+  Enabling.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

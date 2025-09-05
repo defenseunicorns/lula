@@ -1,0 +1,129 @@
+family: MP
+control-acronym: MP-4
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Physically controls and securely stores [Assignment: organization-defined
+  types of digital and/or non-digital media] within [Assignment:
+  organization-defined controlled areas]; and
+
+  b. Protects information system media until the media are destroyed or
+  sanitized using approved equipment, techniques, and procedures.
+
+
+  Supplemental Guidance:
+
+  Information system media includes both digital and non-digital media. Digital
+  media includes, for example, diskettes, magnetic tapes, external/removable
+  hard disk drives, flash drives, compact disks, and digital video disks.
+  Non-digital media includes, for example, paper and microfilm. Physically
+  controlling information system media includes, for example, conducting
+  inventories, ensuring procedures are in place to allow individuals to check
+  out and return media to the media library, and maintaining accountability for
+  all stored media. Secure storage includes, for example, a locked drawer, desk,
+  or cabinet, or a controlled media library. The type of media storage is
+  commensurate with the security category and/or classification of the
+  information residing on the media. Controlled areas are areas for which
+  organizations provide sufficient physical and procedural safeguards to meet
+  the requirements established for protecting information and/or information
+  systems. For media containing information determined by organizations to be in
+  the public domain, to be publicly releasable, or to have limited or no adverse
+  impact on organizations or individuals if accessed by other than authorized
+  personnel, fewer safeguards may be needed. In these situations, physical
+  access controls provide adequate protection. Related controls: CP-6, CP-9,
+  MP-2, MP-7, PE-3.
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: MP-4 (a)
+  Requirement: The service provider defines controlled areas within facilities
+  where the information and information system reside.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information system media protection policy; procedures
+  addressing media storage; physical and environmental protection policy and
+  procedures; access control policy and procedures; security plan; information
+  system media; designated controlled areas; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  media protection and storage responsibilities; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for storing information media;
+  automated mechanisms supporting and/or implementing secure media storage/media
+  protection].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: MP-4.1
+cci: 1014
+cci-definition: >-
+  001014: The organization physically controls and securely stores
+  organization-defined types of digital and/or non-digital media within
+  organization-defined controlled areas.
+implementation-guidance: >-
+  The organization being inspected/assessed physically controls and securely
+  stores all digital and non-digital media containing sensitive, controlled,
+  and/or classified information within areas approved for processing or storing
+  data IAW the sensitivity and/or classification level of the information
+  contained on/within the media. DoD has defined the digital and non-digital
+  media types as all digital and non-digital media containing sensitive,
+  controlled, and/or classified information. DoD has defined the controlled
+  areas as areas approved for processing or storing data IAW the sensitivity
+  and/or classification level of the information contained on/within the media.
+
+  Recommended Compelling Evidence:
+
+  1.) Written review of inspection of organization's storage areas where digital
+  and non-digital media is being stored to ensure that digital and non-digital
+  media containing sensitive, controlled, and/or classified information is
+  stored in controlled areas that are areas approved for processing or storing
+  data IAW the sensitivity and/or classification level of the information
+  contained on/within the media.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  list of all digital and non-digital media containing sensitive, controlled,
+  and/or classified information within areas approved for processing or storing
+  data IAW the sensitivity and/or classification level of the information
+  contained on/within the media to ensure that physical controls are in place
+  and that it is securely stored as defined in PE-3. DoD has defined the digital
+  and non-digital media types as all digital and non-digital media containing
+  sensitive, controlled, and/or classified information. DoD has defined the
+  controlled areas as areas approved for processing or storing data IAW the
+  sensitivity and/or classification level of the information contained on/within
+  the media.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

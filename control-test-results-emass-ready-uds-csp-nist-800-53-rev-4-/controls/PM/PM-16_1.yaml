@@ -1,0 +1,88 @@
+family: PM
+control-acronym: PM-16
+control-information: >-
+  Description:
+
+  The organization implements a threat awareness program that includes a
+  cross-organization information-sharing capability.
+
+
+  Supplemental Guidance:
+
+  Because of the constantly changing and increasing sophistication of
+  adversaries, especially the advanced persistent threat (APT), it is becoming
+  more likely that adversaries may successfully breach or compromise
+  organizational information systems. One of the best techniques to address this
+  concern is for organizations to share threat information. This can include,
+  for example, sharing threat events (i.e., tactics, techniques, and procedures)
+  that organizations have experienced, mitigations that organizations have found
+  are effective against certain types of threats, threat intelligence (i.e.,
+  indications and warnings about threats that are likely to occur). Threat
+  information sharing may be bilateral (e.g., government-commercial
+  cooperatives, government-government cooperatives), or multilateral (e.g.,
+  organizations taking part in threat-sharing consortia). Threat information may
+  be highly sensitive requiring special agreements and protection, or less
+  sensitive and freely shared. Related controls: PM-12, PM-16.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information security program plan; threat awareness
+  program documentation; procedures for the threat awareness program; risk
+  assessment results relevant to threat awareness; list or other documentation
+  on the cross-organization information-sharing capability; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  program planning and plan implementation responsibilities; organizational
+  personnel responsible for the threat awareness program; organizational
+  personnel with responsibility for the cross-organization information-sharing
+  capability; organizational personnel with information security
+  responsibilities; personnel with whom threat awareness information is shared
+  by the organization].
+
+
+  Test: [SELECT FROM: Organizational processes for implementing the threat
+  awareness program; Organizational processes for implementing the
+  cross-organization information-sharing capability; automated mechanisms
+  supporting and/or implementing the threat awareness program; automated
+  mechanisms supporting and/or implementing the cross-organization
+  information-sharing capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: PM-16.1
+cci: 3013
+cci-definition: >-
+  003013: The organization implements a threat awareness program that includes a
+  cross-organization information-sharing capability.
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a threat
+  awareness program that includes a cross-organization information-sharing
+  capability.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated threat awareness program documentation that includes the
+  cross-organization information-sharing capability.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented threat awareness program to ensure the organization being
+  inspected/assessed implements a threat awareness program that includes a
+  cross-organization information-sharing capability.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (The Program Management (PM) family of
+  controls primarily focuses on high-level organizational security governance,
+  including policies, risk management strategies, and enterprise-wide planning.
+  These controls are typically addressed at the organizational level rather than
+  by a specific technology platform like UDS.)

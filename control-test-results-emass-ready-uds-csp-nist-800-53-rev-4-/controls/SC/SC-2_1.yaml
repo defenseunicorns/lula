@@ -1,0 +1,81 @@
+family: SC
+control-acronym: SC-2
+control-information: >-
+  Description:
+
+  The information system separates user functionality (including user interface
+  services) from information system management functionality.
+
+
+  Supplemental Guidance:
+
+  Information system management functionality includes, for example, functions
+  necessary to administer databases, network components, workstations, or
+  servers, and typically requires privileged user access. The separation of user
+  functionality from information system management functionality is either
+  physical or logical. Organizations implement separation of system
+  management-related functionality from user functionality by using different
+  computers, different central processing units, different instances of
+  operating systems, different network addresses, virtualization techniques, or
+  combinations of these or other methods, as appropriate. This type of
+  separation includes, for example, web administrative interfaces that use
+  separate authentication methods for users of any other information system
+  resources. Separation of system and user functionality may include isolating
+  administrative interfaces on different domains and with additional access
+  controls. Related controls: SA-4, SA-8, SC-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing application partitioning; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer].
+
+
+  Test: [SELECT FROM: Separation of user functionality from information system
+  management functionality].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-2.1
+cci: 1082
+cci-definition: >-
+  001082: The information system separates user functionality (including user
+  interface services) from information system management functionality.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  separate user functionality (including user interface services) from
+  information system management functionality. For information system components
+  that have applicable STIGs or SRGs, the organization being inspected/assessed
+  must comply with the STIG/SRG guidance that pertains to CCI 1082.
+
+  Recommended Compelling Evidence:
+
+  1.) Data flow diagram.
+
+  2.) Applicable STIG/SRG checks.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to separate user functionality (including user interface
+  services) from information system management functionality. For information
+  system components that have applicable STIGs or SRGs, the organization
+  conducting the inspection/assessment evaluates the components to ensure that
+  the organization being inspected/assessed has configured the information
+  system in compliance with the applicable STIGs and SRGs pertaining to CCI
+  1082.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "UDS provides application partitioning through containerization and namespace separation. Each microservice in UDS runs in its own isolated container or pod, which the underlying OS and Kubernetes isolate from others (via separate process spaces, cgroups, etc.). Moreover, UDS can be configured with separate Kubernetes namespaces for different components (for example, security services vs. user applications). Communication between these partitions is controlled by Istio policies. This means that if one component is compromised, it cannot freely access others itâ\x80\x99s partitioned by design. For example, Keycloak runs separately from, say, the application it is protecting; it only communicates over defined network APIs, not via shared memory.. Partitioning is further enhanced by RBAC: even if someone had access to manage an app, they can't directly affect the monitoring system, etc., because those are different components with separate privileges. UDS enforces strong boundaries between different subsystems. The provided architecture and data flow diagram provide a visual of the separation."

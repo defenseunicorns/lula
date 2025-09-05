@@ -1,0 +1,75 @@
+family: CM
+control-acronym: CM-3(4)
+control-information: >-
+  Description:
+
+  The organization requires an information security representative to be a
+  member of the [Assignment: organization-defined configuration change control
+  element].
+
+
+  Supplemental Guidance:
+
+  Information security representatives can include, for example, senior agency
+  information security officers, information system security officers, or
+  information system security managers. Representation by personnel with
+  information security expertise is important because changes to information
+  system configurations can have unintended side effects, some of which may be
+  security-relevant. Detecting such changes early in the process can help avoid
+  unintended, negative consequences that could ultimately affect the security
+  state of organizational information systems. The configuration change control
+  element in this control enhancement reflects the change control elements
+  defined by organizations in CM-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  information system configuration change control; configuration management
+  plan; security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with configuration change
+  control responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for configuration change
+  control].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CM-3(4).1
+cci: 332
+cci-definition: >-
+  000332: The organization requires an information security representative to be
+  a member of the organization-defined configuration change control element.
+implementation-guidance: >-
+  The organization being inspected/assessed requires an information security
+  representative to be a member of the configuration control board. DoD has
+  defined the configuration change control element as the configuration control
+  board.
+
+  Recommended Compelling Evidence:
+
+  1.) Membership list of the CCB, which identifies an information security
+  representative as a member
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  membership list of the organization's configuration control board to ensure an
+  information security representative is a member of the organization's
+  configuration control board.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (The UDS technology stack provides
+  tools to assist with configuration management, but the requirement for an
+  information security representative to be a member of the organization-defined
+  configuration change control element, such as a Configuration Control Board
+  (CCB), is the responsibility of organization.)

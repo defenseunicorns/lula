@@ -1,0 +1,91 @@
+family: AU
+control-acronym: AU-5(1)
+control-information: >-
+  Description:
+
+  The information system provides a warning to [Assignment: organization-defined
+  personnel, roles, and/or locations] within [Assignment: organization-defined
+  time period] when allocated audit record storage volume reaches [Assignment:
+  organization-defined percentage] of repository maximum audit record storage
+  capacity.
+
+
+  Supplemental Guidance:
+
+  Organizations may have multiple audit data storage repositories distributed
+  across multiple information system components, with each repository having
+  different storage volume capacities.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Audit and accountability policy; procedures addressing
+  response to audit processing failures; information system design
+  documentation; security plan; information system configuration settings and
+  associated documentation; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with audit and
+  accountability responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing audit storage limit
+  warnings].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AU-5(1).1,CCI-001852,Local
+  AU-5(1).2,CCI-001853,DoD Organization or Service Common Control Package
+  AU-5(1).3,CCI-001854,DoD Organization or Service Common Control Package
+  AU-5(1).4,CCI-001855,Local...
+ap-acronym: AU-5(1).1
+cci: 1852
+cci-definition: >-
+  001852: The organization defines the personnel, roles and/or locations to
+  receive a warning when allocated audit record storage volume reaches a defined
+  percentage of maximum audit records storage capacity.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents any personnel
+  or roles, in addition to the ISSO/PMO and ISSM, who shall receive a warning
+  when allocated audit record storage volume reaches a defined percentage of
+  maximum audit records storage capacity. If there are no additional personnel
+  or roles, the organization must also document that.
+
+  DoD has defined the personnel or roles as at a minimum, the ISSO/PMO and ISSM.
+
+  Recommended Compelling Evidence:
+
+  1.) List of personnel who receive indications of organization-defined
+  inappropriate or unusual activity
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented list of personnel or roles who should receive a warning when
+  allocated audit record storage volume reaches a defined percentage of maximum
+  audit records storage capacity to ensure the organization being
+  inspected/assessed has either defined additional personnel or roles, or
+  identified that there are no additional personnel or roles beyond the ISSO/PMO
+  and ISSM.
+
+
+  DoD has defined the personnel or roles as at a minimum, the ISSO/PMO and ISSM.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  The UDS monitoring components (Prometheus/Grafana) keep an eye on system
+  health, including the logging pipeline. If the log collector (Vector) or log
+  store (Loki) fails or fills up, this would generate alerts (e.g., a Prometheus
+  alert if Loki is unreachable or if disk usage for logs is high).
+  Administrators would be notified to take action (such as allocate more space
+  or restart services). While UDS does not automatically switch to an alternate
+  logging mechanism upon failure, it does ensure that failures are detected and
+  can be responded to in a timely manner
+uds-alignment: Loki, Grafana, Prometheus

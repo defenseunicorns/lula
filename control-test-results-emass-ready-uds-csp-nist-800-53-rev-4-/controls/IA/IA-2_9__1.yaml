@@ -1,0 +1,86 @@
+family: IA
+control-acronym: IA-2(9)
+control-information: >-
+  Description:
+
+  The information system implements replay-resistant authentication mechanisms
+  for network access to non-privileged accounts.
+
+
+  Supplemental Guidance:
+
+  Authentication processes resist replay attacks if it is impractical to achieve
+  successful authentications by recording/replaying previous authentication
+  messages. Replay-resistant techniques include, for example, protocols that use
+  nonces or challenges such as Transport Layer Security (TLS) and time
+  synchronous or challenge-response one-time authenticators
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing user identification and authentication; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; list of non-privileged
+  information system accounts; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  operations responsibilities; organizational personnel with account management
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  identification and authentication capability; automated mechanisms supporting
+  and/or implementing replay resistant authentication mechanisms].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-2(9).1
+cci: 1942
+cci-definition: >-
+  001942: The information system implements replay-resistant authentication
+  mechanisms for network access to non-privileged accounts.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  implement replay-resistant authentication mechanisms for network access to
+  non-privileged accounts. For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 1942.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Access Control Policy
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to implement replay-resistant authentication mechanisms for
+  network access to non-privileged accounts. For information system components
+  that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 1942.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  UDS implements replay-resistant authentication mechanisms for network access
+  to non-privileged accounts through its centralized identity management
+  solution, Keycloak. Authentication to privileged accounts leverages
+  cryptographically signed JSON Web Tokens (JWT) that include unique,
+  timestamped session information, making replay attacks infeasible.
+  Additionally, authentication sessions are secured via Transport Layer Security
+  (TLS) with mutual TLS (mTLS) provided by the Istio Service Mesh, ensuring
+  strong encryption and session integrity. The combination of secure token
+  issuance, validation processes, and encrypted communication effectively
+  prevents replay attacks, fully meeting the intent of this control requirement.
+uds-alignment: Keycloak, Istio

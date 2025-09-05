@@ -1,0 +1,98 @@
+family: SC
+control-acronym: SC-7
+control-information: >-
+  Description:
+
+  The information system:
+
+  a. Monitors and controls communications at the external boundary of the system
+  and at key internal boundaries within the system;
+
+  b. Implements subnetworks for publicly accessible system components that are
+  [Selection: physically; logically] separated from internal organizational
+  networks; and
+
+  c. Connects to external networks or information systems only through managed
+  interfaces consisting of boundary protection devices arranged in accordance
+  with an organizational security architecture.
+
+
+  Supplemental Guidance:
+
+  Managed interfaces include, for example, gateways, routers, firewalls, guards,
+  network-based malicious code analysis and virtualization systems, or encrypted
+  tunnels implemented within a security architecture (e.g., routers protecting
+  firewalls or application gateways residing on protected subnetworks).
+  Subnetworks that are physically or logically separated from internal networks
+  are referred to as demilitarized zones or DMZs. Restricting or prohibiting
+  interfaces within organizational information systems includes, for example,
+  restricting external web traffic to designated web servers within managed
+  interfaces and prohibiting external traffic that appears to be spoofing
+  internal addresses. Organizations consider the shared nature of commercial
+  telecommunications services in the implementation of security controls
+  associated with the use of such services. Commercial telecommunications
+  services are commonly based on network components and consolidated management
+  systems shared by all attached commercial customers, and may also include
+  third party-provided access lines and other service elements. Such
+  transmission services may represent sources of increased risk despite contract
+  security provisions. Related controls: AC-4, AC-17, CA-3, CM-7, CP-8, IR-4,
+  RA-3, SC-5, SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; list of key internal boundaries of the
+  information system; information system design documentation; boundary
+  protection hardware and software; information system configuration settings
+  and associated documentation; enterprise security architecture documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing boundary protection
+  capability].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-7.2
+cci: 2395
+cci-definition: >-
+  002395: The information system implements subnetworks for publicly accessible
+  system components that are physically and/or logically separated from internal
+  organizational networks.
+implementation-guidance: >-
+  The organization being inspected/assessed designs the information system to
+  leverage subnetworks so that publicly accessible system components are
+  physically and/or logically separated from internal organizational networks.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Current network topology diagrams.
+
+  2.) Architecture documentation or relevant documentation for identifying
+  component partitioning.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines
+  network topology diagrams, architecture documentation, or any other
+  documentation identifying component partitioning to ensure the organization
+  being inspected/assessed implements subnetworks for publicly accessible system
+  components that are physically and/or logically separated from internal
+  organizational networks.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

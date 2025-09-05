@@ -1,0 +1,71 @@
+family: AC
+control-acronym: AC-12(1)
+control-information: >-
+  Description:
+
+  The information system:
+
+  (a) Provides a logout capability for user-initiated communications sessions
+  whenever authentication is used to gain access to [Assignment:
+  organization-defined information resources]; and
+
+  (b) Displays an explicit logout message to users indicating the reliable
+  termination of authenticated communications sessions.
+
+
+  Supplemental Guidance:
+
+  Information resources to which users gain access via authentication include,
+  for example, local workstations, databases, and password-protected
+  websites/web-based services. Logout messages for web page access, for example,
+  can be displayed after authenticated sessions have been terminated. However,
+  for some types of interactive sessions including, for example, file transfer
+  protocol (FTP) sessions, information systems typically send logout messages as
+  final messages prior to terminating sessions.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing session
+  termination; user logout messages; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Information system session lock mechanisms].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-12(1).1,CCI-002362,DoD Organization or Service Common Control Package
+  AC-12(1).2,CCI-002363,Local
+  AC-12(1).3,CCI-002364,Local...
+ap-acronym: AC-12(1).1
+cci: 2362
+cci-definition: >-
+  002362: The organization defines the resources requiring information system
+  authentication in order to gain access.
+implementation-guidance: |-
+  DoD has defined the resources as all.
+
+  Recommended Compelling Evidence:
+  Automatically compliant
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level. DoD has defined the resources
+  as all.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

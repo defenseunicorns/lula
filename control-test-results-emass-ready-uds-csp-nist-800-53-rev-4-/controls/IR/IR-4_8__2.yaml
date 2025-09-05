@@ -1,0 +1,80 @@
+family: IR
+control-acronym: IR-4(8)
+control-information: >-
+  Description:
+
+  The organization coordinates with [Assignment: organization-defined external
+  organizations] to correlate and share [Assignment: organization-defined
+  incident information] to achieve a cross-organization perspective on incident
+  awareness and more effective incident responses.
+
+
+  Supplemental Guidance:
+
+  The coordination of incident information with external organizations
+  including, for example, mission/business partners, military/coalition
+  partners, customers, and multitiered developers, can provide significant
+  benefits. Cross-organizational coordination with respect to incident handling
+  can serve as an important risk management capability. This capability allows
+  organizations to leverage critical information from a variety of sources to
+  effectively respond to information security-related incidents potentially
+  affecting the organization's operations, assets, and individuals.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident handling; list of external organizations; records of incident
+  handling coordination with external organizations; incident response plan;
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident handling
+  responsibilities; organizational personnel with information security
+  responsibilities; personnel from external organizations with whom incident
+  response information is to be coordinated/shared/correlated].
+
+
+  Test: [SELECT FROM: Organizational processes for coordinating incident
+  handling information with external organizations].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IR-4(8).2
+cci: 2786
+cci-definition: >-
+  002786: The organization defines external organizations to correlate and share
+  organization-defined incident information.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents external
+  organizations with whom they will correlate and share organization-defined
+  incident information.
+
+  DoD has determined the external organizations are not appropriate to define at
+  the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation that defines external organizations with whom they will
+  correlate and share organization-defined incident information.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented external organizations to ensure the organization being
+  inspected/assessed defines external organizations to correlate and share
+  organization-defined incident information.
+
+
+  DoD has determined the external organizations are not appropriate to define at
+  the Enterprise level.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

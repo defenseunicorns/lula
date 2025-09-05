@@ -1,0 +1,93 @@
+family: SI
+control-acronym: SI-7(8)
+control-information: >-
+  Description:
+
+  The information system, upon detection of a potential integrity violation,
+  provides the capability to audit the event and initiates the following
+  actions: [Selection (one or more): generates an audit record; alerts current
+  user; alerts [Assignment: organization-defined personnel or roles];
+  [Assignment: organization-defined other actions]].
+
+
+  Supplemental Guidance:
+
+  Organizations select response actions based on types of software, specific
+  software, or information for which there are potential integrity violations.
+  Related controls: AU-2, AU-6, AU-12.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing software, firmware, and information integrity; information system
+  design documentation; information system configuration settings and associated
+  documentation; integrity verification tools and associated documentation;
+  records of integrity scans; incident response records, list of
+  security-relevant changes to the information system; automated tools
+  supporting alerts and notifications if unauthorized security changes are
+  detected; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  software, firmware, and/or information integrity; organizational personnel
+  with information security responsibilities; system/network administrators;
+  system developer].
+
+
+  Test: [SELECT FROM: Software, firmware, and information integrity verification
+  tools; automated mechanisms supporting and/or implementing the capability to
+  audit potential integrity violations; automated mechanisms supporting and/or
+  implementing alerts about potential integrity violations].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SI-7(8).1,CCI-002721,DoD Organization or Service Common Control Package
+  SI-7(8).2,CCI-002722,Local
+  SI-7(8).3,CCI-002723,Local
+  SI-7(8).4,CCI-002724,Local...
+ap-acronym: SI-7(8).2
+cci: 2722
+cci-definition: >-
+  002722: The organization defines other actions that can be taken when the
+  information system detects a potential integrity violation.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents other actions
+  that can be taken when the information system detects a potential integrity
+  violation. DoD has determined the other actions are not appropriate to define
+  at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System security plan defines the other actions that can
+  be taken when the information system detects a potential integrity violation.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented other actions to ensure the organization being inspected/assessed
+  defines other actions that can be taken when the information system detects a
+  potential integrity violation. DoD has determined the other actions are not
+  appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This likely refers to detecting unauthorized changes to software and
+  information. As described, NeuVector is effectively doing this it will detect
+  if any unexpected process or file change occurs in a container beyond what was
+  present at deployment. Also, any changes to Kubernetes resources (adding a new
+  pod, changing a config) are logged and can be monitored an unauthorized change
+  (like someone applying a manifest outside of GitOps) can trigger an alert via
+  admission control tools (Pepr could block or log it). So the infrastructure is
+  in place to catch if something deviates from the baseline. This could be
+  considered integrity monitoring. For example, if an attacker managed to modify
+  a container image on disk, its hash would differ and would notice either
+  failing to start the container or flagging it as un-scanned. UDS covers
+  continuous verification and alerts on any unauthorized modifications.
+uds-alignment: Neuvector, Kubernetes, Pepr, OpenTofu

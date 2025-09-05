@@ -1,0 +1,87 @@
+family: AC
+control-acronym: AC-2(2)
+control-information: >-
+  Description:
+
+  The information system automatically [Selection: removes; disables] temporary
+  and emergency accounts after [Assignment: organization-defined time period for
+  each type of account].
+
+
+  Supplemental Guidance:
+
+  This control enhancement requires the removal of both temporary and emergency
+  accounts automatically after a predefined period of time has elapsed, rather
+  than at the convenience of the systems administrator.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; security plan; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system-generated list of temporary accounts removed and/or
+  disabled; information system-generated list of emergency accounts removed
+  and/or disabled; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing account management
+  functions].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-2(2).1,CCI-000016,Local
+  AC-2(2).2,CCI-001361,DoD Organization or Service Common Control Package
+  AC-2(2).3,CCI-001365,DoD Organization or Service Common Control Package
+  AC-2(2).4,CCI-001682,Local...
+ap-acronym: AC-2(2).1
+cci: 16
+cci-definition: >-
+  000016: The information system automatically removes or disables temporary
+  accounts after an organization-defined time period for each type of account.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  automatically remove or disable temporary accounts after 72 hours. For
+  information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 000016. DoD has defined the time period as 72 hours.
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation which defines how temporary accounts are
+  automatically removed or disabled after a 72 hour period.
+
+  2.) Applicable STIG checks.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to automatically remove or disable temporary accounts after
+  72 hours. For information system components that have applicable STIGs or
+  SRGs, the organization conducting the inspection/assessment evaluates the
+  components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 000016. DoD has defined the time period as 72 hours.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This enhancement requires automatically disabling or removing temporary or
+  emergency accounts after a defined period. The UDS stack allows creation of
+  temporary accounts (e.g., a Keycloak user account for a guest or emergency
+  access) and those accounts can be given an expiration date by an admin which
+  then mark them disabled. This can be done in Keycloak by creating a custom
+  attribute with the 72 hour expiration value or done via the Keycloak Admin API
+  using a JSON file that contains the custom attribute. Following security best
+  practices it is typically not recommended to use temporary accounts.
+uds-alignment: Keycloak

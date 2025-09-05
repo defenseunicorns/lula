@@ -1,0 +1,74 @@
+family: IA
+control-acronym: IA-2(2)
+control-information: >-
+  Description:
+
+  The information system implements multifactor authentication for network
+  access to non-privileged accounts.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing user identification and authentication; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; list of information system
+  accounts; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  operations responsibilities; organizational personnel with account management
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  multifactor authentication capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-2(2).1
+cci: 766
+cci-definition: >-
+  000766: Implement multifactor authentication for network access to
+  non-privileged accounts.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  implement multifactor authentication for network access to non-privileged
+  accounts. For information system components that have applicable STIGs or
+  SRGs, the organization being inspected/assessed must comply with the STIG/SRG
+  guidance that pertains to CCI 766.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated Access Control Policy
+
+  2.) Applicable STIG/SRG checks
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to implement multifactor authentication for network access
+  to non-privileged accounts. For information system components that have
+  applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 766.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  Consistent with IA-2(1).1, UDS enforces mandatory multifactor authentication
+  (MFA) for all non-privileged user accounts accessing the network. UDS
+  leverages Keycloak to require MFA, supporting secure, DoD-approved mechanisms
+  such as Common Access Card (CAC) or Personal Identity Verification (PIV) cards
+  paired with a PIN. Additionally, Keycloak offers flexible MFA options
+  including One-Time Passwords (OTP), mobile push notifications, and Universal
+  2nd Factor (U2F) hardware tokens, ensuring comprehensive MFA coverage aligned
+  with organizational policies and security requirements.
+uds-alignment: Keycloak

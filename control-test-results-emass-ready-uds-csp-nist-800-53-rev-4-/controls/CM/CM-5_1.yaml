@@ -1,0 +1,84 @@
+family: CM
+control-acronym: CM-5
+control-information: >-
+  Description:
+
+  The organization defines, documents, approves, and enforces physical and
+  logical access restrictions associated with changes to the information system.
+
+
+  Supplemental Guidance:
+
+  Any changes to the hardware, software, and/or firmware components of
+  information systems can potentially have significant effects on the overall
+  security of the systems. Therefore, organizations permit only qualified and
+  authorized individuals to access information systems for purposes of
+  initiating changes, including upgrades and modifications. Organizations
+  maintain records of access to ensure that configuration change control is
+  implemented and to support after-the-fact actions should organizations
+  discover any unauthorized changes. Access restrictions for change also include
+  software libraries. Access restrictions include, for example, physical and
+  logical access controls (see AC-3 and PE-3), workflow automation, media
+  libraries, abstract layers (e.g., changes implemented into third-party
+  interfaces rather than directly into information systems), and change windows
+  (e.g., changes occur only during specified times, making unauthorized changes
+  easy to discover). Related controls: AC-3, AC-6, PE-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  access restrictions for changes to the information system; configuration
+  management plan; information system design documentation; information system
+  architecture and configuration documentation; information system configuration
+  settings and associated documentation; logical access approvals; physical
+  access approvals; access credentials; change control records; information
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with logical access control
+  responsibilities; organizational personnel with physical access control
+  responsibilities; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing access restrictions
+  to change; automated mechanisms supporting/implementing/enforcing access
+  restrictions associated with changes to the information system].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CM-5.1
+cci: 338
+cci-definition: >-
+  000338: The organization defines physical access restrictions associated with
+  changes to the information system.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents in the
+  configuration management policy, physical access restrictions associated with
+  changes to the information system.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated configuration management policy referencing physical
+  access restrictions section
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  configuration management policy to ensure the organization being
+  inspected/assessed defines physical access restrictions associated with
+  changes to the information system.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (The UDS technology stack provides the
+  IDAM solution Keycloak to assist in controlling logical access, but the
+  responsibility for defining, documenting, approving, and enforcing physical
+  access restrictions associated with changes to the information system lies
+  with the organization.)

@@ -1,0 +1,84 @@
+family: SC
+control-acronym: SC-23(3)
+control-information: >-
+  Description:
+
+  The information system generates a unique session identifier for each session
+  with [Assignment: organization-defined randomness requirements] and recognizes
+  only session identifiers that are system-generated.
+
+
+  Supplemental Guidance:
+
+  This control enhancement curtails the ability of adversaries from reusing
+  previously valid session IDs. Employing the concept of randomness in the
+  generation of unique session identifiers helps to protect against brute-force
+  attacks to determine future session identifiers. Related control: SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing session authenticity; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  generating and monitoring unique session identifiers; automated mechanisms
+  supporting and/or implementing randomness requirements].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SC-23(3).1
+cci: 1188
+cci-definition: >-
+  001188: The information system generates unique session identifiers for each
+  session with organization-defined randomness requirements.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  generate unique session identifiers for each session with randomness
+  requirements defined in SC-23 (3), CCI 1189. For information system components
+  that have applicable STIGs or SRGs, the organization being inspected/assessed
+  must comply with the STIG/SRG guidance that pertains to CCI 1188.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that describes organization-defined
+  randomness requirements.
+
+  2.) Applicable STIG/SRG checks.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to generate unique session identifiers for each session
+  with randomness requirements defined in SC-23 (3), CCI 1189. For information
+  system components that have applicable STIGs or SRGs, the organization
+  conducting the inspection/assessment evaluates the components to ensure that
+  the organization being inspected/assessed has configured the information
+  system in compliance with the applicable STIGs and SRGs pertaining to CCI
+  1188.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  UDS uses Keycloak for session management and authentication, generating unique
+  and secure session identifiers in the form of cryptographically signed JSON
+  Web Tokens (JWT). Keycloak employs industry-standard cryptographic libraries
+  and secure randomness sources provided by the underlying operating system,
+  ensuring session identifiers (tokens) meet stringent randomness and uniqueness
+  requirements. The Istio Service Mesh generates unique cryptographic session
+  identifiers (certificates) for each internal service-to-service session using
+  secure random number generation compliant with best practices and DoD security
+  standards.
+uds-alignment: Keycloak, Istio, Authservice

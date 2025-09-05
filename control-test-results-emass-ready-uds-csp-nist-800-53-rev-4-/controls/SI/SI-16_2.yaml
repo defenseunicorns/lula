@@ -1,0 +1,79 @@
+family: SI
+control-acronym: SI-16
+control-information: >-
+  Description:
+
+  The information system implements [Assignment: organization-defined security
+  safeguards] to protect its memory from unauthorized code execution.
+
+
+  Supplemental Guidance:
+
+  Some adversaries launch attacks with the intent of executing code in
+  non-executable regions of memory or in memory locations that are prohibited.
+  Security safeguards employed to protect memory include, for example, data
+  execution prevention and address space layout randomization. Data execution
+  prevention safeguards can either be hardware-enforced or software-enforced
+  with hardware providing the greater strength of mechanism. Related controls:
+  AC-25, SC-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing memory protection for the information system; information system
+  design documentation; information system configuration settings and associated
+  documentation; list of security safeguards protecting information system
+  memory from unauthorized code execution; information system audit records;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  memory protection; organizational personnel with information security
+  responsibilities; system/network administrators; system developer].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  safeguards to protect information system memory from unauthorized code
+  execution].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SI-16.2
+cci: 2824
+cci-definition: >-
+  002824: Implement organization-defined controls to protect its memory from
+  unauthorized code execution.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  implement security safeguards defined in SI-16, CCI 2823 to protect its memory
+  from unauthorized code execution. For information system components that have
+  applicable STIGs or SRGs, the organization being inspected/assessed must
+  comply with the STIG/SRG guidance that pertains to CCI 2824.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System security plan defines security safeguards to
+  protect memory against unauthorized code execution.
+
+  2.) Protection software configuration that blocks and reports unauthorized
+  code execution attempts.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to implement security safeguards defined in SI-16, CCI 2823
+  to protect its memory from unauthorized code execution. For information system
+  components that have applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 2824.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "UDS benefits from modern OS and container runtime protections. The underlying Linux kernel (especially if using a Defense Unicorn hardened distro) provides memory protection features (like NX bit to prevent code execution on the stack, ASLR for address randomization). Containers add another layer of isolation, so one containerâ\x80\x99s memory is not accessible to another. Many UDS components are written in memory-safe languages (or managed environments). For instance, Grafana is in Go (with automatic memory management), which reduces certain memory corruption risks. While UDS doesnâ\x80\x99t provide a specific memory firewall, it inherits strong memory protection from the environment it runs in. Therefore, the system has effective memory protection in place by virtue of platform and language security features."

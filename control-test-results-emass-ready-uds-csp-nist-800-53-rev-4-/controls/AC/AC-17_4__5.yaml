@@ -1,0 +1,71 @@
+family: AC
+control-acronym: AC-17(4)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Authorizes the execution of privileged commands and access to
+  security-relevant information via remote access only for [Assignment:
+  organization-defined needs]; and
+
+  (b) Documents the rationale for such access in the security plan for the
+  information system.
+
+
+  Supplemental Guidance:
+
+  Related control: AC-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing remote
+  access to the information system; information system configuration settings
+  and associated documentation; security plan; information system audit records;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing remote access
+  management].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-17(4).5
+cci: 2319
+cci-definition: >-
+  002319: The organization documents in the security plan for the information
+  system the rationale for authorization of the execution of privilege commands
+  via remote access.
+implementation-guidance: >-
+  The organization being inspected/assessed documents in the security plan for
+  the information system the rationale for authorization of the execution of
+  privilege commands via remote access.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated system security plan (SSP) that documents and identifies
+  the rationale for authorization of the execution of privilege commands via
+  remote access.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  security plan to ensure the organization being inspected/assessed documents in
+  the security plan for the information system the rationale for authorization
+  of the execution of privilege commands via remote access.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

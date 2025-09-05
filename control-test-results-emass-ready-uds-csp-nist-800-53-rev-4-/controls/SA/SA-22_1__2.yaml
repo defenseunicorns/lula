@@ -1,0 +1,82 @@
+family: SA
+control-acronym: SA-22(1)
+control-information: >-
+  Description:
+
+  The organization provides [Selection (one or more): in-house support;
+  [Assignment: organization-defined support from external providers]] for
+  unsupported information system components.
+
+
+  Supplemental Guidance:
+
+  This control enhancement addresses the need to provide continued support for
+  selected information system components that are no longer supported by the
+  original developers, vendors, or manufacturers when such components remain
+  essential to mission/business operations. Organizations can establish in-house
+  support, for example, by developing customized patches for critical software
+  components or secure the services of external providers who through
+  contractual relationships, provide ongoing support for the designated
+  unsupported components. Such contractual relationships can include, for
+  example, Open Source Software value-added vendors.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing support for unsupported information system components; solicitation
+  documentation; acquisition documentation; acquisition contracts; service-level
+  agreements; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and services
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with responsibility system
+  development life cycle; organizational personnel or third-party external
+  providers supporting information system components no longer supported by
+  original developers, vendors, or manufacturers].
+
+
+  Test: [SELECT FROM: Organizational processes for supporting system components
+  no longer supported by original developers, vendors, or manufacturers;
+  automated mechanisms providing support for system components no longer
+  supported by original developers, vendors, or manufacturers].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SA-22(1).2
+cci: 3373
+cci-definition: >-
+  003373: The organization provides in-house support and/or organization-defined
+  support from external providers for unsupported information system components.
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to provide in-house support and/or support from external providers defined in
+  SA-22 (1), CCI 3372 for unsupported information system components.
+
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP).
+
+  2.) System development life cycle (SDLC) documentation.
+
+  3.) Continuous monitoring plan for providing in-house support and/or
+  organization-defined support from external providers for unsupported
+  information system components.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented process to ensure the organization being inspected/assessed
+  provides in-house support and/or support from external providers defined in
+  SA-22 (1), CCI 3372 for unsupported information system components.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (This is typically documented in an
+  End of Life plan using an organizational template.)

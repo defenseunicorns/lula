@@ -1,0 +1,90 @@
+family: IA
+control-acronym: IA-7
+control-information: >-
+  Description:
+
+  The information system implements mechanisms for authentication to a
+  cryptographic module that meet the requirements of applicable federal laws,
+  Executive Orders, directives, policies, regulations, standards, and guidance
+  for such authentication.
+
+
+  Supplemental Guidance:
+
+  Authentication mechanisms may be required within a cryptographic module to
+  authenticate an operator accessing the module and to verify that the operator
+  is authorized to assume the requested role and perform services within that
+  role. Related controls: SC-12, SC-13.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Identification and authentication policy; procedures
+  addressing cryptographic module authentication; information system design
+  documentation; information system configuration settings and associated
+  documentation; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  cryptographic module authentication; organizational personnel with information
+  security responsibilities; system/network administrators; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms supporting and/or implementing
+  cryptographic module authentication].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: IA-7.1
+cci: 803
+cci-definition: >-
+  000803: The information system implements mechanisms for authentication to a
+  cryptographic module that meet the requirements of applicable federal laws,
+  Executive Orders, directives, policies, regulations, standards, and guidance
+  for such authentication.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  implement mechanisms for authentication to a cryptographic module that meet
+  the requirements of applicable federal laws, Executive Orders, directives,
+  policies, regulations, standards, and guidance for such authentication. For
+  information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 803.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated SOP/TTP documenting organization's configuration of the
+  information system to implement mechanisms for authentication to a
+  cryptographic module that meet the requirements of applicable federal laws,
+  EO, directives, policies, regulations, standards and guidance for such
+  authentication.
+
+  2.) Applicable STIG/SRG checks.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to implement mechanisms for authentication to a
+  cryptographic module that meet the requirements of applicable federal laws,
+  Executive Orders, directives, policies, regulations, standards, and guidance
+  for such authentication. For information system components that have
+  applicable STIGs or SRGs, the organization conducting the
+  inspection/assessment evaluates the components to ensure that the organization
+  being inspected/assessed has configured the information system in compliance
+  with the applicable STIGs and SRGs pertaining to CCI 803.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  UDS components use cryptographic modules that meet federal standards (FIPS
+  140-2) when configured for secure environments. For example, Istio can be
+  deployed with FIPS-validated crypto libraries, and the Linux operating
+  environment can be in FIPS mode. Keycloak and other components support
+  FIPS-compliant algorithms for TLS and hashing.
+uds-alignment: Keycloak, Istio

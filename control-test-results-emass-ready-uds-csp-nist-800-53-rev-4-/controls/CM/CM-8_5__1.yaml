@@ -1,0 +1,76 @@
+family: CM
+control-acronym: CM-8(5)
+control-information: >-
+  Description:
+
+  The organization verifies that all components within the authorization
+  boundary of the information system are not duplicated in other information
+  system component inventories.
+
+
+  Supplemental Guidance:
+
+  This control enhancement addresses the potential problem of duplicate
+  accounting of information system components in large or complex interconnected
+  systems.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  information system component inventory; configuration management plan;
+  security plan; information system inventory records; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  inventory responsibilities; organizational personnel with responsibilities for
+  defining information system components within the authorization boundary of
+  the system; organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for maintaining the inventory of
+  information system components; automated mechanisms implementing the
+  information system component inventory].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CM-8(5).1
+cci: 419
+cci-definition: >-
+  000419: The organization verifies that all components within the authorization
+  boundary of the information system are not duplicated in other information
+  system inventories.
+implementation-guidance: >-
+  The organization being inspected/assessed verifies that all components within
+  the authorization boundary of the information system are not duplicated in
+  other information system inventories.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Configuration (hardware) baseline
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  inventory list of the authorized information system and verifies that all
+  components identified during the inspection are not duplicated in other
+  information system inventories.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  UDS inherently supports accurate tracking and management of deployed
+  components through Infrastructure as Code (IaC) via OpenTofu and secure
+  deployment packages with Zarf. These methods provide a definitive, consistent
+  record of components deployed within the information system, significantly
+  reducing the risk of duplicate, redundant, or unauthorized system components.
+  The UDS user interface is automatically updated to maintain a complete
+  real-time inventory of software deployed within UDS.
+uds-alignment: OpenTofu, Zarf, UDS UI

@@ -1,0 +1,75 @@
+family: CM
+control-acronym: CM-5(2)
+control-information: >-
+  Description:
+
+  The organization reviews information system changes [Assignment:
+  organization-defined frequency] and [Assignment: organization-defined
+  circumstances] to determine whether unauthorized changes have occurred.
+
+
+  Supplemental Guidance:
+
+  Indications that warrant review of information system changes and the specific
+  circumstances justifying such reviews may be obtained from activities carried
+  out by organizations during the configuration change process. Related
+  controls: AU-6, AU-7, CM-3, CM-5, PE-6, PE-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  access restrictions for changes to the information system; configuration
+  management plan; security plan; reviews of information system changes; audit
+  and review reports; change control records; information system audit records;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing access restrictions
+  to change; automated mechanisms supporting/implementing information system
+  reviews to determine whether unauthorized changes have occurred].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CM-5(2).1,CCI-000348,DoD Organization or Service Common Control Package
+  CM-5(2).2,CCI-000349,Local
+  CM-5(2).3,CCI-000350,Local
+  CM-5(2).4,CCI-001826,DoD Organization or Service Common Control Package...
+ap-acronym: CM-5(2).1
+cci: 348
+cci-definition: >-
+  000348: The organization defines a frequency to conduct reviews of information
+  system changes.
+implementation-guidance: >-
+  DoD has defined the frequency as every 90 days or more frequently as the
+  organization defines for high systems AND at least annually or more frequently
+  as the organization defines for low and moderate systems.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically Compliant
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level.
+
+
+  DoD has defined the frequency as every 90 days or more frequently as the
+  organization defines for high systems AND at least annually or more frequently
+  as the organization defines for low and moderate systems.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

@@ -1,0 +1,83 @@
+family: AC
+control-acronym: AC-3
+control-information: >-
+  Description:
+
+  The information system enforces approved authorizations for logical access to
+  information and system resources in accordance with applicable access control
+  policies.
+
+
+  Supplemental Guidance:
+
+  Access control policies (e.g., identity-based policies, role-based policies,
+  attribute-based policies) and access enforcement mechanisms (e.g., access
+  control lists, access control matrices, cryptography) control access between
+  active entities or subjects (i.e., users or processes acting on behalf of
+  users) and passive entities or objects (e.g., devices, files, records,
+  domains) in information systems. In addition to enforcing authorized access at
+  the information system level and recognizing that information systems can host
+  many applications and services in support of organizational missions and
+  business operations, access enforcement mechanisms can also be employed at the
+  application and service level to provide increased information security.
+  Related controls: AC-2, AC-4, AC-5, AC-6, AC-16, AC-17, AC-18, AC-19, AC-20,
+  AC-21, AC-22, AU-9, CM-5, CM-6, CM-11, MA-3, MA-4, MA-5, PE-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing access
+  enforcement; information system design documentation; information system
+  configuration settings and associated documentation; list of approved
+  authorizations (user privileges); information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with access enforcement
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing access control policy].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-3.1
+cci: 213
+cci-definition: >-
+  000213: The information system enforces approved authorizations for logical
+  access to information and system resources in accordance with applicable
+  access control policies.
+implementation-guidance: >-
+  The organization being inspected/assessed configures the information system to
+  enforce approved authorizations for logical access to information and system
+  resources in accordance with applicable access control policies. For
+  information system components that have applicable STIGs or SRGs, the
+  organization being inspected/assessed must comply with the STIG/SRG guidance
+  that pertains to CCI 213.
+
+  Recommended Compelling Evidence:
+
+  1.) Access control policy.
+
+  2.) Applicable STIG/SRG checks.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the information
+  system to ensure the organization being inspected/assessed configures the
+  information system to enforce approved authorizations for logical access to
+  information and system resources in accordance with applicable access control
+  policies. For information system components that have applicable STIGs or
+  SRGs, the organization conducting the inspection/assessment evaluates the
+  components to ensure that the organization being inspected/assessed has
+  configured the information system in compliance with the applicable STIGs and
+  SRGs pertaining to CCI 213.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "UDS enforces access control for systems and services through multiple layers. At the application level, Keycloak ensures that only authenticated and authorized users can access protected applications (via OAuth2/OIDC tokens or SSO sessions). At the service/microservice level, AuthService (integrated with Istioâ\x80\x99s Envoy sidecars) acts as a policy enforcement point to check user tokens and permissions before allowing API requests, ensuring that application-level access policies are uniformly enforced. Additionally, Kubernetes RBAC ensures that administrative operations (like deploying a container or accessing a config) are only executed by principals with the correct role. In effect, every request in the UDS environment whether a user logging into a web app or a service calling another service â\x80\x93 goes through an access control check: user requests are vetted by Keycloak/AuthService, and inter-service calls are controlled by Istioâ\x80\x99s security policies. These mechanisms collectively satisfy the controlâ\x80\x99s intent by enforcing assigned access privileges on all attempted actions in the system."

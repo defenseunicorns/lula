@@ -1,0 +1,87 @@
+family: PE
+control-acronym: PE-15
+control-information: >-
+  Description:
+
+  The organization protects the information system from damage resulting from
+  water leakage by providing master shutoff or isolation valves that are
+  accessible, working properly, and known to key personnel.
+
+
+  Supplemental Guidance:
+
+  This control applies primarily to facilities containing concentrations of
+  information system resources including, for example, data centers, server
+  rooms, and mainframe computer rooms. Isolation valves can be employed in
+  addition to or in lieu of master shutoff valves to shut off water supplies in
+  specific areas of concern, without affecting entire organizations. Related
+  control: AT-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing water damage protection; facility housing the
+  information system; master shutoff valves; list of key personnel with
+  knowledge of location and activation procedures for master shutoff valves for
+  the plumbing system; master shutoff valve documentation; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  information system environmental controls; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Master water-shutoff valves; organizational process for
+  activating master water-shutoff].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: PE-15.1
+cci: 977
+cci-definition: >-
+  000977: The organization protects the information system from damage resulting
+  from water leakage by providing master shutoff or isolation valves that are
+  accessible.
+implementation-guidance: >-
+  The organization being inspected/assessed must provide master shutoff valves
+  that are accessible to protect the information system from damage resulting
+  from water leakage.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Evidence of accessible master shutoff valves
+assessment-procedures: >-
+  The organization conducting the inspection/assessment will inspect the master
+  shutoff valves to ensure they are installed and accessible.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

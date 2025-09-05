@@ -1,0 +1,86 @@
+family: SA
+control-acronym: SA-22
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Replaces information system components when support for the components is
+  no longer available from the developer, vendor, or manufacturer; and
+
+  b. Provides justification and documents approval for the continued use of
+  unsupported system components required to satisfy mission/business needs.
+
+
+  Supplemental Guidance:
+
+  Support for information system components includes, for example, software
+  patches, firmware updates, replacement parts, and maintenance contracts.
+  Unsupported components (e.g., when vendors are no longer providing critical
+  software patches), provide a substantial opportunity for adversaries to
+  exploit new weaknesses discovered in the currently installed components.
+  Exceptions to replacing unsupported system components may include, for
+  example, systems that provide critical mission/business capability where newer
+  technologies are not available or where the systems are so isolated that
+  installing replacement components is not an option. Related controls: PL-2,
+  SA-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing replacement or continued use of unsupported information system
+  components; documented evidence of replacing unsupported information system
+  components; documented approvals (including justification) for continued use
+  of unsupported information system components; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with system and services
+  acquisition responsibilities; organizational personnel with information
+  security responsibilities; organizational personnel with responsibility system
+  development life cycle; organizational personnel responsible for configuration
+  management].
+
+
+  Test: [SELECT FROM: Organizational processes for replacing unsupported system
+  components; automated mechanisms supporting and/or implementing replacement of
+  unsupported system components].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SA-22.2
+cci: 3374
+cci-definition: >-
+  003374: The organization documents approval for the continued use of
+  unsupported system components required to satisfy mission/business needs.
+implementation-guidance: >-
+  The organization being inspected/assessed documents approval for the continued
+  use of unsupported system components required to satisfy mission/business
+  needs.
+
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP).
+
+  2.) System development life cycle (SDLC) documentation.
+
+  3.) Continuous monitoring plan for documenting approval for the continued use
+  of unsupported system components required to satisfy mission/business needs.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  hardware and software lists as well as the documented approvals to ensure the
+  organization being inspected/assessed documents approval for the continued use
+  of unsupported system components required to satisfy mission/business needs.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (This is typically documented in an
+  End of Life plan using an organizational template.)

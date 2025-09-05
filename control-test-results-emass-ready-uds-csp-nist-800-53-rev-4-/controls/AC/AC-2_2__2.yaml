@@ -1,0 +1,70 @@
+family: AC
+control-acronym: AC-2(2)
+control-information: >-
+  Description:
+
+  The information system automatically [Selection: removes; disables] temporary
+  and emergency accounts after [Assignment: organization-defined time period for
+  each type of account].
+
+
+  Supplemental Guidance:
+
+  This control enhancement requires the removal of both temporary and emergency
+  accounts automatically after a predefined period of time has elapsed, rather
+  than at the convenience of the systems administrator.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing account
+  management; security plan; information system design documentation;
+  information system configuration settings and associated documentation;
+  information system-generated list of temporary accounts removed and/or
+  disabled; information system-generated list of emergency accounts removed
+  and/or disabled; information system audit records; other relevant documents or
+  records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with account management
+  responsibilities; system/network administrators; organizational personnel with
+  information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing account management
+  functions].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-2(2).1,CCI-000016,Local
+  AC-2(2).2,CCI-001361,DoD Organization or Service Common Control Package
+  AC-2(2).3,CCI-001365,DoD Organization or Service Common Control Package
+  AC-2(2).4,CCI-001682,Local...
+ap-acronym: AC-2(2).2
+cci: 1361
+cci-definition: >-
+  001361: The organization defines a time period after which temporary accounts
+  are automatically terminated.
+implementation-guidance: >-
+  DoD has defined the time period as 72 hours. The time period of 72 hours
+  applies to temporary user accounts.
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level. DoD has defined the time period
+  as 72 hours. The time period of 72 hours applies to temporary user accounts.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

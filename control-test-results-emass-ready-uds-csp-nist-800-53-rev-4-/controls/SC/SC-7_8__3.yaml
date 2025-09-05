@@ -1,0 +1,78 @@
+family: SC
+control-acronym: SC-7(8)
+control-information: >-
+  Description:
+
+  The information system routes [Assignment: organization-defined internal
+  communications traffic] to [Assignment: organization-defined external
+  networks] through authenticated proxy servers at managed interfaces.
+
+
+  Supplemental Guidance:
+
+  External networks are networks outside of organizational control. A proxy
+  server is a server (i.e., information system or application) that acts as an
+  intermediary for clients requesting information system resources (e.g., files,
+  connections, web pages, or services) from other organizational servers. Client
+  requests established through an initial connection to the proxy server are
+  evaluated to manage complexity and to provide additional protection by
+  limiting direct connectivity. Web content filtering devices are one of the
+  most common proxy servers providing access to the Internet. Proxy servers
+  support logging individual Transmission Control Protocol (TCP) sessions and
+  blocking specific Uniform Resource Locators (URLs), domain names, and Internet
+  Protocol (IP) addresses. Web proxies can be configured with
+  organization-defined lists of authorized and unauthorized websites. Related
+  controls: AC-3, AU-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and communications protection policy; procedures
+  addressing boundary protection; information system design documentation;
+  information system hardware and software; information system architecture;
+  information system configuration settings and associated documentation;
+  information system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developer;
+  organizational personnel with boundary protection responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing traffic management
+  through authenticated proxy servers at managed interfaces].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SC-7(8).1,CCI-001112,Organization AWS Cloud Brokerage Package
+  SC-7(8).2,CCI-001113,DoD Organization or Service Common Control Package
+  SC-7(8).3,CCI-001114,DoD Organization or Service Common Control Package...
+ap-acronym: SC-7(8).3
+cci: 1114
+cci-definition: >-
+  001114: The organization defines the external networks to which the
+  organization-defined internal communications traffic should be routed.
+implementation-guidance: >-
+  DoD has defined the external networks as any network external to the
+  authorization boundary.
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant.
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level. DoD has defined the external
+  networks as any network external to the authorization boundary.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

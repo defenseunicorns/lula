@@ -1,0 +1,106 @@
+family: SA
+control-acronym: SA-3
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Manages the information system using [Assignment: organization-defined
+  system development life cycle] that incorporates information security
+  considerations;
+
+  b. Defines and documents information security roles and responsibilities
+  throughout the system development life cycle;
+
+  c. Identifies individuals having information security roles and
+  responsibilities; and
+
+  d. Integrates the organizational information security risk management process
+  into system development life cycle activities.
+
+
+  Supplemental Guidance:
+
+  A well-defined system development life cycle provides the foundation for the
+  successful development, implementation, and operation of organizational
+  information systems. To apply the required security controls within the system
+  development life cycle requires a basic understanding of information security,
+  threats, vulnerabilities, adverse impacts, and risk to critical
+  missions/business functions. The security engineering principles in SA-8
+  cannot be properly applied if individuals that design, code, and test
+  information systems and system components (including information technology
+  products) do not understand security. Therefore, organizations include
+  qualified personnel, for example, chief information security officers,
+  security architects, security engineers, and information system security
+  officers in system development life cycle activities to ensure that security
+  requirements are incorporated into organizational information systems. It is
+  equally important that developers include individuals on the development team
+  that possess the requisite security expertise and skills to ensure that needed
+  security capabilities are effectively integrated into the information system.
+  Security awareness and training programs can help ensure that individuals
+  having key security roles and responsibilities have the appropriate
+  experience, skills, and expertise to conduct assigned system development life
+  cycle activities. The effective integration of security requirements into
+  enterprise architecture also helps to ensure that important security
+  considerations are addressed early in the system development life cycle and
+  that those considerations are directly related to the organizational
+  mission/business processes. This process also facilitates the integration of
+  the information security architecture into the enterprise architecture,
+  consistent with organizational risk management and information security
+  strategies. Related controls: AT-3, PM-7, SA-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and services acquisition policy; procedures
+  addressing the integration of information security into the system development
+  life cycle process; information system development life cycle documentation;
+  information security risk management strategy/program documentation; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  and system life cycle development responsibilities; organizational personnel
+  with information security risk management responsibilities; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for defining and documenting the
+  SDLC; organizational processes for identifying SDLC roles and
+  responsibilities; organizational process for integrating information security
+  risk management into the SDLC; automated mechanisms supporting and/or
+  implementing the SDLC].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SA-3.5
+cci: 3093
+cci-definition: >-
+  003093: The organization integrates the organizational information security
+  risk management process into system development life cycle activities.
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to integrate the organizational information security risk management process
+  into system development life cycle activities.
+
+  Recommended Compelling Evidence:
+
+  1.) System Development Life Cycle (SDLC) documentation documents process for
+  risk management evaluation of information system.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented process to ensure the organization being inspected/assessed
+  integrates the organizational information security risk management process
+  into system development life cycle activities.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (UDS is itself developed following
+  secure SDLC by Defense Unicorns; when the organization develops custom apps to
+  run on UDS, they should follow their own secure SDLC requirements.)

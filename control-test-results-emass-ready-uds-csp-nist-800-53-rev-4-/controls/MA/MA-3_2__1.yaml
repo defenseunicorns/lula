@@ -1,0 +1,101 @@
+family: MA
+control-acronym: MA-3(2)
+control-information: >-
+  Description:
+
+  The organization checks media containing diagnostic and test programs for
+  malicious code before the media are used in the information system.
+
+
+  Supplemental Guidance:
+
+  If, upon inspection of media containing maintenance diagnostic and test
+  programs, organizations determine that the media contain malicious code, the
+  incident is handled consistent with organizational incident handling policies
+  and procedures. Related control: SI-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information system maintenance policy; procedures
+  addressing information system maintenance tools; information system
+  maintenance tools and associated documentation; maintenance records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  maintenance responsibilities; organizational personnel with information
+  security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational process for inspecting media for malicious
+  code; automated mechanisms supporting and/or implementing inspection of media
+  used for maintenance].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: >-
+  AWS does not permit portable external hard drives, disks, tapes, memory
+  devices, or any other media inside data centers (see control MP-2.)
+  Third-party contractors do not have logical access to any systems or data for
+  maintenance purposes. Maintenance activities are conducted without the use of
+  portable media. Therefore the control is not applicable....
+ap-acronym: MA-3(2).1
+cci: 870
+cci-definition: >-
+  000870: The organization checks media containing diagnostic and test programs
+  for malicious code before the media are used in the information system.
+implementation-guidance: >-
+  The organization being inspected/assessed:
+
+  1. documents and implements procedures to check all media containing
+  diagnostic and test programs for malicious code before the media are used in
+  the information system; and
+
+  2. Runs an automated tool set to check all media containing diagnostic and
+  test programs for malicious code before the media are used in the information
+  system.
+
+  The organization must maintain configuration files for the automated tool set
+  and audit logs of the tool set used to check media.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Policy that details how test digital media is verified to be free of
+  malicious code prior to use on an information system
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  procedures for checking all diagnostic and test media for malicious code, and
+  a sampling of configuration files and audit logs of the tool set used to check
+  media. The purpose of the review is to ensure the organization being
+  inspected/assessed checks all media containing diagnostic and test programs
+  for malicious code before the media are used in the information system.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

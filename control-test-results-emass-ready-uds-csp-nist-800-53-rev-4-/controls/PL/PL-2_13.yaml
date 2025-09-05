@@ -1,0 +1,50 @@
+family: PL
+control-acronym: PL-2
+control-information: "Description:\nThe organization:\na. Develops a security plan for the information system that:\n1. Is consistent with the organizationâ\x80\x99s enterprise architecture;\n2. Explicitly defines the authorization boundary for the system;\n3. Describes the operational context of the information system in terms of missions and business processes;\n4. Provides the security categorization of the information system including supporting rationale;\n5. Describes the operational environment for the information system and relationships with or connections to other information systems;\n6. Provides an overview of the security requirements for the system;\n7. Identifies any relevant overlays, if applicable;\n8. Describes the security controls in place or planned for meeting those requirements including a rationale for the tailoring within the control text decisions; and \n9. Is reviewed and approved by the authorizing official or designated representative prior to plan implementation;\nb. Distributes copies of the security plan and communicates subsequent changes to the plan to [Assignment: organization-defined personnel or roles];\nc. Reviews the security plan for the information system [Assignment: organization-defined frequency];\nd. Updates the plan to address changes to the information system/environment of operation or problems identified during plan implementation or security control assessments; and\ne. Protects the security plan from unauthorized disclosure and modification.\n\nSupplemental Guidance:\nSecurity plans relate security requirements to a set of security controls and control enhancements. Security plans also describe, at a high level, how the security controls and control enhancements meet those security requirements, but do not provide detailed, technical descriptions of the specific design or implementation of the controls/enhancements. Security plans contain sufficient information (including the specification of parameter values for assignment and selection statements either explicitly or by reference) to enable a design and implementation that is unambiguously compliant with the intent of the plans and subsequent determinations of risk to organizational operations and assets, individuals, other organizations, and the Nation if the plan is implemented as intended. Organizations can also apply tailoring guidance to the security control baselines in Appendix D and CNSS Instruction 1253 to develop overlays for community-wide use or to address specialized requirements, technologies, or missions/environments of operation (e.g., DoD-tactical, Federal Public Key Infrastructure, or Federal Identity, Credential, and Access Management, space operations). Appendix I provides guidance on developing overlays.\nSecurity plans need not be single documents; the plans can be a collection of various documents including documents that already exist. Effective security plans make extensive use of references to policies, procedures, and additional documents (e.g., design and implementation specifications) where more detailed information can be obtained. This reduces the documentation requirements associated with security programs and maintains security-related information in other established management/operational areas related to enterprise architecture, system development life cycle, systems engineering, and acquisition. For example, security plans do not contain detailed contingency plan or incident response plan information but instead provide explicitly or by reference, sufficient information to define what needs to be accomplished by those plans. Related controls: AC-2, AC-6, AC-14, AC-17, AC-20, CA-2, CA-3, CA-7, CM-9, CP-2, IR-8, MA-4, MA-5, MP-2, MP-4, MP-5, PL-7, PM-1, PM-7, PM-8, PM-9, PM-11, SA-5, SA-17.\n\nPotential Assessment Methods and Objectives:\nThe below information from the NIST SP 800-53 Revision 4 Security Catalog is intended to provide additional optional mechanisms to take into account when reviewing this Security Control. Assessments of the individual security requirements must still include a response to the specific procedures/guidance stated in the correlated Assessment Procedures.\nExamine: [SELECT FROM: Security planning policy; procedures addressing security plan development and implementation; procedures addressing security plan reviews and updates; enterprise architecture documentation; security plan for the information system; records of security plan reviews and updates; other relevant documents or records].\n\nInterview: [SELECT FROM: Organizational personnel with security planning and plan implementation responsibilities; organizational personnel with information security responsibilities].\n\nTest: [SELECT FROM: Organizational processes for security plan development/review/update/approval; automated mechanisms supporting the information system security plan]."
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  PL-2.1,CCI-003049,Local
+  PL-2.2,CCI-003050,Local
+  PL-2.3,CCI-003051,Local
+  PL-2.4,CCI-003052,Local
+  PL-2.5,CCI-003053,Local
+  PL-2.6,CCI-003054,Local
+  PL-2.7,CCI-003055,Local
+  PL-2.8,CCI-003056,Local
+  PL-2.9,CCI-003057,Local
+  PL-2.10,CCI-000571,Local
+  PL-2.11,CCI-003059,Local
+  PL-2.12,CCI-003060,DoD Organization or Service Common Control Package
+  PL-2.13,CCI-003061,Local
+  PL-2.14,CCI-003062,DoD Organization or Service Common Control Package
+  PL-2.15,CCI-000572,DoD Organization or Service Common Control Package
+  PL-2.16,CCI-000573,Local
+  PL-2.17,CCI-000574,Local
+  PL-2.18,CCI-003063,Local
+  PL-2.19,CCI-003064,Local...
+ap-acronym: PL-2.13
+cci: 3061
+cci-definition: >-
+  003061: The organization communicates subsequent changes to the security plan
+  to organization-defined personnel or roles.
+implementation-guidance: >-
+  The organization being inspected/assessed distributes changes to the security
+  plan to, at a minimum, the ISSO, ISSM and SCA via the organization's
+  information sharing portal. DoD has defined the personnel or roles as at a
+  minimum, the ISSO, ISSM and SCA.
+
+  Recommended Compelling Evidence:
+
+  1.) Audit trail of changes to system security plan (SSP) and
+  organization-defined personnel or roles the updates are disseminated to.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment examines the
+  organization's information sharing portal to ensure at a minimum, the ISSO,
+  ISSM and SCA have been provided changes to the security plan. DoD has defined
+  the personnel or roles as at a minimum, the ISSO, ISSM and SCA.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (This workflow is completed at the
+  organizational level.)

@@ -1,0 +1,51 @@
+family: PS
+control-acronym: PS-6(3)
+control-information: >-
+  Description:
+
+  The organization
+
+  (a) Notifies individuals of applicable, legally binding post-employment
+  requirements for protection of organizational information; and
+
+  (b) Requires individuals to sign an acknowledgment of these requirements, if
+  applicable, as part of granting initial access to covered information.
+
+
+  Supplemental Guidance:
+
+  Organizations consult with the Office of the General Counsel regarding matters
+  of post-employment requirements on terminated individuals.
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: PS-6(3).2
+cci: 3039
+cci-definition: >-
+  003039: The organization requires individuals to sign an acknowledgement of
+  legally binding post-employment requirements for protection of organizational
+  information, if applicable, as part of granting initial access to covered
+  information.
+implementation-guidance: >-
+  The organization being inspected/assessed documents and implements a process
+  to require individuals to sign an acknowledgement of legally binding
+  post-employment requirements for protection of organizational information, if
+  applicable, as part of granting initial access to covered information.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Post-employment documentation for departing individuals.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented process and a sampling of signed acknowledgements to ensure the
+  organization being inspected/assessed requires individuals to sign an
+  acknowledgement of legally binding post-employment requirements for protection
+  of organizational information, if applicable, as part of granting initial
+  access to covered information.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (UDS is unrelated to personnel
+  security controls, which cover hiring, transfer, agreements, termination,
+  etc.)

@@ -1,0 +1,68 @@
+family: CP
+control-acronym: CP-4(1)
+control-information: >-
+  Description:
+
+  The organization coordinates contingency plan testing with organizational
+  elements responsible for related plans.
+
+
+  Supplemental Guidance:
+
+  Plans related to contingency plans for organizational information systems
+  include, for example, Business Continuity Plans, Disaster Recovery Plans,
+  Continuity of Operations Plans, Crisis Communications Plans, Critical
+  Infrastructure Plans, Cyber Incident Response Plans, and Occupant Emergency
+  Plans. This control enhancement does not require organizations to create
+  organizational elements to handle related plans or to align such elements with
+  specific plans. It does require, however, that if such organizational elements
+  are responsible for related plans, organizations should coordinate with those
+  elements. Related controls: IR-8, PM-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; incident response policy;
+  procedures addressing contingency plan testing; contingency plan testing
+  documentation; contingency plan; business continuity plans; disaster recovery
+  plans; continuity of operations plans; crisis communications plans; critical
+  infrastructure plans; cyber incident response plans; occupant emergency plans;
+  security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with contingency plan
+  testing responsibilities; organizational personnel; personnel with
+  responsibilities for related plans; organizational personnel with information
+  security responsibilities].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: CP-4(1).1
+cci: 498
+cci-definition: >-
+  000498: The organization coordinates contingency plan testing with
+  organizational elements responsible for related plans.
+implementation-guidance: >-
+  The organization being inspected/assessed coordinates the testing of its
+  contingency plan with other organizational elements responsible for related
+  plans. The organization documents any applicable agreements with responsible
+  internal or external entities. For external entities the agreements could
+  entail MOUs, MOAs, SLAs or contracts.
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation (MOU/MOA) of agreements with entities responsible for the
+  contingency or related plans
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines
+  documentation of agreements with entities responsible for the contingency or
+  related plans to ensure there is evidence of coordination of those tests.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: "Not Applicable to UDS technology stack. (UDS cannot conduct plan exercises; the organization must test its contingency plans. UDSâ\x80\x99s role is to support restoration when needed.)"

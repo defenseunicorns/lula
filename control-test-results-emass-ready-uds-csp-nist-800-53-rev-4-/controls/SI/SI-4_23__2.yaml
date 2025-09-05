@@ -1,0 +1,73 @@
+family: SI
+control-acronym: SI-4(23)
+control-information: >-
+  Description:
+
+  The organization implements [Assignment: organization-defined host-based
+  monitoring mechanisms] at [Assignment: organization-defined information system
+  components].
+
+
+  Supplemental Guidance:
+
+  Information system components where host-based monitoring can be implemented
+  include, for example, servers, workstations, and mobile devices. Organizations
+  consider employing host-based monitoring mechanisms from multiple information
+  technology product developers.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing information system monitoring tools and techniques; information
+  system design documentation; host-based monitoring mechanisms; information
+  system monitoring tools and techniques documentation; information system
+  configuration settings and associated documentation; list of information
+  system components requiring host-based monitoring; information system
+  monitoring logs or records; information system audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; organizational personnel
+  installing, configuring, and/or maintaining the information system;
+  organizational personnel with responsibility for monitoring information system
+  hosts].
+
+
+  Test: [SELECT FROM: Organizational processes for information system
+  monitoring; automated mechanisms supporting and/or implementing host-based
+  monitoring capability].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: |-
+  SI-4(23).1,CCI-002685,DoD Organization or Service Common Control Package
+  SI-4(23).2,CCI-002686,DoD Organization or Service Common Control Package
+  SI-4(23).3,CCI-002687,Organization AWS Cloud Brokerage Package...
+ap-acronym: SI-4(23).2
+cci: 2686
+cci-definition: >-
+  002686: The organization defines the information system components at which
+  organization-defined host-based monitoring mechanisms are to be implemented.
+implementation-guidance: |-
+  DoD has defined the information system components as all components.
+
+  Recommended Compelling Evidence:
+  Automatically compliant.
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level. DoD has defined the information
+  system components as all components.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level. DoD has defined the information
+  system components as all components.

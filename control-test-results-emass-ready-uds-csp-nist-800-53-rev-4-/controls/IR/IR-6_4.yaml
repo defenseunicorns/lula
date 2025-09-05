@@ -1,0 +1,83 @@
+family: IR
+control-acronym: IR-6
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Requires personnel to report suspected security incidents to the
+  organizational incident response capability within [Assignment:
+  organization-defined time period]; and
+
+  b. Reports security incident information to [Assignment: organization-defined
+  authorities].
+
+
+  Supplemental Guidance:
+
+  The intent of this control is to address both specific incident reporting
+  requirements within an organization and the formal incident reporting
+  requirements for federal agencies and their subordinate organizations.
+  Suspected security incidents include, for example, the receipt of suspicious
+  email communications that can potentially contain malicious code. The types of
+  security incidents reported, the content and timeliness of the reports, and
+  the designated reporting authorities reflect applicable federal laws,
+  Executive Orders, directives, regulations, policies, standards, and guidance.
+  Current federal policy requires that all federal agencies (unless specifically
+  exempted from such requirements) report security incidents to the United
+  States Computer Emergency Readiness Team (US-CERT) within specified time
+  frames designated in the US-CERT Concept of Operations for Federal Cyber
+  Security Incident Handling. Related controls: IR-4, IR-5, IR-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Incident response policy; procedures addressing
+  incident reporting; incident reporting records and documentation; incident
+  response plan; security plan; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with incident reporting
+  responsibilities; organizational personnel with information security
+  responsibilities; personnel who have/should have reported incidents; personnel
+  (authorities) to whom incident information is to be reported].
+
+
+  Test: [SELECT FROM: Organizational processes for incident reporting; automated
+  mechanisms supporting and/or implementing incident reporting].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  IR-6.1,CCI-000834,DoD Organization or Service Common Control Package
+  IR-6.2,CCI-000835,Organization AWS Cloud Brokerage Package
+  IR-6.3,CCI-000836,Organization AWS Cloud Brokerage Package
+  IR-6.4,CCI-002791,DoD Organization or Service Common Control Package...
+ap-acronym: IR-6.4
+cci: 2791
+cci-definition: >-
+  002791: The organization defines authorities to whom security incident
+  information is reported.
+implementation-guidance: >-
+  DoD has defined the authorities as the appropriate CIRT/CERT (such as US-CERT,
+  DoD CERT, IC CERT).
+
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant
+assessment-procedures: >-
+  The organization being inspected/assessed is automatically compliant with this
+  CCI because they are covered at the DoD level. DoD has defined the authorities
+  as the appropriate CIRT/CERT (such as US-CERT, DoD CERT, IC CERT).
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

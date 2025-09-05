@@ -1,0 +1,99 @@
+family: CP
+control-acronym: CP-7
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Establishes an alternate processing site including necessary agreements to
+  permit the transfer and resumption of [Assignment: organization-defined
+  information system operations] for essential missions/business functions
+  within [Assignment: organization-defined time period consistent with recovery
+  time and recovery point objectives] when the primary processing capabilities
+  are unavailable;
+
+  b. Ensures that equipment and supplies required to transfer and resume
+  operations are available at the alternate processing site or contracts are in
+  place to support delivery to the site within the organization-defined time
+  period for transfer/resumption; and
+
+  c. Ensures that the alternate processing site provides information security
+  safeguards equivalent to that of the primary site.
+
+
+  Supplemental Guidance:
+
+  Alternate processing sites are sites that are geographically distinct from
+  primary processing sites. An alternate processing site provides processing
+  capability in the event that the primary processing site is not available.
+  Items covered by alternate processing site agreements include, for example,
+  environmental conditions at alternate sites, access rules, physical and
+  environmental protection requirements, and coordination for the
+  transfer/assignment of personnel. Requirements are specifically allocated to
+  alternate processing sites that reflect the requirements in contingency plans
+  to maintain essential missions/business functions despite disruption,
+  compromise, or failure in organizational information systems. Related
+  controls: CP-2, CP-6, CP-8, CP-9, CP-10, MA-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Contingency planning policy; procedures addressing
+  alternate processing sites; contingency plan; alternate processing site
+  agreements; primary processing site agreements; spare equipment and supplies
+  inventory at alternate processing site; equipment and supply contracts;
+  service-level agreements; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibilities for
+  contingency planning and/or alternate site arrangements; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for recovery at the alternate
+  site; automated mechanisms supporting and/or implementing recovery at the
+  alternate processing site].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CP-7.1,CCI-000510,DoD Organization or Service Common Control Package
+  CP-7.2,CCI-000513,Organization AWS Cloud Brokerage Package
+  CP-7.3,CCI-000514,Organization AWS Cloud Brokerage Package
+  CP-7.4,CCI-002839,Local
+  CP-7.5,CCI-000515,Organization AWS Cloud Brokerage Package
+  CP-7.6,CCI-000521,Organization AWS Cloud Brokerage Package...
+ap-acronym: CP-7.4
+cci: 2839
+cci-definition: >-
+  002839: The organization defines information system operations that are
+  permitted to transfer and resume at an alternate processing sites for
+  essential missions/business functions when the primary processing capabilities
+  are unavailable.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents information
+  system operations that are permitted to transfer and resume at an alternate
+  processing sites for essential missions/business functions when the primary
+  processing capabilities are unavailable. DoD has determined the information
+  system operations are not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Contingency plan, referencing list of operations that are permitted to
+  transfer and resume at an alternate processing sites section
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented information system operations to ensure the organization being
+  inspected/assessed defines information system operations that are permitted to
+  transfer and resume at an alternate processing sites for essential
+  missions/business functions when the primary processing capabilities are
+  unavailable. DoD has determined the information system operations are not
+  appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: "Not Applicable to UDS technology stack. (Similar to CP-6, having an alternate processing environment is an enterprise consideration. UDS could be re-deployed to an alternate site if needed, but managing that site is outside UDSâ\x80\x99s domain.)"

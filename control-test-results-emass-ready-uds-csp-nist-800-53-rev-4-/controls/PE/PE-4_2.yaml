@@ -1,0 +1,101 @@
+family: PE
+control-acronym: PE-4
+control-information: >-
+  Description:
+
+  The organization controls physical access to [Assignment: organization-defined
+  information system distribution and transmission lines] within organizational
+  facilities using [Assignment: organization-defined security safeguards].
+
+
+  Supplemental Guidance:
+
+  Physical security safeguards applied to information system distribution and
+  transmission lines help to prevent accidental damage, disruption, and physical
+  tampering. In addition, physical safeguards may be necessary to help prevent
+  eavesdropping or in transit modification of unencrypted transmissions.
+  Security safeguards to control physical access to system distribution and
+  transmission lines include, for example: (i) locked wiring closets; (ii)
+  disconnected or locked spare jacks; and/or (iii) protection of cabling by
+  conduit or cable trays. Related controls: MP-2, MP-4, PE-2, PE-3, PE-5, SC-7,
+  SC-8.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Physical and environmental protection policy;
+  procedures addressing access control for transmission medium; information
+  system design documentation; facility communications and wiring diagrams; list
+  of physical security safeguards applied to information system distribution and
+  transmission lines; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with physical access control
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for access control to
+  distribution and transmission lines; automated mechanisms/security safeguards
+  supporting and/or implementing access control to distribution and transmission
+  lines].
+
+
+  Justification to Select: 
+
+
+  Added by [r4] DoD Level 5 - FedRAMP HBL / FedRAMP+ Overlay: Included in the
+  FedRAMP HIGH Baseline, and included in CNSSI 1253 MMM.
+
+
+  FedRAMP HIGH PA accepted for Level 5 with additional FedRAMP+ C/CE assessment.
+
+
+  CNSSI 1253 MMM does not apply to commercial off-premises CSPs/CSOs.
+
+
+  FedRAMP Justification: Included in NIST High Baseline, Rev 4 and FedRAMP
+  Moderate Baseline, Rev 4
+control-implementation-status: Inherited
+security-control-designation: Common
+control-implementation-narrative: Can Be Inherited from CSP...
+ap-acronym: PE-4.2
+cci: 2930
+cci-definition: >-
+  002930: The organization defines information system distribution and
+  transmission lines within organizational facilities to control physical access
+  using organization-defined security safeguards.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents information
+  system distribution and transmission lines within organizational facilities to
+  control physical access using organization-defined security safeguards. If
+  transmission lines carry classified information, a protected distribution
+  system (PDS) must be used to transmit unencrypted classified information
+  through an area of lesser classification or control. For additional
+  information, see NSTISSI No. 7003. DoD has determined the information system
+  distribution and transmission lines are not appropriate to define at the
+  Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  2.) Facility access policy and procedures
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented information system distribution and transmission lines to ensure
+  the organization being inspected/assessed defines information system
+  distribution and transmission lines within organizational facilities to
+  control physical access using organization-defined security safeguards. DoD
+  has determined the information system distribution and transmission lines are
+  not appropriate to define at the Enterprise level.
+inherited: AWS GovCloud L5 Cloud Service Provider Package
+remote-inheritance-instance: Cloud
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

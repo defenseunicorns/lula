@@ -1,0 +1,92 @@
+family: SI
+control-acronym: SI-12
+control-information: >-
+  Description:
+
+  The organization handles and retains information within the information system
+  and information output from the system in accordance with applicable federal
+  laws, Executive Orders, directives, policies, regulations, standards, and
+  operational requirements.
+
+
+  Supplemental Guidance:
+
+  Information handling and retention requirements cover the full life cycle of
+  information, in some cases extending beyond the disposal of information
+  systems. The National Archives and Records Administration provides guidance on
+  records retention. Related controls: AC-16, AU-5, AU-11, MP-2, MP-4.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; federal laws,
+  Executive Orders, directives, policies, regulations, standards, and
+  operational requirements applicable to information handling and retention;
+  media protection policy and procedures; procedures addressing information
+  system output handling and retention; information retention records, other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  information handling and retention; organizational personnel with information
+  security responsibilities/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for information handling and
+  retention; automated mechanisms supporting and/or implementing information
+  handling and retention].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: SI-12.2
+cci: 1678
+cci-definition: >-
+  001678: The organization retains information within the information system and
+  information output from the system in accordance with applicable federal laws,
+  Executive Orders, directives, policies, regulations, standards, and
+  operational requirements.
+implementation-guidance: >-
+  The organization being inspected/assessed identifies and documents federal
+  laws, Executive Orders, directives, policies, regulations, standards, and
+  operational requirements which apply to the information within the information
+  system. The organization documents and implements a process to retain
+  information IAW those documented federal laws, Executive Orders, directives,
+  policies, regulations, standards, and operational requirements.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System security plan.
+
+  2.) Documentation pertaining to list of applicable federal laws, Executive
+  Orders, directives, policies, regulations, standards, and operational
+  requirements within the information system and documented processes.
+
+  3.) Process documentation for handling information within the information
+  system and information output from the system in accordance with applicable
+  federal laws, Executive Orders, directives, policies, regulations, standards,
+  and operational requirements.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented list of applicable federal laws, Executive Orders, directives,
+  policies, regulations, standards, and operational requirements which apply to
+  the information within the information system, as well as the documented
+  process for information retention to ensure the organization being
+  inspected/assessed retains information within the information system and
+  information output from the system in accordance with applicable federal laws,
+  Executive Orders, directives, policies, regulations, standards, and
+  operational requirements.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  UDS handles and maintains information according to organizational requirements
+  but is dependent on the data being supported. Typically UDS setups configure
+  data and backups to be maintained for one year but can be configured for
+  longer.
+uds-alignment: Velero, Loki

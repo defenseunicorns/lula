@@ -1,0 +1,77 @@
+family: AC
+control-acronym: AC-10
+control-information: >-
+  Description:
+
+  The information system limits the number of concurrent sessions for each
+  [Assignment: organization-defined account and/or account type] to [Assignment:
+  organization-defined number].
+
+
+  Supplemental Guidance:
+
+  Organizations may define the maximum number of concurrent sessions for
+  information system accounts globally, by account type (e.g., privileged user,
+  non-privileged user, domain, specific application), by account, or a
+  combination. For example, organizations may limit the number of concurrent
+  sessions for system administrators or individuals working in particularly
+  sensitive domains or mission-critical applications. This control addresses
+  concurrent sessions for information system accounts and does not address
+  concurrent sessions by single users via multiple system accounts.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing concurrent
+  session control; information system design documentation; information system
+  configuration settings and associated documentation; security plan; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing access control policy
+  for concurrent session control].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  AC-10.1,CCI-000054,Local
+  AC-10.2,CCI-000055,Local
+  AC-10.3,CCI-002252,DoD Organization or Service Common Control Package...
+ap-acronym: AC-10.2
+cci: 55
+cci-definition: >-
+  000055: The organization defines the maximum number of concurrent sessions to
+  be allowed for each organization-defined account and/or account type.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the maximum
+  number of concurrent sessions to be allowed for each organization-defined
+  account and/or account type. The maximum number of concurrent sessions should
+  be defined based upon the systems operational environment and mission needs.
+  DoD has determined the maximum number is not appropriate to define at the
+  Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that defines the maximum number of
+  concurrent sessions to be allowed for each organization-defined account and/or
+  account type.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented maximum number to ensure the organization being inspected/assessed
+  defines the maximum number of concurrent sessions to be allowed for each
+  organization-defined account and/or account type. DoD has determined the
+  maximum number is not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "UDS effectively limits the number of concurrent user sessions through its centralized identity management solution, Keycloak. Administrators explicitly configure this in the Keycloak administrative interface by navigating to Authentication â\x86\x92 Sessions â\x86\x92 Realm Sessions and setting the \"Session Limits\" parameters, specifically the \"Max Sessions\" field. These settings allow the enforcement of maximum concurrent session limits per individual user or defined account types, aligning precisely with organizational policy. Once configured, Keycloak automatically enforces these session constraints by terminating or preventing additional sessions beyond the defined limit."
+uds-alignment: Keycloak

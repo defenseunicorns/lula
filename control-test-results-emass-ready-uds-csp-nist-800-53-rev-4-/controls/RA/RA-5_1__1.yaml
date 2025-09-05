@@ -1,0 +1,78 @@
+family: RA
+control-acronym: RA-5(1)
+control-information: >-
+  Description:
+
+  The organization employs vulnerability scanning tools that include the
+  capability to readily update the information system vulnerabilities to be
+  scanned.
+
+
+  Supplemental Guidance:
+
+  The vulnerabilities to be scanned need to be readily updated as new
+  vulnerabilities are discovered, announced, and scanning methods developed.
+  This updating process helps to ensure that potential vulnerabilities in the
+  information system are identified and addressed as quickly as possible.
+  Related controls: SI-3, SI-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Procedures addressing vulnerability scanning; security
+  plan; security assessment report; vulnerability scanning tools and associated
+  configuration documentation; vulnerability scanning results; patch and
+  vulnerability management records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with vulnerability scanning
+  responsibilities; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for vulnerability scanning;
+  automated mechanisms/tools supporting and/or implementing vulnerability
+  scanning].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: RA-5(1).1
+cci: 1062
+cci-definition: >-
+  001062: The organization employs vulnerability scanning tools that include the
+  capability to readily update the information system vulnerabilities to be
+  scanned.
+implementation-guidance: >-
+  The organization being inspected/assessed will employ scanning tools that
+  maintain currency with industry standard information system vulnerabilities to
+  ensure that scanning activities are conducted with the most up to date list of
+  known vulnerabilities to include USCYBERCOM issued IAVMs.
+
+  DoD has provided an enterprise scanning tool that fully meets this
+  requirement. Organizations that choose not to use the enterprise scanning tool
+  must identify which scanning tool they are using and ensure that it meets
+  these requirements.
+
+  Recommended Compelling Evidence:
+
+  1.) Documentation that scanning tool being used can be updated.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment will:
+
+  1. If the inspected organization is using the DoD provided enterprise scanning
+  tool, compliance with this control is complete.
+
+  2. Validate the identified tool in use by the inspected organization is able
+  to maintain current up to date information system vulnerability data.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

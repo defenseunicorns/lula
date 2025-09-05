@@ -1,0 +1,121 @@
+family: AC
+control-acronym: AC-4
+control-information: >-
+  Description:
+
+  The information system enforces approved authorizations for controlling the
+  flow of information within the system and between interconnected systems based
+  on [Assignment: organization-defined information flow control policies].
+
+
+  Supplemental Guidance:
+
+  Information flow control regulates where information is allowed to travel
+  within an information system and between information systems (as opposed to
+  who is allowed to access the information) and without explicit regard to
+  subsequent accesses to that information. Flow control restrictions include,
+  for example, keeping export-controlled information from being transmitted in
+  the clear to the Internet, blocking outside traffic that claims to be from
+  within the organization, restricting web requests to the Internet that are not
+  from the internal web proxy server, and limiting information transfers between
+  organizations based on data structures and content. Transferring information
+  between information systems representing different security domains with
+  different security policies introduces risk that such transfers violate one or
+  more domain security policies. In such situations, information owners/stewards
+  provide guidance at designated policy enforcement points between
+  interconnected systems. Organizations consider mandating specific
+  architectural solutions when required to enforce specific security policies.
+  Enforcement includes, for example: (i) prohibiting information transfers
+  between interconnected systems (i.e., allowing access only); (ii) employing
+  hardware mechanisms to enforce one-way information flows; and (iii)
+  implementing trustworthy regrading mechanisms to reassign security attributes
+  and security labels.
+
+  Organizations commonly employ information flow control policies and
+  enforcement mechanisms to control the flow of information between designated
+  sources and destinations (e.g., networks, individuals, and devices) within
+  information systems and between interconnected systems. Flow control is based
+  on the characteristics of the information and/or the information path.
+  Enforcement occurs, for example, in boundary protection devices (e.g.,
+  gateways, routers, guards, encrypted tunnels, firewalls) that employ rule sets
+  or establish configuration settings that restrict information system services,
+  provide a packet-filtering capability based on header information, or
+  message-filtering capability based on message content (e.g., implementing key
+  word searches or using document characteristics). Organizations also consider
+  the trustworthiness of filtering/inspection mechanisms (i.e., hardware,
+  firmware, and software components) that are critical to information flow
+  enforcement. Control enhancements 3 through 22 primarily address cross-domain
+  solution needs which focus on more advanced filtering techniques, in-depth
+  analysis, and stronger flow enforcement mechanisms implemented in cross-domain
+  products, for example, high-assurance guards. Such capabilities are generally
+  not available in commercial off-the-shelf information technology products.
+  Related controls: AC-3, AC-17, AC-19, AC-21, CM-6, CM-7, SA-8, SC-2, SC-5,
+  SC-7, SC-18.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; information flow control
+  policies; procedures addressing information flow enforcement; information
+  system design documentation; information system configuration settings and
+  associated documentation; information system baseline configuration; list of
+  information flow authorizations; information system audit records; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities; system developers].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing information flow
+  enforcement policy].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-4.5
+cci: 1550
+cci-definition: >-
+  001550: The organization defines approved authorizations for controlling the
+  flow of information within the system.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents approved
+  authorizations for controlling the flow of information within the system.
+
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated access control policy.
+
+  2.) Signed and dated data flow diagram.
+
+  3.) Signed and dated documentation that defines approved authorizations for
+  controlling the flow of information
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented approved authorizations to ensure the organization being
+  inspected/assessed defines approved authorizations for controlling the flow of
+  information within the system.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  UDS information flow control policies are achieved through network
+  segmentation and service mesh policies. Istio can implement policies that
+  restrict services from talking to each other except as allowed (for example,
+  service A cannot call database B unless a policy allows it). Also, NeuVector
+  provides Layer-7 firewalling between containers, so even if Kubernetes
+  networking would allow two pods to communicate, NeuVector can block flows that
+  violate defined security policies or that are not part of a learned normal
+  behavior. This means UDS can enforce that data only flows between components
+  that should exchange information. UDS covers typical use cases (e.g.,
+  preventing a dev namespace service from contacting a prod database) via
+  network policy, but it does not inherently label data or enforce policy by
+  data content. UDS meets the core intent (network-level info flow control) by
+  segmenting and gating traffic.
+uds-alignment: Istio

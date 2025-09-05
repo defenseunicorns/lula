@@ -1,0 +1,86 @@
+family: CM
+control-acronym: CM-5(5)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Limits privileges to change information system components and
+  system-related information within a production or operational environment; and
+
+  (b) Reviews and reevaluates privileges [Assignment: organization-defined
+  frequency].
+
+
+  Supplemental Guidance:
+
+  In many organizations, information systems support multiple core
+  missions/business functions. Limiting privileges to change information system
+  components with respect to operational systems is necessary because changes to
+  a particular information system component may have far-reaching effects on
+  mission/business processes supported by the system where the component
+  resides. The complex, many-to-many relationships between systems and
+  mission/business processes are in some cases, unknown to developers. Related
+  control: AC-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Configuration management policy; procedures addressing
+  access restrictions for changes to the information system; configuration
+  management plan; security plan; information system design documentation;
+  information system architecture and configuration documentation; information
+  system configuration settings and associated documentation; user privilege
+  reviews; user privilege recertifications; change control records; information
+  system audit records; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for managing access restrictions
+  to change; automated mechanisms supporting and/or implementing access
+  restrictions for change].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  CM-5(5).1,CCI-001753,Local
+  CM-5(5).2,CCI-001754,Local
+  CM-5(5).3,CCI-001827,DoD Organization or Service Common Control Package
+  CM-5(5).4,CCI-001828,DoD Organization or Service Common Control Package
+  CM-5(5).5,CCI-001829,Local
+  CM-5(5).6,CCI-001830,Local...
+ap-acronym: CM-5(5).5
+cci: 1829
+cci-definition: >-
+  001829: The organization reviews information system privileges per
+  organization defined frequency.
+implementation-guidance: >-
+  The organization being inspected/assessed reviews information system
+  privileges every 90 days. The organization must maintain the reviews as an
+  audit trail. DoD has defined the frequency as every 90 days.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated documentation that defines a process to review
+  information system privileges every 90 days
+
+  2.) Audit trail of reviews
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  audit trail of reviews to ensure the organization being inspected/assessed
+  reviews information system privileges every 90 days . DoD has defined the
+  frequency as every 90 days.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (Though UDS provides the audit trail
+  the organization must assign personnel to complete a review of the data every
+  90 days.)

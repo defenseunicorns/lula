@@ -1,0 +1,80 @@
+family: SI
+control-acronym: SI-7(1)
+control-information: >-
+  Description:
+
+  The information system performs an integrity check of [Assignment:
+  organization-defined software, firmware, and information] [Selection (one or
+  more): at startup; at [Assignment: organization-defined transitional states or
+  security-relevant events]; [Assignment: organization-defined frequency]].
+
+
+  Supplemental Guidance:
+
+  Security-relevant events include, for example, the identification of a new
+  threat to which organizational information systems are susceptible, and the
+  installation of new hardware, software, or firmware. Transitional states
+  include, for example, system startup, restart, shutdown, and abort.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: System and information integrity policy; procedures
+  addressing software, firmware, and information integrity; information system
+  design documentation; information system configuration settings and associated
+  documentation; integrity verification tools and associated documentation;
+  records of integrity scans; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with responsibility for
+  software, firmware, and/or information integrity; organizational personnel
+  with information security responsibilities; system/network administrators;
+  system developer].
+
+
+  Test: [SELECT FROM: Software, firmware, and information integrity verification
+  tools].
+control-implementation-status: Implemented
+security-control-designation: Hybrid
+control-implementation-narrative: |-
+  SI-7(1).1,CCI-002705,Local
+  SI-7(1).2,CCI-002706,Organization AWS Cloud Brokerage Package
+  SI-7(1).3,CCI-002707,Local
+  SI-7(1).4,CCI-002708,Local
+  SI-7(1).5,CCI-002709,DoD Organization or Service Common Control Package
+  SI-7(1).6,CCI-002710,Local
+  SI-7(1).7,CCI-002711,Organization AWS Cloud Brokerage Package
+  SI-7(1).8,CCI-002712,Local...
+ap-acronym: SI-7(1).1
+cci: 2705
+cci-definition: >-
+  002705: The organization defines the software on which integrity checks will
+  be performed.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the software
+  on which integrity checks will be performed. DoD has determined the software
+  is not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated System security plan defines the software which will be
+  subjected to integrity verification tools to check for unauthorized changes.
+
+  2.) Implementation documentation of integrity verification tools that will
+  check the firmware for unauthorized changes.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented software to ensure the organization being inspected/assessed
+  defines the firmware on which integrity checks will be performed. DoD has
+  determined the software is not appropriate to define at the Enterprise level.
+inherited: Local
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: "UDS provides inherent capabilities to support integrity checking through its containerized deployment model and Infrastructure as Code (IaC) practices. Specifically, all deployed software components within UDS including Keycloak, Istio, and core Kubernetes resources are packaged and distributed via signed and version-controlled Zarf packages, which inherently include cryptographic hashes to verify software integrity prior to deployment. Thereâ\x80\x99s confidence the code running is exactly what was published by the provider. Configuration Integrity is done through Pepr policies enforce that Kubernetes resources maintain expected settings (e.g., images with known good digests, certain labels present). If someone tried to deploy an unapproved image, the admission controller would reject it. All communications are integrity-protected (per SC-8) and data at rest can be encrypted (SC-28). Also, version control of IaC means any config change is tracked. UDS ensures that the systemâ\x80\x99s software and information cannot be altered undetectably. If an unauthorized change occurs, it will either be prevented or logged/alerted."
+uds-alignment: OpenTofu, Zarf, Pepr

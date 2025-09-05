@@ -1,0 +1,77 @@
+family: MP
+control-acronym: MP-6(8)
+control-information: >-
+  Description:
+
+  The organization provides the capability to purge/wipe information from
+  [Assignment: organization-defined information systems, system components, or
+  devices] either remotely or under the following conditions: [Assignment:
+  organization-defined conditions].
+
+
+  Supplemental Guidance:
+
+  This control enhancement protects data/information on organizational
+  information systems, system components, or devices (e.g., mobile devices) if
+  such systems, components, or devices are obtained by unauthorized individuals.
+  Remote purge/wipe commands require strong authentication to mitigate the risk
+  of unauthorized individuals purging/wiping the system/component/device. The
+  purge/wipe function can be implemented in a variety of ways including, for
+  example, by overwriting data/information multiple times or by destroying the
+  key necessary to decrypt encrypted data.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information system media protection policy; procedures
+  addressing media sanitization and disposal; information system design
+  documentation; information system configuration settings and associated
+  documentation; media sanitization records; audit records; other relevant
+  documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information system
+  media sanitization responsibilities; organizational personnel with information
+  security responsibilities; system/network administrators].
+
+
+  Test: [SELECT FROM: Organizational processes for purging/wiping media;
+  automated mechanisms supporting and/or implementing purge/wipe capabilities].
+control-implementation-status: Not Applicable
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: MP-6(8).2
+cci: 2576
+cci-definition: >-
+  002576: The organization defines conditions in which information from
+  organization-defined information systems, system components, or devices should
+  be purged/wiped.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents conditions in
+  which information from organization-defined information systems, system
+  components, or devices should be purged/wiped. DoD has determined the
+  conditions are not appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated SOP or TTP for purging/wiping of organization-defined
+  information systems
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented conditions to ensure the organization being inspected/assessed
+  defines conditions in which information from organization-defined information
+  systems, system components, or devices should be purged/wiped. DoD has
+  determined the conditions are not appropriate to define at the Enterprise
+  level.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (UDS does not have a remote or secure
+  wipe function and would require the device to be wiped by third party tool
+  integrated with UDS.)

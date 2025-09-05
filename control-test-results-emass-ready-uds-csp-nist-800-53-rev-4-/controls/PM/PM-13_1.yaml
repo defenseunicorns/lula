@@ -1,0 +1,86 @@
+family: PM
+control-acronym: PM-13
+control-information: >-
+  Description:
+
+  The organization establishes an information security workforce development and
+  improvement program.
+
+
+  Supplemental Guidance:
+
+  Information security workforce development and improvement programs include,
+  for example: (i) defining the knowledge and skill levels needed to perform
+  information security duties and tasks; (ii) developing role-based training
+  programs for individuals assigned information security roles and
+  responsibilities; and (iii) providing standards for measuring and building
+  individual qualifications for incumbents and applicants for information
+  security-related positions. Such workforce programs can also include
+  associated information security career paths to encourage: (i) information
+  security professionals to advance in the field and fill positions with greater
+  responsibility; and (ii) organizations to fill information security-related
+  positions with qualified personnel. Information security workforce development
+  and improvement programs are complementary to organizational security
+  awareness and training programs. Information security workforce development
+  and improvement programs focus on developing and institutionalizing core
+  information security capabilities of selected personnel needed to protect
+  organizational operations, assets, and individuals. Related controls: AT-2,
+  AT-3.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Information security program plan; information security
+  workforce development and improvement program documentation; procedures for
+  the information security workforce development and improvement program; other
+  relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with information security
+  program planning and plan implementation responsibilities; organizational
+  personnel responsible for the information security workforce development and
+  improvement program; organizational personnel with information security
+  responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for implementing information
+  security workforce development and improvement program; automated mechanisms
+  supporting and/or implementing the information security workforce development
+  and improvement program].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: ...
+ap-acronym: PM-13.1
+cci: 2997
+cci-definition: >-
+  002997: The organization establishes an information security workforce
+  development and improvement program.
+implementation-guidance: >-
+  DoD 8570.01-M, "Information Assurance Workforce Improvement Program" meets the
+  DoD requirement to establish an information security workforce development and
+  improvement program.
+
+  DoD components are automatically complaint with this CCI as they are covered
+  at the DoD level, DoDI 8570.01-M.
+
+  Recommended Compelling Evidence:
+
+  Automatically compliant per DoDI 8570.01-M.
+assessment-procedures: >-
+  DoD 8570.01-M meets the DoD requirement to establish an information security
+  workforce development and improvement program.
+
+  DoD components are automatically complaint with this CCI as they are covered
+  at the DoD level, DoDI 8570.01-M.
+inherited: DoD Organization or Service Common Control Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

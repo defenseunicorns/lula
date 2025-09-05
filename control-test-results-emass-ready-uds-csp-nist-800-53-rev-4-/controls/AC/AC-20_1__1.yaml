@@ -1,0 +1,65 @@
+family: AC
+control-acronym: AC-20(1)
+control-information: >-
+  Description:
+
+  The organization permits authorized individuals to use an external information
+  system to access the information system or to process, store, or transmit
+  organization-controlled information only when the organization
+
+  (a) Verifies the implementation of required security controls on the external
+  system as specified in the organization's information security policy and
+  security plan; or
+
+  (b) Retains approved information system connection or processing agreements
+  with the organizational entity hosting the external information system.
+
+
+  Supplemental Guidance:
+
+  This control enhancement recognizes that there are circumstances where
+  individuals using external information systems (e.g., contractors, coalition
+  partners) need to access organizational information systems. In those
+  situations, organizations need confidence that the external information
+  systems contain the necessary security safeguards (i.e., security controls),
+  so as not to compromise, damage, or otherwise harm organizational information
+  systems. Verification that the required security controls have been
+  implemented can be achieved, for example, by third-party, independent
+  assessments, attestations, or other means, depending on the confidence level
+  required by organizations. Related control: CA-2.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing the use of
+  external information systems; security plan; information system connection or
+  processing agreements; account management documents; other relevant documents
+  or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing limits on use of
+  external information systems].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-20(1).1
+cci: 2333
+cci-definition: "002333: The organization permits authorized individuals to use an external information system to access the information system only when the organization verifies the implementation of required security controls on the external system as specified in the organizationâ\x80\x99s information security policy and security plan."
+implementation-guidance: "The organization being inspected/assessed documents and implements a process to permit authorized individuals to use an external information system to access the information system only when the organization verifies the implementation of required security controls on the external system as specified in the organizationâ\x80\x99s information security policy and security plan.\n\nRecommended Compelling Evidence:\n1.) Signed and dated system security (SSP)\n2.) Signed and dated MOU/MOA with any external information systems"
+assessment-procedures: "The organization conducting the inspection/assessment obtains and examines the documented process to ensure the organization being inspected/assessed permits authorized individuals to use an external information system to access the information system only when the organization verifies the implementation of required security controls on the external system as specified in the organizationâ\x80\x99s information security policy and security plan."
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (An MOU/MOA must be written according
+  to the organizational requirements and is handled outside of the system though
+  technical access can be enforced by UDS.)

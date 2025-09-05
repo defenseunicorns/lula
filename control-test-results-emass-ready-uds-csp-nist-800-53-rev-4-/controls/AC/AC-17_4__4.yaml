@@ -1,0 +1,76 @@
+family: AC
+control-acronym: AC-17(4)
+control-information: >-
+  Description:
+
+  The organization:
+
+  (a) Authorizes the execution of privileged commands and access to
+  security-relevant information via remote access only for [Assignment:
+  organization-defined needs]; and
+
+  (b) Documents the rationale for such access in the security plan for the
+  information system.
+
+
+  Supplemental Guidance:
+
+  Related control: AC-6.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Access control policy; procedures addressing remote
+  access to the information system; information system configuration settings
+  and associated documentation; security plan; information system audit records;
+  other relevant documents or records].
+
+
+  Interview: [SELECT FROM: System/network administrators; organizational
+  personnel with information security responsibilities].
+
+
+  Test: [SELECT FROM: Automated mechanisms implementing remote access
+  management].
+control-implementation-status: Inherited
+security-control-designation: Hybrid
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: AC-17(4).4
+cci: 2318
+cci-definition: >-
+  002318: The organization defines the operational needs when access to
+  security-relevant information via remote access is to be authorized.
+implementation-guidance: >-
+  The organization being inspected/assessed defines and documents the
+  operational needs when access to security-relevant information via remote
+  access is to be authorized. DoD has determined the operational needs are not
+  appropriate to define at the Enterprise level.
+
+  Recommended Compelling Evidence:
+
+  1.) Signed and dated access control policy, which defines the operational
+  needs when access to security-relevant information via remote access is to be
+  authorized.
+
+  2.) Signed and dated system security plan (SSP)
+
+  3.) Signed and dated privileged user agreement
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented operational needs to ensure the organization being
+  inspected/assessed defines the operational needs when access to
+  security-relevant information via remote access is to be authorized. DoD has
+  determined the operational needs are not appropriate to define at the
+  Enterprise level.
+inherited: Organization AWS Cloud Brokerage Package
+remote-inheritance-instance: '-'
+compliance-status: Compliant
+test-results: >-
+  This control has been inherited and will receive test results from the
+  providing system or Common Control Package.

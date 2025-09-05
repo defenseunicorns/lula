@@ -1,0 +1,92 @@
+family: RA
+control-acronym: RA-2
+control-information: >-
+  Description:
+
+  The organization:
+
+  a. Categorizes information and the information system in accordance with
+  applicable federal laws, Executive Orders, directives, policies, regulations,
+  standards, and guidance;
+
+  b. Documents the security categorization results (including supporting
+  rationale) in the security plan for the information system; and
+
+  c. Ensures that the security categorization decision is reviewed and approved
+  by the authorizing official or authorizing official designated representative.
+
+
+  Supplemental Guidance:
+
+  Clearly defined authorization boundaries are a prerequisite for effective
+  security categorization decisions. Security categories describe the potential
+  adverse impacts to organizational operations, organizational assets, and
+  individuals if organizational information and information systems are
+  comprised through a loss of confidentiality, integrity, or availability.
+  Organizations conduct the security categorization process as an
+  organization-wide activity with the involvement of chief information officers,
+  senior information security officers, information system owners,
+  mission/business owners, and information owners/stewards. Organizations also
+  consider the potential adverse impacts to other organizations and, in
+  accordance with the USA PATRIOT Act of 2001 and Homeland Security Presidential
+  Directives, potential national-level adverse impacts. Security categorization
+  processes carried out by organizations facilitate the development of
+  inventories of information assets, and along with CM-8, mappings to specific
+  information system components where information is processed, stored, or
+  transmitted. Related controls: CM-8, MP-4, RA-3, SC-7.
+
+
+  Potential Assessment Methods and Objectives:
+
+  The below information from the NIST SP 800-53 Revision 4 Security Catalog is
+  intended to provide additional optional mechanisms to take into account when
+  reviewing this Security Control. Assessments of the individual security
+  requirements must still include a response to the specific procedures/guidance
+  stated in the correlated Assessment Procedures.
+
+  Examine: [SELECT FROM: Risk assessment policy; security planning policy and
+  procedures; procedures addressing security categorization of organizational
+  information and information systems; security plan; security categorization
+  documentation; other relevant documents or records].
+
+
+  Interview: [SELECT FROM: Organizational personnel with security categorization
+  and risk assessment responsibilities; organizational personnel with
+  information security responsibilities].
+
+
+  Test: [SELECT FROM: Organizational processes for security categorization].
+control-implementation-status: Implemented
+security-control-designation: System-Specific
+control-implementation-narrative: Control compliance provided by System Owner...
+ap-acronym: RA-2.2
+cci: 1046
+cci-definition: >-
+  001046: The organization documents the security categorization results
+  (including supporting rationale) in the security plan for the information
+  system.
+implementation-guidance: >-
+  The organization being inspected/assessed documents the security
+  categorization results (including supporting rationale) in the security plan
+  for the information system IAW CNSSI 1253. 
+
+
+  Recommended Compelling Evidence:
+
+  1.) System security plan (SSP).
+
+  2.) Reference to system security plan (SSP) section pertaining to Risk
+  Assessment Implementation and reference a procedure for categorizing
+  information.
+assessment-procedures: >-
+  The organization conducting the inspection/assessment obtains and examines the
+  documented security categorization results to ensure the organization being
+  inspected/assessed documents the security categorization results (including
+  supporting rationale) in the security plan for the information system IAW
+  CNSSI 1253.
+inherited: Local
+remote-inheritance-instance: '-'
+test-results: >-
+  Not Applicable to UDS technology stack. (The system and data categorization is
+  typically documented on an organizational template or in the eMASS
+  Categorization tab which lives outside of UDS.)
