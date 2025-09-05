@@ -3,6 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { ExistingControlSets, SpreadsheetImport } from '$components/setup';
 	import { appState, wsClient } from '$lib/websocket';
+	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
 
 	let activeTab: 'import' | 'existing' = 'import'; // Default to import
@@ -85,51 +86,37 @@
 		console.log('Starting control set switch to:', path);
 		isSwitching = true;
 
-		// Store the current state to detect changes
-		let initialPath = '';
-		const unsubscribeInitial = appState.subscribe((state: any) => {
-			initialPath = state.currentPath || '';
-		});
-		// Immediately unsubscribe after getting the initial value
-		unsubscribeInitial();
-
 		try {
-			// Use WebSocket to switch control set (now async)
+			// Send the switch command to WebSocket
 			await wsClient.switchControlSet(path);
 			console.log('WebSocket command sent, waiting for state update...');
 
-			// Wait for the state to update via WebSocket
-			let hasUpdated = false;
-			let unsubscribe: (() => void) | null = null;
-			
-			unsubscribe = appState.subscribe((state: any) => {
-				console.log('State check - currentPath:', state.currentPath, 'looking for:', path);
-				// Check if we're already on this control set or if the switch completed
-				if (state.currentPath && state.currentPath.includes(path)) {
-					// If initialPath already contains the path, we're already on this control set
-					// If isSwitchingControlSet is false, the switch completed
-					if (initialPath.includes(path) || !state.isSwitchingControlSet) {
-						if (!hasUpdated) {
-							hasUpdated = true;
-							console.log('Control set switch successful, navigating home...');
-							if (unsubscribe) unsubscribe();
-							isSwitching = false;
-							// Use SvelteKit navigation instead of hard reload
-							goto('/');
-						}
+			// Wait for the actual state update to complete
+			await new Promise<void>((resolve) => {
+				let checkCount = 0;
+				const maxChecks = 50; // 5 seconds max (100ms intervals)
+				
+				const checkInterval = setInterval(() => {
+					checkCount++;
+					const state = get(appState);
+					
+					// Check if the switch is complete
+					if (!state.isSwitchingControlSet && state.currentPath && state.currentPath.includes(path)) {
+						clearInterval(checkInterval);
+						console.log('Control set switch completed successfully');
+						resolve();
+					} else if (checkCount >= maxChecks) {
+						clearInterval(checkInterval);
+						console.error('Control set switch timed out');
+						alert('Control set switch timed out. Please try again.');
+						resolve();
 					}
-				}
+				}, 100);
 			});
 
-			// Add a timeout to prevent hanging forever
-			setTimeout(() => {
-				if (unsubscribe) unsubscribe();
-				if (isSwitching) {
-					console.error('Control set switch timed out');
-					isSwitching = false;
-					alert('Control set switch timed out. Please try again.');
-				}
-			}, 5000);
+			// Navigate to home page after successful switch
+			isSwitching = false;
+			goto('/');
 		} catch (error) {
 			console.error('Error switching control set:', error);
 			alert('Failed to switch control set: ' + (error as Error).message);
