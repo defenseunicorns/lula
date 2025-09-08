@@ -142,3 +142,31 @@ e2e/crds/uds-podmonitors/podmonitor-v*.ts
 # Ignore all JSON schema files in e2e
 e2e/**/*.json-schema
 e2e/*v1alpha1.ts
+
+node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Temporary framework files (processed data is kept)
+cli/frameworks/cci-data/*.zip
+

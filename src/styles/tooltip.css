@@ -1,0 +1,65 @@
+/*
+  Copyright 2025 Defense Unicorns
+  SPDX-License-Identifier: LicenseRef-Defense-Unicorns-Commercial
+*/
+@reference "tailwindcss";
+
+@layer components {
+	.tooltip {
+		@apply pointer-events-none fixed z-50 rounded bg-gray-950 p-2 text-xs text-gray-100 opacity-0 shadow-sm shadow-gray-600/40 transition-opacity duration-200;
+		z-index: 1000;
+		top: var(--group-top, 0);
+		max-width: min(320px, calc(100vw - 40px));
+		white-space: normal;
+	}
+
+	[data-tooltip-trigger]:hover .tooltip,
+	[data-tooltip-trigger]:focus-within .tooltip {
+		@apply opacity-100;
+	}
+
+	.tooltip::before {
+		content: '';
+		@apply absolute top-[16px] -translate-y-0 transform border-8 border-solid;
+	}
+
+	.tooltip-left {
+		@apply mr-2;
+		right: calc(100% - var(--group-left, 0));
+	}
+
+	.tooltip-left::before {
+		@apply -right-4 border-t-transparent border-r-transparent border-b-transparent border-l-gray-950;
+	}
+
+	.tooltip-right {
+		@apply ml-2;
+		left: var(--group-right, 0);
+	}
+
+	.tooltip-right::before {
+		@apply -left-4 border-t-transparent border-r-gray-950 border-b-transparent border-l-transparent;
+	}
+
+	.tooltip-top {
+		@apply mb-2;
+		bottom: calc(100% - var(--group-top, 0));
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	.tooltip-top::before {
+		@apply -bottom-4 left-1/2 -translate-x-1/2 border-t-gray-950 border-r-transparent border-b-transparent border-l-transparent;
+	}
+
+	.tooltip-bottom {
+		@apply mt-2;
+		top: var(--group-bottom, 0);
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	.tooltip-bottom::before {
+		@apply -top-4 left-1/2 -translate-x-1/2 border-t-transparent border-r-transparent border-b-gray-950 border-l-transparent;
+	}
+}

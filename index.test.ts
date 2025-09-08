@@ -3,7 +3,7 @@
 
 import { describe, it, expect, vi } from "vitest";
 import fs from "fs";
-import { getVersion } from "./index.js";
+import { getVersion } from "./index";
 
 vi.mock("fs", () => ({
   default: {

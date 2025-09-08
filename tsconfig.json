@@ -1,18 +1,31 @@
 {
+  "extends": "./.svelte-kit/tsconfig.json",
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
-    "lib": ["ES2022", "WebWorker"],
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "outDir": "dist",
+    "noEmit": true,
+    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "rootDir": "src",
+    "skipLibCheck": true,
+    "sourceMap": true,
     "strict": true,
+    "outDir": "dist",
     "target": "ES2022",
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
+    "types": ["vitest/globals"],
     "useUnknownInCatchVariables": false
   },
-  "include": ["src/**/*.ts"],
+  "include": [
+    ".svelte-kit/**/*.ts",
+    "cli/**/*.ts",
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/**/*.svelte",
+    "vite.config.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }

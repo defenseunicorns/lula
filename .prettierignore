@@ -1,4 +1,28 @@
-e2e/crds
-e2e/crds/**/*.ts
-e2e/generated
-generated/**/*.ts
+# Package Managers
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+bun.lock
+bun.lockb
+
+# Build outputs
+/build/
+/.svelte-kit/
+/dist/
+
+# Miscellaneous
+/static/
+
+# Data files and control sets
+*.yaml
+*.yml
+/examples/
+/imported-controls/
+/control-test-results-*/
+/nist-*/
+control-set.yaml
+controls/
+mappings/
+
+# Only format code in src and cli
+# Everything else is ignored by default

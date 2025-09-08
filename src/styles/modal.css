@@ -1,0 +1,58 @@
+/*
+  Copyright 2025 Defense Unicorns
+  SPDX-License-Identifier: LicenseRef-Defense-Unicorns-Commercial
+*/
+
+@reference "tailwindcss";
+
+@layer components {
+	/* Backdrop styling */
+	.modal-backdrop {
+		@apply fixed inset-0 z-100 hidden bg-black/70;
+	}
+
+	/* Modal content */
+	.modal-content {
+		@apply absolute z-[1000] hidden max-h-[calc(100vh-2rem)] w-[calc(100vw-2rem)] max-w-2xl overflow-auto rounded-lg border border-gray-700 bg-gray-900 p-6 shadow-xl md:w-full;
+	}
+
+	/* When modal is open, content should be visible */
+	.modal-content[aria-hidden='false'] {
+		@apply fixed !block;
+		top: 50% !important;
+		left: 50% !important;
+		transform: translate(-50%, -50%) !important;
+	}
+
+	.modal-title {
+		@apply pe-4 text-lg font-semibold text-white;
+	}
+
+	/* Close button */
+	.modal-close {
+		@apply absolute top-3 right-4 flex h-8 w-8 cursor-pointer items-center justify-center border-0 bg-transparent text-2xl leading-none text-gray-400 transition-colors hover:text-gray-300;
+	}
+
+	.modal-close:hover {
+		@apply bg-gray-600/20 text-gray-100;
+	}
+
+	/* Animation classes */
+	.modal-fade-in {
+		animation: fadeIn 0.15s ease-in-out forwards;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	/* Button styling for modals */
+	.btn {
+		@apply flex items-center rounded border border-gray-700 bg-gray-800/50 px-3 py-1 text-sm text-gray-400 transition-colors hover:border-blue-500 hover:text-blue-400;
+	}
+}

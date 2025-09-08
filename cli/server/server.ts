@@ -1,0 +1,94 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+import cors from 'cors';
+import express from 'express';
+import { existsSync, mkdirSync } from 'fs';
+import { createServer as createHttpServer } from 'http';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { initializeServerState, loadAllData, saveMappingsToFile } from './serverState';
+import spreadsheetRoutes from './spreadsheetRoutes';
+import { wsManager } from './websocketServer';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export interface ServerOptions {
+	controlSetDir: string;
+	port: number;
+	wizardMode?: boolean;
+}
+
+export async function createServer(options: ServerOptions): Promise<{
+	app: express.Application;
+	start: () => Promise<void>;
+}> {
+	const { controlSetDir, port } = options;
+
+	// Ensure control set directory exists
+	if (!existsSync(controlSetDir)) {
+		mkdirSync(controlSetDir, { recursive: true });
+	}
+
+	// Initialize server state
+	initializeServerState(controlSetDir);
+
+	// Load all data into memory
+	await loadAllData();
+
+	// Create Express app
+	const app = express();
+
+	// Middleware
+	app.use(cors());
+	app.use(express.json({ limit: '50mb' }));
+
+	// Serve static files from dist directory (build output)
+	const distPath = join(__dirname, '../dist');
+	app.use(express.static(distPath));
+
+	// API Routes
+	app.use('/api', spreadsheetRoutes);
+
+	// Serve frontend for all other routes (SPA fallback)
+	app.get('*', (req, res) => {
+		res.sendFile(join(distPath, 'index.html'));
+	});
+
+	// Create HTTP server for both Express and WebSocket
+	const httpServer = createHttpServer(app);
+
+	// Initialize WebSocket server
+	wsManager.initialize(httpServer);
+
+	return {
+		app,
+		start: () => {
+			return new Promise<void>((resolve) => {
+				httpServer.listen(port, () => {
+					console.log(`\n✨ Lula is running at http://localhost:${port}`);
+					resolve();
+				});
+			});
+		}
+	};
+}
+
+export async function startServer(
+	controlSetDir: string,
+	port: number,
+	options: { wizardMode?: boolean } = {}
+) {
+	const server = await createServer({ controlSetDir, port, ...options });
+	await server.start();
+
+	// Graceful shutdown
+	process.on('SIGINT', async () => {
+		try {
+			await saveMappingsToFile();
+		} catch (error) {
+			console.error('Error saving changes:', error);
+		}
+		process.exit(0);
+	});
+}
