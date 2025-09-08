@@ -82,6 +82,30 @@ export async function startServer(
 	const server = await createServer({ controlSetDir, port, ...options });
 	await server.start();
 
+	// Set up keyboard input handling
+	if (process.stdin.isTTY) {
+		process.stdin.setRawMode(true);
+		process.stdin.resume();
+		process.stdin.setEncoding('utf8');
+
+		console.log('\nPress ESC to close the app\n');
+
+		process.stdin.on('data', async (key) => {
+			const keyStr = key.toString();
+			// ESC key or Ctrl+C
+			if (keyStr === '\u001b' || keyStr === '\u0003') {
+				console.log('\n\nShutting down server...');
+				try {
+					await saveMappingsToFile();
+					console.log('Changes saved successfully');
+				} catch (error) {
+					console.error('Error saving changes:', error);
+				}
+				process.exit(0);
+			}
+		});
+	}
+
 	// Graceful shutdown
 	process.on('SIGINT', async () => {
 		try {

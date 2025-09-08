@@ -35,11 +35,11 @@
   ],
   "scripts": {
     "dev": "vite dev --port 5173",
-    "dev:api": "tsx --watch index.ts --port 3000 --debug",
+    "dev:api": "tsx --watch index.ts --port 3000 --debug --open-browser false",
     "dev:full": "concurrently \"npm run dev:api\" \"npm run dev\"",
     "build": "npm run build:svelte && npm run build:cli && npm run postbuild:cli",
     "build:svelte": "vite build",
-    "build:cli": "esbuild index.ts cli/**/*.ts --bundle --platform=node --target=node22 --format=esm --outdir=dist --external:express --external:commander --external:js-yaml --external:yaml --external:isomorphic-git --external:glob --external:open --external:ws --external:cors --external:multer --external:@octokit/rest --external:undici --external:xlsx",
+    "build:cli": "esbuild index.ts cli/**/*.ts --bundle --platform=node --target=node22 --format=esm --outdir=dist --external:express --external:commander --external:js-yaml --external:yaml --external:isomorphic-git --external:glob --external:open --external:ws --external:cors --external:multer --external:@octokit/rest --external:undici --external:exceljs --external:csv-parse",
     "postbuild:cli": "cp cli-wrapper.mjs dist/lula2 && chmod +x dist/lula2",
     "preview": "vite preview",
     "prepare": "svelte-kit sync || echo ''",
@@ -56,6 +56,8 @@
     "@types/ws": "^8.18.1",
     "commander": "^14.0.0",
     "cors": "^2.8.5",
+    "csv-parse": "^6.1.0",
+    "exceljs": "^4.4.0",
     "express": "^4.21.2",
     "flowbite": "^2.5.2",
     "glob": "^10.4.5",
@@ -65,7 +67,6 @@
     "open": "^9.1.0",
     "undici": "^7.15.0",
     "ws": "^8.18.3",
-    "xlsx": "^0.18.5",
     "yaml": "^2.8.1"
   },
   "devDependencies": {
