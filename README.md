@@ -264,9 +264,9 @@ families:
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 22+
 - Git (for version history features)
-- pnpm
+- pnpm (recommended) or npm
 
 ### Local Development
 

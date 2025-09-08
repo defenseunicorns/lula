@@ -8,26 +8,29 @@ This is **Lula 2** - a Git-friendly compliance control management system built w
 
 ## Key Development Commands
 
+**Note:** This project uses pnpm as the package manager. All commands below use `pnpm`, but `npm` can also be used.
+
 ### Development Server
 
-- `npm run dev` - Start frontend development server on port 5173
-- `npm run dev:api` - Start backend API server on port 3000 (serves from current directory)
-- `npm run dev:full` - Run both frontend and backend concurrently
+- `pnpm run dev` - Start frontend development server on port 5173
+- `pnpm run dev:api` - Start backend API server on port 3000 (serves from current directory)
+- `pnpm run dev:full` - Run both frontend and backend concurrently
 
 ### Building and Testing
 
-- `npm run build` - Build both SvelteKit app and CLI for production
-- `npm run build:svelte` - Build only the SvelteKit app
-- `npm run build:cli` - Build only the CLI tool
-- `npm run preview` - Preview production build
-- `npm run test` - Run unit tests (vitest)
-- `npm run test:unit` - Run unit tests in watch mode
+- `pnpm run build` - Build both SvelteKit app and CLI for production
+- `pnpm run build:svelte` - Build only the SvelteKit app
+- `pnpm run build:cli` - Build only the CLI tool
+- `pnpm run preview` - Preview production build
+- `pnpm run test` - Run unit tests (vitest)
+- `pnpm run test:unit` - Run unit tests in watch mode
 
 ### Code Quality
 
-- `npm run lint` - Check code formatting and linting (prettier + eslint)
-- `npm run format` - Format code with prettier
-- `npm run check` - Type check with svelte-check
+- `pnpm run lint` - Check code formatting and linting (prettier + eslint)
+- `pnpm run format` - Format code with prettier
+- `pnpm run format:check` - Check code formatting without modifying files
+- `pnpm run check` - Type check with svelte-check
 
 ### CLI Tool
 

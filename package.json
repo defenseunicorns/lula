@@ -46,6 +46,7 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && tsc --noEmit",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "format": "prettier --write 'src/**/*.{ts,js,svelte}' 'cli/**/*.ts' 'index.ts'",
+    "format:check": "prettier --check 'src/**/*.{ts,js,svelte}' 'cli/**/*.ts' 'index.ts'",
     "lint": "prettier --check 'src/**/*.{ts,js,svelte}' 'cli/**/*.ts' 'index.ts' && eslint src cli",
     "test:unit": "vitest",
     "test": "npm run test:unit -- --run"
