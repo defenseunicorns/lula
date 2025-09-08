@@ -110,11 +110,6 @@
     "vitest": "^3.2.4",
     "vitest-browser-svelte": "^0.1.0"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
-  },
   "release": {
     "branches": [
       "main",
