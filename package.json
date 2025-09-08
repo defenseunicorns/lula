@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/defenseunicorns/lula-next.git"
+    "url": "git+https://github.com/defenseunicorns/lula.git"
   },
   "keywords": [
     "compliance",
@@ -21,9 +21,9 @@
   "author": "Defense Unicorns",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/defenseunicorns/lula-next/issues"
+    "url": "https://github.com/defenseunicorns/lula/issues"
   },
-  "homepage": "https://github.com/defenseunicorns/lula-next#readme",
+  "homepage": "https://github.com/defenseunicorns/lula#readme",
   "files": [
     "/src",
     "/dist",
