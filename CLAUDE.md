@@ -4,22 +4,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **Lula** - a Git-friendly compliance control management system built with SvelteKit 5. The application manages security compliance controls (like NIST 800-53) with individual YAML files per control, enabling proper version control and collaboration on compliance documentation. It is designed to be a generic way to manage
-controls of any sort, split the work of defining them, mapping them and also associating to actual source code & docs
-for tracking changes over time. Everything is persisted by git and this is intended to be run as an `npx app` command
-against a local git repo.
+This is **Lula 2** - a Git-friendly compliance control management system built with SvelteKit 5. The application manages security compliance controls (like NIST 800-53) with individual YAML files per control, enabling proper version control and collaboration on compliance documentation. It is designed to be a generic way to manage controls of any sort, split the work of defining them, mapping them and also associating to actual source code & docs for tracking changes over time. Everything is persisted by git and this is intended to be run as an `npx` command against a local git repo.
 
 ## Key Development Commands
 
-### Development Server (typically already running out-of-band)
+### Development Server
 
 - `npm run dev` - Start frontend development server on port 5173
-- `npm run dev:api` - Start backend API server on port 3000 (serves from examples/nist-800-53-v4-moderate)
+- `npm run dev:api` - Start backend API server on port 3000 (serves from current directory)
 - `npm run dev:full` - Run both frontend and backend concurrently
 
 ### Building and Testing
 
-- `npm run build` - Build for production
+- `npm run build` - Build both SvelteKit app and CLI for production
+- `npm run build:svelte` - Build only the SvelteKit app
+- `npm run build:cli` - Build only the CLI tool
 - `npm run preview` - Preview production build
 - `npm run test` - Run unit tests (vitest)
 - `npm run test:unit` - Run unit tests in watch mode
@@ -32,7 +31,11 @@ against a local git repo.
 
 ### CLI Tool
 
-- `tsx cli.ts --dir <path> --port <port>` - Start server for specific control set
+- `npx lula2` - Run the CLI tool directly (production)
+- `npx lula2 --dir <path> --port <port>` - Start server for specific control set
+- `npx lula2 crawl` - Analyze pull requests for compliance impact
+- `npx lula2 --version` - Show version
+- `tsx index.ts` - Run CLI in development mode
 
 ## Architecture
 
@@ -46,10 +49,11 @@ against a local git repo.
 
 ### Backend (Express + Node.js)
 
-- **CLI-first approach**: Express server embedded in CLI tool (`cli.ts`)
+- **CLI-first approach**: Express server embedded in CLI tool (`index.ts`)
 - **File-based storage**: Individual YAML files per control in `controls/<family>/` directories
 - **Git integration**: Built-in git history tracking for all files
 - **In-memory caching**: Controls and mappings cached for performance
+- **WebSocket support**: Real-time updates for control changes
 
 ### Data Model
 
@@ -92,9 +96,10 @@ examples/nist-800-53-v4-moderate/
 
 ### File Operations
 
-- All file operations go through `FileStore` class (`src/lib/fileStore.ts`)
-- Git operations handled by `GitHistoryUtil` (`src/lib/gitHistory.ts`)
-- Migration utilities in `src/lib/migration.ts`
+- All file operations go through `FileStore` class (`cli/server/infrastructure/fileStore.ts`)
+- Git operations handled by `GitHistoryUtil` (`cli/server/infrastructure/gitHistory.ts`)
+- Server state management in `cli/server/serverState.ts`
+- WebSocket communication in `cli/server/websocketServer.ts`
 
 ### Component Architecture
 
@@ -112,4 +117,13 @@ examples/nist-800-53-v4-moderate/
 
 - Individual YAML files per control enable meaningful diffs
 - Git history integration shows file-level changes over time
-- Migration tools help transition from monolithic files
+- Spreadsheet import with customizable field mapping
+- UUID-based mapping system for tracking code-to-control relationships
+
+## NPM Package Details
+
+- **Package name**: `lula2`
+- **Binary name**: `lula2` 
+- **Minimum Node version**: 22.0.0
+- **Package type**: ESM module
+- **Distribution**: Built CLI in `dist/` directory
