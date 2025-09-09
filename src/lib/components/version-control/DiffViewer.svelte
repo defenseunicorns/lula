@@ -19,7 +19,9 @@
 	}: Props = $props();
 
 	let isCompact = $state(compact);
-	let parsedDiff: DiffLine[] = $derived(isCompact ? getCompactDiff(parseDiff(diff)) : parseDiff(diff));
+	let parsedDiff: DiffLine[] = $derived(
+		isCompact ? getCompactDiff(parseDiff(diff)) : parseDiff(diff)
+	);
 
 	interface DiffLine {
 		type: 'context' | 'addition' | 'deletion' | 'header' | 'hunk';
