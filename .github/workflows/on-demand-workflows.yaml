@@ -21,8 +21,6 @@ on:
         type: boolean
 
     secrets:
-      CODECOV_ORG_TOKEN:
-        required: true
       CHAINGUARD_IDENTITY:
         required: false
 
