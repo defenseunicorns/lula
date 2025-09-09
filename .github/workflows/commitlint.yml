@@ -40,6 +40,9 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
 
+      - name: Ensure pnpm store exists
+        run: pnpm store path | xargs -I{} mkdir -p "{}"
+
       - name: Install commitlint
         run: npm install --save-dev @commitlint/{config-conventional,cli}
 
