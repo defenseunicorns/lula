@@ -48,8 +48,9 @@
 		"format": "prettier --write 'src/**/*.{ts,js,svelte}' 'cli/**/*.ts' 'index.ts'",
 		"format:check": "prettier --check 'src/**/*.{ts,js,svelte}' 'cli/**/*.ts' 'index.ts'",
 		"lint": "prettier --check 'src/**/*.{ts,js,svelte}' 'cli/**/*.ts' 'index.ts' && eslint src cli",
-		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run"
+		"test": "npm run test:unit -- --run --coverage",
+		"test:integration": "vitest --config integration/vitest.config.integration.ts",
+		"test:unit": "vitest"
 	},
 	"dependencies": {
 		"@octokit/rest": "^22.0.0",

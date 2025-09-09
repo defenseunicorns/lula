@@ -1,0 +1,96 @@
+# Workflows that can be called on demand
+name: on-demand-workflows
+
+on:
+  workflow_call:
+    inputs:
+      run-format:
+        description: "Run format check"
+        required: false
+        default: false
+        type: boolean
+      run-units:
+        description: "Run unit tests"
+        required: false
+        default: false
+        type: boolean
+      run-integration:
+        description: "Run integration tests"
+        required: false
+        default: false
+        type: boolean
+
+    secrets:
+      CODECOV_ORG_TOKEN:
+        required: true
+      CHAINGUARD_IDENTITY:
+        required: false
+
+permissions:
+  id-token: write # This is needed for OIDC federation.
+  contents: read
+
+jobs:
+  format:
+    if: inputs.run-format == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Use Node.js latest
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: latest
+          cache: "npm"
+      - run: pnpm ci
+      - run: pnpm run format:check
+
+  unit-test:
+    if: inputs.run-units == true
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: '22.x'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+
+      - name: Ensure pnpm store exists
+        run: pnpm store path | xargs -I{} mkdir -p "{}"
+      - run: pnpm ci
+      - run: pnpm run build
+      - run: pnpm run test:unit
+
+  integration-test:
+    if: inputs.run-integration == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: '22.x'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
+
+      - name: Ensure pnpm store exists
+        run: pnpm store path | xargs -I{} mkdir -p "{}"
+      - run: pnpm ci
+      - run: pnpm run test:integration
+        timeout-minutes: 10
