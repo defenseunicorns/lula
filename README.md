@@ -2,25 +2,20 @@
 
 <img src="static/lula.png" alt="Lula Logo" width="150" align="right" />
 
+
+> [!IMPORTANT]
+> This project is still in its early stages. Expect breaking changes.
+>
+> Looking for the original Lula OSCAL compliance validator? Go to [defenseunicorns-labs/lula1](https://github.com/defenseunicorns-labs/lula1)
+>
+> _Lula 1 is in maintenance mode and not receiving active updates or new features._
+
 [![Npm package license](https://badgen.net/npm/license/lula-next)](https://npmjs.com/package/lula-next)
 [![Known Vulnerabilities](https://snyk.io/test/npm/lula-next/badge.svg)](https://snyk.io/advisor/npm-package/lula-next)
 [![Npm package version](https://badgen.net/npm/v/lula-next)](https://npmjs.com/package/lula-next)
 [![Npm package total downloads](https://badgen.net/npm/dt/lula-next)](https://npmjs.com/package/lula-next)
 
 Bring GitOps principles to compliance management. Lula treats security controls as code, enabling teams to manage compliance frameworks (NIST 800-53, CIS, SOC2) through pull requests, code reviews, and automated workflows—just like your application code in a user-friendly web interface. Your data stays your data--Lula takes spreadsheet imports, lets you drag & drop the UI layout and version control the data as yaml automatically for you.
-
-> [!CAUTION]
-> This project is still in its early stages. Expect breaking changes.
-
-## ❓ Questions
-
-### Looking for the original Lula CLI tool?
-
-If you're looking for the original Lula OSCAL tool, please visit: [https://github.com/defenseunicorns-labs/lula1](https://github.com/defenseunicorns-labs/lula1)
-
-**Note:** _Lula 1 is in maintenance mode and not receiving active engineering support._
-
-### Why Lula 2?
 
 We built Lula 2 after discovering key limitations with the OSCAL-based approach:
 
