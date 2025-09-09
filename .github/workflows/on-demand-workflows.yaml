@@ -44,7 +44,7 @@ jobs:
       - run: pnpm ci
       - run: pnpm run format:check
 
-  test:
+  unit-test:
     if: inputs.run-units == true
     runs-on: ubuntu-latest
     strategy:
@@ -61,7 +61,7 @@ jobs:
       - run: pnpm run build
       - run: pnpm run test:unit
 
-  integration:
+  integration-test:
     if: inputs.run-integration == true
     runs-on: ubuntu-latest
     steps:
