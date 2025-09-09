@@ -100,6 +100,7 @@
     "prettier": "3.6.2",
     "prettier-plugin-svelte": "^3.4.0",
     "semantic-release": "^24.2.7",
+    "shellcheck": "^4.1.0",
     "svelte": "^5.38.7",
     "svelte-check": "^4.3.1",
     "tailwind-merge": "^3.3.1",
