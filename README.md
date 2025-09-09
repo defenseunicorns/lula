@@ -9,19 +9,22 @@
 
 Bring GitOps principles to compliance management. Lula treats security controls as code, enabling teams to manage compliance frameworks (NIST 800-53, CIS, SOC2) through pull requests, code reviews, and automated workflows—just like your application code in a user-friendly web interface. Your data stays your data--Lula takes spreadsheet imports, lets you drag & drop the UI layout and version control the data as yaml automatically for you.
 
+> [!CAUTION]
+> This project is still in its early stages. Expect breaking changes.
+
 ## ❓ Questions
 
 ### Looking for the original Lula CLI tool?
 
-If you're looking for the original Lula OSCAL validation CLI tool, please visit: [https://github.com/defenseunicorns-labs/lula1](https://github.com/defenseunicorns-labs/lula1)
+If you're looking for the original Lula OSCAL tool, please visit: [https://github.com/defenseunicorns-labs/lula1](https://github.com/defenseunicorns-labs/lula1)
 
-**Note:** _The original Lula project has been superseded by Lula 2 due to lessons learned about OSCAL complexity and the limitations of purely automated compliance testing._
+**Note:** _Lula 1 is in maintenance mode and not receiving active engineering support._
 
 ### Why Lula 2?
 
 We built Lula 2 after discovering key limitations with the OSCAL-based approach:
 
-**Challenges with Lula 1:**
+**Challenges in Lula 1:**
 - OSCAL proved too complex for most teams to work with effectively
 - Automated tests alone were insufficient for real compliance verification
 - The format made collaboration and review difficult
@@ -34,9 +37,6 @@ We built Lula 2 after discovering key limitations with the OSCAL-based approach:
 - **Change Impact Tracking**: Maps controls to actual code and tracks when changes might affect compliance
 
 This evolution reflects our learning that effective compliance management needs to be accessible to all stakeholders—not just those who can navigate complex standards or write validation code.
-
-> [!CAUTION]
-> This project is still in its early stages. Expect breaking changes.
 
 ## Why GitOps for Compliance?
 
