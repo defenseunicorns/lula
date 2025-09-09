@@ -13,7 +13,7 @@ Bring GitOps principles to compliance management. Lula treats security controls 
 
 ### Looking for the original Lula CLI tool?
 
-If you're looking for the original Lula OSCAL validation CLI tool, please visit: [https://github.com/defenseunicorns/lula1](https://github.com/defenseunicorns/lula1)
+If you're looking for the original Lula OSCAL validation CLI tool, please visit: [https://github.com/defenseunicorns-labs/lula1](https://github.com/defenseunicorns-labs/lula1)
 
 **Note:** _The original Lula project has been superseded by Lula 2 due to lessons learned about OSCAL complexity and the limitations of purely automated compliance testing._
 
@@ -300,7 +300,7 @@ Apache-2.0 - See [LICENSE](LICENSE) for details.
 
 ## Related Projects
 
-- [Lula 1 (Original CLI)](https://github.com/defenseunicorns/lula1) - OSCAL-based compliance validator CLI
+- [Lula 1 (Original CLI)](https://github.com/defenseunicorns-labs/lula1) - OSCAL-based compliance validator CLI
 - [OSCAL](https://pages.nist.gov/OSCAL/) - Open Security Controls Assessment Language
 
 ## Credits
