@@ -33,7 +33,7 @@ jobs:
     if: inputs.run-format == true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      # - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -49,7 +49,7 @@ jobs:
 
       - name: Ensure pnpm store exists
         run: pnpm store path | xargs -I{} mkdir -p "{}"
-      - run: pnpm ci
+      - run: pnpm install
       - run: pnpm run format:check
 
   unit-test:
@@ -59,7 +59,7 @@ jobs:
       matrix:
         node-version: [20, 22, 24]
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      # - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -75,15 +75,14 @@ jobs:
 
       - name: Ensure pnpm store exists
         run: pnpm store path | xargs -I{} mkdir -p "{}"
-      - run: pnpm ci
-      - run: pnpm run build
+      - run: pnpm install
       - run: pnpm run test:unit
 
   integration-test:
     if: inputs.run-integration == true
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      # - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
@@ -99,6 +98,7 @@ jobs:
 
       - name: Ensure pnpm store exists
         run: pnpm store path | xargs -I{} mkdir -p "{}"
-      - run: pnpm ci
+      - run: pnpm install
+      - run: pnpm run build
       - run: pnpm run test:integration
         timeout-minutes: 10
