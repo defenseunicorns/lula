@@ -39,10 +39,17 @@ jobs:
           node-version: '22.x'
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
 
       - name: Ensure pnpm store exists
         run: pnpm store path | xargs -I{} mkdir -p "{}"
-        
+
+      - name: Auth to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
 
       - name: Publish to NPM
         env:
