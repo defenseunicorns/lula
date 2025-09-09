@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2025-Present The Lula2 Authors
 
-import fs from "fs";
-import { Octokit } from "@octokit/rest";
-import { Command } from "commander";
-import { createHash } from "crypto";
+import fs from 'fs';
+import { Octokit } from '@octokit/rest';
+import { Command } from 'commander';
+import { createHash } from 'crypto';
 
 type FileContentResponse = {
-  content: string;
-  encoding: "base64" | string;
+	content: string;
+	encoding: 'base64' | string;
 };
 
 /**
@@ -17,27 +17,27 @@ type FileContentResponse = {
  * @returns The pull request context containing the owner, repo, and pull number.
  */
 export function getPRContext(): { owner: string; repo: string; pull_number: number } {
-  const fallbackOwner = process.env.OWNER;
-  const fallbackRepo = process.env.REPO;
-  const fallbackNumber = process.env.PULL_NUMBER;
+	const fallbackOwner = process.env.OWNER;
+	const fallbackRepo = process.env.REPO;
+	const fallbackNumber = process.env.PULL_NUMBER;
 
-  if (process.env.GITHUB_EVENT_PATH && process.env.GITHUB_REPOSITORY) {
-    const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, "utf8"));
-    const [owner, repo] = process.env.GITHUB_REPOSITORY.split("/");
-    const pull_number = event.pull_request?.number;
-    if (!pull_number) throw new Error("PR number not found in GitHub event payload.");
-    return { owner, repo, pull_number };
-  }
+	if (process.env.GITHUB_EVENT_PATH && process.env.GITHUB_REPOSITORY) {
+		const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
+		const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+		const pull_number = event.pull_request?.number;
+		if (!pull_number) throw new Error('PR number not found in GitHub event payload.');
+		return { owner, repo, pull_number };
+	}
 
-  if (!fallbackOwner || !fallbackRepo || !fallbackNumber) {
-    throw new Error("Set OWNER, REPO, and PULL_NUMBER in the environment for local use.");
-  }
+	if (!fallbackOwner || !fallbackRepo || !fallbackNumber) {
+		throw new Error('Set OWNER, REPO, and PULL_NUMBER in the environment for local use.');
+	}
 
-  return {
-    owner: fallbackOwner,
-    repo: fallbackRepo,
-    pull_number: parseInt(fallbackNumber, 10),
-  };
+	return {
+		owner: fallbackOwner,
+		repo: fallbackRepo,
+		pull_number: parseInt(fallbackNumber, 10)
+	};
 }
 
 /**
@@ -52,43 +52,43 @@ export function getPRContext(): { owner: string; repo: string; pull_number: numb
  * @returns The content of the file as a string.
  */
 export async function fetchRawFileViaAPI({
-  octokit,
-  owner,
-  repo,
-  path,
-  ref,
+	octokit,
+	owner,
+	repo,
+	path,
+	ref
 }: {
-  octokit: Octokit;
-  owner: string;
-  repo: string;
-  path: string;
-  ref: string;
+	octokit: Octokit;
+	owner: string;
+	repo: string;
+	path: string;
+	ref: string;
 }): Promise<string> {
-  const res = await octokit.repos.getContent({
-    owner,
-    repo,
-    path,
-    ref,
-    headers: {
-      accept: "application/vnd.github.v3.raw",
-    },
-  });
+	const res = await octokit.repos.getContent({
+		owner,
+		repo,
+		path,
+		ref,
+		headers: {
+			accept: 'application/vnd.github.v3.raw'
+		}
+	});
 
-  if (typeof res.data === "string") {
-    return res.data;
-  }
+	if (typeof res.data === 'string') {
+		return res.data;
+	}
 
-  if (
-    typeof res.data === "object" &&
-    res.data !== null &&
-    "content" in res.data &&
-    typeof (res.data as { content: unknown }).content === "string"
-  ) {
-    const { content } = res.data as FileContentResponse;
-    return Buffer.from(content, "base64").toString("utf-8");
-  }
+	if (
+		typeof res.data === 'object' &&
+		res.data !== null &&
+		'content' in res.data &&
+		typeof (res.data as { content: unknown }).content === 'string'
+	) {
+		const { content } = res.data as FileContentResponse;
+		return Buffer.from(content, 'base64').toString('utf-8');
+	}
 
-  throw new Error("Unexpected GitHub API response shape");
+	throw new Error('Unexpected GitHub API response shape');
 }
 
 /**
@@ -99,35 +99,35 @@ export async function fetchRawFileViaAPI({
  * @returns An array of objects containing the UUID, start line, and end line of each block.
  */
 export function extractMapBlocks(content: string): {
-  uuid: string;
-  startLine: number;
-  endLine: number;
+	uuid: string;
+	startLine: number;
+	endLine: number;
 }[] {
-  const lines = content.split("\n");
-  interface MapBlock {
-    uuid: string;
-    startLine: number;
-    endLine: number;
-  }
-  const blocks: MapBlock[] = [];
-  const stack: { uuid: string; line: number }[] = [];
+	const lines = content.split('\n');
+	interface MapBlock {
+		uuid: string;
+		startLine: number;
+		endLine: number;
+	}
+	const blocks: MapBlock[] = [];
+	const stack: { uuid: string; line: number }[] = [];
 
-  lines.forEach((line, idx) => {
-    const start = line.match(/@lulaStart\s+([a-f0-9-]+)/);
-    const end = line.match(/@lulaEnd\s+([a-f0-9-]+)/);
+	lines.forEach((line, idx) => {
+		const start = line.match(/@lulaStart\s+([a-f0-9-]+)/);
+		const end = line.match(/@lulaEnd\s+([a-f0-9-]+)/);
 
-    if (start) {
-      stack.push({ uuid: start[1], line: idx });
-    } else if (end) {
-      const last = stack.find(s => s.uuid === end[1]);
-      if (last) {
-        blocks.push({ uuid: last.uuid, startLine: last.line, endLine: idx + 1 });
-        stack.splice(stack.indexOf(last), 1);
-      }
-    }
-  });
+		if (start) {
+			stack.push({ uuid: start[1], line: idx });
+		} else if (end) {
+			const last = stack.find((s) => s.uuid === end[1]);
+			if (last) {
+				blocks.push({ uuid: last.uuid, startLine: last.line, endLine: idx + 1 });
+				stack.splice(stack.indexOf(last), 1);
+			}
+		}
+	});
 
-  return blocks;
+	return blocks;
 }
 
 /**
@@ -139,30 +139,30 @@ export function extractMapBlocks(content: string): {
  * @returns An array of objects representing the changed blocks.
  */
 export function getChangedBlocks(
-  oldText: string,
-  newText: string,
+	oldText: string,
+	newText: string
 ): {
-  uuid: string;
-  startLine: number;
-  endLine: number;
+	uuid: string;
+	startLine: number;
+	endLine: number;
 }[] {
-  const oldBlocks = extractMapBlocks(oldText);
-  const newBlocks = extractMapBlocks(newText);
-  const changed = [];
+	const oldBlocks = extractMapBlocks(oldText);
+	const newBlocks = extractMapBlocks(newText);
+	const changed = [];
 
-  for (const newBlock of newBlocks) {
-    const oldMatch = oldBlocks.find(b => b.uuid === newBlock.uuid);
-    if (!oldMatch) continue;
+	for (const newBlock of newBlocks) {
+		const oldMatch = oldBlocks.find((b) => b.uuid === newBlock.uuid);
+		if (!oldMatch) continue;
 
-    const oldSegment = oldText.split("\n").slice(oldMatch.startLine, oldMatch.endLine).join("\n");
-    const newSegment = newText.split("\n").slice(newBlock.startLine, newBlock.endLine).join("\n");
+		const oldSegment = oldText.split('\n').slice(oldMatch.startLine, oldMatch.endLine).join('\n');
+		const newSegment = newText.split('\n').slice(newBlock.startLine, newBlock.endLine).join('\n');
 
-    if (oldSegment !== newSegment) {
-      changed.push(newBlock);
-    }
-  }
+		if (oldSegment !== newSegment) {
+			changed.push(newBlock);
+		}
+	}
 
-  return changed;
+	return changed;
 }
 /**
  * Defines the "crawl" command for the CLI.
@@ -170,58 +170,58 @@ export function getChangedBlocks(
  * @returns The configured Command instance.
  */
 export function crawlCommand(): Command {
-  return new Command()
-    .command("crawl")
-    .description("Detect compliance-related changes between @lulaStart and @lulaEnd in PR files")
-    .action(async () => {
-      const { owner, repo, pull_number } = getPRContext();
-      const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+	return new Command()
+		.command('crawl')
+		.description('Detect compliance-related changes between @lulaStart and @lulaEnd in PR files')
+		.action(async () => {
+			const { owner, repo, pull_number } = getPRContext();
+			const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
-      const pr = await octokit.pulls.get({ owner, repo, pull_number });
-      const prBranch = pr.data.head.ref;
+			const pr = await octokit.pulls.get({ owner, repo, pull_number });
+			const prBranch = pr.data.head.ref;
 
-      const { data: files } = await octokit.pulls.listFiles({ owner, repo, pull_number });
+			const { data: files } = await octokit.pulls.listFiles({ owner, repo, pull_number });
 
-      for (const file of files) {
-        if (file.status === "added") continue;
-        try {
-          const [oldText, newText] = await Promise.all([
-            fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: "main" }),
-            fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: prBranch }),
-          ]);
+			for (const file of files) {
+				if (file.status === 'added') continue;
+				try {
+					const [oldText, newText] = await Promise.all([
+						fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: 'main' }),
+						fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: prBranch })
+					]);
 
-          const changedBlocks = getChangedBlocks(oldText, newText);
+					const changedBlocks = getChangedBlocks(oldText, newText);
 
-          for (const block of changedBlocks) {
-            const newBlockText = newText
-              .split("\n")
-              .slice(block.startLine, block.endLine)
-              .join("\n");
+					for (const block of changedBlocks) {
+						const newBlockText = newText
+							.split('\n')
+							.slice(block.startLine, block.endLine)
+							.join('\n');
 
-            const blockSha256 = createHash("sha256").update(newBlockText).digest("hex");
-            const commentBody =
-              `**Compliance Alert**:\`${file.filename}\` changed between lines ${block.startLine + 1}–${block.endLine}.` +
-              `\nUUID \`${block.uuid}\` may be out of compliance.` +
-              `\nSHA-256 of block contents: \`${blockSha256}\`.` +
-              `\n\n Please review the changes to ensure they meet compliance standards.`;
-            console.log(`Commenting on ${file.filename}: ${commentBody}`);
-            await octokit.issues.createComment({
-              owner,
-              repo,
-              issue_number: pull_number,
-              body: commentBody,
-            });
-            //   await octokit.pulls.createReview({
-            //   owner,
-            //   repo,
-            //   pull_number,
-            //   body: commentBody,
-            //   event: "REQUEST_CHANGES",
-            // })
-          }
-        } catch (err) {
-          console.error(`Error processing ${file.filename}: ${err}`);
-        }
-      }
-    });
+						const blockSha256 = createHash('sha256').update(newBlockText).digest('hex');
+						const commentBody =
+							`**Compliance Alert**:\`${file.filename}\` changed between lines ${block.startLine + 1}–${block.endLine}.` +
+							`\nUUID \`${block.uuid}\` may be out of compliance.` +
+							`\nSHA-256 of block contents: \`${blockSha256}\`.` +
+							`\n\n Please review the changes to ensure they meet compliance standards.`;
+						console.log(`Commenting on ${file.filename}: ${commentBody}`);
+						await octokit.issues.createComment({
+							owner,
+							repo,
+							issue_number: pull_number,
+							body: commentBody
+						});
+						//   await octokit.pulls.createReview({
+						//   owner,
+						//   repo,
+						//   pull_number,
+						//   body: commentBody,
+						//   event: "REQUEST_CHANGES",
+						// })
+					}
+				} catch (err) {
+					console.error(`Error processing ${file.filename}: ${err}`);
+				}
+			}
+		});
 }
