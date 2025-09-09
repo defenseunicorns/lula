@@ -41,7 +41,6 @@ jobs:
           cache-dependency-path: 'pnpm-lock.yaml'
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
-          # scope: '@defenseunicorns'   # uncomment if your package is scoped
 
       - name: Ensure pnpm store exists
         run: pnpm store path | xargs -I{} mkdir -p "{}"
