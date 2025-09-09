@@ -4,10 +4,9 @@
 <script lang="ts">
 	import type { Control, Mapping } from '$lib/types';
 	import { wsClient } from '$lib/websocket';
-	import { StatusBadge } from '../../ui';
+	import { Add, Document } from 'carbon-icons-svelte';
 	import MappingCard from '../MappingCard.svelte';
 	import MappingForm from '../MappingForm.svelte';
-	import { Add, Document } from 'carbon-icons-svelte';
 
 	interface Props {
 		control: Control;

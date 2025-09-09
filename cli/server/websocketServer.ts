@@ -6,14 +6,14 @@
  * Handles control updates, state synchronization, and control set switching
  */
 
-import { WebSocketServer, WebSocket } from 'ws';
-import { Server } from 'http';
-import { getServerState, getCurrentControlSetPath } from './serverState';
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { Server } from 'http';
 import * as yaml from 'js-yaml';
+import { join } from 'path';
+import { WebSocket, WebSocketServer } from 'ws';
+import { debug } from '../utils/debug';
 import { getControlId } from './infrastructure/controlHelpers';
-import { debug } from './utils/debug';
+import { getCurrentControlSetPath, getServerState } from './serverState';
 import type { Control, Mapping } from './types';
 
 /**
@@ -334,10 +334,10 @@ class WebSocketManager {
 									}
 								}
 
-								console.log(`Getting timeline for control ${control.id}:`);
-								console.log(`  Current path: ${currentPath}`);
-								console.log(`  Control path found: ${controlPath}`);
-								console.log(`  File exists: ${existsSync(controlPath)}`);
+								debug(`Getting timeline for control ${control.id}:`);
+								debug(`  Current path: ${currentPath}`);
+								debug(`  Control path found: ${controlPath}`);
+								debug(`  File exists: ${existsSync(controlPath)}`);
 
 								if (!controlPath) {
 									console.error(`Could not find file for control ${control.id}`);
@@ -347,7 +347,7 @@ class WebSocketManager {
 									const gitUtil = new GitHistoryUtil(currentPath);
 									const controlHistory = await gitUtil.getFileHistory(controlPath);
 
-									console.log(`Git history for ${control.id}:`, {
+									debug(`Git history for ${control.id}:`, {
 										path: controlPath,
 										totalCommits: controlHistory.totalCommits,
 										commits: controlHistory.commits?.length || 0
@@ -360,7 +360,7 @@ class WebSocketManager {
 
 									if (existsSync(mappingPath)) {
 										mappingHistory = await gitUtil.getFileHistory(mappingPath);
-										console.log(`Mapping history for ${control.id}:`, {
+										debug(`Mapping history for ${control.id}:`, {
 											path: mappingPath,
 											totalCommits: mappingHistory.totalCommits,
 											commits: mappingHistory.commits?.length || 0
@@ -391,14 +391,14 @@ class WebSocketManager {
 											// Git status codes: M = modified, A = added (staged)
 											hasPendingChanges = gitStatus.length > 0;
 											if (hasPendingChanges) {
-												console.log(
+												debug(
 													`Control ${payload.id} has pending changes: ${gitStatus.substring(0, 2)}`
 												);
 											}
 										} catch {
 											// File is not tracked - it's new/untracked
 											hasPendingChanges = true;
-											console.log(`Control ${payload.id} is untracked (new file)`);
+											debug(`Control ${payload.id} is untracked (new file)`);
 										}
 									} catch {
 										// Error checking file/git status - silently continue
@@ -421,13 +421,11 @@ class WebSocketManager {
 
 												if (gitStatus.length > 0) {
 													hasPendingChanges = true;
-													console.log(
-														`Mapping file has pending changes: ${gitStatus.substring(0, 2)}`
-													);
+													debug(`Mapping file has pending changes: ${gitStatus.substring(0, 2)}`);
 												}
 											} catch {
 												hasPendingChanges = true;
-												console.log(`Mapping file is untracked`);
+												debug(`Mapping file is untracked`);
 											}
 										} catch {
 											// Error checking mapping file status
@@ -459,7 +457,7 @@ class WebSocketManager {
 
 									// If no history but file exists, create a pending entry
 									if (timeline.totalCommits === 0 && hasPendingChanges) {
-										console.log(`No git history for control ${payload.id} - showing as pending`);
+										debug(`No git history for control ${payload.id} - showing as pending`);
 										timeline.commits = [
 											{
 												hash: 'pending',
@@ -499,7 +497,7 @@ class WebSocketManager {
 										timeline.totalCommits += 1;
 									}
 
-									console.log(`Final timeline for ${control.id}:`, {
+									debug(`Final timeline for ${control.id}:`, {
 										totalCommits: timeline.totalCommits,
 										commits: timeline.commits?.length || 0,
 										hasPending: timeline.hasPendingChanges
@@ -579,13 +577,13 @@ class WebSocketManager {
 				if (!control.id) {
 					control.id = getControlId(control, currentPath);
 				}
-				
+
 				// Extract only the fields needed for overview tab and list display
 				const metadata: any = {
 					id: control.id,
 					family: control.family
 				};
-				
+
 				// Include all overview tab fields from the field schema
 				const fieldSchema = (controlSetData as any).fieldSchema?.fields || {};
 				for (const [fieldName, fieldConfig] of Object.entries(fieldSchema)) {
@@ -593,12 +591,14 @@ class WebSocketManager {
 						metadata[fieldName] = control[fieldName];
 					}
 				}
-				
+
 				// Always include commonly needed fields for list display
 				if (control.title !== undefined) metadata.title = control.title;
-				if (control.implementation_status !== undefined) metadata.implementation_status = control.implementation_status;
-				if (control.compliance_status !== undefined) metadata.compliance_status = control.compliance_status;
-				
+				if (control.implementation_status !== undefined)
+					metadata.implementation_status = control.implementation_status;
+				if (control.compliance_status !== undefined)
+					metadata.compliance_status = control.compliance_status;
+
 				return metadata;
 			});
 
@@ -717,14 +717,16 @@ class WebSocketManager {
 		this.wss.on('connection', (ws: WebSocket) => {
 			debug('New WebSocket client connected');
 			this.clients.add(ws);
-			
+
 			// Send initial state immediately on connection
 			const initialState = this.getCompleteState();
 			if (initialState) {
-				ws.send(JSON.stringify({
-					type: 'state-update',
-					payload: initialState
-				}));
+				ws.send(
+					JSON.stringify({
+						type: 'state-update',
+						payload: initialState
+					})
+				);
 			}
 
 			ws.on('message', async (message: string) => {

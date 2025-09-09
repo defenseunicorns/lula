@@ -422,7 +422,7 @@ export class FileStore {
 		if (existsSync(mappingFile)) {
 			try {
 				const content = readFileSync(mappingFile, 'utf8');
-				existingMappings = yaml.load(content) as Mapping[] || [];
+				existingMappings = (yaml.load(content) as Mapping[]) || [];
 			} catch (error) {
 				console.error(`Failed to parse existing mappings file: ${mappingFile}`, error);
 				existingMappings = [];
@@ -463,7 +463,7 @@ export class FileStore {
 		for (const file of mappingFiles) {
 			try {
 				const content = readFileSync(file, 'utf8');
-				let mappings: Mapping[] = yaml.load(content) as Mapping[] || [];
+				let mappings: Mapping[] = (yaml.load(content) as Mapping[]) || [];
 
 				const originalLength = mappings.length;
 				mappings = mappings.filter((m) => m.uuid !== uuid);

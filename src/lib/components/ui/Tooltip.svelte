@@ -2,7 +2,7 @@
 <!-- SPDX-FileCopyrightText: 2023-Present The Lula Authors -->
 
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	type Props = {
 		content: string;
@@ -12,7 +12,13 @@
 		children: () => any;
 	};
 
-	let { content, placement = 'top', maxWidth = '300px', multiline = false, children }: Props = $props();
+	let {
+		content,
+		placement = 'top',
+		maxWidth = '300px',
+		multiline = false,
+		children
+	}: Props = $props();
 
 	let tooltip: HTMLDivElement | null = $state(null);
 	let trigger: HTMLDivElement;

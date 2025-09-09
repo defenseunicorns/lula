@@ -2,7 +2,7 @@
 <!-- SPDX-FileCopyrightText: 2023-Present The Lula Authors -->
 
 <script lang="ts">
-	import { processMultilineText, type ProcessedSection } from './textProcessor';
+	import { processMultilineText } from './textProcessor';
 	
 	interface Props {
 		text: string;

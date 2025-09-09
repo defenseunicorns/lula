@@ -9,7 +9,7 @@
 	import { appState } from '$lib/websocket';
 	import { complianceStore, searchTerm, selectedFamily } from '$stores/compliance';
 	import { Filter, Information } from 'carbon-icons-svelte';
-	import { derived, writable } from 'svelte/store';
+	import { derived } from 'svelte/store';
 
 	// Derive controls and families from appState
 	const controls = derived(appState, ($state) => $state.controls || []);

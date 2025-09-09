@@ -16,10 +16,13 @@
 	const displayName = $derived(
 		field.original_name || fieldName.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())
 	);
+
+	// Generate unique ID for form control
+	const fieldId = $derived(`field-${fieldName}-${Math.random().toString(36).substr(2, 9)}`);
 </script>
 
 <div class="space-y-2">
-	<label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+	<label for={fieldId} class="text-sm font-medium text-gray-700 dark:text-gray-300">
 		{displayName}
 		{#if field.required}
 			<span class="text-red-500">*</span>
@@ -28,6 +31,7 @@
 
 	{#if field.ui_type === 'select' && field.options}
 		<select
+			id={fieldId}
 			bind:value
 			disabled={!field.editable}
 			onchange={onChange}
@@ -40,6 +44,7 @@
 		</select>
 	{:else if field.ui_type === 'textarea' || field.ui_type === 'long_text'}
 		<textarea
+			id={fieldId}
 			bind:value
 			disabled={!field.editable}
 			oninput={onChange}
@@ -50,18 +55,20 @@
 	{:else if field.ui_type === 'boolean'}
 		<div class="flex items-center">
 			<input
+				id={fieldId}
 				type="checkbox"
 				bind:checked={value}
 				disabled={!field.editable}
 				onchange={onChange}
 				class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
 			/>
-			<label class="ml-2 text-sm text-gray-900 dark:text-gray-300" for="checkbox">
+			<label class="ml-2 text-sm text-gray-900 dark:text-gray-300" for={fieldId}>
 				{value ? 'Yes' : 'No'}
 			</label>
 		</div>
 	{:else if field.ui_type === 'date'}
 		<input
+			id={fieldId}
 			type="date"
 			bind:value
 			disabled={!field.editable}
@@ -70,6 +77,7 @@
 		/>
 	{:else if field.ui_type === 'number'}
 		<input
+			id={fieldId}
 			type="number"
 			bind:value
 			disabled={!field.editable}
@@ -79,6 +87,7 @@
 	{:else}
 		<!-- Default to text input -->
 		<input
+			id={fieldId}
 			type="text"
 			bind:value
 			disabled={!field.editable}

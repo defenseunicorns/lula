@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 export interface ProcessedSection {
 	type: 'header' | 'paragraph' | 'table' | 'list';
 	content: string;
@@ -10,21 +13,21 @@ export interface TableRow {
 
 export function processMultilineText(text: string): ProcessedSection[] {
 	if (!text) return [];
-	
+
 	// First check if the entire content is a table
 	if (isEntireContentTable(text)) {
 		return processAsTable(text);
 	}
-	
+
 	const lines = text.split('\n');
 	const sections: ProcessedSection[] = [];
 	let currentSection: string[] = [];
 	let currentType: 'paragraph' | 'list' = 'paragraph';
-	
+
 	for (let i = 0; i < lines.length; i++) {
 		const line = lines[i];
 		const trimmedLine = line.trim();
-		
+
 		// Check for empty lines
 		if (!trimmedLine) {
 			// Process accumulated section if any
@@ -33,7 +36,7 @@ export function processMultilineText(text: string): ProcessedSection[] {
 			}
 			continue;
 		}
-		
+
 		// Check for headers (lines ending with colon and followed by content)
 		if (trimmedLine.endsWith(':') && i < lines.length - 1) {
 			const nextLine = lines[i + 1]?.trim();
@@ -43,7 +46,7 @@ export function processMultilineText(text: string): ProcessedSection[] {
 				if (currentSection.length > 0) {
 					flushSection();
 				}
-				
+
 				// Add header
 				sections.push({
 					type: 'header',
@@ -52,7 +55,7 @@ export function processMultilineText(text: string): ProcessedSection[] {
 				continue;
 			}
 		}
-		
+
 		// Check for list items
 		if (isListItem(trimmedLine)) {
 			if (currentType !== 'list') {
@@ -65,7 +68,7 @@ export function processMultilineText(text: string): ProcessedSection[] {
 			currentSection.push(trimmedLine);
 			continue;
 		}
-		
+
 		// Default to paragraph
 		if (currentType === 'list') {
 			// Flush previous section if switching from list to paragraph
@@ -74,15 +77,15 @@ export function processMultilineText(text: string): ProcessedSection[] {
 			}
 			currentType = 'paragraph';
 		}
-		
+
 		currentSection.push(line); // Preserve original line formatting for paragraphs
 	}
-	
+
 	// Flush any remaining section
 	if (currentSection.length > 0) {
 		flushSection();
 	}
-	
+
 	function flushSection() {
 		if (currentType === 'list') {
 			const items = currentSection.map(line => {
@@ -91,7 +94,7 @@ export function processMultilineText(text: string): ProcessedSection[] {
 					.replace(/^\d+\.\s*/, '')
 					.replace(/^[a-zA-Z]\.\s*/, '');
 			});
-			
+
 			sections.push({
 				type: 'list',
 				content: currentSection.join('\n'),
@@ -103,17 +106,17 @@ export function processMultilineText(text: string): ProcessedSection[] {
 				content: currentSection.join('\n').trim()
 			});
 		}
-		
+
 		currentSection = [];
 	}
-	
+
 	return sections;
 }
 
 function isEntireContentTable(text: string): boolean {
 	const lines = text.split('\n').filter(line => line.trim());
 	if (lines.length === 0) return false;
-	
+
 	// Check if ALL non-empty lines are table rows
 	return lines.every(line => isTableRow(line.trim()));
 }
@@ -123,7 +126,7 @@ function processAsTable(text: string): ProcessedSection[] {
 	const rows: TableRow[] = lines.map(line => ({
 		columns: line.split(',').map(col => col.trim())
 	}));
-	
+
 	return [{
 		type: 'table',
 		content: text,
@@ -136,16 +139,16 @@ function isTableRow(line: string): boolean {
 	// Must have at least 2 commas and consistent structure
 	const parts = line.split(',');
 	if (parts.length < 2) return false;
-	
+
 	// Common patterns for table data:
 	// - Control IDs (AC-10.1)
 	// - CCI codes (CCI-000054)
 	// - Short descriptive text
 	const hasControlPattern = /^[A-Z]{2}-\d+(\.\d+)?/.test(parts[0].trim());
 	const hasCCIPattern = parts.some(part => /^CCI-\d+/.test(part.trim()));
-	
+
 	// If it looks like structured data with consistent separators
-	return hasControlPattern || hasCCIPattern || 
+	return hasControlPattern || hasCCIPattern ||
 		(parts.length >= 2 && parts.every(p => p.trim().length > 0 && p.trim().length < 100));
 }
 

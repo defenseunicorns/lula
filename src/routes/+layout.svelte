@@ -7,15 +7,7 @@
 	import { ControlSetInfo } from '$components/control-sets';
 	import { Dropdown } from '$components/ui';
 	import { appState, wsClient } from '$lib/websocket';
-	import {
-		Download,
-		DocumentExport,
-		Code,
-		Settings,
-		Help,
-		Notification,
-		LogoGithub
-	} from 'carbon-icons-svelte';
+	import { Code, DocumentExport, Download, LogoGithub } from 'carbon-icons-svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import '../app.css';
 

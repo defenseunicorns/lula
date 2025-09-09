@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 import cors from 'cors';
 import express from 'express';
 import { existsSync, mkdirSync } from 'fs';
@@ -16,10 +17,12 @@ const __dirname = dirname(__filename);
 export interface ServerOptions {
 	controlSetDir: string;
 	port: number;
-	wizardMode?: boolean;
 }
 
-export async function createServer(options: ServerOptions) {
+export async function createServer(options: ServerOptions): Promise<{
+	app: express.Application;
+	start: () => Promise<void>;
+}> {
 	const { controlSetDir, port } = options;
 
 	// Ensure control set directory exists
@@ -71,13 +74,33 @@ export async function createServer(options: ServerOptions) {
 	};
 }
 
-export async function startServer(
-	controlSetDir: string,
-	port: number,
-	options: { wizardMode?: boolean } = {}
-) {
-	const server = await createServer({ controlSetDir, port, ...options });
+export async function startServer(options: ServerOptions) {
+	const server = await createServer(options);
 	await server.start();
+
+	// Set up keyboard input handling
+	if (process.stdin.isTTY) {
+		process.stdin.setRawMode(true);
+		process.stdin.resume();
+		process.stdin.setEncoding('utf8');
+
+		console.log('\nPress ESC to close the app\n');
+
+		process.stdin.on('data', async (key) => {
+			const keyStr = key.toString();
+			// ESC key or Ctrl+C
+			if (keyStr === '\u001b' || keyStr === '\u0003') {
+				console.log('\n\nShutting down server...');
+				try {
+					await saveMappingsToFile();
+					console.log('Changes saved successfully');
+				} catch (error) {
+					console.error('Error saving changes:', error);
+				}
+				process.exit(0);
+			}
+		});
+	}
 
 	// Graceful shutdown
 	process.on('SIGINT', async () => {

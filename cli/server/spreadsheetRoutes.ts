@@ -1,19 +1,23 @@
+// SPDX-License-Identifier: Apache-2.0
+// SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
+import { parse as parseCSVSync } from 'csv-parse/sync';
+import ExcelJS from 'exceljs';
 import express from 'express';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { glob } from 'glob';
+import * as yaml from 'js-yaml';
 import multer from 'multer';
 import { dirname, join, relative } from 'path';
-import * as XLSX from 'xlsx';
-import * as yaml from 'js-yaml';
+import { debug } from '../utils/debug';
 import { getServerState } from './serverState';
-import { debug } from './utils/debug';
 
 // Type definitions
 interface SpreadsheetRow {
 	[key: string]: any;
 }
 
-const router = express.Router();
+const router: express.Router = express.Router();
 const upload = multer({
 	storage: multer.memoryStorage(),
 	limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
@@ -97,17 +101,36 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 		const skipEmpty = true;
 		const skipEmptyRows = true;
 
-		// Parse the spreadsheet
-		const workbook = XLSX.read((req as any).file.buffer, { type: 'buffer' });
-		const sheetName = workbook.SheetNames[0];
-		const sheet = workbook.Sheets[sheetName];
+		// Parse the spreadsheet - handle both CSV and Excel
+		const fileName = (req as any).file.originalname || '';
+		const isCSV = fileName.toLowerCase().endsWith('.csv');
+		let rawData: any[][] = [];
 
-		// Convert to JSON with headers
-		const rawData = XLSX.utils.sheet_to_json(sheet, {
-			header: 1,
-			defval: null,
-			blankrows: true
-		});
+		if (isCSV) {
+			// Parse CSV file
+			const csvContent = (req as any).file.buffer.toString('utf-8');
+			rawData = parseCSV(csvContent);
+		} else {
+			// Parse Excel file with ExcelJS
+			const workbook = new ExcelJS.Workbook();
+			// Convert multer buffer to Node.js Buffer
+			const buffer = Buffer.from((req as any).file.buffer);
+			await workbook.xlsx.load(buffer as any);
+			const worksheet = workbook.worksheets[0];
+
+			if (!worksheet) {
+				return res.status(400).json({ error: 'No worksheet found in file' });
+			}
+
+			// Convert to array format similar to XLSX
+			worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+				const rowData: any[] = [];
+				row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+					rowData[colNumber - 1] = cell.value;
+				});
+				rawData[rowNumber - 1] = rowData;
+			});
+		}
 
 		const startRowIndex = parseInt(startRow) - 1;
 		if (rawData.length <= startRowIndex) {
@@ -317,7 +340,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			if (fieldName === 'family' || (fieldName === 'id' && controlIdFieldNameClean !== 'id')) {
 				return;
 			}
-			
+
 			// Check if this field was excluded in the frontend (not assigned to any tab)
 			const frontendConfig = frontendFieldSchema?.find((f) => f.fieldName === fieldName);
 			// If we have frontend schema and this field isn't in it, skip it (it was excluded)
@@ -437,34 +460,42 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			familyControls.forEach((control) => {
 				// Use the control ID field value for the filename
 				const controlId = control[controlIdFieldNameClean];
-				const fileName = `${controlId.replace(/[^a-zA-Z0-9-]/g, '_')}.yaml`;
+
+				if (!controlId) {
+					console.error('Missing control ID for control:', control);
+					return; // Skip this control
+				}
+
+				// Ensure the control ID is a string and limit filename length
+				const controlIdStr = String(controlId).slice(0, 50); // Limit to 50 chars for safety
+				const fileName = `${controlIdStr.replace(/[^a-zA-Z0-9-]/g, '_')}.yaml`;
 				const filePath = join(familyDir, fileName);
-				
+
 				// Filter control to only include fields that are in the field schema (not excluded)
 				const filteredControl: SpreadsheetRow = {};
-				
+
 				// Always include family
 				if (control.family !== undefined) {
 					filteredControl.family = control.family;
 				}
-				
+
 				// Include fields that are in the frontend schema or in the fields metadata
 				Object.keys(control).forEach((fieldName) => {
 					// Skip family as it's already added
 					if (fieldName === 'family') return;
-					
+
 					// Check if field is in the frontend schema (meaning it was assigned to a tab)
-					const isInFrontendSchema = frontendFieldSchema?.some(f => f.fieldName === fieldName);
-					
+					const isInFrontendSchema = frontendFieldSchema?.some((f) => f.fieldName === fieldName);
+
 					// Check if field is in the fields metadata (core fields)
 					const isInFieldsMetadata = fields.hasOwnProperty(fieldName);
-					
+
 					// Include the field if it's either in frontend schema or fields metadata
 					if (isInFrontendSchema || isInFieldsMetadata) {
 						filteredControl[fieldName] = control[fieldName];
 					}
 				});
-				
+
 				writeFileSync(filePath, yaml.dump(filteredControl));
 			});
 		});
@@ -565,6 +596,35 @@ function detectValueType(value: unknown): 'string' | 'number' | 'boolean' | 'dat
 	return 'string';
 }
 
+// Parse CSV content into rows using the csv-parse library
+function parseCSV(content: string): any[][] {
+	try {
+		// Parse CSV with robust handling of edge cases
+		const records = parseCSVSync(content, {
+			// Don't treat first row as headers - we'll handle that ourselves
+			columns: false,
+			// Skip empty lines
+			skip_empty_lines: true,
+			// Handle different line endings
+			relax_column_count: true,
+			// Trim whitespace from fields
+			trim: true,
+			// Handle quoted fields properly
+			quote: '"',
+			// Standard escape character
+			escape: '"',
+			// Auto-detect delimiter (usually comma)
+			delimiter: ','
+		});
+
+		return records;
+	} catch (error) {
+		console.error('CSV parsing error:', error);
+		// Fallback to simple split if csv-parse fails
+		return content.split(/\r?\n/).map((line) => line.split(','));
+	}
+}
+
 function extractFamilyFromControlId(controlId: string): string {
 	if (!controlId) return 'UNKNOWN';
 
@@ -593,7 +653,7 @@ router.get('/export-controls', async (req, res) => {
 		const format = (req.query.format as string) || 'csv';
 		const state = getServerState();
 		const fileStore = state.fileStore;
-		
+
 		if (!fileStore) {
 			return res.status(500).json({ error: 'No control set loaded' });
 		}
@@ -601,7 +661,7 @@ router.get('/export-controls', async (req, res) => {
 		// Load all controls and mappings
 		const controls = await fileStore.loadAllControls();
 		const mappings = await fileStore.loadMappings();
-		
+
 		// Load metadata from lula.yaml file
 		let metadata: any = {};
 		try {
@@ -613,21 +673,21 @@ router.get('/export-controls', async (req, res) => {
 		} catch (err) {
 			debug('Could not load metadata:', err);
 		}
-		
+
 		if (!controls || controls.length === 0) {
 			return res.status(404).json({ error: 'No controls found' });
 		}
 
 		// Combine controls with their mappings
-		const controlsWithMappings = controls.map(control => {
+		const controlsWithMappings = controls.map((control) => {
 			// Use the control_id_field value or fallback to 'id' for mapping lookups
 			const controlIdField = metadata?.control_id_field || 'id';
 			const controlId = control[controlIdField] || control.id;
-			const controlMappings = mappings.filter(m => m.control_id === controlId);
+			const controlMappings = mappings.filter((m) => m.control_id === controlId);
 			return {
 				...control,
 				mappings_count: controlMappings.length,
-				mappings: controlMappings.map(m => ({
+				mappings: controlMappings.map((m) => ({
 					uuid: m.uuid,
 					status: m.status,
 					description: m.justification || ''
@@ -642,7 +702,7 @@ router.get('/export-controls', async (req, res) => {
 				return exportAsCSV(controlsWithMappings, metadata, res);
 			case 'excel':
 			case 'xlsx':
-				return exportAsExcel(controlsWithMappings, metadata, res);
+				return await exportAsExcel(controlsWithMappings, metadata, res);
 			case 'json':
 				return exportAsJSON(controlsWithMappings, metadata, res);
 			default:
@@ -659,54 +719,55 @@ function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
-	
+
 	// Get all unique field names from controls
 	const allFields = new Set<string>();
-	controls.forEach(control => {
-		Object.keys(control).forEach(key => allFields.add(key));
+	controls.forEach((control) => {
+		Object.keys(control).forEach((key) => allFields.add(key));
 	});
-	
+
 	// Build field list with display names
 	const fieldMapping: Array<{ fieldName: string; displayName: string }> = [];
-	
+
 	// Handle the control ID field first (might be 'control-acronym' or 'ap-acronym' etc)
 	if (allFields.has(controlIdField)) {
 		const idSchema = fieldSchema[controlIdField];
-		fieldMapping.push({ 
-			fieldName: controlIdField, 
+		fieldMapping.push({
+			fieldName: controlIdField,
 			displayName: idSchema?.original_name || 'Control ID'
 		});
 		allFields.delete(controlIdField); // Remove so we don't add it twice
 	} else if (allFields.has('id')) {
 		// Fallback to 'id' field if control_id_field not found
-		fieldMapping.push({ 
-			fieldName: 'id', 
+		fieldMapping.push({
+			fieldName: 'id',
 			displayName: 'Control ID'
 		});
 		allFields.delete('id');
 	}
-	
+
 	// Add family field second if it exists
 	if (allFields.has('family')) {
 		const familySchema = fieldSchema['family'];
-		fieldMapping.push({ 
-			fieldName: 'family', 
+		fieldMapping.push({
+			fieldName: 'family',
 			displayName: familySchema?.original_name || 'Family'
 		});
 		allFields.delete('family');
 	}
-	
+
 	// Add remaining fields using their original names from schema
 	Array.from(allFields)
-		.filter(field => field !== 'mappings' && field !== 'mappings_count') // Skip our added fields for now
+		.filter((field) => field !== 'mappings' && field !== 'mappings_count') // Skip our added fields for now
 		.sort()
-		.forEach(field => {
+		.forEach((field) => {
 			const schema = fieldSchema[field];
 			// Use original_name if available, otherwise clean up the field name
-			const displayName = schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+			const displayName =
+				schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 			fieldMapping.push({ fieldName: field, displayName });
 		});
-	
+
 	// Add mappings at the end
 	if (allFields.has('mappings_count')) {
 		fieldMapping.push({ fieldName: 'mappings_count', displayName: 'Mappings Count' });
@@ -717,23 +778,26 @@ function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
 
 	// Create CSV header with display names
 	const csvRows = [];
-	csvRows.push(fieldMapping.map(field => `"${field.displayName}"`).join(','));
-	
+	csvRows.push(fieldMapping.map((field) => `"${field.displayName}"`).join(','));
+
 	// Add control rows
-	controls.forEach(control => {
+	controls.forEach((control) => {
 		const row = fieldMapping.map(({ fieldName }) => {
 			const value = control[fieldName];
 			if (value === undefined || value === null) return '""';
-			
+
 			// Special handling for mappings
 			if (fieldName === 'mappings' && Array.isArray(value)) {
 				// Format mappings as a readable string
-				const mappingsStr = value.map((m: any) => 
-					`${m.status}: ${m.description.substring(0, 50)}${m.description.length > 50 ? '...' : ''}`
-				).join('; ');
+				const mappingsStr = value
+					.map(
+						(m: any) =>
+							`${m.status}: ${m.description.substring(0, 50)}${m.description.length > 50 ? '...' : ''}`
+					)
+					.join('; ');
 				return `"${mappingsStr.replace(/"/g, '""')}"`;
 			}
-			
+
 			if (Array.isArray(value)) return `"${value.join('; ').replace(/"/g, '""')}"`;
 			if (typeof value === 'object') return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
 			return `"${String(value).replace(/"/g, '""')}"`;
@@ -743,23 +807,23 @@ function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
 
 	const csvContent = csvRows.join('\n');
 	const fileName = `${metadata?.name || 'controls'}_export_${Date.now()}.csv`;
-	
+
 	res.setHeader('Content-Type', 'text/csv');
 	res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 	res.send(csvContent);
 }
 
 // Export as Excel
-function exportAsExcel(controls: any[], metadata: any, res: express.Response) {
+async function exportAsExcel(controls: any[], metadata: any, res: express.Response) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
-	
+
 	// Prepare data for Excel with original field names
-	const worksheetData = controls.map(control => {
+	const worksheetData = controls.map((control) => {
 		// Create a new object with original field names
 		const exportControl: any = {};
-		
+
 		// Process control ID field first
 		if (control[controlIdField]) {
 			const idSchema = fieldSchema[controlIdField];
@@ -768,31 +832,37 @@ function exportAsExcel(controls: any[], metadata: any, res: express.Response) {
 		} else if (control.id) {
 			exportControl['Control ID'] = control.id;
 		}
-		
+
 		// Process family field
 		if (control.family) {
 			const familySchema = fieldSchema['family'];
 			const familyDisplayName = familySchema?.original_name || 'Family';
 			exportControl[familyDisplayName] = control.family;
 		}
-		
+
 		// Process all other fields
-		Object.keys(control).forEach(key => {
+		Object.keys(control).forEach((key) => {
 			// Skip if already processed or is our added field
 			if (key === controlIdField || key === 'id' || key === 'family') return;
-			
+
 			const schema = fieldSchema[key];
-			const displayName = schema?.original_name || 
-				(key === 'mappings_count' ? 'Mappings Count' : 
-				 key === 'mappings' ? 'Mappings' :
-				 key.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()));
+			const displayName =
+				schema?.original_name ||
+				(key === 'mappings_count'
+					? 'Mappings Count'
+					: key === 'mappings'
+						? 'Mappings'
+						: key.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()));
 			const value = control[key];
-			
+
 			// Special handling for mappings
 			if (key === 'mappings' && Array.isArray(value)) {
-				exportControl[displayName] = value.map((m: any) => 
-					`${m.status}: ${m.description.substring(0, 100)}${m.description.length > 100 ? '...' : ''}`
-				).join('\n');
+				exportControl[displayName] = value
+					.map(
+						(m: any) =>
+							`${m.status}: ${m.description.substring(0, 100)}${m.description.length > 100 ? '...' : ''}`
+					)
+					.join('\n');
 			} else if (Array.isArray(value)) {
 				exportControl[displayName] = value.join('; ');
 			} else if (typeof value === 'object' && value !== null) {
@@ -804,38 +874,61 @@ function exportAsExcel(controls: any[], metadata: any, res: express.Response) {
 		return exportControl;
 	});
 
-	// Create workbook and worksheet
-	const wb = XLSX.utils.book_new();
-	const ws = XLSX.utils.json_to_sheet(worksheetData);
-	
-	// Auto-size columns
-	const colWidths: { wch: number }[] = [];
+	// Create workbook and worksheet with ExcelJS
+	const wb = new ExcelJS.Workbook();
+	const ws = wb.addWorksheet('Controls');
+
+	// Add headers and configure columns
 	const headers = Object.keys(worksheetData[0] || {});
-	headers.forEach((header, i) => {
-		const maxLength = Math.max(
-			header.length,
-			...worksheetData.map(row => String(row[header] || '').length)
-		);
-		colWidths[i] = { wch: Math.min(maxLength + 2, 50) }; // Cap at 50 characters
+	ws.columns = headers.map((header) => ({
+		header: header,
+		key: header,
+		width: Math.min(
+			Math.max(
+				header.length,
+				...worksheetData.map((row: any) => String(row[header] || '').length)
+			) + 2,
+			50
+		) // Auto-size with max width of 50
+	}));
+
+	// Add data rows
+	worksheetData.forEach((row: any) => {
+		ws.addRow(row);
 	});
-	ws['!cols'] = colWidths;
-	
-	// Add worksheet to workbook
-	XLSX.utils.book_append_sheet(wb, ws, 'Controls');
-	
+
+	// Style the header row
+	ws.getRow(1).font = { bold: true };
+	ws.getRow(1).fill = {
+		type: 'pattern',
+		pattern: 'solid',
+		fgColor: { argb: 'FFE0E0E0' }
+	};
+
 	// Create metadata sheet if available
 	if (metadata) {
+		const metaSheet = wb.addWorksheet('Metadata');
 		const cleanMetadata = { ...metadata };
 		delete cleanMetadata.fieldSchema; // Remove large schema object
-		const metaSheet = XLSX.utils.json_to_sheet([cleanMetadata]);
-		XLSX.utils.book_append_sheet(wb, metaSheet, 'Metadata');
+
+		// Add metadata as key-value pairs
+		metaSheet.columns = [
+			{ header: 'Property', key: 'property', width: 30 },
+			{ header: 'Value', key: 'value', width: 50 }
+		];
+		Object.entries(cleanMetadata).forEach(([key, value]) => {
+			metaSheet.addRow({ property: key, value: String(value) });
+		});
 	}
 
 	// Generate Excel buffer
-	const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'buffer' });
+	const buffer = await wb.xlsx.writeBuffer();
 	const fileName = `${metadata?.name || 'controls'}_export_${Date.now()}.xlsx`;
-	
-	res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+	res.setHeader(
+		'Content-Type',
+		'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+	);
 	res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 	res.send(buffer);
 }
@@ -850,11 +943,142 @@ function exportAsJSON(controls: any[], metadata: any, res: express.Response) {
 	};
 
 	const fileName = `${metadata?.name || 'controls'}_export_${Date.now()}.json`;
-	
+
 	res.setHeader('Content-Type', 'application/json');
 	res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 	res.json(exportData);
 }
 
+// Parse Excel/CSV file for preview (used by frontend)
+router.post('/parse-excel', upload.single('file'), async (req, res) => {
+	try {
+		if (!req.file) {
+			return res.status(400).json({ error: 'No file uploaded' });
+		}
+
+		const fileName = req.file.originalname || '';
+		const isCSV = fileName.toLowerCase().endsWith('.csv');
+		let sheets: string[] = [];
+		let rows: any[][] = [];
+
+		if (isCSV) {
+			// Parse CSV file
+			const csvContent = req.file.buffer.toString('utf-8');
+			rows = parseCSV(csvContent);
+			sheets = ['Sheet1']; // CSV files only have one "sheet"
+		} else {
+			// Parse Excel file with ExcelJS
+			const workbook = new ExcelJS.Workbook();
+			// Convert multer buffer to Node.js Buffer
+			const buffer = Buffer.from(req.file.buffer);
+			await workbook.xlsx.load(buffer as any);
+
+			// Get all sheet names
+			sheets = workbook.worksheets.map((ws) => ws.name);
+
+			// Parse first sheet by default
+			const worksheet = workbook.worksheets[0];
+			if (!worksheet) {
+				return res.status(400).json({ error: 'No worksheet found in file' });
+			}
+
+			// Get data from the worksheet
+			worksheet.eachRow({ includeEmpty: false }, (row: any, rowNumber: number) => {
+				const rowData: any[] = [];
+				row.eachCell({ includeEmpty: true }, (cell: any, colNumber: number) => {
+					rowData[colNumber - 1] = cell.value;
+				});
+				rows.push(rowData);
+			});
+		}
+
+		// Find potential header rows (first 5 non-empty rows)
+		const headerCandidates = rows.slice(0, 5).map((row, index) => ({
+			row: index + 1,
+			preview:
+				row
+					.slice(0, 4)
+					.filter((v) => v != null)
+					.join(', ') + (row.length > 4 ? ', ...' : '')
+		}));
+
+		res.json({
+			sheets,
+			selectedSheet: sheets[0],
+			rowPreviews: headerCandidates,
+			totalRows: rows.length,
+			sampleData: rows.slice(0, 10) // First 10 rows for preview
+		});
+	} catch (error) {
+		console.error('Error parsing Excel file:', error);
+		res.status(500).json({ error: 'Failed to parse Excel file' });
+	}
+});
+
+// Get data from specific sheet
+router.post('/parse-excel-sheet', upload.single('file'), async (req, res) => {
+	try {
+		const { sheetName, headerRow } = req.body;
+
+		if (!req.file) {
+			return res.status(400).json({ error: 'No file uploaded' });
+		}
+
+		const fileName = req.file.originalname || '';
+		const isCSV = fileName.toLowerCase().endsWith('.csv');
+		let rows: any[][] = [];
+
+		if (isCSV) {
+			// Parse CSV file
+			const csvContent = req.file.buffer.toString('utf-8');
+			rows = parseCSV(csvContent);
+		} else {
+			// Parse Excel file with ExcelJS
+			const workbook = new ExcelJS.Workbook();
+			// Convert multer buffer to Node.js Buffer
+			const buffer = Buffer.from(req.file.buffer);
+			await workbook.xlsx.load(buffer as any);
+
+			// Get specific sheet
+			const worksheet = workbook.getWorksheet(sheetName);
+			if (!worksheet) {
+				return res.status(400).json({ error: `Sheet "${sheetName}" not found` });
+			}
+
+			// Get data from the worksheet
+			worksheet.eachRow({ includeEmpty: false }, (row: any, rowNumber: number) => {
+				const rowData: any[] = [];
+				row.eachCell({ includeEmpty: true }, (cell: any, colNumber: number) => {
+					rowData[colNumber - 1] = cell.value;
+				});
+				rows.push(rowData);
+			});
+		}
+
+		const headerRowIndex = parseInt(headerRow) - 1;
+		const headers = rows[headerRowIndex] || [];
+		const fields = headers.filter((h: any) => h && typeof h === 'string');
+
+		// Get sample data
+		const sampleData = rows.slice(headerRowIndex + 1, headerRowIndex + 4).map((row) => {
+			const obj: any = {};
+			headers.forEach((header: string, index: number) => {
+				if (header) {
+					obj[header] = row[index];
+				}
+			});
+			return obj;
+		});
+
+		res.json({
+			fields,
+			sampleData,
+			controlCount: rows.length - headerRowIndex - 1
+		});
+	} catch (error) {
+		console.error('Error parsing Excel sheet:', error);
+		res.status(500).json({ error: 'Failed to parse Excel sheet' });
+	}
+});
 
 export default router;

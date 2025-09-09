@@ -80,6 +80,8 @@
 	onkeydown={(e) => e.key === 'Escape' && onClose()}
 >
 	<!-- Modal -->
+	<!-- svelte-ignore a11y_click_events_have_key_events -->
+	<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 	<div
 		class="relative min-h-screen w-full p-6 bg-white dark:bg-gray-900"
 		role="document"

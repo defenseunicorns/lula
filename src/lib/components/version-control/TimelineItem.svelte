@@ -3,7 +3,7 @@
 
 <script lang="ts">
 	import type { GitCommit } from '$lib/types';
-	import { YamlDiffViewer, DiffViewer } from '.';
+	import { DiffViewer, YamlDiffViewer } from '.';
 
 	interface Props {
 		commit: GitCommit & { type?: string; fileType?: string; source?: 'control' | 'mapping' };

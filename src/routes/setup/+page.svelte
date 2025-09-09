@@ -3,16 +3,16 @@
 	import { goto } from '$app/navigation';
 	import { ExistingControlSets, SpreadsheetImport } from '$components/setup';
 	import { appState, wsClient } from '$lib/websocket';
-	import { get } from 'svelte/store';
 	import { onMount } from 'svelte';
+	import { get } from 'svelte/store';
 
 	let activeTab: 'import' | 'existing' = 'import'; // Default to import
 	let currentControlSetPath = '';
 	let hasAnyControlSets = false;
 	let isSwitching = false;
-	let controlSets: { 
-		path: string; 
-		name: string; 
+	let controlSets: {
+		path: string;
+		name: string;
 		description: string;
 		controlCount: number;
 		file: string;
@@ -95,13 +95,17 @@
 			await new Promise<void>((resolve) => {
 				let checkCount = 0;
 				const maxChecks = 50; // 5 seconds max (100ms intervals)
-				
+
 				const checkInterval = setInterval(() => {
 					checkCount++;
 					const state = get(appState);
-					
+
 					// Check if the switch is complete
-					if (!state.isSwitchingControlSet && state.currentPath && state.currentPath.includes(path)) {
+					if (
+						!state.isSwitchingControlSet &&
+						state.currentPath &&
+						state.currentPath.includes(path)
+					) {
 						clearInterval(checkInterval);
 						console.log('Control set switch completed successfully');
 						resolve();

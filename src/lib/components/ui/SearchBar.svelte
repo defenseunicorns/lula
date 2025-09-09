@@ -2,7 +2,7 @@
 <!-- SPDX-FileCopyrightText: 2023-Present The Lula Authors -->
 
 <script lang="ts">
-	import { complianceStore, filteredControls, searchTerm } from '$stores/compliance';
+	import { complianceStore } from '$stores/compliance';
 
 	let searchInput = $state('');
 	let debounceTimer: ReturnType<typeof setTimeout> | undefined;

@@ -19,7 +19,7 @@
 	}: Props = $props();
 
 	let isCompact = $state(compact);
-	let parsedDiff: DiffLine[] = $state([]);
+	let parsedDiff: DiffLine[] = $derived(isCompact ? getCompactDiff(parseDiff(diff)) : parseDiff(diff));
 
 	interface DiffLine {
 		type: 'context' | 'addition' | 'deletion' | 'header' | 'hunk';
@@ -159,7 +159,6 @@
 
 		return result;
 	}
-	parsedDiff = isCompact ? getCompactDiff(parseDiff(diff)) : parseDiff(diff);
 </script>
 
 <div class="diff-viewer border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden">

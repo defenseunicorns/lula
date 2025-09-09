@@ -4,40 +4,41 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **Lula** - a Git-friendly compliance control management system built with SvelteKit 5. The application manages security compliance controls (like NIST 800-53) with individual YAML files per control, enabling proper version control and collaboration on compliance documentation. It is designed to be a generic way to manage
-controls of any sort, split the work of defining them, mapping them and also associating to actual source code & docs
-for tracking changes over time. Everything is persisted by git and this is intended to be run as an `npx app` command
-against a local git repo.
+This is **Lula 2** - a Git-friendly compliance control management system built with SvelteKit 5. The application manages security compliance controls (like NIST 800-53) with individual YAML files per control, enabling proper version control and collaboration on compliance documentation. It is designed to be a generic way to manage controls of any sort, split the work of defining them, mapping them and also associating to actual source code & docs for tracking changes over time. Everything is persisted by git and this is intended to be run as an `npx` command against a local git repo.
 
 ## Key Development Commands
 
-### Development Server (typically already running out-of-band)
+**Note:** This project uses pnpm as the package manager. All commands below use `pnpm`, but `npm` can also be used.
 
-- `npm run dev` - Start frontend development server on port 5173
-- `npm run dev:api` - Start backend API server on port 3000 (serves from examples/nist-800-53-v4-moderate)
-- `npm run dev:full` - Run both frontend and backend concurrently
+### Development Server
+
+- `pnpm run dev` - Start frontend development server on port 5173
+- `pnpm run dev:api` - Start backend API server on port 3000 (serves from current directory)
+- `pnpm run dev:full` - Run both frontend and backend concurrently
 
 ### Building and Testing
 
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run test` - Run unit tests (vitest)
-- `npm run test:unit` - Run unit tests in watch mode
+- `pnpm run build` - Build both SvelteKit app and CLI for production
+- `pnpm run build:svelte` - Build only the SvelteKit app
+- `pnpm run build:cli` - Build only the CLI tool
+- `pnpm run preview` - Preview production build
+- `pnpm run test` - Run unit tests (vitest)
+- `pnpm run test:unit` - Run unit tests in watch mode
 
 ### Code Quality
 
-- `npm run lint` - Check code formatting and linting (prettier + eslint)
-- `npm run format` - Format code with prettier
-- `npm run check` - Type check with svelte-check
+- `pnpm run lint` - Check code formatting and linting (prettier + eslint)
+- `pnpm run format` - Format code with prettier
+- `pnpm run format:check` - Check code formatting without modifying files
+- `pnpm run check` - Type check with svelte-check
 
 ### CLI Tool
 
-- `tsx cli.ts serve --dir <path> --port <port>` - Start server for specific control set
-- `tsx cli.ts import --file <oscal-file> --dir <output-dir>` - Import OSCAL catalog or profile (auto-detected)
-- `tsx cli.ts import-catalog <catalog-file> <output-dir>` - Import OSCAL catalog with options
-- `tsx cli.ts import-profile <profile-file> <output-dir>` - Import OSCAL profile with options
-- `tsx cli.ts migrate --dir <path>` - Migrate from monolithic YAML to individual files
-- `tsx cli.ts status --dir <path>` - Check migration status
+- `npx lula2` - Run the CLI tool directly (production)
+- `npx lula2 --dir <path> --port <port>` - Start server for specific control set
+- `npx lula2 crawl` - Analyze pull requests for compliance impact
+- `npx lula2 --version` - Show version
+- `tsx index.ts` - Run CLI in development mode
 
 ## Architecture
 
@@ -51,10 +52,11 @@ against a local git repo.
 
 ### Backend (Express + Node.js)
 
-- **CLI-first approach**: Express server embedded in CLI tool (`cli.ts`)
+- **CLI-first approach**: Express server embedded in CLI tool (`index.ts`)
 - **File-based storage**: Individual YAML files per control in `controls/<family>/` directories
 - **Git integration**: Built-in git history tracking for all files
 - **In-memory caching**: Controls and mappings cached for performance
+- **WebSocket support**: Real-time updates for control changes
 
 ### Data Model
 
@@ -97,21 +99,16 @@ examples/nist-800-53-v4-moderate/
 
 ### File Operations
 
-- All file operations go through `FileStore` class (`src/lib/fileStore.ts`)
-- Git operations handled by `GitHistoryUtil` (`src/lib/gitHistory.ts`)
-- Migration utilities in `src/lib/migration.ts`
+- All file operations go through `FileStore` class (`cli/server/infrastructure/fileStore.ts`)
+- Git operations handled by `GitHistoryUtil` (`cli/server/infrastructure/gitHistory.ts`)
+- Server state management in `cli/server/serverState.ts`
+- WebSocket communication in `cli/server/websocketServer.ts`
 
 ### Component Architecture
 
 - Prefer composition over inheritance
 - Use TypeScript interfaces defined in `src/lib/types.ts`
 - Components in `src/components/` organized by feature area
-
-### Test Validation
-
-- Run `node test-validation.js` to verify OSCAL+CCI processing pipeline
-- Validates CCI database integration and OSCAL enrichment
-- Ensures enhanced control format completeness
 
 ## Testing
 
@@ -123,4 +120,13 @@ examples/nist-800-53-v4-moderate/
 
 - Individual YAML files per control enable meaningful diffs
 - Git history integration shows file-level changes over time
-- Migration tools help transition from monolithic files
+- Spreadsheet import with customizable field mapping
+- UUID-based mapping system for tracking code-to-control relationships
+
+## NPM Package Details
+
+- **Package name**: `lula2`
+- **Binary name**: `lula2` 
+- **Minimum Node version**: 22.0.0
+- **Package type**: ESM module
+- **Distribution**: Built CLI in `dist/` directory

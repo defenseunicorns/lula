@@ -58,7 +58,7 @@
 		// Normalize paths for comparison (remove trailing slashes)
 		const normalizedCurrentPath = currentPath?.replace(/\/$/, '');
 		const normalizedControlSetPath = controlSet.path?.replace(/\/$/, '');
-		
+
 		return !!(
 			normalizedCurrentPath &&
 			normalizedControlSetPath &&

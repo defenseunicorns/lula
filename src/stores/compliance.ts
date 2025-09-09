@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
-import { writable, derived } from 'svelte/store';
-import type { Control, Mapping, ControlWithMappings } from '$lib/types';
+import type { Control, ControlWithMappings, Mapping } from '$lib/types';
+import { derived, writable } from 'svelte/store';
 
 // Base stores
 export const controls = writable<Control[]>([]);

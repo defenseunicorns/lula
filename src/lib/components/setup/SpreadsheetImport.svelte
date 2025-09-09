@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { CloudUpload, Draggable } from 'carbon-icons-svelte';
 	import { createEventDispatcher } from 'svelte';
-	import * as XLSX from 'xlsx';
-	import { CloudUpload, InformationFilled, ErrorFilled, CheckmarkFilled, Draggable } from 'carbon-icons-svelte';
 
 	const dispatch = createEventDispatcher();
 
-	let workbook: XLSX.WorkBook | null = null;
+	// File data
+	let fileData: File | null = null;
 	let fileName = '';
 	let selectedSheet = '';
 	let sheets: string[] = [];
@@ -13,7 +13,8 @@
 	let sampleData: any[] = [];
 	let controlCount = 0;
 	let rowPreviews: { row: number; preview: string }[] = [];
-	$: availableFields = fields;
+	// Make availableFields reactive to both fields and fieldConfigs changes
+	$: availableFields = fields.filter((f) => fields.includes(f));
 
 	// Field configuration for tabs
 	type TabAssignment = 'overview' | 'implementation' | 'custom' | null;
@@ -46,6 +47,26 @@
 	let dragOverTab: TabAssignment | null = null;
 	let dragOverField: string | null = null;
 
+	// Reset all form state
+	function resetFormState() {
+		// Reset field data
+		fields = [];
+		sampleData = [];
+		controlCount = 0;
+		fieldConfigs.clear();
+		fieldConfigs = new Map(); // Force reactivity
+
+		// Reset selections
+		controlIdField = '';
+
+		// Reset UI state
+		errorMessage = '';
+		successMessage = '';
+		draggedField = null;
+		dragOverTab = null;
+		dragOverField = null;
+	}
+
 	function handleDragOver(e: DragEvent) {
 		e.preventDefault();
 		dragActive = true;
@@ -73,188 +94,168 @@
 	}
 
 	async function handleFile(file: File) {
+		// Reset all form state when loading a new file
+		resetFormState();
+
 		fileName = file.name;
+		fileData = file;
 		errorMessage = '';
+		isLoading = true;
 
 		// Auto-populate control set name from filename (remove extension)
-		if (!controlSetName) {
-			controlSetName = fileName.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
-			controlSetDescription = `Imported from ${fileName}`;
-		}
+		controlSetName = fileName.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+		controlSetDescription = `Imported from ${fileName}`;
 
-		const reader = new FileReader();
-		reader.onload = (e) => {
-			try {
-				const data = new Uint8Array(e.target?.result as ArrayBuffer);
-				workbook = XLSX.read(data, { type: 'array' });
+		try {
+			// Send file to backend for parsing
+			const formData = new FormData();
+			formData.append('file', file);
 
-				sheets = workbook.SheetNames;
-				selectedSheet = sheets[0];
+			const response = await fetch('/api/parse-excel', {
+				method: 'POST',
+				body: formData
+			});
 
-				generateRowPreviews();
-				collectFields();
-				showFieldMapping = true;
-			} catch (error) {
-				errorMessage = 'Error reading file: ' + (error as Error).message;
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || 'Failed to parse file');
 			}
-		};
 
-		reader.readAsArrayBuffer(file);
-	}
+			const result = await response.json();
 
-	function generateRowPreviews() {
-		if (!workbook || !selectedSheet) return;
+			sheets = result.sheets || [];
+			selectedSheet = result.selectedSheet || sheets[0];
+			rowPreviews = result.rowPreviews || [];
 
-		const sheet = workbook.Sheets[selectedSheet];
-		const rawData = XLSX.utils.sheet_to_json(sheet, {
-			header: 1,
-			defval: null,
-			blankrows: false
-		}) as any[][];
-
-		rowPreviews = [];
-
-		// Generate previews for first 5 non-empty rows
-		for (let i = 0; i < Math.min(5, rawData.length); i++) {
-			const row = rawData[i];
-			if (!row || row.length === 0) continue;
-
-			// Create preview from first few columns
-			const previewCells = row
-				.slice(0, 4)
-				.filter((cell) => cell !== null && cell !== undefined)
-				.map((cell) => {
-					const str = String(cell).trim();
-					return str.length > 15 ? str.substring(0, 15) + '...' : str;
-				});
-
-			if (previewCells.length > 0) {
-				rowPreviews.push({
-					row: i + 1,
-					preview: previewCells.join(', ') + (row.length > 4 ? ', ...' : '')
-				});
+			// Set default header row
+			if (rowPreviews.length > 0 && headerRow === 1) {
+				headerRow = rowPreviews[0].row;
 			}
-		}
 
-		// Set default header row to first row with data
-		if (rowPreviews.length > 0 && headerRow === 1) {
-			headerRow = rowPreviews[0].row;
+			// Load fields from the selected sheet
+			await loadSheetData();
+			showFieldMapping = true;
+		} catch (error) {
+			errorMessage = 'Error reading file: ' + (error as Error).message;
+		} finally {
+			isLoading = false;
 		}
 	}
 
-	function collectFields() {
-		if (!workbook || !selectedSheet) return;
+	async function loadSheetData() {
+		if (!fileData || !selectedSheet) return;
 
-		const sheet = workbook.Sheets[selectedSheet];
-		const rawData = XLSX.utils.sheet_to_json(sheet, {
-			header: 1,
-			defval: null,
-			blankrows: true
-		}) as any[][];
+		isLoading = true;
 
-		const headerRowIndex = headerRow - 1;
-		if (rawData.length > headerRowIndex) {
-			const headers = rawData[headerRowIndex];
-			if (headers && headers.length > 0) {
-				fields = headers.filter((h) => h && typeof h === 'string');
+		// Clear previous field configurations when changing sheets
+		fieldConfigs.clear();
+		fieldConfigs = new Map(); // Force reactivity
+		controlIdField = ''; // Reset control ID field selection
 
-				// Initialize field configurations with smart defaults
-				fieldConfigs.clear();
-				fields.forEach((field, index) => {
-					const lowerField = field.toLowerCase();
-					let tab: TabAssignment = 'custom';
-					let fieldType: 'text' | 'textarea' | 'select' | 'date' | 'number' | 'boolean' = 'text';
+		try {
+			const formData = new FormData();
+			formData.append('file', fileData);
+			formData.append('sheetName', selectedSheet);
+			formData.append('headerRow', headerRow.toString());
 
-					// Smart tab assignment based on field name
-					if (
-						lowerField.includes('implementation') ||
-						lowerField.includes('status') ||
-						lowerField.includes('narrative') ||
-						lowerField.includes('guidance')
-					) {
-						tab = 'implementation';
-					} else if (
-						lowerField.includes('id') ||
-						lowerField.includes('title') ||
-						lowerField.includes('family') ||
-						lowerField.includes('cci') ||
-						lowerField.includes('control') ||
-						lowerField.includes('acronym')
-					) {
-						tab = 'overview';
-					}
+			const response = await fetch('/api/parse-excel-sheet', {
+				method: 'POST',
+				body: formData
+			});
 
-					// Smart field type detection
-					if (
-						lowerField.includes('description') ||
-						lowerField.includes('narrative') ||
-						lowerField.includes('guidance') ||
-						lowerField.includes('statement')
-					) {
-						fieldType = 'textarea';
-					} else if (
-						lowerField.includes('status') ||
-						lowerField.includes('type') ||
-						lowerField.includes('designation')
-					) {
-						fieldType = 'select';
-					} else if (lowerField.includes('date')) {
-						fieldType = 'date';
-					} else if (lowerField.includes('count') || lowerField.includes('number')) {
-						fieldType = 'number';
-					}
+			if (!response.ok) {
+				const error = await response.json();
+				throw new Error(error.error || 'Failed to parse sheet');
+			}
 
-					fieldConfigs.set(field, {
-						originalName: field,
-						tab,
-						displayOrder: index,
-						fieldType,
-						required: lowerField.includes('id') || lowerField.includes('title')
-					});
-				});
+			const result = await response.json();
 
-				// Get sample data and count total rows (excluding header)
-				sampleData = [];
-				let totalDataRows = 0;
-				for (let i = headerRowIndex + 1; i < rawData.length; i++) {
-					const row = rawData[i];
-					if (!row || row.length === 0) continue;
+			fields = result.fields || [];
+			sampleData = result.sampleData || [];
+			controlCount = result.controlCount || 0;
 
-					const sample: any = {};
-					headers.forEach((header, index) => {
-						if (header && row[index] !== undefined) {
-							sample[header] = row[index];
-						}
-					});
+			// Initialize field configurations with smart defaults
+			fields.forEach((field, index) => {
+				const lowerField = field.toLowerCase();
+				let tab: TabAssignment = 'custom';
+				let fieldType: 'text' | 'textarea' | 'select' | 'date' | 'number' | 'boolean' = 'text';
 
-					if (Object.keys(sample).length > 0) {
-						totalDataRows++;
-						if (sampleData.length < 3) {
-							sampleData.push(sample);
-						}
-					}
+				// Smart tab assignment based on field name
+				if (
+					lowerField.includes('implementation') ||
+					lowerField.includes('status') ||
+					lowerField.includes('narrative') ||
+					lowerField.includes('guidance')
+				) {
+					tab = 'implementation';
+				} else if (
+					lowerField.includes('id') ||
+					lowerField.includes('title') ||
+					lowerField.includes('family') ||
+					lowerField.includes('cci') ||
+					lowerField.includes('control') ||
+					lowerField.includes('acronym')
+				) {
+					tab = 'overview';
 				}
 
-				// Store the total count for display
-				controlCount = totalDataRows;
+				// Smart field type detection
+				if (
+					lowerField.includes('description') ||
+					lowerField.includes('narrative') ||
+					lowerField.includes('guidance') ||
+					lowerField.includes('statement')
+				) {
+					fieldType = 'textarea';
+				} else if (
+					lowerField.includes('status') ||
+					lowerField.includes('type') ||
+					lowerField.includes('designation')
+				) {
+					fieldType = 'select';
+				} else if (lowerField.includes('date')) {
+					fieldType = 'date';
+				} else if (lowerField.includes('count') || lowerField.includes('number')) {
+					fieldType = 'number';
+				}
 
-				// Default controlIdField to "AP Acronym" if it exists, has short values, and is unique
-				if (!controlIdField && fields.includes('AP Acronym')) {
-					const hasShortValues =
-						!sampleData.length ||
-						sampleData.every((row) => !row['AP Acronym'] || String(row['AP Acronym']).length < 25);
-					const nonEmptyValues = sampleData
-						.map((row) => row['AP Acronym'])
-						.filter((v) => v != null && v !== '' && String(v).trim() !== '');
-					const uniqueValues = new Set(nonEmptyValues);
-					const hasUniqueValues =
-						!nonEmptyValues.length || uniqueValues.size === nonEmptyValues.length;
-					const hasNonEmptyValues = nonEmptyValues.length > 0;
-					if (hasShortValues && hasUniqueValues && hasNonEmptyValues) {
-						controlIdField = 'AP Acronym';
-					}
+				fieldConfigs.set(field, {
+					originalName: field,
+					tab,
+					displayOrder: index,
+					fieldType,
+					required: lowerField.includes('id') || lowerField.includes('title')
+				});
+			});
+
+			// Trigger reactivity for fieldConfigs
+			fieldConfigs = fieldConfigs;
+
+			// Reset controlIdField if it doesn't exist in the new sheet
+			if (controlIdField && !fields.includes(controlIdField)) {
+				controlIdField = '';
+			}
+
+			// Default controlIdField to "AP Acronym" if it exists, has short values, and is unique
+			if (!controlIdField && fields.includes('AP Acronym')) {
+				const hasShortValues =
+					!sampleData.length ||
+					sampleData.every((row) => !row['AP Acronym'] || String(row['AP Acronym']).length < 25);
+				const nonEmptyValues = sampleData
+					.map((row) => row['AP Acronym'])
+					.filter((v) => v != null && v !== '' && String(v).trim() !== '');
+				const uniqueValues = new Set(nonEmptyValues);
+				const hasUniqueValues =
+					!nonEmptyValues.length || uniqueValues.size === nonEmptyValues.length;
+				const hasNonEmptyValues = nonEmptyValues.length > 0;
+				if (hasShortValues && hasUniqueValues && hasNonEmptyValues) {
+					controlIdField = 'AP Acronym';
 				}
 			}
+		} catch (error) {
+			errorMessage = 'Error loading sheet data: ' + (error as Error).message;
+		} finally {
+			isLoading = false;
 		}
 	}
 
@@ -373,16 +374,18 @@
 	}
 
 	async function importSpreadsheet() {
-		if (!workbook || !fileName) return;
+		if (!fileData || !fileName) return;
 
 		// Validate required fields
 		if (!controlIdField) {
 			errorMessage = 'Please select a Control ID field before importing';
+			successMessage = ''; // Clear any previous success message
 			return;
 		}
 
 		if (!controlSetName || controlSetName.trim() === '') {
 			errorMessage = 'Please enter a Control Set Name before importing';
+			successMessage = ''; // Clear any previous success message
 			return;
 		}
 
@@ -393,10 +396,8 @@
 		try {
 			const formData = new FormData();
 
-			// Convert workbook back to file
-			const wbout = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-			const blob = new Blob([wbout], { type: 'application/octet-stream' });
-			formData.append('file', blob, fileName);
+			// Add the file
+			formData.append('file', fileData, fileName);
 
 			// Add configuration
 			formData.append('controlIdField', controlIdField);
@@ -404,7 +405,6 @@
 			formData.append('namingConvention', 'kebab-case');
 			formData.append('skipEmpty', 'true');
 			formData.append('skipEmptyRows', 'true');
-			// Use the editable control set name and description
 			formData.append('controlSetName', controlSetName || fileName.replace(/\.[^.]+$/, ''));
 			formData.append(
 				'controlSetDescription',
@@ -599,8 +599,7 @@
 						id="sheet"
 						bind:value={selectedSheet}
 						on:change={() => {
-							generateRowPreviews();
-							collectFields();
+							loadSheetData();
 						}}
 						class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
 					>
@@ -623,7 +622,7 @@
 					<select
 						id="headerRow"
 						bind:value={headerRow}
-						on:change={collectFields}
+						on:change={loadSheetData}
 						class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
 					>
 						{#each rowPreviews as preview}
@@ -713,32 +712,28 @@
 						role="region"
 						aria-label="Excluded fields drop zone"
 					>
-						{#each availableFields as field}
-							{@const config = fieldConfigs.get(field)}
-							{@const isExcluded = !config || config.tab === null}
-							{#if isExcluded}
-								<div
-									draggable="true"
-									on:dragstart={(e) => handleFieldDragStart(e, field)}
-									on:dragend={handleFieldDragEnd}
-									role="button"
-									aria-label="Drag {field} field"
-									tabindex="0"
-									class="flex items-center px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded text-sm cursor-move hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors opacity-75"
-								>
-									<svg class="w-3 h-3 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-										<path
-											d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
-										/>
-									</svg>
-									<span class="truncate line-through">{field}</span>
-									{#if field === controlIdField}
-										<span class="ml-auto text-xs text-blue-600 dark:text-blue-400">ID</span>
-									{/if}
-								</div>
-							{/if}
+						{#each fields.filter((f) => !fieldConfigs.get(f) || fieldConfigs.get(f)?.tab === null) as field (field)}
+							<div
+								draggable="true"
+								on:dragstart={(e) => handleFieldDragStart(e, field)}
+								on:dragend={handleFieldDragEnd}
+								role="button"
+								aria-label="Drag {field} field"
+								tabindex="0"
+								class="flex items-center px-3 py-2 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded text-sm cursor-move hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors opacity-75"
+							>
+								<svg class="w-3 h-3 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+									<path
+										d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+									/>
+								</svg>
+								<span class="truncate line-through">{field}</span>
+								{#if field === controlIdField}
+									<span class="ml-auto text-xs text-blue-600 dark:text-blue-400">ID</span>
+								{/if}
+							</div>
 						{/each}
-						{#if availableFields.filter((f) => !fieldConfigs.get(f) || fieldConfigs.get(f)?.tab === null).length === 0}
+						{#if fields.filter((f) => !fieldConfigs.get(f) || fieldConfigs.get(f)?.tab === null).length === 0}
 							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 								No excluded fields
 							</p>
@@ -769,7 +764,7 @@
 					>
 						{#each Array.from(fieldConfigs.entries())
 							.filter(([field, config]) => config.tab === 'overview')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index}
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -820,7 +815,7 @@
 					>
 						{#each Array.from(fieldConfigs.entries())
 							.filter(([field, config]) => config.tab === 'implementation')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index}
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -869,7 +864,7 @@
 					>
 						{#each Array.from(fieldConfigs.entries())
 							.filter(([field, config]) => config.tab === 'custom')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index}
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -936,7 +931,7 @@
 		<div class="flex justify-center">
 			<button
 				on:click={importSpreadsheet}
-				disabled={isLoading || !workbook || !controlIdField}
+				disabled={isLoading || !fileData || !controlIdField}
 				class="px-5 py-2.5 text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm disabled:opacity-50 disabled:cursor-not-allowed"
 				title={!controlIdField ? 'Please select a Control ID field' : ''}
 			>

@@ -2,9 +2,9 @@
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
 import { join } from 'path';
+import { debug } from '../utils/debug';
 import { FileStore } from './infrastructure/fileStore';
 import { GitHistoryUtil } from './infrastructure/gitHistory';
-import { debug } from './utils/debug';
 import type { Control, Mapping } from './types';
 
 /**

@@ -5,21 +5,21 @@
 	import type { Control } from '$lib/types';
 	import { appState, wsClient } from '$lib/websocket';
 	import {
+		CheckmarkFilled,
 		Connect,
 		Edit,
 		Information,
-		Time,
 		InProgress,
-		WarningFilled,
-		CheckmarkFilled
+		Time,
+		WarningFilled
 	} from 'carbon-icons-svelte';
 	import { TabNavigation } from '../ui';
-	import { 
-		OverviewTab, 
-		ImplementationTab, 
-		CustomFieldsTab, 
-		MappingsTab, 
-		TimelineTab 
+	import {
+		CustomFieldsTab,
+		ImplementationTab,
+		MappingsTab,
+		OverviewTab,
+		TimelineTab
 	} from './tabs';
 
 	interface Props {

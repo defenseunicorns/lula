@@ -10,30 +10,30 @@
 
 // Import shared core types from frontend
 import type {
-	Control as FrontendControl,
-	Mapping as FrontendMapping,
-	SourceEntry,
+	ControlCompleteData,
 	ControlSet,
 	ControlSetInfo,
+	ControlWithHistory,
+	Control as FrontendControl,
+	Mapping as FrontendMapping,
 	GitCommit,
 	GitFileHistory,
-	UnifiedHistory,
-	ControlWithHistory,
-	ControlCompleteData
-} from '../src/lib/types';
+	SourceEntry,
+	UnifiedHistory
+} from '../../src/lib/types';
 
 // Re-export for external use
 export type Control = FrontendControl;
 export type Mapping = FrontendMapping;
 export type {
-	SourceEntry,
+	ControlCompleteData,
 	ControlSet,
 	ControlSetInfo,
+	ControlWithHistory,
 	GitCommit,
 	GitFileHistory,
-	UnifiedHistory,
-	ControlWithHistory,
-	ControlCompleteData
+	SourceEntry,
+	UnifiedHistory
 };
 
 /**
@@ -66,7 +66,6 @@ export interface Enhancement {
 	[key: string]: unknown;
 }
 
-
 /**
  * Control set metadata
  */
@@ -82,7 +81,6 @@ export interface ControlSetMetadata {
 	/** Additional metadata */
 	[key: string]: unknown;
 }
-
 
 /**
  * Field metadata for spreadsheet import
