@@ -8,7 +8,7 @@ import { createHash } from 'crypto';
 
 type FileContentResponse = {
 	content: string;
-	encoding: 'base64' | string ;
+	encoding: 'base64' | string;
 };
 
 /**
