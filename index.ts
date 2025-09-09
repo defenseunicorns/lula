@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import { UICommand } from './cli/commands/ui';
 import { getVersion } from './cli/commands/version';
 import { crawlCommand } from './cli/commands/crawl';
+
 const program = new Command();
 
 program
@@ -12,8 +13,9 @@ program
 	.version(getVersion(), '-v, --version', 'output the current version')
 	.option('--debug', 'Enable debug logging');
 
+program.addCommand(crawlCommand());
+
 // Register commands
 UICommand.register(program, () => program.opts().debug || false);
-program.addCommand(crawlCommand());
 
 program.parse(process.argv);
