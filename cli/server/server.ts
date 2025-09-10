@@ -57,7 +57,7 @@ export async function createServer(options: ServerOptions): Promise<{
 
 	// Serve frontend for all other routes (SPA fallback)
 	app.get('/*splat', (req, res) => {
-		res.sendFile(join(distPath, 'index.html'));
+		res.sendFile('index.html', { root: distPath });
 	});
 
 	// Create HTTP server for both Express and WebSocket
