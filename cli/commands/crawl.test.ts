@@ -71,6 +71,14 @@ describe('getPRContext', () => {
 		expect(fsMock.readFileSync).toHaveBeenCalledWith('/path/to/event.json', 'utf8');
 	});
 
+	it('throws when GitHub event payload lacks PR number', () => {
+		process.env.GITHUB_EVENT_PATH = '/path/to/event.json';
+		process.env.GITHUB_REPOSITORY = 'octo-org/octo-repo';
+		fsMock.readFileSync.mockReturnValueOnce(JSON.stringify({ pull_request: {} }));
+
+		expect(() => getPRContext()).toThrow('PR number not found in GitHub event payload.');
+	});
+
 	it('falls back to OWNER/REPO/PULL_NUMBER env vars when event payload is absent', () => {
 		process.env.OWNER = 'me';
 		process.env.REPO = 'mine';
@@ -172,6 +180,21 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 
 		const unchanged = getChangedBlocks(oldText, newTextUnchanged);
 		expect(unchanged).toHaveLength(0);
+	});
+
+	it('skips new blocks that have no matching old block (no oldMatch)', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+		const oldText = 'header\nfooter';
+		const newText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'new content',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const changed = getChangedBlocks(oldText, newText);
+		expect(changed).toHaveLength(0);
 	});
 });
 
