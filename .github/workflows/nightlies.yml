@@ -1,20 +1,21 @@
-name: PR Title Check
+name: Nightlies
 
 on:
-  pull_request:
-    branches: [main]
-    types: [opened, edited, synchronize]
-  merge_group:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
 
-permissions: # added using https://github.com/step-security/secure-repo
+permissions:
   contents: read
 
 jobs:
-  title_check:
+  build:
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
-      pull-requests: read
+      packages: write
+      id-token: write
 
     steps:
       - name: Harden Runner
@@ -22,10 +23,9 @@ jobs:
         with:
           egress-policy: audit
 
-      - name: Checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -39,15 +39,19 @@ jobs:
           node-version: '22.x'
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
+          registry-url: 'https://registry.npmjs.org'
+          always-auth: true
 
       - name: Ensure pnpm store exists
         run: pnpm store path | xargs -I{} mkdir -p "{}"
 
-      - name: Install commitlint
-        run: npm install --save-dev @commitlint/{config-conventional,cli}
-
-      - name: Lint PR title
-        if: ${{ github.event.pull_request && github.event.pull_request.title }}
+      - name: Auth to npm
         env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
-        run: echo "$PR_TITLE" | npx commitlint
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+
+      - name: Publish to NPM
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: ./scripts/nightlies.sh
