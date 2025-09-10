@@ -12,7 +12,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  * @returns The current version
  */
 export function getVersion() {
-	const pkgPath = path.resolve(__dirname, '../package.json'); // adjust path if index.ts is in src/
+	let pkgPath = path.resolve(__dirname, '../package.json');
+	if (!fs.existsSync(pkgPath)) {
+		pkgPath = path.resolve(__dirname, '../../package.json');
+	}
 	const packageJson = fs.readFileSync(pkgPath, 'utf8');
 	const { version } = JSON.parse(packageJson);
 	return version;
