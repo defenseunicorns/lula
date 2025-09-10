@@ -60,6 +60,7 @@
 		"csv-parse": "^6.1.0",
 		"exceljs": "^4.4.0",
 		"express": "^5.1.0",
+		"express-rate-limit": "^8.1.0",
 		"flowbite": "^3.1.2",
 		"glob": "^11.0.3",
 		"isomorphic-git": "^1.33.1",
