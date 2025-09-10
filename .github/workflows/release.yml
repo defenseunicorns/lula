@@ -11,6 +11,9 @@ jobs:
   test:
     # Runs e2e tests and unit tests
     uses: "./.github/workflows/tests.yaml"
+    permissions:
+      contents: read
+      id-token: write   
 
   release:
     name: Release
