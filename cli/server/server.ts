@@ -51,7 +51,7 @@ export async function createServer(options: ServerOptions): Promise<{
 	app.use('/api', spreadsheetRoutes);
 
 	// Serve frontend for all other routes (SPA fallback)
-	app.get('*', (req, res) => {
+	app.get('/*splat', (req, res) => {
 		res.sendFile(join(distPath, 'index.html'));
 	});
 
