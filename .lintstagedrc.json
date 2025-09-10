@@ -1,16 +1,10 @@
 {
-	"**/*.{ts,tsx}": [
-		"prettier --config .prettierrc --write",
-		"eslint --config eslint.config.js --fix"
-	],
-	"**/*.test.{ts,tsx}": ["eslint --config eslint.config.js"],
+	"*.ts": ["prettier --config .prettierrc --write", "eslint --config eslint.config.js --fix"],
+	"*.test.ts": ["eslint --config eslint.config.js"],
 	"integration/**/*.ts": ["eslint --config eslint.config.js"],
-	"**/*.mjs": ["prettier --config .prettierrc --write"],
-	"**/*.js": ["prettier --config .prettierrc --write"],
-	"**/*.json": ["prettier --config .prettierrc --write"],
-	"**/*.sh": ["shellcheck -f tty"],
-	".husky/pre-*": ["shellcheck -f tty"],
-	"**/*.md": [
-		"npx -y markdownlint-cli --config .markdownlint.json --fix --ignore adr --ignore node_modules"
-	]
+	"*.mjs": ["prettier --config .prettierrc --write"],
+	"*.js": ["prettier --config .prettierrc --write"],
+	"*.json": ["prettier --config .prettierrc --write"],
+	"*.sh": ["shellcheck -f tty"],
+	".husky/pre-*": ["shellcheck -f tty"]
 }

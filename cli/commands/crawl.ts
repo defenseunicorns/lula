@@ -203,7 +203,7 @@ export function crawlCommand(): Command {
 							`**Compliance Alert**:\`${file.filename}\` changed between lines ${block.startLine + 1}–${block.endLine}.` +
 							`\nUUID \`${block.uuid}\` may be out of compliance.` +
 							`\nSHA-256 of block contents: \`${blockSha256}\`.` +
-							`\n\n Please review the changes to ensure they meet compliance standards.`;
+							`\n\nPlease review the changes to ensure they meet compliance standards.\n\n`;
 						console.log(`Commenting on ${file.filename}: ${commentBody}`);
 						await octokit.issues.createComment({
 							owner,
