@@ -2,7 +2,6 @@
 
 <img src="static/lula.png" alt="Lula Logo" width="150" align="right" />
 
-
 > [!IMPORTANT]
 > This project is still in its early stages. Expect breaking changes.
 >
@@ -17,21 +16,13 @@
 
 Bring GitOps principles to compliance management. Lula treats security controls as code, enabling teams to manage compliance frameworks (NIST 800-53, CIS, SOC2) through pull requests, code reviews, and automated workflows—just like your application code in a user-friendly web interface. Your data stays your data--Lula takes spreadsheet imports, lets you drag & drop the UI layout and version control the data as yaml automatically for you.
 
-We built Lula 2 after discovering key limitations with the OSCAL-based approach:
+## Quickstart
 
-**Challenges in Lula 1:**
-- OSCAL proved too complex for most teams to work with effectively
-- Automated tests alone were insufficient for real compliance verification
-- The format made collaboration and review difficult
+Run Lula directly with npx (no installation required):
 
-**Lula 2's Approach:**
-- **Simple YAML + Spreadsheets**: Import from any spreadsheet tool (including EMASS), no OSCAL knowledge required
-- **Human + AI Analysis**: Recognizes that compliance requires human judgment augmented by AI reasoning, not just automated tests
-- **Git-native**: Use standard diff tools and pull requests for review
-- **Web UI**: Intuitive interface that anyone can use, not just CLI experts
-- **Change Impact Tracking**: Maps controls to actual code and tracks when changes might affect compliance
-
-This evolution reflects our learning that effective compliance management needs to be accessible to all stakeholders—not just those who can navigate complex standards or write validation code.
+```bash
+npx lula2
+```
 
 ## Why GitOps for Compliance?
 
@@ -52,20 +43,6 @@ This evolution reflects our learning that effective compliance management needs 
 - **Multi-Framework**: Support NIST, CIS, SOC2, and custom frameworks in one repo
 - **Git Timeline**: Visual history of all control changes
 
-## Quick Start
-
-Run Lula directly with npx (no installation required):
-
-```bash
-npx lula2
-```
-
-This will:
-
-1. Scan for existing control sets in your directory
-2. Launch the web interface at http://localhost:3000
-3. Start the API server for control management
-
 ## Interface Features
 
 Once launched, you can:
@@ -77,7 +54,47 @@ Once launched, you can:
 - **Import Data**: Use the setup page to import OSCAL catalogs or existing control sets
 - **Export Reports**: Generate compliance reports and assessments
 
+## Learning from Lula 1
+
+We built Lula 2 after discovering key limitations with the OSCAL-based approach:
+
+**Challenges in Lula 1:**
+
+- OSCAL proved too complex for most teams to work with effectively
+- Automated tests alone were insufficient for real compliance verification
+- The format made collaboration and review difficult
+
+**Lula 2's Approach:**
+
+- **Simple YAML + Spreadsheets**: Import from any spreadsheet tool (including EMASS), no OSCAL knowledge required
+- **Human + AI Analysis**: Recognizes that compliance requires human judgment augmented by AI reasoning, not just automated tests
+- **Git-native**: Use standard diff tools and pull requests for review
+- **Web UI**: Intuitive interface that anyone can use, not just CLI experts
+- **Change Impact Tracking**: Maps controls to actual code and tracks when changes might affect compliance
+
+This evolution reflects our learning that effective compliance management needs to be accessible to all stakeholders—not just those who can navigate complex standards or write validation code.
+
 ## Commands
+
+### UI Command
+
+By default, the web interface is launched as the root command, but if you need to provide configuration flags:
+
+```bash
+> npx lula2 ui
+```
+
+### Crawl Command
+
+Analyze pull requests for compliance impact:
+
+```bash
+> OWNER=defenseunicorns REPO=on-demand-compliance  PULL_NUMBER=24 GITHUB_TOKEN=$(gh auth token) npx lula2 crawl
+Commenting on file1.ts: **Compliance Alert**: `file1.ts` changed between lines 9–16.
+UUID `123e4567-e89b-12d3-a456-426614174001` may be out of compliance. Please review.
+Commenting on file1.yaml: **Compliance Alert**: `file1.yaml` changed between lines 16–18.
+UUID `123e4567-e89b-12d3-a456-426614174000` may be out of compliance. Please review.
+```
 
 ### Version Command
 
