@@ -23,6 +23,8 @@ on:
     secrets:
       CHAINGUARD_IDENTITY:
         required: false
+      CODECOV_TOKEN:
+        required: false
 
 permissions:
   id-token: write # This is needed for OIDC federation.
