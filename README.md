@@ -13,6 +13,7 @@
 [![Known Vulnerabilities](https://snyk.io/test/npm/lula-next/badge.svg)](https://snyk.io/advisor/npm-package/lula-next)
 [![Npm package version](https://badgen.net/npm/v/lula-next)](https://npmjs.com/package/lula-next)
 [![Npm package total downloads](https://badgen.net/npm/dt/lula-next)](https://npmjs.com/package/lula-next)
+[![codecov](https://codecov.io/gh/defenseunicorns/lula/graph/badge.svg?token=FZV3DSS8NF)](https://codecov.io/gh/defenseunicorns/lula)
 
 Bring GitOps principles to compliance management. Lula treats security controls as code, enabling teams to manage compliance frameworks (NIST 800-53, CIS, SOC2) through pull requests, code reviews, and automated workflows—just like your application code in a user-friendly web interface. Your data stays your data--Lula takes spreadsheet imports, lets you drag & drop the UI layout and version control the data as yaml automatically for you.
 
