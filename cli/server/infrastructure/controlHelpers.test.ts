@@ -71,12 +71,12 @@ description: A test control set
 		it('should handle malformed YAML gracefully', () => {
 			// Mock console.error to suppress stderr output during test
 			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-			
+
 			writeFileSync(join(tempDir, 'lula.yaml'), 'invalid_yaml: {\n  unclosed_bracket: [');
 
 			const result = loadControlSetMetadata(tempDir);
 			expect(result).toEqual({});
-			
+
 			// Restore console.error
 			consoleSpy.mockRestore();
 		});
