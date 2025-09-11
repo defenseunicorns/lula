@@ -1,6 +1,8 @@
 import { defineConfig } from 'vitest/config';
+import { sveltekit } from '@sveltejs/kit/vite';
 
 export default defineConfig({
+	plugins: [sveltekit()],
 	test: {
 		include: ['src/**/*.test.ts', 'hack/**/*.test.ts', 'cli/**/*.test.ts'],
 		exclude: ['node_modules', 'dist', 'coverage'],
