@@ -1,0 +1,5 @@
+ignore:
+- src/app.d.ts
+- cli/server/types.ts
+- src/lib/form-types.ts
+- src/lib/types.ts
