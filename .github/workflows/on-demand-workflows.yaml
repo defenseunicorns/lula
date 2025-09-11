@@ -81,8 +81,8 @@ jobs:
       - run: npm run test:unit -- --run --coverage --coverage.reporter=lcov --coverage.reportsDirectory=coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7 # v5.5.1
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   integration-test:
     if: inputs.run-integration == true
