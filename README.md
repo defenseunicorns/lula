@@ -89,11 +89,19 @@ By default, the web interface is launched as the root command, but if you need t
 Analyze pull requests for compliance impact:
 
 ```bash
-> OWNER=defenseunicorns REPO=on-demand-compliance  PULL_NUMBER=24 GITHUB_TOKEN=$(gh auth token) npx lula2 crawl
-Commenting on file1.ts: **Compliance Alert**: `file1.ts` changed between lines 9–16.
-UUID `123e4567-e89b-12d3-a456-426614174001` may be out of compliance. Please review.
-Commenting on file1.yaml: **Compliance Alert**: `file1.yaml` changed between lines 16–18.
-UUID `123e4567-e89b-12d3-a456-426614174000` may be out of compliance. Please review.
+> OWNER=defenseunicorns REPO=pepr-excellent-examples  PULL_NUMBER=374 GITHUB_TOKEN=$(gh auth token) npx lula2 crawl
+Commenting on hello-pepr-ns-all/capabilities/namespace.ts: **Compliance Alert**:`hello-pepr-ns-all/capabilities/namespace.ts` changed between lines 24–34.
+UUID `123e4567-e89b-12d3-a456-426614174000` may be out of compliance.
+SHA-256 of block contents: `b2cdf6cac0cbb0ffb372acb487900e0d706526ff58979384894e99d50275763e`.
+
+Please review the changes to ensure they meet compliance standards.
+
+
+Commenting on hello-pepr-ns-all/ex.yaml: **Compliance Alert**:`hello-pepr-ns-all/ex.yaml` changed between lines 1–6.
+UUID `123e4567-e89b-12d3-a456-426614174001` may be out of compliance.
+SHA-256 of block contents: `c5464d5233e9547ca08cbe1f910966008bad22cc1ab4d05cb9f39f713ae76fe4`.
+
+Please review the changes to ensure they meet compliance standards.
 ```
 
 ### Version Command
