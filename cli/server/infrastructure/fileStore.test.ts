@@ -216,11 +216,17 @@ control_id_field: id`;
 		});
 
 		it('should handle file read errors gracefully', async () => {
+			// Mock console.error to suppress stderr output during test
+			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+			
 			const controlsDir = join(tempDir, 'controls', 'INVALID');
 			mkdirSync(controlsDir, { recursive: true });
-			writeFileSync(join(controlsDir, 'INVALID-1.yaml'), 'invalid: yaml: content: [');
+			writeFileSync(join(controlsDir, 'INVALID-1.yaml'), 'invalid_yaml: {\n  unclosed_bracket: [');
 
 			await expect(fileStore.loadControl('INVALID-1')).rejects.toThrow();
+			
+			// Restore console.error
+			consoleSpy.mockRestore();
 		});
 	});
 
@@ -298,13 +304,19 @@ control_id_field: id`;
 		});
 
 		it('should skip controls that fail to load', async () => {
+			// Mock console.error to suppress stderr output during test
+			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+			
 			const controlsDir = join(tempDir, 'controls', 'INVALID');
 			mkdirSync(controlsDir, { recursive: true });
-			writeFileSync(join(controlsDir, 'INVALID-1.yaml'), 'invalid: yaml: [[[');
+			writeFileSync(join(controlsDir, 'INVALID-1.yaml'), 'invalid_yaml: {\n  unclosed_bracket: [');
 
 			const controls = await fileStore.loadAllControls();
 			expect(controls.length).toBeGreaterThan(0);
 			expect(controls.every((c) => c.id !== 'INVALID-1')).toBe(true);
+			
+			// Restore console.error
+			consoleSpy.mockRestore();
 		});
 	});
 
@@ -433,12 +445,18 @@ control_id_field: id`;
 		});
 
 		it('should handle malformed mapping files gracefully', async () => {
+			// Mock console.error to suppress stderr output during test
+			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+			
 			const mappingsDir = join(tempDir, 'mappings', 'INVALID');
 			mkdirSync(mappingsDir, { recursive: true });
-			writeFileSync(join(mappingsDir, 'INVALID-1-mappings.yaml'), 'invalid: yaml: [[[');
+			writeFileSync(join(mappingsDir, 'INVALID-1-mappings.yaml'), 'invalid_yaml: {\n  unclosed_bracket: [');
 
 			const mappings = await fileStore.loadMappings();
 			expect(mappings.length).toBeGreaterThan(0);
+			
+			// Restore console.error
+			consoleSpy.mockRestore();
 		});
 	});
 
@@ -528,12 +546,18 @@ control_id_field: id`;
 		});
 
 		it('should clear and refresh the control metadata cache', () => {
+			// Mock console.error to suppress stderr output during test
+			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+			
 			expect(fileStore.getControlMetadata('AC-1')).toBeDefined();
 
 			fileStore.clearCache();
 
 			const metadata = fileStore.getControlMetadata('AC-1');
 			expect(metadata).toBeDefined();
+			
+			// Restore console.error
+			consoleSpy.mockRestore();
 		});
 	});
 });
