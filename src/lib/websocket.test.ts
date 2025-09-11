@@ -4,7 +4,6 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-
 vi.mock('$app/environment', () => ({
 	browser: true
 }));
@@ -14,17 +13,17 @@ import type { Control, Mapping, SourceEntry } from './types';
 
 class MockWebSocket {
 	url: string;
-	readyState = 0; 
+	readyState = 0;
 	onopen: ((event: Event) => void) | null = null;
 	onmessage: ((event: MessageEvent) => void) | null = null;
 	onclose: ((event: CloseEvent) => void) | null = null;
 	onerror: ((event: Event) => void) | null = null;
-	
+
 	constructor(url: string) {
 		this.url = url;
 		mockInstance = this;
 	}
-	
+
 	send = vi.fn();
 	close = vi.fn();
 
@@ -32,7 +31,7 @@ class MockWebSocket {
 	OPEN = 1;
 	CLOSING = 2;
 	CLOSED = 3;
-	
+
 	static CONNECTING = 0;
 	static OPEN = 1;
 	static CLOSING = 2;
@@ -49,7 +48,7 @@ describe('WebSocket Client', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockInstance = null;
-		
+
 		vi.spyOn(console, 'log').mockImplementation(() => {});
 		vi.spyOn(console, 'error').mockImplementation(() => {});
 		vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -84,7 +83,7 @@ describe('WebSocket Client', () => {
 	describe('Connection Management', () => {
 		it('should connect to WebSocket with correct URL', () => {
 			wsClient.connect();
-			
+
 			expect(mockInstance?.url).toBe('ws://localhost:3000/ws');
 		});
 
@@ -99,30 +98,30 @@ describe('WebSocket Client', () => {
 			});
 
 			wsClient.connect();
-			
+
 			expect(mockInstance?.url).toBe('wss://example.com/ws');
 		});
 
-	it('should update connection status when onopen is called', async () => {
-		wsClient.connect();
+		it('should update connection status when onopen is called', async () => {
+			wsClient.connect();
 
-		await new Promise(resolve => setTimeout(resolve, 1));
+			await new Promise((resolve) => setTimeout(resolve, 1));
 
-		if (mockInstance) {
-			mockInstance.readyState = MockWebSocket.OPEN;
-			if (mockInstance.onopen) {
-				mockInstance.onopen(new Event('open'));
+			if (mockInstance) {
+				mockInstance.readyState = MockWebSocket.OPEN;
+				if (mockInstance.onopen) {
+					mockInstance.onopen(new Event('open'));
+				}
 			}
-		}
 
-		expect(wsClient.isConnected()).toBe(true);
-	});
+			expect(wsClient.isConnected()).toBe(true);
+		});
 	});
 
 	describe('Message Handling', () => {
 		beforeEach(async () => {
 			wsClient.connect();
-			await new Promise(resolve => setTimeout(resolve, 1));
+			await new Promise((resolve) => setTimeout(resolve, 1));
 			if (mockInstance) {
 				mockInstance.readyState = MockWebSocket.OPEN;
 				if (mockInstance.onopen) {
@@ -139,7 +138,7 @@ describe('WebSocket Client', () => {
 			}
 
 			let currentState: AppState;
-			appState.subscribe(state => currentState = state)();
+			appState.subscribe((state) => (currentState = state))();
 			expect(currentState!.isConnected).toBe(true);
 		});
 
@@ -148,13 +147,15 @@ describe('WebSocket Client', () => {
 				id: 'test-control-set',
 				name: 'Test Control Set',
 				controls: [{ id: 'test-1', title: 'Test Control', family: 'access-control' }],
-				mappings: [{
-					uuid: 'mapping-1',
-					control_id: 'test-1',
-					justification: 'Test justification',
-					source_entries: [{ location: 'test/location' }] as SourceEntry[],
-					status: 'implemented'
-				}],
+				mappings: [
+					{
+						uuid: 'mapping-1',
+						control_id: 'test-1',
+						justification: 'Test justification',
+						source_entries: [{ location: 'test/location' }] as SourceEntry[],
+						status: 'implemented'
+					}
+				],
 				totalControls: 1,
 				totalMappings: 1
 			};
@@ -166,7 +167,7 @@ describe('WebSocket Client', () => {
 			}
 
 			let currentState: AppState;
-			appState.subscribe(state => currentState = state)();
+			appState.subscribe((state) => (currentState = state))();
 			expect(currentState!.id).toBe('test-control-set');
 		});
 
@@ -183,7 +184,7 @@ describe('WebSocket Client', () => {
 			}
 
 			let currentState: AppState;
-			appState.subscribe(state => currentState = state)();
+			appState.subscribe((state) => (currentState = state))();
 			expect(currentState!.controls).toEqual(controls);
 		});
 
@@ -216,7 +217,7 @@ describe('WebSocket Client', () => {
 	describe('Command Methods', () => {
 		beforeEach(async () => {
 			wsClient.connect();
-			await new Promise(resolve => setTimeout(resolve, 1));
+			await new Promise((resolve) => setTimeout(resolve, 1));
 
 			if (mockInstance) {
 				mockInstance.readyState = MockWebSocket.OPEN;
@@ -266,23 +267,23 @@ describe('WebSocket Client', () => {
 	});
 
 	describe('Connection State', () => {
-	it('should return correct connection status', async () => {
-		expect(wsClient.isConnected()).toBe(false);
+		it('should return correct connection status', async () => {
+			expect(wsClient.isConnected()).toBe(false);
 
-		wsClient.connect();
-		await new Promise(resolve => setTimeout(resolve, 1));
+			wsClient.connect();
+			await new Promise((resolve) => setTimeout(resolve, 1));
 
-		if (mockInstance) {
-			mockInstance.readyState = MockWebSocket.OPEN;
-			if (mockInstance.onopen) {
-				mockInstance.onopen(new Event('open'));
+			if (mockInstance) {
+				mockInstance.readyState = MockWebSocket.OPEN;
+				if (mockInstance.onopen) {
+					mockInstance.onopen(new Event('open'));
+				}
 			}
-		}
 
-		expect(wsClient.isConnected()).toBe(true);
+			expect(wsClient.isConnected()).toBe(true);
 
-		wsClient.disconnect();
-		expect(wsClient.isConnected()).toBe(false);
+			wsClient.disconnect();
+			expect(wsClient.isConnected()).toBe(false);
 		});
 
 		it('should clean up properly on disconnect', () => {
@@ -294,7 +295,7 @@ describe('WebSocket Client', () => {
 
 		it('should handle connection close events', () => {
 			wsClient.connect();
-			
+
 			if (mockInstance?.onclose) {
 				mockInstance.onclose(new CloseEvent('close'));
 			}
