@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { createYamlDiff } from './yamlDiff';
 
 describe('yamlDiff', () => {
@@ -240,13 +240,19 @@ category: security
 		});
 
 		it('should handle malformed YAML gracefully', () => {
+			// Mock console.error to suppress stderr output during test
+			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
 			const yaml1 = 'valid: yaml';
-			const yaml2 = 'invalid: yaml: content: [[[';
+			const yaml2 = 'invalid_yaml: {\n  unclosed_bracket: [';
 
 			const result = createYamlDiff(yaml1, yaml2);
 
 			expect(result.hasChanges).toBe(false);
 			expect(result.summary).toBe('Error parsing YAML content');
+
+			// Restore console.error
+			consoleSpy.mockRestore();
 		});
 
 		it('should generate meaningful summaries', () => {

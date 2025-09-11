@@ -3,7 +3,7 @@
 
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Control } from '../types';
 import {
 	clearMetadataCache,
@@ -69,10 +69,16 @@ description: A test control set
 		});
 
 		it('should handle malformed YAML gracefully', () => {
-			writeFileSync(join(tempDir, 'lula.yaml'), 'invalid: yaml: content: [[[');
+			// Mock console.error to suppress stderr output during test
+			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+			writeFileSync(join(tempDir, 'lula.yaml'), 'invalid_yaml: {\n  unclosed_bracket: [');
 
 			const result = loadControlSetMetadata(tempDir);
 			expect(result).toEqual({});
+
+			// Restore console.error
+			consoleSpy.mockRestore();
 		});
 
 		it('should cache metadata and not reload on subsequent calls', () => {
