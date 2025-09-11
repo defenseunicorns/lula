@@ -18,6 +18,8 @@ permissions:
 jobs:
   on-demand-workflows:
     uses: ./.github/workflows/on-demand-workflows.yaml
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     with:
       run-format: true
       run-units: true
