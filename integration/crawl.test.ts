@@ -66,7 +66,7 @@ describe('crawl', () => {
 		expect(command_output).toContain("SHA-256 of block contents: `c5464d5233e9547ca08cbe1f910966008bad22cc1ab4d05cb9f39f713ae76fe4`.");
 	}, { timeout: 2 * 60 * 1000})
 	it('comments on a PR with lines changed between lulaStart and lulaEnd', async () => {
-		await new Promise(resolve => setTimeout(resolve, 5000));
+		await sleep(10);
 		
 		const { data: comments } = await octokit.request(`GET /repos/${OWNER}/${REPO}/issues/${PULL_NUMBER}/comments`, {
 			owner: OWNER,
