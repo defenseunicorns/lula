@@ -25,8 +25,6 @@ on:
         required: false
       CODECOV_TOKEN:
         required: false
-      INTEGRATION_GITHUB_TOKEN:
-        required: false
 
 permissions:
   id-token: write # This is needed for OIDC federation.
@@ -115,4 +113,4 @@ jobs:
       - run: pnpm run test:integration
         timeout-minutes: 15
         env:
-          GITHUB_TOKEN: ${{ secrets.INTEGRATION_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

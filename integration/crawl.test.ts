@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2025-Present The Lula2 Authors
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { Octokit } from '@octokit/rest';
-import execSync from 'child_process';
+import { execSync } from "node:child_process";
 
 const OWNER="defenseunicorns";
 const REPO="lula";
@@ -16,7 +16,7 @@ describe('crawl', () => {
 	beforeAll(() => {
 		if (!process.env.GITHUB_TOKEN) {
 			try {
-				GITHUB_TOKEN = execSync.execSync(`gh auth token`, { encoding: 'utf8' }).trim();
+				GITHUB_TOKEN = execSync(`gh auth token`, { encoding: 'utf8' }).trim();
 			} catch (error) {
 				console.log('No GitHub token available, skipping integration test');
 				throw error;
@@ -29,7 +29,7 @@ describe('crawl', () => {
 		testStartTime = new Date();
 		
 		try {
-			command_output = execSync.execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} npx lula2 crawl`, { 
+			command_output = execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} npx lula2 crawl`, { 
 				encoding: 'utf8',
 				timeout: 60000 
 			});
