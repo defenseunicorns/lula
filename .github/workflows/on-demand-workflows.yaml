@@ -108,3 +108,5 @@ jobs:
       - run: pnpm run build
       - run: pnpm run test:integration
         timeout-minutes: 10
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
