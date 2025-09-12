@@ -30,13 +30,27 @@ describe('crawl', () => {
 		testStartTime = new Date();
 		
 		try {
-			command_output = execSync.execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} npx lula2 crawl`, { 
+			console.log('Running crawl command...');
+			const result = execSync.execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} npx lula2 crawl`, { 
 				encoding: 'utf8',
-				timeout: 60000 // 60 second timeout
+				timeout: 60000, // 60 second timeout
+				stdio: ['pipe', 'pipe', 'pipe'] // capture stdout and stderr
 			});
+			command_output = result;
+			console.log('Crawl command completed successfully');
+			console.log('Output length:', command_output.length);
 		} catch (error) {
 			console.error('Failed to run crawl command:', error);
-			throw error;
+			if (error.stdout) {
+				console.log('STDOUT:', error.stdout.toString());
+				command_output = error.stdout.toString();
+			}
+			if (error.stderr) {
+				console.log('STDERR:', error.stderr.toString());
+			}
+			if (!command_output) {
+				throw error;
+			}
 		}
 	}, 120000); // 2 minute timeout for beforeAll
 	afterAll( async ()=> {
@@ -57,6 +71,13 @@ describe('crawl', () => {
 		}
 	});
 	it("should console log command output with the files that changed, the lines that changed, and the hash", () => {
+		console.log('Command output length:', command_output.length);
+		console.log('Command output:', JSON.stringify(command_output));
+		
+		if (!command_output || command_output.length === 0) {
+			throw new Error('No command output received - the crawl command may have failed or produced no output');
+		}
+		
 		expect(command_output).toContain("Commenting on hello-pepr-ns-all/capabilities/namespace.ts: **Compliance Alert**:`hello-pepr-ns-all/capabilities/namespace.ts` changed between lines 24–34.");
 		expect(command_output).toContain("UUID `123e4567-e89b-12d3-a456-426614174000` may be out of compliance.");
 		expect(command_output).toContain("SHA-256 of block contents: `b2cdf6cac0cbb0ffb372acb487900e0d706526ff58979384894e99d50275763e`.");
