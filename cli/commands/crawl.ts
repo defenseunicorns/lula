@@ -175,7 +175,7 @@ export function crawlCommand(): Command {
 		.description('Detect compliance-related changes between @lulaStart and @lulaEnd in PR files')
 		.action(async () => {
 			const { owner, repo, pull_number } = getPRContext();
-			console.log(`Analyzing PR #${pull_number} in ${owner}/${repo} for compliance changes...`);
+			console.log(`Analyzing PR #${pull_number} in ${owner}/${repo} for compliance changes...\n`);
 			const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 			const pr = await octokit.pulls.get({ owner, repo, pull_number });
 			const prBranch = pr.data.head.ref;
