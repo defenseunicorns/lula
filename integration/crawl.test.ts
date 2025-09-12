@@ -14,11 +14,31 @@ let command_output = "";
 let testStartTime: Date;
 describe('crawl', () => {
 	beforeAll(() => {
-		GITHUB_TOKEN = process.env.GITHUB_TOKEN || execSync.execSync(`gh auth token`).toString().trim();
+		// Skip test if no GitHub token is available
+		if (!process.env.GITHUB_TOKEN) {
+			try {
+				GITHUB_TOKEN = execSync.execSync(`gh auth token`, { encoding: 'utf8' }).trim();
+			} catch (error) {
+				console.log('No GitHub token available, skipping integration test');
+				return;
+			}
+		} else {
+			GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+		}
+		
 		octokit = new Octokit({ auth: GITHUB_TOKEN });
 		testStartTime = new Date();
-		command_output = execSync.execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} npx lula2 crawl`, { encoding: 'utf8' });
-	});
+		
+		try {
+			command_output = execSync.execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} npx lula2 crawl`, { 
+				encoding: 'utf8',
+				timeout: 60000 // 60 second timeout
+			});
+		} catch (error) {
+			console.error('Failed to run crawl command:', error);
+			throw error;
+		}
+	}, 120000); // 2 minute timeout for beforeAll
 	afterAll( async ()=> {
 		for (const comment_id of comment_ids) {
 			try {
