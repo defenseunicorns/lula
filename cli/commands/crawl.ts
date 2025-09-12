@@ -21,23 +21,23 @@ export function getPRContext(): { owner: string; repo: string; pull_number: numb
 	const fallbackRepo = process.env.REPO;
 	const fallbackNumber = process.env.PULL_NUMBER;
 
+	if (fallbackOwner && fallbackRepo && fallbackNumber) {
+		return {
+			owner: fallbackOwner!,
+			repo: fallbackRepo!,
+			pull_number: parseInt(fallbackNumber!, 10)
+		};
+	}
+
 	if (process.env.GITHUB_EVENT_PATH && process.env.GITHUB_REPOSITORY) {
-		const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
-		const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+		const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH!, 'utf8'));
+		const [owner, repo] = process.env.GITHUB_REPOSITORY!.split('/');
 		const pull_number = event.pull_request?.number;
 		if (!pull_number) throw new Error('PR number not found in GitHub event payload.');
 		return { owner, repo, pull_number };
 	}
 
-	if (!fallbackOwner || !fallbackRepo || !fallbackNumber) {
-		throw new Error('Set OWNER, REPO, and PULL_NUMBER in the environment for local use.');
-	}
-
-	return {
-		owner: fallbackOwner,
-		repo: fallbackRepo,
-		pull_number: parseInt(fallbackNumber, 10)
-	};
+	throw new Error('Set OWNER, REPO, and PULL_NUMBER in the environment for local use.');
 }
 
 /**
