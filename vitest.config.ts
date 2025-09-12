@@ -11,7 +11,7 @@ export default defineConfig({
 			reporter: ['text', 'html', 'lcov'],
 			reportsDirectory: './coverage',
 			include: ['src/**/*.ts', 'cli/**/*.ts'],
-			exclude: ['node_modules', 'dist', 'coverage']
+			exclude: ['node_modules', 'dist', 'coverage', "integration/test-files/**"]
 		},
 
 		hookTimeout: 10000
