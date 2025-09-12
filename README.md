@@ -90,17 +90,19 @@ By default, the web interface is launched as the root command, but if you need t
 Analyze pull requests for compliance impact:
 
 ```bash
-> OWNER=defenseunicorns REPO=pepr-excellent-examples  PULL_NUMBER=374 GITHUB_TOKEN=$(gh auth token) npx lula2 crawl
-Commenting on hello-pepr-ns-all/capabilities/namespace.ts: **Compliance Alert**:`hello-pepr-ns-all/capabilities/namespace.ts` changed between lines 24–34.
+> OWNER=defenseunicorns REPO=lula  PULL_NUMBER=119 GITHUB_TOKEN=$(gh auth token) npx lula2 crawl
+Analyzing PR #119 in defenseunicorns/lula for compliance changes...
+
+Commenting on integration/test-files/ex.ts: **Compliance Alert**:`integration/test-files/ex.ts` changed between lines 20–31.
 UUID `123e4567-e89b-12d3-a456-426614174000` may be out of compliance.
-SHA-256 of block contents: `b2cdf6cac0cbb0ffb372acb487900e0d706526ff58979384894e99d50275763e`.
+SHA-256 of block contents: `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`.
 
 Please review the changes to ensure they meet compliance standards.
 
 
-Commenting on hello-pepr-ns-all/ex.yaml: **Compliance Alert**:`hello-pepr-ns-all/ex.yaml` changed between lines 1–6.
+Commenting on integration/test-files/ex.yaml: **Compliance Alert**:`integration/test-files/ex.yaml` changed between lines 1–5.
 UUID `123e4567-e89b-12d3-a456-426614174001` may be out of compliance.
-SHA-256 of block contents: `c5464d5233e9547ca08cbe1f910966008bad22cc1ab4d05cb9f39f713ae76fe4`.
+SHA-256 of block contents: `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`.
 
 Please review the changes to ensure they meet compliance standards.
 ```
