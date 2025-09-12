@@ -29,7 +29,7 @@ describe('crawl', () => {
 		testStartTime = new Date();
 		
 		try {
-			command_output = execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} npx lula2 crawl`, { 
+			command_output = execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} node dist/index.js crawl`, { 
 				encoding: 'utf8',
 				timeout: 60000 
 			});
