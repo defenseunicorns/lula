@@ -14,7 +14,6 @@ let command_output = "";
 let testStartTime: Date;
 describe('crawl', () => {
 	beforeAll(() => {
-		execSync.execSync(`pnpm run build`);
 		if (!process.env.GITHUB_TOKEN) {
 			try {
 				GITHUB_TOKEN = execSync.execSync(`gh auth token`, { encoding: 'utf8' }).trim();
