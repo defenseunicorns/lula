@@ -14,6 +14,8 @@ on:
 permissions:
   id-token: write # This is needed for OIDC federation.
   contents: read
+  issues: write # Needed for integration tests to comment on PRs
+  pull-requests: write # Needed for integration tests to comment on PRs
 
 jobs:
   on-demand-workflows:
