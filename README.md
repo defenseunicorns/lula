@@ -91,6 +91,8 @@ Analyze pull requests for compliance impact:
 
 ```bash
 > OWNER=defenseunicorns REPO=lula  PULL_NUMBER=119 GITHUB_TOKEN=$(gh auth token) npx lula2 crawl
+Analyzing PR #119 in defenseunicorns/lula for compliance changes...
+
 Commenting on integration/test-files/ex.ts: **Compliance Alert**:`integration/test-files/ex.ts` changed between lines 20–31.
 UUID `123e4567-e89b-12d3-a456-426614174000` may be out of compliance.
 SHA-256 of block contents: `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`.
