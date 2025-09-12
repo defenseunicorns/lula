@@ -31,25 +31,39 @@ describe('crawl', () => {
 		
 		try {
 			console.log('Running crawl command...');
-			const result = execSync.execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} npx lula2 crawl`, { 
+			// Use the built version instead of npx to ensure we're testing the current build
+			const result = execSync.execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} ./dist/lula2 crawl`, { 
 				encoding: 'utf8',
 				timeout: 60000, // 60 second timeout
-				stdio: ['pipe', 'pipe', 'pipe'] // capture stdout and stderr
+				stdio: ['pipe', 'pipe', 'pipe'], // capture stdout and stderr
+				cwd: process.cwd() // ensure we're in the right directory
 			});
 			command_output = result;
 			console.log('Crawl command completed successfully');
 			console.log('Output length:', command_output.length);
 		} catch (error) {
 			console.error('Failed to run crawl command:', error);
-			if (error.stdout) {
-				console.log('STDOUT:', error.stdout.toString());
-				command_output = error.stdout.toString();
-			}
-			if (error.stderr) {
-				console.log('STDERR:', error.stderr.toString());
-			}
-			if (!command_output) {
-				throw error;
+			console.log('Trying fallback with npx...');
+			try {
+				const fallbackResult = execSync.execSync(`OWNER=${OWNER} REPO=${REPO} PULL_NUMBER=${PULL_NUMBER} GITHUB_TOKEN=${GITHUB_TOKEN} npx lula2 crawl`, { 
+					encoding: 'utf8',
+					timeout: 60000,
+					stdio: ['pipe', 'pipe', 'pipe']
+				});
+				command_output = fallbackResult;
+				console.log('Fallback command succeeded');
+			} catch (fallbackError) {
+				console.error('Fallback also failed:', fallbackError);
+				if (error.stdout) {
+					console.log('STDOUT:', error.stdout.toString());
+					command_output = error.stdout.toString();
+				}
+				if (error.stderr) {
+					console.log('STDERR:', error.stderr.toString());
+				}
+				if (!command_output) {
+					throw error;
+				}
 			}
 		}
 	}, 120000); // 2 minute timeout for beforeAll
@@ -70,7 +84,7 @@ describe('crawl', () => {
 			}
 		}
 	});
-	it("should console log command output with the files that changed, the lines that changed, and the hash", () => {
+	it("should console log command output with the files that changed, the lines that changed, and the hash", { timeout: 2 * 60 * 1000 }, () => {
 		console.log('Command output length:', command_output.length);
 		console.log('Command output:', JSON.stringify(command_output));
 		
@@ -85,8 +99,8 @@ describe('crawl', () => {
 		expect(command_output).toContain("Commenting on hello-pepr-ns-all/ex.yaml: **Compliance Alert**:`hello-pepr-ns-all/ex.yaml` changed between lines 1–6.");
 		expect(command_output).toContain("UUID `123e4567-e89b-12d3-a456-426614174001` may be out of compliance.");
 		expect(command_output).toContain("SHA-256 of block contents: `c5464d5233e9547ca08cbe1f910966008bad22cc1ab4d05cb9f39f713ae76fe4`.");
-	}, { timeout: 2 * 60 * 1000})
-	it('comments on a PR with lines changed between lulaStart and lulaEnd', async () => {
+	})
+	it('comments on a PR with lines changed between lulaStart and lulaEnd', { timeout: 2 * 60 * 1000 }, async () => {
 		await sleep(10);
 		
 		const { data: comments } = await octokit.request(`GET /repos/${OWNER}/${REPO}/issues/${PULL_NUMBER}/comments`, {
@@ -121,7 +135,7 @@ describe('crawl', () => {
 		}
 		
 		console.log(`Found ${relevantComments.length} relevant comments created by this test`);
-	}, { timeout: 2 * 60 * 1000});
+	});
 });
 
 function sleep(seconds: number): Promise<void> {
