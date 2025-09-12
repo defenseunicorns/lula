@@ -20,7 +20,8 @@ export default defineConfig({
 				'**/.env*',
 				'**/README.md',
 				'**/CHANGELOG.md',
-				'**/LICENSE'
+				'**/LICENSE',
+				'**/integration/test-files/**' // Ignore test files
 			]
 		},
 		proxy: {
