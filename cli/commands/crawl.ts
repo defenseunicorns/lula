@@ -21,23 +21,23 @@ export function getPRContext(): { owner: string; repo: string; pull_number: numb
 	const fallbackRepo = process.env.REPO;
 	const fallbackNumber = process.env.PULL_NUMBER;
 
+	if (fallbackOwner && fallbackRepo && fallbackNumber) {
+		return {
+			owner: fallbackOwner!,
+			repo: fallbackRepo!,
+			pull_number: parseInt(fallbackNumber!, 10)
+		};
+	}
+
 	if (process.env.GITHUB_EVENT_PATH && process.env.GITHUB_REPOSITORY) {
-		const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, 'utf8'));
-		const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+		const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH!, 'utf8'));
+		const [owner, repo] = process.env.GITHUB_REPOSITORY!.split('/');
 		const pull_number = event.pull_request?.number;
 		if (!pull_number) throw new Error('PR number not found in GitHub event payload.');
 		return { owner, repo, pull_number };
 	}
 
-	if (!fallbackOwner || !fallbackRepo || !fallbackNumber) {
-		throw new Error('Set OWNER, REPO, and PULL_NUMBER in the environment for local use.');
-	}
-
-	return {
-		owner: fallbackOwner,
-		repo: fallbackRepo,
-		pull_number: parseInt(fallbackNumber, 10)
-	};
+	throw new Error('Set OWNER, REPO, and PULL_NUMBER in the environment for local use.');
 }
 
 /**
@@ -175,8 +175,8 @@ export function crawlCommand(): Command {
 		.description('Detect compliance-related changes between @lulaStart and @lulaEnd in PR files')
 		.action(async () => {
 			const { owner, repo, pull_number } = getPRContext();
+			console.log(`Analyzing PR #${pull_number} in ${owner}/${repo} for compliance changes...\n`);
 			const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-
 			const pr = await octokit.pulls.get({ owner, repo, pull_number });
 			const prBranch = pr.data.head.ref;
 
