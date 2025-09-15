@@ -205,19 +205,19 @@ export function crawlCommand(): Command {
 							`\nSHA-256 of block contents: \`${blockSha256}\`.` +
 							`\n\nPlease review the changes to ensure they meet compliance standards.\n\n`;
 						console.log(`Commenting on ${file.filename}: ${commentBody}`);
-						await octokit.issues.createComment({
-							owner,
-							repo,
-							issue_number: pull_number,
-							body: commentBody
-						});
-						//   await octokit.pulls.createReview({
-						//   owner,
-						//   repo,
-						//   pull_number,
-						//   body: commentBody,
-						//   event: "REQUEST_CHANGES",
-						// })
+						// await octokit.issues.createComment({
+						// 	owner,
+						// 	repo,
+						// 	issue_number: pull_number,
+						// 	body: commentBody
+						// });
+						  await octokit.pulls.createReview({
+						  owner,
+						  repo,
+						  pull_number,
+						  body: commentBody,
+						  event: "REQUEST_CHANGES",
+						})
 					}
 				} catch (err) {
 					console.error(`Error processing ${file.filename}: ${err}`);
