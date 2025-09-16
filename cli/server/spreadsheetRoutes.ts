@@ -522,7 +522,11 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 					if (fieldName === 'family') return;
 
 					// Check if this field is in the justification fields list
-					if (justificationFields.includes(fieldName) && control[fieldName] !== undefined && control[fieldName] !== null) {
+					if (
+						justificationFields.includes(fieldName) &&
+						control[fieldName] !== undefined &&
+						control[fieldName] !== null
+					) {
 						// Add to justification contents
 						justificationContents.push(control[fieldName]);
 						return; // Skip adding this field to the control file

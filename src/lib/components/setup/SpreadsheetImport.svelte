@@ -314,7 +314,7 @@
 
 			// If dragging from mappings tab to another tab, remove from justificationFields
 			if (config.tab === 'mappings' && tab !== 'mappings') {
-				justificationFields = justificationFields.filter(f => f !== draggedField);
+				justificationFields = justificationFields.filter((f) => f !== draggedField);
 			}
 
 			// If dragging to mappings tab, add to justificationFields
@@ -436,7 +436,10 @@
 			formData.append('fieldSchema', JSON.stringify(fieldSchema));
 
 			// Add justification fields
-			formData.append('justificationFields', JSON.stringify(justificationFields.map(field => cleanFieldName(field))));
+			formData.append(
+				'justificationFields',
+				JSON.stringify(justificationFields.map((field) => cleanFieldName(field)))
+			);
 
 			const response = await fetch('/api/import-spreadsheet', {
 				method: 'POST',
@@ -752,7 +755,7 @@
 							</div>
 						{/each}
 						{#if fields.filter((f) => !fieldConfigs.get(f) || fieldConfigs.get(f)?.tab === null).length === 0}
-						  <p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
+							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 								No excluded fields
 							</p>
 						{/if}
@@ -803,7 +806,7 @@
 							</div>
 						{/each}
 						{#if Array.from(fieldConfigs.entries()).filter(([field, config]) => config.tab === 'overview').length === 0}
-						  <p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
+							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 								Drop fields here
 							</p>
 						{/if}
@@ -854,8 +857,8 @@
 							</div>
 						{/each}
 						{#if Array.from(fieldConfigs.entries()).filter(([field, config]) => config.tab === 'implementation').length === 0}
-						  <p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
-							  Drop fields here
+							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
+								Drop fields here
 							</p>
 						{/if}
 					</div>
@@ -868,12 +871,12 @@
 					<div
 						class="p-3 border-b border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 rounded-t-lg"
 					>
-						<h4 class="text-sm font-semibold text-orange-700 dark:text-orange-300">
-							Mappings Tab
-						</h4>
-						<p class="text-xs text-orange-600 dark:text-orange-400 mt-1">Pre-populate justification for a control mapping</p>
+						<h4 class="text-sm font-semibold text-orange-700 dark:text-orange-300">Mappings Tab</h4>
+						<p class="text-xs text-orange-600 dark:text-orange-400 mt-1">
+							Pre-populate justification for a control mapping
+						</p>
 					</div>
-					<div 
+					<div
 						class="p-3 min-h-[400px] max-h-[600px] overflow-y-auto transition-colors
 						{dragOverTab === 'mappings' ? 'bg-orange-50 dark:bg-orange-900/10' : ''}"
 						on:dragover={(e) => handleTabDragOver(e, 'mappings')}
@@ -884,28 +887,29 @@
 					>
 						<!-- Justification Fields -->
 						<div class="space-y-2">
-						{#if justificationFields.length > 0}
-							<!-- Display justification fields -->
-							{#each justificationFields as field, index}
-								<div
-									draggable="true"
-									on:dragstart={(e) => handleFieldDragStart(e, field)}
-									on:dragend={handleFieldDragEnd}
-									on:dragover={(e) => handleFieldDragOver(e, field)}
-									on:dragleave={handleFieldDragLeave}
-									on:drop={(e) => handleFieldDrop(e, field, 'mappings')}
-									role="button"
-									aria-label="{field} field in Mappings tab"
-									tabindex="0"
-									class="flex items-center px-3 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded text-sm cursor-move hover:bg-orange-200 dark:hover:bg-orange-800/30 transition-colors
-									{dragOverField === field && draggedField !== field ? 'border-t-2 border-orange-500' : ''}">
-									<Draggable class="w-3 h-3 mr-2 flex-shrink-0" />
-									<span class="truncate">{field}</span>
-								</div>
-							{/each}
+							{#if justificationFields.length > 0}
+								<!-- Display justification fields -->
+								{#each justificationFields as field, index}
+									<div
+										draggable="true"
+										on:dragstart={(e) => handleFieldDragStart(e, field)}
+										on:dragend={handleFieldDragEnd}
+										on:dragover={(e) => handleFieldDragOver(e, field)}
+										on:dragleave={handleFieldDragLeave}
+										on:drop={(e) => handleFieldDrop(e, field, 'mappings')}
+										role="button"
+										aria-label="{field} field in Mappings tab"
+										tabindex="0"
+										class="flex items-center px-3 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded text-sm cursor-move hover:bg-orange-200 dark:hover:bg-orange-800/30 transition-colors
+									{dragOverField === field && draggedField !== field ? 'border-t-2 border-orange-500' : ''}"
+									>
+										<Draggable class="w-3 h-3 mr-2 flex-shrink-0" />
+										<span class="truncate">{field}</span>
+									</div>
+								{/each}
 							{:else}
 								<!-- Drop zone only shown when no fields are present -->
-								<div 
+								<div
 									role="region"
 									aria-label="Justification field drop zone"
 									class="p-4 transition-colors
@@ -922,18 +926,18 @@
 											if (!justificationFields.includes(draggedField)) {
 												justificationFields = [...justificationFields, draggedField];
 											}
-											
+
 											// Set tab assignment
 											const config = fieldConfigs.get(draggedField)!;
 											config.tab = 'mappings';
 											fieldConfigs.set(draggedField, config);
 											fieldConfigs = new Map(fieldConfigs); // Force reactivity
-											
+
 											dragOverTab = null;
 										}
 									}}
 								>
-								  <p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
+									<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 										Drop fields here
 									</p>
 								</div>
@@ -984,7 +988,7 @@
 							</div>
 						{/each}
 						{#if Array.from(fieldConfigs.entries()).filter(([field, config]) => config.tab === 'custom').length === 0}
-						  <p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
+							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 								Drop fields here
 							</p>
 						{/if}
