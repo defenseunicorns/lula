@@ -10,7 +10,8 @@ import {
 	fetchRawFileViaAPI,
 	extractMapBlocks,
 	getChangedBlocks,
-	crawlCommand
+	crawlCommand,
+	postFinding
 } from './crawl';
 
 vi.mock('fs', () => {
@@ -22,9 +23,10 @@ const pullsGet = vi.fn();
 const pullsListFiles = vi.fn();
 const reposGetContent = vi.fn();
 const issuesCreateComment = vi.fn();
+const pullsCreateReview = vi.fn();
 
 const mockOctokitInstance = {
-	pulls: { get: pullsGet, listFiles: pullsListFiles },
+	pulls: { get: pullsGet, listFiles: pullsListFiles, createReview: pullsCreateReview },
 	repos: { getContent: reposGetContent },
 	issues: { createComment: issuesCreateComment }
 };
@@ -33,6 +35,7 @@ vi.mock('@octokit/rest', () => {
 	const Octokit = vi.fn().mockImplementation(() => mockOctokitInstance);
 	return { Octokit };
 });
+
 const fsMock = fs as unknown as { readFileSync: ReturnType<typeof vi.fn> };
 
 const originalEnv = { ...process.env };
@@ -247,15 +250,26 @@ describe('crawl command (integration)', () => {
 
 		const command = crawlCommand();
 
-		await command.parseAsync([], { from: 'user' });
+		// Run as a user would invoke: subcommand "crawl" plus option to post as a comment
+		await command.parseAsync(['--post-mode', 'comment'], { from: 'user' });
 
+		// Should post a PR comment (not a review) in comment mode
 		expect(issuesCreateComment).toHaveBeenCalledTimes(1);
-		const call = issuesCreateComment.mock.calls[0][0];
+		expect(pullsCreateReview).not.toHaveBeenCalled();
 
+		const call = issuesCreateComment.mock.calls[0][0];
 		expect(call.owner).toBe('octo-org');
 		expect(call.repo).toBe('octo-repo');
 		expect(call.issue_number).toBe(77);
 
+		// Body should match the new Lula overview format
+		expect(call.body).toContain('## Lula Compliance Overview');
+		expect(call.body).toContain('src/file1.txt');
+
+		// The table shows backticked line range like `2–4`
+		expect(call.body).toMatch(/`2–4`/);
+
+		// UUID and SHA should be present
 		const changedBlockText = [
 			`// @lulaStart ${uuid}`,
 			'new line changed',
@@ -263,20 +277,68 @@ describe('crawl command (integration)', () => {
 		].join('\n');
 		const expectedSha = crypto.createHash('sha256').update(changedBlockText).digest('hex');
 
-		expect(call.body).toContain('**Compliance Alert**:');
-		expect(call.body).toContain('src/file1.txt');
-		expect(call.body).toMatch(/lines 2–4\./);
-		expect(call.body).toContain(`UUID \`${uuid}\``);
+		expect(call.body).toContain(uuid);
 		expect(call.body).toContain(expectedSha);
 
+		// Ensure added files were skipped
 		const fetchedPaths = reposGetContent.mock.calls.map((c) => c[0].path);
 		expect(fetchedPaths).not.toContain('src/added.txt');
 
+		// Error handling for broken file
 		expect(errSpy).toHaveBeenCalled();
 		const errMsgs = errSpy.mock.calls.map((c) => c[0] as string);
 		expect(errMsgs.some((m) => m.includes('Error processing src/broken.txt'))).toBe(true);
 
 		logSpy.mockRestore();
 		errSpy.mockRestore();
+	});
+});
+
+describe('postFinding', () => {
+	it('creates a PR review with REQUEST_CHANGES when postMode is "review"', async () => {
+		const octokit = new Octokit();
+
+		await postFinding({
+			octokit,
+			postMode: 'review',
+			owner: 'octo-org',
+			repo: 'octo-repo',
+			pull_number: 101,
+			body: 'Review body'
+		});
+
+		expect(mockOctokitInstance.pulls.createReview).toHaveBeenCalledTimes(1);
+		expect(mockOctokitInstance.pulls.createReview).toHaveBeenCalledWith({
+			owner: 'octo-org',
+			repo: 'octo-repo',
+			pull_number: 101,
+			body: 'Review body',
+			event: 'REQUEST_CHANGES'
+		});
+
+		expect(mockOctokitInstance.issues.createComment).not.toHaveBeenCalled();
+	});
+
+	it('creates an issue comment when postMode is "comment"', async () => {
+		const octokit = new Octokit();
+
+		await postFinding({
+			octokit,
+			postMode: 'comment',
+			owner: 'octo-org',
+			repo: 'octo-repo',
+			pull_number: 202,
+			body: 'Comment body'
+		});
+
+		expect(mockOctokitInstance.issues.createComment).toHaveBeenCalledTimes(1);
+		expect(mockOctokitInstance.issues.createComment).toHaveBeenCalledWith({
+			owner: 'octo-org',
+			repo: 'octo-repo',
+			issue_number: 202,
+			body: 'Comment body'
+		});
+
+		expect(mockOctokitInstance.pulls.createReview).not.toHaveBeenCalled();
 	});
 });
