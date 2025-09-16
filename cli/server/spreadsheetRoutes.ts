@@ -2,13 +2,13 @@
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
 import { parse as parseCSVSync } from 'csv-parse/sync';
-import ExcelJS from 'exceljs';
 import express from 'express';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { glob } from 'glob';
 import * as yaml from 'js-yaml';
 import multer from 'multer';
 import { dirname, join, relative } from 'path';
+import * as XLSX from 'xlsx';
 import { debug } from '../utils/debug';
 import { getServerState } from './serverState';
 
@@ -111,25 +111,21 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			const csvContent = (req as any).file.buffer.toString('utf-8');
 			rawData = parseCSV(csvContent);
 		} else {
-			// Parse Excel file with ExcelJS
-			const workbook = new ExcelJS.Workbook();
-			// Convert multer buffer to Node.js Buffer
+			// Parse Excel file with SheetJS (xlsx)
 			const buffer = Buffer.from((req as any).file.buffer);
-			await workbook.xlsx.load(buffer as any);
-			const worksheet = workbook.worksheets[0];
-
-			if (!worksheet) {
+			const wb = XLSX.read(buffer, { type: 'buffer' });
+			const firstSheetName = wb.SheetNames[0];
+			if (!firstSheetName) {
 				return res.status(400).json({ error: 'No worksheet found in file' });
 			}
+			const ws = wb.Sheets[firstSheetName];
 
-			// Convert to array format similar to XLSX
-			worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
-				const rowData: any[] = [];
-				row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-					rowData[colNumber - 1] = cell.value;
-				});
-				rawData[rowNumber - 1] = rowData;
-			});
+			// Convert to 2D array like before; keep empties as nulls
+			rawData = XLSX.utils.sheet_to_json(ws, {
+				header: 1,
+				raw: true,
+				defval: null
+			}) as any[][];
 		}
 
 		const startRowIndex = parseInt(startRow) - 1;
@@ -209,7 +205,6 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 						// Track value for metadata - normalize strings for uniqueness detection
 						const normalizedValue = typeof value === 'string' ? value.trim() : value;
 						if (normalizedValue !== '') {
-							// Don't count empty strings as unique values
 							metadata.uniqueValues.add(normalizedValue);
 						}
 
@@ -282,7 +277,6 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 
 		// Create lula.yaml with enhanced field metadata
 		const uniqueFamilies = Array.from(families.keys()).filter((f) => f && f !== 'UNKNOWN');
-		// Process families and controls
 
 		// Build field schema from metadata in the expected format
 		// Check if frontend provided field schema with tab assignments
@@ -315,7 +309,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			.sort();
 		fields['family'] = {
 			type: 'string',
-			ui_type: familyOptions.length <= 50 ? 'select' : 'short_text', // Make select if reasonable number of families
+			ui_type: familyOptions.length <= 50 ? 'select' : 'short_text',
 			is_array: false,
 			max_length: 10,
 			usage_count: controls.length,
@@ -359,15 +353,15 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			const nonEmptyCount = metadata.totalCount - metadata.emptyCount;
 			const isDropdownCandidate =
 				metadata.uniqueValues.size > 0 &&
-				metadata.uniqueValues.size <= 20 && // Max 20 unique values for dropdown
-				nonEmptyCount >= 10 && // At least 10 non-empty values to be meaningful
-				metadata.maxLength <= 100 && // Reasonably short values only
-				metadata.uniqueValues.size / nonEmptyCount <= 0.3; // Less than 30% unique ratio among non-empty values
+				metadata.uniqueValues.size <= 20 &&
+				nonEmptyCount >= 10 &&
+				metadata.maxLength <= 100 &&
+				metadata.uniqueValues.size / nonEmptyCount <= 0.3;
 
 			if (metadata.hasMultipleLines || metadata.maxLength > 500) {
 				uiType = 'textarea';
 			} else if (isDropdownCandidate) {
-				uiType = 'select'; // Few unique values suggest a dropdown
+				uiType = 'select';
 			} else if (metadata.type === 'boolean') {
 				uiType = 'checkbox';
 			} else if (metadata.type === 'number') {
@@ -408,13 +402,13 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				max_length: metadata.maxLength,
 				usage_count: usageCount,
 				usage_percentage: usagePercentage,
-				required: isControlIdField ? true : (frontendConfig?.required ?? usagePercentage > 95), // Control ID is always required
+				required: isControlIdField ? true : (frontendConfig?.required ?? usagePercentage > 95),
 				visible: frontendConfig?.tab !== 'hidden',
-				show_in_table: isControlIdField ? true : metadata.maxLength <= 100 && usagePercentage > 30, // Always show control ID in table
-				editable: isControlIdField ? false : true, // Control ID is not editable
-				display_order: isControlIdField ? 1 : (frontendConfig?.displayOrder ?? displayOrder++), // Control ID is always first
-				category: isControlIdField ? 'core' : category, // Control ID is always core
-				tab: isControlIdField ? 'overview' : frontendConfig?.tab || undefined // Control ID is always in overview
+				show_in_table: isControlIdField ? true : metadata.maxLength <= 100 && usagePercentage > 30,
+				editable: isControlIdField ? false : true,
+				display_order: isControlIdField ? 1 : (frontendConfig?.displayOrder ?? displayOrder++),
+				category: isControlIdField ? 'core' : category,
+				tab: isControlIdField ? 'overview' : frontendConfig?.tab || undefined
 			};
 
 			// Only add options for select fields
@@ -488,7 +482,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 					const isInFrontendSchema = frontendFieldSchema?.some((f) => f.fieldName === fieldName);
 
 					// Check if field is in the fields metadata (core fields)
-					const isInFieldsMetadata = fields.hasOwnProperty(fieldName);
+					const isInFieldsMetadata = Object.prototype.hasOwnProperty.call(fields, fieldName);
 
 					// Include the field if it's either in frontend schema or fields metadata
 					if (isInFrontendSchema || isInFieldsMetadata) {
@@ -679,15 +673,15 @@ router.get('/export-controls', async (req, res) => {
 		}
 
 		// Combine controls with their mappings
-		const controlsWithMappings = controls.map((control) => {
+		const controlsWithMappings = controls.map((control: any) => {
 			// Use the control_id_field value or fallback to 'id' for mapping lookups
 			const controlIdField = metadata?.control_id_field || 'id';
 			const controlId = control[controlIdField] || control.id;
-			const controlMappings = mappings.filter((m) => m.control_id === controlId);
+			const controlMappings = mappings.filter((m: any) => m.control_id === controlId);
 			return {
 				...control,
 				mappings_count: controlMappings.length,
-				mappings: controlMappings.map((m) => ({
+				mappings: controlMappings.map((m: any) => ({
 					uuid: m.uuid,
 					status: m.status,
 					description: m.justification || ''
@@ -813,7 +807,7 @@ function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
 	res.send(csvContent);
 }
 
-// Export as Excel
+// Export as Excel (SheetJS)
 async function exportAsExcel(controls: any[], metadata: any, res: express.Response) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
@@ -874,55 +868,49 @@ async function exportAsExcel(controls: any[], metadata: any, res: express.Respon
 		return exportControl;
 	});
 
-	// Create workbook and worksheet with ExcelJS
-	const wb = new ExcelJS.Workbook();
-	const ws = wb.addWorksheet('Controls');
+	// Create workbook and worksheet with SheetJS
+	const wb = XLSX.utils.book_new();
 
-	// Add headers and configure columns
-	const headers = Object.keys(worksheetData[0] || {});
-	ws.columns = headers.map((header) => ({
-		header: header,
-		key: header,
-		width: Math.min(
-			Math.max(
-				header.length,
-				...worksheetData.map((row: any) => String(row[header] || '').length)
-			) + 2,
-			50
-		) // Auto-size with max width of 50
-	}));
+	if ((worksheetData?.length ?? 0) === 0) {
+		// No data: still emit an empty sheet for consistency
+		const emptyWs = XLSX.utils.aoa_to_sheet([['No Data']]);
+		XLSX.utils.book_append_sheet(wb, emptyWs, 'Controls');
+	} else {
+		const headers = Object.keys(worksheetData[0] || {});
+		// Build worksheet with stable header order
+		const ws = XLSX.utils.json_to_sheet(worksheetData, { header: headers, skipHeader: false });
 
-	// Add data rows
-	worksheetData.forEach((row: any) => {
-		ws.addRow(row);
-	});
+		// Column widths (approximate autosize)
+		const colWidths = headers.map((header) => {
+			const maxLen = Math.min(
+				Math.max(
+					String(header).length,
+					...worksheetData.map((row: any) => String(row[header] ?? '').length)
+				) + 2,
+				50
+			);
+			return { wch: Math.max(10, maxLen) };
+		});
+		(ws as any)['!cols'] = colWidths;
 
-	// Style the header row
-	ws.getRow(1).font = { bold: true };
-	ws.getRow(1).fill = {
-		type: 'pattern',
-		pattern: 'solid',
-		fgColor: { argb: 'FFE0E0E0' }
-	};
+		XLSX.utils.book_append_sheet(wb, ws, 'Controls');
+	}
 
 	// Create metadata sheet if available
 	if (metadata) {
-		const metaSheet = wb.addWorksheet('Metadata');
 		const cleanMetadata = { ...metadata };
-		delete cleanMetadata.fieldSchema; // Remove large schema object
-
-		// Add metadata as key-value pairs
-		metaSheet.columns = [
-			{ header: 'Property', key: 'property', width: 30 },
-			{ header: 'Value', key: 'value', width: 50 }
+		delete (cleanMetadata as any).fieldSchema; // Remove large schema object
+		const metaRows = [
+			['Property', 'Value'],
+			...Object.entries(cleanMetadata).map(([k, v]) => [k, String(v)])
 		];
-		Object.entries(cleanMetadata).forEach(([key, value]) => {
-			metaSheet.addRow({ property: key, value: String(value) });
-		});
+		const metaWs = XLSX.utils.aoa_to_sheet(metaRows);
+		(metaWs as any)['!cols'] = [{ wch: 30 }, { wch: 50 }];
+		XLSX.utils.book_append_sheet(wb, metaWs, 'Metadata');
 	}
 
 	// Generate Excel buffer
-	const buffer = await wb.xlsx.writeBuffer();
+	const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
 	const fileName = `${metadata?.name || 'controls'}_export_${Date.now()}.xlsx`;
 
 	res.setHeader(
@@ -967,29 +955,26 @@ router.post('/parse-excel', upload.single('file'), async (req, res) => {
 			rows = parseCSV(csvContent);
 			sheets = ['Sheet1']; // CSV files only have one "sheet"
 		} else {
-			// Parse Excel file with ExcelJS
-			const workbook = new ExcelJS.Workbook();
-			// Convert multer buffer to Node.js Buffer
+			// Parse Excel file with SheetJS
 			const buffer = Buffer.from(req.file.buffer);
-			await workbook.xlsx.load(buffer as any);
+			const wb = XLSX.read(buffer, { type: 'buffer' });
 
 			// Get all sheet names
-			sheets = workbook.worksheets.map((ws) => ws.name);
+			sheets = wb.SheetNames;
 
 			// Parse first sheet by default
-			const worksheet = workbook.worksheets[0];
-			if (!worksheet) {
+			const firstSheetName = wb.SheetNames[0];
+			if (!firstSheetName) {
 				return res.status(400).json({ error: 'No worksheet found in file' });
 			}
+			const ws = wb.Sheets[firstSheetName];
 
 			// Get data from the worksheet
-			worksheet.eachRow({ includeEmpty: false }, (row: any, rowNumber: number) => {
-				const rowData: any[] = [];
-				row.eachCell({ includeEmpty: true }, (cell: any, colNumber: number) => {
-					rowData[colNumber - 1] = cell.value;
-				});
-				rows.push(rowData);
-			});
+			rows = XLSX.utils.sheet_to_json(ws, {
+				header: 1,
+				raw: true,
+				defval: null
+			}) as any[][];
 		}
 
 		// Find potential header rows (first 5 non-empty rows)
@@ -1033,30 +1018,26 @@ router.post('/parse-excel-sheet', upload.single('file'), async (req, res) => {
 			const csvContent = req.file.buffer.toString('utf-8');
 			rows = parseCSV(csvContent);
 		} else {
-			// Parse Excel file with ExcelJS
-			const workbook = new ExcelJS.Workbook();
-			// Convert multer buffer to Node.js Buffer
+			// Parse Excel file with SheetJS
 			const buffer = Buffer.from(req.file.buffer);
-			await workbook.xlsx.load(buffer as any);
+			const wb = XLSX.read(buffer, { type: 'buffer' });
 
 			// Get specific sheet
-			const worksheet = workbook.getWorksheet(sheetName);
-			if (!worksheet) {
+			const ws = wb.Sheets[sheetName];
+			if (!ws) {
 				return res.status(400).json({ error: `Sheet "${sheetName}" not found` });
 			}
 
 			// Get data from the worksheet
-			worksheet.eachRow({ includeEmpty: false }, (row: any, rowNumber: number) => {
-				const rowData: any[] = [];
-				row.eachCell({ includeEmpty: true }, (cell: any, colNumber: number) => {
-					rowData[colNumber - 1] = cell.value;
-				});
-				rows.push(rowData);
-			});
+			rows = XLSX.utils.sheet_to_json(ws, {
+				header: 1,
+				raw: true,
+				defval: null
+			}) as any[][];
 		}
 
 		const headerRowIndex = parseInt(headerRow) - 1;
-		const headers = rows[headerRowIndex] || [];
+		const headers = (rows[headerRowIndex] || []) as any[];
 		const fields = headers.filter((h: any) => h && typeof h === 'string');
 
 		// Get sample data
@@ -1064,7 +1045,7 @@ router.post('/parse-excel-sheet', upload.single('file'), async (req, res) => {
 			const obj: any = {};
 			headers.forEach((header: string, index: number) => {
 				if (header) {
-					obj[header] = row[index];
+					obj[header] = row ? row[index] : undefined;
 				}
 			});
 			return obj;
@@ -1073,7 +1054,7 @@ router.post('/parse-excel-sheet', upload.single('file'), async (req, res) => {
 		res.json({
 			fields,
 			sampleData,
-			controlCount: rows.length - headerRowIndex - 1
+			controlCount: Math.max(0, rows.length - headerRowIndex - 1)
 		});
 	} catch (error) {
 		console.error('Error parsing Excel sheet:', error);
