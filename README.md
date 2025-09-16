@@ -90,21 +90,45 @@ By default, the web interface is launched as the root command, but if you need t
 Analyze pull requests for compliance impact:
 
 ```bash
-> OWNER=defenseunicorns REPO=lula  PULL_NUMBER=119 GITHUB_TOKEN=$(gh auth token) npx lula2 crawl
-Analyzing PR #119 in defenseunicorns/lula for compliance changes...
+> OWNER=defenseunicorns REPO=lula  PULL_NUMBER=126 GITHUB_TOKEN=$(gh auth token) npx lula2 crawl --post-mode=comment                   
+Analyzing PR #126 in defenseunicorns/lula for compliance changes...
+Commenting regarding `integration/test-files/ex.ts`.
+Commenting regarding `integration/test-files/ex.yaml`.
 
-Commenting on integration/test-files/ex.ts: **Compliance Alert**:`integration/test-files/ex.ts` changed between lines 20–31.
-UUID `123e4567-e89b-12d3-a456-426614174000` may be out of compliance.
-SHA-256 of block contents: `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`.
+Posted (comment)
+----------------
 
-Please review the changes to ensure they meet compliance standards.
-
-
-Commenting on integration/test-files/ex.yaml: **Compliance Alert**:`integration/test-files/ex.yaml` changed between lines 1–5.
-UUID `123e4567-e89b-12d3-a456-426614174001` may be out of compliance.
-SHA-256 of block contents: `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`.
+## Lula Compliance Overview
 
 Please review the changes to ensure they meet compliance standards.
+
+### Reviewed Changes
+
+Lula reviewed 2 files changed that affect compliance.
+
+
+
+---
+| File | Lines Changed |
+| ---- | ------------- |
+| `integration/test-files/ex.ts` | `20–31` |
+> **uuid**-`123e4567-e89b-12d3-a456-426614174000`
+ **sha256** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`
+
+
+
+---
+| File | Lines Changed |
+| ---- | ------------- |
+| `integration/test-files/ex.yaml` | `1–5` |
+> **uuid**-`123e4567-e89b-12d3-a456-426614174001`
+ **sha256** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`
+
+
+
+---
+
+<sub>**Tip:** Customize your compliance reviews with <a href="https://github.com/defenseunicorns/lula.git" class="Link--inTextBlock" target="_blank" rel="noopener noreferrer">Lula</a>.</sub>
 ```
 
 ### Version Command
