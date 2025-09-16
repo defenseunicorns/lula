@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
+import crypto from 'crypto';
 import { parse as parseCSVSync } from 'csv-parse/sync';
 import ExcelJS from 'exceljs';
 import express from 'express';
@@ -88,6 +89,17 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			controlSetName = 'Imported Control Set',
 			controlSetDescription = 'Imported from spreadsheet'
 		} = req.body;
+
+		// Parse justification fields if provided
+		let justificationFields: string[] = [];
+		if (req.body.justificationFields) {
+			try {
+				justificationFields = JSON.parse(req.body.justificationFields);
+				debug('Justification fields received:', justificationFields);
+			} catch (e) {
+				console.error('Failed to parse justification fields:', e);
+			}
+		}
 
 		debug('Import parameters received:', {
 			controlIdField,
@@ -450,11 +462,22 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 
 		// Create controls directory and write individual control files
 		const controlsDir = join(baseDir, 'controls');
+		const mappingsDir = join(baseDir, 'mappings');
+
+		// Track which fields are used for justification to avoid duplicating them in control files
+		const justificationFieldNames = justificationFields;
 
 		families.forEach((familyControls, family) => {
+			// Create family directories for both controls and mappings
 			const familyDir = join(controlsDir, family);
+			const familyMappingsDir = join(mappingsDir, family);
+
 			if (!existsSync(familyDir)) {
 				mkdirSync(familyDir, { recursive: true });
+			}
+
+			if (!existsSync(familyMappingsDir)) {
+				mkdirSync(familyMappingsDir, { recursive: true });
 			}
 
 			familyControls.forEach((control) => {
@@ -471,10 +494,24 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				const fileName = `${controlIdStr.replace(/[^a-zA-Z0-9-]/g, '_')}.yaml`;
 				const filePath = join(familyDir, fileName);
 
+				// Create mapping file path
+				const mappingFileName = `${controlIdStr.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`;
+				const mappingFilePath = join(familyMappingsDir, mappingFileName);
+
 				// Filter control to only include fields that are in the field schema (not excluded)
 				const filteredControl: SpreadsheetRow = {};
 
-				// Always include family
+				// Prepare mapping data with empty justification
+				const mappingData: any = {
+					control_id: controlIdStr,
+					justification: '',
+					uuid: crypto.randomUUID() // Use crypto.randomUUID() for consistent UUID generation
+				};
+
+				// Collect justification content from all specified fields
+				const justificationContents: string[] = [];
+
+				// Always include family in control file
 				if (control.family !== undefined) {
 					filteredControl.family = control.family;
 				}
@@ -483,6 +520,13 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				Object.keys(control).forEach((fieldName) => {
 					// Skip family as it's already added
 					if (fieldName === 'family') return;
+
+					// Check if this field is in the justification fields list
+					if (justificationFields.includes(fieldName) && control[fieldName] !== undefined && control[fieldName] !== null) {
+						// Add to justification contents
+						justificationContents.push(control[fieldName]);
+						return; // Skip adding this field to the control file
+					}
 
 					// Check if field is in the frontend schema (meaning it was assigned to a tab)
 					const isInFrontendSchema = frontendFieldSchema?.some((f) => f.fieldName === fieldName);
@@ -496,7 +540,20 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 					}
 				});
 
+				// Write control file
 				writeFileSync(filePath, yaml.dump(filteredControl));
+
+				// Combine all justification contents with line breaks
+				if (justificationContents.length > 0) {
+					mappingData.justification = justificationContents.join('\n\n');
+				}
+
+				// Write mapping file if it has justification content
+				if (mappingData.justification && mappingData.justification.trim() !== '') {
+					// Format as an array with a single mapping entry
+					const mappingArray = [mappingData];
+					writeFileSync(mappingFilePath, yaml.dump(mappingArray));
+				}
 			});
 		});
 
