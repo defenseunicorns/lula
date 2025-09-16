@@ -262,7 +262,7 @@ export function crawlCommand(): Command {
 					body: commentBody + closingBody
 				});
 				const header = `Posted (${opts.postMode})`;
-				const underline = "-".repeat(header.length);
+				const underline = '-'.repeat(header.length);
 				console.log(`\n${header}\n${underline}\n\n${commentBody + closingBody}\n\n`);
 			}
 		});
