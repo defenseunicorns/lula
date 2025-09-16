@@ -3,13 +3,47 @@
 
 import fs from 'fs';
 import { Octokit } from '@octokit/rest';
-import { Command } from 'commander';
+import { Command, Option } from 'commander';
 import { createHash } from 'crypto';
 
 type FileContentResponse = {
 	content: string;
 	encoding: 'base64' | string;
 };
+const closingBody = `\n\n---\n\n<sub>**Tip:** Customize your compliance reviews with <a href="https://github.com/defenseunicorns/lula.git" class="Link--inTextBlock" target="_blank" rel="noopener noreferrer">Lula</a>.</sub>`;
+
+// Add a post mode union for future expansion
+type PostMode = 'review' | 'comment';
+
+/** Utility to post a finding based on the chosen mode. */
+export async function postFinding(params: {
+	octokit: Octokit;
+	postMode: PostMode;
+	owner: string;
+	repo: string;
+	pull_number: number;
+	body: string;
+}): Promise<void> {
+	const { octokit, postMode, owner, repo, pull_number, body } = params;
+
+	if (postMode === 'comment') {
+		await octokit.issues.createComment({
+			owner,
+			repo,
+			issue_number: pull_number,
+			body
+		});
+		return;
+	}
+
+	await octokit.pulls.createReview({
+		owner,
+		repo,
+		pull_number,
+		body,
+		event: 'REQUEST_CHANGES'
+	});
+}
 
 /**
  * Get the pull request context from the environment or GitHub event payload.
@@ -173,17 +207,29 @@ export function crawlCommand(): Command {
 	return new Command()
 		.command('crawl')
 		.description('Detect compliance-related changes between @lulaStart and @lulaEnd in PR files')
-		.action(async () => {
+		.addOption(
+			new Option('--post-mode <mode>', 'How to post findings')
+				.choices(['review', 'comment'])
+				.default('review')
+		)
+		.action(async (opts) => {
 			const { owner, repo, pull_number } = getPRContext();
-			console.log(`Analyzing PR #${pull_number} in ${owner}/${repo} for compliance changes...\n`);
+			console.log(`Analyzing PR #${pull_number} in ${owner}/${repo} for compliance changes...`);
 			const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 			const pr = await octokit.pulls.get({ owner, repo, pull_number });
 			const prBranch = pr.data.head.ref;
 
 			const { data: files } = await octokit.pulls.listFiles({ owner, repo, pull_number });
 
+			let commentBody =
+				`## Lula Compliance Overview\n\n` +
+				`Please review the changes to ensure they meet compliance standards.\n\n` +
+				`### Reviewed Changes\n\n` +
+				`Lula reviewed ${files.length} files changed that affect compliance.\n\n`;
+
 			for (const file of files) {
 				if (file.status === 'added') continue;
+				console.log(`Commenting regarding \`${file.filename}\`.`);
 				try {
 					const [oldText, newText] = await Promise.all([
 						fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: 'main' }),
@@ -193,35 +239,31 @@ export function crawlCommand(): Command {
 					const changedBlocks = getChangedBlocks(oldText, newText);
 
 					for (const block of changedBlocks) {
+						commentBody += `\n\n---\n| File | Lines Changed |\n` + `| ---- | ------------- |\n`;
 						const newBlockText = newText
 							.split('\n')
 							.slice(block.startLine, block.endLine)
 							.join('\n');
 
 						const blockSha256 = createHash('sha256').update(newBlockText).digest('hex');
-						const commentBody =
-							`**Compliance Alert**:\`${file.filename}\` changed between lines ${block.startLine + 1}–${block.endLine}.` +
-							`\nUUID \`${block.uuid}\` may be out of compliance.` +
-							`\nSHA-256 of block contents: \`${blockSha256}\`.` +
-							`\n\nPlease review the changes to ensure they meet compliance standards.\n\n`;
-						console.log(`Commenting on ${file.filename}: ${commentBody}`);
-						// await octokit.issues.createComment({
-						// 	owner,
-						// 	repo,
-						// 	issue_number: pull_number,
-						// 	body: commentBody
-						// });
-						  await octokit.pulls.createReview({
-						  owner,
-						  repo,
-						  pull_number,
-						  body: commentBody,
-						  event: "REQUEST_CHANGES",
-						})
+						commentBody += `| \`${file.filename}\` | \`${block.startLine + 1}–${block.endLine}\` |\n> **uuid**-\`${block.uuid}\`\n **sha256** \`${blockSha256}\`\n\n`;
 					}
 				} catch (err) {
 					console.error(`Error processing ${file.filename}: ${err}`);
 				}
+			}
+			if (files.length > 0) {
+				await postFinding({
+					octokit,
+					postMode: opts.postMode,
+					owner,
+					repo,
+					pull_number,
+					body: commentBody + closingBody
+				});
+				const header = `Posted (${opts.postMode})`;
+				const underline = "-".repeat(header.length);
+				console.log(`\n${header}\n${underline}\n\n${commentBody + closingBody}\n\n`);
 			}
 		});
 }
