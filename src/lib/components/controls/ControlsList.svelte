@@ -5,9 +5,10 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { Dropdown, SearchBar, Tooltip } from '$components/ui';
+	import FilterBuilder from '$components/ui/FilterBuilder.svelte';
 	import type { Control, FieldSchema } from '$lib/types';
 	import { appState } from '$lib/websocket';
-	import { complianceStore, searchTerm, selectedFamily } from '$stores/compliance';
+	import { complianceStore, searchTerm, activeFilters } from '$stores/compliance';
 	import { Filter, Information } from 'carbon-icons-svelte';
 	import { derived } from 'svelte/store';
 
@@ -104,24 +105,73 @@
 
 	// Create filtered controls with mappings
 	const filteredControlsWithMappings = derived(
-		[controlsWithMappings, selectedFamily, searchTerm],
-		([$controlsWithMappings, $selectedFamily, $searchTerm]) => {
+		[controlsWithMappings, searchTerm, activeFilters],
+		([$controlsWithMappings, $searchTerm, $activeFilters]) => {
 			let results = $controlsWithMappings;
 
-			if ($selectedFamily) {
-				results = results.filter((c) => {
-					const family =
-						(c as any)?._metadata?.family ||
-						(c as any)?.family ||
-						(c as any)?.['control-acronym']?.split('-')[0] ||
-						'';
-					return family === $selectedFamily;
-				});
-			}
-
+			// Apply search term
 			if ($searchTerm) {
 				const term = $searchTerm.toLowerCase();
-				results = results.filter((c) => JSON.stringify(c).toLowerCase().includes(term));
+				results = results.filter((c: any) => JSON.stringify(c).toLowerCase().includes(term));
+			}
+
+			// Apply advanced filters
+			if ($activeFilters.length > 0) {
+				results = results.filter((control: any) => {
+					// Control must match all active filters
+					return $activeFilters.every(filter => {
+						if (!filter.active) return true;
+						
+						// Handle special case for family field which might be in different locations
+						let fieldValue;
+						if (filter.fieldName === 'family') {
+							// Enhanced controls have family in _metadata.family, fallback to extracting from control-acronym
+							fieldValue = (control as any)?._metadata?.family ||
+								(control as any)?.family ||
+								(control as any)?.['control-acronym']?.split('-')[0] ||
+								'';
+						} else {
+							fieldValue = (control as any)[filter.fieldName];
+						}
+						
+						switch (filter.operator) {
+							case 'equals':
+								return fieldValue === filter.value;
+								
+							case 'not_equals':
+								return fieldValue !== filter.value;
+								
+							case 'is_set':
+								return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
+								
+							case 'is_not_set':
+								return fieldValue === undefined || fieldValue === null || fieldValue === '';
+								
+							case 'includes':
+								if (typeof fieldValue === 'string') {
+									return fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
+								} else if (Array.isArray(fieldValue)) {
+									return fieldValue.some(item => 
+										String(item).toLowerCase().includes(String(filter.value).toLowerCase())
+									);
+								}
+								return false;
+								
+							case 'not_includes':
+								if (typeof fieldValue === 'string') {
+									return !fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
+								} else if (Array.isArray(fieldValue)) {
+									return !fieldValue.some(item => 
+										String(item).toLowerCase().includes(String(filter.value).toLowerCase())
+									);
+								}
+								return true;
+								
+							default:
+								return true;
+						}
+					});
+				});
 			}
 
 			return results;
@@ -243,64 +293,57 @@
 				</span>
 			</div>
 
-			<!-- Search Bar, Family Filter, and Export -->
-			<div class="flex gap-3">
-				<div class="flex-1">
+			<!-- Search Bar and Filter -->
+			<div class="flex gap-3 flex-wrap">
+				<div class="flex-1 min-w-[200px]">
 					<SearchBar />
 				</div>
+				
+				<!-- Filter Builder -->
 				<div class="flex-shrink-0">
-					<Dropdown
-						buttonLabel={$selectedFamily || 'All Families'}
-						buttonIcon={Filter}
-						buttonClass="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
-						dropdownClass="w-64"
-					>
-						{#snippet children()}
-							<div class="space-y-1">
-								<button
-									onclick={() => {
-										complianceStore.setSelectedFamily(null);
-									}}
-									class="w-full text-left px-3 py-2 text-sm rounded-md transition-colors duration-200 flex items-center justify-between {$selectedFamily ===
-									null
-										? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
-										: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}"
-								>
-									<span>All Families</span>
-									<span class="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-full">
-										{$controls.length}
-									</span>
-								</button>
-
-								{#each $families as family}
-									{@const familyCount = $controls.filter((c) => {
-										const controlFamily =
-											(c as any)?._metadata?.family ||
-											(c as any)?.family ||
-											(c as any)?.['control-acronym']?.split('-')[0] ||
-											'';
-										return controlFamily === family;
-									}).length}
-									<button
-										onclick={() => {
-											complianceStore.setSelectedFamily(family);
-										}}
-										class="w-full text-left px-3 py-2 text-sm rounded-md transition-colors duration-200 flex items-center justify-between {$selectedFamily ===
-										family
-											? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
-											: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}"
-									>
-										<span>{family}</span>
-										<span class="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-full">
-											{familyCount}
-										</span>
-									</button>
-								{/each}
-							</div>
-						{/snippet}
-					</Dropdown>
+					<FilterBuilder />
 				</div>
 			</div>
+			
+			<!-- Active Filters Summary -->
+			{#if $activeFilters.length > 0}
+				<div class="mt-2 flex flex-wrap gap-2">
+					{#each $activeFilters.filter(f => f.active) as filter, index}
+						<div class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+							<span>{filter.fieldName}: </span>
+							{#if filter.operator === 'is_set'}
+								<span>is set</span>
+							{:else if filter.operator === 'is_not_set'}
+								<span>is not set</span>
+							{:else if filter.operator === 'equals'}
+								<span>= {filter.value}</span>
+							{:else if filter.operator === 'not_equals'}
+								<span>≠ {filter.value}</span>
+							{:else if filter.operator === 'includes'}
+								<span>contains "{filter.value}"</span>
+							{:else if filter.operator === 'not_includes'}
+								<span>doesn't contain "{filter.value}"</span>
+							{/if}
+							<button 
+								onclick={() => complianceStore.removeFilter(index)}
+								class="ml-1 text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-blue-100"
+								aria-label="Remove filter"
+							>
+								×
+							</button>
+						</div>
+					{/each}
+					
+					{#if $activeFilters.filter(f => f.active).length > 1}
+						<button 
+							onclick={() => complianceStore.clearFilters()}
+							class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+						>
+							Clear all
+						</button>
+					{/if}
+				</div>
+			{/if}
 		</div>
 
 		<!-- Controls Table -->
@@ -582,10 +625,11 @@
 					</svg>
 					<h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">No controls found</h3>
 					<p class="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
-						{#if $searchTerm}
-							No controls match your search criteria. Try adjusting your search terms or clearing
-							filters.
-						{:else if $selectedFamily}
+						{#if $activeFilters.length > 0}
+							No controls match your filter criteria. Try adjusting or removing some filters.
+						{:else if $searchTerm}
+							No controls match your search criteria. Try adjusting your search terms.
+						{:else if $activeFilters.find(f => f.fieldName === 'family' && f.active)}
 							No controls available in this family. Select a different family or check your data.
 						{:else if $controls.length === 0}
 							No controls have been imported yet.
