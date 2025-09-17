@@ -316,7 +316,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 		if (req.body.fieldSchema) {
 			try {
 				frontendFieldSchema = JSON.parse(req.body.fieldSchema);
-			} catch (e) {
+			} catch {
 				// Failed to parse fieldSchema
 			}
 		}
@@ -1073,7 +1073,8 @@ router.post('/parse-excel', upload.single('file'), async (req, res) => {
 			preview:
 				row
 					.slice(0, 4)
-					.filter((v) => v != null)
+					.filter((v) => v !== null)
+					.filter((v) => v !== undefined)
 					.join(', ') + (row.length > 4 ? ', ...' : '')
 		}));
 

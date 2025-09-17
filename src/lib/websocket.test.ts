@@ -8,7 +8,7 @@ vi.mock('$app/environment', () => ({
 	browser: true
 }));
 
-import { appState, type WSMessage, type AppState } from './websocket';
+import { appState, type AppState } from './websocket';
 import type { Control, Mapping, SourceEntry } from './types';
 
 class MockWebSocket {
