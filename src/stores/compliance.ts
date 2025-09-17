@@ -57,24 +57,6 @@ export const searchTerm = writable('');
 export const selectedControl = writable<Control | null>(null);
 export const activeFilters = writable<FilterCondition[]>([]);
 
-// Derived stores
-export const families = derived(controls, ($controls) => {
-	const familySet = new Set(
-		$controls.map((c) => {
-			// Enhanced controls have family in _metadata.family, fallback to extracting from control-acronym
-			return (
-				(c as any)?._metadata?.family ||
-				(c as any)?.family ||
-				(c as any)?.['control-acronym']?.split('-')[0] ||
-				''
-			);
-		})
-	);
-	return Array.from(familySet)
-		.filter((f) => f)
-		.sort();
-});
-
 export const filteredControls = derived(
 	[controls, searchTerm, activeFilters],
 	([$controls, $searchTerm, $activeFilters]) => {
@@ -94,23 +76,7 @@ export const filteredControls = derived(
 
 				// Control must match all filters
 				return $activeFilters.every((filter) => {
-					let fieldValue: unknown;
-
-					if (filter.fieldName === 'family') {
-						// Handle special case for family field which might be in different locations
-						const metadata = dynamicControl._metadata as Record<string, unknown> | undefined;
-						const controlAcronym = dynamicControl['control-acronym'] as string | undefined;
-						const familyField = dynamicControl.family as string | undefined;
-
-						fieldValue =
-							(metadata?.family as string | undefined) ||
-							familyField ||
-							(controlAcronym ? controlAcronym.split('-')[0] : '') ||
-							'';
-					} else {
-						// Access field directly using the dynamic field access
-						fieldValue = dynamicControl[filter.fieldName];
-					}
+					const fieldValue = dynamicControl[filter.fieldName];
 
 					// For exists/not_exists operators, we just need to check if the field has a value
 					if (filter.operator === 'exists') {
@@ -168,6 +134,7 @@ export const complianceStore = {
 	setSelectedControl(control: Control | null) {
 		// Strip mappings property if it exists to prevent it from being saved to control files
 		if (control && 'mappings' in control) {
+			// eslint-disable-next-line  @typescript-eslint/no-explicit-any
 			const { mappings: _mappings, ...controlWithoutMappings } = control as any;
 			selectedControl.set(controlWithoutMappings);
 		} else {
@@ -213,9 +180,6 @@ export const complianceStore = {
 		// Get all unique field names from all controls and field schema
 		const allControls = get(controls);
 		const fieldSet = new Set<string>();
-
-		// Add 'family' as a special field that's always available
-		fieldSet.add('family');
 
 		// Extract fields from controls
 		allControls.forEach((control) => {

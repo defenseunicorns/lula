@@ -8,7 +8,7 @@
 	import FilterBuilder from '$components/ui/FilterBuilder.svelte';
 	import type { Control, FieldSchema } from '$lib/types';
 	import { appState } from '$lib/websocket';
-	import { complianceStore, searchTerm, activeFilters, type ControlWithDynamicFields, getOperatorLabel } from '$stores/compliance';
+	import { complianceStore, searchTerm, activeFilters, getOperatorLabel } from '$stores/compliance';
 	import { Information } from 'carbon-icons-svelte';
 	import { derived } from 'svelte/store';
 
@@ -119,26 +119,8 @@
 				results = results.filter((control) => {
 					// Control must match all filters
 					return $activeFilters.every(filter => {
-						// Handle special case for family field which might be in different locations
-						let fieldValue;
-						if (filter.fieldName === 'family') {
-							// Cast to ControlWithDynamicFields for dynamic field access
-							const dynamicControl = control as Record<string, unknown>;
-							// Enhanced controls have family in _metadata.family, fallback to extracting from control-acronym
-							const metadata = dynamicControl._metadata as Record<string, unknown> | undefined;
-							const controlAcronym = dynamicControl['control-acronym'] as string | undefined;
-							const familyField = dynamicControl.family as string | undefined;
-							
-							fieldValue = 
-								(metadata?.family as string | undefined) ||
-								familyField ||
-								(controlAcronym ? controlAcronym.split('-')[0] : '') ||
-								'';
-						} else {
-							// Cast to ControlWithDynamicFields for dynamic field access
-							const dynamicControl = control as Record<string, unknown>;
-							fieldValue = dynamicControl[filter.fieldName];
-						}
+						const dynamicControl = control as Record<string, unknown>;
+						const fieldValue = dynamicControl[filter.fieldName];
 						
 						switch (filter.operator) {
 							case 'equals':
@@ -299,7 +281,7 @@
 				</span>
 			</div>
 
-			<!-- Search Bar, Family Filter, and Export -->
+			<!-- Search Bar, Filter, and Export -->
 			<div class="flex gap-3">
 				<div class="flex-1">
 					<SearchBar />
@@ -631,12 +613,10 @@
 							No controls match your filter criteria. Try adjusting or removing some filters.
 						{:else if $searchTerm}
 							No controls match your search criteria. Try adjusting your search terms.
-						{:else if $activeFilters.find(f => f.fieldName === 'family')}
-							No controls available in this family. Select a different family or check your data.
 						{:else if $controls.length === 0}
 							No controls have been imported yet.
 						{:else}
-							No controls available. Select a different family or check your data.
+							No controls available. Check your data.
 						{/if}
 					</p>
 					{#if $controls.length === 0}

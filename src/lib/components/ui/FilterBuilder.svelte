@@ -22,15 +22,12 @@
 	// Local state
 	let showFilterPanel = false;
 	let showFieldDropdown = false;
-	let showOperatorDropdown = false;
-	let showValueDropdown = false;
 	let newFilterField = '';
 	let newFilterOperator: FilterOperator = 'equals';
 	let newFilterValue = '';
 
 	// Get field schema and families from app state
 	const fieldSchema = derived(appState, ($state) => $state.fieldSchema?.fields || {});
-	const availableFamilies = derived(appState, ($state) => $state.families || []);
 
 	// Get available fields from the store
 	$: availableFields = complianceStore.getAvailableFields();
@@ -45,6 +42,11 @@
 	$: isSelectField = selectedFieldUiType === 'select';
 	$: fieldOptions = isSelectField ? selectedFieldSchema?.options || [] : [];
 
+	// Force equals operator for select fields
+	$: if (isSelectField) {
+		newFilterOperator = 'equals';
+	}
+
 	// Group fields by tab
 	$: fieldsByTab = {
 		overview: [] as string[],
@@ -58,11 +60,8 @@
 		fieldsByTab.implementation = [];
 		fieldsByTab.custom = [];
 
-		// Filter out special fields (family fields)
-		const regularFields = availableFields.filter((f) => f !== 'family');
-
 		// Group fields by tab
-		regularFields.forEach((field) => {
+		availableFields.forEach((field) => {
 			const schema = $fieldSchema[field];
 			if (schema) {
 				const tab = schema.tab || getDefaultTabForCategory(schema.category);
@@ -74,13 +73,6 @@
 				fieldsByTab.custom.push(field);
 			}
 		});
-	}
-
-	// Special handling for family field
-	$: isFamilyField = newFilterField === 'family';
-	$: if (isFamilyField) {
-		// Force equals operator for family field
-		newFilterOperator = 'equals';
 	}
 
 	// Determine if value input should be shown based on operator
@@ -136,7 +128,15 @@
 	// Get display name for a field
 	function getFieldDisplayName(fieldName: string): string {
 		const schema = $fieldSchema[fieldName];
-		return schema?.original_name || schema?.display_name || fieldName.replace(/-/g, ' ');
+
+		// Use schema names if available
+		if (schema?.original_name || schema?.display_name) {
+			return schema.original_name || schema.display_name;
+		}
+
+		// Otherwise use the field name with hyphens replaced by spaces and first letter capitalized
+		let displayName = fieldName.replace(/-/g, ' ');
+		return displayName.charAt(0).toUpperCase() + displayName.slice(1);
 	}
 
 	// Get display value for a filter
@@ -256,25 +256,6 @@
 									class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-y-auto"
 									transition:fade={{ duration: 100 }}
 								>
-									<!-- Family field is always first and specially formatted -->
-									<button
-										class={twMerge(
-											'w-full text-left px-3 py-2 text-sm font-medium',
-											newFilterField === 'family'
-												? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-												: 'hover:bg-gray-100 dark:hover:bg-gray-700/50'
-										)}
-										onclick={() => {
-											newFilterField = 'family';
-											showFieldDropdown = false;
-										}}
-									>
-										Family
-									</button>
-
-									<!-- Divider -->
-									<div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-
 									<!-- Overview fields -->
 									<div
 										class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/80"
@@ -356,14 +337,20 @@
 						</div>
 					</div>
 
-					<!-- Operator Selection (hidden for family field) -->
-					{#if !isFamilyField}
-						<div>
-							<label
-								for="filter-operator"
-								class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Operator</label
-							>
+					<!-- Operator Selection -->
+					<div>
+						<label for="filter-operator" class="block text-xs text-gray-600 dark:text-gray-400 mb-1"
+							>Operator</label
+						>
 
+						{#if isSelectField}
+							<!-- Disabled dropdown for select fields (always equals) -->
+							<div
+								class="px-3 py-2 text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
+							>
+								Equals
+							</div>
+						{:else}
 							<!-- Custom Operator Dropdown -->
 							<CustomDropdown
 								bind:value={newFilterOperator}
@@ -371,28 +358,16 @@
 								getDisplayValue={getOperatorLabel}
 								labelId="filter-operator"
 							/>
-						</div>
-					{/if}
+						{/if}
+					</div>
 
-					<!-- Value Input (conditional or always for family) -->
-					{#if showValueInput || isFamilyField}
+					<!-- Value Input (conditional) -->
+					{#if showValueInput}
 						<div>
 							<label for="filter-value" class="block text-xs text-gray-600 dark:text-gray-400 mb-1"
 								>Value</label
 							>
-
-							{#if newFilterField === 'family'}
-								<!-- Special handling for family field with CustomDropdown -->
-								<CustomDropdown
-									bind:value={newFilterValue}
-									options={$availableFamilies.map((family: string) => ({
-										value: family,
-										label: family
-									}))}
-									placeholder="Select a family"
-									labelId="filter-value"
-								/>
-							{:else if isSelectField}
+							{#if isSelectField}
 								<!-- Custom dropdown for select fields -->
 								<CustomDropdown
 									bind:value={newFilterValue}
