@@ -19,7 +19,6 @@ export default defineConfig({
 				'src/lib/components/ui/index.ts',
 				'src/lib/components/version-control/index.ts',
 				'src/lib/components/setup/index.ts',
-				'src/lib/components/setup/index.ts',
 				'src/lib/components/controls/tabs/index.ts',
 				'src/lib/components/controls/renderers/index.ts',
 				'src/lib/components/controls/index.ts',
