@@ -154,7 +154,7 @@ export default ts.config(
   {
   files: ["**/*.test.ts"],
   rules: {
-    "max-statements": "off"
+    "max-statements": "off",
   },
 },
 
