@@ -5,6 +5,42 @@ import type { Control, ControlWithMappings, Mapping } from '$lib/types';
 import { appState } from '$lib/websocket';
 import { derived, get, writable } from 'svelte/store';
 
+// Type for control field values - similar to FilterValue but more specific to control fields
+export type ControlFieldValue =
+	| string
+	| number
+	| boolean
+	| string[]
+	| number[]
+	| Record<string, unknown>;
+
+// Interface for accessing control fields dynamically for filtering
+export interface ControlWithDynamicFields {
+	// Index signature with more specific type than 'any'
+	[key: string]:
+		| ControlFieldValue
+		| undefined
+		| Record<string, ControlFieldValue>
+		| Mapping[]
+		| unknown[];
+
+	// Common known fields with specific types
+	_metadata?: {
+		family?: string;
+		[key: string]: ControlFieldValue | undefined;
+	};
+	id?: string;
+	family?: string;
+	'control-acronym'?: string;
+	name?: string;
+	title?: string;
+	description?: string;
+	mappings?: Mapping[];
+	enhancements?: unknown[];
+	links?: Array<{ href: string; rel?: string; text?: string }>;
+	parameters?: Array<{ id: string; [key: string]: unknown }>;
+}
+
 // Filter types
 export type FilterOperator =
 	| 'equals'
@@ -14,11 +50,39 @@ export type FilterOperator =
 	| 'includes'
 	| 'not_includes';
 
+// Filter operator option with display label
+export interface FilterOperatorOption {
+	value: FilterOperator;
+	label: string;
+}
+
+/**
+ * Shared filter operator options used across the application
+ */
+export const FILTER_OPERATORS: FilterOperatorOption[] = [
+	{ value: 'equals', label: 'Equals' },
+	{ value: 'not_equals', label: 'Not equals' },
+	{ value: 'includes', label: 'Contains' },
+	{ value: 'not_includes', label: 'Does not contain' },
+	{ value: 'exists', label: 'Exists' },
+	{ value: 'not_exists', label: 'Not exists' }
+];
+
+/**
+ * Helper function to get the display label for a filter operator
+ */
+export function getOperatorLabel(operator: FilterOperator): string {
+	const option = FILTER_OPERATORS.find((op) => op.value === operator);
+	return option?.label || operator;
+}
+
+// Type for filter values - can be string, number, boolean, or array of these
+export type FilterValue = string | number | boolean | string[] | number[] | Record<string, unknown>;
+
 export interface FilterCondition {
 	fieldName: string;
 	operator: FilterOperator;
-	value?: any;
-	active: boolean;
+	value?: FilterValue;
 }
 
 // Base stores
@@ -60,7 +124,7 @@ export const filteredControls = derived(
 		}
 
 		// Helper function to evaluate filter against a field value
-		function evaluateFilter(filter: FilterCondition, fieldValue: any): boolean {
+		function evaluateFilter(filter: FilterCondition, fieldValue: FilterValue | undefined): boolean {
 			switch (filter.operator) {
 				case 'equals':
 					return fieldValue === filter.value;
@@ -101,22 +165,25 @@ export const filteredControls = derived(
 
 		// Apply advanced filters
 		if ($activeFilters.length > 0) {
-			results = results.filter((control: any) => {
-				// Control must match all active filters
+			results = results.filter((control) => {
+				// Cast to ControlWithDynamicFields for dynamic field access
+				const dynamicControl = control as ControlWithDynamicFields;
+				// Control must match all filters
 				return $activeFilters.every((filter) => {
-					if (!filter.active) return true;
-
 					if (filter.fieldName === 'family') {
 						// Handle special case for family field which might be in different locations
-						const fieldValue = (control as any)?._metadata?.family ||
-							(control as any)?.family ||
-							(control as any)?.['control-acronym']?.split('-')[0] ||
+						const fieldValue =
+							dynamicControl._metadata?.family ||
+							dynamicControl.family ||
+							(dynamicControl['control-acronym']
+								? dynamicControl['control-acronym'].split('-')[0]
+								: '') ||
 							'';
 
 						return evaluateFilter(filter, fieldValue);
 					} else {
 						// Regular control field
-						const fieldValue = (control as any)[filter.fieldName];
+						const fieldValue = dynamicControl[filter.fieldName];
 						return evaluateFilter(filter, fieldValue);
 					}
 				});
@@ -159,32 +226,13 @@ export const complianceStore = {
 		activeFilters.set([]);
 	},
 
-	// Helper to set family filter using the new filter system
-	setFamilyFilter(family: string | null) {
-		// Remove any existing family filters
-		const filters = get(activeFilters).filter((f) => f.fieldName !== 'family');
-
-		// Add new family filter if a family is selected
-		if (family) {
-			filters.push({
-				fieldName: 'family',
-				operator: 'equals',
-				value: family,
-				active: true
-			});
-		}
-
-		activeFilters.set(filters);
-	},
-
 	// Advanced filter methods
-	addFilter(fieldName: string, operator: FilterOperator, value?: any) {
+	addFilter(fieldName: string, operator: FilterOperator, value?: FilterValue) {
 		const filters = get(activeFilters);
 		const newFilter: FilterCondition = {
 			fieldName,
 			operator,
-			value,
-			active: true
+			value
 		};
 		activeFilters.set([...filters, newFilter]);
 		return newFilter;
@@ -207,13 +255,6 @@ export const complianceStore = {
 		}
 	},
 
-	toggleFilter(index: number) {
-		const filters = get(activeFilters);
-		if (index >= 0 && index < filters.length) {
-			this.updateFilter(index, { active: !filters[index].active });
-		}
-	},
-
 	getAvailableFields() {
 		// Get all unique field names from all controls and field schema
 		const allControls = get(controls);
@@ -224,8 +265,8 @@ export const complianceStore = {
 		fieldSet.add('family');
 
 		// Extract fields from controls
-		allControls.forEach(control => {
-			Object.keys(control).forEach(key => {
+		allControls.forEach((control) => {
+			Object.keys(control).forEach((key) => {
 				// Skip internal fields that start with underscore
 				if (!key.startsWith('_')) {
 					fieldSet.add(key);
@@ -237,7 +278,7 @@ export const complianceStore = {
 		const state = get(appState);
 		const schema = state?.fieldSchema || state?.field_schema;
 		if (schema?.fields) {
-			Object.keys(schema.fields).forEach(key => {
+			Object.keys(schema.fields).forEach((key) => {
 				fieldSet.add(key);
 			});
 		}

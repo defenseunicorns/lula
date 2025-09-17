@@ -8,7 +8,7 @@
 	import FilterBuilder from '$components/ui/FilterBuilder.svelte';
 	import type { Control, FieldSchema } from '$lib/types';
 	import { appState } from '$lib/websocket';
-	import { complianceStore, searchTerm, activeFilters } from '$stores/compliance';
+	import { complianceStore, searchTerm, activeFilters, type ControlWithDynamicFields, getOperatorLabel } from '$stores/compliance';
 	import { Filter, Information } from 'carbon-icons-svelte';
 	import { derived } from 'svelte/store';
 
@@ -112,26 +112,28 @@
 			// Apply search term
 			if ($searchTerm) {
 				const term = $searchTerm.toLowerCase();
-				results = results.filter((c: any) => JSON.stringify(c).toLowerCase().includes(term));
+				results = results.filter((c) => JSON.stringify(c).toLowerCase().includes(term));
 			}
 
 			// Apply advanced filters
 			if ($activeFilters.length > 0) {
-				results = results.filter((control: any) => {
-					// Control must match all active filters
+				results = results.filter((control) => {
+					// Control must match all filters
 					return $activeFilters.every(filter => {
-						if (!filter.active) return true;
-						
 						// Handle special case for family field which might be in different locations
 						let fieldValue;
 						if (filter.fieldName === 'family') {
+							// Cast to ControlWithDynamicFields for dynamic field access
+							const dynamicControl = control as ControlWithDynamicFields;
 							// Enhanced controls have family in _metadata.family, fallback to extracting from control-acronym
-							fieldValue = (control as any)?._metadata?.family ||
-								(control as any)?.family ||
-								(control as any)?.['control-acronym']?.split('-')[0] ||
+							fieldValue = dynamicControl._metadata?.family ||
+								dynamicControl.family ||
+								(dynamicControl['control-acronym'] ? dynamicControl['control-acronym'].split('-')[0] : '') ||
 								'';
 						} else {
-							fieldValue = (control as any)[filter.fieldName];
+							// Cast to ControlWithDynamicFields for dynamic field access
+							const dynamicControl = control as ControlWithDynamicFields;
+							fieldValue = dynamicControl[filter.fieldName];
 						}
 						
 						switch (filter.operator) {
@@ -294,8 +296,8 @@
 			</div>
 
 			<!-- Search Bar and Filter -->
-			<div class="flex gap-3 flex-wrap">
-				<div class="flex-1 min-w-[200px]">
+			<div class="flex gap-3">
+				<div class="flex-1">
 					<SearchBar />
 				</div>
 				
@@ -308,21 +310,17 @@
 			<!-- Active Filters Summary -->
 			{#if $activeFilters.length > 0}
 				<div class="mt-2 flex flex-wrap gap-2">
-					{#each $activeFilters.filter(f => f.active) as filter, index}
+					{#each $activeFilters as filter, index}
 						<div class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
 							<span>{filter.fieldName}: </span>
-							{#if filter.operator === 'exists'}
-								<span>exists</span>
-							{:else if filter.operator === 'not_exists'}
-								<span>does not exist</span>
+							{#if filter.operator === 'exists' || filter.operator === 'not_exists'}
+								<span>{getOperatorLabel(filter.operator).toLowerCase()}</span>
 							{:else if filter.operator === 'equals'}
 								<span>= {filter.value}</span>
 							{:else if filter.operator === 'not_equals'}
 								<span>≠ {filter.value}</span>
-							{:else if filter.operator === 'includes'}
-								<span>contains "{filter.value}"</span>
-							{:else if filter.operator === 'not_includes'}
-								<span>doesn't contain "{filter.value}"</span>
+							{:else}
+								<span>{getOperatorLabel(filter.operator).toLowerCase()} "{filter.value}"</span>
 							{/if}
 							<button 
 								onclick={() => complianceStore.removeFilter(index)}
@@ -334,7 +332,7 @@
 						</div>
 					{/each}
 					
-					{#if $activeFilters.filter(f => f.active).length > 1}
+					{#if $activeFilters.length > 1}
 						<button 
 							onclick={() => complianceStore.clearFilters()}
 							class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"

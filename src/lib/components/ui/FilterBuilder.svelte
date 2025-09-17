@@ -6,8 +6,10 @@
 		complianceStore,
 		type FilterOperator,
 		type FilterCondition,
+		type FilterValue,
 		activeFilters,
-		families
+		FILTER_OPERATORS,
+		getOperatorLabel
 	} from '$stores/compliance';
 	import { appState } from '$lib/websocket';
 	import { Filter, Add, TrashCan, ChevronDown, ChevronUp } from 'carbon-icons-svelte';
@@ -15,6 +17,7 @@
 	import { slide, fade } from 'svelte/transition';
 	import { derived } from 'svelte/store';
 	import { twMerge } from 'tailwind-merge';
+	import CustomDropdown from './CustomDropdown.svelte';
 
 	// Local state
 	let showFilterPanel = false;
@@ -32,7 +35,7 @@
 	// Get available fields from the store
 	$: availableFields = complianceStore.getAvailableFields();
 
-	// Use the activeFilters store directly
+	// Get the active filters from the store
 	$: activeFiltersList = $activeFilters;
 
 	// Get field type for the selected field
@@ -41,25 +44,25 @@
 	$: selectedFieldUiType = selectedFieldSchema?.ui_type || 'short_text';
 	$: isSelectField = selectedFieldUiType === 'select';
 	$: fieldOptions = isSelectField ? selectedFieldSchema?.options || [] : [];
-	
+
 	// Group fields by tab
 	$: fieldsByTab = {
 		overview: [] as string[],
 		implementation: [] as string[],
 		custom: [] as string[]
 	};
-	
+
 	$: {
 		// Reset arrays before populating
 		fieldsByTab.overview = [];
 		fieldsByTab.implementation = [];
 		fieldsByTab.custom = [];
-		
-		// Filter out special fields (family and mapping fields)
-		const regularFields = availableFields.filter(f => f !== 'family' && !f.startsWith('mapping.'));
-		
+
+		// Filter out special fields (family fields)
+		const regularFields = availableFields.filter((f) => f !== 'family');
+
 		// Group fields by tab
-		regularFields.forEach(field => {
+		regularFields.forEach((field) => {
 			const schema = $fieldSchema[field];
 			if (schema) {
 				const tab = schema.tab || getDefaultTabForCategory(schema.category);
@@ -83,15 +86,8 @@
 	// Determine if value input should be shown based on operator
 	$: showValueInput = newFilterOperator !== 'exists' && newFilterOperator !== 'not_exists';
 
-	// Operator options
-	const operatorOptions = [
-		{ value: 'equals', label: 'Equals' },
-		{ value: 'not_equals', label: 'Not equals' },
-		{ value: 'includes', label: 'Contains' },
-		{ value: 'not_includes', label: 'Does not contain' },
-		{ value: 'exists', label: 'Exists' },
-		{ value: 'not_exists', label: 'Not exists' }
-	];
+	// Use the shared filter operators constant
+	const operatorOptions = FILTER_OPERATORS;
 
 	// Add a new filter
 	function addFilter() {
@@ -100,23 +96,22 @@
 		let value = newFilterValue;
 
 		// Convert value based on field type
-		let processedValue: any = value;
-		if (selectedFieldType === 'number' && !isNaN(Number(value))) {
-			processedValue = Number(value);
-		} else if (selectedFieldType === 'boolean') {
-			processedValue = value === 'true';
+		let processedValue: FilterValue = value;
+		if (selectedFieldType === 'boolean' && typeof value === 'string') {
+			processedValue = value.toLowerCase() === 'true';
+		} else if (selectedFieldType === 'number' && typeof value === 'string') {
+			processedValue = parseFloat(value);
+			if (isNaN(processedValue)) processedValue = value; // Fallback to string if parsing fails
 		}
 
-		value = processedValue;
+		// Add the filter
+		complianceStore.addFilter(newFilterField, newFilterOperator, processedValue);
 
-		complianceStore.addFilter(
-			newFilterField,
-			newFilterOperator,
-			showValueInput ? value : undefined
-		);
-
-		// Reset form
+		// Reset the form
+		newFilterField = '';
+		newFilterOperator = 'equals';
 		newFilterValue = '';
+		showFilterPanel = false;
 	}
 
 	// Toggle filter panel
@@ -146,12 +141,13 @@
 
 	// Get display value for a filter
 	function getFilterDisplayValue(filter: FilterCondition): string {
+		// Special cases for exists/not_exists that don't need to show a value
 		if (filter.operator === 'exists') return 'exists';
 		if (filter.operator === 'not_exists') return 'does not exist';
 
-		const operatorText =
-			operatorOptions.find((op) => op.value === filter.operator)?.label || filter.operator;
-		return `${operatorText.toLowerCase()} "${filter.value}"`;
+		// Use the shared getOperatorLabel function
+		const operatorText = getOperatorLabel(filter.operator).toLowerCase();
+		return `${operatorText} "${filter.value}"`;
 	}
 
 	// Handle click outside to close the panel
@@ -191,21 +187,15 @@
 			<div class="p-4 border-b border-gray-200 dark:border-gray-700">
 				<h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Active Filters</h3>
 
-				{#if activeFiltersList.length === 0}
-					<p class="text-sm text-gray-500 dark:text-gray-400">No active filters</p>
+				{#if $activeFilters.length === 0}
+					<p class="text-sm text-gray-500 dark:text-gray-400">No filters</p>
 				{:else}
 					<div class="space-y-2">
-						{#each activeFiltersList as filter, index}
+						{#each $activeFilters as filter, index}
 							<div
 								class="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-2 rounded-md"
 							>
 								<div class="flex items-center">
-									<input
-										type="checkbox"
-										checked={filter.active}
-										onchange={() => complianceStore.toggleFilter(index)}
-										class="mr-2 h-4 w-4 text-blue-600 rounded border-gray-300 dark:border-gray-600 focus:ring-blue-500"
-									/>
 									<span class="text-sm text-gray-700 dark:text-gray-300">
 										<span class="font-medium">{getFieldDisplayName(filter.fieldName)}</span>
 										<span class="mx-1 text-gray-500 dark:text-gray-400"
@@ -222,15 +212,6 @@
 								</button>
 							</div>
 						{/each}
-
-						{#if activeFiltersList.length > 1}
-							<button
-								onclick={() => complianceStore.clearFilters()}
-								class="text-sm text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300"
-							>
-								Clear all filters
-							</button>
-						{/if}
 					</div>
 				{/if}
 			</div>
@@ -245,22 +226,22 @@
 						<label for="filter-field" class="block text-xs text-gray-600 dark:text-gray-400 mb-1"
 							>Field</label
 						>
-						
+
 						<!-- Custom Field Dropdown -->
-						<div class="relative" use:clickOutside={() => showFieldDropdown = false}>
+						<div class="relative" use:clickOutside={() => (showFieldDropdown = false)}>
 							<!-- Dropdown Trigger -->
 							<button
-								onclick={() => showFieldDropdown = !showFieldDropdown}
+								onclick={() => (showFieldDropdown = !showFieldDropdown)}
 								class={twMerge(
-									"w-full flex items-center justify-between px-3 py-2 text-sm rounded-md border transition-colors",
-									showFieldDropdown 
-										? "border-blue-500 dark:border-blue-400 ring-2 ring-blue-200 dark:ring-blue-900"
-										: "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500",
-									"bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+									'w-full flex items-center justify-between px-3 py-2 text-sm rounded-md border transition-colors',
+									showFieldDropdown
+										? 'border-blue-500 dark:border-blue-400 ring-2 ring-blue-200 dark:ring-blue-900'
+										: 'border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500',
+									'bg-white dark:bg-gray-700 text-gray-900 dark:text-white'
 								)}
 							>
 								<span class="truncate">
-									{newFilterField ? getFieldDisplayName(newFilterField) : "Select a field"}
+									{newFilterField ? getFieldDisplayName(newFilterField) : 'Select a field'}
 								</span>
 								{#if showFieldDropdown}
 									<ChevronUp class="h-4 w-4 text-gray-500 dark:text-gray-400" />
@@ -268,20 +249,20 @@
 									<ChevronDown class="h-4 w-4 text-gray-500 dark:text-gray-400" />
 								{/if}
 							</button>
-							
+
 							<!-- Dropdown Menu -->
 							{#if showFieldDropdown}
-								<div 
+								<div
 									class="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-y-auto"
 									transition:fade={{ duration: 100 }}
 								>
 									<!-- Family field is always first and specially formatted -->
 									<button
 										class={twMerge(
-											"w-full text-left px-3 py-2 text-sm font-medium",
+											'w-full text-left px-3 py-2 text-sm font-medium',
 											newFilterField === 'family'
-												? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-												: "hover:bg-gray-100 dark:hover:bg-gray-700/50"
+												? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+												: 'hover:bg-gray-100 dark:hover:bg-gray-700/50'
 										)}
 										onclick={() => {
 											newFilterField = 'family';
@@ -290,21 +271,23 @@
 									>
 										Family
 									</button>
-									
+
 									<!-- Divider -->
 									<div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-									
+
 									<!-- Overview fields -->
-									<div class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/80">
+									<div
+										class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/80"
+									>
 										Overview Fields
 									</div>
 									{#each fieldsByTab.overview as field}
 										<button
 											class={twMerge(
-												"w-full text-left px-3 py-2 text-sm",
+												'w-full text-left px-3 py-2 text-sm',
 												newFilterField === field
-													? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-													: "hover:bg-gray-100 dark:hover:bg-gray-700/50"
+													? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+													: 'hover:bg-gray-100 dark:hover:bg-gray-700/50'
 											)}
 											onclick={() => {
 												newFilterField = field;
@@ -314,21 +297,23 @@
 											{getFieldDisplayName(field)}
 										</button>
 									{/each}
-									
+
 									<!-- Implementation fields -->
 									{#if fieldsByTab.implementation.length > 0}
 										<!-- Divider -->
 										<div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-										<div class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/80">
+										<div
+											class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/80"
+										>
 											Implementation Fields
 										</div>
 										{#each fieldsByTab.implementation as field}
 											<button
 												class={twMerge(
-													"w-full text-left px-3 py-2 text-sm",
+													'w-full text-left px-3 py-2 text-sm',
 													newFilterField === field
-														? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-														: "hover:bg-gray-100 dark:hover:bg-gray-700/50"
+														? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+														: 'hover:bg-gray-100 dark:hover:bg-gray-700/50'
 												)}
 												onclick={() => {
 													newFilterField = field;
@@ -339,21 +324,23 @@
 											</button>
 										{/each}
 									{/if}
-									
+
 									<!-- Custom fields -->
 									{#if fieldsByTab.custom.length > 0}
 										<!-- Divider -->
 										<div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-										<div class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/80">
+										<div
+											class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/80"
+										>
 											Custom Fields
 										</div>
 										{#each fieldsByTab.custom as field}
 											<button
 												class={twMerge(
-													"w-full text-left px-3 py-2 text-sm",
+													'w-full text-left px-3 py-2 text-sm',
 													newFilterField === field
-														? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
-														: "hover:bg-gray-100 dark:hover:bg-gray-700/50"
+														? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+														: 'hover:bg-gray-100 dark:hover:bg-gray-700/50'
 												)}
 												onclick={() => {
 													newFilterField = field;
@@ -366,7 +353,7 @@
 									{/if}
 								</div>
 							{/if}
-					</div>
+						</div>
 					</div>
 
 					<!-- Operator Selection (hidden for family field) -->
@@ -376,15 +363,14 @@
 								for="filter-operator"
 								class="block text-xs text-gray-600 dark:text-gray-400 mb-1">Operator</label
 							>
-							<select
-								id="filter-operator"
+
+							<!-- Custom Operator Dropdown -->
+							<CustomDropdown
 								bind:value={newFilterOperator}
-								class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-							>
-								{#each operatorOptions as option}
-									<option value={option.value}>{option.label}</option>
-								{/each}
-							</select>
+								options={operatorOptions}
+								getDisplayValue={getOperatorLabel}
+								labelId="filter-operator"
+							/>
 						</div>
 					{/if}
 
@@ -396,51 +382,35 @@
 							>
 
 							{#if newFilterField === 'family'}
-								<!-- Special handling for family field -->
-								<select
-									id="filter-value"
+								<!-- Special handling for family field with CustomDropdown -->
+								<CustomDropdown
 									bind:value={newFilterValue}
-									class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-								>
-									<option value="" disabled>Select a family</option>
-									{#each $availableFamilies as family}
-										<option value={family}>{family}</option>
-									{/each}
-								</select>
-							{:else if newFilterField === 'mapping.status'}
-								<!-- Special handling for mapping status field -->
-								<select
-									id="filter-value"
-									bind:value={newFilterValue}
-									class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-								>
-									<option value="" disabled>Select a status</option>
-									<option value="planned">Planned</option>
-									<option value="implemented">Implemented</option>
-									<option value="verified">Verified</option>
-								</select>
+									options={$availableFamilies.map((family: string) => ({
+										value: family,
+										label: family
+									}))}
+									placeholder="Select a family"
+									labelId="filter-value"
+								/>
 							{:else if isSelectField}
-								<!-- Dropdown for select fields -->
-								<select
-									id="filter-value"
+								<!-- Custom dropdown for select fields -->
+								<CustomDropdown
 									bind:value={newFilterValue}
-									class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-								>
-									<option value="" disabled>Select a value</option>
-									{#each fieldOptions as option}
-										<option value={option}>{option}</option>
-									{/each}
-								</select>
+									options={fieldOptions.map((option: string) => ({ value: option, label: option }))}
+									placeholder="Select a value"
+									labelId="filter-value"
+								/>
 							{:else if selectedFieldType === 'boolean'}
-								<!-- Boolean toggle -->
-								<select
-									id="filter-value"
+								<!-- Boolean field with CustomDropdown -->
+								<CustomDropdown
 									bind:value={newFilterValue}
-									class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
-								>
-									<option value="true">Yes</option>
-									<option value="false">No</option>
-								</select>
+									options={[
+										{ value: 'true', label: 'Yes' },
+										{ value: 'false', label: 'No' }
+									]}
+									placeholder="Select yes/no"
+									labelId="filter-value"
+								/>
 							{:else}
 								<!-- Text input for other fields -->
 								<input
