@@ -1074,6 +1074,7 @@ router.post('/parse-excel', upload.single('file'), async (req, res) => {
 				row
 					.slice(0, 4)
 					.filter((v) => v !== null)
+					.filter((v) => v !== undefined)
 					.join(', ') + (row.length > 4 ? ', ...' : '')
 		}));
 
