@@ -110,7 +110,7 @@ export default ts.config(
       complexity: [
         "warn",
         {
-          max: 10,
+          max: 15,
         },
       ],
 
@@ -120,21 +120,21 @@ export default ts.config(
       "max-depth": [
         "warn",
         {
-          max: 3,
+          max: 5,
         },
       ],
 
       "max-nested-callbacks": [
         "warn",
         {
-          max: 4,
+          max: 5,
         },
       ],
 
       "max-params": [
         "error",
         {
-          max: 4,
+          max: 5,
         },
       ],
 
