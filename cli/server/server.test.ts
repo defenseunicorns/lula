@@ -32,6 +32,7 @@ type StdinRW = {
 };
 
 const h = vi.hoisted(() => {
+	const mockServer = { listen: vi.fn<ListenFn>() };
 	return {
 		existsSync: vi.fn(),
 		mkdirSync: vi.fn(),
@@ -44,7 +45,8 @@ const h = vi.hoisted(() => {
 		cors: vi.fn<() => unknown>(() => 'cors-mw'),
 		rateLimit: vi.fn<(_: { windowMs: number; max: number }) => unknown>(() => 'limiter-mw'),
 
-		httpListen: vi.fn<ListenFn>(),
+		httpListen: mockServer.listen,
+		httpServer: mockServer,
 
 		initializeServerState: vi.fn<(dir: string) => void>(),
 		loadAllData: vi.fn<() => Promise<void>>(),
@@ -57,10 +59,19 @@ const h = vi.hoisted(() => {
 	};
 });
 
-vi.mock('fs', () => ({
-	existsSync: h.existsSync,
-	mkdirSync: h.mkdirSync
-}));
+vi.mock('fs', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('fs')>();
+	return {
+		...actual,
+		default: {
+			...actual,
+			existsSync: h.existsSync,
+			mkdirSync: h.mkdirSync
+		},
+		existsSync: h.existsSync,
+		mkdirSync: h.mkdirSync
+	};
+});
 
 vi.mock('express', () => {
 	const app: ExpressAppMock = { use: h.expressUse, get: h.expressGet };
@@ -79,9 +90,17 @@ vi.mock('express', () => {
 vi.mock('cors', () => ({ default: h.cors }));
 vi.mock('express-rate-limit', () => ({ default: h.rateLimit }));
 
-vi.mock('http', () => ({
-	createServer: vi.fn(() => ({ listen: h.httpListen }))
-}));
+vi.mock('http', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('http')>();
+	return {
+		...actual,
+		default: {
+			...actual,
+			createServer: vi.fn(() => h.httpServer)
+		},
+		createServer: vi.fn(() => h.httpServer)
+	};
+});
 
 vi.mock('./serverState', () => ({
 	initializeServerState: h.initializeServerState,
@@ -113,6 +132,11 @@ describe('server', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+		
+		// Set default behaviors for fs mocks
+		h.existsSync.mockReturnValue(true); // By default, directories exist
+		h.mkdirSync.mockImplementation(() => undefined); // Mock mkdir to do nothing
+		
 		h.httpListen.mockImplementation((_port: number, cb: () => void) => cb());
 		h.loadAllData.mockResolvedValue(undefined);
 		logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined as unknown as void);
@@ -268,7 +292,9 @@ describe('server', () => {
 		await handler({}, res);
 		expect(res.sendFile).toHaveBeenCalledWith('index.html', { root: expect.any(String) });
 
-		expect(h.wsInitialize).toHaveBeenCalledWith({ listen: h.httpListen });
+		expect(h.wsInitialize).toHaveBeenCalledWith(expect.objectContaining({
+			listen: expect.any(Function)
+		}));
 
 		await srv.start();
 		expect(h.httpListen).toHaveBeenCalledWith(4321, expect.any(Function));
