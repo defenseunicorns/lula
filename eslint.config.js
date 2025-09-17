@@ -83,7 +83,7 @@ export default ts.config(
   .extends("eslint:recommended", "plugin:@typescript-eslint/recommended")
   .map((cfg) => ({
     ...cfg,
-    files: ["**/*.ts"],   
+    files: ["**/*.ts"],
   })),
   {
 	files: ["**/*.ts"],
