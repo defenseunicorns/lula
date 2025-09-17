@@ -784,8 +784,8 @@
 						aria-label="Overview tab drop zone"
 					>
 						{#each Array.from(fieldConfigs.entries())
-							.filter(([field, config]) => config.tab === 'overview')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index (field)}
+							.filter(([_field, config]) => config.tab === 'overview')
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -836,7 +836,7 @@
 					>
 						{#each Array.from(fieldConfigs.entries())
 							.filter(([field, config]) => config.tab === 'implementation')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index (field)}
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}

@@ -78,10 +78,7 @@ interface OriginalConsole {
 }
 
 const mockWebSocketServer = vi.mocked(WebSocketServer);
-const mockWebSocket = vi.mocked(WebSocket);
 const mockGetServerState = vi.mocked(getServerState);
-const mockGetCurrentControlSetPath = vi.mocked(getCurrentControlSetPath);
-const mockInitializeServerState = vi.mocked(initializeServerState);
 const mockLoadAllData = vi.mocked(loadAllData);
 const mockScanControlSets = vi.mocked(scanControlSets);
 
