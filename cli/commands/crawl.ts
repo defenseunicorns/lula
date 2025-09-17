@@ -198,7 +198,7 @@ export function getChangedBlocks(
 
 	return changed;
 }
-let leavePost = false;
+
 /**
  * Defines the "crawl" command for the CLI.
  *
@@ -214,6 +214,7 @@ export function crawlCommand(): Command {
 				.default('review')
 		)
 		.action(async (opts) => {
+			let leavePost = false;
 			const { owner, repo, pull_number } = getPRContext();
 			console.log(`Analyzing PR #${pull_number} in ${owner}/${repo} for compliance changes...`);
 			const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
