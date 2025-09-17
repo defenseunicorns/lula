@@ -3,10 +3,10 @@
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { 
-	families, 
-	filteredControls, 
-	controlsWithMappings, 
+import {
+	families,
+	filteredControls,
+	controlsWithMappings,
 	complianceStore,
 	controls,
 	mappings,
@@ -70,14 +70,14 @@ describe('complianceStore', () => {
 	describe('families derived store', () => {
 		it('should extract unique families from controls', () => {
 			controls.set(mockControls);
-			
+
 			const familiesValue = get(families);
 			expect(familiesValue).toEqual(['AC', 'AU']);
 		});
 
 		it('should handle empty controls array', () => {
 			controls.set([]);
-			
+
 			const familiesValue = get(families);
 			expect(familiesValue).toEqual([]);
 		});
@@ -91,9 +91,9 @@ describe('complianceStore', () => {
 					'control-acronym': 'SC-1'
 				}
 			];
-			
+
 			controls.set(controlsWithoutMetadata);
-			
+
 			const familiesValue = get(families);
 			expect(familiesValue).toEqual(['SC']);
 		});
@@ -115,9 +115,9 @@ describe('complianceStore', () => {
 					_metadata: { family: 'AA' }
 				}
 			];
-			
+
 			controls.set(unsortedControls);
-			
+
 			const familiesValue = get(families);
 			expect(familiesValue).toEqual(['AA', 'ZZ']);
 		});
@@ -134,12 +134,12 @@ describe('complianceStore', () => {
 				{
 					id: 'INVALID-1',
 					title: 'Invalid Control',
-					family: '',
+					family: ''
 				}
 			];
-			
+
 			controls.set(controlsWithMissingFamily);
-			
+
 			const familiesValue = get(families);
 			expect(familiesValue).toEqual(['VALID']);
 		});
@@ -149,7 +149,7 @@ describe('complianceStore', () => {
 				{
 					id: 'NO-FAMILY-1',
 					title: 'Control with no family data',
-					family: '',
+					family: ''
 				},
 				{
 					id: 'NULL-FIELDS',
@@ -166,9 +166,9 @@ describe('complianceStore', () => {
 					_metadata: { family: 'VALID' }
 				}
 			];
-			
+
 			controls.set(controlsWithNoFamilyData);
-			
+
 			const familiesValue = get(families);
 			expect(familiesValue).toEqual(['VALID']);
 		});
@@ -183,9 +183,9 @@ describe('complianceStore', () => {
 					_metadata: {}
 				}
 			];
-			
+
 			controls.set(controlsWithFamilyProperty);
-			
+
 			const familiesValue = get(families);
 			expect(familiesValue).toEqual(['FAMILYPROP']);
 		});
@@ -199,9 +199,9 @@ describe('complianceStore', () => {
 					'control-acronym': 'ACRONYM-1'
 				}
 			];
-			
+
 			controls.set(controlsWithAcronymOnly);
-			
+
 			const familiesValue = get(families);
 			expect(familiesValue).toEqual(['ACRONYM']);
 		});
@@ -219,15 +219,15 @@ describe('complianceStore', () => {
 
 		it('should filter by selected family', () => {
 			selectedFamily.set('AC');
-			
+
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(2);
-			expect(filtered.every(c => c.family === 'AC')).toBe(true);
+			expect(filtered.every((c) => c.family === 'AC')).toBe(true);
 		});
 
 		it('should filter by search term', () => {
 			searchTerm.set('management');
-			
+
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(1);
 			expect(filtered[0].id).toBe('AC-2');
@@ -236,7 +236,7 @@ describe('complianceStore', () => {
 		it('should apply both family and search filters', () => {
 			selectedFamily.set('AC');
 			searchTerm.set('policy');
-			
+
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(1);
 			expect(filtered[0].id).toBe('AC-1');
@@ -244,7 +244,7 @@ describe('complianceStore', () => {
 
 		it('should be case insensitive for search', () => {
 			searchTerm.set('AUDIT');
-			
+
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(1);
 			expect(filtered[0].id).toBe('AU-1');
@@ -252,7 +252,7 @@ describe('complianceStore', () => {
 
 		it('should return empty array when no matches found', () => {
 			searchTerm.set('nonexistent');
-			
+
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(0);
 		});
@@ -263,16 +263,16 @@ describe('complianceStore', () => {
 				{
 					id: 'INVALID-1',
 					title: 'Invalid Control',
-					family: '',
+					family: ''
 				}
 			];
-			
+
 			controls.set(controlsWithMissingFamily);
 			selectedFamily.set('AC');
-			
+
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(2);
-			expect(filtered.every(c => c.family === 'AC')).toBe(true);
+			expect(filtered.every((c) => c.family === 'AC')).toBe(true);
 		});
 
 		it('should use family property when filtering and _metadata.family is missing', () => {
@@ -282,13 +282,13 @@ describe('complianceStore', () => {
 					title: 'Control using family property',
 					family: 'TESTFAM',
 					'control-acronym': 'TESTFAM-1',
-					_metadata: {} 
+					_metadata: {}
 				}
 			];
-			
+
 			controls.set(controlsWithFamilyProperty);
 			selectedFamily.set('TESTFAM');
-			
+
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(1);
 			expect(filtered[0].id).toBe('FAMILY-PROP-1');
@@ -303,10 +303,10 @@ describe('complianceStore', () => {
 					'control-acronym': 'ACRO-1'
 				}
 			];
-			
+
 			controls.set(controlsWithAcronymOnly);
 			selectedFamily.set('ACRO');
-			
+
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(1);
 			expect(filtered[0].id).toBe('ACRO-1');
@@ -321,24 +321,24 @@ describe('complianceStore', () => {
 
 		it('should combine controls with their mappings', () => {
 			const controlsWithMaps = get(controlsWithMappings);
-			
+
 			expect(controlsWithMaps).toHaveLength(3);
-			
-			const ac1Control = controlsWithMaps.find(c => c.id === 'AC-1');
+
+			const ac1Control = controlsWithMaps.find((c) => c.id === 'AC-1');
 			expect(ac1Control?.mappings).toHaveLength(1);
 			expect(ac1Control?.mappings[0].uuid).toBe('mapping-1');
-			
-			const au1Control = controlsWithMaps.find(c => c.id === 'AU-1');
+
+			const au1Control = controlsWithMaps.find((c) => c.id === 'AU-1');
 			expect(au1Control?.mappings).toHaveLength(0);
 		});
 
 		it('should handle controls with no mappings', () => {
 			mappings.set([]);
-			
+
 			const controlsWithMaps = get(controlsWithMappings);
-			
+
 			expect(controlsWithMaps).toHaveLength(3);
-			controlsWithMaps.forEach(control => {
+			controlsWithMaps.forEach((control) => {
 				expect(control.mappings).toHaveLength(0);
 			});
 		});
@@ -348,7 +348,7 @@ describe('complianceStore', () => {
 		describe('setSearchTerm', () => {
 			it('should update search term', () => {
 				complianceStore.setSearchTerm('test search');
-				
+
 				expect(get(searchTerm)).toBe('test search');
 			});
 		});
@@ -356,13 +356,13 @@ describe('complianceStore', () => {
 		describe('setSelectedFamily', () => {
 			it('should update selected family', () => {
 				complianceStore.setSelectedFamily('AC');
-				
+
 				expect(get(selectedFamily)).toBe('AC');
 			});
 
 			it('should handle null family', () => {
 				complianceStore.setSelectedFamily(null);
-				
+
 				expect(get(selectedFamily)).toBeNull();
 			});
 		});
@@ -371,13 +371,13 @@ describe('complianceStore', () => {
 			it('should update selected control', () => {
 				const control = mockControls[0];
 				complianceStore.setSelectedControl(control);
-				
+
 				expect(get(selectedControl)).toEqual(control);
 			});
 
 			it('should handle null control', () => {
 				complianceStore.setSelectedControl(null);
-				
+
 				expect(get(selectedControl)).toBeNull();
 			});
 
@@ -386,9 +386,9 @@ describe('complianceStore', () => {
 					...mockControls[0],
 					mappings: mockMappings
 				};
-				
+
 				complianceStore.setSelectedControl(controlWithMappings);
-				
+
 				const selected = get(selectedControl);
 				expect(selected).toBeDefined();
 				expect('mappings' in selected!).toBe(false);
@@ -400,12 +400,12 @@ describe('complianceStore', () => {
 			it('should reset search term and selected family', () => {
 				searchTerm.set('test');
 				selectedFamily.set('AC');
-				
+
 				complianceStore.clearFilters();
-				
+
 				expect(get(searchTerm)).toBe('');
 				expect(get(selectedFamily)).toBeNull();
 			});
 		});
 	});
-})
+});
