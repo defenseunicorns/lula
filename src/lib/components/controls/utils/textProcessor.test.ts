@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
 import { describe, expect, it } from 'vitest';
-import { processMultilineText, type ProcessedSection, type TableRow } from './textProcessor';
+import { processMultilineText } from './textProcessor';
 
 describe('textProcessor', () => {
 	describe('processMultilineText', () => {
