@@ -410,7 +410,10 @@ export class FileStore {
 		const controlId = mapping.control_id;
 		const family = this.getControlFamily(controlId);
 		const familyDir = join(this.mappingsDir, family);
-		const mappingFile = join(familyDir, `${controlId.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`);
+		const mappingFile = join(
+			familyDir,
+			`${controlId.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`
+		);
 
 		// Ensure family directory exists
 		if (!existsSync(familyDir)) {
@@ -543,7 +546,10 @@ export class FileStore {
 		for (const [controlId, controlMappings] of mappingsByControl) {
 			const family = this.getControlFamily(controlId);
 			const familyDir = join(this.mappingsDir, family);
-			const mappingFile = join(familyDir, `${controlId.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`);
+			const mappingFile = join(
+				familyDir,
+				`${controlId.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`
+			);
 
 			// Ensure family directory exists
 			if (!existsSync(familyDir)) {
