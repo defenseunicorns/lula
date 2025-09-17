@@ -18,6 +18,12 @@ interface SpreadsheetRow {
 	[key: string]: any;
 }
 
+interface MappingData {
+	control_id: string;
+	justification: string;
+	uuid: string;
+}
+
 const router: express.Router = express.Router();
 const upload = multer({
 	storage: multer.memoryStorage(),
@@ -502,10 +508,10 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				const filteredControl: SpreadsheetRow = {};
 
 				// Prepare mapping data with empty justification
-				const mappingData: any = {
+				const mappingData: MappingData = {
 					control_id: controlIdStr,
 					justification: '',
-					uuid: crypto.randomUUID() // Use crypto.randomUUID() for consistent UUID generation
+					uuid: crypto.randomUUID()
 				};
 
 				// Collect justification content from all specified fields
