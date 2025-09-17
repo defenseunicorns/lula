@@ -354,7 +354,7 @@ class WebSocketManager {
 									});
 
 									// Also get mapping file history
-									const mappingFilename = `${control.id}-mappings.yaml`;
+									const mappingFilename = `${control.id.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`;
 									const mappingPath = join(currentPath, 'mappings', family, mappingFilename);
 									let mappingHistory: any = { commits: [], totalCommits: 0 };
 
