@@ -86,8 +86,8 @@
 	// Determine if value input should be shown based on operator
 	$: showValueInput = newFilterOperator !== 'exists' && newFilterOperator !== 'not_exists';
 
-	// Use the shared filter operators constant
-	const operatorOptions = FILTER_OPERATORS;
+	// Create a new array from the readonly constant to make it mutable for Svelte
+	const operatorOptions = FILTER_OPERATORS.map((op) => ({ value: op.value, label: op.label }));
 
 	// Add a new filter
 	function addFilter() {
@@ -100,8 +100,8 @@
 		if (selectedFieldType === 'boolean' && typeof value === 'string') {
 			processedValue = value.toLowerCase() === 'true';
 		} else if (selectedFieldType === 'number' && typeof value === 'string') {
-			processedValue = parseFloat(value);
-			if (isNaN(processedValue)) processedValue = value; // Fallback to string if parsing fails
+			const parsedValue = parseFloat(value);
+			processedValue = isNaN(parsedValue) ? value : parsedValue; // Fallback to string if parsing fails
 		}
 
 		// Add the filter

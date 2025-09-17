@@ -295,7 +295,7 @@
 				</span>
 			</div>
 
-			<!-- Search Bar and Filter -->
+			<!-- Search Bar, Family Filter, and Export -->
 			<div class="flex gap-3">
 				<div class="flex-1">
 					<SearchBar />

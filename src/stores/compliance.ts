@@ -5,68 +5,69 @@ import type { Control, ControlWithMappings, Mapping } from '$lib/types';
 import { appState } from '$lib/websocket';
 import { derived, get, writable } from 'svelte/store';
 
-// Type for control field values - similar to FilterValue but more specific to control fields
+/**
+ * A more flexible type for control field values that can handle any type of data
+ * found in control objects, including primitive values, arrays, and objects.
+ */
 export type ControlFieldValue =
 	| string
 	| number
 	| boolean
-	| string[]
-	| number[]
+	| null
+	| undefined
+	| Array<unknown>
 	| Record<string, unknown>;
 
-// Interface for accessing control fields dynamically for filtering
+/**
+ * Interface for accessing control fields dynamically for filtering.
+ * This interface is intentionally flexible to handle the varied structure
+ * of control objects loaded from YAML files.
+ */
 export interface ControlWithDynamicFields {
-	// Index signature with more specific type than 'any'
-	[key: string]:
-		| ControlFieldValue
-		| undefined
-		| Record<string, ControlFieldValue>
-		| Mapping[]
-		| unknown[];
+	// Index signature that allows any string key with any type of value
+	[key: string]: unknown;
 
-	// Common known fields with specific types
-	_metadata?: {
-		family?: string;
-		[key: string]: ControlFieldValue | undefined;
-	};
+	// Common known fields with specific types for better IDE support
 	id?: string;
-	family?: string;
-	'control-acronym'?: string;
-	name?: string;
 	title?: string;
 	description?: string;
+	family?: string;
+	status?: string;
+	'review-status'?: string;
+	'control-acronym'?: string;
+
+	// Metadata fields
+	_metadata?: Record<string, unknown>;
+
+	// Complex fields
 	mappings?: Mapping[];
 	enhancements?: unknown[];
 	links?: Array<{ href: string; rel?: string; text?: string }>;
 	parameters?: Array<{ id: string; [key: string]: unknown }>;
 }
 
-// Filter types
-export type FilterOperator =
-	| 'equals'
-	| 'not_equals'
-	| 'exists'
-	| 'not_exists'
-	| 'includes'
-	| 'not_includes';
+/**
+ * Shared filter operator options used across the application
+ */
+export const FILTER_OPERATORS = [
+	{ value: 'equals' as const, label: 'Equals' },
+	{ value: 'not_equals' as const, label: 'Not equals' },
+	{ value: 'includes' as const, label: 'Contains' },
+	{ value: 'not_includes' as const, label: 'Does not contain' },
+	{ value: 'exists' as const, label: 'Exists' },
+	{ value: 'not_exists' as const, label: 'Not exists' }
+] as const;
 
-// Filter operator option with display label
+// Extract the filter operator type from the constant
+export type FilterOperator = (typeof FILTER_OPERATORS)[number]['value'];
+
+/**
+ * Filter operator option with display label
+ */
 export interface FilterOperatorOption {
 	value: FilterOperator;
 	label: string;
 }
-
-/**
- * Shared filter operator options used across the application
- */
-export const FILTER_OPERATORS: FilterOperatorOption[] = [
-	{ value: 'equals', label: 'Equals' },
-	{ value: 'not_equals', label: 'Not equals' },
-	{ value: 'includes', label: 'Contains' },
-	{ value: 'not_includes', label: 'Does not contain' },
-	{ value: 'exists', label: 'Exists' },
-	{ value: 'not_exists', label: 'Not exists' }
-];
 
 /**
  * Helper function to get the display label for a filter operator
@@ -76,8 +77,11 @@ export function getOperatorLabel(operator: FilterOperator): string {
 	return option?.label || operator;
 }
 
-// Type for filter values - can be string, number, boolean, or array of these
-export type FilterValue = string | number | boolean | string[] | number[] | Record<string, unknown>;
+/**
+ * Type for filter values - intentionally flexible to handle any value type
+ * that might be found in control objects loaded from YAML files.
+ */
+export type FilterValue = unknown;
 
 export interface FilterCondition {
 	fieldName: string;
@@ -123,69 +127,62 @@ export const filteredControls = derived(
 			results = results.filter((c) => JSON.stringify(c).toLowerCase().includes(term));
 		}
 
-		// Helper function to evaluate filter against a field value
-		function evaluateFilter(filter: FilterCondition, fieldValue: FilterValue | undefined): boolean {
-			switch (filter.operator) {
-				case 'equals':
-					return fieldValue === filter.value;
-
-				case 'not_equals':
-					return fieldValue !== filter.value;
-
-				case 'exists':
-					return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
-
-				case 'not_exists':
-					return fieldValue === undefined || fieldValue === null || fieldValue === '';
-
-				case 'includes':
-					if (typeof fieldValue === 'string') {
-						return fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
-					} else if (Array.isArray(fieldValue)) {
-						return fieldValue.some((item) =>
-							String(item).toLowerCase().includes(String(filter.value).toLowerCase())
-						);
-					}
-					return false;
-
-				case 'not_includes':
-					if (typeof fieldValue === 'string') {
-						return !fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
-					} else if (Array.isArray(fieldValue)) {
-						return !fieldValue.some((item) =>
-							String(item).toLowerCase().includes(String(filter.value).toLowerCase())
-						);
-					}
-					return true;
-
-				default:
-					return true;
-			}
-		}
-
 		// Apply advanced filters
 		if ($activeFilters.length > 0) {
 			results = results.filter((control) => {
 				// Cast to ControlWithDynamicFields for dynamic field access
 				const dynamicControl = control as ControlWithDynamicFields;
+
 				// Control must match all filters
 				return $activeFilters.every((filter) => {
+					let fieldValue: unknown;
+
 					if (filter.fieldName === 'family') {
 						// Handle special case for family field which might be in different locations
-						const fieldValue =
+						fieldValue =
 							dynamicControl._metadata?.family ||
 							dynamicControl.family ||
 							(dynamicControl['control-acronym']
 								? dynamicControl['control-acronym'].split('-')[0]
 								: '') ||
 							'';
-
-						return evaluateFilter(filter, fieldValue);
 					} else {
-						// Regular control field
-						const fieldValue = dynamicControl[filter.fieldName];
-						return evaluateFilter(filter, fieldValue);
+						// Access field directly using the dynamic field access
+						fieldValue = dynamicControl[filter.fieldName];
 					}
+
+					// For exists/not_exists operators, we just need to check if the field has a value
+					if (filter.operator === 'exists') {
+						return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
+					} else if (filter.operator === 'not_exists') {
+						return fieldValue === undefined || fieldValue === null || fieldValue === '';
+					}
+
+					// For other operators, convert values to strings for comparison
+					if (fieldValue !== undefined && fieldValue !== null) {
+						const fieldValueStr = String(fieldValue).toLowerCase();
+						const filterValueStr =
+							filter.value !== undefined ? String(filter.value).toLowerCase() : '';
+
+						switch (filter.operator) {
+							case 'equals':
+								return fieldValueStr === filterValueStr;
+
+							case 'not_equals':
+								return fieldValueStr !== filterValueStr;
+
+							case 'includes':
+								return fieldValueStr.includes(filterValueStr);
+
+							case 'not_includes':
+								return !fieldValueStr.includes(filterValueStr);
+
+							default:
+								return true;
+						}
+					}
+
+					return false;
 				});
 			});
 		}
