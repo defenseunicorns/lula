@@ -151,5 +151,11 @@ export default ts.config(
       "no-invalid-this": "warn",
     },
   },
+  {
+  files: ["**/*.test.ts"],
+  rules: {
+    "max-statements": "off"
+  },
+},
 
 );
