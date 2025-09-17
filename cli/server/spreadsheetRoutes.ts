@@ -402,7 +402,10 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 
 			// Determine category based on field name and usage or use frontend config
 			let category = frontendConfig?.category || 'custom';
-			if (!frontendConfig) {
+			// Check if this field is in the justification fields list
+			if (justificationFields.includes(fieldName)) {
+				category = 'mappings';
+			} else if (!frontendConfig) {
 				if (fieldName.includes('status') || fieldName.includes('state')) {
 					category = 'compliance';
 				} else if (
@@ -432,7 +435,11 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				editable: isControlIdField ? false : true, // Control ID is not editable
 				display_order: isControlIdField ? 1 : (frontendConfig?.displayOrder ?? displayOrder++), // Control ID is always first
 				category: isControlIdField ? 'core' : category, // Control ID is always core
-				tab: isControlIdField ? 'overview' : frontendConfig?.tab || undefined // Control ID is always in overview
+				tab: isControlIdField
+					? 'overview'
+					: justificationFields.includes(fieldName)
+						? 'mappings' // Mark justification fields for mappings tab
+						: frontendConfig?.tab || undefined // Use frontend config or default
 			};
 
 			// Only add options for select fields
@@ -535,7 +542,8 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 					) {
 						// Add to justification contents
 						justificationContents.push(control[fieldName]);
-						return; // Skip adding this field to the control file
+						// Also keep the field in the control file
+						filteredControl[fieldName] = control[fieldName];
 					}
 
 					// Check if field is in the frontend schema (meaning it was assigned to a tab)
