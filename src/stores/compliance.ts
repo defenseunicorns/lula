@@ -2,23 +2,23 @@
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
 import type { Control, ControlWithMappings, Mapping } from '$lib/types';
-import { derived, writable, get } from 'svelte/store';
 import { appState } from '$lib/websocket';
+import { derived, get, writable } from 'svelte/store';
 
 // Filter types
-export type FilterOperator = 
-  | 'equals' 
-  | 'not_equals' 
-  | 'is_set' 
-  | 'is_not_set' 
-  | 'includes' 
-  | 'not_includes';
+export type FilterOperator =
+	| 'equals'
+	| 'not_equals'
+	| 'exists'
+	| 'not_exists'
+	| 'includes'
+	| 'not_includes';
 
 export interface FilterCondition {
-  fieldName: string;
-  operator: FilterOperator;
-  value?: any;
-  active: boolean;
+	fieldName: string;
+	operator: FilterOperator;
+	value?: any;
+	active: boolean;
 }
 
 // Base stores
@@ -59,60 +59,65 @@ export const filteredControls = derived(
 			results = results.filter((c) => JSON.stringify(c).toLowerCase().includes(term));
 		}
 
+		// Helper function to evaluate filter against a field value
+		function evaluateFilter(filter: FilterCondition, fieldValue: any): boolean {
+			switch (filter.operator) {
+				case 'equals':
+					return fieldValue === filter.value;
+
+				case 'not_equals':
+					return fieldValue !== filter.value;
+
+				case 'exists':
+					return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
+
+				case 'not_exists':
+					return fieldValue === undefined || fieldValue === null || fieldValue === '';
+
+				case 'includes':
+					if (typeof fieldValue === 'string') {
+						return fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
+					} else if (Array.isArray(fieldValue)) {
+						return fieldValue.some((item) =>
+							String(item).toLowerCase().includes(String(filter.value).toLowerCase())
+						);
+					}
+					return false;
+
+				case 'not_includes':
+					if (typeof fieldValue === 'string') {
+						return !fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
+					} else if (Array.isArray(fieldValue)) {
+						return !fieldValue.some((item) =>
+							String(item).toLowerCase().includes(String(filter.value).toLowerCase())
+						);
+					}
+					return true;
+
+				default:
+					return true;
+			}
+		}
+
 		// Apply advanced filters
 		if ($activeFilters.length > 0) {
-			results = results.filter(control => {
+			results = results.filter((control: any) => {
 				// Control must match all active filters
-				return $activeFilters.every(filter => {
+				return $activeFilters.every((filter) => {
 					if (!filter.active) return true;
-					
-					// Handle special case for family field which might be in different locations
-					let fieldValue;
+
 					if (filter.fieldName === 'family') {
-						// Enhanced controls have family in _metadata.family, fallback to extracting from control-acronym
-						fieldValue = (control as any)?._metadata?.family ||
+						// Handle special case for family field which might be in different locations
+						const fieldValue = (control as any)?._metadata?.family ||
 							(control as any)?.family ||
 							(control as any)?.['control-acronym']?.split('-')[0] ||
 							'';
+
+						return evaluateFilter(filter, fieldValue);
 					} else {
-						fieldValue = (control as any)[filter.fieldName];
-					}
-					
-					switch (filter.operator) {
-						case 'equals':
-							return fieldValue === filter.value;
-							
-						case 'not_equals':
-							return fieldValue !== filter.value;
-							
-						case 'is_set':
-							return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
-							
-						case 'is_not_set':
-							return fieldValue === undefined || fieldValue === null || fieldValue === '';
-							
-						case 'includes':
-							if (typeof fieldValue === 'string') {
-								return fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
-							} else if (Array.isArray(fieldValue)) {
-								return fieldValue.some(item => 
-									String(item).toLowerCase().includes(String(filter.value).toLowerCase())
-								);
-							}
-							return false;
-							
-						case 'not_includes':
-							if (typeof fieldValue === 'string') {
-								return !fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
-							} else if (Array.isArray(fieldValue)) {
-								return !fieldValue.some(item => 
-									String(item).toLowerCase().includes(String(filter.value).toLowerCase())
-								);
-							}
-							return true;
-							
-						default:
-							return true;
+						// Regular control field
+						const fieldValue = (control as any)[filter.fieldName];
+						return evaluateFilter(filter, fieldValue);
 					}
 				});
 			});
@@ -153,12 +158,12 @@ export const complianceStore = {
 		searchTerm.set('');
 		activeFilters.set([]);
 	},
-	
+
 	// Helper to set family filter using the new filter system
 	setFamilyFilter(family: string | null) {
 		// Remove any existing family filters
-		const filters = get(activeFilters).filter(f => f.fieldName !== 'family');
-		
+		const filters = get(activeFilters).filter((f) => f.fieldName !== 'family');
+
 		// Add new family filter if a family is selected
 		if (family) {
 			filters.push({
@@ -168,10 +173,10 @@ export const complianceStore = {
 				active: true
 			});
 		}
-		
+
 		activeFilters.set(filters);
 	},
-	
+
 	// Advanced filter methods
 	addFilter(fieldName: string, operator: FilterOperator, value?: any) {
 		const filters = get(activeFilters);
@@ -184,7 +189,7 @@ export const complianceStore = {
 		activeFilters.set([...filters, newFilter]);
 		return newFilter;
 	},
-	
+
 	updateFilter(index: number, updates: Partial<FilterCondition>) {
 		const filters = get(activeFilters);
 		if (index >= 0 && index < filters.length) {
@@ -193,7 +198,7 @@ export const complianceStore = {
 			activeFilters.set(updatedFilters);
 		}
 	},
-	
+
 	removeFilter(index: number) {
 		const filters = get(activeFilters);
 		if (index >= 0 && index < filters.length) {
@@ -201,22 +206,23 @@ export const complianceStore = {
 			activeFilters.set(updatedFilters);
 		}
 	},
-	
+
 	toggleFilter(index: number) {
 		const filters = get(activeFilters);
 		if (index >= 0 && index < filters.length) {
 			this.updateFilter(index, { active: !filters[index].active });
 		}
 	},
-	
+
 	getAvailableFields() {
 		// Get all unique field names from all controls and field schema
 		const allControls = get(controls);
+		const allMappings = get(mappings);
 		const fieldSet = new Set<string>();
-		
+
 		// Add 'family' as a special field that's always available
 		fieldSet.add('family');
-		
+
 		// Extract fields from controls
 		allControls.forEach(control => {
 			Object.keys(control).forEach(key => {
@@ -226,7 +232,7 @@ export const complianceStore = {
 				}
 			});
 		});
-		
+
 		// Get fields from the app state field schema if available
 		const state = get(appState);
 		const schema = state?.fieldSchema || state?.field_schema;
@@ -235,7 +241,7 @@ export const complianceStore = {
 				fieldSet.add(key);
 			});
 		}
-		
+
 		return Array.from(fieldSet).sort();
 	}
 };

@@ -141,10 +141,10 @@
 							case 'not_equals':
 								return fieldValue !== filter.value;
 								
-							case 'is_set':
+							case 'exists':
 								return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
 								
-							case 'is_not_set':
+							case 'not_exists':
 								return fieldValue === undefined || fieldValue === null || fieldValue === '';
 								
 							case 'includes':
@@ -311,10 +311,10 @@
 					{#each $activeFilters.filter(f => f.active) as filter, index}
 						<div class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
 							<span>{filter.fieldName}: </span>
-							{#if filter.operator === 'is_set'}
-								<span>is set</span>
-							{:else if filter.operator === 'is_not_set'}
-								<span>is not set</span>
+							{#if filter.operator === 'exists'}
+								<span>exists</span>
+							{:else if filter.operator === 'not_exists'}
+								<span>does not exist</span>
 							{:else if filter.operator === 'equals'}
 								<span>= {filter.value}</span>
 							{:else if filter.operator === 'not_equals'}
