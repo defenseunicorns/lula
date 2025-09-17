@@ -198,6 +198,7 @@ export function getChangedBlocks(
 
 	return changed;
 }
+let leavePost = false;
 /**
  * Defines the "crawl" command for the CLI.
  *
@@ -239,6 +240,7 @@ export function crawlCommand(): Command {
 					const changedBlocks = getChangedBlocks(oldText, newText);
 
 					for (const block of changedBlocks) {
+						leavePost = true;
 						commentBody += `\n\n---\n| File | Lines Changed |\n` + `| ---- | ------------- |\n`;
 						const newBlockText = newText
 							.split('\n')
@@ -252,7 +254,7 @@ export function crawlCommand(): Command {
 					console.error(`Error processing ${file.filename}: ${err}`);
 				}
 			}
-			if (files.length > 0) {
+			if (leavePost) {
 				await postFinding({
 					octokit,
 					postMode: opts.postMode,
