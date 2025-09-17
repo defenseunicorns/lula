@@ -3,8 +3,8 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { scanControlSets } from './spreadsheetRoutes';
-import {  getServerState } from './serverState';
-import { readFileSync} from 'fs';
+import { getServerState } from './serverState';
+import { readFileSync } from 'fs';
 import { glob } from 'glob';
 import * as yaml from 'js-yaml';
 
@@ -20,7 +20,7 @@ const mockGetServerState = vi.mocked(getServerState);
 describe('spreadsheetRoutes', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
-		
+
 		mockGetServerState.mockReturnValue({
 			CONTROL_SET_DIR: '/test/control-sets',
 			currentSubdir: '.',
@@ -74,9 +74,7 @@ describe('spreadsheetRoutes', () => {
 				.mockReturnValueOnce(yaml.dump(mockYamlContent1))
 				.mockReturnValueOnce(yaml.dump(mockYamlContent2));
 
-			mockYamlLoad
-				.mockReturnValueOnce(mockYamlContent1)
-				.mockReturnValueOnce(mockYamlContent2);
+			mockYamlLoad.mockReturnValueOnce(mockYamlContent1).mockReturnValueOnce(mockYamlContent2);
 
 			const result = await scanControlSets();
 
@@ -118,9 +116,7 @@ describe('spreadsheetRoutes', () => {
 				.mockReturnValueOnce(yaml.dump(defaultYamlContent))
 				.mockReturnValueOnce(yaml.dump(validYamlContent));
 
-			mockYamlLoad
-				.mockReturnValueOnce(defaultYamlContent)
-				.mockReturnValueOnce(validYamlContent);
+			mockYamlLoad.mockReturnValueOnce(defaultYamlContent).mockReturnValueOnce(validYamlContent);
 
 			const result = await scanControlSets();
 
@@ -322,7 +318,7 @@ describe('spreadsheetRoutes', () => {
 			const result = await scanControlSets();
 
 			expect(result.controlSets).toHaveLength(3);
-			
+
 			// Should include valid1
 			expect(result.controlSets[0]).toEqual({
 				path: 'valid1',

@@ -132,11 +132,11 @@ describe('server', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		
+
 		// Set default behaviors for fs mocks
 		h.existsSync.mockReturnValue(true); // By default, directories exist
 		h.mkdirSync.mockImplementation(() => undefined); // Mock mkdir to do nothing
-		
+
 		h.httpListen.mockImplementation((_port: number, cb: () => void) => cb());
 		h.loadAllData.mockResolvedValue(undefined);
 		logSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined as unknown as void);
@@ -292,9 +292,11 @@ describe('server', () => {
 		await handler({}, res);
 		expect(res.sendFile).toHaveBeenCalledWith('index.html', { root: expect.any(String) });
 
-		expect(h.wsInitialize).toHaveBeenCalledWith(expect.objectContaining({
-			listen: expect.any(Function)
-		}));
+		expect(h.wsInitialize).toHaveBeenCalledWith(
+			expect.objectContaining({
+				listen: expect.any(Function)
+			})
+		);
 
 		await srv.start();
 		expect(h.httpListen).toHaveBeenCalledWith(4321, expect.any(Function));

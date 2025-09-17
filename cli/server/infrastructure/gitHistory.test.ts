@@ -63,7 +63,7 @@ describe('GitHistoryUtil', () => {
 		gitHistoryUtil = new GitHistoryUtil(tempDir);
 
 		mockGit = (await import('isomorphic-git')) as unknown as MockedGit;
-		
+
 		mockConsoleError.mockClear();
 		mockConsoleLog.mockClear();
 		mockConsoleWarn.mockClear();
@@ -171,7 +171,7 @@ describe('GitHistoryUtil', () => {
 						author: {
 							name: 'Jane Smith',
 							email: 'jane@example.com',
-							timestamp: 1641081600 
+							timestamp: 1641081600
 						},
 						message: 'Update test file'
 					}

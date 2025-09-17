@@ -28,7 +28,12 @@ vi.mock('crypto', () => ({
 
 import { wsManager } from './websocketServer';
 import type { WSMessage, WSMessageType } from './websocketServer';
-import { getServerState, getCurrentControlSetPath, initializeServerState, loadAllData } from './serverState';
+import {
+	getServerState,
+	getCurrentControlSetPath,
+	initializeServerState,
+	loadAllData
+} from './serverState';
 import { scanControlSets } from './spreadsheetRoutes';
 import type { CLIServerState } from './serverState';
 import type { Control, Mapping } from './types';
@@ -101,7 +106,7 @@ describe('websocketServer', () => {
 		console.log = vi.fn();
 		console.warn = vi.fn();
 		console.info = vi.fn();
-		
+
 		mockState = {
 			CONTROL_SET_DIR: '/test/controls',
 			currentSubdir: '.',
@@ -118,9 +123,9 @@ describe('websocketServer', () => {
 			mappingsByFamily: new Map(),
 			mappingsByControl: new Map()
 		};
-		
+
 		mockGetServerState.mockReturnValue(mockState as unknown as CLIServerState);
-		
+
 		mockServer = {
 			listen: vi.fn(),
 			close: vi.fn()
@@ -177,14 +182,13 @@ describe('websocketServer', () => {
 
 			it('should handle new client connections', () => {
 				wsManager.initialize(mockServer);
-		
+
 				const connectionHandler = mockWss.on.mock.calls.find(
 					(call: unknown[]) => call[0] === 'connection'
 				)?.[1] as Function;
 
 				expect(connectionHandler).toBeDefined();
 
-			
 				if (connectionHandler) {
 					connectionHandler(mockWs);
 				}
@@ -196,7 +200,7 @@ describe('websocketServer', () => {
 
 			it('should send initial connected message to new clients', () => {
 				wsManager.initialize(mockServer);
-				
+
 				const connectionHandler = mockWss.on.mock.calls.find(
 					(call: unknown[]) => call[0] === 'connection'
 				)?.[1] as Function;
@@ -205,13 +209,11 @@ describe('websocketServer', () => {
 					connectionHandler(mockWs);
 				}
 
-				expect(mockWs.send).toHaveBeenCalledWith(
-					JSON.stringify({ type: 'connected' })
-				);
+				expect(mockWs.send).toHaveBeenCalledWith(JSON.stringify({ type: 'connected' }));
 			});
 		});
 
-			describe('broadcast', () => {
+		describe('broadcast', () => {
 			beforeEach(() => {
 				wsManager.initialize(mockServer);
 				(wsManager as unknown as { clients: Set<WebSocket> }).clients = mockClients;
@@ -219,8 +221,8 @@ describe('websocketServer', () => {
 
 			it('should send message to all connected clients', () => {
 				const mockClient1 = { send: vi.fn(), readyState: 1 };
-				const mockClient2 = { send: vi.fn(), readyState: 1 }; 
-				const mockClient3 = { send: vi.fn(), readyState: 3 }; 
+				const mockClient2 = { send: vi.fn(), readyState: 1 };
+				const mockClient3 = { send: vi.fn(), readyState: 3 };
 
 				mockClients.add(mockClient1 as unknown as WebSocket);
 				mockClients.add(mockClient2 as unknown as WebSocket);
@@ -235,17 +237,17 @@ describe('websocketServer', () => {
 
 				expect(mockClient1.send).toHaveBeenCalledWith(JSON.stringify(message));
 				expect(mockClient2.send).toHaveBeenCalledWith(JSON.stringify(message));
-				expect(mockClient3.send).not.toHaveBeenCalled(); 
+				expect(mockClient3.send).not.toHaveBeenCalled();
 			});
 
 			it('should handle empty client list', () => {
 				const message: WSMessage = { type: 'connected' };
-				
+
 				expect(() => wsManager.broadcast(message)).not.toThrow();
 			});
 		});
 
-			describe('broadcastState', () => {
+		describe('broadcastState', () => {
 			beforeEach(() => {
 				wsManager.initialize(mockServer);
 				(wsManager as unknown as { clients: Set<WebSocket> }).clients = mockClients;
@@ -255,7 +257,10 @@ describe('websocketServer', () => {
 				const mockClient = { ...mockWs, readyState: 1 };
 				mockClients.add(mockClient as unknown as WebSocket);
 
-				vi.spyOn(wsManager as unknown as { getCompleteState: () => unknown }, 'getCompleteState').mockReturnValue(null);
+				vi.spyOn(
+					wsManager as unknown as { getCompleteState: () => unknown },
+					'getCompleteState'
+				).mockReturnValue(null);
 
 				wsManager.broadcastState();
 
@@ -267,7 +272,10 @@ describe('websocketServer', () => {
 				const mockClient = { ...mockWs, readyState: 1 };
 				mockClients.add(mockClient as unknown as WebSocket);
 
-				vi.spyOn(wsManager as unknown as { getCompleteState: () => unknown }, 'getCompleteState').mockReturnValue(mockState);
+				vi.spyOn(
+					wsManager as unknown as { getCompleteState: () => unknown },
+					'getCompleteState'
+				).mockReturnValue(mockState);
 
 				wsManager.broadcastState();
 
@@ -317,7 +325,7 @@ describe('websocketServer', () => {
 
 			beforeEach(async () => {
 				wsManager.initialize(mockServer);
-				
+
 				const connectionHandler = mockWss.on.mock.calls.find(
 					(call: unknown[]) => call[0] === 'connection'
 				)?.[1] as Function;
@@ -379,7 +387,7 @@ describe('websocketServer', () => {
 				}
 
 				expect(mockScanControlSets).toHaveBeenCalled();
-				
+
 				expect(mockWs.send).toHaveBeenCalled();
 			});
 
@@ -390,8 +398,8 @@ describe('websocketServer', () => {
 				};
 				const messageStr = JSON.stringify(message);
 
-				mockState.controlsCache.set('AC-1', { 
-					id: 'AC-1', 
+				mockState.controlsCache.set('AC-1', {
+					id: 'AC-1',
 					title: 'Original Control',
 					family: 'AC'
 				} as Control);
@@ -437,7 +445,7 @@ describe('websocketServer', () => {
 
 			beforeEach(() => {
 				wsManager.initialize(mockServer);
-				
+
 				connectionHandler = mockWss.on.mock.calls.find(
 					(call: unknown[]) => call[0] === 'connection'
 				)?.[1] as Function;
@@ -456,27 +464,47 @@ describe('websocketServer', () => {
 			});
 
 			it('should remove client on close', () => {
-				(wsManager as unknown as { clients: Set<WebSocket> }).clients.add(mockWs as unknown as WebSocket);
-				
-				expect((wsManager as unknown as { clients: Set<WebSocket> }).clients.has(mockWs as unknown as WebSocket)).toBe(true);
+				(wsManager as unknown as { clients: Set<WebSocket> }).clients.add(
+					mockWs as unknown as WebSocket
+				);
+
+				expect(
+					(wsManager as unknown as { clients: Set<WebSocket> }).clients.has(
+						mockWs as unknown as WebSocket
+					)
+				).toBe(true);
 
 				if (closeHandler) {
 					closeHandler();
 				}
 
-				expect((wsManager as unknown as { clients: Set<WebSocket> }).clients.has(mockWs as unknown as WebSocket)).toBe(false);
+				expect(
+					(wsManager as unknown as { clients: Set<WebSocket> }).clients.has(
+						mockWs as unknown as WebSocket
+					)
+				).toBe(false);
 			});
 
 			it('should remove client on error', () => {
-				(wsManager as unknown as { clients: Set<WebSocket> }).clients.add(mockWs as unknown as WebSocket);
-				
-				expect((wsManager as unknown as { clients: Set<WebSocket> }).clients.has(mockWs as unknown as WebSocket)).toBe(true);
+				(wsManager as unknown as { clients: Set<WebSocket> }).clients.add(
+					mockWs as unknown as WebSocket
+				);
+
+				expect(
+					(wsManager as unknown as { clients: Set<WebSocket> }).clients.has(
+						mockWs as unknown as WebSocket
+					)
+				).toBe(true);
 
 				if (errorHandler) {
 					errorHandler(new Error('Connection error'));
 				}
 
-				expect((wsManager as unknown as { clients: Set<WebSocket> }).clients.has(mockWs as unknown as WebSocket)).toBe(false);
+				expect(
+					(wsManager as unknown as { clients: Set<WebSocket> }).clients.has(
+						mockWs as unknown as WebSocket
+					)
+				).toBe(false);
 			});
 		});
 
@@ -487,26 +515,30 @@ describe('websocketServer', () => {
 					throw new Error('State not initialized');
 				});
 
-				const result = (wsManager as unknown as { getCompleteState: () => unknown }).getCompleteState();
+				const result = (
+					wsManager as unknown as { getCompleteState: () => unknown }
+				).getCompleteState();
 				expect(result).toBeNull();
 			});
 
 			it('should return state when available', () => {
-				mockState.controlsCache.set('AC-1', { 
-					id: 'AC-1', 
+				mockState.controlsCache.set('AC-1', {
+					id: 'AC-1',
 					title: 'Test Control',
 					family: 'AC'
 				} as Control);
-				mockState.mappingsCache.set('uuid-1', { 
-					uuid: 'uuid-1', 
+				mockState.mappingsCache.set('uuid-1', {
+					uuid: 'uuid-1',
 					control_id: 'AC-1',
 					justification: 'Test justification',
 					source_entries: [],
 					status: 'planned'
 				} as Mapping);
 
-				const result = (wsManager as unknown as { getCompleteState: () => unknown }).getCompleteState();
-				
+				const result = (
+					wsManager as unknown as { getCompleteState: () => unknown }
+				).getCompleteState();
+
 				expect(result).toBeDefined();
 				expect(result).toHaveProperty('controls');
 				expect(result).toHaveProperty('mappings');
@@ -552,7 +584,7 @@ describe('websocketServer', () => {
 		it('should maintain singleton behavior', async () => {
 			const module1 = await import('./websocketServer');
 			const module2 = await import('./websocketServer');
-			
+
 			expect(module1.wsManager).toBe(module2.wsManager);
 		});
 	});
