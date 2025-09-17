@@ -128,7 +128,7 @@
 {#if readonly}
 	<!-- View Mode: Clean minimal layout -->
 	<div class="space-y-6">
-		{#each Object.entries(fieldGroups) as [groupName, fields]}
+		{#each Object.entries(fieldGroups) as [_groupName, fields]}
 			{#each [fields] as fieldList}
 				{@const importantFields = fieldList.filter((f) =>
 					['id', 'title', 'priority', 'status'].includes(f.id)
@@ -226,7 +226,7 @@
 										</span>
 									</h3>
 									<div class="space-y-3">
-										{#each value as item, index}
+										{#each value as item, _index}
 											<div
 												class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
 											>

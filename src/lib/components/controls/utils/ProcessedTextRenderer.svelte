@@ -23,7 +23,7 @@
 			<div class="overflow-x-auto">
 				<table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
 					<tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-						{#each section.data.rows as row, i}
+						{#each section.data.rows as row, _i}
 							<tr class="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
 								{#each row.columns as column, j}
 									<td class="px-3 py-2 text-sm {j === 0 ? 'font-medium text-gray-900 dark:text-gray-100' : 'text-gray-600 dark:text-gray-400'}">

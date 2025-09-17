@@ -785,7 +785,7 @@
 					>
 						{#each Array.from(fieldConfigs.entries())
 							.filter(([_field, config]) => config.tab === 'overview')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], index (field)}
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], _index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -805,7 +805,7 @@
 								<span class="truncate">{field}</span>
 							</div>
 						{/each}
-						{#if Array.from(fieldConfigs.entries()).filter(([field, config]) => config.tab === 'overview').length === 0}
+						{#if Array.from(fieldConfigs.entries()).filter(([_field, config]) => config.tab === 'overview').length === 0}
 							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 								Drop fields here
 							</p>
@@ -835,7 +835,7 @@
 						aria-label="Implementation tab drop zone"
 					>
 						{#each Array.from(fieldConfigs.entries())
-							.filter(([field, config]) => config.tab === 'implementation')
+							.filter(([_field, config]) => config.tab === 'implementation')
 							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], index (field)}
 							<div
 								draggable="true"
@@ -856,7 +856,7 @@
 								<span class="truncate">{field}</span>
 							</div>
 						{/each}
-						{#if Array.from(fieldConfigs.entries()).filter(([field, config]) => config.tab === 'implementation').length === 0}
+						{#if Array.from(fieldConfigs.entries()).filter(([_field, config]) => config.tab === 'implementation').length === 0}
 							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 								Drop fields here
 							</p>
@@ -889,7 +889,7 @@
 						<div class="space-y-2">
 							{#if justificationFields.length > 0}
 								<!-- Display justification fields -->
-								{#each justificationFields as field, index}
+								{#each justificationFields as field, _index}
 									<div
 										draggable="true"
 										on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -966,8 +966,8 @@
 						aria-label="Custom fields drop zone"
 					>
 						{#each Array.from(fieldConfigs.entries())
-							.filter(([field, config]) => config.tab === 'custom')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index (field)}
+							.filter(([_field, config]) => config.tab === 'custom')
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], _index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -987,7 +987,7 @@
 								<span class="truncate">{field}</span>
 							</div>
 						{/each}
-						{#if Array.from(fieldConfigs.entries()).filter(([field, config]) => config.tab === 'custom').length === 0}
+						{#if Array.from(fieldConfigs.entries()).filter(([_field, config]) => config.tab === 'custom').length === 0}
 							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 								Drop fields here
 							</p>

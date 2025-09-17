@@ -11,7 +11,7 @@
 		timeline?: any; // Timeline type from control.timeline
 	}
 
-	let { control, timeline }: Props = $props();
+	let { timeline }: Props = $props();
 
 	const commits = $derived(timeline?.commits || []);
 </script>

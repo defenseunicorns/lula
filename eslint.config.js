@@ -155,6 +155,7 @@ export default ts.config(
   files: ["**/*.test.ts"],
   rules: {
     "max-statements": "off",
+    "@typescript-eslint/no-unsafe-function-type": "off",
   },
 },
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { appState } from '$lib/websocket';
 
