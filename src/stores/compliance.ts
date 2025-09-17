@@ -6,47 +6,6 @@ import { appState } from '$lib/websocket';
 import { derived, get, writable } from 'svelte/store';
 
 /**
- * A more flexible type for control field values that can handle any type of data
- * found in control objects, including primitive values, arrays, and objects.
- */
-export type ControlFieldValue =
-	| string
-	| number
-	| boolean
-	| null
-	| undefined
-	| Array<unknown>
-	| Record<string, unknown>;
-
-/**
- * Interface for accessing control fields dynamically for filtering.
- * This interface is intentionally flexible to handle the varied structure
- * of control objects loaded from YAML files.
- */
-export interface ControlWithDynamicFields {
-	// Index signature that allows any string key with any type of value
-	[key: string]: unknown;
-
-	// Common known fields with specific types for better IDE support
-	id?: string;
-	title?: string;
-	description?: string;
-	family?: string;
-	status?: string;
-	'review-status'?: string;
-	'control-acronym'?: string;
-
-	// Metadata fields
-	_metadata?: Record<string, unknown>;
-
-	// Complex fields
-	mappings?: Mapping[];
-	enhancements?: unknown[];
-	links?: Array<{ href: string; rel?: string; text?: string }>;
-	parameters?: Array<{ id: string; [key: string]: unknown }>;
-}
-
-/**
  * Shared filter operator options used across the application
  */
 export const FILTER_OPERATORS = [
@@ -131,7 +90,7 @@ export const filteredControls = derived(
 		if ($activeFilters.length > 0) {
 			results = results.filter((control) => {
 				// Cast to ControlWithDynamicFields for dynamic field access
-				const dynamicControl = control as ControlWithDynamicFields;
+				const dynamicControl = control as Record<string, unknown>;
 
 				// Control must match all filters
 				return $activeFilters.every((filter) => {
@@ -139,12 +98,14 @@ export const filteredControls = derived(
 
 					if (filter.fieldName === 'family') {
 						// Handle special case for family field which might be in different locations
+						const metadata = dynamicControl._metadata as Record<string, unknown> | undefined;
+						const controlAcronym = dynamicControl['control-acronym'] as string | undefined;
+						const familyField = dynamicControl.family as string | undefined;
+
 						fieldValue =
-							dynamicControl._metadata?.family ||
-							dynamicControl.family ||
-							(dynamicControl['control-acronym']
-								? dynamicControl['control-acronym'].split('-')[0]
-								: '') ||
+							(metadata?.family as string | undefined) ||
+							familyField ||
+							(controlAcronym ? controlAcronym.split('-')[0] : '') ||
 							'';
 					} else {
 						// Access field directly using the dynamic field access
@@ -159,30 +120,26 @@ export const filteredControls = derived(
 					}
 
 					// For other operators, convert values to strings for comparison
-					if (fieldValue !== undefined && fieldValue !== null) {
-						const fieldValueStr = String(fieldValue).toLowerCase();
-						const filterValueStr =
-							filter.value !== undefined ? String(filter.value).toLowerCase() : '';
+					const fieldValueStr = String(fieldValue).toLowerCase();
+					const filterValueStr =
+						filter.value !== undefined ? String(filter.value).toLowerCase() : '';
 
-						switch (filter.operator) {
-							case 'equals':
-								return fieldValueStr === filterValueStr;
+					switch (filter.operator) {
+						case 'equals':
+							return fieldValueStr === filterValueStr;
 
-							case 'not_equals':
-								return fieldValueStr !== filterValueStr;
+						case 'not_equals':
+							return fieldValueStr !== filterValueStr;
 
-							case 'includes':
-								return fieldValueStr.includes(filterValueStr);
+						case 'includes':
+							return fieldValueStr.includes(filterValueStr);
 
-							case 'not_includes':
-								return !fieldValueStr.includes(filterValueStr);
+						case 'not_includes':
+							return !fieldValueStr.includes(filterValueStr);
 
-							default:
-								return true;
-						}
+						default:
+							return true;
 					}
-
-					return false;
 				});
 			});
 		}
@@ -255,7 +212,6 @@ export const complianceStore = {
 	getAvailableFields() {
 		// Get all unique field names from all controls and field schema
 		const allControls = get(controls);
-		const allMappings = get(mappings);
 		const fieldSet = new Set<string>();
 
 		// Add 'family' as a special field that's always available

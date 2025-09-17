@@ -11,7 +11,7 @@ import {
 	controls,
 	mappings,
 	searchTerm,
-	selectedFamily,
+	activeFilters,
 	selectedControl
 } from './compliance';
 import { get } from 'svelte/store';
@@ -63,7 +63,7 @@ describe('complianceStore', () => {
 		controls.set([]);
 		mappings.set([]);
 		searchTerm.set('');
-		selectedFamily.set(null);
+		activeFilters.set([]);
 		selectedControl.set(null);
 	});
 
@@ -217,8 +217,145 @@ describe('complianceStore', () => {
 			expect(filtered).toEqual(mockControls);
 		});
 
-		it('should filter by selected family', () => {
-			selectedFamily.set('AC');
+		// Test data for filter operator tests
+		const testControls = [
+			{
+				id: 'TEST-1',
+				title: 'Test Control One',
+				status: 'Open',
+				description: 'This is a test control with status Open',
+				family: 'TEST'
+			},
+			{
+				id: 'TEST-2',
+				title: 'Test Control Two',
+				status: 'Closed',
+				description: 'This is a test control with status Closed',
+				family: 'TEST'
+			},
+			{
+				id: 'TEST-3',
+				title: 'Test Control Three',
+				// No status field
+				description: 'This is a test control with no status',
+				family: 'TEST'
+			},
+			{
+				id: 'TEST-4',
+				title: 'Test Control Four',
+				status: 'In Progress',
+				description: 'This control contains the word Open in description but status is different',
+				family: 'TEST'
+			}
+		] as Control[];
+
+		it('should filter with equals operator', () => {
+			controls.set(testControls);
+			activeFilters.set([
+				{
+					fieldName: 'status',
+					operator: 'equals',
+					value: 'Open'
+				}
+			]);
+
+			const filtered = get(filteredControls);
+			expect(filtered).toHaveLength(1);
+			expect(filtered[0].id).toBe('TEST-1');
+		});
+
+		it('should filter with not_equals operator', () => {
+			controls.set(testControls);
+			activeFilters.set([
+				{
+					fieldName: 'status',
+					operator: 'not_equals',
+					value: 'Open'
+				}
+			]);
+
+			const filtered = get(filteredControls);
+			// Should return controls with status != 'Open' and those without status
+			// The expected behavior should include TEST-2, TEST-3, and TEST-4
+			expect(filtered).toHaveLength(3);
+			expect(filtered.some((c) => c.id === 'TEST-1')).toBe(false);
+			expect(filtered.some((c) => c.id === 'TEST-2')).toBe(true);
+			expect(filtered.some((c) => c.id === 'TEST-3')).toBe(true);
+			expect(filtered.some((c) => c.id === 'TEST-4')).toBe(true);
+		});
+
+		it('should filter with exists operator', () => {
+			controls.set(testControls);
+			activeFilters.set([
+				{
+					fieldName: 'status',
+					operator: 'exists'
+				}
+			]);
+
+			const filtered = get(filteredControls);
+			// Should return controls that have a status field
+			expect(filtered).toHaveLength(3);
+			expect(filtered.some((c) => c.id === 'TEST-3')).toBe(false);
+		});
+
+		it('should filter with not_exists operator', () => {
+			controls.set(testControls);
+			activeFilters.set([
+				{
+					fieldName: 'status',
+					operator: 'not_exists'
+				}
+			]);
+
+			const filtered = get(filteredControls);
+			// Should return controls that don't have a status field
+			expect(filtered).toHaveLength(1);
+			expect(filtered[0].id).toBe('TEST-3');
+		});
+
+		it('should filter with includes operator', () => {
+			controls.set(testControls);
+			activeFilters.set([
+				{
+					fieldName: 'description',
+					operator: 'includes',
+					value: 'Open'
+				}
+			]);
+
+			const filtered = get(filteredControls);
+			// Should return controls with 'Open' in the description
+			expect(filtered).toHaveLength(2);
+			expect(filtered.some((c) => c.id === 'TEST-1')).toBe(true);
+			expect(filtered.some((c) => c.id === 'TEST-4')).toBe(true);
+		});
+
+		it('should filter with not_includes operator', () => {
+			controls.set(testControls);
+			activeFilters.set([
+				{
+					fieldName: 'description',
+					operator: 'not_includes',
+					value: 'Open'
+				}
+			]);
+
+			const filtered = get(filteredControls);
+			// Should return controls without 'Open' in the description
+			expect(filtered).toHaveLength(2);
+			expect(filtered.some((c) => c.id === 'TEST-2')).toBe(true);
+			expect(filtered.some((c) => c.id === 'TEST-3')).toBe(true);
+		});
+
+		it('should filter by family using activeFilters', () => {
+			activeFilters.set([
+				{
+					fieldName: 'family',
+					operator: 'equals',
+					value: 'AC'
+				}
+			]);
 
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(2);
@@ -233,8 +370,14 @@ describe('complianceStore', () => {
 			expect(filtered[0].id).toBe('AC-2');
 		});
 
-		it('should apply both family and search filters', () => {
-			selectedFamily.set('AC');
+		it('should apply both family filter and search term', () => {
+			activeFilters.set([
+				{
+					fieldName: 'family',
+					operator: 'equals',
+					value: 'AC'
+				}
+			]);
 			searchTerm.set('policy');
 
 			const filtered = get(filteredControls);
@@ -268,7 +411,13 @@ describe('complianceStore', () => {
 			];
 
 			controls.set(controlsWithMissingFamily);
-			selectedFamily.set('AC');
+			activeFilters.set([
+				{
+					fieldName: 'family',
+					operator: 'equals',
+					value: 'AC'
+				}
+			]);
 
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(2);
@@ -287,7 +436,13 @@ describe('complianceStore', () => {
 			];
 
 			controls.set(controlsWithFamilyProperty);
-			selectedFamily.set('TESTFAM');
+			activeFilters.set([
+				{
+					fieldName: 'family',
+					operator: 'equals',
+					value: 'TESTFAM'
+				}
+			]);
 
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(1);
@@ -305,7 +460,13 @@ describe('complianceStore', () => {
 			];
 
 			controls.set(controlsWithAcronymOnly);
-			selectedFamily.set('ACRO');
+			activeFilters.set([
+				{
+					fieldName: 'family',
+					operator: 'equals',
+					value: 'ACRO'
+				}
+			]);
 
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(1);
@@ -353,17 +514,15 @@ describe('complianceStore', () => {
 			});
 		});
 
-		describe('setSelectedFamily', () => {
-			it('should update selected family', () => {
-				complianceStore.setSelectedFamily('AC');
+		describe('addFilter', () => {
+			it('should add a filter condition', () => {
+				complianceStore.addFilter('status', 'equals', 'Open');
 
-				expect(get(selectedFamily)).toBe('AC');
-			});
-
-			it('should handle null family', () => {
-				complianceStore.setSelectedFamily(null);
-
-				expect(get(selectedFamily)).toBeNull();
+				const filters = get(activeFilters);
+				expect(filters).toHaveLength(1);
+				expect(filters[0].fieldName).toBe('status');
+				expect(filters[0].operator).toBe('equals');
+				expect(filters[0].value).toBe('Open');
 			});
 		});
 
@@ -397,14 +556,20 @@ describe('complianceStore', () => {
 		});
 
 		describe('clearFilters', () => {
-			it('should reset search term and selected family', () => {
+			it('should reset search term and active filters', () => {
 				searchTerm.set('test');
-				selectedFamily.set('AC');
+				activeFilters.set([
+					{
+						fieldName: 'status',
+						operator: 'equals',
+						value: 'Open'
+					}
+				]);
 
 				complianceStore.clearFilters();
 
 				expect(get(searchTerm)).toBe('');
-				expect(get(selectedFamily)).toBeNull();
+				expect(get(activeFilters)).toEqual([]);
 			});
 		});
 	});

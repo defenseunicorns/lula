@@ -4,17 +4,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { Dropdown, SearchBar, Tooltip } from '$components/ui';
+	import { SearchBar, Tooltip } from '$components/ui';
 	import FilterBuilder from '$components/ui/FilterBuilder.svelte';
 	import type { Control, FieldSchema } from '$lib/types';
 	import { appState } from '$lib/websocket';
 	import { complianceStore, searchTerm, activeFilters, type ControlWithDynamicFields, getOperatorLabel } from '$stores/compliance';
-	import { Filter, Information } from 'carbon-icons-svelte';
+	import { Information } from 'carbon-icons-svelte';
 	import { derived } from 'svelte/store';
 
-	// Derive controls and families from appState
+	// Derive controls from appState
 	const controls = derived(appState, ($state) => $state.controls || []);
-	const families = derived(appState, ($state) => $state.families || []);
 	const loading = derived(appState, ($state) => !$state.isConnected);
 
 	// Derive controls with mappings
@@ -124,15 +123,20 @@
 						let fieldValue;
 						if (filter.fieldName === 'family') {
 							// Cast to ControlWithDynamicFields for dynamic field access
-							const dynamicControl = control as ControlWithDynamicFields;
+							const dynamicControl = control as Record<string, unknown>;
 							// Enhanced controls have family in _metadata.family, fallback to extracting from control-acronym
-							fieldValue = dynamicControl._metadata?.family ||
-								dynamicControl.family ||
-								(dynamicControl['control-acronym'] ? dynamicControl['control-acronym'].split('-')[0] : '') ||
+							const metadata = dynamicControl._metadata as Record<string, unknown> | undefined;
+							const controlAcronym = dynamicControl['control-acronym'] as string | undefined;
+							const familyField = dynamicControl.family as string | undefined;
+							
+							fieldValue = 
+								(metadata?.family as string | undefined) ||
+								familyField ||
+								(controlAcronym ? controlAcronym.split('-')[0] : '') ||
 								'';
 						} else {
 							// Cast to ControlWithDynamicFields for dynamic field access
-							const dynamicControl = control as ControlWithDynamicFields;
+							const dynamicControl = control as Record<string, unknown>;
 							fieldValue = dynamicControl[filter.fieldName];
 						}
 						
@@ -627,7 +631,7 @@
 							No controls match your filter criteria. Try adjusting or removing some filters.
 						{:else if $searchTerm}
 							No controls match your search criteria. Try adjusting your search terms.
-						{:else if $activeFilters.find(f => f.fieldName === 'family' && f.active)}
+						{:else if $activeFilters.find(f => f.fieldName === 'family')}
 							No controls available in this family. Select a different family or check your data.
 						{:else if $controls.length === 0}
 							No controls have been imported yet.
