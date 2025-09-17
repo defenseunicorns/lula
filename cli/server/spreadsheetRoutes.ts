@@ -1058,7 +1058,7 @@ router.post('/parse-excel', upload.single('file'), async (req, res) => {
 			}
 
 			// Get data from the worksheet
-			worksheet.eachRow({ includeEmpty: false }, (row: any, rowNumber: number) => {
+			worksheet.eachRow({ includeEmpty: false }, (row: any, _rowNumber: number) => {
 				const rowData: any[] = [];
 				row.eachCell({ includeEmpty: true }, (cell: any, colNumber: number) => {
 					rowData[colNumber - 1] = cell.value;
@@ -1121,7 +1121,7 @@ router.post('/parse-excel-sheet', upload.single('file'), async (req, res) => {
 			}
 
 			// Get data from the worksheet
-			worksheet.eachRow({ includeEmpty: false }, (row: any, rowNumber: number) => {
+			worksheet.eachRow({ includeEmpty: false }, (row: any, _rowNumber: number) => {
 				const rowData: any[] = [];
 				row.eachCell({ includeEmpty: true }, (cell: any, colNumber: number) => {
 					rowData[colNumber - 1] = cell.value;

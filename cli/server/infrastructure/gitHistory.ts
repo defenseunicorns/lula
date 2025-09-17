@@ -215,7 +215,7 @@ export class GitHistoryUtil {
 					changes = diffResult.changes;
 					diff = diffResult.diff;
 					yamlDiff = diffResult.yamlDiff;
-				} catch (error) {
+				} catch {
 					// Could not get diff for commit
 				}
 			}
@@ -298,7 +298,7 @@ export class GitHistoryUtil {
 				diff,
 				yamlDiff
 			};
-		} catch (error) {
+		} catch {
 			// Error getting diff
 			return { changes: { insertions: 0, deletions: 0, files: 1 } };
 		}
