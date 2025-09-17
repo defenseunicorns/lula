@@ -198,6 +198,7 @@ export function getChangedBlocks(
 
 	return changed;
 }
+
 /**
  * Defines the "crawl" command for the CLI.
  *
@@ -213,6 +214,7 @@ export function crawlCommand(): Command {
 				.default('review')
 		)
 		.action(async (opts) => {
+			let leavePost = false;
 			const { owner, repo, pull_number } = getPRContext();
 			console.log(`Analyzing PR #${pull_number} in ${owner}/${repo} for compliance changes...`);
 			const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
@@ -239,6 +241,7 @@ export function crawlCommand(): Command {
 					const changedBlocks = getChangedBlocks(oldText, newText);
 
 					for (const block of changedBlocks) {
+						leavePost = true;
 						commentBody += `\n\n---\n| File | Lines Changed |\n` + `| ---- | ------------- |\n`;
 						const newBlockText = newText
 							.split('\n')
@@ -252,7 +255,7 @@ export function crawlCommand(): Command {
 					console.error(`Error processing ${file.filename}: ${err}`);
 				}
 			}
-			if (files.length > 0) {
+			if (leavePost) {
 				await postFinding({
 					octokit,
 					postMode: opts.postMode,
