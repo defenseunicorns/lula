@@ -6,6 +6,7 @@ export default defineConfig({
 	test: {
 		include: ['src/**/*.test.ts', 'hack/**/*.test.ts', 'cli/**/*.test.ts'],
 		exclude: ['node_modules', 'dist', 'coverage'],
+		environment: 'jsdom',
 		coverage: {
 			provider: 'v8',
 			reporter: ['text', 'html', 'lcov'],
@@ -23,11 +24,13 @@ export default defineConfig({
 				'src/lib/components/controls/renderers/index.ts',
 				'src/lib/components/controls/index.ts',
 				'src/lib/components/control-sets/index.ts',
+				'src/lib/components/forms/index.ts',
 				'src/lib/types.ts',
 				'src/lib/index.ts',
 				'cli/server/types.ts',
 				'src/app.d.ts',
-				'src/lib/form-types.ts'
+				'src/lib/form-types.ts',
+				'cli/server/index.ts'
 			]
 		},
 

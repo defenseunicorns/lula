@@ -15,3 +15,5 @@ ignore:
   - cli/server/types.ts
   - src/app.d.ts
   - src/lib/form-types.ts
+  - src/lib/components/forms/index.ts
+  - cli/server/index.ts
