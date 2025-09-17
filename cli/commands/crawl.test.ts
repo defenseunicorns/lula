@@ -14,10 +14,9 @@ import {
 	postFinding,
 	deleteOldIssueComments,
 	deleteOldReviewComments,
-	dismissOldReviews
+	dismissOldReviews,
+	LULA_SIGNATURE
 } from './crawl';
-
-const LULA_SIGNATURE = '<!-- LULA_SIGNATURE:v1 -->';
 
 // ---- fs mock ----
 vi.mock('fs', () => {
@@ -255,7 +254,7 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 
 // ---- cleanup helpers (unit tests) ----
 describe('cleanup helpers', () => {
-	it('deleteOldIssueComments deletes only signed comments', async () => {
+	it('deleteOldIssueComments deletes only the first signed comment per page', async () => {
 		const octokit = new Octokit();
 		issuesListComments
 			.mockResolvedValueOnce({
@@ -269,20 +268,15 @@ describe('cleanup helpers', () => {
 
 		await deleteOldIssueComments({ octokit, owner: 'o', repo: 'r', pull_number: 7 });
 
-		expect(issuesDeleteComment).toHaveBeenCalledTimes(2);
+		expect(issuesDeleteComment).toHaveBeenCalledTimes(1);
 		expect(issuesDeleteComment).toHaveBeenNthCalledWith(1, {
 			owner: 'o',
 			repo: 'r',
 			comment_id: 1
 		});
-		expect(issuesDeleteComment).toHaveBeenNthCalledWith(2, {
-			owner: 'o',
-			repo: 'r',
-			comment_id: 3
-		});
 	});
 
-	it('deleteOldReviewComments deletes only signed review comments', async () => {
+	it('deleteOldReviewComments deletes only the first signed review comment per page', async () => {
 		const octokit = new Octokit();
 
 		// two pages: one with data, one empty
@@ -298,20 +292,15 @@ describe('cleanup helpers', () => {
 
 		await deleteOldReviewComments({ octokit, owner: 'o', repo: 'r', pull_number: 8 });
 
-		expect(pullsDeleteReviewComment).toHaveBeenCalledTimes(2);
+		expect(pullsDeleteReviewComment).toHaveBeenCalledTimes(1);
 		expect(pullsDeleteReviewComment).toHaveBeenNthCalledWith(1, {
 			owner: 'o',
 			repo: 'r',
 			comment_id: 11
 		});
-		expect(pullsDeleteReviewComment).toHaveBeenNthCalledWith(2, {
-			owner: 'o',
-			repo: 'r',
-			comment_id: 13
-		});
 	});
 
-	it('dismissOldReviews dismisses only signed reviews (handles null bodies)', async () => {
+	it('dismissOldReviews dismisses only the first signed review per page (handles null bodies)', async () => {
 		const octokit = new Octokit();
 		pullsListReviews
 			.mockResolvedValueOnce({
@@ -326,19 +315,12 @@ describe('cleanup helpers', () => {
 
 		await dismissOldReviews({ octokit, owner: 'o', repo: 'r', pull_number: 9 });
 
-		expect(pullsDismissReview).toHaveBeenCalledTimes(2);
+		expect(pullsDismissReview).toHaveBeenCalledTimes(1);
 		expect(pullsDismissReview).toHaveBeenNthCalledWith(1, {
 			owner: 'o',
 			repo: 'r',
 			pull_number: 9,
 			review_id: 21,
-			message: 'Superseded by a new Lula compliance review.'
-		});
-		expect(pullsDismissReview).toHaveBeenNthCalledWith(2, {
-			owner: 'o',
-			repo: 'r',
-			pull_number: 9,
-			review_id: 24,
 			message: 'Superseded by a new Lula compliance review.'
 		});
 	});
@@ -366,6 +348,17 @@ describe('cleanup helpers (null/undefined body edge cases)', () => {
 		await deleteOldReviewComments({ octokit, owner: 'o', repo: 'r', pull_number: 11 });
 
 		expect(pullsDeleteReviewComment).not.toHaveBeenCalled();
+	});
+
+	it('dismissOldReviews skips when body is null (covers (r.body ?? ""))', async () => {
+		const octokit = new Octokit();
+		pullsListReviews
+			.mockResolvedValueOnce({ data: [{ id: 3, body: null }] })
+			.mockResolvedValueOnce({ data: [] });
+
+		await dismissOldReviews({ octokit, owner: 'o', repo: 'r', pull_number: 12 });
+
+		expect(pullsDismissReview).not.toHaveBeenCalled();
 	});
 });
 

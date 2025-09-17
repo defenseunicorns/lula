@@ -11,7 +11,7 @@ type FileContentResponse = {
 	encoding: 'base64' | string;
 };
 const closingBody = `\n\n---\n\n<sub>**Tip:** Customize your compliance reviews with <a href="https://github.com/defenseunicorns/lula.git" class="Link--inTextBlock" target="_blank" rel="noopener noreferrer">Lula</a>.</sub>`;
-const LULA_SIGNATURE = '<!-- LULA_SIGNATURE:v1 -->';
+export const LULA_SIGNATURE = '<!-- LULA_SIGNATURE:v1 -->';
 // Add a post mode union for future expansion
 type PostMode = 'review' | 'comment';
 
@@ -304,6 +304,7 @@ export async function deleteOldIssueComments({
 			const hasSignature = (c.body ?? '').includes(LULA_SIGNATURE);
 			if (hasSignature) {
 				await octokit.issues.deleteComment({ owner, repo, comment_id: c.id });
+				break;
 			}
 		}
 		page++;
@@ -336,6 +337,7 @@ export async function deleteOldReviewComments({
 			const hasSignature = (rc.body ?? '').includes(LULA_SIGNATURE);
 			if (hasSignature) {
 				await octokit.pulls.deleteReviewComment({ owner, repo, comment_id: rc.id });
+				break;
 			}
 		}
 		page++;
@@ -365,7 +367,6 @@ export async function dismissOldReviews({
 		if (!reviews.length) break;
 
 		for (const r of reviews) {
-			// note: r.body can be null
 			const hasSignature = (r.body ?? '').includes(LULA_SIGNATURE);
 			if (hasSignature) {
 				await octokit.pulls.dismissReview({
@@ -375,6 +376,7 @@ export async function dismissOldReviews({
 					review_id: r.id,
 					message: 'Superseded by a new Lula compliance review.'
 				});
+				break;
 			}
 		}
 		page++;
