@@ -231,7 +231,6 @@ export function crawlCommand(): Command {
 
 			for (const file of files) {
 				if (file.status === 'added') continue;
-				console.log(`Commenting regarding \`${file.filename}\`.`);
 				try {
 					const [oldText, newText] = await Promise.all([
 						fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: 'main' }),
@@ -241,6 +240,7 @@ export function crawlCommand(): Command {
 					const changedBlocks = getChangedBlocks(oldText, newText);
 
 					for (const block of changedBlocks) {
+						console.log(`Commenting regarding \`${file.filename}\`.`);
 						leavePost = true;
 						commentBody += `\n\n---\n| File | Lines Changed |\n` + `| ---- | ------------- |\n`;
 						const newBlockText = newText
