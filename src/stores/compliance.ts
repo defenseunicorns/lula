@@ -64,8 +64,15 @@ export const filteredControls = derived(
 
 		// Apply search term
 		if ($searchTerm) {
-			const term = $searchTerm.toLowerCase();
-			results = results.filter((c) => JSON.stringify(c).toLowerCase().includes(term));
+			// Create a normalized search term
+			const term = $searchTerm.toLowerCase().replace(/\s+/g, ' ').trim();
+			// Filter using JSON.stringify with normalization
+			results = results.filter((control) => {
+				const json = JSON.stringify(control);
+				const normalizedJson = json.replace(/\\\n/g, ' ').toLowerCase().replace(/\s+/g, ' ');
+
+				return normalizedJson.includes(term);
+			});
 		}
 
 		// Apply advanced filters
@@ -85,10 +92,15 @@ export const filteredControls = derived(
 						return fieldValue === undefined || fieldValue === null || fieldValue === '';
 					}
 
-					// For other operators, convert values to strings for comparison
-					const fieldValueStr = String(fieldValue).toLowerCase();
+					// For other operators, convert values to strings for comparison and normalize whitespace
+					const fieldValueStr =
+						fieldValue !== undefined && fieldValue !== null
+							? String(fieldValue).toLowerCase().replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()
+							: '';
 					const filterValueStr =
-						filter.value !== undefined ? String(filter.value).toLowerCase() : '';
+						filter.value !== undefined
+							? String(filter.value).toLowerCase().replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()
+							: '';
 
 					switch (filter.operator) {
 						case 'equals':
