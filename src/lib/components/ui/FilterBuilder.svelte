@@ -191,7 +191,7 @@
 					<p class="text-sm text-gray-500 dark:text-gray-400">No filters</p>
 				{:else}
 					<div class="space-y-2">
-						{#each $activeFilters as filter, index}
+						{#each $activeFilters as filter, index (index)}
 							<div
 								class="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-2 rounded-md"
 							>
@@ -262,7 +262,7 @@
 									>
 										Overview Fields
 									</div>
-									{#each fieldsByTab.overview as field}
+									{#each fieldsByTab.overview as field (field)}
 										<button
 											class={twMerge(
 												'w-full text-left px-3 py-2 text-sm',
@@ -288,7 +288,7 @@
 										>
 											Implementation Fields
 										</div>
-										{#each fieldsByTab.implementation as field}
+										{#each fieldsByTab.implementation as field (field)}
 											<button
 												class={twMerge(
 													'w-full text-left px-3 py-2 text-sm',
@@ -315,7 +315,7 @@
 										>
 											Custom Fields
 										</div>
-										{#each fieldsByTab.custom as field}
+										{#each fieldsByTab.custom as field (field)}
 											<button
 												class={twMerge(
 													'w-full text-left px-3 py-2 text-sm',

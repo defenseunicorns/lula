@@ -311,6 +311,7 @@ class WebSocketManager {
 								const possibleFilenames = [
 									`${control.id}.yaml`,
 									`${control.id.replace(/\./g, '_')}.yaml`, // AC-1.1 -> AC-1_1.yaml
+									// eslint-disable-next-line no-useless-escape
 									`${control.id.replace(/[^\w\-]/g, '_')}.yaml` // General sanitization
 								];
 

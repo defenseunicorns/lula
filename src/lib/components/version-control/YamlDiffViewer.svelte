@@ -272,7 +272,7 @@
 			{#if showDetailedView}
 				<!-- Detailed view with full context -->
 				<div class="divide-y divide-gray-200 dark:divide-gray-600">
-					{#each yamlDiff.changes as change}
+					{#each yamlDiff.changes as change (change)}
 						<div class="p-3 {getChangeColor(change.type)}">
 							<div class="flex items-start space-x-3">
 								<div
@@ -337,7 +337,7 @@
 			{:else}
 				<!-- Summary view - more compact -->
 				<div class="p-4 space-y-2">
-					{#each yamlDiff.changes as change}
+					{#each yamlDiff.changes as change (change)}
 						<div class="flex items-center space-x-2 text-sm">
 							<span
 								class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold {getChangeColor(

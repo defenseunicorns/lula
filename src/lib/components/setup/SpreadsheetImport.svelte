@@ -13,8 +13,6 @@
 	let sampleData: any[] = [];
 	let controlCount = 0;
 	let rowPreviews: { row: number; preview: string }[] = [];
-	// Make availableFields reactive to both fields and fieldConfigs changes
-	$: availableFields = fields.filter((f) => fields.includes(f));
 
 	// Field configuration for tabs
 	type TabAssignment = 'overview' | 'implementation' | 'mappings' | 'custom' | null;
@@ -428,7 +426,7 @@
 
 			// Add field schema configuration - include all fields that are assigned to a tab
 			const fieldSchema = Array.from(fieldConfigs.entries())
-				.filter(([field, config]) => config.tab !== null)
+				.filter(([_field, config]) => config.tab !== null)
 				.map(([field, config]) => ({
 					fieldName: cleanFieldName(field),
 					...config
@@ -624,7 +622,7 @@
 						}}
 						class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
 					>
-						{#each sheets as sheet}
+						{#each sheets as sheet (sheet)}
 							<option value={sheet}>{sheet}</option>
 						{/each}
 					</select>
@@ -646,7 +644,7 @@
 						on:change={loadSheetData}
 						class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
 					>
-						{#each rowPreviews as preview}
+						{#each rowPreviews as preview (preview.row)}
 							<option value={preview.row}>
 								Row {preview.row}: {preview.preview}
 							</option>
@@ -673,7 +671,7 @@
 						required
 					>
 						<option value="" disabled>Select Control ID field</option>
-						{#each fields as field}
+						{#each fields as field (field)}
 							{@const exampleValue =
 								sampleData.length > 0 && sampleData[0][field]
 									? String(sampleData[0][field]).slice(0, 30)
@@ -836,7 +834,7 @@
 					>
 						{#each Array.from(fieldConfigs.entries())
 							.filter(([_field, config]) => config.tab === 'implementation')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], index (field)}
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], _index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -889,7 +887,7 @@
 						<div class="space-y-2">
 							{#if justificationFields.length > 0}
 								<!-- Display justification fields -->
-								{#each justificationFields as field, _index}
+								{#each justificationFields as field (field)}
 									<div
 										draggable="true"
 										on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -1011,15 +1009,15 @@
 							class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-600 dark:text-gray-400"
 						>
 							<tr>
-								{#each fields.slice(0, 5) as field}
+								{#each fields.slice(0, 5) as field (field)}
 									<th class="px-4 py-2">{field}</th>
 								{/each}
 							</tr>
 						</thead>
 						<tbody>
-							{#each sampleData as row}
+							{#each sampleData as row (row)}
 								<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-									{#each fields.slice(0, 5) as field}
+									{#each fields.slice(0, 5) as field (field)}
 										<td class="px-4 py-2">{row[field] || ''}</td>
 									{/each}
 								</tr>

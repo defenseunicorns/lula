@@ -213,7 +213,7 @@
 	{/if}
 
 	<div class="diff-content max-h-96 overflow-y-auto">
-		{#each parsedDiff as line}
+		{#each parsedDiff as line, index (index)}
 			<div
 				class="diff-line flex {line.type === 'addition'
 					? 'bg-green-50 dark:bg-green-900/20'

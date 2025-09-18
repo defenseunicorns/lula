@@ -110,7 +110,7 @@
 			<!-- Existing entries -->
 			{#if formData.source_entries.length > 0}
 				<div class="space-y-3">
-					{#each formData.source_entries as entry, index}
+					{#each formData.source_entries as entry, index (index)}
 						<div class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
 							<div class="flex-1 min-w-0">
 								<div class="text-sm font-mono text-gray-900 dark:text-white break-all">

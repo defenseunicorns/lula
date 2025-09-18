@@ -28,12 +28,7 @@ vi.mock('crypto', () => ({
 
 import { wsManager } from './websocketServer';
 import type { WSMessage, WSMessageType } from './websocketServer';
-import {
-	getServerState,
-	getCurrentControlSetPath,
-	initializeServerState,
-	loadAllData
-} from './serverState';
+import { getServerState, loadAllData } from './serverState';
 import { scanControlSets } from './spreadsheetRoutes';
 import type { CLIServerState } from './serverState';
 import type { Control, Mapping } from './types';

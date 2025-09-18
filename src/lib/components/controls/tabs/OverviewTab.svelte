@@ -107,9 +107,9 @@
 		<div class="space-y-4">
 			<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
 				<div class="space-y-8">
-					{#each fieldGroups as fieldGroup}
+					{#each fieldGroups as fieldGroup, index (index)}
 						<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-							{#each fieldGroup as [fieldName, field]}
+							{#each fieldGroup as [fieldName, field], index (index)}
 								<div class={getFieldLayoutClass(field)}>
 									<FieldRenderer 
 										{fieldName} 
@@ -136,7 +136,7 @@
 			<h3 class="text-lg font-semibold text-gray-900 dark:text-white">Control Properties</h3>
 			<div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 p-6">
 				<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-					{#each Object.entries(control.properties) as [key, value]}
+					{#each Object.entries(control.properties) as [key, value], index (index)}
 						<FieldRenderer 
 							fieldName={key.replace(/_/g, ' ')} 
 							field={null} 
