@@ -151,8 +151,8 @@ describe('complianceStore', () => {
 
 			const filtered = get(filteredControls);
 			expect(filtered).toHaveLength(2); // Both should match after normalization
-			expect(filtered.some(c => c.id === 'ML-1')).toBe(true);
-			expect(filtered.some(c => c.id === 'ML-2')).toBe(true);
+			expect(filtered.some((c) => c.id === 'ML-1')).toBe(true);
+			expect(filtered.some((c) => c.id === 'ML-2')).toBe(true);
 		});
 
 		it('should filter with not_equals operator', () => {
