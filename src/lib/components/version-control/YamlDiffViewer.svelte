@@ -272,7 +272,7 @@
 			{#if showDetailedView}
 				<!-- Detailed view with full context -->
 				<div class="divide-y divide-gray-200 dark:divide-gray-600">
-					{#each yamlDiff.changes as change (change)}
+					{#each yamlDiff.changes as change, i (i)}
 						<div class="p-3 {getChangeColor(change.type)}">
 							<div class="flex items-start space-x-3">
 								<div
