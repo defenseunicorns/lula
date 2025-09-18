@@ -66,9 +66,12 @@ export class FileStore {
 	 * Get simple filename from control ID
 	 */
 	private getControlFilename(controlId: string): string {
-		// Sanitize control ID for filename (replace invalid characters including dots)
-		// This ensures consistency with imported files that use underscores
-		const sanitized = controlId.replace(/[^\w\-]/g, '_');
+		// Sanitize control ID for filename, preserving the first dash
+		// AC-1.1 -> AC-1_1, AC-10.3 -> AC-10_3, but AC-1 stays AC-1
+		const sanitized = controlId.replace(/^([A-Z]+)-(.*)/, (match, prefix, suffix) => {
+			// Preserve the first dash, replace other non-word chars with underscores
+			return `${prefix}-${suffix.replace(/[^\w]/g, '_')}`;
+		});
 		return `${sanitized}.yaml`;
 	}
 
