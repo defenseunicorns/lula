@@ -587,7 +587,10 @@ class WebSocketManager {
 				};
 
 				// Include all fields defined in the field schema
-				const fieldSchema = (controlSetData as any).fieldSchema?.fields || (controlSetData as any).field_schema?.fields || {};
+				const fieldSchema =
+					(controlSetData as any).fieldSchema?.fields ||
+					(controlSetData as any).field_schema?.fields ||
+					{};
 				for (const [fieldName] of Object.entries(fieldSchema)) {
 					// Include field if it exists in the control
 					if (control[fieldName] !== undefined) {
@@ -669,7 +672,9 @@ class WebSocketManager {
 				};
 
 				// Include all fields defined in the field schema
-				const schemaFields = (controlSetData as any).field_schema?.fields || (controlSetData as any).fieldSchema?.fields;
+				const schemaFields =
+					(controlSetData as any).field_schema?.fields ||
+					(controlSetData as any).fieldSchema?.fields;
 				if (schemaFields) {
 					for (const [fieldName] of Object.entries(schemaFields)) {
 						// Include field if it exists in the control
