@@ -1015,7 +1015,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							{#each sampleData as row (row)}
+							{#each sampleData as row, i (i)}
 								<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 									{#each fields.slice(0, 5) as field (field)}
 										<td class="px-4 py-2">{row[field] || ''}</td>
