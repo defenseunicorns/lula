@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
-import type { Control, ControlWithMappings, Mapping } from '$lib/types';
+import type { Control, Mapping } from '$lib/types';
 import { appState } from '$lib/websocket';
-import { derived, get, writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 
 /**
  * Shared filter operator options used across the application
@@ -56,95 +56,6 @@ export const saveStatus = writable<'saved' | 'saving' | 'error'>('saved');
 export const searchTerm = writable('');
 export const selectedControl = writable<Control | null>(null);
 export const activeFilters = writable<FilterCondition[]>([]);
-
-export const filteredControls = derived(
-	[controls, searchTerm, activeFilters],
-	([$controls, $searchTerm, $activeFilters]) => {
-		let results = $controls;
-
-		// Apply search term
-		if ($searchTerm) {
-			// Create a normalized search term
-			const term = $searchTerm.toLowerCase().replace(/\s+/g, ' ').trim();
-			// Filter using JSON.stringify with normalization
-			results = results.filter((control) => {
-				const json = JSON.stringify(control);
-				const normalizedJson = json.replace(/\\\n/g, ' ').toLowerCase().replace(/\s+/g, ' ');
-
-				return normalizedJson.includes(term);
-			});
-		}
-
-		// Apply advanced filters
-		if ($activeFilters.length > 0) {
-			results = results.filter((control) => {
-				// Cast to ControlWithDynamicFields for dynamic field access
-				const dynamicControl = control as Record<string, unknown>;
-
-				// Control must match all filters
-				return $activeFilters.every((filter) => {
-					const fieldValue = dynamicControl[filter.fieldName];
-
-					// For exists/not_exists operators, we just need to check if the field has a value
-					if (filter.operator === 'exists') {
-						return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
-					} else if (filter.operator === 'not_exists') {
-						return fieldValue === undefined || fieldValue === null || fieldValue === '';
-					}
-
-					// For other operators, convert values to strings for comparison and normalize whitespace
-					const fieldValueStr =
-						fieldValue !== undefined && fieldValue !== null
-							? String(fieldValue)
-									.toLowerCase()
-									.replace(/\n/g, ' ')
-									.replace(/\r/g, ' ')
-									.replace(/\s+/g, ' ')
-									.trim()
-							: '';
-					const filterValueStr =
-						filter.value !== undefined
-							? String(filter.value)
-									.toLowerCase()
-									.replace(/\n/g, ' ')
-									.replace(/\r/g, ' ')
-									.replace(/\s+/g, ' ')
-									.trim()
-							: '';
-
-					switch (filter.operator) {
-						case 'equals':
-							return fieldValueStr === filterValueStr;
-
-						case 'not_equals':
-							return fieldValueStr !== filterValueStr;
-
-						case 'includes':
-							return fieldValueStr.includes(filterValueStr);
-
-						case 'not_includes':
-							return !fieldValueStr.includes(filterValueStr);
-
-						default:
-							return true;
-					}
-				});
-			});
-		}
-
-		return results;
-	}
-);
-
-export const controlsWithMappings = derived(
-	[controls, mappings],
-	([$controls, $mappings]): ControlWithMappings[] => {
-		return $controls.map((control) => ({
-			...control,
-			mappings: $mappings.filter((m) => m.control_id === control.id)
-		}));
-	}
-);
 
 // Store actions - mostly for local state management
 // All server operations now go through WebSocket
