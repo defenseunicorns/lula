@@ -402,10 +402,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 
 			// Determine category based on field name and usage or use frontend config
 			let category = frontendConfig?.category || 'custom';
-			// Check if this field is in the justification fields list
-			if (justificationFields.includes(fieldName)) {
-				category = 'mappings';
-			} else if (!frontendConfig) {
+			if (!frontendConfig) {
 				if (fieldName.includes('status') || fieldName.includes('state')) {
 					category = 'compliance';
 				} else if (
@@ -435,11 +432,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				editable: isControlIdField ? false : true, // Control ID is not editable
 				display_order: isControlIdField ? 1 : (frontendConfig?.displayOrder ?? displayOrder++), // Control ID is always first
 				category: isControlIdField ? 'core' : category, // Control ID is always core
-				tab: isControlIdField
-					? 'overview'
-					: justificationFields.includes(fieldName)
-						? 'mappings' // Mark justification fields for mappings tab
-						: frontendConfig?.tab || undefined // Use frontend config or default
+				tab: isControlIdField ? 'overview' : frontendConfig?.tab || undefined // Use frontend config or default
 			};
 
 			// Only add options for select fields
@@ -476,9 +469,6 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 		// Create controls directory and write individual control files
 		const controlsDir = join(baseDir, 'controls');
 		const mappingsDir = join(baseDir, 'mappings');
-
-		// Track which fields are used for justification to avoid duplicating them in control files
-		const justificationFieldNames = justificationFields;
 
 		families.forEach((familyControls, family) => {
 			// Create family directories for both controls and mappings
@@ -542,8 +532,6 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 					) {
 						// Add to justification contents
 						justificationContents.push(control[fieldName]);
-						// Also keep the field in the control file
-						filteredControl[fieldName] = control[fieldName];
 					}
 
 					// Check if field is in the frontend schema (meaning it was assigned to a tab)
