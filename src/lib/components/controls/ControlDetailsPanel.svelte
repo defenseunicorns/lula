@@ -139,7 +139,7 @@
 	}
 
 	// Handle field changes from custom tab
-	function handleFieldChange(fieldName: string, value: any) {
+	function handleFieldChange(_fieldName: string, _value: any) {
 		triggerAutoSave();
 	}
 </script>

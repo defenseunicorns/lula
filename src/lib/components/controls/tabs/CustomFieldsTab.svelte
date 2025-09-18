@@ -105,9 +105,9 @@
 					Additional fields specific to your organization
 				</div>
 				<div class="space-y-8">
-					{#each fieldGroups as fieldGroup}
+					{#each fieldGroups as fieldGroup, index (index)}
 						<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-							{#each fieldGroup as [fieldName, field]}
+							{#each fieldGroup as [fieldName, field], index (index)}
 								<div class={getFieldLayoutClass(field)}>
 									<EditableFieldRenderer 
 										{fieldName} 

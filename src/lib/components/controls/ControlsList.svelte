@@ -170,32 +170,6 @@
 		goto(`/control/${encodeURIComponent(control.id)}`);
 	}
 
-	function getStatusBadgeClass(status: string) {
-		switch (status) {
-			case 'Implemented':
-				return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300';
-			case 'Planned':
-				return 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300';
-			case 'Not Implemented':
-				return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
-			default:
-				return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
-		}
-	}
-
-	function getComplianceBadgeClass(status: string) {
-		switch (status) {
-			case 'Compliant':
-				return 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300';
-			case 'Non-Compliant':
-				return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
-			case 'Not Assessed':
-				return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
-			default:
-				return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
-		}
-	}
-
 	function extractDescriptionFromNested(data: any): string {
 		if (typeof data === 'string') {
 			return data;
@@ -222,24 +196,6 @@
 			}
 		}
 		return 'No description available';
-	}
-
-	// Helper to determine if a field should be truncated and show tooltip
-	function shouldTruncateField(field: FieldSchema | undefined, value: string): boolean {
-		if (!value) return false;
-		
-		// Always show tooltip for textarea fields if content is long
-		if (field?.ui_type === 'textarea' || field?.ui_type === 'long_text') {
-			return value.length > 100; // Lower threshold for long text fields
-		}
-		
-		// For short_text fields, only show if really long
-		if (field?.ui_type === 'short_text') {
-			return value.length > 200;
-		}
-		
-		// Default for unknown field types
-		return value.length > 150;
 	}
 
 	// Get truncation length based on field type
@@ -296,7 +252,7 @@
 			<!-- Active Filters Summary -->
 			{#if $activeFilters.length > 0}
 				<div class="mt-2 flex flex-wrap gap-2">
-					{#each $activeFilters as filter, index}
+					{#each $activeFilters as filter, index (index)}
 						<div class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
 							<span>{filter.fieldName}: </span>
 							{#if filter.operator === 'exists' || filter.operator === 'not_exists'}
@@ -342,7 +298,7 @@
 						class="grid gap-4 px-6 py-3"
 						style="grid-template-columns: repeat({tableColumns.length + 1}, minmax(0, 1fr)); max-width: 100%;"
 					>
-						{#each tableColumns as { fieldName, field }}
+						{#each tableColumns as { fieldName, field }, index (index)} 
 							<div
 								class="text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
 							>
@@ -391,7 +347,7 @@
 			<!-- Scrollable Table Body -->
 			<div class="flex-1 overflow-auto">
 				<div class="divide-y divide-gray-200 dark:divide-gray-700">
-					{#each $filteredControlsWithMappings as control}
+					{#each $filteredControlsWithMappings as control, index (index)}
 						{@const rawDescription = (() => {
 							// Cast control to any to allow dynamic field access
 							const anyControl = control as any;
@@ -434,7 +390,7 @@
 								tabindex="0"
 								aria-label="Select control {control.id}"
 							>
-								{#each tableColumns as { fieldName, field }}
+								{#each tableColumns as { fieldName, field }, index (index)}
 									{@const value = (control as any)[fieldName]}
 									<div class="flex flex-col justify-center">
 										{#if field.ui_type === 'select' && value}

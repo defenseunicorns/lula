@@ -165,7 +165,7 @@
 		</div>
 	{:else if controlSets.length > 0}
 		<div class="space-y-3">
-			{#each controlSets as controlSet}
+			{#each controlSets as controlSet, index (index)}
 				{@const isCurrent = isCurrentControlSet(controlSet)}
 				<div
 					on:click={() => !isCurrent && selectControlSet(controlSet)}

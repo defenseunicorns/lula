@@ -21,7 +21,7 @@
 
 <nav class="border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
 	<div class="flex space-x-4">
-		{#each tabs as tab}
+		{#each tabs as tab, index (index)}
 			<button
 				onclick={() => !tab.disabled && onSelect(tab.id)}
 				disabled={tab.disabled}

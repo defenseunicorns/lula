@@ -74,7 +74,7 @@
 			>
 				<slot name="header" />
 
-				{#each options as option}
+				{#each options as option, index (index)}
 					<button
 						type="button"
 						class={twMerge(
