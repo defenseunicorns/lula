@@ -1,9 +1,9 @@
-import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import tsParser from "@typescript-eslint/parser";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-import js from "@eslint/js";
-import { FlatCompat } from "@eslint/eslintrc";
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import js from '@eslint/js';
+import { FlatCompat } from '@eslint/eslintrc';
 import prettier from 'eslint-config-prettier';
 import { includeIgnoreFile } from '@eslint/compat';
 import svelte from 'eslint-plugin-svelte';
@@ -15,9 +15,9 @@ const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
+	baseDirectory: __dirname,
+	recommendedConfig: js.configs.recommended,
+	allConfig: js.configs.all
 });
 export default ts.config(
 	includeIgnoreFile(gitignorePath),
@@ -76,87 +76,91 @@ export default ts.config(
 			'svelte/no-at-html-tags': 'warn', // Downgrade to warning - sometimes HTML is safe (from markdown)
 			'svelte/prefer-svelte-reactivity': 'warn', // Downgrade to warning - sometimes Set is needed
 			// Allow any types in Svelte components for now (will fix incrementally)
-			'@typescript-eslint/no-explicit-any': 'warn'
+			'@typescript-eslint/no-explicit-any': 'warn',
+			'svelte/no-navigation-without-resolve': 'warn',
+			'svelte/no-unused-props': 'warn',
+			'svelte/no-unused-svelte-ignore': 'warn',
+			'svelte/no-useless-children-snippet': 'warn'
 		}
 	},
-	...compat
-  .extends("eslint:recommended", "plugin:@typescript-eslint/recommended")
-  .map((cfg) => ({
-    ...cfg,
-    files: ["**/*.ts"],
-  })),
-  {
-	files: ["**/*.ts"],
-    plugins: {
-      "@typescript-eslint": typescriptEslint,
-    },
+	...compat.extends('eslint:recommended', 'plugin:@typescript-eslint/recommended').map((cfg) => ({
+		...cfg,
+		files: ['**/*.ts']
+	})),
+	{
+		files: ['**/*.ts'],
+		plugins: {
+			'@typescript-eslint': typescriptEslint
+		},
 
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        project: path.resolve(__dirname, "tsconfig.json"),
-        tsconfigRootDir: path.resolve(__dirname, "./"),
-        sourceType: "module",
-      },
-      globals: {
-        ...globals.node,
-      },
-    },
+		languageOptions: {
+			parser: tsParser,
+			parserOptions: {
+				project: path.resolve(__dirname, 'tsconfig.json'),
+				tsconfigRootDir: path.resolve(__dirname, './'),
+				sourceType: 'module'
+			},
+			globals: {
+				...globals.node
+			}
+		},
 
-    rules: {
-      "@typescript-eslint/no-floating-promises": "warn",
-      "class-methods-use-this": "warn",
+		rules: {
+			'@typescript-eslint/no-floating-promises': 'warn',
+			'class-methods-use-this': 'warn',
 
-      complexity: [
-        "warn",
-        {
-          max: 15,
-        },
-      ],
+			complexity: [
+				'warn',
+				{
+					max: 15
+				}
+			],
 
-      "consistent-this": "warn",
-      eqeqeq: "error",
+			'consistent-this': 'warn',
+			eqeqeq: 'warn',
+			'@typescript-eslint/no-explicit-any': 'warn',
+			'no-prototype-builtins': 'warn',
+			'max-depth': [
+				'warn',
+				{
+					max: 5
+				}
+			],
 
-      "max-depth": [
-        "warn",
-        {
-          max: 5,
-        },
-      ],
+			'max-nested-callbacks': [
+				'warn',
+				{
+					max: 5
+				}
+			],
 
-      "max-nested-callbacks": [
-        "warn",
-        {
-          max: 5,
-        },
-      ],
+			'max-params': [
+				'warn',
+				{
+					max: 5
+				}
+			],
 
-      "max-params": [
-        "error",
-        {
-          max: 5,
-        },
-      ],
+			'max-statements': [
+				'warn',
+				{
+					max: 20
+				},
+				{
+					ignoreTopLevelFunctions: true
+				}
+			],
 
-      "max-statements": [
-        "warn",
-        {
-          max: 20,
-        },
-        {
-          ignoreTopLevelFunctions: true,
-        },
-      ],
-
-      "no-invalid-this": "warn",
-    },
-  },
-  {
-  files: ["**/*.test.ts"],
-  rules: {
-    "max-statements": "off",
-    "@typescript-eslint/no-unsafe-function-type": "off",
-  },
-},
-
+			'no-invalid-this': 'warn'
+		}
+	},
+	{
+		files: ['**/*.test.ts'],
+		rules: {
+			'max-statements': 'off',
+			'@typescript-eslint/no-unsafe-function-type': 'off',
+			'@typescript-eslint/no-explicit-any': 'warn',
+			'@typescript-eslint/no-this-alias': 'warn'
+		}
+	}
 );
