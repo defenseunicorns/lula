@@ -123,6 +123,38 @@ describe('complianceStore', () => {
 			expect(filtered[0].id).toBe('TEST-1');
 		});
 
+		it('should filter with equals operator on multi-line text', () => {
+			// Create controls with multi-line text
+			controls.set([
+				{
+					id: 'ML-1',
+					title: 'Multi-line Test Control 1',
+					family: 'ML',
+					'test-results': 'This is a test\nwith multiple lines\nspanning across newlines'
+				},
+				{
+					id: 'ML-2',
+					title: 'Multi-line Test Control 2',
+					family: 'ML',
+					'test-results': 'This is a test with multiple lines spanning across newlines'
+				}
+			]);
+
+			// Filter for exact match ignoring newlines
+			activeFilters.set([
+				{
+					fieldName: 'test-results',
+					operator: 'equals',
+					value: 'This is a test with multiple lines spanning across newlines'
+				}
+			]);
+
+			const filtered = get(filteredControls);
+			expect(filtered).toHaveLength(2); // Both should match after normalization
+			expect(filtered.some(c => c.id === 'ML-1')).toBe(true);
+			expect(filtered.some(c => c.id === 'ML-2')).toBe(true);
+		});
+
 		it('should filter with not_equals operator', () => {
 			controls.set(testControls);
 			activeFilters.set([
@@ -188,6 +220,31 @@ describe('complianceStore', () => {
 			expect(filtered).toHaveLength(2);
 			expect(filtered.some((c) => c.id === 'TEST-1')).toBe(true);
 			expect(filtered.some((c) => c.id === 'TEST-4')).toBe(true);
+		});
+
+		it('should filter with includes operator across newlines', () => {
+			// Create a control with multi-line text
+			controls.set([
+				{
+					id: 'ML-1',
+					title: 'Multi-line Test Control',
+					family: 'ML',
+					'test-results': 'This is a test\nwith multiple lines\nspanning across newlines'
+				}
+			]);
+
+			// Filter for text that spans a newline
+			activeFilters.set([
+				{
+					fieldName: 'test-results',
+					operator: 'includes',
+					value: 'test with multiple'
+				}
+			]);
+
+			const filtered = get(filteredControls);
+			expect(filtered).toHaveLength(1);
+			expect(filtered[0].id).toBe('ML-1');
 		});
 
 		it('should filter with not_includes operator', () => {
