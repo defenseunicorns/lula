@@ -68,7 +68,8 @@ export class FileStore {
 	private getControlFilename(controlId: string): string {
 		// Sanitize control ID for filename (replace invalid characters including dots)
 		// This ensures consistency with imported files that use underscores
-		const sanitized = controlId.replace(/[^\w]/g, '_');
+		// eslint-disable-next-line no-useless-escape
+		const sanitized = controlId.replace(/[^\w\-]/g, '_');
 		return `${sanitized}.yaml`;
 	}
 
