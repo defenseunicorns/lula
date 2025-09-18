@@ -95,11 +95,21 @@ export const filteredControls = derived(
 					// For other operators, convert values to strings for comparison and normalize whitespace
 					const fieldValueStr =
 						fieldValue !== undefined && fieldValue !== null
-							? String(fieldValue).toLowerCase().replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()
+							? String(fieldValue)
+									.toLowerCase()
+									.replace(/\n/g, ' ')
+									.replace(/\r/g, ' ')
+									.replace(/\s+/g, ' ')
+									.trim()
 							: '';
 					const filterValueStr =
 						filter.value !== undefined
-							? String(filter.value).toLowerCase().replace(/\n/g, ' ').replace(/\s+/g, ' ').trim()
+							? String(filter.value)
+									.toLowerCase()
+									.replace(/\n/g, ' ')
+									.replace(/\r/g, ' ')
+									.replace(/\s+/g, ' ')
+									.trim()
 							: '';
 
 					switch (filter.operator) {
