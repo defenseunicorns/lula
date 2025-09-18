@@ -312,49 +312,47 @@
 		if (draggedField && fieldConfigs.has(draggedField)) {
 			const config = fieldConfigs.get(draggedField)!;
 
-			// If dragging from mappings tab to another tab, remove from justificationFields
-			if (config.tab === 'mappings' && tab !== 'mappings') {
-				justificationFields = justificationFields.filter((f) => f !== draggedField);
+			// Special handling for mappings tab
+			if (tab === 'mappings') {
+				// Add to justificationFields if not already there
+				if (!justificationFields.includes(draggedField)) {
+					justificationFields = [...justificationFields, draggedField];
+				}
+			} else {
+				config.tab = tab;
+
+				// If dropping at a specific position, update display orders
+				if (targetIndex !== undefined && tab !== null) {
+					// Get all fields in this tab
+					const tabFields = Array.from(fieldConfigs.entries())
+						.filter(([_, cfg]) => cfg.tab === tab)
+						.sort((a, b) => a[1].displayOrder - b[1].displayOrder);
+
+					// Remove the dragged field from the list if it was already in this tab
+					const filteredFields = tabFields.filter(([field]) => field !== draggedField);
+
+					// Insert at the target position
+					filteredFields.splice(targetIndex, 0, [draggedField, config]);
+
+					// Update display orders for all fields in this tab
+					filteredFields.forEach(([field, cfg], index) => {
+						cfg.displayOrder = index;
+						fieldConfigs.set(field, cfg);
+					});
+				} else if (tab !== null) {
+					// If no specific position, add to end
+					const maxOrder = Math.max(
+						0,
+						...Array.from(fieldConfigs.values())
+							.filter((cfg) => cfg.tab === tab)
+							.map((cfg) => cfg.displayOrder)
+					);
+					config.displayOrder = maxOrder + 1;
+				}
+
+				fieldConfigs.set(draggedField, config);
+				fieldConfigs = fieldConfigs; // Trigger reactivity
 			}
-
-			// If dragging to mappings tab, add to justificationFields
-			if (tab === 'mappings' && !justificationFields.includes(draggedField)) {
-				justificationFields = [...justificationFields, draggedField];
-			}
-
-			config.tab = tab;
-
-			// If dropping at a specific position, update display orders
-			if (targetIndex !== undefined && tab !== null) {
-				// Get all fields in this tab
-				const tabFields = Array.from(fieldConfigs.entries())
-					.filter(([_, cfg]) => cfg.tab === tab)
-					.sort((a, b) => a[1].displayOrder - b[1].displayOrder);
-
-				// Remove the dragged field from the list if it was already in this tab
-				const filteredFields = tabFields.filter(([field]) => field !== draggedField);
-
-				// Insert at the target position
-				filteredFields.splice(targetIndex, 0, [draggedField, config]);
-
-				// Update display orders for all fields in this tab
-				filteredFields.forEach(([field, cfg], index) => {
-					cfg.displayOrder = index;
-					fieldConfigs.set(field, cfg);
-				});
-			} else if (tab !== null) {
-				// If no specific position, add to end
-				const maxOrder = Math.max(
-					0,
-					...Array.from(fieldConfigs.values())
-						.filter((cfg) => cfg.tab === tab)
-						.map((cfg) => cfg.displayOrder)
-				);
-				config.displayOrder = maxOrder + 1;
-			}
-
-			fieldConfigs.set(draggedField, config);
-			fieldConfigs = fieldConfigs; // Trigger reactivity
 		}
 		draggedField = null;
 		dragOverTab = null;
@@ -864,88 +862,6 @@
 					</div>
 				</div>
 
-				<!-- Mappings Tab Column -->
-				<div
-					class="border border-orange-300 dark:border-orange-700 rounded-lg bg-white dark:bg-gray-800"
-				>
-					<div
-						class="p-3 border-b border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 rounded-t-lg"
-					>
-						<h4 class="text-sm font-semibold text-orange-700 dark:text-orange-300">Mappings Tab</h4>
-						<p class="text-xs text-orange-600 dark:text-orange-400 mt-1">
-							Pre-populate justification for a control mapping
-						</p>
-					</div>
-					<div
-						class="p-3 min-h-[400px] max-h-[600px] overflow-y-auto transition-colors
-						{dragOverTab === 'mappings' ? 'bg-orange-50 dark:bg-orange-900/10' : ''}"
-						on:dragover={(e) => handleTabDragOver(e, 'mappings')}
-						on:dragleave={handleTabDragLeave}
-						on:drop={(e) => handleTabDrop(e, 'mappings')}
-						role="region"
-						aria-label="Justifications tab drop zone"
-					>
-						<!-- Justification Fields -->
-						<div class="space-y-2">
-							{#if justificationFields.length > 0}
-								<!-- Display justification fields -->
-								{#each justificationFields as field, _index}
-									<div
-										draggable="true"
-										on:dragstart={(e) => handleFieldDragStart(e, field)}
-										on:dragend={handleFieldDragEnd}
-										on:dragover={(e) => handleFieldDragOver(e, field)}
-										on:dragleave={handleFieldDragLeave}
-										on:drop={(e) => handleFieldDrop(e, field, 'mappings')}
-										role="button"
-										aria-label="{field} field in Mappings tab"
-										tabindex="0"
-										class="flex items-center px-3 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded text-sm cursor-move hover:bg-orange-200 dark:hover:bg-orange-800/30 transition-colors
-									{dragOverField === field && draggedField !== field ? 'border-t-2 border-orange-500' : ''}"
-									>
-										<Draggable class="w-3 h-3 mr-2 flex-shrink-0" />
-										<span class="truncate">{field}</span>
-									</div>
-								{/each}
-							{:else}
-								<!-- Drop zone only shown when no fields are present -->
-								<div
-									role="region"
-									aria-label="Justification field drop zone"
-									class="p-4 transition-colors
-									{dragOverTab === 'mappings' ? 'bg-orange-50 dark:bg-orange-900/10' : ''}"
-									on:dragover={(e) => {
-										e.preventDefault();
-										handleTabDragOver(e, 'mappings');
-									}}
-									on:dragleave={handleTabDragLeave}
-									on:drop={(e) => {
-										e.preventDefault();
-										if (draggedField && fieldConfigs.has(draggedField)) {
-											// Add to justification fields if not already present
-											if (!justificationFields.includes(draggedField)) {
-												justificationFields = [...justificationFields, draggedField];
-											}
-
-											// Set tab assignment
-											const config = fieldConfigs.get(draggedField)!;
-											config.tab = 'mappings';
-											fieldConfigs.set(draggedField, config);
-											fieldConfigs = new Map(fieldConfigs); // Force reactivity
-
-											dragOverTab = null;
-										}
-									}}
-								>
-									<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
-										Drop fields here
-									</p>
-								</div>
-							{/if}
-						</div>
-					</div>
-				</div>
-
 				<!-- Custom Tab Column -->
 				<div
 					class="border border-purple-300 dark:border-purple-700 rounded-lg bg-white dark:bg-gray-800"
@@ -992,6 +908,89 @@
 								Drop fields here
 							</p>
 						{/if}
+					</div>
+				</div>
+
+				<!-- Mappings Tab Column -->
+				<div
+					class="border border-orange-300 dark:border-orange-700 rounded-lg bg-white dark:bg-gray-800"
+				>
+					<div
+						class="p-3 border-b border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 rounded-t-lg"
+					>
+						<h4 class="text-sm font-semibold text-orange-700 dark:text-orange-300">Mappings Tab</h4>
+						<p class="text-xs text-orange-600 dark:text-orange-400 mt-1">
+							Pre-populate justification for a control mapping
+						</p>
+					</div>
+					<div
+						class="p-3 min-h-[400px] max-h-[600px] overflow-y-auto transition-colors
+						{dragOverTab === 'mappings' ? 'bg-orange-50 dark:bg-orange-900/10' : ''}"
+						on:dragover={(e) => handleTabDragOver(e, 'mappings')}
+						on:dragleave={handleTabDragLeave}
+						on:drop={(e) => handleTabDrop(e, 'mappings')}
+						role="region"
+						aria-label="Justifications tab drop zone"
+					>
+						<!-- Justification Fields -->
+						<div class="space-y-2">
+							{#if justificationFields.length > 0}
+								<!-- Display justification fields -->
+								{#each justificationFields as field, _index}
+									<div
+										draggable="false"
+										role="button"
+										tabindex="0"
+										class="flex items-center px-3 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded text-sm hover:bg-orange-200 dark:hover:bg-orange-800/30 transition-colors"
+									>
+										<span class="truncate">{field}</span>
+										<button
+											class="ml-auto text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400"
+											title="Remove from mappings"
+											on:click|stopPropagation={() => {
+												justificationFields = justificationFields.filter((f) => f !== field);
+											}}
+										>
+											×
+										</button>
+									</div>
+								{/each}
+							{:else}
+								<!-- Drop zone only shown when no fields are present -->
+								<div
+									role="region"
+									aria-label="Justification field drop zone"
+									class="p-4 transition-colors
+									{dragOverTab === 'mappings' ? 'bg-orange-50 dark:bg-orange-900/10' : ''}"
+									on:dragover={(e) => {
+										e.preventDefault();
+										handleTabDragOver(e, 'mappings');
+									}}
+									on:dragleave={handleTabDragLeave}
+									on:drop={(e) => {
+										e.preventDefault();
+										if (draggedField && fieldConfigs.has(draggedField)) {
+											// Add to justification fields if not already present
+											if (!justificationFields.includes(draggedField)) {
+												justificationFields = [...justificationFields, draggedField];
+											}
+
+											// Set tab assignment
+											const config = fieldConfigs.get(draggedField)!;
+											config.tab = 'mappings';
+											fieldConfigs.set(draggedField, config);
+											fieldConfigs = new Map(fieldConfigs); // Force reactivity
+
+											dragOverTab = null;
+										}
+									}}
+								>
+									<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
+										Drop fields here
+									</p>
+								</div>
+							{/if}
+						</div>
 					</div>
 				</div>
 			</div>
