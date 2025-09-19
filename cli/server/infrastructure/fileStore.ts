@@ -142,7 +142,12 @@ export class FileStore {
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
-						parsed.id = getControlId(parsed, this.baseDir);
+						try {
+							parsed.id = getControlId(parsed, this.baseDir);
+						} catch (error) {
+							// Fallback to the controlId parameter if getControlId fails
+							parsed.id = controlId;
+						}
 					}
 					return parsed as Control;
 				} catch (error) {
@@ -172,7 +177,12 @@ export class FileStore {
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
-						parsed.id = getControlId(parsed, this.baseDir);
+						try {
+							parsed.id = getControlId(parsed, this.baseDir);
+						} catch (error) {
+							// Fallback to the controlId parameter if getControlId fails
+							parsed.id = controlId;
+						}
 					}
 					return parsed as Control;
 				} catch (error) {

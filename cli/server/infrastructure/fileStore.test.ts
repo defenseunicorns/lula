@@ -4,8 +4,8 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { FileStore } from './fileStore';
 import type { Control, Mapping } from '../types';
+import { FileStore } from './fileStore';
 
 vi.mock('./controlHelpers', () => ({
 	getControlId: vi.fn((control: Partial<Control>) => {
@@ -208,7 +208,7 @@ control_id_field: ap-acronym`;
 			mkdirSync(controlsDir, { recursive: true });
 			writeFileSync(
 				join(controlsDir, 'TEST-1.yaml'),
-				'title: Test Control\ndescription: No ID field\nap-acronym: TEST-1'
+				'title: Test Control\ndescription: No ID field'
 			);
 
 			const control = await fileStore.loadControl('TEST-1');
