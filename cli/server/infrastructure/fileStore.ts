@@ -142,9 +142,12 @@ export class FileStore {
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
-						// If the filename has underscores, convert back to dots
-						// AC-10_3 -> AC-10.3, but leave AC-10 as-is
-						parsed.id = controlId.replace(/_(\d)/g, '.$1');
+						try {
+							parsed.id = getControlId(parsed, this.baseDir);
+						} catch (error) {
+							// Fallback to the controlId parameter if getControlId fails
+							parsed.id = controlId;
+						}
 					}
 					return parsed as Control;
 				} catch (error) {
@@ -174,9 +177,12 @@ export class FileStore {
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
-						// If the filename has underscores, convert back to dots
-						// AC-10_3 -> AC-10.3, but leave AC-10 as-is
-						parsed.id = controlId.replace(/_(\d)/g, '.$1');
+						try {
+							parsed.id = getControlId(parsed, this.baseDir);
+						} catch (error) {
+							// Fallback to the controlId parameter if getControlId fails
+							parsed.id = controlId;
+						}
 					}
 					return parsed as Control;
 				} catch (error) {
