@@ -17,7 +17,11 @@ import { getServerState } from './serverState';
 interface SpreadsheetRow {
 	[key: string]: any;
 }
-
+interface MappingData {
+	control_id: string;
+	justification: string;
+	uuid: string;
+}
 const router: express.Router = express.Router();
 const upload = multer({
 	storage: multer.memoryStorage(),
@@ -504,6 +508,11 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 
 				// Filter control to only include fields that are in the field schema (not excluded)
 				const filteredControl: SpreadsheetRow = {};
+				const mappingData: MappingData = {
+					control_id: controlIdStr,
+					justification: '',
+					uuid: crypto.randomUUID()
+				};
 
 				// Collect justification content from all specified fields
 				const justificationContents: string[] = [];
@@ -554,6 +563,15 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 						uuid: mapping.uuid || crypto.randomUUID()
 					}));
 					writeFileSync(mappingFilePath, yaml.dump(mappingArray));
+				} else if (justificationContents.length > 0) {
+					// Combine all justification contents with line breaks
+					mappingData.justification = justificationContents.join('\n\n');
+					// Write mapping file if it has justification content
+					if (mappingData.justification && mappingData.justification.trim() !== '') {
+						// Format as an array with a single mapping entry
+						const mappingArray = [mappingData];
+						writeFileSync(mappingFilePath, yaml.dump(mappingArray));
+					}
 				}
 			});
 		});
