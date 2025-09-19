@@ -98,7 +98,7 @@
     "esbuild": "^0.25.9",
     "eslint": "^9.35.0",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-jsdoc": "^58.1.1",
+    "eslint-plugin-jsdoc": "^59.0.2",
     "eslint-plugin-svelte": "^3.12.2",
     "globals": "^16.3.0",
     "husky": "^9.1.7",
