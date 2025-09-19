@@ -2,7 +2,7 @@
 // SPDX-FileCopyrightText: 2025-Present The Lula2 Authors
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { scanControlSets } from './spreadsheetRoutes';
+import { scanControlSets, parseMappingsFromCSV } from './spreadsheetRoutes';
 import { getServerState } from './serverState';
 import { readFileSync } from 'fs';
 import { glob } from 'glob';
@@ -16,7 +16,94 @@ const mockReadFileSync = vi.mocked(readFileSync);
 const mockGlob = vi.mocked(glob);
 const mockYamlLoad = vi.mocked(yaml.load);
 const mockGetServerState = vi.mocked(getServerState);
+describe('parseMappingsFromCSV', () => {
+	it('should return an empty array for empty input', () => {
+		expect(parseMappingsFromCSV('')).toEqual([]);
+		expect(parseMappingsFromCSV('   ')).toEqual([]);
+	});
 
+	it('should parse a single JSON mapping correctly', () => {
+		const input =
+			'{"uuid":"550e8400-e29b-41d4-a716-446655440000","status":"verified","description":"Test justification","source_entries":[]}';
+		const expectedOutput = [
+			{
+				uuid: '550e8400-e29b-41d4-a716-446655440000',
+				status: 'verified',
+				justification: 'Test justification',
+				source_entries: []
+			}
+		];
+		expect(parseMappingsFromCSV(input)).toEqual(expectedOutput);
+	});
+
+	it('should parse multiple JSON mappings separated by ||', () => {
+		const input =
+			'{"uuid":"uuid-1","status":"verified","description":"Justification 1","source_entries":[]}||{"uuid":"uuid-2","description":"Justification 2","source_entries":[{"location":"test.ts","shasum":"abc"}]}';
+		const expectedOutput = [
+			{
+				uuid: 'uuid-1',
+				status: 'verified',
+				justification: 'Justification 1',
+				source_entries: []
+			},
+			{
+				uuid: 'uuid-2',
+				status: undefined,
+				justification: 'Justification 2',
+				source_entries: [{ location: 'test.ts', shasum: 'abc' }]
+			}
+		];
+		expect(parseMappingsFromCSV(input)).toEqual(expectedOutput);
+	});
+
+	it('should handle mappings with undefined status correctly', () => {
+		const input = '{"uuid":"uuid-1","description":"Test description","source_entries":[]}';
+		const expectedOutput = [
+			{
+				uuid: 'uuid-1',
+				status: undefined,
+				justification: 'Test description',
+				source_entries: []
+			}
+		];
+		expect(parseMappingsFromCSV(input)).toEqual(expectedOutput);
+	});
+
+	it('should handle complex source entries', () => {
+		const input =
+			'{"uuid":"uuid-1","status":"implemented","description":"Complex mapping","source_entries":[{"location":"handler.ts","shasum":"asdf"},{"location":"config.yaml","shasum":"1234"}]}';
+		const expectedOutput = [
+			{
+				uuid: 'uuid-1',
+				status: 'implemented',
+				justification: 'Complex mapping',
+				source_entries: [
+					{ location: 'handler.ts', shasum: 'asdf' },
+					{ location: 'config.yaml', shasum: '1234' }
+				]
+			}
+		];
+		expect(parseMappingsFromCSV(input)).toEqual(expectedOutput);
+	});
+
+	it('should return empty array for malformed JSON', () => {
+		const input = 'invalid json format';
+		expect(parseMappingsFromCSV(input)).toEqual([]);
+	});
+
+	it('should generate UUID if not provided', () => {
+		const input = '{"status":"verified","description":"Test","source_entries":[]}';
+		const result = parseMappingsFromCSV(input);
+		expect(result).toHaveLength(1);
+		expect(result[0]).toMatchObject({
+			status: 'verified',
+			justification: 'Test',
+			source_entries: []
+		});
+		expect(result[0].uuid).toBeDefined();
+		expect(typeof result[0].uuid).toBe('string');
+	});
+});
 describe('spreadsheetRoutes', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();

@@ -571,7 +571,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 });
 
 // Helper function to parse mappings from CSV format
-function parseMappingsFromCSV(mappingsString: string): any[] {
+export function parseMappingsFromCSV(mappingsString: string): any[] {
 	if (!mappingsString || mappingsString.trim() === '') {
 		return [];
 	}
