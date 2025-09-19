@@ -38,7 +38,8 @@ export default ts.config(
 			'mappings/**',
 			'build/**',
 			'.svelte-kit/**',
-			'dist/**'
+			'dist/**',
+			'integration/test-files/**'
 		]
 	},
 	{

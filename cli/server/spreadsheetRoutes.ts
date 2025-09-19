@@ -501,6 +501,13 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				const mappingFileName = `${controlIdStr.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`;
 				const mappingFilePath = join(familyMappingsDir, mappingFileName);
 
+				// Check if this row contains mappings data that should be parsed
+				let extractedMappings: any[] = [];
+				if (control.mappings && typeof control.mappings === 'string') {
+					// Try to parse mappings from the CSV format
+					extractedMappings = parseMappingsFromCSV(control.mappings);
+				}
+
 				// Filter control to only include fields that are in the field schema (not excluded)
 				const filteredControl: SpreadsheetRow = {};
 
@@ -549,16 +556,26 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				// Write control file
 				writeFileSync(filePath, yaml.dump(filteredControl));
 
-				// Combine all justification contents with line breaks
-				if (justificationContents.length > 0) {
-					mappingData.justification = justificationContents.join('\n\n');
-				}
-
-				// Write mapping file if it has justification content
-				if (mappingData.justification && mappingData.justification.trim() !== '') {
-					// Format as an array with a single mapping entry
-					const mappingArray = [mappingData];
+				// Write mapping file based on available data
+				if (extractedMappings.length > 0) {
+					// Use mappings from CSV
+					const mappingArray = extractedMappings.map((mapping) => ({
+						control_id: controlIdStr,
+						justification: mapping.justification || '',
+						status: mapping.status,
+						source_entries: mapping.source_entries || [],
+						uuid: mapping.uuid || crypto.randomUUID()
+					}));
 					writeFileSync(mappingFilePath, yaml.dump(mappingArray));
+				} else if (justificationContents.length > 0) {
+					// Combine all justification contents with line breaks
+					mappingData.justification = justificationContents.join('\n\n');
+					// Write mapping file if it has justification content
+					if (mappingData.justification && mappingData.justification.trim() !== '') {
+						// Format as an array with a single mapping entry
+						const mappingArray = [mappingData];
+						writeFileSync(mappingFilePath, yaml.dump(mappingArray));
+					}
 				}
 			});
 		});
@@ -574,6 +591,31 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 		res.status(500).json({ error: 'Failed to process spreadsheet' });
 	}
 });
+
+// Helper function to parse mappings from CSV format
+function parseMappingsFromCSV(mappingsString: string): any[] {
+	if (!mappingsString || mappingsString.trim() === '') {
+		return [];
+	}
+
+	try {
+		// Split by || delimiter to get individual mappings
+		const mappingStrings = mappingsString.split('||');
+		return mappingStrings.map((mappingStr) => {
+			// Parse each mapping as JSON
+			const mapping = JSON.parse(mappingStr.trim());
+			return {
+				uuid: mapping.uuid || crypto.randomUUID(),
+				status: mapping.status === undefined ? undefined : mapping.status,
+				justification: mapping.description || '',
+				source_entries: mapping.source_entries || []
+			};
+		});
+	} catch (error) {
+		debug('Error parsing mappings from CSV:', error);
+		return [];
+	}
+}
 
 // Helper functions
 function applyNamingConvention(fieldName: string, convention: string): string {
@@ -752,8 +794,9 @@ router.get('/export-controls', async (req, res) => {
 				mappings_count: controlMappings.length,
 				mappings: controlMappings.map((m) => ({
 					uuid: m.uuid,
-					status: m.status,
-					description: m.justification || ''
+					status: m.status || 'undefined',
+					description: m.justification || '',
+					source_entries: m.source_entries || []
 				}))
 			};
 		});
@@ -851,13 +894,34 @@ function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
 
 			// Special handling for mappings
 			if (fieldName === 'mappings' && Array.isArray(value)) {
-				// Format mappings as a readable string
+				// Format mappings as a properly escaped JSON string for CSV
+				// This ensures we can parse it back during import
 				const mappingsStr = value
-					.map(
-						(m: any) =>
-							`${m.status}: ${m.description.substring(0, 50)}${m.description.length > 50 ? '...' : ''}`
-					)
-					.join('; ');
+					.map((m: any) => {
+						// Format source_entries to preserve all information
+						const sourceEntries = (m.source_entries || []).map((entry: any) => {
+							if (typeof entry === 'string') {
+								return { location: entry };
+							} else if (entry && typeof entry === 'object') {
+								// Preserve the full source entry structure
+								return {
+									location: entry.location || '',
+									shasum: entry.shasum || ''
+								};
+							}
+							return { location: String(entry) };
+						});
+
+						return JSON.stringify({
+							status: m.status || undefined,
+							description: m.description || '',
+							source_entries: sourceEntries,
+							uuid: m.uuid || ''
+						});
+					})
+					.join('||'); // Use || as delimiter between mappings
+
+				// Properly escape for CSV (double quotes become double-double quotes)
 				return `"${mappingsStr.replace(/"/g, '""')}"`;
 			}
 
