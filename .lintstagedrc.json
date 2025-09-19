@@ -1,5 +1,5 @@
 {
-	"*.ts": ["prettier --config .prettierrc --write", "eslint --config eslint.config.js --fix --ignore integration/test-files/**"],
+	"*.ts": ["prettier --config .prettierrc --write", "eslint --config eslint.config.js --fix"],
 	"*.test.ts": ["eslint --config eslint.config.js"],
 	"integration/**/*.ts": ["eslint --config eslint.config.js"],
 	"*.mjs": ["prettier --config .prettierrc --write"],
