@@ -27,7 +27,7 @@ describe('FileStore', () => {
 
 		const lulaConfig = `id: test-control-set
 name: Test Control Set
-control_id_field: id`;
+control_id_field: ap-acronym`;
 		writeFileSync(join(tempDir, 'lula.yaml'), lulaConfig);
 
 		fileStore = new FileStore({ baseDir: tempDir });
@@ -182,7 +182,7 @@ control_id_field: id`;
 		beforeEach(async () => {
 			// Set up test control
 			const control: Partial<Control> = {
-				id: 'AC-1',
+				'ap-acronym': 'AC-1',
 				title: 'Access Control Policy',
 				description: 'Test control'
 			};
@@ -208,7 +208,7 @@ control_id_field: id`;
 			mkdirSync(controlsDir, { recursive: true });
 			writeFileSync(
 				join(controlsDir, 'TEST-1.yaml'),
-				'title: Test Control\ndescription: No ID field'
+				'title: Test Control\ndescription: No ID field\nap-acronym: TEST-1'
 			);
 
 			const control = await fileStore.loadControl('TEST-1');
@@ -265,9 +265,9 @@ control_id_field: id`;
 		beforeEach(async () => {
 			// Set up multiple test controls
 			const controls: Partial<Control>[] = [
-				{ id: 'AC-1', title: 'Access Control Policy 1' },
-				{ id: 'AC-2', title: 'Access Control Policy 2' },
-				{ id: 'AU-1', title: 'Audit Policy 1' }
+				{ 'ap-acronym': 'AC-1', title: 'Access Control Policy 1' },
+				{ 'ap-acronym': 'AC-2', title: 'Access Control Policy 2' },
+				{ 'ap-acronym': 'AU-1', title: 'Audit Policy 1' }
 			];
 
 			for (const control of controls) {
@@ -296,7 +296,7 @@ control_id_field: id`;
 		it('should handle flat structure (atomic controls)', async () => {
 			const controlsDir = join(tempDir, 'controls');
 			mkdirSync(controlsDir, { recursive: true });
-			writeFileSync(join(controlsDir, 'FLAT-1.yaml'), 'id: FLAT-1\ntitle: Flat Control');
+			writeFileSync(join(controlsDir, 'FLAT-1.yaml'), 'ap-acronym: FLAT-1\ntitle: Flat Control');
 
 			const controls = await fileStore.loadAllControls();
 			const flatControl = controls.find((c) => c.id === 'FLAT-1');
