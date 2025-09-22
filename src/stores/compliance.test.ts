@@ -15,15 +15,13 @@ import {
 } from './compliance';
 
 // Mock console methods to avoid log output during tests
-const mockConsole: Partial<Console> = {
-	log: vi.fn(),
-	error: vi.fn(),
-	warn: vi.fn(),
-	info: vi.fn(),
-	debug: vi.fn()
+let consoleSpies: {
+	log: ReturnType<typeof vi.spyOn>;
+	error: ReturnType<typeof vi.spyOn>;
+	warn: ReturnType<typeof vi.spyOn>;
+	info: ReturnType<typeof vi.spyOn>;
+	debug: ReturnType<typeof vi.spyOn>;
 };
-
-const originalConsole = global.console;
 
 describe('complianceStore', () => {
 	const mockControls: Control[] = [
@@ -75,8 +73,13 @@ describe('complianceStore', () => {
 	];
 
 	beforeEach(() => {
-		// Mock console methods to avoid log output during tests
-		global.console = mockConsole as Console;
+		consoleSpies = {
+			log: vi.spyOn(console, 'log').mockImplementation(() => {}),
+			error: vi.spyOn(console, 'error').mockImplementation(() => {}),
+			warn: vi.spyOn(console, 'warn').mockImplementation(() => {}),
+			info: vi.spyOn(console, 'info').mockImplementation(() => {}),
+			debug: vi.spyOn(console, 'debug').mockImplementation(() => {})
+		};
 
 		controls.set([]);
 		mappings.set([]);
@@ -86,8 +89,7 @@ describe('complianceStore', () => {
 	});
 
 	afterEach(() => {
-		// Restore original console
-		global.console = originalConsole;
+		Object.values(consoleSpies).forEach((spy) => spy.mockRestore());
 	});
 
 	describe('complianceStore actions', () => {
@@ -204,7 +206,7 @@ describe('complianceStore', () => {
 
 				const filters = get(activeFilters);
 				expect(filters).toHaveLength(1);
-				expect(filters[0].operator).toBe('equals'); // Should remain unchanged
+				expect(filters[0].operator).toBe('equals'); 
 			});
 
 			it('should handle negative filter index', () => {
@@ -213,7 +215,7 @@ describe('complianceStore', () => {
 
 				const filters = get(activeFilters);
 				expect(filters).toHaveLength(1);
-				expect(filters[0].operator).toBe('equals'); // Should remain unchanged
+				expect(filters[0].operator).toBe('equals'); 
 			});
 		});
 
