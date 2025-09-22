@@ -790,7 +790,7 @@ router.get('/export-controls', async (req, res) => {
 				mappings_count: controlMappings.length,
 				mappings: controlMappings.map((m) => ({
 					uuid: m.uuid,
-					status: m.status || 'undefined',
+					status: m.status === undefined ? undefined : m.status,
 					description: m.justification || '',
 					source_entries: m.source_entries || []
 				}))
