@@ -238,20 +238,60 @@
 				controlIdField = '';
 			}
 
-			// Default controlIdField to "AP Acronym" if it exists, has short values, and is unique
-			if (!controlIdField && fields.includes('AP Acronym')) {
-				const hasShortValues =
-					!sampleData.length ||
-					sampleData.every((row) => !row['AP Acronym'] || String(row['AP Acronym']).length < 25);
-				const nonEmptyValues = sampleData
-					.map((row) => row['AP Acronym'])
-					.filter((v) => v != null && v !== '' && String(v).trim() !== '');
-				const uniqueValues = new Set(nonEmptyValues);
-				const hasUniqueValues =
-					!nonEmptyValues.length || uniqueValues.size === nonEmptyValues.length;
-				const hasNonEmptyValues = nonEmptyValues.length > 0;
-				if (hasShortValues && hasUniqueValues && hasNonEmptyValues) {
-					controlIdField = 'AP Acronym';
+			// Auto-select a suitable Control ID field if none is selected
+			if (!controlIdField) {
+				// First try "AP Acronym" or similar variations
+				const apAcronymField = fields.find(
+					(f) => f.toLowerCase().includes('ap') && f.toLowerCase().includes('acronym')
+				);
+
+				if (apAcronymField) {
+					const hasShortValues =
+						!sampleData.length ||
+						sampleData.every(
+							(row) => !row[apAcronymField] || String(row[apAcronymField]).length < 25
+						);
+					const nonEmptyValues = sampleData
+						.map((row) => row[apAcronymField])
+						.filter((v) => v != null && v !== '' && String(v).trim() !== '');
+					const uniqueValues = new Set(nonEmptyValues);
+					const hasUniqueValues =
+						!nonEmptyValues.length || uniqueValues.size === nonEmptyValues.length;
+					const hasNonEmptyValues = nonEmptyValues.length > 0;
+					const isSuitableForControlId =
+						hasShortValues && hasNonEmptyValues && (hasUniqueValues || uniqueValues.size > 1);
+
+					if (isSuitableForControlId) {
+						controlIdField = apAcronymField;
+					}
+				}
+
+				// If still no field selected, try "Control ID" or similar
+				if (!controlIdField) {
+					const controlIdFieldOption = fields.find(
+						(f) => f.toLowerCase().includes('control') && f.toLowerCase().includes('id')
+					);
+
+					if (controlIdFieldOption) {
+						const hasShortValues =
+							!sampleData.length ||
+							sampleData.every(
+								(row) => !row[controlIdFieldOption] || String(row[controlIdFieldOption]).length < 25
+							);
+						const nonEmptyValues = sampleData
+							.map((row) => row[controlIdFieldOption])
+							.filter((v) => v != null && v !== '' && String(v).trim() !== '');
+						const uniqueValues = new Set(nonEmptyValues);
+						const hasUniqueValues =
+							!nonEmptyValues.length || uniqueValues.size === nonEmptyValues.length;
+						const hasNonEmptyValues = nonEmptyValues.length > 0;
+						const isSuitableForControlId =
+							hasShortValues && hasNonEmptyValues && (hasUniqueValues || uniqueValues.size > 1);
+
+						if (isSuitableForControlId) {
+							controlIdField = controlIdFieldOption;
+						}
+					}
 				}
 			}
 		} catch (error) {
@@ -684,9 +724,13 @@
 							{@const hasUniqueValues =
 								!nonEmptyValues.length || uniqueValues.size === nonEmptyValues.length}
 							{@const hasNonEmptyValues = nonEmptyValues.length > 0}
-							{#if hasShortValues && hasUniqueValues && hasNonEmptyValues}
+							{@const isSuitableForControlId =
+								hasShortValues && hasNonEmptyValues && (hasUniqueValues || uniqueValues.size > 1)}
+							{#if isSuitableForControlId}
 								<option value={field}>
-									{field}{exampleValue ? ` (e.g., ${exampleValue})` : ''}
+									{field}{exampleValue ? ` (e.g., ${exampleValue})` : ''}{!hasUniqueValues
+										? ' (mappings)'
+										: ''}
 								</option>
 							{/if}
 						{/each}
