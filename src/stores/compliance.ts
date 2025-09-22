@@ -61,7 +61,7 @@ export const activeFilters = writable<FilterCondition[]>([]);
 // All server operations now go through WebSocket
 export const complianceStore = {
 	setSearchTerm(term: string) {
-		searchTerm.set(term);
+		searchTerm.set(term || '');
 	},
 
 	setSelectedControl(control: Control | null) {
