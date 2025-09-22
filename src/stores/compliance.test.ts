@@ -206,7 +206,7 @@ describe('complianceStore', () => {
 
 				const filters = get(activeFilters);
 				expect(filters).toHaveLength(1);
-				expect(filters[0].operator).toBe('equals'); 
+				expect(filters[0].operator).toBe('equals');
 			});
 
 			it('should handle negative filter index', () => {
@@ -215,7 +215,7 @@ describe('complianceStore', () => {
 
 				const filters = get(activeFilters);
 				expect(filters).toHaveLength(1);
-				expect(filters[0].operator).toBe('equals'); 
+				expect(filters[0].operator).toBe('equals');
 			});
 		});
 
