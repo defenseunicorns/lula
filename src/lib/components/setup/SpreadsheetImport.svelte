@@ -13,11 +13,12 @@
 	let sampleData: any[] = [];
 	let controlCount = 0;
 	let rowPreviews: { row: number; preview: string }[] = [];
-	// Make availableFields reactive to both fields and fieldConfigs changes
-	$: availableFields = fields.filter((f) => fields.includes(f));
 
 	// Field configuration for tabs
-	type TabAssignment = 'overview' | 'implementation' | 'custom' | null;
+	type TabAssignment = 'overview' | 'implementation' | 'mappings' | 'custom' | null;
+
+	// Store fields for justification
+	let justificationFields: string[] = [];
 	let fieldConfigs = new Map<
 		string,
 		{
@@ -55,6 +56,7 @@
 		controlCount = 0;
 		fieldConfigs.clear();
 		fieldConfigs = new Map(); // Force reactivity
+		justificationFields = [];
 
 		// Reset selections
 		controlIdField = '';
@@ -307,39 +309,48 @@
 		e.preventDefault();
 		if (draggedField && fieldConfigs.has(draggedField)) {
 			const config = fieldConfigs.get(draggedField)!;
-			config.tab = tab;
 
-			// If dropping at a specific position, update display orders
-			if (targetIndex !== undefined && tab !== null) {
-				// Get all fields in this tab
-				const tabFields = Array.from(fieldConfigs.entries())
-					.filter(([_, cfg]) => cfg.tab === tab)
-					.sort((a, b) => a[1].displayOrder - b[1].displayOrder);
+			// Special handling for mappings tab
+			if (tab === 'mappings') {
+				// Add to justificationFields if not already there
+				if (!justificationFields.includes(draggedField)) {
+					justificationFields = [...justificationFields, draggedField];
+				}
+			} else {
+				config.tab = tab;
 
-				// Remove the dragged field from the list if it was already in this tab
-				const filteredFields = tabFields.filter(([field]) => field !== draggedField);
+				// If dropping at a specific position, update display orders
+				if (targetIndex !== undefined && tab !== null) {
+					// Get all fields in this tab
+					const tabFields = Array.from(fieldConfigs.entries())
+						.filter(([_, cfg]) => cfg.tab === tab)
+						.sort((a, b) => a[1].displayOrder - b[1].displayOrder);
 
-				// Insert at the target position
-				filteredFields.splice(targetIndex, 0, [draggedField, config]);
+					// Remove the dragged field from the list if it was already in this tab
+					const filteredFields = tabFields.filter(([field]) => field !== draggedField);
 
-				// Update display orders for all fields in this tab
-				filteredFields.forEach(([field, cfg], index) => {
-					cfg.displayOrder = index;
-					fieldConfigs.set(field, cfg);
-				});
-			} else if (tab !== null) {
-				// If no specific position, add to end
-				const maxOrder = Math.max(
-					0,
-					...Array.from(fieldConfigs.values())
-						.filter((cfg) => cfg.tab === tab)
-						.map((cfg) => cfg.displayOrder)
-				);
-				config.displayOrder = maxOrder + 1;
+					// Insert at the target position
+					filteredFields.splice(targetIndex, 0, [draggedField, config]);
+
+					// Update display orders for all fields in this tab
+					filteredFields.forEach(([field, cfg], index) => {
+						cfg.displayOrder = index;
+						fieldConfigs.set(field, cfg);
+					});
+				} else if (tab !== null) {
+					// If no specific position, add to end
+					const maxOrder = Math.max(
+						0,
+						...Array.from(fieldConfigs.values())
+							.filter((cfg) => cfg.tab === tab)
+							.map((cfg) => cfg.displayOrder)
+					);
+					config.displayOrder = maxOrder + 1;
+				}
+
+				fieldConfigs.set(draggedField, config);
+				fieldConfigs = fieldConfigs; // Trigger reactivity
 			}
-
-			fieldConfigs.set(draggedField, config);
-			fieldConfigs = fieldConfigs; // Trigger reactivity
 		}
 		draggedField = null;
 		dragOverTab = null;
@@ -413,12 +424,18 @@
 
 			// Add field schema configuration - include all fields that are assigned to a tab
 			const fieldSchema = Array.from(fieldConfigs.entries())
-				.filter(([field, config]) => config.tab !== null)
+				.filter(([_field, config]) => config.tab !== null)
 				.map(([field, config]) => ({
 					fieldName: cleanFieldName(field),
 					...config
 				}));
 			formData.append('fieldSchema', JSON.stringify(fieldSchema));
+
+			// Add justification fields
+			formData.append(
+				'justificationFields',
+				JSON.stringify(justificationFields.map((field) => cleanFieldName(field)))
+			);
 
 			const response = await fetch('/api/import-spreadsheet', {
 				method: 'POST',
@@ -603,7 +620,7 @@
 						}}
 						class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
 					>
-						{#each sheets as sheet}
+						{#each sheets as sheet (sheet)}
 							<option value={sheet}>{sheet}</option>
 						{/each}
 					</select>
@@ -625,7 +642,7 @@
 						on:change={loadSheetData}
 						class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
 					>
-						{#each rowPreviews as preview}
+						{#each rowPreviews as preview (preview.row)}
 							<option value={preview.row}>
 								Row {preview.row}: {preview.preview}
 							</option>
@@ -652,7 +669,7 @@
 						required
 					>
 						<option value="" disabled>Select Control ID field</option>
-						{#each fields as field}
+						{#each fields as field (field)}
 							{@const exampleValue =
 								sampleData.length > 0 && sampleData[0][field]
 									? String(sampleData[0][field]).slice(0, 30)
@@ -692,7 +709,7 @@
 			</p>
 
 			<!-- Column Layout -->
-			<div class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+			<div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
 				<!-- Excluded Fields Column -->
 				<div
 					class="border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800"
@@ -763,8 +780,8 @@
 						aria-label="Overview tab drop zone"
 					>
 						{#each Array.from(fieldConfigs.entries())
-							.filter(([field, config]) => config.tab === 'overview')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index (field)}
+							.filter(([_field, config]) => config.tab === 'overview')
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], _index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -784,7 +801,7 @@
 								<span class="truncate">{field}</span>
 							</div>
 						{/each}
-						{#if Array.from(fieldConfigs.entries()).filter(([field, config]) => config.tab === 'overview').length === 0}
+						{#if Array.from(fieldConfigs.entries()).filter(([_field, config]) => config.tab === 'overview').length === 0}
 							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 								Drop fields here
 							</p>
@@ -814,8 +831,8 @@
 						aria-label="Implementation tab drop zone"
 					>
 						{#each Array.from(fieldConfigs.entries())
-							.filter(([field, config]) => config.tab === 'implementation')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index (field)}
+							.filter(([_field, config]) => config.tab === 'implementation')
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], _index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -835,7 +852,7 @@
 								<span class="truncate">{field}</span>
 							</div>
 						{/each}
-						{#if Array.from(fieldConfigs.entries()).filter(([field, config]) => config.tab === 'implementation').length === 0}
+						{#if Array.from(fieldConfigs.entries()).filter(([_field, config]) => config.tab === 'implementation').length === 0}
 							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 								Drop fields here
 							</p>
@@ -863,8 +880,8 @@
 						aria-label="Custom fields drop zone"
 					>
 						{#each Array.from(fieldConfigs.entries())
-							.filter(([field, config]) => config.tab === 'custom')
-							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, config], index (field)}
+							.filter(([_field, config]) => config.tab === 'custom')
+							.sort((a, b) => a[1].displayOrder - b[1].displayOrder) as [field, _config], _index (field)}
 							<div
 								draggable="true"
 								on:dragstart={(e) => handleFieldDragStart(e, field)}
@@ -884,11 +901,94 @@
 								<span class="truncate">{field}</span>
 							</div>
 						{/each}
-						{#if Array.from(fieldConfigs.entries()).filter(([field, config]) => config.tab === 'custom').length === 0}
+						{#if Array.from(fieldConfigs.entries()).filter(([_field, config]) => config.tab === 'custom').length === 0}
 							<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
 								Drop fields here
 							</p>
 						{/if}
+					</div>
+				</div>
+
+				<!-- Mappings Tab Column -->
+				<div
+					class="border border-orange-300 dark:border-orange-700 rounded-lg bg-white dark:bg-gray-800"
+				>
+					<div
+						class="p-3 border-b border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20 rounded-t-lg"
+					>
+						<h4 class="text-sm font-semibold text-orange-700 dark:text-orange-300">Mappings Tab</h4>
+						<p class="text-xs text-orange-600 dark:text-orange-400 mt-1">
+							Pre-populate justification for a control mapping
+						</p>
+					</div>
+					<div
+						class="p-3 min-h-[400px] max-h-[600px] overflow-y-auto transition-colors
+						{dragOverTab === 'mappings' ? 'bg-orange-50 dark:bg-orange-900/10' : ''}"
+						on:dragover={(e) => handleTabDragOver(e, 'mappings')}
+						on:dragleave={handleTabDragLeave}
+						on:drop={(e) => handleTabDrop(e, 'mappings')}
+						role="region"
+						aria-label="Justifications tab drop zone"
+					>
+						<!-- Justification Fields -->
+						<div class="space-y-2">
+							{#if justificationFields.length > 0}
+								<!-- Display justification fields -->
+								{#each justificationFields as field, _index}
+									<div
+										draggable="false"
+										role="button"
+										tabindex="0"
+										class="flex items-center px-3 py-2 bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 rounded text-sm hover:bg-orange-200 dark:hover:bg-orange-800/30 transition-colors"
+									>
+										<span class="truncate">{field}</span>
+										<button
+											class="ml-auto text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400"
+											title="Remove from mappings"
+											on:click|stopPropagation={() => {
+												justificationFields = justificationFields.filter((f) => f !== field);
+											}}
+										>
+											×
+										</button>
+									</div>
+								{/each}
+							{:else}
+								<!-- Drop zone only shown when no fields are present -->
+								<div
+									role="region"
+									aria-label="Justification field drop zone"
+									class="p-4 transition-colors
+									{dragOverTab === 'mappings' ? 'bg-orange-50 dark:bg-orange-900/10' : ''}"
+									on:dragover={(e) => {
+										e.preventDefault();
+										handleTabDragOver(e, 'mappings');
+									}}
+									on:dragleave={handleTabDragLeave}
+									on:drop={(e) => {
+										e.preventDefault();
+										if (draggedField && fieldConfigs.has(draggedField)) {
+											// Add to justification fields if not already present
+											if (!justificationFields.includes(draggedField)) {
+												justificationFields = [...justificationFields, draggedField];
+											}
+
+											// Set tab assignment
+											const config = fieldConfigs.get(draggedField)!;
+											config.tab = 'mappings';
+											fieldConfigs.set(draggedField, config);
+											fieldConfigs = new Map(fieldConfigs); // Force reactivity
+
+											dragOverTab = null;
+										}
+									}}
+								>
+									<p class="text-xs text-gray-400 dark:text-gray-500 text-center py-4">
+										Drop fields here
+									</p>
+								</div>
+							{/if}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -908,15 +1008,15 @@
 							class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-600 dark:text-gray-400"
 						>
 							<tr>
-								{#each fields.slice(0, 5) as field}
+								{#each fields.slice(0, 5) as field (field)}
 									<th class="px-4 py-2">{field}</th>
 								{/each}
 							</tr>
 						</thead>
 						<tbody>
-							{#each sampleData as row}
+							{#each sampleData as row, i (i)}
 								<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-									{#each fields.slice(0, 5) as field}
+									{#each fields.slice(0, 5) as field (field)}
 										<td class="px-4 py-2">{row[field] || ''}</td>
 									{/each}
 								</tr>

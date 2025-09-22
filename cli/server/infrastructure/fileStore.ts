@@ -66,9 +66,13 @@ export class FileStore {
 	 * Get simple filename from control ID
 	 */
 	private getControlFilename(controlId: string): string {
-		// Sanitize control ID for filename (replace invalid characters including dots)
-		// This ensures consistency with imported files that use underscores
-		const sanitized = controlId.replace(/[^\w\-]/g, '_');
+		// Sanitize control ID for filename, preserving the first dash
+		// AC-1.1 -> AC-1_1, AC-10.3 -> AC-10_3, but AC-1 stays AC-1
+		// eslint-disable-next-line no-useless-escape
+		const sanitized = controlId.replace(/^([A-Z]+)-(.*)/, (match, prefix, suffix) => {
+			// Preserve the first dash, replace other non-word chars with underscores
+			return `${prefix}-${suffix.replace(/[^\w]/g, '_')}`;
+		});
 		return `${sanitized}.yaml`;
 	}
 
@@ -120,6 +124,7 @@ export class FileStore {
 		// We need to handle both cases
 
 		// Convert control ID to filename format (AC-1.1 -> AC-1_1)
+		// eslint-disable-next-line no-useless-escape
 		const sanitizedId = controlId.replace(/[^\w\-]/g, '_');
 
 		// Try flat structure first (atomic controls)
@@ -137,9 +142,12 @@ export class FileStore {
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
-						// If the filename has underscores, convert back to dots
-						// AC-10_3 -> AC-10.3, but leave AC-10 as-is
-						parsed.id = controlId.replace(/_(\d)/g, '.$1');
+						try {
+							parsed.id = getControlId(parsed, this.baseDir);
+						} catch (error) {
+							// Fallback to the controlId parameter if getControlId fails
+							parsed.id = controlId;
+						}
 					}
 					return parsed as Control;
 				} catch (error) {
@@ -169,9 +177,12 @@ export class FileStore {
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
-						// If the filename has underscores, convert back to dots
-						// AC-10_3 -> AC-10.3, but leave AC-10 as-is
-						parsed.id = controlId.replace(/_(\d)/g, '.$1');
+						try {
+							parsed.id = getControlId(parsed, this.baseDir);
+						} catch (error) {
+							// Fallback to the controlId parameter if getControlId fails
+							parsed.id = controlId;
+						}
 					}
 					return parsed as Control;
 				} catch (error) {
@@ -410,7 +421,10 @@ export class FileStore {
 		const controlId = mapping.control_id;
 		const family = this.getControlFamily(controlId);
 		const familyDir = join(this.mappingsDir, family);
-		const mappingFile = join(familyDir, `${controlId}-mappings.yaml`);
+		const mappingFile = join(
+			familyDir,
+			`${controlId.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`
+		);
 
 		// Ensure family directory exists
 		if (!existsSync(familyDir)) {
@@ -543,7 +557,10 @@ export class FileStore {
 		for (const [controlId, controlMappings] of mappingsByControl) {
 			const family = this.getControlFamily(controlId);
 			const familyDir = join(this.mappingsDir, family);
-			const mappingFile = join(familyDir, `${controlId}-mappings.yaml`);
+			const mappingFile = join(
+				familyDir,
+				`${controlId.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`
+			);
 
 			// Ensure family directory exists
 			if (!existsSync(familyDir)) {

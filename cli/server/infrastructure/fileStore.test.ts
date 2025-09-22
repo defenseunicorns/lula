@@ -4,8 +4,8 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { FileStore } from './fileStore';
 import type { Control, Mapping } from '../types';
+import { FileStore } from './fileStore';
 
 vi.mock('./controlHelpers', () => ({
 	getControlId: vi.fn((control: Partial<Control>) => {

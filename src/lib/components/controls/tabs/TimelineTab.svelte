@@ -3,15 +3,14 @@
 
 <script lang="ts">
 	import { TimelineItem } from '$components/version-control';
-	import type { Control } from '$lib/types';
 	import { EmptyState } from '../../ui';
 
 	interface Props {
-		control: Control;
+		// control: Control;
 		timeline?: any; // Timeline type from control.timeline
 	}
 
-	let { control, timeline }: Props = $props();
+	let { timeline }: Props = $props();
 
 	const commits = $derived(timeline?.commits || []);
 </script>
@@ -26,7 +25,7 @@
 	{:else if commits.length > 0}
 		<div class="mb-4">
 			<div class="space-y-6">
-				{#each commits as commit, index}
+				{#each commits as commit, index (index)}
 					<TimelineItem {commit} showConnector={index < commits.length - 1} />
 				{/each}
 			</div>

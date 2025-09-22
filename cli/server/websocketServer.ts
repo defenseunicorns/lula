@@ -311,6 +311,7 @@ class WebSocketManager {
 								const possibleFilenames = [
 									`${control.id}.yaml`,
 									`${control.id.replace(/\./g, '_')}.yaml`, // AC-1.1 -> AC-1_1.yaml
+									// eslint-disable-next-line no-useless-escape
 									`${control.id.replace(/[^\w\-]/g, '_')}.yaml` // General sanitization
 								];
 
@@ -354,7 +355,7 @@ class WebSocketManager {
 									});
 
 									// Also get mapping file history
-									const mappingFilename = `${control.id}-mappings.yaml`;
+									const mappingFilename = `${control.id.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`;
 									const mappingPath = join(currentPath, 'mappings', family, mappingFilename);
 									let mappingHistory: any = { commits: [], totalCommits: 0 };
 
@@ -571,33 +572,36 @@ class WebSocketManager {
 				};
 			}
 
-			// For initial state, only send essential control fields for the list view
-			// Full control data will be loaded on demand
+			// For initial state, send all schema fields that exist in controls
+			// This ensures consistency with sendStateInChunks behavior
+			// we implemented this because there was a bug in our filter behavior
 			const controlsMetadata = Array.from(state.controlsCache.values()).map((control) => {
 				if (!control.id) {
 					control.id = getControlId(control, currentPath);
 				}
 
-				// Extract only the fields needed for overview tab and list display
+				// Always include id and family as they're essential
 				const metadata: any = {
 					id: control.id,
 					family: control.family
 				};
 
-				// Include all overview tab fields from the field schema
-				const fieldSchema = (controlSetData as any).fieldSchema?.fields || {};
-				for (const [fieldName, fieldConfig] of Object.entries(fieldSchema)) {
-					if ((fieldConfig as any).tab === 'overview' && control[fieldName] !== undefined) {
+				// Include all fields defined in the field schema
+				const fieldSchema =
+					(controlSetData as any).fieldSchema?.fields ||
+					(controlSetData as any).field_schema?.fields ||
+					{};
+				for (const [fieldName] of Object.entries(fieldSchema)) {
+					// Include field if it exists in the control
+					if (control[fieldName] !== undefined) {
 						metadata[fieldName] = control[fieldName];
 					}
 				}
 
-				// Always include commonly needed fields for list display
-				if (control.title !== undefined) metadata.title = control.title;
-				if (control.implementation_status !== undefined)
-					metadata.implementation_status = control.implementation_status;
-				if (control.compliance_status !== undefined)
-					metadata.compliance_status = control.compliance_status;
+				// If no schema, include all fields from the control
+				if (Object.keys(fieldSchema).length === 0) {
+					Object.assign(metadata, control);
+				}
 
 				return metadata;
 			});
@@ -668,8 +672,11 @@ class WebSocketManager {
 				};
 
 				// Include all fields defined in the field schema
-				if (controlSetData.field_schema?.fields) {
-					for (const [fieldName] of Object.entries(controlSetData.field_schema.fields)) {
+				const schemaFields =
+					(controlSetData as any).field_schema?.fields ||
+					(controlSetData as any).fieldSchema?.fields;
+				if (schemaFields) {
+					for (const [fieldName] of Object.entries(schemaFields)) {
 						// Include field if it exists in the control
 						if ((control as Record<string, unknown>)[fieldName] !== undefined) {
 							summary[fieldName] = (control as Record<string, unknown>)[fieldName];

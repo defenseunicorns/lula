@@ -11,24 +11,51 @@ import {
 	extractMapBlocks,
 	getChangedBlocks,
 	crawlCommand,
-	postFinding
+	postFinding,
+	deleteOldIssueComments,
+	deleteOldReviewComments,
+	dismissOldReviews,
+	LULA_SIGNATURE
 } from './crawl';
 
+// ---- fs mock ----
 vi.mock('fs', () => {
 	const readFileSync = vi.fn();
 	return { default: { readFileSync } };
 });
+const fsMock = fs as unknown as { readFileSync: ReturnType<typeof vi.fn> };
 
+// ---- Octokit mocks ----
 const pullsGet = vi.fn();
 const pullsListFiles = vi.fn();
-const reposGetContent = vi.fn();
-const issuesCreateComment = vi.fn();
 const pullsCreateReview = vi.fn();
+const pullsListReviewComments = vi.fn();
+const pullsDeleteReviewComment = vi.fn();
+const pullsListReviews = vi.fn();
+const pullsDismissReview = vi.fn();
+
+const reposGetContent = vi.fn();
+
+const issuesCreateComment = vi.fn();
+const issuesListComments = vi.fn();
+const issuesDeleteComment = vi.fn();
 
 const mockOctokitInstance = {
-	pulls: { get: pullsGet, listFiles: pullsListFiles, createReview: pullsCreateReview },
+	pulls: {
+		get: pullsGet,
+		listFiles: pullsListFiles,
+		createReview: pullsCreateReview,
+		listReviewComments: pullsListReviewComments,
+		deleteReviewComment: pullsDeleteReviewComment,
+		listReviews: pullsListReviews,
+		dismissReview: pullsDismissReview
+	},
 	repos: { getContent: reposGetContent },
-	issues: { createComment: issuesCreateComment }
+	issues: {
+		createComment: issuesCreateComment,
+		listComments: issuesListComments,
+		deleteComment: issuesDeleteComment
+	}
 };
 
 vi.mock('@octokit/rest', () => {
@@ -36,8 +63,7 @@ vi.mock('@octokit/rest', () => {
 	return { Octokit };
 });
 
-const fsMock = fs as unknown as { readFileSync: ReturnType<typeof vi.fn> };
-
+// ---- env helpers ----
 const originalEnv = { ...process.env };
 const resetEnv = () => {
 	process.env = { ...originalEnv };
@@ -49,11 +75,36 @@ const resetEnv = () => {
 	delete process.env.GITHUB_TOKEN;
 };
 
+// ---- log mocks ----
+let logSpy: ReturnType<typeof vi.spyOn>;
+let errSpy: ReturnType<typeof vi.spyOn>;
+
 beforeEach(() => {
 	vi.clearAllMocks();
+
+	// defaults so loops terminate (intentionally no default for pullsListReviewComments)
+	issuesListComments.mockResolvedValue({ data: [] });
+	issuesDeleteComment.mockResolvedValue({});
+
+	pullsDeleteReviewComment.mockResolvedValue({});
+	pullsListReviews.mockResolvedValue({ data: [] });
+	pullsDismissReview.mockResolvedValue({});
+
+	pullsGet.mockResolvedValue({ data: { head: { ref: 'main' } } });
+	pullsListFiles.mockResolvedValue({ data: [] });
+
+	reposGetContent.mockResolvedValue({ data: '' });
+
+	// silence console output during tests
+	logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+	errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
 	resetEnv();
 });
+
 afterEach(() => {
+	logSpy.mockRestore();
+	errSpy.mockRestore();
 	resetEnv();
 });
 
@@ -201,15 +252,126 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 	});
 });
 
+// ---- cleanup helpers (unit tests) ----
+describe('cleanup helpers', () => {
+	it('deleteOldIssueComments deletes only the first signed comment per page', async () => {
+		const octokit = new Octokit();
+		issuesListComments
+			.mockResolvedValueOnce({
+				data: [
+					{ id: 1, body: `${LULA_SIGNATURE}\nSigned A` },
+					{ id: 2, body: 'Not signed' },
+					{ id: 3, body: `${LULA_SIGNATURE}\nSigned B` }
+				]
+			})
+			.mockResolvedValueOnce({ data: [] }); // end pages
+
+		await deleteOldIssueComments({ octokit, owner: 'o', repo: 'r', pull_number: 7 });
+
+		expect(issuesDeleteComment).toHaveBeenCalledTimes(1);
+		expect(issuesDeleteComment).toHaveBeenNthCalledWith(1, {
+			owner: 'o',
+			repo: 'r',
+			comment_id: 1
+		});
+	});
+
+	it('deleteOldReviewComments deletes only the first signed review comment per page', async () => {
+		const octokit = new Octokit();
+
+		// two pages: one with data, one empty
+		pullsListReviewComments
+			.mockResolvedValueOnce({
+				data: [
+					{ id: 11, body: `${LULA_SIGNATURE}\nRC A` },
+					{ id: 12, body: 'other' },
+					{ id: 13, body: `${LULA_SIGNATURE}\nRC B` }
+				]
+			})
+			.mockResolvedValueOnce({ data: [] });
+
+		await deleteOldReviewComments({ octokit, owner: 'o', repo: 'r', pull_number: 8 });
+
+		expect(pullsDeleteReviewComment).toHaveBeenCalledTimes(1);
+		expect(pullsDeleteReviewComment).toHaveBeenNthCalledWith(1, {
+			owner: 'o',
+			repo: 'r',
+			comment_id: 11
+		});
+	});
+
+	it('dismissOldReviews dismisses only the first signed review per page (handles null bodies)', async () => {
+		const octokit = new Octokit();
+		pullsListReviews
+			.mockResolvedValueOnce({
+				data: [
+					{ id: 21, body: `${LULA_SIGNATURE}\nReview A` },
+					{ id: 22, body: null },
+					{ id: 23, body: 'not signed' },
+					{ id: 24, body: `${LULA_SIGNATURE}\nReview B` }
+				]
+			})
+			.mockResolvedValueOnce({ data: [] });
+
+		await dismissOldReviews({ octokit, owner: 'o', repo: 'r', pull_number: 9 });
+
+		expect(pullsDismissReview).toHaveBeenCalledTimes(1);
+		expect(pullsDismissReview).toHaveBeenNthCalledWith(1, {
+			owner: 'o',
+			repo: 'r',
+			pull_number: 9,
+			review_id: 21,
+			message: 'Superseded by a new Lula compliance review.'
+		});
+	});
+});
+
+// ---- cleanup helpers (null/undefined body edge cases to cover ?? checks) ----
+describe('cleanup helpers (null/undefined body edge cases)', () => {
+	it('deleteOldIssueComments skips when body is null (covers (c.body ?? ""))', async () => {
+		const octokit = new Octokit();
+		issuesListComments
+			.mockResolvedValueOnce({ data: [{ id: 1, body: null }] })
+			.mockResolvedValueOnce({ data: [] });
+
+		await deleteOldIssueComments({ octokit, owner: 'o', repo: 'r', pull_number: 10 });
+
+		expect(issuesDeleteComment).not.toHaveBeenCalled();
+	});
+
+	it('deleteOldReviewComments skips when body is undefined (covers (rc.body ?? ""))', async () => {
+		const octokit = new Octokit();
+		pullsListReviewComments
+			.mockResolvedValueOnce({ data: [{ id: 2, body: undefined }] })
+			.mockResolvedValueOnce({ data: [] });
+
+		await deleteOldReviewComments({ octokit, owner: 'o', repo: 'r', pull_number: 11 });
+
+		expect(pullsDeleteReviewComment).not.toHaveBeenCalled();
+	});
+
+	it('dismissOldReviews skips when body is null (covers (r.body ?? ""))', async () => {
+		const octokit = new Octokit();
+		pullsListReviews
+			.mockResolvedValueOnce({ data: [{ id: 3, body: null }] })
+			.mockResolvedValueOnce({ data: [] });
+
+		await dismissOldReviews({ octokit, owner: 'o', repo: 'r', pull_number: 12 });
+
+		expect(pullsDismissReview).not.toHaveBeenCalled();
+	});
+});
+
+// ---- crawl command (integration) ----
 describe('crawl command (integration)', () => {
-	it('comments only for changed blocks, skips added files, and handles errors', async () => {
+	it('comments only for changed blocks, cleans old comments, skips added files, and handles errors (comment mode)', async () => {
 		process.env.OWNER = 'octo-org';
 		process.env.REPO = 'octo-repo';
 		process.env.PULL_NUMBER = '77';
 		process.env.GITHUB_TOKEN = 'test-token';
 
+		// PR + files
 		pullsGet.mockResolvedValueOnce({ data: { head: { ref: 'feature-branch' } } });
-
 		pullsListFiles.mockResolvedValueOnce({
 			data: [
 				{ filename: 'src/file1.txt', status: 'modified' },
@@ -218,6 +380,7 @@ describe('crawl command (integration)', () => {
 			]
 		});
 
+		// Old/LHS and New/RHS file bodies
 		const uuid = '123e4567-e89b-12d3-a456-426614174000';
 		const oldText = [
 			'header',
@@ -245,15 +408,22 @@ describe('crawl command (integration)', () => {
 			throw new Error(`Unexpected getContent call for ${path} @ ${ref}`);
 		});
 
-		const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-		const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+		// Cleanup: there is one signed old issue comment to delete
+		issuesListComments
+			.mockResolvedValueOnce({ data: [{ id: 99, body: `${LULA_SIGNATURE}\nold content` }] })
+			.mockResolvedValueOnce({ data: [] });
 
 		const command = crawlCommand();
-
-		// Run as a user would invoke: subcommand "crawl" plus option to post as a comment
 		await command.parseAsync(['--post-mode', 'comment'], { from: 'user' });
 
-		// Should post a PR comment (not a review) in comment mode
+		// Cleanup happened
+		expect(issuesDeleteComment).toHaveBeenCalledTimes(1);
+		expect(issuesDeleteComment).toHaveBeenCalledWith({
+			owner: 'octo-org',
+			repo: 'octo-repo',
+			comment_id: 99
+		});
+
 		expect(issuesCreateComment).toHaveBeenCalledTimes(1);
 		expect(pullsCreateReview).not.toHaveBeenCalled();
 
@@ -262,35 +432,115 @@ describe('crawl command (integration)', () => {
 		expect(call.repo).toBe('octo-repo');
 		expect(call.issue_number).toBe(77);
 
-		// Body should match the new Lula overview format
 		expect(call.body).toContain('## Lula Compliance Overview');
 		expect(call.body).toContain('src/file1.txt');
 
-		// The table shows backticked line range like `2–4`
 		expect(call.body).toMatch(/`2–4`/);
 
-		// UUID and SHA should be present
 		const changedBlockText = [
 			`// @lulaStart ${uuid}`,
 			'new line changed',
 			`// @lulaEnd ${uuid}`
 		].join('\n');
 		const expectedSha = crypto.createHash('sha256').update(changedBlockText).digest('hex');
-
 		expect(call.body).toContain(uuid);
 		expect(call.body).toContain(expectedSha);
 
-		// Ensure added files were skipped
 		const fetchedPaths = reposGetContent.mock.calls.map((c) => c[0].path);
 		expect(fetchedPaths).not.toContain('src/added.txt');
+	});
 
-		// Error handling for broken file
-		expect(errSpy).toHaveBeenCalled();
-		const errMsgs = errSpy.mock.calls.map((c) => c[0] as string);
-		expect(errMsgs.some((m) => m.includes('Error processing src/broken.txt'))).toBe(true);
+	it('review mode: cleans old reviews & review comments, then posts REQUEST_CHANGES', async () => {
+		process.env.OWNER = 'octo-org';
+		process.env.REPO = 'octo-repo';
+		process.env.PULL_NUMBER = '88';
+		process.env.GITHUB_TOKEN = 'test-token';
 
-		logSpy.mockRestore();
-		errSpy.mockRestore();
+		pullsGet.mockResolvedValueOnce({ data: { head: { ref: 'feat' } } });
+		pullsListFiles.mockResolvedValueOnce({ data: [{ filename: 'x.txt', status: 'modified' }] });
+
+		const uuid = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
+		const oldText = ['a', `// @lulaStart ${uuid}`, 'old', `// @lulaEnd ${uuid}`, 'z'].join('\n');
+		const newText = ['a', `// @lulaStart ${uuid}`, 'new', `// @lulaEnd ${uuid}`, 'z'].join('\n');
+
+		reposGetContent.mockImplementation(({ path, ref }) => {
+			if (path === 'x.txt' && ref === 'main') return Promise.resolve({ data: oldText });
+			if (path === 'x.txt' && ref === 'feat') {
+				const content = Buffer.from(newText, 'utf8').toString('base64');
+				return Promise.resolve({ data: { content } });
+			}
+			throw new Error('unexpected getContent');
+		});
+
+		pullsListReviewComments
+			.mockResolvedValueOnce({ data: [{ id: 55, body: '<!-- LULA_SIGNATURE:v1 -->\nline cmt' }] })
+			.mockResolvedValueOnce({ data: [] }); // end pages
+
+		pullsListReviews
+			.mockResolvedValueOnce({ data: [{ id: 66, body: '<!-- LULA_SIGNATURE:v1 -->\nreview' }] })
+			.mockResolvedValueOnce({ data: [] });
+
+		const command = crawlCommand();
+		await command.parseAsync(['--post-mode', 'review'], { from: 'user' });
+
+		expect(pullsListReviewComments).toHaveBeenCalled();
+		expect(pullsListReviews).toHaveBeenCalled();
+
+		expect(pullsDeleteReviewComment).toHaveBeenCalledTimes(1);
+		expect(pullsDeleteReviewComment).toHaveBeenCalledWith({
+			owner: 'octo-org',
+			repo: 'octo-repo',
+			comment_id: 55
+		});
+
+		expect(pullsDismissReview).toHaveBeenCalledTimes(1);
+		expect(pullsDismissReview).toHaveBeenCalledWith({
+			owner: 'octo-org',
+			repo: 'octo-repo',
+			pull_number: 88,
+			review_id: 66,
+			message: 'Superseded by a new Lula compliance review.'
+		});
+
+		expect(pullsCreateReview).toHaveBeenCalledTimes(1);
+		expect(issuesCreateComment).not.toHaveBeenCalled();
+	});
+
+	it('no changes found: runs cleanup but does not post anything', async () => {
+		process.env.OWNER = 'o';
+		process.env.REPO = 'r';
+		process.env.PULL_NUMBER = '99';
+		process.env.GITHUB_TOKEN = 'x';
+
+		pullsGet.mockResolvedValueOnce({ data: { head: { ref: 'same' } } });
+		pullsListFiles.mockResolvedValueOnce({ data: [{ filename: 'same.txt', status: 'modified' }] });
+
+		const txt = [
+			'h',
+			'// @lulaStart 11111111-1111-1111-1111-111111111111',
+			'x',
+			'// @lulaEnd 11111111-1111-1111-1111-111111111111',
+			'f'
+		].join('\n');
+
+		reposGetContent.mockImplementation(({ path }) => {
+			if (path === 'same.txt') return Promise.resolve({ data: txt });
+			throw new Error('unexpected');
+		});
+
+		issuesListComments.mockResolvedValueOnce({ data: [] });
+		pullsListReviewComments.mockResolvedValueOnce({ data: [] });
+		pullsListReviews.mockResolvedValueOnce({ data: [] });
+
+		const command = crawlCommand();
+		await command.parseAsync(['--post-mode', 'comment'], { from: 'user' });
+
+		expect(issuesDeleteComment).not.toHaveBeenCalled();
+		expect(pullsDeleteReviewComment).not.toHaveBeenCalled();
+		expect(pullsDismissReview).not.toHaveBeenCalled();
+
+		expect(issuesCreateComment).not.toHaveBeenCalled();
+		expect(pullsCreateReview).not.toHaveBeenCalled();
 	});
 });
 

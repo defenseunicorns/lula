@@ -99,7 +99,7 @@
 	<!-- Existing Mappings -->
 	{#if mappings.length > 0}
 		<div class="space-y-4">
-			{#each mappings as mapping}
+			{#each mappings as mapping (mapping.uuid)}
 				{#if editingMapping && editingMapping.uuid === mapping.uuid}
 					<!-- Edit Form in place of the mapping being edited -->
 					<div

@@ -38,7 +38,7 @@
 			class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white disabled:opacity-50 disabled:cursor-not-allowed focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:focus:ring-blue-400"
 		>
 			<option value="">-- Select --</option>
-			{#each field.options as option}
+			{#each field.options as option (option)}
 				<option value={option}>{option}</option>
 			{/each}
 		</select>

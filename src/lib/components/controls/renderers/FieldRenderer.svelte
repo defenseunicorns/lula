@@ -12,7 +12,7 @@
 		readonly?: boolean;
 	}
 
-	let { fieldName, field, value, readonly = true }: Props = $props();
+	let { fieldName, field, value }: Props = $props();
 
 	const displayName = $derived(
 		field?.original_name || fieldName.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase())

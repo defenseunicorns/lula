@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
+import crypto from 'crypto';
 import { parse as parseCSVSync } from 'csv-parse/sync';
 import express from 'express';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
@@ -15,6 +16,12 @@ import { getServerState } from './serverState';
 // Type definitions
 interface SpreadsheetRow {
 	[key: string]: any;
+}
+
+interface MappingData {
+	control_id: string;
+	justification: string;
+	uuid: string;
 }
 
 const router: express.Router = express.Router();
@@ -88,6 +95,17 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 			controlSetName = 'Imported Control Set',
 			controlSetDescription = 'Imported from spreadsheet'
 		} = req.body;
+
+		// Parse justification fields if provided
+		let justificationFields: string[] = [];
+		if (req.body.justificationFields) {
+			try {
+				justificationFields = JSON.parse(req.body.justificationFields);
+				debug('Justification fields received:', justificationFields);
+			} catch (e) {
+				console.error('Failed to parse justification fields:', e);
+			}
+		}
 
 		debug('Import parameters received:', {
 			controlIdField,
@@ -292,7 +310,7 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 		if (req.body.fieldSchema) {
 			try {
 				frontendFieldSchema = JSON.parse(req.body.fieldSchema);
-			} catch (e) {
+			} catch {
 				// Failed to parse fieldSchema
 			}
 		}
@@ -404,11 +422,11 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				usage_percentage: usagePercentage,
 				required: isControlIdField ? true : (frontendConfig?.required ?? usagePercentage > 95),
 				visible: frontendConfig?.tab !== 'hidden',
-				show_in_table: isControlIdField ? true : metadata.maxLength <= 100 && usagePercentage > 30,
-				editable: isControlIdField ? false : true,
-				display_order: isControlIdField ? 1 : (frontendConfig?.displayOrder ?? displayOrder++),
-				category: isControlIdField ? 'core' : category,
-				tab: isControlIdField ? 'overview' : frontendConfig?.tab || undefined
+				show_in_table: isControlIdField ? true : metadata.maxLength <= 100 && usagePercentage > 30, // Always show control ID in table
+				editable: isControlIdField ? false : true, // Control ID is not editable
+				display_order: isControlIdField ? 1 : (frontendConfig?.displayOrder ?? displayOrder++), // Control ID is always first
+				category: isControlIdField ? 'core' : category, // Control ID is always core
+				tab: isControlIdField ? 'overview' : frontendConfig?.tab || undefined // Use frontend config or default
 			};
 
 			// Only add options for select fields
@@ -444,11 +462,19 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 
 		// Create controls directory and write individual control files
 		const controlsDir = join(baseDir, 'controls');
+		const mappingsDir = join(baseDir, 'mappings');
 
 		families.forEach((familyControls, family) => {
+			// Create family directories for both controls and mappings
 			const familyDir = join(controlsDir, family);
+			const familyMappingsDir = join(mappingsDir, family);
+
 			if (!existsSync(familyDir)) {
 				mkdirSync(familyDir, { recursive: true });
+			}
+
+			if (!existsSync(familyMappingsDir)) {
+				mkdirSync(familyMappingsDir, { recursive: true });
 			}
 
 			familyControls.forEach((control) => {
@@ -465,10 +491,24 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				const fileName = `${controlIdStr.replace(/[^a-zA-Z0-9-]/g, '_')}.yaml`;
 				const filePath = join(familyDir, fileName);
 
+				// Create mapping file path
+				const mappingFileName = `${controlIdStr.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`;
+				const mappingFilePath = join(familyMappingsDir, mappingFileName);
+
 				// Filter control to only include fields that are in the field schema (not excluded)
 				const filteredControl: SpreadsheetRow = {};
 
-				// Always include family
+				// Prepare mapping data with empty justification
+				const mappingData: MappingData = {
+					control_id: controlIdStr,
+					justification: '',
+					uuid: crypto.randomUUID()
+				};
+
+				// Collect justification content from all specified fields
+				const justificationContents: string[] = [];
+
+				// Always include family in control file
 				if (control.family !== undefined) {
 					filteredControl.family = control.family;
 				}
@@ -477,6 +517,16 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 				Object.keys(control).forEach((fieldName) => {
 					// Skip family as it's already added
 					if (fieldName === 'family') return;
+
+					// Check if this field is in the justification fields list
+					if (
+						justificationFields.includes(fieldName) &&
+						control[fieldName] !== undefined &&
+						control[fieldName] !== null
+					) {
+						// Add to justification contents
+						justificationContents.push(control[fieldName]);
+					}
 
 					// Check if field is in the frontend schema (meaning it was assigned to a tab)
 					const isInFrontendSchema = frontendFieldSchema?.some((f) => f.fieldName === fieldName);
@@ -490,7 +540,20 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 					}
 				});
 
+				// Write control file
 				writeFileSync(filePath, yaml.dump(filteredControl));
+
+				// Combine all justification contents with line breaks
+				if (justificationContents.length > 0) {
+					mappingData.justification = justificationContents.join('\n\n');
+				}
+
+				// Write mapping file if it has justification content
+				if (mappingData.justification && mappingData.justification.trim() !== '') {
+					// Format as an array with a single mapping entry
+					const mappingArray = [mappingData];
+					writeFileSync(mappingFilePath, yaml.dump(mappingArray));
+				}
 			});
 		});
 
@@ -983,7 +1046,8 @@ router.post('/parse-excel', upload.single('file'), async (req, res) => {
 			preview:
 				row
 					.slice(0, 4)
-					.filter((v) => v != null)
+					.filter((v) => v !== null)
+					.filter((v) => v !== undefined)
 					.join(', ') + (row.length > 4 ? ', ...' : '')
 		}));
 

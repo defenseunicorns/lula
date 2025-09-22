@@ -11,7 +11,7 @@ type FileContentResponse = {
 	encoding: 'base64' | string;
 };
 const closingBody = `\n\n---\n\n<sub>**Tip:** Customize your compliance reviews with <a href="https://github.com/defenseunicorns/lula.git" class="Link--inTextBlock" target="_blank" rel="noopener noreferrer">Lula</a>.</sub>`;
-
+export const LULA_SIGNATURE = '<!-- LULA_SIGNATURE:v1 -->';
 // Add a post mode union for future expansion
 type PostMode = 'review' | 'comment';
 
@@ -198,6 +198,7 @@ export function getChangedBlocks(
 
 	return changed;
 }
+
 /**
  * Defines the "crawl" command for the CLI.
  *
@@ -213,6 +214,7 @@ export function crawlCommand(): Command {
 				.default('review')
 		)
 		.action(async (opts) => {
+			let leavePost = false;
 			const { owner, repo, pull_number } = getPRContext();
 			console.log(`Analyzing PR #${pull_number} in ${owner}/${repo} for compliance changes...`);
 			const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
@@ -222,6 +224,7 @@ export function crawlCommand(): Command {
 			const { data: files } = await octokit.pulls.listFiles({ owner, repo, pull_number });
 
 			let commentBody =
+				`${LULA_SIGNATURE}\n` +
 				`## Lula Compliance Overview\n\n` +
 				`Please review the changes to ensure they meet compliance standards.\n\n` +
 				`### Reviewed Changes\n\n` +
@@ -229,7 +232,6 @@ export function crawlCommand(): Command {
 
 			for (const file of files) {
 				if (file.status === 'added') continue;
-				console.log(`Commenting regarding \`${file.filename}\`.`);
 				try {
 					const [oldText, newText] = await Promise.all([
 						fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: 'main' }),
@@ -239,6 +241,8 @@ export function crawlCommand(): Command {
 					const changedBlocks = getChangedBlocks(oldText, newText);
 
 					for (const block of changedBlocks) {
+						console.log(`Commenting regarding \`${file.filename}\`.`);
+						leavePost = true;
 						commentBody += `\n\n---\n| File | Lines Changed |\n` + `| ---- | ------------- |\n`;
 						const newBlockText = newText
 							.split('\n')
@@ -252,7 +256,13 @@ export function crawlCommand(): Command {
 					console.error(`Error processing ${file.filename}: ${err}`);
 				}
 			}
-			if (files.length > 0) {
+			if (opts.postMode === 'comment') {
+				await deleteOldIssueComments({ octokit, owner, repo, pull_number });
+			} else {
+				await dismissOldReviews({ octokit, owner, repo, pull_number });
+				await deleteOldReviewComments({ octokit, owner, repo, pull_number });
+			}
+			if (leavePost) {
 				await postFinding({
 					octokit,
 					postMode: opts.postMode,
@@ -266,4 +276,109 @@ export function crawlCommand(): Command {
 				console.log(`\n${header}\n${underline}\n\n${commentBody + closingBody}\n\n`);
 			}
 		});
+}
+
+export async function deleteOldIssueComments({
+	octokit,
+	owner,
+	repo,
+	pull_number
+}: {
+	octokit: Octokit;
+	owner: string;
+	repo: string;
+	pull_number: number;
+}): Promise<void> {
+	let page = 1;
+	while (true) {
+		const { data: comments } = await octokit.issues.listComments({
+			owner,
+			repo,
+			issue_number: pull_number,
+			per_page: 100,
+			page
+		});
+		if (!comments.length) break;
+
+		for (const c of comments) {
+			const hasSignature = (c.body ?? '').includes(LULA_SIGNATURE);
+			if (hasSignature) {
+				await octokit.issues.deleteComment({ owner, repo, comment_id: c.id });
+				break;
+			}
+		}
+		page++;
+	}
+}
+
+export async function deleteOldReviewComments({
+	octokit,
+	owner,
+	repo,
+	pull_number
+}: {
+	octokit: Octokit;
+	owner: string;
+	repo: string;
+	pull_number: number;
+}): Promise<void> {
+	let page = 1;
+	while (true) {
+		const { data: reviewComments } = await octokit.pulls.listReviewComments({
+			owner,
+			repo,
+			pull_number,
+			per_page: 100,
+			page
+		});
+		if (!reviewComments.length) break;
+
+		for (const rc of reviewComments) {
+			const hasSignature = (rc.body ?? '').includes(LULA_SIGNATURE);
+			if (hasSignature) {
+				await octokit.pulls.deleteReviewComment({ owner, repo, comment_id: rc.id });
+				break;
+			}
+		}
+		page++;
+	}
+}
+
+export async function dismissOldReviews({
+	octokit,
+	owner,
+	repo,
+	pull_number
+}: {
+	octokit: Octokit;
+	owner: string;
+	repo: string;
+	pull_number: number;
+}): Promise<void> {
+	let page = 1;
+	while (true) {
+		const { data: reviews } = await octokit.pulls.listReviews({
+			owner,
+			repo,
+			pull_number,
+			per_page: 100,
+			page
+		});
+		if (!reviews.length) break;
+
+		for (const r of reviews) {
+			const hasSignature = (r.body ?? '').includes(LULA_SIGNATURE);
+			if (hasSignature) {
+				await octokit.pulls.dismissReview({
+					owner,
+					repo,
+					pull_number,
+					review_id: r.id,
+					message: 'Superseded by a new Lula compliance review.'
+				});
+				break;
+			}
+		}
+		page++;
+	}
 }

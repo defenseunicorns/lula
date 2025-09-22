@@ -4,16 +4,16 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { Dropdown, SearchBar, Tooltip } from '$components/ui';
+	import { SearchBar, Tooltip } from '$components/ui';
+	import FilterBuilder from '$components/ui/FilterBuilder.svelte';
 	import type { Control, FieldSchema } from '$lib/types';
 	import { appState } from '$lib/websocket';
-	import { complianceStore, searchTerm, selectedFamily } from '$stores/compliance';
-	import { Filter, Information } from 'carbon-icons-svelte';
+	import { complianceStore, searchTerm, activeFilters, getOperatorLabel } from '$stores/compliance';
+	import { Information } from 'carbon-icons-svelte';
 	import { derived } from 'svelte/store';
 
-	// Derive controls and families from appState
+	// Derive controls from appState
 	const controls = derived(appState, ($state) => $state.controls || []);
-	const families = derived(appState, ($state) => $state.families || []);
 	const loading = derived(appState, ($state) => !$state.isConnected);
 
 	// Derive controls with mappings
@@ -104,24 +104,62 @@
 
 	// Create filtered controls with mappings
 	const filteredControlsWithMappings = derived(
-		[controlsWithMappings, selectedFamily, searchTerm],
-		([$controlsWithMappings, $selectedFamily, $searchTerm]) => {
+		[controlsWithMappings, searchTerm, activeFilters],
+		([$controlsWithMappings, $searchTerm, $activeFilters]) => {
 			let results = $controlsWithMappings;
 
-			if ($selectedFamily) {
-				results = results.filter((c) => {
-					const family =
-						(c as any)?._metadata?.family ||
-						(c as any)?.family ||
-						(c as any)?.['control-acronym']?.split('-')[0] ||
-						'';
-					return family === $selectedFamily;
-				});
-			}
-
+			// Apply search term
 			if ($searchTerm) {
 				const term = $searchTerm.toLowerCase();
 				results = results.filter((c) => JSON.stringify(c).toLowerCase().includes(term));
+			}
+
+			// Apply advanced filters
+			if ($activeFilters.length > 0) {
+				results = results.filter((control) => {
+					// Control must match all filters
+					return $activeFilters.every(filter => {
+						const dynamicControl = control as Record<string, unknown>;
+						const fieldValue = dynamicControl[filter.fieldName];
+						
+						switch (filter.operator) {
+							case 'equals':
+								return fieldValue === filter.value;
+								
+							case 'not_equals':
+								return fieldValue !== filter.value;
+								
+							case 'exists':
+								return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
+								
+							case 'not_exists':
+								return fieldValue === undefined || fieldValue === null || fieldValue === '';
+								
+							case 'includes':
+								if (typeof fieldValue === 'string') {
+									return fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
+								} else if (Array.isArray(fieldValue)) {
+									return fieldValue.some(item => 
+										String(item).toLowerCase().includes(String(filter.value).toLowerCase())
+									);
+								}
+								return false;
+								
+							case 'not_includes':
+								if (typeof fieldValue === 'string') {
+									return !fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
+								} else if (Array.isArray(fieldValue)) {
+									return !fieldValue.some(item => 
+										String(item).toLowerCase().includes(String(filter.value).toLowerCase())
+									);
+								}
+								return true;
+								
+							default:
+								return true;
+						}
+					});
+				});
 			}
 
 			return results;
@@ -130,32 +168,6 @@
 
 	function selectControl(control: Control) {
 		goto(`/control/${encodeURIComponent(control.id)}`);
-	}
-
-	function getStatusBadgeClass(status: string) {
-		switch (status) {
-			case 'Implemented':
-				return 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300';
-			case 'Planned':
-				return 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300';
-			case 'Not Implemented':
-				return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
-			default:
-				return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
-		}
-	}
-
-	function getComplianceBadgeClass(status: string) {
-		switch (status) {
-			case 'Compliant':
-				return 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300';
-			case 'Non-Compliant':
-				return 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300';
-			case 'Not Assessed':
-				return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
-			default:
-				return 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300';
-		}
 	}
 
 	function extractDescriptionFromNested(data: any): string {
@@ -184,24 +196,6 @@
 			}
 		}
 		return 'No description available';
-	}
-
-	// Helper to determine if a field should be truncated and show tooltip
-	function shouldTruncateField(field: FieldSchema | undefined, value: string): boolean {
-		if (!value) return false;
-		
-		// Always show tooltip for textarea fields if content is long
-		if (field?.ui_type === 'textarea' || field?.ui_type === 'long_text') {
-			return value.length > 100; // Lower threshold for long text fields
-		}
-		
-		// For short_text fields, only show if really long
-		if (field?.ui_type === 'short_text') {
-			return value.length > 200;
-		}
-		
-		// Default for unknown field types
-		return value.length > 150;
 	}
 
 	// Get truncation length based on field type
@@ -243,64 +237,53 @@
 				</span>
 			</div>
 
-			<!-- Search Bar, Family Filter, and Export -->
+			<!-- Search Bar, Filter, and Export -->
 			<div class="flex gap-3">
 				<div class="flex-1">
 					<SearchBar />
 				</div>
+				
+				<!-- Filter Builder -->
 				<div class="flex-shrink-0">
-					<Dropdown
-						buttonLabel={$selectedFamily || 'All Families'}
-						buttonIcon={Filter}
-						buttonClass="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
-						dropdownClass="w-64"
-					>
-						{#snippet children()}
-							<div class="space-y-1">
-								<button
-									onclick={() => {
-										complianceStore.setSelectedFamily(null);
-									}}
-									class="w-full text-left px-3 py-2 text-sm rounded-md transition-colors duration-200 flex items-center justify-between {$selectedFamily ===
-									null
-										? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
-										: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}"
-								>
-									<span>All Families</span>
-									<span class="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-full">
-										{$controls.length}
-									</span>
-								</button>
-
-								{#each $families as family}
-									{@const familyCount = $controls.filter((c) => {
-										const controlFamily =
-											(c as any)?._metadata?.family ||
-											(c as any)?.family ||
-											(c as any)?.['control-acronym']?.split('-')[0] ||
-											'';
-										return controlFamily === family;
-									}).length}
-									<button
-										onclick={() => {
-											complianceStore.setSelectedFamily(family);
-										}}
-										class="w-full text-left px-3 py-2 text-sm rounded-md transition-colors duration-200 flex items-center justify-between {$selectedFamily ===
-										family
-											? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200'
-											: 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}"
-									>
-										<span>{family}</span>
-										<span class="text-xs bg-gray-200 dark:bg-gray-600 px-2 py-1 rounded-full">
-											{familyCount}
-										</span>
-									</button>
-								{/each}
-							</div>
-						{/snippet}
-					</Dropdown>
+					<FilterBuilder />
 				</div>
 			</div>
+			
+			<!-- Active Filters Summary -->
+			{#if $activeFilters.length > 0}
+				<div class="mt-2 flex flex-wrap gap-2">
+					{#each $activeFilters as filter, index (index)}
+						<div class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300">
+							<span>{filter.fieldName}: </span>
+							{#if filter.operator === 'exists' || filter.operator === 'not_exists'}
+								<span>{getOperatorLabel(filter.operator).toLowerCase()}</span>
+							{:else if filter.operator === 'equals'}
+								<span>= {filter.value}</span>
+							{:else if filter.operator === 'not_equals'}
+								<span>≠ {filter.value}</span>
+							{:else}
+								<span>{getOperatorLabel(filter.operator).toLowerCase()} "{filter.value}"</span>
+							{/if}
+							<button 
+								onclick={() => complianceStore.removeFilter(index)}
+								class="ml-1 text-blue-700 dark:text-blue-300 hover:text-blue-900 dark:hover:text-blue-100"
+								aria-label="Remove filter"
+							>
+								×
+							</button>
+						</div>
+					{/each}
+					
+					{#if $activeFilters.length > 1}
+						<button 
+							onclick={() => complianceStore.clearFilters()}
+							class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+						>
+							Clear all
+						</button>
+					{/if}
+				</div>
+			{/if}
 		</div>
 
 		<!-- Controls Table -->
@@ -315,7 +298,7 @@
 						class="grid gap-4 px-6 py-3"
 						style="grid-template-columns: repeat({tableColumns.length + 1}, minmax(0, 1fr)); max-width: 100%;"
 					>
-						{#each tableColumns as { fieldName, field }}
+						{#each tableColumns as { fieldName, field }, index (index)} 
 							<div
 								class="text-left text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wider"
 							>
@@ -364,7 +347,7 @@
 			<!-- Scrollable Table Body -->
 			<div class="flex-1 overflow-auto">
 				<div class="divide-y divide-gray-200 dark:divide-gray-700">
-					{#each $filteredControlsWithMappings as control}
+					{#each $filteredControlsWithMappings as control, index (index)}
 						{@const rawDescription = (() => {
 							// Cast control to any to allow dynamic field access
 							const anyControl = control as any;
@@ -407,7 +390,7 @@
 								tabindex="0"
 								aria-label="Select control {control.id}"
 							>
-								{#each tableColumns as { fieldName, field }}
+								{#each tableColumns as { fieldName, field }, index (index)}
 									{@const value = (control as any)[fieldName]}
 									<div class="flex flex-col justify-center">
 										{#if field.ui_type === 'select' && value}
@@ -582,15 +565,14 @@
 					</svg>
 					<h3 class="mt-4 text-lg font-medium text-gray-900 dark:text-white">No controls found</h3>
 					<p class="mt-2 text-sm text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
-						{#if $searchTerm}
-							No controls match your search criteria. Try adjusting your search terms or clearing
-							filters.
-						{:else if $selectedFamily}
-							No controls available in this family. Select a different family or check your data.
+						{#if $activeFilters.length > 0}
+							No controls match your filter criteria. Try adjusting or removing some filters.
+						{:else if $searchTerm}
+							No controls match your search criteria. Try adjusting your search terms.
 						{:else if $controls.length === 0}
 							No controls have been imported yet.
 						{:else}
-							No controls available. Select a different family or check your data.
+							No controls available. Check your data.
 						{/if}
 					</p>
 					{#if $controls.length === 0}
