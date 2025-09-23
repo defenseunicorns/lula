@@ -15,7 +15,7 @@
 	let { children } = $props();
 
 	let hasCheckedInitialRedirect = false;
-	
+
 	let exportDialogOpen = $state(false);
 	let exportFormat = $state<'csv' | 'excel'>('csv');
 	let columnHeaders = $state<Array<{ value: string; label: string }>>([]);
@@ -33,7 +33,7 @@
 
 			const pathParts = currentPath.split('/');
 			const dirName = pathParts[pathParts.length - 1];
-			
+
 			const sheetDir = encodeURIComponent(dirName);
 			const response = await fetch(`/api/${sheetDir}/export-column-headers`);
 			if (response.ok) {
@@ -72,11 +72,13 @@
 		}
 	}
 
-	async function handleExportWithColumn(event: CustomEvent<{ format: string; mappingsColumn: string }>) {
+	async function handleExportWithColumn(
+		event: CustomEvent<{ format: string; mappingsColumn: string }>
+	) {
 		try {
 			const { format, mappingsColumn } = event.detail;
 			const exportUrl = `/api/export-controls?format=${format}&mappingsColumn=${encodeURIComponent(mappingsColumn)}`;
-			
+
 			const link = document.createElement('a');
 			link.href = exportUrl;
 			link.download = '';
@@ -290,12 +292,11 @@
 	{/if}
 </div>
 
-
-		<ExportColumnDialog
-			bind:isOpen={exportDialogOpen}
-			format={exportFormat}
-			columnHeaders={columnHeaders}
-			defaultColumn={defaultColumn}
-			on:export={handleExportWithColumn}
-			on:cancel={() => {}}
-		/>
+<ExportColumnDialog
+	bind:isOpen={exportDialogOpen}
+	format={exportFormat}
+	{columnHeaders}
+	{defaultColumn}
+	on:export={handleExportWithColumn}
+	on:cancel={() => {}}
+/>

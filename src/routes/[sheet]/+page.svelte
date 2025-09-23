@@ -16,7 +16,7 @@
 			// Extract just the directory name from the full path for comparison
 			const pathParts = $appState.currentPath.split('/');
 			const currentDirName = pathParts[pathParts.length - 1];
-			
+
 			if (currentDirName !== decodeURIComponent(sheetParam)) {
 				wsClient.switchControlSet(decodeURIComponent(sheetParam));
 			}

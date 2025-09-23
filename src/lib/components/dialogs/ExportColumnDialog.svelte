@@ -17,7 +17,12 @@
 		defaultColumn: string;
 	}
 
-	let { isOpen = $bindable(), format, columnHeaders = [], defaultColumn = 'Mappings' }: ExportColumnDialogProps = $props();
+	let {
+		isOpen = $bindable(),
+		format,
+		columnHeaders = [],
+		defaultColumn = 'Mappings'
+	}: ExportColumnDialogProps = $props();
 
 	const dispatch = createEventDispatcher<{
 		export: { format: string; mappingsColumn: string };
@@ -91,15 +96,18 @@
 					<Close class="w-6 h-6" />
 				</button>
 			</div>
-			
+
 			<!-- Content -->
 			<div class="mb-6">
 				<p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
 					Choose which column should contain the mappings data:
 				</p>
-				
+
 				<div class="space-y-2">
-					<label for="column-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+					<label
+						for="column-select"
+						class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+					>
 						Mappings Column
 					</label>
 					<select
@@ -112,10 +120,11 @@
 						{/each}
 					</select>
 				</div>
-				
+
 				<div class="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md">
 					<p class="text-xs text-blue-600 dark:text-blue-400">
-						<strong>Note:</strong> Mappings data will be formatted as "status: description..." in the selected column.
+						<strong>Note:</strong> Mappings data will be formatted as "status: description..." in the
+						selected column.
 					</p>
 				</div>
 			</div>

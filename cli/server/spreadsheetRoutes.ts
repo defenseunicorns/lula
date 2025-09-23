@@ -780,7 +780,12 @@ router.get('/export-controls', async (req, res) => {
 });
 
 // Export as CSV
-function exportAsCSV(controls: any[], metadata: any, mappingsColumn: string, res: express.Response) {
+function exportAsCSV(
+	controls: any[],
+	metadata: any,
+	mappingsColumn: string,
+	res: express.Response
+) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
@@ -820,14 +825,14 @@ function exportAsCSV(controls: any[], metadata: any, mappingsColumn: string, res
 	if (allFields.has('family')) {
 		const familySchema = fieldSchema['family'];
 		const displayName = familySchema?.original_name || 'Family';
-		
+
 		// Check if mappings should replace this family column
 		let fieldToUse = 'family';
 		if (allFields.has('mappings') && mappingsColumn.toLowerCase() === displayName.toLowerCase()) {
 			fieldToUse = 'mappings'; // Use mappings data instead of family data
 			allFields.delete('mappings'); // Remove mappings so it doesn't get added later
 		}
-		
+
 		fieldMapping.push({
 			fieldName: fieldToUse,
 			displayName: displayName
@@ -845,14 +850,14 @@ function exportAsCSV(controls: any[], metadata: any, mappingsColumn: string, res
 			// Use original_name if available, otherwise clean up the field name
 			const displayName =
 				schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
-			
+
 			// Check if mappings should replace this field's column
 			let fieldToUse = field;
 			if (allFields.has('mappings') && mappingsColumn.toLowerCase() === displayName.toLowerCase()) {
 				fieldToUse = 'mappings'; // Use mappings data instead of field data
 				allFields.delete('mappings'); // Remove mappings so it doesn't get added later
 			}
-			
+
 			// Only add if display name hasn't been used already (case-insensitive comparison)
 			if (!usedDisplayNames.has(displayName.toLowerCase())) {
 				fieldMapping.push({ fieldName: fieldToUse, displayName });
@@ -913,7 +918,12 @@ function exportAsCSV(controls: any[], metadata: any, mappingsColumn: string, res
 }
 
 // Export as CSV with column mapping support
-function exportAsCSVWithMapping(controls: any[], metadata: any, columnMappings: Record<string, string>, res: express.Response) {
+function exportAsCSVWithMapping(
+	controls: any[],
+	metadata: any,
+	columnMappings: Record<string, string>,
+	res: express.Response
+) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
@@ -927,41 +937,41 @@ function exportAsCSVWithMapping(controls: any[], metadata: any, columnMappings: 
 	// Build field list with display names, handling column mappings first
 	const fieldMapping: Array<{ fieldName: string; displayName: string }> = [];
 	const usedDisplayNames = new Set<string>(); // Track used display names to avoid duplicates (case-insensitive)
-	
+
 	// Track which fields are being remapped to avoid adding them twice
 	const remappedFields = new Set<string>();
-	Object.keys(columnMappings).forEach(sourceField => remappedFields.add(sourceField));
+	Object.keys(columnMappings).forEach((sourceField) => remappedFields.add(sourceField));
 
 	// Handle the control ID field first (might be 'control-acronym' or 'ap-acronym' etc)
 	if (allFields.has(controlIdField)) {
 		const idSchema = fieldSchema[controlIdField];
 		let displayName = idSchema?.original_name || 'Control ID';
 		let fieldName = controlIdField;
-		
+
 		// Check if this display name is being overwritten by a mapping
-		const mappingEntry = Object.entries(columnMappings).find(([_, targetName]) => 
-			targetName.toLowerCase() === displayName.toLowerCase()
+		const mappingEntry = Object.entries(columnMappings).find(
+			([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
 		);
-		
+
 		if (mappingEntry) {
 			fieldName = mappingEntry[0]; // Use the mapped field instead
 		}
-		
+
 		fieldMapping.push({ fieldName, displayName });
 		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete(controlIdField);
 	} else if (allFields.has('id')) {
 		let displayName = 'Control ID';
 		let fieldName = 'id';
-		
-		const mappingEntry = Object.entries(columnMappings).find(([_, targetName]) => 
-			targetName.toLowerCase() === displayName.toLowerCase()
+
+		const mappingEntry = Object.entries(columnMappings).find(
+			([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
 		);
-		
+
 		if (mappingEntry) {
 			fieldName = mappingEntry[0];
 		}
-		
+
 		fieldMapping.push({ fieldName, displayName });
 		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete('id');
@@ -972,16 +982,16 @@ function exportAsCSVWithMapping(controls: any[], metadata: any, columnMappings: 
 		const familySchema = fieldSchema['family'];
 		let displayName = familySchema?.original_name || 'Family';
 		let fieldName = 'family';
-		
+
 		// Check if Family column is being overwritten by a mapping
-		const mappingEntry = Object.entries(columnMappings).find(([_, targetName]) => 
-			targetName.toLowerCase() === displayName.toLowerCase()
+		const mappingEntry = Object.entries(columnMappings).find(
+			([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
 		);
-		
+
 		if (mappingEntry) {
 			fieldName = mappingEntry[0]; // Use the mapped field instead (e.g., 'mappings')
 		}
-		
+
 		fieldMapping.push({ fieldName, displayName });
 		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete('family');
@@ -989,22 +999,25 @@ function exportAsCSVWithMapping(controls: any[], metadata: any, columnMappings: 
 
 	// Add remaining fields using their original names from schema
 	Array.from(allFields)
-		.filter((field) => field !== 'mappings' && field !== 'mappings_count' && !remappedFields.has(field))
+		.filter(
+			(field) => field !== 'mappings' && field !== 'mappings_count' && !remappedFields.has(field)
+		)
 		.sort()
 		.forEach((field) => {
 			const schema = fieldSchema[field];
-			let displayName = schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+			let displayName =
+				schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 			let fieldName = field;
-			
+
 			// Check if this display name is being overwritten by a mapping
-			const mappingEntry = Object.entries(columnMappings).find(([_, targetName]) => 
-				targetName.toLowerCase() === displayName.toLowerCase()
+			const mappingEntry = Object.entries(columnMappings).find(
+				([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
 			);
-			
+
 			if (mappingEntry) {
 				fieldName = mappingEntry[0];
 			}
-			
+
 			// Only add if display name hasn't been used already (case-insensitive comparison)
 			if (!usedDisplayNames.has(displayName.toLowerCase())) {
 				fieldMapping.push({ fieldName, displayName });
@@ -1055,7 +1068,12 @@ function exportAsCSVWithMapping(controls: any[], metadata: any, columnMappings: 
 }
 
 // Export as Excel
-async function exportAsExcel(controls: any[], metadata: any, mappingsColumn: string, res: express.Response) {
+async function exportAsExcel(
+	controls: any[],
+	metadata: any,
+	mappingsColumn: string,
+	res: express.Response
+) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
@@ -1195,7 +1213,7 @@ router.get('/:sheetDir/export-column-headers', async (req, res) => {
 	try {
 		const state = getServerState();
 		const sheetDir = decodeURIComponent(req.params.sheetDir);
-		
+
 		let metadata: any = {};
 		try {
 			const metadataPath = join(state.CONTROL_SET_DIR, sheetDir, 'lula.yaml');
@@ -1245,7 +1263,8 @@ router.get('/:sheetDir/export-column-headers', async (req, res) => {
 			}
 
 			const displayName =
-				schema?.original_name || fieldName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+				schema?.original_name ||
+				fieldName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
 			columnHeaders.push({
 				value: displayName,
 				label: displayName
@@ -1316,7 +1335,6 @@ router.post('/:sheetDir/export-csv', async (req, res) => {
 
 			// Use custom export function with column mapping
 			return exportAsCSVWithMapping(controlsWithMappings, metadata, columnMappings, res);
-
 		} finally {
 			// Restore original control set directory
 			state.CONTROL_SET_DIR = originalControlSetDir;
