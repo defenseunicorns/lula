@@ -814,7 +814,12 @@ function exportAsCSVWithMapping(
 
 	// Track which fields are being remapped to avoid adding them twice
 	const remappedFields = new Set<string>();
-	Object.keys(columnMappings).forEach((sourceField) => remappedFields.add(sourceField));
+	// Only add to remappedFields if we're actually replacing an existing field, not adding mappings
+	Object.entries(columnMappings).forEach(([sourceField, targetName]) => {
+		if (targetName !== 'Mappings') {
+			remappedFields.add(sourceField);
+		}
+	});
 
 	// Also track which display names are being replaced
 	const replacedDisplayNames = new Set<string>();
@@ -918,7 +923,7 @@ function exportAsCSVWithMapping(
 				}
 		});
 
-	// Add mappings only if not already mapped to another column
+	// Add mappings column if available and not remapped to another column
 	if (allFields.has('mappings') && !remappedFields.has('mappings')) {
 		fieldMapping.push({ fieldName: 'mappings', displayName: 'Mappings' });
 	}
@@ -991,7 +996,12 @@ async function exportAsExcelWithMapping(
 	const fieldMapping: Array<{ fieldName: string; displayName: string }> = [];
 	const usedDisplayNames = new Set<string>();
 	const remappedFields = new Set<string>();
-	Object.keys(columnMappings).forEach((sourceField) => remappedFields.add(sourceField));
+	// Only add to remappedFields if we're actually replacing an existing field, not adding mappings
+	Object.entries(columnMappings).forEach(([sourceField, targetName]) => {
+		if (targetName !== 'Mappings') {
+			remappedFields.add(sourceField);
+		}
+	});
 
 	// Handle the control ID field first
 	if (allFields.has(controlIdField)) {
@@ -1072,7 +1082,7 @@ async function exportAsExcelWithMapping(
 			}
 		});
 
-	// Add mappings only if not already mapped to another column
+	// Add mappings column if available and not remapped to another column
 	if (allFields.has('mappings') && !remappedFields.has('mappings')) {
 		fieldMapping.push({ fieldName: 'mappings', displayName: 'Mappings' });
 	}
