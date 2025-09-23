@@ -714,6 +714,7 @@ function extractFamilyFromControlId(controlId: string): string {
 router.get('/export-controls', async (req, res) => {
 	try {
 		const format = (req.query.format as string) || 'csv';
+		const mappingsColumn = (req.query.mappingsColumn as string) || 'Mappings';
 		const state = getServerState();
 		const fileStore = state.fileStore;
 
@@ -762,10 +763,10 @@ router.get('/export-controls', async (req, res) => {
 
 		switch (format.toLowerCase()) {
 			case 'csv':
-				return exportAsCSV(controlsWithMappings, metadata, res);
+				return exportAsCSV(controlsWithMappings, metadata, mappingsColumn, res);
 			case 'excel':
 			case 'xlsx':
-				return await exportAsExcel(controlsWithMappings, metadata, res);
+				return await exportAsExcel(controlsWithMappings, metadata, mappingsColumn, res);
 			case 'json':
 				return exportAsJSON(controlsWithMappings, metadata, res);
 			default:
@@ -778,7 +779,7 @@ router.get('/export-controls', async (req, res) => {
 });
 
 // Export as CSV
-function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
+function exportAsCSV(controls: any[], metadata: any, mappingsColumn: string, res: express.Response) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
@@ -791,31 +792,38 @@ function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
 
 	// Build field list with display names
 	const fieldMapping: Array<{ fieldName: string; displayName: string }> = [];
+	const usedDisplayNames = new Set<string>(); // Track used display names to avoid duplicates (case-insensitive)
 
 	// Handle the control ID field first (might be 'control-acronym' or 'ap-acronym' etc)
 	if (allFields.has(controlIdField)) {
 		const idSchema = fieldSchema[controlIdField];
+		const displayName = idSchema?.original_name || 'Control ID';
 		fieldMapping.push({
 			fieldName: controlIdField,
-			displayName: idSchema?.original_name || 'Control ID'
+			displayName: displayName
 		});
+		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete(controlIdField); // Remove so we don't add it twice
 	} else if (allFields.has('id')) {
 		// Fallback to 'id' field if control_id_field not found
+		const displayName = 'Control ID';
 		fieldMapping.push({
 			fieldName: 'id',
-			displayName: 'Control ID'
+			displayName: displayName
 		});
+		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete('id');
 	}
 
 	// Add family field second if it exists
 	if (allFields.has('family')) {
 		const familySchema = fieldSchema['family'];
+		const displayName = familySchema?.original_name || 'Family';
 		fieldMapping.push({
 			fieldName: 'family',
-			displayName: familySchema?.original_name || 'Family'
+			displayName: displayName
 		});
+		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete('family');
 	}
 
@@ -828,7 +836,12 @@ function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
 			// Use original_name if available, otherwise clean up the field name
 			const displayName =
 				schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
-			fieldMapping.push({ fieldName: field, displayName });
+			
+			// Only add if display name hasn't been used already (case-insensitive comparison)
+			if (!usedDisplayNames.has(displayName.toLowerCase())) {
+				fieldMapping.push({ fieldName: field, displayName });
+				usedDisplayNames.add(displayName.toLowerCase());
+			}
 		});
 
 	// Add mappings at the end
@@ -836,7 +849,7 @@ function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
 		fieldMapping.push({ fieldName: 'mappings_count', displayName: 'Mappings Count' });
 	}
 	if (allFields.has('mappings')) {
-		fieldMapping.push({ fieldName: 'mappings', displayName: 'Mappings' });
+		fieldMapping.push({ fieldName: 'mappings', displayName: mappingsColumn });
 	}
 
 	// Create CSV header with display names
@@ -877,7 +890,7 @@ function exportAsCSV(controls: any[], metadata: any, res: express.Response) {
 }
 
 // Export as Excel
-async function exportAsExcel(controls: any[], metadata: any, res: express.Response) {
+async function exportAsExcel(controls: any[], metadata: any, mappingsColumn: string, res: express.Response) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
@@ -914,7 +927,7 @@ async function exportAsExcel(controls: any[], metadata: any, res: express.Respon
 				(key === 'mappings_count'
 					? 'Mappings Count'
 					: key === 'mappings'
-						? 'Mappings'
+						? mappingsColumn
 						: key.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()));
 			const value = control[key];
 
@@ -1011,6 +1024,79 @@ function exportAsJSON(controls: any[], metadata: any, res: express.Response) {
 	res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
 	res.json(exportData);
 }
+
+// Get available column headers for export
+router.get('/:sheetDir/export-column-headers', async (req, res) => {
+	try {
+		const state = getServerState();
+		const sheetDir = decodeURIComponent(req.params.sheetDir);
+		
+		let metadata: any = {};
+		try {
+			const metadataPath = join(state.CONTROL_SET_DIR, sheetDir, 'lula.yaml');
+			if (existsSync(metadataPath)) {
+				const metadataContent = readFileSync(metadataPath, 'utf8');
+				metadata = yaml.load(metadataContent) as any;
+			} else {
+				return res.status(404).json({ error: `No lula.yaml file found in directory: ${sheetDir}` });
+			}
+		} catch (err) {
+			return res.status(500).json({ error: 'Failed to read lula.yaml file' });
+		}
+
+		const fieldSchema = metadata?.fieldSchema?.fields || {};
+		const controlIdField = metadata?.control_id_field || 'id';
+
+		const columnHeaders: Array<{ value: string; label: string }> = [];
+
+		if (fieldSchema[controlIdField]) {
+			const idSchema = fieldSchema[controlIdField];
+			const displayName = idSchema?.original_name || 'Control ID';
+			columnHeaders.push({
+				value: displayName,
+				label: displayName
+			});
+		} else {
+			columnHeaders.push({ value: 'Control ID', label: 'Control ID' });
+		}
+
+		if (fieldSchema['family']) {
+			const familySchema = fieldSchema['family'];
+			const displayName = familySchema?.original_name || 'Family';
+			columnHeaders.push({
+				value: displayName,
+				label: displayName
+			});
+		}
+
+		Object.entries(fieldSchema).forEach(([fieldName, schema]: [string, any]) => {
+			if (
+				fieldName === controlIdField ||
+				fieldName === 'family' ||
+				fieldName === 'mappings' ||
+				fieldName === 'mappings_count'
+			) {
+				return;
+			}
+
+			const displayName =
+				schema?.original_name || fieldName.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+			columnHeaders.push({
+				value: displayName,
+				label: displayName
+			});
+		});
+
+		columnHeaders.push({ value: 'Mappings', label: 'Mappings (Default)' });
+
+		res.json({
+			columnHeaders,
+			defaultColumn: 'Mappings'
+		});
+	} catch (error: any) {
+		res.status(500).json({ error: error.message });
+	}
+});
 
 // Parse Excel/CSV file for preview (used by frontend)
 router.post('/parse-excel', upload.single('file'), async (req, res) => {

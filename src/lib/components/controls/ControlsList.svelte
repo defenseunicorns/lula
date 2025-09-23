@@ -167,7 +167,18 @@
 	);
 
 	function selectControl(control: Control) {
-		goto(`/control/${encodeURIComponent(control.id)}`);
+		const currentPath = $appState.currentPath;
+		if (!currentPath) {
+			console.error('No current control set path available');
+			return;
+		}
+		
+		const pathParts = currentPath.split('/');
+		const dirName = pathParts[pathParts.length - 1];
+		
+		const encodedSheet = encodeURIComponent(dirName);
+		const encodedControlId = encodeURIComponent(control.id);
+		goto(`/${encodedSheet}/control/${encodedControlId}`);
 	}
 
 	function extractDescriptionFromNested(data: any): string {

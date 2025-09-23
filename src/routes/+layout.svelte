@@ -5,6 +5,7 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { ControlSetInfo } from '$components/control-sets';
+	import { ExportColumnDialog } from '$components/dialogs';
 	import { Dropdown } from '$components/ui';
 	import { appState, wsClient } from '$lib/websocket';
 	import { Code, DocumentExport, Download, LogoGithub } from 'carbon-icons-svelte';
@@ -14,17 +15,71 @@
 	let { children } = $props();
 
 	let hasCheckedInitialRedirect = false;
+	
+	let exportDialogOpen = $state(false);
+	let exportFormat = $state<'csv' | 'excel'>('csv');
+	let columnHeaders = $state<Array<{ value: string; label: string }>>([]);
+	let defaultColumn = $state('Mappings');
 
-	// Export controls function
-	async function exportControls(format: string) {
+	async function loadColumnHeaders() {
 		try {
-			// Build the export URL
-			const exportUrl = `/api/export-controls?format=${format}`;
+			const currentPath = $appState.currentPath;
+			if (!currentPath) {
+				console.error('No current control set path available');
+				columnHeaders = [{ value: 'Mappings', label: 'Mappings (Default)' }];
+				defaultColumn = 'Mappings';
+				return;
+			}
 
-			// Create a temporary link and trigger download
+			const pathParts = currentPath.split('/');
+			const dirName = pathParts[pathParts.length - 1];
+			
+			const sheetDir = encodeURIComponent(dirName);
+			const response = await fetch(`/api/${sheetDir}/export-column-headers`);
+			if (response.ok) {
+				const data = await response.json();
+				columnHeaders = data.columnHeaders || [];
+				defaultColumn = data.defaultColumn || 'Mappings';
+			} else {
+				console.error('Failed to load column headers');
+				columnHeaders = [{ value: 'Mappings', label: 'Mappings (Default)' }];
+				defaultColumn = 'Mappings';
+			}
+		} catch (error) {
+			console.error('Error loading column headers:', error);
+			columnHeaders = [{ value: 'Mappings', label: 'Mappings (Default)' }];
+			defaultColumn = 'Mappings';
+		}
+	}
+
+	async function exportControls(format: string) {
+		if (format === 'json') {
+			try {
+				const exportUrl = `/api/export-controls?format=${format}`;
+				const link = document.createElement('a');
+				link.href = exportUrl;
+				link.download = '';
+				document.body.appendChild(link);
+				link.click();
+				document.body.removeChild(link);
+			} catch (error) {
+				console.error('Export failed:', error);
+			}
+		} else {
+			exportFormat = format as 'csv' | 'excel';
+			await loadColumnHeaders();
+			exportDialogOpen = true;
+		}
+	}
+
+	async function handleExportWithColumn(event: CustomEvent<{ format: string; mappingsColumn: string }>) {
+		try {
+			const { format, mappingsColumn } = event.detail;
+			const exportUrl = `/api/export-controls?format=${format}&mappingsColumn=${encodeURIComponent(mappingsColumn)}`;
+			
 			const link = document.createElement('a');
 			link.href = exportUrl;
-			link.download = ''; // Let the server set the filename
+			link.download = '';
 			document.body.appendChild(link);
 			link.click();
 			document.body.removeChild(link);
@@ -234,3 +289,13 @@
 		{@render children()}
 	{/if}
 </div>
+
+
+		<ExportColumnDialog
+			bind:isOpen={exportDialogOpen}
+			format={exportFormat}
+			columnHeaders={columnHeaders}
+			defaultColumn={defaultColumn}
+			on:export={handleExportWithColumn}
+			on:cancel={() => {}}
+		/>
