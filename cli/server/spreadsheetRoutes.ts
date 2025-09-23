@@ -797,7 +797,7 @@ function exportAsCSVWithMapping(
 	res: express.Response
 ) {
 	console.log('MAPPING DEBUG: Column mappings received:', columnMappings);
-	
+
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
@@ -823,7 +823,9 @@ function exportAsCSVWithMapping(
 
 	// Also track which display names are being replaced
 	const replacedDisplayNames = new Set<string>();
-	Object.values(columnMappings).forEach((displayName) => replacedDisplayNames.add(displayName.toLowerCase()));
+	Object.values(columnMappings).forEach((displayName) =>
+		replacedDisplayNames.add(displayName.toLowerCase())
+	);
 
 	// Handle the control ID field first (might be 'control-acronym' or 'ap-acronym' etc)
 	if (allFields.has(controlIdField)) {
@@ -838,13 +840,15 @@ function exportAsCSVWithMapping(
 
 		if (mappingEntry) {
 			fieldName = mappingEntry[0]; // Use the mapped field instead (e.g., 'mappings')
-			console.log(`MAPPING DEBUG: Replacing field '${controlIdField}' (display: '${displayName}') with '${fieldName}'`);
+			console.log(
+				`MAPPING DEBUG: Replacing field '${controlIdField}' (display: '${displayName}') with '${fieldName}'`
+			);
 		}
 
 		fieldMapping.push({ fieldName, displayName });
 		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete(controlIdField);
-		
+
 		// If this field was replaced, mark it as remapped to prevent adding mappings separately
 		if (mappingEntry) {
 			remappedFields.add(fieldName);
@@ -879,48 +883,52 @@ function exportAsCSVWithMapping(
 
 		if (mappingEntry) {
 			fieldName = mappingEntry[0]; // Use the mapped field instead (e.g., 'mappings')
-			console.log(`MAPPING DEBUG: Replacing field 'family' (display: '${displayName}') with '${fieldName}'`);
+			console.log(
+				`MAPPING DEBUG: Replacing field 'family' (display: '${displayName}') with '${fieldName}'`
+			);
 		}
 
 		fieldMapping.push({ fieldName, displayName });
 		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete('family');
-		
+
 		// If this field was replaced, mark it as remapped to prevent adding mappings separately
 		if (mappingEntry) {
 			remappedFields.add(fieldName);
 		}
 	}
 
-		// Add remaining fields using their original names from schema
-		Array.from(allFields)
-			.filter(
-				(field) => field !== 'mappings' && field !== 'mappings_count' && !remappedFields.has(field)
-			)
-			.sort()
-			.forEach((field) => {
-				const schema = fieldSchema[field];
-				let displayName =
-					schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
-				let fieldName = field;
+	// Add remaining fields using their original names from schema
+	Array.from(allFields)
+		.filter(
+			(field) => field !== 'mappings' && field !== 'mappings_count' && !remappedFields.has(field)
+		)
+		.sort()
+		.forEach((field) => {
+			const schema = fieldSchema[field];
+			let displayName =
+				schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+			let fieldName = field;
 
-				// Check if this display name is being overwritten by a mapping
-				const mappingEntry = Object.entries(columnMappings).find(
-					([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
+			// Check if this display name is being overwritten by a mapping
+			const mappingEntry = Object.entries(columnMappings).find(
+				([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
+			);
+
+			if (mappingEntry) {
+				fieldName = mappingEntry[0];
+				console.log(
+					`MAPPING DEBUG: Replacing field '${field}' (display: '${displayName}') with '${fieldName}'`
 				);
+				// Mark this field as remapped to prevent adding mappings separately
+				remappedFields.add(fieldName);
+			}
 
-				if (mappingEntry) {
-					fieldName = mappingEntry[0];
-					console.log(`MAPPING DEBUG: Replacing field '${field}' (display: '${displayName}') with '${fieldName}'`);
-					// Mark this field as remapped to prevent adding mappings separately
-					remappedFields.add(fieldName);
-				}
-
-				// Only add if display name hasn't been used already (case-insensitive comparison)
-				if (!usedDisplayNames.has(displayName.toLowerCase())) {
-					fieldMapping.push({ fieldName, displayName });
-					usedDisplayNames.add(displayName.toLowerCase());
-				}
+			// Only add if display name hasn't been used already (case-insensitive comparison)
+			if (!usedDisplayNames.has(displayName.toLowerCase())) {
+				fieldMapping.push({ fieldName, displayName });
+				usedDisplayNames.add(displayName.toLowerCase());
+			}
 		});
 
 	// Add mappings column if available and not remapped to another column
