@@ -104,7 +104,8 @@ export async function loadAllData(): Promise<void> {
 		// Load mappings from mappings file
 		const mappings = await state.fileStore.loadMappings();
 		for (const mapping of mappings) {
-			state.mappingsCache.set(mapping.uuid, mapping);
+			const compositeKey = `${mapping.control_id}:${mapping.uuid}`;
+			state.mappingsCache.set(compositeKey, mapping);
 			addMappingToIndexes(mapping);
 		}
 		debug(`Loaded ${mappings.length} mappings`);
