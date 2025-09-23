@@ -786,135 +786,7 @@ function exportAsCSV(
 	mappingsColumn: string,
 	res: express.Response
 ) {
-	// Get field schema to use original names
-	const fieldSchema = metadata?.fieldSchema?.fields || {};
-	const controlIdField = metadata?.control_id_field || 'id';
-
-	// Get all unique field names from controls
-	const allFields = new Set<string>();
-	controls.forEach((control) => {
-		Object.keys(control).forEach((key) => allFields.add(key));
-	});
-
-	// Build field list with display names
-	const fieldMapping: Array<{ fieldName: string; displayName: string }> = [];
-	const usedDisplayNames = new Set<string>(); // Track used display names to avoid duplicates (case-insensitive)
-
-	// Handle the control ID field first (might be 'control-acronym' or 'ap-acronym' etc)
-	if (allFields.has(controlIdField)) {
-		const idSchema = fieldSchema[controlIdField];
-		const displayName = idSchema?.original_name || 'Control ID';
-		fieldMapping.push({
-			fieldName: controlIdField,
-			displayName: displayName
-		});
-		usedDisplayNames.add(displayName.toLowerCase());
-		allFields.delete(controlIdField); // Remove so we don't add it twice
-	} else if (allFields.has('id')) {
-		// Fallback to 'id' field if control_id_field not found
-		const displayName = 'Control ID';
-		fieldMapping.push({
-			fieldName: 'id',
-			displayName: displayName
-		});
-		usedDisplayNames.add(displayName.toLowerCase());
-		allFields.delete('id');
-	}
-
-	// Add family field second if it exists
-	if (allFields.has('family')) {
-		const familySchema = fieldSchema['family'];
-		const displayName = familySchema?.original_name || 'Family';
-
-		// Check if mappings should replace this family column
-		let fieldToUse = 'family';
-		if (allFields.has('mappings') && mappingsColumn.toLowerCase() === displayName.toLowerCase()) {
-			fieldToUse = 'mappings'; // Use mappings data instead of family data
-			allFields.delete('mappings'); // Remove mappings so it doesn't get added later
-		}
-
-		fieldMapping.push({
-			fieldName: fieldToUse,
-			displayName: displayName
-		});
-		usedDisplayNames.add(displayName.toLowerCase());
-		allFields.delete('family');
-	}
-
-	// Add remaining fields using their original names from schema
-	Array.from(allFields)
-		.filter((field) => field !== 'mappings' && field !== 'mappings_count') // Skip our added fields for now
-		.sort()
-		.forEach((field) => {
-			const schema = fieldSchema[field];
-			// Use original_name if available, otherwise clean up the field name
-			const displayName =
-				schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
-
-			// Check if mappings should replace this field's column
-			let fieldToUse = field;
-			if (allFields.has('mappings') && mappingsColumn.toLowerCase() === displayName.toLowerCase()) {
-				fieldToUse = 'mappings'; // Use mappings data instead of field data
-				allFields.delete('mappings'); // Remove mappings so it doesn't get added later
-			}
-
-			// Only add if display name hasn't been used already (case-insensitive comparison)
-			if (!usedDisplayNames.has(displayName.toLowerCase())) {
-				fieldMapping.push({ fieldName: fieldToUse, displayName });
-				usedDisplayNames.add(displayName.toLowerCase());
-			}
-		});
-
-	// Add mappings ONLY if the column name is different from existing ones
-	if (allFields.has('mappings_count')) {
-		const mappingsCountDisplayName = 'Mappings Count';
-		if (!usedDisplayNames.has(mappingsCountDisplayName.toLowerCase())) {
-			fieldMapping.push({ fieldName: 'mappings_count', displayName: mappingsCountDisplayName });
-			usedDisplayNames.add(mappingsCountDisplayName.toLowerCase());
-		}
-	}
-	if (allFields.has('mappings')) {
-		// Check if mappingsColumn name conflicts with existing columns
-		if (!usedDisplayNames.has(mappingsColumn.toLowerCase())) {
-			fieldMapping.push({ fieldName: 'mappings', displayName: mappingsColumn });
-		}
-	}
-
-	// Create CSV header with display names
-	const csvRows = [];
-	csvRows.push(fieldMapping.map((field) => `"${field.displayName}"`).join(','));
-
-	// Add control rows
-	controls.forEach((control) => {
-		const row = fieldMapping.map(({ fieldName }) => {
-			const value = control[fieldName];
-			if (value === undefined || value === null) return '""';
-
-			// Special handling for mappings
-			if (fieldName === 'mappings' && Array.isArray(value)) {
-				// Format mappings as a readable string
-				const mappingsStr = value
-					.map(
-						(m: any) =>
-							`${m.status}: ${m.description.substring(0, 50)}${m.description.length > 50 ? '...' : ''}`
-					)
-					.join('; ');
-				return `"${mappingsStr.replace(/"/g, '""')}"`;
-			}
-
-			if (Array.isArray(value)) return `"${value.join('; ').replace(/"/g, '""')}"`;
-			if (typeof value === 'object') return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
-			return `"${String(value).replace(/"/g, '""')}"`;
-		});
-		csvRows.push(row.join(','));
-	});
-
-	const csvContent = csvRows.join('\n');
-	const fileName = `${metadata?.name || 'controls'}_export_${Date.now()}.csv`;
-
-	res.setHeader('Content-Type', 'text/csv');
-	res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-	res.send(csvContent);
+	return exportAsCSVWithMapping(controls, metadata, { mappings: mappingsColumn }, res);
 }
 
 // Export as CSV with column mapping support
@@ -924,6 +796,8 @@ function exportAsCSVWithMapping(
 	columnMappings: Record<string, string>,
 	res: express.Response
 ) {
+	console.log('MAPPING DEBUG: Column mappings received:', columnMappings);
+	
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
@@ -942,6 +816,10 @@ function exportAsCSVWithMapping(
 	const remappedFields = new Set<string>();
 	Object.keys(columnMappings).forEach((sourceField) => remappedFields.add(sourceField));
 
+	// Also track which display names are being replaced
+	const replacedDisplayNames = new Set<string>();
+	Object.values(columnMappings).forEach((displayName) => replacedDisplayNames.add(displayName.toLowerCase()));
+
 	// Handle the control ID field first (might be 'control-acronym' or 'ap-acronym' etc)
 	if (allFields.has(controlIdField)) {
 		const idSchema = fieldSchema[controlIdField];
@@ -954,12 +832,18 @@ function exportAsCSVWithMapping(
 		);
 
 		if (mappingEntry) {
-			fieldName = mappingEntry[0]; // Use the mapped field instead
+			fieldName = mappingEntry[0]; // Use the mapped field instead (e.g., 'mappings')
+			console.log(`MAPPING DEBUG: Replacing field '${controlIdField}' (display: '${displayName}') with '${fieldName}'`);
 		}
 
 		fieldMapping.push({ fieldName, displayName });
 		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete(controlIdField);
+		
+		// If this field was replaced, mark it as remapped to prevent adding mappings separately
+		if (mappingEntry) {
+			remappedFields.add(fieldName);
+		}
 	} else if (allFields.has('id')) {
 		let displayName = 'Control ID';
 		let fieldName = 'id';
@@ -990,39 +874,48 @@ function exportAsCSVWithMapping(
 
 		if (mappingEntry) {
 			fieldName = mappingEntry[0]; // Use the mapped field instead (e.g., 'mappings')
+			console.log(`MAPPING DEBUG: Replacing field 'family' (display: '${displayName}') with '${fieldName}'`);
 		}
 
 		fieldMapping.push({ fieldName, displayName });
 		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete('family');
+		
+		// If this field was replaced, mark it as remapped to prevent adding mappings separately
+		if (mappingEntry) {
+			remappedFields.add(fieldName);
+		}
 	}
 
-	// Add remaining fields using their original names from schema
-	Array.from(allFields)
-		.filter(
-			(field) => field !== 'mappings' && field !== 'mappings_count' && !remappedFields.has(field)
-		)
-		.sort()
-		.forEach((field) => {
-			const schema = fieldSchema[field];
-			let displayName =
-				schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
-			let fieldName = field;
+		// Add remaining fields using their original names from schema
+		Array.from(allFields)
+			.filter(
+				(field) => field !== 'mappings' && field !== 'mappings_count' && !remappedFields.has(field)
+			)
+			.sort()
+			.forEach((field) => {
+				const schema = fieldSchema[field];
+				let displayName =
+					schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+				let fieldName = field;
 
-			// Check if this display name is being overwritten by a mapping
-			const mappingEntry = Object.entries(columnMappings).find(
-				([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
-			);
+				// Check if this display name is being overwritten by a mapping
+				const mappingEntry = Object.entries(columnMappings).find(
+					([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
+				);
 
-			if (mappingEntry) {
-				fieldName = mappingEntry[0];
-			}
+				if (mappingEntry) {
+					fieldName = mappingEntry[0];
+					console.log(`MAPPING DEBUG: Replacing field '${field}' (display: '${displayName}') with '${fieldName}'`);
+					// Mark this field as remapped to prevent adding mappings separately
+					remappedFields.add(fieldName);
+				}
 
-			// Only add if display name hasn't been used already (case-insensitive comparison)
-			if (!usedDisplayNames.has(displayName.toLowerCase())) {
-				fieldMapping.push({ fieldName, displayName });
-				usedDisplayNames.add(displayName.toLowerCase());
-			}
+				// Only add if display name hasn't been used already (case-insensitive comparison)
+				if (!usedDisplayNames.has(displayName.toLowerCase())) {
+					fieldMapping.push({ fieldName, displayName });
+					usedDisplayNames.add(displayName.toLowerCase());
+				}
 		});
 
 	// Add mappings only if not already mapped to another column
@@ -1074,48 +967,125 @@ async function exportAsExcel(
 	mappingsColumn: string,
 	res: express.Response
 ) {
+	return await exportAsExcelWithMapping(controls, metadata, { mappings: mappingsColumn }, res);
+}
+
+// Export as Excel with column mapping support
+async function exportAsExcelWithMapping(
+	controls: any[],
+	metadata: any,
+	columnMappings: Record<string, string>,
+	res: express.Response
+) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
 
-	// Prepare data for Excel with original field names
+	// Get all unique field names from controls
+	const allFields = new Set<string>();
+	controls.forEach((control) => {
+		Object.keys(control).forEach((key) => allFields.add(key));
+	});
+
+	// Build field list with display names using same logic as CSV
+	const fieldMapping: Array<{ fieldName: string; displayName: string }> = [];
+	const usedDisplayNames = new Set<string>();
+	const remappedFields = new Set<string>();
+	Object.keys(columnMappings).forEach((sourceField) => remappedFields.add(sourceField));
+
+	// Handle the control ID field first
+	if (allFields.has(controlIdField)) {
+		const idSchema = fieldSchema[controlIdField];
+		let displayName = idSchema?.original_name || 'Control ID';
+		let fieldName = controlIdField;
+
+		const mappingEntry = Object.entries(columnMappings).find(
+			([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
+		);
+
+		if (mappingEntry) {
+			fieldName = mappingEntry[0];
+		}
+
+		fieldMapping.push({ fieldName, displayName });
+		usedDisplayNames.add(displayName.toLowerCase());
+		allFields.delete(controlIdField);
+	} else if (allFields.has('id')) {
+		let displayName = 'Control ID';
+		let fieldName = 'id';
+
+		const mappingEntry = Object.entries(columnMappings).find(
+			([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
+		);
+
+		if (mappingEntry) {
+			fieldName = mappingEntry[0];
+		}
+
+		fieldMapping.push({ fieldName, displayName });
+		usedDisplayNames.add(displayName.toLowerCase());
+		allFields.delete('id');
+	}
+
+	// Add family field second if it exists
+	if (allFields.has('family')) {
+		const familySchema = fieldSchema['family'];
+		let displayName = familySchema?.original_name || 'Family';
+		let fieldName = 'family';
+
+		const mappingEntry = Object.entries(columnMappings).find(
+			([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
+		);
+
+		if (mappingEntry) {
+			fieldName = mappingEntry[0];
+		}
+
+		fieldMapping.push({ fieldName, displayName });
+		usedDisplayNames.add(displayName.toLowerCase());
+		allFields.delete('family');
+	}
+
+	// Add remaining fields using their original names from schema
+	Array.from(allFields)
+		.filter(
+			(field) => field !== 'mappings' && field !== 'mappings_count' && !remappedFields.has(field)
+		)
+		.sort()
+		.forEach((field) => {
+			const schema = fieldSchema[field];
+			let displayName =
+				schema?.original_name || field.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+			let fieldName = field;
+
+			const mappingEntry = Object.entries(columnMappings).find(
+				([_, targetName]) => targetName.toLowerCase() === displayName.toLowerCase()
+			);
+
+			if (mappingEntry) {
+				fieldName = mappingEntry[0];
+			}
+
+			if (!usedDisplayNames.has(displayName.toLowerCase())) {
+				fieldMapping.push({ fieldName, displayName });
+				usedDisplayNames.add(displayName.toLowerCase());
+			}
+		});
+
+	// Add mappings only if not already mapped to another column
+	if (allFields.has('mappings') && !remappedFields.has('mappings')) {
+		fieldMapping.push({ fieldName: 'mappings', displayName: 'Mappings' });
+	}
+
+	// Prepare data for Excel with the field mapping
 	const worksheetData = controls.map((control) => {
-		// Create a new object with original field names
 		const exportControl: any = {};
 
-		// Process control ID field first
-		if (control[controlIdField]) {
-			const idSchema = fieldSchema[controlIdField];
-			const idDisplayName = idSchema?.original_name || 'Control ID';
-			exportControl[idDisplayName] = control[controlIdField];
-		} else if (control.id) {
-			exportControl['Control ID'] = control.id;
-		}
-
-		// Process family field
-		if (control.family) {
-			const familySchema = fieldSchema['family'];
-			const familyDisplayName = familySchema?.original_name || 'Family';
-			exportControl[familyDisplayName] = control.family;
-		}
-
-		// Process all other fields
-		Object.keys(control).forEach((key) => {
-			// Skip if already processed or is our added field
-			if (key === controlIdField || key === 'id' || key === 'family') return;
-
-			const schema = fieldSchema[key];
-			const displayName =
-				schema?.original_name ||
-				(key === 'mappings_count'
-					? 'Mappings Count'
-					: key === 'mappings'
-						? mappingsColumn
-						: key.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()));
-			const value = control[key];
+		fieldMapping.forEach(({ fieldName, displayName }) => {
+			const value = control[fieldName];
 
 			// Special handling for mappings
-			if (key === 'mappings' && Array.isArray(value)) {
+			if (fieldName === 'mappings' && Array.isArray(value)) {
 				exportControl[displayName] = value
 					.map(
 						(m: any) =>
@@ -1130,6 +1100,7 @@ async function exportAsExcel(
 				exportControl[displayName] = value;
 			}
 		});
+
 		return exportControl;
 	});
 
