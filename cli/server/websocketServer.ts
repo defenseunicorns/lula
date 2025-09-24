@@ -166,8 +166,8 @@ class WebSocketManager {
 						// Save the mapping
 						await state.fileStore.saveMapping(mapping);
 
-						// Update the cache
-						state.mappingsCache.set(mapping.uuid, mapping);
+						const compositeKey = `${mapping.control_id}:${mapping.uuid}`;
+						state.mappingsCache.set(compositeKey, mapping);
 
 						// Update indexes
 						const family = mapping.control_id.split('-')[0];
@@ -204,8 +204,8 @@ class WebSocketManager {
 						// Save the mapping
 						await state.fileStore.saveMapping(mapping);
 
-						// Update the cache
-						state.mappingsCache.set(mapping.uuid, mapping);
+						const compositeKey = `${mapping.control_id}:${mapping.uuid}`;
+						state.mappingsCache.set(compositeKey, mapping);
 
 						// Send success response
 						ws.send(
@@ -226,13 +226,14 @@ class WebSocketManager {
 					const state = getServerState();
 					if (payload && payload.uuid) {
 						const uuid = payload.uuid as string;
+
 						const mapping = state.mappingsCache.get(uuid);
 
 						if (mapping) {
 							// Delete the mapping file
 							await state.fileStore.deleteMapping(uuid);
 
-							// Remove from cache
+							// Remove from cache using the composite key
 							state.mappingsCache.delete(uuid);
 
 							// Remove from indexes
