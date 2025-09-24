@@ -31,12 +31,25 @@
 
 	let selectedColumn = $state(defaultColumn);
 
-	// Reset selected column when dialog opens
+	// Reset selected column and focus when dialog opens
 	$effect(() => {
 		if (isOpen) {
 			selectedColumn = defaultColumn;
 		}
 	});
+
+	function focusSelect(node: HTMLSelectElement) {
+		if (isOpen) {
+			setTimeout(() => node.focus(), 0);
+		}
+		return {
+			update(newIsOpen: boolean) {
+				if (newIsOpen) {
+					setTimeout(() => node.focus(), 0);
+				}
+			}
+		};
+	}
 
 	function handleExport() {
 		dispatch('export', { format, mappingsColumn: selectedColumn });
@@ -77,13 +90,11 @@
 	>
 		<!-- Modal Content -->
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
-
+		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 		<div
 			class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-auto"
 			role="document"
 			onclick={(e) => e.stopPropagation()}
-			tabindex="0"
-			autofocus
 		>
 			<!-- Header -->
 			<div class="flex items-center justify-between mb-4">
@@ -114,6 +125,7 @@
 					</label>
 					<select
 						id="column-select"
+						use:focusSelect={isOpen}
 						bind:value={selectedColumn}
 						class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
 					>
