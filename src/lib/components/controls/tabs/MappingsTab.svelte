@@ -86,7 +86,8 @@
 			const uuidChanged = updatedMapping.uuid !== editingMapping.uuid;
 			
 			if (uuidChanged) {
-				await wsClient.deleteMapping(editingMapping.uuid);
+				const compositeId = `${control.id}:${editingMapping.uuid}`;
+				await wsClient.deleteMapping(compositeId);
 				await wsClient.createMapping(updatedMapping);
 			} else {
 				await wsClient.updateMapping(updatedMapping);
@@ -100,7 +101,8 @@
 
 	async function handleDeleteMapping(uuid: string) {
 		try {
-			await wsClient.deleteMapping(uuid);
+			const compositeId = `${control.id}:${uuid}`;
+			await wsClient.deleteMapping(compositeId);
 		} catch (error) {
 			console.error('Failed to delete mapping:', error);
 		}

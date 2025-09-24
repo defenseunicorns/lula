@@ -231,7 +231,7 @@ class WebSocketManager {
 						let compositeKey: string | undefined;
 
 						for (const [key, cachedMapping] of state.mappingsCache.entries()) {
-							if (cachedMapping.uuid === uuid) {
+							if (key === uuid) {
 								mapping = cachedMapping;
 								compositeKey = key;
 								break;
@@ -240,7 +240,7 @@ class WebSocketManager {
 
 						if (mapping && compositeKey) {
 							// Delete the mapping file
-							await state.fileStore.deleteMapping(uuid);
+							await state.fileStore.deleteMapping(compositeKey);
 
 							// Remove from cache using the composite key
 							state.mappingsCache.delete(compositeKey);

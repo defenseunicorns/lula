@@ -68,7 +68,7 @@ export class FileStore {
 	private getControlFilename(controlId: string): string {
 		// Sanitize control ID for filename, preserving the first dash
 		// AC-1.1 -> AC-1_1, AC-10.3 -> AC-10_3, but AC-1 stays AC-1
-		// eslint-disable-next-line no-useless-escape
+		 
 		const sanitized = controlId.replace(/^([A-Z]+)-(.*)/, (match, prefix, suffix) => {
 			// Preserve the first dash, replace other non-word chars with underscores
 			return `${prefix}-${suffix.replace(/[^\w]/g, '_')}`;
@@ -144,7 +144,7 @@ export class FileStore {
 					if (!parsed.id) {
 						try {
 							parsed.id = getControlId(parsed, this.baseDir);
-						} catch (error) {
+						} catch {
 							// Fallback to the controlId parameter if getControlId fails
 							parsed.id = controlId;
 						}
@@ -179,7 +179,7 @@ export class FileStore {
 					if (!parsed.id) {
 						try {
 							parsed.id = getControlId(parsed, this.baseDir);
-						} catch (error) {
+						} catch {
 							// Fallback to the controlId parameter if getControlId fails
 							parsed.id = controlId;
 						}
@@ -480,7 +480,9 @@ export class FileStore {
 				let mappings: Mapping[] = (yaml.load(content) as Mapping[]) || [];
 
 				const originalLength = mappings.length;
-				mappings = mappings.filter((m) => m.uuid !== uuid);
+				mappings = mappings.filter((m) => {
+					return `${m.control_id}:${m.uuid}` !== uuid;
+				});
 
 				// If we removed a mapping, save the file
 				if (mappings.length < originalLength) {
