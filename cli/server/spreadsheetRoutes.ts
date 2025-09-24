@@ -796,8 +796,6 @@ function exportAsCSVWithMapping(
 	columnMappings: Record<string, string>,
 	res: express.Response
 ) {
-	console.log('MAPPING DEBUG: Column mappings received:', columnMappings);
-
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
 	const controlIdField = metadata?.control_id_field || 'id';
@@ -839,10 +837,7 @@ function exportAsCSVWithMapping(
 		);
 
 		if (mappingEntry) {
-			fieldName = mappingEntry[0]; // Use the mapped field instead (e.g., 'mappings')
-			console.log(
-				`MAPPING DEBUG: Replacing field '${controlIdField}' (display: '${displayName}') with '${fieldName}'`
-			);
+			fieldName = mappingEntry[0];
 		}
 
 		fieldMapping.push({ fieldName, displayName });
@@ -882,10 +877,7 @@ function exportAsCSVWithMapping(
 		);
 
 		if (mappingEntry) {
-			fieldName = mappingEntry[0]; // Use the mapped field instead (e.g., 'mappings')
-			console.log(
-				`MAPPING DEBUG: Replacing field 'family' (display: '${displayName}') with '${fieldName}'`
-			);
+			fieldName = mappingEntry[0];
 		}
 
 		fieldMapping.push({ fieldName, displayName });
@@ -917,9 +909,6 @@ function exportAsCSVWithMapping(
 
 			if (mappingEntry) {
 				fieldName = mappingEntry[0];
-				console.log(
-					`MAPPING DEBUG: Replacing field '${field}' (display: '${displayName}') with '${fieldName}'`
-				);
 				// Mark this field as remapped to prevent adding mappings separately
 				remappedFields.add(fieldName);
 			}
