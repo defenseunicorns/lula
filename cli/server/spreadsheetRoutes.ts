@@ -1201,7 +1201,7 @@ router.get('/:sheetDir/export-column-headers', async (req, res) => {
 			} else {
 				return res.status(404).json({ error: `No lula.yaml file found in directory: ${sheetDir}` });
 			}
-		} catch (err) {
+		} catch {
 			return res.status(500).json({ error: 'Failed to read lula.yaml file' });
 		}
 
@@ -1264,7 +1264,7 @@ router.get('/:sheetDir/export-column-headers', async (req, res) => {
 router.post('/:sheetDir/export-csv', async (req, res) => {
 	try {
 		const sheetDir = req.params.sheetDir;
-		const { format = 'csv', columns = [], columnMappings = {} } = req.body;
+		const { format = 'csv', _columns = [], columnMappings = {} } = req.body;
 
 		const state = getServerState();
 		const originalControlSetDir = state.CONTROL_SET_DIR;
