@@ -227,23 +227,14 @@ class WebSocketManager {
 					if (payload && payload.uuid) {
 						const uuid = payload.uuid as string;
 
-						let mapping: Mapping | undefined;
-						let compositeKey: string | undefined;
+						const mapping = state.mappingsCache.get(uuid);
 
-						for (const [key, cachedMapping] of state.mappingsCache.entries()) {
-							if (key === uuid) {
-								mapping = cachedMapping;
-								compositeKey = key;
-								break;
-							}
-						}
-
-						if (mapping && compositeKey) {
+						if (mapping) {
 							// Delete the mapping file
-							await state.fileStore.deleteMapping(compositeKey);
+							await state.fileStore.deleteMapping(uuid);
 
 							// Remove from cache using the composite key
-							state.mappingsCache.delete(compositeKey);
+							state.mappingsCache.delete(uuid);
 
 							// Remove from indexes
 							const family = mapping.control_id.split('-')[0];
