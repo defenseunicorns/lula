@@ -68,7 +68,7 @@ export class FileStore {
 	private getControlFilename(controlId: string): string {
 		// Sanitize control ID for filename, preserving the first dash
 		// AC-1.1 -> AC-1_1, AC-10.3 -> AC-10_3, but AC-1 stays AC-1
-
+		 
 		const sanitized = controlId.replace(/^([A-Z]+)-(.*)/, (match, prefix, suffix) => {
 			// Preserve the first dash, replace other non-word chars with underscores
 			return `${prefix}-${suffix.replace(/[^\w]/g, '_')}`;
