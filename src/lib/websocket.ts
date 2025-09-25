@@ -127,106 +127,136 @@ class WebSocketClient {
 
 		switch (message.type) {
 			case 'connected':
-				console.log('WebSocket connection confirmed');
-				appState.update((state) => ({ ...state, isConnected: true }));
+				this.handleConnected();
 				break;
-
 			case 'state-update':
-				console.log('State update received');
-				// Update the entire app state with the payload
-				if (message.payload) {
-					appState.set({
-						...message.payload,
-						isConnected: true,
-						isSwitchingControlSet: false // Clear switching flag after state update
-					});
-				}
+				this.handleStateUpdate(message.payload);
 				break;
-
 			case 'metadata-update':
-				console.log('Metadata update received');
-				// Update metadata and control set info
-				if (message.payload) {
-					appState.update((state) => ({
-						...state,
-						...message.payload,
-						isConnected: true,
-						isSwitchingControlSet: false // Clear switching flag
-					}));
-				}
+				this.handleMetadataUpdate(message.payload);
 				break;
-
 			case 'controls-update':
-				console.log('Controls update received');
-				// Update just the controls array
-				if (message.payload) {
-					appState.update((state) => ({
-						...state,
-						controls: message.payload
-					}));
-				}
+				this.handleControlsUpdate(message.payload);
 				break;
-
 			case 'mappings-update':
-				console.log('Mappings update received');
-				// Update just the mappings array
-				if (message.payload) {
-					appState.update((state) => ({
-						...state,
-						mappings: message.payload
-					}));
-				}
+				this.handleMappingsUpdate(message.payload);
 				break;
-
 			case 'control-details':
-				console.log('Control details received:', message.payload);
-				// Emit a custom event for control details
-				if (message.payload) {
-					window.dispatchEvent(
-						new CustomEvent('control-details', {
-							detail: message.payload
-						})
-					);
-				}
+				this.handleControlDetails(message.payload);
 				break;
-
 			case 'control-sets-list':
-				console.log('Control sets list received');
-				// Emit a custom event for control sets list
-				if (message.payload) {
-					window.dispatchEvent(
-						new CustomEvent('control-sets-list', {
-							detail: message.payload
-						})
-					);
-				}
+				this.handleControlSetsList(message.payload);
 				break;
-
 			case 'control-updated':
-				console.log('Control updated successfully:', message.payload);
-				// Don't trigger any state updates - the component already has the updated data
-				// This just confirms the save was successful
+				this.handleControlUpdated(message.payload);
 				break;
-
 			case 'mapping-created':
 			case 'mapping-updated':
 			case 'mapping-deleted':
-				console.log(`Mapping operation successful: ${message.type}`, message.payload);
-				// Emit an event so the control details panel can refresh its mappings
-				window.dispatchEvent(
-					new CustomEvent('mappings-changed', {
-						detail: message.payload
-					})
-				);
+				this.handleMappingOperation(message.type, message.payload);
 				break;
-
 			case 'error':
-				console.error('WebSocket error:', message.payload);
+				this.handleError(message.payload);
 				break;
-
 			default:
 				console.warn('Unknown WebSocket message type:', message.type);
 		}
+	}
+
+	handleConnected() {
+		console.log('WebSocket connection confirmed');
+		appState.update((state) => ({ ...state, isConnected: true }));
+	}
+
+	handleStateUpdate(payload: any) {
+		console.log('State update received');
+		// Update the entire app state with the payload
+		if (payload) {
+			appState.set({
+				...payload,
+				isConnected: true,
+				isSwitchingControlSet: false // Clear switching flag after state update
+			});
+		}
+	}
+
+	handleMetadataUpdate(payload: any) {
+		console.log('Metadata update received');
+		// Update metadata and control set info
+		if (payload) {
+			appState.update((state) => ({
+				...state,
+				...payload,
+				isConnected: true,
+				isSwitchingControlSet: false // Clear switching flag
+			}));
+		}
+	}
+
+	handleControlsUpdate(payload: any) {
+		console.log('Controls update received');
+		// Update just the controls array
+		if (payload) {
+			appState.update((state) => ({
+				...state,
+				controls: payload
+			}));
+		}
+	}
+
+	handleMappingsUpdate(payload: any) {
+		console.log('Mappings update received');
+		// Update just the mappings array
+		if (payload) {
+			appState.update((state) => ({
+				...state,
+				mappings: payload
+			}));
+		}
+	}
+
+	handleControlDetails(payload: any) {
+		console.log('Control details received:', payload);
+		// Emit a custom event for control details
+		if (payload) {
+			window.dispatchEvent(
+				new CustomEvent('control-details', {
+					detail: payload
+				})
+			);
+		}
+	}
+
+	handleControlSetsList(payload: any) {
+		console.log('Control sets list received');
+		// Emit a custom event for control sets list
+		if (payload) {
+			window.dispatchEvent(
+				new CustomEvent('control-sets-list', {
+					detail: payload
+				})
+			);
+		}
+	}
+
+	handleControlUpdated(payload: any) {
+		console.log('Control updated successfully:', payload);
+		// Don't trigger any state updates - the component already has the updated data
+		// This just confirms the save was successful
+	}
+
+	handleMappingOperation(type: string, payload: any) {
+		console.log(`Mapping operation successful: ${type}`, payload);
+		// Emit an event so the control details panel can refresh its mappings
+		window.dispatchEvent(
+			new CustomEvent('mappings-changed', {
+				detail: payload
+			})
+		);
+	}
+
+	handleError(payload: any) {
+		console.error('WebSocket error:', payload);
 	}
 
 	private scheduleReconnect() {
