@@ -12,7 +12,6 @@ import multer from 'multer';
 import { dirname, join, relative } from 'path';
 import { debug } from '../utils/debug';
 import { getServerState, getCurrentControlSetPath } from './serverState';
-import { FileStore } from './infrastructure/fileStore';
 
 // Type definitions
 interface SpreadsheetRow {
@@ -902,7 +901,7 @@ function exportAsCSVWithMapping(
 
 	// Add control rows
 	controls.forEach((control) => {
-		const row = fieldMapping.map(({ fieldName, displayName, isMappingColumn }) => {
+		const row = fieldMapping.map(({ fieldName, isMappingColumn }) => {
 			let value;
 
 			if (isMappingColumn) {
@@ -968,14 +967,7 @@ async function exportAsExcel(
 	mappingsColumn: string,
 	res: express.Response
 ) {
-	const workbook = new ExcelJS.Workbook();
-	return await exportAsExcelWithMapping(
-		controls,
-		metadata,
-		{ mappings: mappingsColumn },
-		res,
-		workbook
-	);
+	return await exportAsExcelWithMapping(controls, metadata, { mappings: mappingsColumn }, res);
 }
 
 // Export as Excel with column mapping support
@@ -983,8 +975,7 @@ async function exportAsExcelWithMapping(
 	controls: any[],
 	metadata: any,
 	columnMappings: Record<string, string>,
-	res: express.Response,
-	workbook: ExcelJS.Workbook
+	res: express.Response
 ) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
@@ -1218,8 +1209,6 @@ function exportAsJSON(controls: any[], metadata: any, res: express.Response) {
 // Get available column headers for export
 router.get('/export-column-headers', async (req, res) => {
 	try {
-		const state = getServerState();
-
 		let metadata: any = {};
 		try {
 			const controlSetPath = getCurrentControlSetPath();

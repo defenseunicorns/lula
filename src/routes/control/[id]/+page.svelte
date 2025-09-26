@@ -44,13 +44,7 @@
 			if (control) {
 				selectedControl.set(control);
 			} else {
-				// Control not found, redirect to the sheet's controls list
-				const sheetParam = $page.params.sheet;
-				if (sheetParam) {
-					goto(`/${encodeURIComponent(sheetParam)}`);
-				} else {
-					goto('/');
-				}
+				goto('/');
 			}
 		};
 
