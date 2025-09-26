@@ -118,17 +118,9 @@
 				}, 100);
 			});
 
-			// Navigate to the specific sheet page after successful switch
+			// Navigate to home page after successful switch
 			isSwitching = false;
-			const state = get(appState);
-			if (state.currentPath) {
-				// Extract just the directory name from the full path
-				const pathParts = state.currentPath.split('/');
-				const dirName = pathParts[pathParts.length - 1];
-				goto(`/${encodeURIComponent(dirName)}`);
-			} else {
-				goto('/');
-			}
+			goto('/');
 		} catch (error) {
 			console.error('Error switching control set:', error);
 			alert('Failed to switch control set: ' + (error as Error).message);
