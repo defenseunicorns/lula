@@ -11,7 +11,7 @@ import * as yaml from 'js-yaml';
 import multer from 'multer';
 import { dirname, join, relative } from 'path';
 import { debug } from '../utils/debug';
-import { getServerState } from './serverState';
+import { getServerState, getCurrentControlSetPath } from './serverState';
 import { FileStore } from './infrastructure/fileStore';
 
 // Type definitions
@@ -730,7 +730,8 @@ router.get('/export-controls', async (req, res) => {
 		// Load metadata from lula.yaml file
 		let metadata: any = {};
 		try {
-			const metadataPath = join(state.CONTROL_SET_DIR, 'lula.yaml');
+			const controlSetPath = getCurrentControlSetPath();
+			const metadataPath = join(controlSetPath, 'lula.yaml');
 			if (existsSync(metadataPath)) {
 				const metadataContent = readFileSync(metadataPath, 'utf8');
 				metadata = yaml.load(metadataContent) as any;
@@ -815,11 +816,32 @@ function exportAsCSVWithMapping(
 	if (allFields.has(controlIdField)) {
 		const idSchema = fieldSchema[controlIdField];
 		const displayName = idSchema?.original_name || 'Control ID';
-		fieldMapping.push({ fieldName: controlIdField, displayName });
+
+		// Check if the control ID field should show mappings data instead
+		let isMappingColumn = false;
+		if (columnMappings['mappings']) {
+			const targetDisplayName = columnMappings['mappings'];
+			// Check if this field's display name matches the target
+			if (displayName.toLowerCase() === targetDisplayName.toLowerCase()) {
+				isMappingColumn = true;
+			}
+		}
+
+		fieldMapping.push({ fieldName: controlIdField, displayName, isMappingColumn });
 		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete(controlIdField);
 	} else if (allFields.has('id')) {
-		fieldMapping.push({ fieldName: 'id', displayName: 'Control ID' });
+		// Check if the 'id' field should show mappings data instead
+		let isMappingColumn = false;
+		const displayName = 'Control ID';
+		if (columnMappings['mappings']) {
+			const targetDisplayName = columnMappings['mappings'];
+			if (displayName.toLowerCase() === targetDisplayName.toLowerCase()) {
+				isMappingColumn = true;
+			}
+		}
+
+		fieldMapping.push({ fieldName: 'id', displayName, isMappingColumn });
 		usedDisplayNames.add('control id');
 		allFields.delete('id');
 	}
@@ -887,16 +909,17 @@ function exportAsCSVWithMapping(
 				// This column should show mappings data, fallback to original field if no mappings
 				const mappingsValue = control['mappings'];
 				if (Array.isArray(mappingsValue) && mappingsValue.length > 0) {
-					// Show mappings justification
+					// Show mappings justification - collect all non-empty justifications
 					const mappingsStr = mappingsValue
 						.map((m: any) => m.description || m.justification || '')
-						.filter((desc: string) => desc.trim() !== '')
+						.filter((desc: string) => desc && desc.trim() !== '')
 						.join('\n');
 
-					if (mappingsStr) {
+					if (mappingsStr.trim() !== '') {
+						// We have justifications, use them
 						value = mappingsStr;
 					} else {
-						// No valid mappings, use original field value
+						// No valid justifications, use original field value
 						value = control[fieldName];
 					}
 				} else {
@@ -910,15 +933,16 @@ function exportAsCSVWithMapping(
 
 			if (value === undefined || value === null) return '""';
 
-			// Special handling for mappings field even when not a mapping column
+			// Special handling for mappings field when it's a dedicated mappings column
 			if (fieldName === 'mappings' && Array.isArray(value)) {
-				// Format mappings as a readable string
+				// Format mappings as a readable string with justifications
 				const mappingsStr = value
-					.map(
-						(m: any) =>
-							`${m.status}: ${m.description.substring(0, 50)}${m.description.length > 50 ? '...' : ''}`
-					)
-					.join('; ');
+					.map((m: any) => {
+						const justification = m.description || m.justification || '';
+						const status = m.status || 'Unknown';
+						return justification.trim() !== '' ? justification : `[${status}]`;
+					})
+					.join('\n');
 				return `"${mappingsStr.replace(/"/g, '""')}"`;
 			}
 
@@ -944,7 +968,14 @@ async function exportAsExcel(
 	mappingsColumn: string,
 	res: express.Response
 ) {
-	return await exportAsExcelWithMapping(controls, metadata, { mappings: mappingsColumn }, res);
+	const workbook = new ExcelJS.Workbook();
+	return await exportAsExcelWithMapping(
+		controls,
+		metadata,
+		{ mappings: mappingsColumn },
+		res,
+		workbook
+	);
 }
 
 // Export as Excel with column mapping support
@@ -952,7 +983,8 @@ async function exportAsExcelWithMapping(
 	controls: any[],
 	metadata: any,
 	columnMappings: Record<string, string>,
-	res: express.Response
+	res: express.Response,
+	workbook: ExcelJS.Workbook
 ) {
 	// Get field schema to use original names
 	const fieldSchema = metadata?.fieldSchema?.fields || {};
@@ -973,11 +1005,32 @@ async function exportAsExcelWithMapping(
 	if (allFields.has(controlIdField)) {
 		const idSchema = fieldSchema[controlIdField];
 		const displayName = idSchema?.original_name || 'Control ID';
-		fieldMapping.push({ fieldName: controlIdField, displayName });
+
+		// Check if the control ID field should show mappings data instead
+		let isMappingColumn = false;
+		if (columnMappings['mappings']) {
+			const targetDisplayName = columnMappings['mappings'];
+			// Check if this field's display name matches the target
+			if (displayName.toLowerCase() === targetDisplayName.toLowerCase()) {
+				isMappingColumn = true;
+			}
+		}
+
+		fieldMapping.push({ fieldName: controlIdField, displayName, isMappingColumn });
 		usedDisplayNames.add(displayName.toLowerCase());
 		allFields.delete(controlIdField);
 	} else if (allFields.has('id')) {
-		fieldMapping.push({ fieldName: 'id', displayName: 'Control ID' });
+		// Check if the 'id' field should show mappings data instead
+		let isMappingColumn = false;
+		const displayName = 'Control ID';
+		if (columnMappings['mappings']) {
+			const targetDisplayName = columnMappings['mappings'];
+			if (displayName.toLowerCase() === targetDisplayName.toLowerCase()) {
+				isMappingColumn = true;
+			}
+		}
+
+		fieldMapping.push({ fieldName: 'id', displayName, isMappingColumn });
 		usedDisplayNames.add('control id');
 		allFields.delete('id');
 	}
@@ -1043,16 +1096,17 @@ async function exportAsExcelWithMapping(
 				// This column should show mappings data, fallback to original field if no mappings
 				const mappingsValue = control['mappings'];
 				if (Array.isArray(mappingsValue) && mappingsValue.length > 0) {
-					// Show mappings justification
+					// Show mappings justification - collect all non-empty justifications
 					const mappingsStr = mappingsValue
 						.map((m: any) => m.description || m.justification || '')
-						.filter((desc: string) => desc.trim() !== '')
+						.filter((desc: string) => desc && desc.trim() !== '')
 						.join('\n');
 
-					if (mappingsStr) {
+					if (mappingsStr.trim() !== '') {
+						// We have justifications, use them
 						value = mappingsStr;
 					} else {
-						// No valid mappings, use original field value
+						// No valid justifications, use original field value
 						value = control[fieldName];
 					}
 				} else {
@@ -1064,11 +1118,14 @@ async function exportAsExcelWithMapping(
 				value = control[fieldName];
 			}
 
-			// Special handling for mappings field even when not a mapping column
+			// Special handling for mappings field when it's a dedicated mappings column
 			if (fieldName === 'mappings' && Array.isArray(value)) {
 				const mappingsStr = value
-					.map((m: any) => m.description || m.justification || '')
-					.filter((desc: string) => desc.trim() !== '')
+					.map((m: any) => {
+						const justification = m.description || m.justification || '';
+						const status = m.status || 'Unknown';
+						return justification.trim() !== '' ? justification : `[${status}]`;
+					})
 					.join('\n');
 				exportControl[displayName] = mappingsStr;
 			} else if (Array.isArray(value)) {
@@ -1159,19 +1216,21 @@ function exportAsJSON(controls: any[], metadata: any, res: express.Response) {
 }
 
 // Get available column headers for export
-router.get('/:sheetDir/export-column-headers', async (req, res) => {
+router.get('/export-column-headers', async (req, res) => {
 	try {
 		const state = getServerState();
-		const sheetDir = decodeURIComponent(req.params.sheetDir);
 
 		let metadata: any = {};
 		try {
-			const metadataPath = join(state.CONTROL_SET_DIR, sheetDir, 'lula.yaml');
+			const controlSetPath = getCurrentControlSetPath();
+			const metadataPath = join(controlSetPath, 'lula.yaml');
 			if (existsSync(metadataPath)) {
 				const metadataContent = readFileSync(metadataPath, 'utf8');
 				metadata = yaml.load(metadataContent) as any;
 			} else {
-				return res.status(404).json({ error: `No lula.yaml file found in directory: ${sheetDir}` });
+				return res
+					.status(404)
+					.json({ error: `No lula.yaml file found in control set path: ${controlSetPath}` });
 			}
 		} catch {
 			return res.status(500).json({ error: 'Failed to read lula.yaml file' });
@@ -1233,62 +1292,58 @@ router.get('/:sheetDir/export-column-headers', async (req, res) => {
 });
 
 // Export with specific column selection and mapping
-router.post('/:sheetDir/export-csv', async (req, res) => {
+router.post('/export-csv', async (req, res) => {
 	try {
-		const sheetDir = req.params.sheetDir;
 		const { format = 'csv', _columns = [], columnMappings = {} } = req.body;
 
 		const state = getServerState();
-		const originalControlSetDir = state.CONTROL_SET_DIR;
-		state.CONTROL_SET_DIR = join(process.cwd(), sheetDir);
+		const fileStore = state.fileStore;
 
-		try {
-			const fileStore = new FileStore({ baseDir: state.CONTROL_SET_DIR });
-
-			// Load all controls and mappings
-			const controls = await fileStore.loadAllControls();
-			const mappings = await fileStore.loadMappings();
-
-			// Load metadata from lula.yaml file
-			let metadata: any = {};
-			try {
-				const metadataPath = join(state.CONTROL_SET_DIR, 'lula.yaml');
-				if (existsSync(metadataPath)) {
-					const metadataContent = readFileSync(metadataPath, 'utf8');
-					metadata = yaml.load(metadataContent) as any;
-				}
-			} catch (err) {
-				debug('Could not load metadata:', err);
-			}
-
-			if (!controls || controls.length === 0) {
-				return res.status(404).json({ error: 'No controls found' });
-			}
-
-			// Combine controls with their mappings
-			const controlIdField = metadata?.control_id_field || 'id';
-			const controlsWithMappings = controls.map((control) => {
-				const controlId = control[controlIdField] || control.id;
-				const controlMappings = mappings.filter((m) => m.control_id === controlId);
-				return {
-					...control,
-					mappings_count: controlMappings.length,
-					mappings: controlMappings.map((m) => ({
-						uuid: m.uuid,
-						status: m.status,
-						description: m.justification || ''
-					}))
-				};
-			});
-
-			debug(`Exporting ${controlsWithMappings.length} controls as ${format} with column mappings`);
-
-			// Use custom export function with column mapping
-			return exportAsCSVWithMapping(controlsWithMappings, metadata, columnMappings, res);
-		} finally {
-			// Restore original control set directory
-			state.CONTROL_SET_DIR = originalControlSetDir;
+		if (!fileStore) {
+			return res.status(500).json({ error: 'No control set loaded' });
 		}
+
+		// Load all controls and mappings
+		const controls = await fileStore.loadAllControls();
+		const mappings = await fileStore.loadMappings();
+
+		// Load metadata from lula.yaml file
+		let metadata: any = {};
+		try {
+			const controlSetPath = getCurrentControlSetPath();
+			const metadataPath = join(controlSetPath, 'lula.yaml');
+			if (existsSync(metadataPath)) {
+				const metadataContent = readFileSync(metadataPath, 'utf8');
+				metadata = yaml.load(metadataContent) as any;
+			}
+		} catch (err) {
+			debug('Could not load metadata:', err);
+		}
+
+		if (!controls || controls.length === 0) {
+			return res.status(404).json({ error: 'No controls found' });
+		}
+
+		// Combine controls with their mappings
+		const controlIdField = metadata?.control_id_field || 'id';
+		const controlsWithMappings = controls.map((control) => {
+			const controlId = control[controlIdField] || control.id;
+			const controlMappings = mappings.filter((m) => m.control_id === controlId);
+			return {
+				...control,
+				mappings_count: controlMappings.length,
+				mappings: controlMappings.map((m) => ({
+					uuid: m.uuid,
+					status: m.status,
+					description: m.justification || ''
+				}))
+			};
+		});
+
+		debug(`Exporting ${controlsWithMappings.length} controls as ${format} with column mappings`);
+
+		// Use custom export function with column mapping
+		return exportAsCSVWithMapping(controlsWithMappings, metadata, columnMappings, res);
 	} catch (error: any) {
 		console.error('Export error:', error);
 		res.status(500).json({ error: error.message });

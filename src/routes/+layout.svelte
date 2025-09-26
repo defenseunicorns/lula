@@ -31,11 +31,7 @@
 				return;
 			}
 
-			const pathParts = currentPath.split('/');
-			const dirName = pathParts[pathParts.length - 1];
-
-			const sheetDir = encodeURIComponent(dirName);
-			const response = await fetch(`/api/${sheetDir}/export-column-headers`);
+			const response = await fetch('/api/export-column-headers');
 			if (response.ok) {
 				const data = await response.json();
 				columnHeaders = data.columnHeaders || [];
