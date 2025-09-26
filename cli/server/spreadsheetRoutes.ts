@@ -136,8 +136,8 @@ export function processImportParameters(reqBody: any): ImportParameters {
 	if (reqBody.fieldSchema) {
 		try {
 			frontendFieldSchema = JSON.parse(reqBody.fieldSchema);
-		} catch {
-			// Failed to parse fieldSchema
+		} catch (e) {
+			console.error('Failed to parse fieldSchema:', e);
 		}
 	}
 
