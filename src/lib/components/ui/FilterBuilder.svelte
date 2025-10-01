@@ -141,51 +141,45 @@
 		}
 	}
 
-	// Helper functions for mapping fields
-	function getMappingFieldType(fieldName: string): string | null {
-		switch (fieldName) {
-			case 'has_mappings':
-				return 'boolean';
-			case 'mapping_count':
-				return 'number';
-			case 'mapping_status':
-				return 'string';
-			default:
-				return null;
+	// Centralized mapping field metadata
+	const mappingFieldConfig: Record<string, {
+		type: string;
+		ui_type: string;
+		options?: Array<{ value: string; label: string }>;
+	}> = {
+		has_mappings: {
+			type: 'boolean',
+			ui_type: 'select',
+			options: [
+				{ value: 'true', label: 'Yes' },
+				{ value: 'false', label: 'No' }
+			]
+		},
+		mapping_count: {
+			type: 'number',
+			ui_type: 'short_text'
+		},
+		mapping_status: {
+			type: 'string',
+			ui_type: 'short_text',
+			options: [
+				{ value: 'planned', label: 'Planned' },
+				{ value: 'implemented', label: 'Implemented' },
+				{ value: 'verified', label: 'Verified' }
+			]
 		}
+	};
+
+	function getMappingFieldType(fieldName: string): string | null {
+		return mappingFieldConfig[fieldName]?.type ?? null;
 	}
 
 	function getMappingFieldUiType(fieldName: string): string | null {
-		switch (fieldName) {
-			case 'has_mappings':
-				return 'select';
-			case 'mapping_count':
-				return 'short_text';
-			case 'mapping_status':
-				return 'short_text'; // Change to short_text so operators work
-			default:
-				return null;
-		}
+		return mappingFieldConfig[fieldName]?.ui_type ?? null;
 	}
 
-	function getMappingFieldOptions(
-		fieldName: string
-	): Array<{ value: string; label: string }> | null {
-		switch (fieldName) {
-			case 'has_mappings':
-				return [
-					{ value: 'true', label: 'Yes' },
-					{ value: 'false', label: 'No' }
-				];
-			case 'mapping_status':
-				return [
-					{ value: 'planned', label: 'Planned' },
-					{ value: 'implemented', label: 'Implemented' },
-					{ value: 'verified', label: 'Verified' }
-				];
-			default:
-				return null;
-		}
+	function getMappingFieldOptions(fieldName: string): Array<{ value: string; label: string }> | null {
+		return mappingFieldConfig[fieldName]?.options ?? null;
 	}
 
 	// Get display name for a field
