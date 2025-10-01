@@ -142,11 +142,14 @@
 	}
 
 	// Centralized mapping field metadata
-	const mappingFieldConfig: Record<string, {
-		type: string;
-		ui_type: string;
-		options?: Array<{ value: string; label: string }>;
-	}> = {
+	const mappingFieldConfig: Record<
+		string,
+		{
+			type: string;
+			ui_type: string;
+			options?: Array<{ value: string; label: string }>;
+		}
+	> = {
 		has_mappings: {
 			type: 'boolean',
 			ui_type: 'select',
@@ -178,7 +181,9 @@
 		return mappingFieldConfig[fieldName]?.ui_type ?? null;
 	}
 
-	function getMappingFieldOptions(fieldName: string): Array<{ value: string; label: string }> | null {
+	function getMappingFieldOptions(
+		fieldName: string
+	): Array<{ value: string; label: string }> | null {
 		return mappingFieldConfig[fieldName]?.options ?? null;
 	}
 
