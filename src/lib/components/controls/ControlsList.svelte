@@ -167,9 +167,9 @@
 									case 'not_equals':
 										return mapping.status !== filterValue;
 									case 'includes':
-										return mapping.status.toLowerCase().includes(String(filterValue).toLowerCase());
+										return (typeof mapping.status === 'string' ? mapping.status.toLowerCase() : '').includes(String(filterValue).toLowerCase());
 									case 'not_includes':
-										return !mapping.status.toLowerCase().includes(String(filterValue).toLowerCase());
+										return !(typeof mapping.status === 'string' ? mapping.status.toLowerCase() : '').includes(String(filterValue).toLowerCase());
 									default:
 										return true;
 								}
