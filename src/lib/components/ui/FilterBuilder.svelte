@@ -37,10 +37,14 @@
 
 	// Get field type for the selected field
 	$: selectedFieldSchema = $fieldSchema[newFilterField] || null;
-	$: selectedFieldType = getMappingFieldType(newFilterField) || selectedFieldSchema?.type || 'string';
-	$: selectedFieldUiType = getMappingFieldUiType(newFilterField) || selectedFieldSchema?.ui_type || 'short_text';
+	$: selectedFieldType =
+		getMappingFieldType(newFilterField) || selectedFieldSchema?.type || 'string';
+	$: selectedFieldUiType =
+		getMappingFieldUiType(newFilterField) || selectedFieldSchema?.ui_type || 'short_text';
 	$: isSelectField = selectedFieldUiType === 'select';
-	$: fieldOptions = getMappingFieldOptions(newFilterField) || (isSelectField ? selectedFieldSchema?.options || [] : []);
+	$: fieldOptions =
+		getMappingFieldOptions(newFilterField) ||
+		(isSelectField ? selectedFieldSchema?.options || [] : []);
 
 	// Force equals operator for select fields (but allow operators for mapping fields)
 	$: if (isSelectField && !['has_mappings', 'mapping_status'].includes(newFilterField)) {
@@ -164,7 +168,9 @@
 		}
 	}
 
-	function getMappingFieldOptions(fieldName: string): Array<{ value: string; label: string }> | null {
+	function getMappingFieldOptions(
+		fieldName: string
+	): Array<{ value: string; label: string }> | null {
 		switch (fieldName) {
 			case 'has_mappings':
 				return [
