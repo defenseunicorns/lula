@@ -25,6 +25,14 @@ Run Lula directly with npx (no installation required):
 npx lula2
 ```
 
+**Import an eMASS Spreadsheet**
+
+The first step is to import an eMASS spreadsheet into Lula. A sample file is provided at: [samples/fake-controls.xlsx](samples/fake-controls.xlsx)
+
+**Continue with Lula Workflow**
+
+Once the spreadsheet is imported, you can proceed with the standard Lula workflow creating mappings to controls.
+
 ## Why GitOps for Compliance?
 
 - **Version Everything**: Every control change, ui change, mapping is tracked, reviewable, and revertable
