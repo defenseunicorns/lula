@@ -1,5 +1,4 @@
-* @defenseunicorns/uds-core
-* @defenseunicorns/pepr
+* @defenseunicorns/uds-core @defenseunicorns/pepr
 
 # Additional privileged files
 /CODEOWNERS @jeff-mccoy @daveworth
