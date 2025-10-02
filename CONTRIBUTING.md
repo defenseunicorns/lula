@@ -41,7 +41,7 @@ Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a respectful
 2. **Commit Your Changes**: Make your changes and commit them. All commits must be signed.
 3. **Run Tests**: Ensure that your changes pass all tests by running `npm test`.
 4. **Push Your Branch**: Push your branch to your fork on GitHub.
-5. **Create a Pull Request**: Open a pull request against the `main` branch of the Pepr repository. Please make sure that your PR passes all CI checks.
+5. **Create a Pull Request**: Open a pull request against the `main` branch of the Lula repository. Please make sure that your PR passes all CI checks.
 
 ### PR Requirements
 
