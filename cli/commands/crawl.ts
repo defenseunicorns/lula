@@ -200,6 +200,17 @@ export function getChangedBlocks(
 }
 
 /**
+ * Check if a text contains Lula annotations (@lulaStart or @lulaEnd).
+ *
+ * @param text The text content to check.
+ * @returns True if the text contains Lula annotations, false otherwise.
+ */
+export function containsLulaAnnotations(text: string): boolean {
+	const lines = text.split('\n');
+	return lines.some((line) => line.includes('@lulaStart') || line.includes('@lulaEnd'));
+}
+
+/**
  * Defines the "crawl" command for the CLI.
  *
  * @returns The configured Command instance.
@@ -230,8 +241,46 @@ export function crawlCommand(): Command {
 				`### Reviewed Changes\n\n` +
 				`Lula reviewed ${files.length} files changed that affect compliance.\n\n`;
 
+			const deletedFilesWithAnnotations = [];
 			for (const file of files) {
-				if (file.status === 'added') continue;
+				if (file.status === 'removed') {
+					try {
+						const oldText = await fetchRawFileViaAPI({
+							octokit,
+							owner,
+							repo,
+							path: file.filename,
+							ref: 'main'
+						});
+
+						if (containsLulaAnnotations(oldText)) {
+							deletedFilesWithAnnotations.push(file.filename);
+						}
+					} catch (err) {
+						console.error(`Error checking deleted file ${file.filename}: ${err}`);
+					}
+				}
+			}
+
+			// Add warning about deleted files with annotations
+			if (deletedFilesWithAnnotations.length > 0) {
+				leavePost = true;
+				commentBody += `\n\n**Compliance Warning: Files with Lula annotations were deleted**\n\n`;
+				commentBody += `The following files contained compliance annotations (\`@lulaStart\`/\`@lulaEnd\`) and were deleted in this PR. This may affect compliance coverage:\n\n`;
+
+				for (const filename of deletedFilesWithAnnotations) {
+					commentBody += `- \`${filename}\`\n`;
+				}
+
+				commentBody += `\nPlease review whether:\n`;
+				commentBody += `- The compliance coverage provided by these files is still needed\n`;
+				commentBody += `- Alternative compliance measures have been implemented\n`;
+				commentBody += `- The deletion is intentional and compliance-approved\n\n`;
+				commentBody += `---\n\n`;
+			}
+
+			for (const file of files) {
+				if (file.status === 'added' || file.status === 'removed') continue;
 				try {
 					const [oldText, newText] = await Promise.all([
 						fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: 'main' }),
