@@ -119,15 +119,66 @@
 				results = results.filter((control) => {
 					// Control must match all filters
 					return $activeFilters.every(filter => {
+						// Handle mapping-related fields specially
+						if (filter.fieldName === 'has_mappings') {
+							const hasMappings = control.mappings && control.mappings.length > 0;
+							const filterValue = getFilterValue(filter.value);
+							switch (filter.operator) {
+								case 'equals':
+									return hasMappings === (filterValue === 'true' || filterValue === true);
+								case 'not_equals':
+									return hasMappings !== (filterValue === 'true' || filterValue === true);
+								case 'exists':
+									return hasMappings;
+								case 'not_exists':
+									return !hasMappings;
+								default:
+									return true;
+							}
+						}
+
+						if (filter.fieldName === 'mapping_status') {
+							if (!control.mappings || control.mappings.length === 0) {
+								return filter.operator === 'not_exists';
+							}
+
+							const filterValue = getFilterValue(filter.value);
+							const hasStatus = control.mappings.some(mapping => {
+								switch (filter.operator) {
+									case 'equals':
+										return mapping.status === filterValue;
+									case 'not_equals':
+										return mapping.status !== filterValue;
+									case 'includes':
+										return (typeof mapping.status === 'string' ? mapping.status.toLowerCase() : '').includes(String(filterValue).toLowerCase());
+									case 'not_includes':
+										return !(typeof mapping.status === 'string' ? mapping.status.toLowerCase() : '').includes(String(filterValue).toLowerCase());
+									default:
+										return true;
+								}
+							});
+
+							switch (filter.operator) {
+								case 'exists':
+									return control.mappings.some(m => m.status !== undefined && m.status !== null);
+								case 'not_exists':
+									return !control.mappings.some(m => m.status !== undefined && m.status !== null);
+								default:
+									return hasStatus;
+							}
+						}
+
+						// Handle regular control fields
 						const dynamicControl = control as Record<string, unknown>;
 						const fieldValue = dynamicControl[filter.fieldName];
+						const filterValue = getFilterValue(filter.value);
 						
 						switch (filter.operator) {
 							case 'equals':
-								return fieldValue === filter.value;
+								return fieldValue === filterValue;
 								
 							case 'not_equals':
-								return fieldValue !== filter.value;
+								return fieldValue !== filterValue;
 								
 							case 'exists':
 								return fieldValue !== undefined && fieldValue !== null && fieldValue !== '';
@@ -137,20 +188,20 @@
 								
 							case 'includes':
 								if (typeof fieldValue === 'string') {
-									return fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
+									return fieldValue.toLowerCase().includes(String(filterValue).toLowerCase());
 								} else if (Array.isArray(fieldValue)) {
 									return fieldValue.some(item => 
-										String(item).toLowerCase().includes(String(filter.value).toLowerCase())
+										String(item).toLowerCase().includes(String(filterValue).toLowerCase())
 									);
 								}
 								return false;
 								
 							case 'not_includes':
 								if (typeof fieldValue === 'string') {
-									return !fieldValue.toLowerCase().includes(String(filter.value).toLowerCase());
+									return !fieldValue.toLowerCase().includes(String(filterValue).toLowerCase());
 								} else if (Array.isArray(fieldValue)) {
 									return !fieldValue.some(item => 
-										String(item).toLowerCase().includes(String(filter.value).toLowerCase())
+										String(item).toLowerCase().includes(String(filterValue).toLowerCase())
 									);
 								}
 								return true;
@@ -196,6 +247,28 @@
 			}
 		}
 		return 'No description available';
+	}
+
+	function formatFilterValue(value: any): string {
+		if (value === null || value === undefined) {
+			return '';
+		}
+		if (typeof value === 'object') {
+			if (Array.isArray(value)) {
+				return value.join(', ');
+			}
+			if ('value' in value) {
+				return String((value as any).value);
+			}
+			return JSON.stringify(value);
+		}
+		return String(value);
+	}
+	function getFilterValue(filterValue: any): any {
+		if (typeof filterValue === 'object' && filterValue !== null && 'value' in filterValue) {
+			return filterValue.value;
+		}
+		return filterValue;
 	}
 
 	// Get truncation length based on field type
@@ -258,11 +331,11 @@
 							{#if filter.operator === 'exists' || filter.operator === 'not_exists'}
 								<span>{getOperatorLabel(filter.operator).toLowerCase()}</span>
 							{:else if filter.operator === 'equals'}
-								<span>= {filter.value}</span>
+								<span>= {formatFilterValue(filter.value)}</span>
 							{:else if filter.operator === 'not_equals'}
-								<span>≠ {filter.value}</span>
+								<span>≠ {formatFilterValue(filter.value)}</span>
 							{:else}
-								<span>{getOperatorLabel(filter.operator).toLowerCase()} "{filter.value}"</span>
+								<span>{getOperatorLabel(filter.operator).toLowerCase()} "{formatFilterValue(filter.value)}"</span>
 							{/if}
 							<button 
 								onclick={() => complianceStore.removeFilter(index)}

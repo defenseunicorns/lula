@@ -301,12 +301,12 @@ describe('complianceStore', () => {
 				expect(fields).not.toContain('_metadata'); // Should exclude internal fields
 			});
 
-			it('should return empty array when no controls are loaded', () => {
+			it('should return only mappings when no controls are loaded', () => {
 				controls.set([]);
 
 				const fields = complianceStore.getAvailableFields();
 
-				expect(fields).toEqual([]);
+				expect(fields).toEqual(['has_mappings', 'mapping_count', 'mapping_status']);
 			});
 
 			it('should return unique sorted fields', () => {
