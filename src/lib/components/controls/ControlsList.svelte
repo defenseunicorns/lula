@@ -137,23 +137,6 @@
 							}
 						}
 
-						if (filter.fieldName === 'mapping_count') {
-							const mappingCount = control.mappings ? control.mappings.length : 0;
-							const filterValue = getFilterValue(filter.value);
-							switch (filter.operator) {
-								case 'equals':
-									return mappingCount === Number(filterValue);
-								case 'not_equals':
-									return mappingCount !== Number(filterValue);
-								case 'exists':
-									return mappingCount > 0;
-								case 'not_exists':
-									return mappingCount === 0;
-								default:
-									return true;
-							}
-						}
-
 						if (filter.fieldName === 'mapping_status') {
 							if (!control.mappings || control.mappings.length === 0) {
 								return filter.operator === 'not_exists';

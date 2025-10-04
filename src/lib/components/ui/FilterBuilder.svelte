@@ -9,7 +9,8 @@
 		type FilterValue,
 		activeFilters,
 		FILTER_OPERATORS,
-		getOperatorLabel
+		getOperatorLabel,
+		MAPPING_STATUS_OPTIONS
 	} from '$stores/compliance';
 	import { appState } from '$lib/websocket';
 	import { Filter, Add, TrashCan, ChevronDown, ChevronUp } from 'carbon-icons-svelte';
@@ -47,7 +48,12 @@
 		(isSelectField ? selectedFieldSchema?.options || [] : []);
 
 	// Force equals operator for select fields (but allow operators for mapping fields)
-	$: if (isSelectField && !['has_mappings', 'mapping_status'].includes(newFilterField)) {
+	// Also force equals operator for has_mappings field
+	$: if (
+		(isSelectField && !['has_mappings', 'mapping_status'].includes(newFilterField)) ||
+		newFilterField === 'has_mappings' ||
+		newFilterField === 'mapping_status'
+	) {
 		newFilterOperator = 'equals';
 	}
 
@@ -69,7 +75,7 @@
 		// Group fields by tab
 		availableFields.forEach((field) => {
 			// Handle mapping-related fields specially
-			if (field === 'has_mappings' || field === 'mapping_status' || field === 'mapping_count') {
+			if (field === 'has_mappings' || field === 'mapping_status') {
 				fieldsByTab.mappings.push(field);
 			} else {
 				const schema = $fieldSchema[field];
@@ -158,18 +164,10 @@
 				{ value: 'false', label: 'No' }
 			]
 		},
-		mapping_count: {
-			type: 'number',
-			ui_type: 'short_text'
-		},
 		mapping_status: {
 			type: 'string',
 			ui_type: 'short_text',
-			options: [
-				{ value: 'planned', label: 'Planned' },
-				{ value: 'implemented', label: 'Implemented' },
-				{ value: 'verified', label: 'Verified' }
-			]
+			options: MAPPING_STATUS_OPTIONS
 		}
 	};
 
@@ -193,8 +191,6 @@
 		switch (fieldName) {
 			case 'has_mappings':
 				return 'Has Mappings';
-			case 'mapping_count':
-				return 'Mapping Count';
 			case 'mapping_status':
 				return 'Mapping Status';
 		}
@@ -460,8 +456,8 @@
 							>Operator</label
 						>
 
-						{#if isSelectField && !['has_mappings', 'mapping_status'].includes(newFilterField)}
-							<!-- Disabled dropdown for select fields (always equals) -->
+						{#if (isSelectField && !['has_mappings', 'mapping_status'].includes(newFilterField)) || newFilterField === 'has_mappings' || newFilterField === 'mapping_status'}
+							<!-- Disabled dropdown for select fields and has_mappings (always equals) -->
 							<div
 								class="px-3 py-2 text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
 							>
@@ -492,9 +488,9 @@
 									class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
 								>
 									<option value="">Select status...</option>
-									<option value="planned">Planned</option>
-									<option value="implemented">Implemented</option>
-									<option value="verified">Verified</option>
+									{#each MAPPING_STATUS_OPTIONS as status}
+										<option value={status.value}>{status.label}</option>
+									{/each}
 								</select>
 							{:else if newFilterField === 'has_mappings'}
 								<!-- Special dropdown for has_mappings -->

@@ -6,6 +6,15 @@ import { appState } from '$lib/websocket';
 import { get, writable } from 'svelte/store';
 
 /**
+ * Shared mapping status options used across the application
+ */
+export const MAPPING_STATUS_OPTIONS = [
+	{ value: 'planned', label: 'Planned' },
+	{ value: 'implemented', label: 'Implemented' },
+	{ value: 'verified', label: 'Verified' }
+];
+
+/**
  * Shared filter operator options used across the application
  */
 export const FILTER_OPERATORS = [
