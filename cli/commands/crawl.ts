@@ -417,7 +417,9 @@ export async function dismissOldReviews({
 
 		for (const r of reviews) {
 			const hasSignature = (r.body ?? '').includes(LULA_SIGNATURE);
-			if (hasSignature) {
+			const isAlreadyDismissed = r.state === 'DISMISSED';
+
+			if (hasSignature && !isAlreadyDismissed) {
 				await octokit.pulls.dismissReview({
 					owner,
 					repo,
