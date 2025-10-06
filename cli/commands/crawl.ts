@@ -308,7 +308,12 @@ export function crawlCommand(): Command {
 			if (opts.postMode === 'comment') {
 				await deleteOldIssueComments({ octokit, owner, repo, pull_number });
 			} else {
-				await dismissOldReviews({ octokit, owner, repo, pull_number });
+				try {
+					await dismissOldReviews({ octokit, owner, repo, pull_number });
+				} catch (err) {
+					console.error(`Error dismissing old reviews: ${err}`);
+				}
+
 				await deleteOldReviewComments({ octokit, owner, repo, pull_number });
 			}
 			if (leavePost) {
