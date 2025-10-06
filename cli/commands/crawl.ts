@@ -341,15 +341,15 @@ export function crawlCommand(): Command {
 						commentBody += `\n\n**Compliance Warning: Lula annotations were removed from \`${file.filename}\`**\n\n`;
 						commentBody += `The following compliance annotation blocks were present in the original file but are missing in the updated version:\n\n`;
 
+						// Add table header once before listing all removed blocks
+						commentBody += `| File | Original Lines | UUID |\n`;
+						commentBody += `| ---- | -------------- | ---- |\n`;
 						for (const block of removedBlocks) {
 							const oldBlockText = oldText
 								.split('\n')
 								.slice(block.startLine, block.endLine)
 								.join('\n');
 							const blockSha256 = createHash('sha256').update(oldBlockText).digest('hex');
-
-							commentBody += `| File | Original Lines | UUID |\n`;
-							commentBody += `| ---- | -------------- | ---- |\n`;
 							commentBody += `| \`${file.filename}\` | \`${block.startLine + 1}–${block.endLine}\` | \`${block.uuid}\` |\n`;
 							commentBody += `> **sha256** \`${blockSha256}\`\n\n`;
 						}
