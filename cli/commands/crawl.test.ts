@@ -10,6 +10,7 @@ import {
 	fetchRawFileViaAPI,
 	extractMapBlocks,
 	getChangedBlocks,
+	getRemovedBlocks,
 	crawlCommand,
 	postFinding,
 	deleteOldIssueComments,
@@ -250,6 +251,87 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 
 		const changed = getChangedBlocks(oldText, newText);
 		expect(changed).toHaveLength(0);
+	});
+});
+
+describe('getRemovedBlocks', () => {
+	it('detects blocks that exist in old text but not in new text', () => {
+		const uuid1 = '123e4567-e89b-12d3-a456-426614174000';
+		const uuid2 = '987fcdeb-51a2-43d1-b789-456789012345';
+
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid1}`,
+			'old content 1',
+			`// @lulaEnd ${uuid1}`,
+			'middle',
+			`// @lulaStart ${uuid2}`,
+			'old content 2',
+			`// @lulaEnd ${uuid2}`,
+			'footer'
+		].join('\n');
+
+		const newText = [
+			'header',
+			`// @lulaStart ${uuid1}`,
+			'new content 1',
+			`// @lulaEnd ${uuid1}`,
+			'middle',
+			'footer'
+		].join('\n');
+
+		const removed = getRemovedBlocks(oldText, newText);
+		expect(removed).toHaveLength(1);
+		expect(removed[0].uuid).toBe(uuid2);
+		expect(removed[0].startLine).toBe(5);
+		expect(removed[0].endLine).toBe(8);
+	});
+
+	it('returns empty array when no blocks are removed', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'old content',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const newText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'new content',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const removed = getRemovedBlocks(oldText, newText);
+		expect(removed).toHaveLength(0);
+	});
+
+	it('detects all removed blocks when old text has annotations but new text has none', () => {
+		const uuid1 = '123e4567-e89b-12d3-a456-426614174000';
+		const uuid2 = '987fcdeb-51a2-43d1-b789-456789012345';
+
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid1}`,
+			'content 1',
+			`// @lulaEnd ${uuid1}`,
+			'middle',
+			`// @lulaStart ${uuid2}`,
+			'content 2',
+			`// @lulaEnd ${uuid2}`,
+			'footer'
+		].join('\n');
+
+		const newText = ['header', 'middle', 'footer'].join('\n');
+
+		const removed = getRemovedBlocks(oldText, newText);
+		expect(removed).toHaveLength(2);
+		expect(removed.map((b) => b.uuid)).toContain(uuid1);
+		expect(removed.map((b) => b.uuid)).toContain(uuid2);
 	});
 });
 
