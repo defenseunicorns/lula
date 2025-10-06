@@ -157,6 +157,18 @@ describe('complianceStore', () => {
 				expect(filters[0].operator).toBe('exists');
 				expect(filters[1].operator).toBe('not_exists');
 			});
+
+			it('should handle mapping_status with equals and not_equals operators', () => {
+				complianceStore.addFilter('mapping_status', 'equals', 'implemented');
+				complianceStore.addFilter('mapping_status', 'not_equals', 'planned');
+
+				const filters = get(activeFilters);
+				expect(filters).toHaveLength(2);
+				expect(filters[0].operator).toBe('equals');
+				expect(filters[0].value).toBe('implemented');
+				expect(filters[1].operator).toBe('not_equals');
+				expect(filters[1].value).toBe('planned');
+			});
 		});
 
 		describe('removeFilter', () => {
@@ -306,7 +318,7 @@ describe('complianceStore', () => {
 
 				const fields = complianceStore.getAvailableFields();
 
-				expect(fields).toEqual(['has_mappings', 'mapping_count', 'mapping_status']);
+				expect(fields).toEqual(['has_mappings', 'mapping_status']);
 			});
 
 			it('should return unique sorted fields', () => {

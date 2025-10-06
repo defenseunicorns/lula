@@ -48,8 +48,8 @@
 		(isSelectField ? selectedFieldSchema?.options || [] : []);
 
 	// Force equals operator for select fields (but allow operators for mapping fields)
-	// Also force equals operator for has_mappings field
-	$: if (isSelectField) {
+	// Also force equals operator for has_mappings field, but allow operators for mapping_status
+	$: if (isSelectField && newFilterField !== 'mapping_status') {
 		newFilterOperator = 'equals';
 	}
 
@@ -93,6 +93,12 @@
 
 	// Create a new array from the readonly constant to make it mutable for Svelte
 	const operatorOptions = FILTER_OPERATORS.map((op) => ({ value: op.value, label: op.label }));
+
+	// Limited operators for mapping status field
+	const mappingStatusOperatorOptions = [
+		{ value: 'equals' as const, label: 'Equals' },
+		{ value: 'not_equals' as const, label: 'Not equals' }
+	];
 
 	// Add a new filter
 	function addFilter() {
@@ -452,7 +458,7 @@
 							>Operator</label
 						>
 
-						{#if (isSelectField && !['has_mappings', 'mapping_status'].includes(newFilterField)) || newFilterField === 'has_mappings' || newFilterField === 'mapping_status'}
+						{#if (isSelectField && !['has_mappings', 'mapping_status'].includes(newFilterField)) || newFilterField === 'has_mappings'}
 							<!-- Disabled dropdown for select fields and has_mappings (always equals) -->
 							<div
 								class="px-3 py-2 text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
@@ -463,7 +469,9 @@
 							<!-- Custom Operator Dropdown -->
 							<CustomDropdown
 								bind:value={newFilterOperator}
-								options={operatorOptions}
+								options={newFilterField === 'mapping_status'
+									? mappingStatusOperatorOptions
+									: operatorOptions}
 								getDisplayValue={getOperatorLabel}
 								labelId="filter-operator"
 							/>
