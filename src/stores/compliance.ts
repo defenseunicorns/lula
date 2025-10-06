@@ -145,7 +145,6 @@ export const complianceStore = {
 		// Add mapping-related fields for filtering
 		fieldSet.add('has_mappings');
 		fieldSet.add('mapping_status');
-		fieldSet.add('mapping_count');
 
 		return Array.from(fieldSet).sort();
 	}
