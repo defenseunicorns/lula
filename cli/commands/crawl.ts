@@ -308,12 +308,7 @@ export function crawlCommand(): Command {
 			if (opts.postMode === 'comment') {
 				await deleteOldIssueComments({ octokit, owner, repo, pull_number });
 			} else {
-				try {
-					await dismissOldReviews({ octokit, owner, repo, pull_number });
-				} catch (err) {
-					console.error(`Error dismissing old reviews: ${err}`);
-				}
-
+				await dismissOldReviews({ octokit, owner, repo, pull_number });
 				await deleteOldReviewComments({ octokit, owner, repo, pull_number });
 			}
 			if (leavePost) {
@@ -422,7 +417,9 @@ export async function dismissOldReviews({
 
 		for (const r of reviews) {
 			const hasSignature = (r.body ?? '').includes(LULA_SIGNATURE);
-			if (hasSignature) {
+			const isAlreadyDismissed = r.state === 'DISMISSED';
+
+			if (hasSignature && !isAlreadyDismissed) {
 				await octokit.pulls.dismissReview({
 					owner,
 					repo,
