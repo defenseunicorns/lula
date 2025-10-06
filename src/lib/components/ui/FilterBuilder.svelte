@@ -166,7 +166,7 @@
 		},
 		mapping_status: {
 			type: 'string',
-			ui_type: 'short_text',
+			ui_type: 'select',
 			options: MAPPING_STATUS_OPTIONS
 		}
 	};
