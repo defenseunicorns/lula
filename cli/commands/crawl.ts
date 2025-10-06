@@ -200,6 +200,36 @@ export function getChangedBlocks(
 }
 
 /**
+ * Get the blocks that were removed (exist in old text but not in new text).
+ *
+ * @param oldText The original text.
+ * @param newText The modified text.
+ *
+ * @returns An array of objects representing the removed blocks from the old text.
+ */
+export function getRemovedBlocks(
+	oldText: string,
+	newText: string
+): {
+	uuid: string;
+	startLine: number;
+	endLine: number;
+}[] {
+	const oldBlocks = extractMapBlocks(oldText);
+	const newBlocks = extractMapBlocks(newText);
+	const removed = [];
+
+	for (const oldBlock of oldBlocks) {
+		const newMatch = newBlocks.find((b) => b.uuid === oldBlock.uuid);
+		if (!newMatch) {
+			removed.push(oldBlock);
+		}
+	}
+
+	return removed;
+}
+
+/**
  * Check if a text contains Lula annotations (@lulaStart or @lulaEnd).
  *
  * @param text The text content to check.
@@ -288,7 +318,9 @@ export function crawlCommand(): Command {
 					]);
 
 					const changedBlocks = getChangedBlocks(oldText, newText);
+					const removedBlocks = getRemovedBlocks(oldText, newText);
 
+					// Handle changed blocks
 					for (const block of changedBlocks) {
 						console.log(`Commenting regarding \`${file.filename}\`.`);
 						leavePost = true;
@@ -300,6 +332,33 @@ export function crawlCommand(): Command {
 
 						const blockSha256 = createHash('sha256').update(newBlockText).digest('hex');
 						commentBody += `| \`${file.filename}\` | \`${block.startLine + 1}–${block.endLine}\` |\n> **uuid**-\`${block.uuid}\`\n **sha256** \`${blockSha256}\`\n\n`;
+					}
+
+					// Handle removed annotations
+					if (removedBlocks.length > 0) {
+						leavePost = true;
+						console.log(`Found removed annotations in \`${file.filename}\`.`);
+						commentBody += `\n\n**Compliance Warning: Lula annotations were removed from \`${file.filename}\`**\n\n`;
+						commentBody += `The following compliance annotation blocks were present in the original file but are missing in the updated version:\n\n`;
+
+						// Add table header once before listing all removed blocks
+						commentBody += `| File | Original Lines | UUID |\n`;
+						commentBody += `| ---- | -------------- | ---- |\n`;
+						for (const block of removedBlocks) {
+							const oldBlockText = oldText
+								.split('\n')
+								.slice(block.startLine, block.endLine)
+								.join('\n');
+							const blockSha256 = createHash('sha256').update(oldBlockText).digest('hex');
+							commentBody += `| \`${file.filename}\` | \`${block.startLine + 1}–${block.endLine}\` | \`${block.uuid}\` |\n`;
+							commentBody += `> **sha256** \`${blockSha256}\`\n\n`;
+						}
+
+						commentBody += `Please review whether:\n`;
+						commentBody += `- The removal of these compliance annotations is intentional\n`;
+						commentBody += `- Alternative compliance measures have been implemented\n`;
+						commentBody += `- The compliance coverage is still adequate\n\n`;
+						commentBody += `---\n\n`;
 					}
 				} catch (err) {
 					console.error(`Error processing ${file.filename}: ${err}`);
