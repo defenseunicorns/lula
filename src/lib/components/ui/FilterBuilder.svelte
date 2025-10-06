@@ -49,11 +49,7 @@
 
 	// Force equals operator for select fields (but allow operators for mapping fields)
 	// Also force equals operator for has_mappings field
-	$: if (
-		(isSelectField && !['has_mappings', 'mapping_status'].includes(newFilterField)) ||
-		newFilterField === 'has_mappings' ||
-		newFilterField === 'mapping_status'
-	) {
+	$: if (isSelectField) {
 		newFilterOperator = 'equals';
 	}
 
