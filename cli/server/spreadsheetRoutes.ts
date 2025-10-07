@@ -9,7 +9,7 @@ import { glob } from 'glob';
 import * as yaml from 'js-yaml';
 import multer from 'multer';
 import { dirname, join, relative } from 'path';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-republish';
 import { debug } from '../utils/debug';
 import { getServerState } from './serverState';
 
