@@ -265,7 +265,7 @@ Link controls to actual implementations using a UUID:
 
 ## Configuration
 
-### lula.yaml
+### `lula.yaml`
 
 Managed by the UI for you, each control set includes a configuration file:
 
