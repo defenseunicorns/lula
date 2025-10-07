@@ -10,11 +10,13 @@ import {
 	fetchRawFileViaAPI,
 	extractMapBlocks,
 	getChangedBlocks,
+	getRemovedBlocks,
 	crawlCommand,
 	postFinding,
 	deleteOldIssueComments,
 	deleteOldReviewComments,
 	dismissOldReviews,
+	containsLulaAnnotations,
 	LULA_SIGNATURE
 } from './crawl';
 
@@ -252,6 +254,87 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 	});
 });
 
+describe('getRemovedBlocks', () => {
+	it('detects blocks that exist in old text but not in new text', () => {
+		const uuid1 = '123e4567-e89b-12d3-a456-426614174000';
+		const uuid2 = '987fcdeb-51a2-43d1-b789-456789012345';
+
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid1}`,
+			'old content 1',
+			`// @lulaEnd ${uuid1}`,
+			'middle',
+			`// @lulaStart ${uuid2}`,
+			'old content 2',
+			`// @lulaEnd ${uuid2}`,
+			'footer'
+		].join('\n');
+
+		const newText = [
+			'header',
+			`// @lulaStart ${uuid1}`,
+			'new content 1',
+			`// @lulaEnd ${uuid1}`,
+			'middle',
+			'footer'
+		].join('\n');
+
+		const removed = getRemovedBlocks(oldText, newText);
+		expect(removed).toHaveLength(1);
+		expect(removed[0].uuid).toBe(uuid2);
+		expect(removed[0].startLine).toBe(5);
+		expect(removed[0].endLine).toBe(8);
+	});
+
+	it('returns empty array when no blocks are removed', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'old content',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const newText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'new content',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const removed = getRemovedBlocks(oldText, newText);
+		expect(removed).toHaveLength(0);
+	});
+
+	it('detects all removed blocks when old text has annotations but new text has none', () => {
+		const uuid1 = '123e4567-e89b-12d3-a456-426614174000';
+		const uuid2 = '987fcdeb-51a2-43d1-b789-456789012345';
+
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid1}`,
+			'content 1',
+			`// @lulaEnd ${uuid1}`,
+			'middle',
+			`// @lulaStart ${uuid2}`,
+			'content 2',
+			`// @lulaEnd ${uuid2}`,
+			'footer'
+		].join('\n');
+
+		const newText = ['header', 'middle', 'footer'].join('\n');
+
+		const removed = getRemovedBlocks(oldText, newText);
+		expect(removed).toHaveLength(2);
+		expect(removed.map((b) => b.uuid)).toContain(uuid1);
+		expect(removed.map((b) => b.uuid)).toContain(uuid2);
+	});
+});
+
 // ---- cleanup helpers (unit tests) ----
 describe('cleanup helpers', () => {
 	it('deleteOldIssueComments deletes only the first signed comment per page', async () => {
@@ -362,8 +445,73 @@ describe('cleanup helpers (null/undefined body edge cases)', () => {
 	});
 });
 
-// ---- crawl command (integration) ----
 describe('crawl command (integration)', () => {
+	it('detects deleted files with Lula annotations and adds warning', async () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+		process.env.OWNER = 'octo-org';
+		process.env.REPO = 'octo-repo';
+		process.env.PULL_NUMBER = '88';
+		process.env.GITHUB_TOKEN = 'fake-token';
+
+		pullsGet.mockResolvedValue({ data: { head: { ref: 'feature-branch' } } });
+
+		pullsListReviewComments.mockResolvedValue({ data: [] });
+		pullsListReviews.mockResolvedValue({ data: [] });
+		issuesListComments.mockResolvedValue({ data: [] });
+		pullsListFiles.mockResolvedValue({
+			data: [
+				{ filename: 'config/secrets.yaml', status: 'removed' },
+				{ filename: 'src/regular.txt', status: 'modified' }
+			]
+		});
+		const deletedFileContent = [
+			'# Configuration file with secrets',
+			`# @lulaStart ${uuid}`,
+			'database:',
+			'  password: "secret123"',
+			'  host: "db.internal"',
+			`# @lulaEnd ${uuid}`,
+			'# End of config'
+		].join('\n');
+
+		const regularFileOld = 'const x = 1;';
+		const regularFileNew = 'const x = 2;';
+
+		reposGetContent.mockImplementation(({ path, ref }) => {
+			if (path === 'config/secrets.yaml' && ref === 'main') {
+				const content = Buffer.from(deletedFileContent, 'utf8').toString('base64');
+				return Promise.resolve({ data: { content } });
+			}
+			if (path === 'src/regular.txt' && ref === 'main') {
+				const content = Buffer.from(regularFileOld, 'utf8').toString('base64');
+				return Promise.resolve({ data: { content } });
+			}
+			if (path === 'src/regular.txt' && ref === 'feature-branch') {
+				const content = Buffer.from(regularFileNew, 'utf8').toString('base64');
+				return Promise.resolve({ data: { content } });
+			}
+			throw new Error(`Unexpected getContent call for ${path} @ ${ref}`);
+		});
+
+		const command = crawlCommand();
+		await command.parseAsync(['--post-mode', 'review'], { from: 'user' });
+
+		expect(pullsCreateReview).toHaveBeenCalledTimes(1);
+
+		const call = pullsCreateReview.mock.calls[0][0];
+		expect(call.owner).toBe('octo-org');
+		expect(call.repo).toBe('octo-repo');
+		expect(call.pull_number).toBe(88);
+
+		expect(call.body).toContain('## Lula Compliance Overview');
+		expect(call.body).toContain('**Compliance Warning: Files with Lula annotations were deleted**');
+		expect(call.body).toContain('config/secrets.yaml');
+		expect(call.body).toContain('This may affect compliance coverage');
+		expect(call.body).toContain('Please review whether:');
+		expect(call.body).toContain('The compliance coverage provided by these files is still needed');
+		expect(call.body).toContain('Alternative compliance measures have been implemented');
+	});
+
 	it('comments only for changed blocks, cleans old comments, skips added files, and handles errors (comment mode)', async () => {
 		process.env.OWNER = 'octo-org';
 		process.env.REPO = 'octo-repo';
@@ -590,5 +738,59 @@ describe('postFinding', () => {
 		});
 
 		expect(mockOctokitInstance.pulls.createReview).not.toHaveBeenCalled();
+	});
+});
+
+describe('containsLulaAnnotations', () => {
+	it('returns true when text contains @lulaStart', () => {
+		const text = `
+			Some code here
+			// @lulaStart 123e4567-e89b-12d3-a456-426614174000
+			const config = { secret: true };
+		`;
+		expect(containsLulaAnnotations(text)).toBe(true);
+	});
+
+	it('returns true when text contains @lulaEnd', () => {
+		const text = `
+			const config = { secret: true };
+			// @lulaEnd 123e4567-e89b-12d3-a456-426614174000
+			Some other code here
+		`;
+		expect(containsLulaAnnotations(text)).toBe(true);
+	});
+
+	it('returns true when text contains both @lulaStart and @lulaEnd', () => {
+		const text = `
+			Some code here
+			// @lulaStart 123e4567-e89b-12d3-a456-426614174000
+			const config = { secret: true };
+			// @lulaEnd 123e4567-e89b-12d3-a456-426614174000
+			Some other code here
+		`;
+		expect(containsLulaAnnotations(text)).toBe(true);
+	});
+
+	it('returns false when text contains no Lula annotations', () => {
+		const text = `
+			Some regular code here
+			const config = { public: true };
+			// Just regular comments
+		`;
+		expect(containsLulaAnnotations(text)).toBe(false);
+	});
+
+	it('returns false for empty text', () => {
+		expect(containsLulaAnnotations('')).toBe(false);
+	});
+
+	it('returns true when annotations are in different formats', () => {
+		const text1 = `# @lulaStart abc123`;
+		const text2 = `<!-- @lulaEnd def456 -->`;
+		const text3 = `/* @lulaStart ghi789 */`;
+
+		expect(containsLulaAnnotations(text1)).toBe(true);
+		expect(containsLulaAnnotations(text2)).toBe(true);
+		expect(containsLulaAnnotations(text3)).toBe(true);
 	});
 });

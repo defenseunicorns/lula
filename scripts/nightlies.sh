@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: 2023-Present The Pepr Authors
-
-# Script to build and publish nightly versions of lula2.
+# SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
 set -e
 

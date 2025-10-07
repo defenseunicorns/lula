@@ -7,6 +7,7 @@
 	import FormField from '../forms/FormField.svelte';
 
 	interface MappingFormData {
+		uuid: string;
 		justification: string;
 		status: 'planned' | 'implemented' | 'verified';
 		source_entries: SourceEntry[];
@@ -29,6 +30,7 @@
 	}: Props = $props();
 
 	let formData = $state<MappingFormData>({
+		uuid: initialData.uuid || '',
 		justification: initialData.justification || '',
 		status: initialData.status || 'planned',
 		source_entries: initialData.source_entries || []
@@ -49,6 +51,7 @@
 	function handleCancel() {
 		// Reset form
 		formData = {
+			uuid: initialData.uuid || '',
 			justification: initialData.justification || '',
 			status: initialData.status || 'planned',
 			source_entries: initialData.source_entries || []
@@ -81,6 +84,14 @@
 	<div class="space-y-8">
 		<!-- Main form fields -->
 		<div class="grid grid-cols-1 gap-8">
+			<FormField
+				id="mapping-uuid"
+				label="UUID"
+				type="text"
+				bind:value={formData.uuid}
+				placeholder="Enter mapping UUID (leave empty to auto-generate)"
+			/>
+
 			<FormField
 				id="mapping-justification"
 				label="Justification"

@@ -214,6 +214,382 @@ describe('WebSocket Client', () => {
 		});
 	});
 
+	describe('Message Handler Methods', () => {
+		beforeEach(() => {
+			// Reset app state before each test
+			appState.set({
+				id: 'unknown',
+				name: 'Unknown Control Set',
+				currentPath: '',
+				controls: [],
+				mappings: [],
+				families: [],
+				totalControls: 0,
+				totalMappings: 0,
+				isConnected: false
+			});
+		});
+
+		describe('handleConnected', () => {
+			it('should update isConnected to true', () => {
+				wsClient.handleConnected();
+
+				let currentState: AppState;
+				appState.subscribe((state) => (currentState = state))();
+				expect(currentState!.isConnected).toBe(true);
+			});
+		});
+
+		describe('handleStateUpdate', () => {
+			it('should update entire app state with payload', () => {
+				const payload = {
+					id: 'test-control-set',
+					name: 'Test Control Set',
+					title: 'Test Title',
+					version: '1.0.0',
+					controls: [{ id: 'test-1', title: 'Test Control', family: 'access-control' }],
+					mappings: [],
+					totalControls: 1,
+					totalMappings: 0
+				};
+
+				wsClient.handleStateUpdate(payload);
+
+				let currentState: AppState;
+				appState.subscribe((state) => (currentState = state))();
+				expect(currentState!.id).toBe('test-control-set');
+				expect(currentState!.name).toBe('Test Control Set');
+				expect(currentState!.title).toBe('Test Title');
+				expect(currentState!.version).toBe('1.0.0');
+				expect(currentState!.isConnected).toBe(true);
+				expect(currentState!.isSwitchingControlSet).toBe(false);
+			});
+
+			it('should not update state if payload is null', () => {
+				const initialState = {
+					id: 'initial',
+					name: 'Initial Control Set',
+					currentPath: '',
+					controls: [],
+					mappings: [],
+					families: [],
+					totalControls: 0,
+					totalMappings: 0,
+					isConnected: false
+				};
+				appState.set(initialState);
+
+				wsClient.handleStateUpdate(null);
+
+				let currentState: AppState;
+				appState.subscribe((state) => (currentState = state))();
+				expect(currentState!.id).toBe('initial');
+				expect(currentState!.name).toBe('Initial Control Set');
+			});
+		});
+
+		describe('handleMetadataUpdate', () => {
+			it('should update metadata and clear switching flag', () => {
+				appState.update((state) => ({ ...state, isSwitchingControlSet: true }));
+
+				const payload = {
+					id: 'updated-control-set',
+					name: 'Updated Control Set',
+					description: 'Test description',
+					version: '2.0.0'
+				};
+
+				wsClient.handleMetadataUpdate(payload);
+
+				let currentState: AppState;
+				appState.subscribe((state) => (currentState = state))();
+				expect(currentState!.id).toBe('updated-control-set');
+				expect(currentState!.name).toBe('Updated Control Set');
+				expect(currentState!.description).toBe('Test description');
+				expect(currentState!.version).toBe('2.0.0');
+				expect(currentState!.isConnected).toBe(true);
+				expect(currentState!.isSwitchingControlSet).toBe(false);
+			});
+
+			it('should not update if payload is null', () => {
+				const initialState = {
+					id: 'initial',
+					name: 'Initial Control Set',
+					currentPath: '',
+					controls: [],
+					mappings: [],
+					families: [],
+					totalControls: 0,
+					totalMappings: 0,
+					isConnected: false
+				};
+				appState.set(initialState);
+
+				wsClient.handleMetadataUpdate(null);
+
+				let currentState: AppState;
+				appState.subscribe((state) => (currentState = state))();
+				expect(currentState!.id).toBe('initial');
+			});
+		});
+
+		describe('handleControlsUpdate', () => {
+			it('should update controls array', () => {
+				const controls = [
+					{ id: 'test-1', title: 'Test Control 1', family: 'access-control' },
+					{ id: 'test-2', title: 'Test Control 2', family: 'audit' },
+					{ id: 'test-3', title: 'Test Control 3', family: 'system-information' }
+				];
+
+				wsClient.handleControlsUpdate(controls);
+
+				let currentState: AppState;
+				appState.subscribe((state) => (currentState = state))();
+				expect(currentState!.controls).toEqual(controls);
+				expect(currentState!.controls).toHaveLength(3);
+			});
+
+			it('should not update if payload is null', () => {
+				const initialControls = [{ id: 'initial', title: 'Initial Control', family: 'test' }];
+				appState.update((state) => ({ ...state, controls: initialControls }));
+
+				wsClient.handleControlsUpdate(null);
+
+				let currentState: AppState;
+				appState.subscribe((state) => (currentState = state))();
+				expect(currentState!.controls).toEqual(initialControls);
+			});
+		});
+
+		describe('handleMappingsUpdate', () => {
+			it('should update mappings array', () => {
+				const mappings = [
+					{
+						uuid: 'mapping-1',
+						control_id: 'test-1',
+						justification: 'Test justification 1',
+						source_entries: [{ location: 'test/location1' }] as SourceEntry[],
+						status: 'implemented'
+					},
+					{
+						uuid: 'mapping-2',
+						control_id: 'test-2',
+						justification: 'Test justification 2',
+						source_entries: [{ location: 'test/location2' }] as SourceEntry[],
+						status: 'planned'
+					}
+				];
+
+				wsClient.handleMappingsUpdate(mappings);
+
+				let currentState: AppState;
+				appState.subscribe((state) => (currentState = state))();
+				expect(currentState!.mappings).toEqual(mappings);
+				expect(currentState!.mappings).toHaveLength(2);
+			});
+
+			it('should not update if payload is null', () => {
+				const initialMappings = [
+					{
+						uuid: 'initial',
+						control_id: 'test',
+						justification: 'Initial',
+						source_entries: [],
+						status: 'implemented' as const
+					}
+				];
+				appState.update((state) => ({ ...state, mappings: initialMappings }));
+
+				wsClient.handleMappingsUpdate(null);
+
+				let currentState: AppState;
+				appState.subscribe((state) => (currentState = state))();
+				expect(currentState!.mappings).toEqual(initialMappings);
+			});
+		});
+
+		describe('handleControlDetails', () => {
+			it('should emit control-details custom event', () => {
+				const payload = {
+					id: 'test-1',
+					title: 'Test Control',
+					description: 'Test description',
+					implementations: []
+				};
+				let receivedDetail: any = null;
+
+				const eventListener = (event: any) => {
+					receivedDetail = event.detail;
+				};
+				window.addEventListener('control-details', eventListener);
+
+				wsClient.handleControlDetails(payload);
+
+				expect(receivedDetail).toEqual(payload);
+
+				// Cleanup
+				window.removeEventListener('control-details', eventListener);
+			});
+
+			it('should not emit event if payload is null', () => {
+				let eventEmitted = false;
+
+				const eventListener = () => {
+					eventEmitted = true;
+				};
+				window.addEventListener('control-details', eventListener);
+
+				wsClient.handleControlDetails(null);
+
+				expect(eventEmitted).toBe(false);
+
+				// Cleanup
+				window.removeEventListener('control-details', eventListener);
+			});
+		});
+
+		describe('handleControlSetsList', () => {
+			it('should emit control-sets-list custom event', () => {
+				const payload = [
+					{ id: 'set-1', name: 'Control Set 1', path: '/path/to/set1' },
+					{ id: 'set-2', name: 'Control Set 2', path: '/path/to/set2' }
+				];
+				let receivedDetail: any = null;
+
+				const eventListener = (event: any) => {
+					receivedDetail = event.detail;
+				};
+				window.addEventListener('control-sets-list', eventListener);
+
+				wsClient.handleControlSetsList(payload);
+
+				expect(receivedDetail).toEqual(payload);
+
+				// Cleanup
+				window.removeEventListener('control-sets-list', eventListener);
+			});
+
+			it('should not emit event if payload is null', () => {
+				let eventEmitted = false;
+
+				const eventListener = () => {
+					eventEmitted = true;
+				};
+				window.addEventListener('control-sets-list', eventListener);
+
+				wsClient.handleControlSetsList(null);
+
+				expect(eventEmitted).toBe(false);
+
+				// Cleanup
+				window.removeEventListener('control-sets-list', eventListener);
+			});
+		});
+
+		describe('handleControlUpdated', () => {
+			it('should log success message', () => {
+				const consoleSpy = vi.spyOn(console, 'log');
+				const payload = { id: 'test-1', status: 'success' };
+
+				wsClient.handleControlUpdated(payload);
+
+				expect(consoleSpy).toHaveBeenCalledWith('Control updated successfully:', payload);
+			});
+
+			it('should handle null payload', () => {
+				const consoleSpy = vi.spyOn(console, 'log');
+
+				wsClient.handleControlUpdated(null);
+
+				expect(consoleSpy).toHaveBeenCalledWith('Control updated successfully:', null);
+			});
+		});
+
+		describe('handleMappingOperation', () => {
+			it('should emit mappings-changed custom event for mapping-created', () => {
+				const payload = { uuid: 'new-mapping', control_id: 'test-1' };
+				let receivedDetail: any = null;
+
+				const eventListener = (event: any) => {
+					receivedDetail = event.detail;
+				};
+				window.addEventListener('mappings-changed', eventListener);
+
+				wsClient.handleMappingOperation('mapping-created', payload);
+
+				expect(receivedDetail).toEqual(payload);
+
+				// Cleanup
+				window.removeEventListener('mappings-changed', eventListener);
+			});
+
+			it('should emit mappings-changed custom event for mapping-updated', () => {
+				const payload = { uuid: 'updated-mapping', control_id: 'test-1' };
+				let receivedDetail: any = null;
+
+				const eventListener = (event: any) => {
+					receivedDetail = event.detail;
+				};
+				window.addEventListener('mappings-changed', eventListener);
+
+				wsClient.handleMappingOperation('mapping-updated', payload);
+
+				expect(receivedDetail).toEqual(payload);
+
+				// Cleanup
+				window.removeEventListener('mappings-changed', eventListener);
+			});
+
+			it('should emit mappings-changed custom event for mapping-deleted', () => {
+				const payload = { uuid: 'deleted-mapping' };
+				let receivedDetail: any = null;
+
+				const eventListener = (event: any) => {
+					receivedDetail = event.detail;
+				};
+				window.addEventListener('mappings-changed', eventListener);
+
+				wsClient.handleMappingOperation('mapping-deleted', payload);
+
+				expect(receivedDetail).toEqual(payload);
+
+				// Cleanup
+				window.removeEventListener('mappings-changed', eventListener);
+			});
+
+			it('should log the operation type and payload', () => {
+				const consoleSpy = vi.spyOn(console, 'log');
+				const payload = { uuid: 'test-mapping' };
+
+				wsClient.handleMappingOperation('mapping-created', payload);
+
+				expect(consoleSpy).toHaveBeenCalledWith(
+					'Mapping operation successful: mapping-created',
+					payload
+				);
+			});
+		});
+
+		describe('handleError', () => {
+			it('should log error message', () => {
+				const consoleErrorSpy = vi.spyOn(console, 'error');
+				const payload = { message: 'Test error', code: 500 };
+
+				wsClient.handleError(payload);
+
+				expect(consoleErrorSpy).toHaveBeenCalledWith('WebSocket error:', payload);
+			});
+
+			it('should handle null payload', () => {
+				const consoleErrorSpy = vi.spyOn(console, 'error');
+
+				wsClient.handleError(null);
+
+				expect(consoleErrorSpy).toHaveBeenCalledWith('WebSocket error:', null);
+			});
+		});
+	});
+
 	describe('Command Methods', () => {
 		beforeEach(async () => {
 			wsClient.connect();

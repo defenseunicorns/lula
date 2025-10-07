@@ -15,7 +15,7 @@
 	let { mapping, onEdit, onDelete, showActions = false }: Props = $props();
 
 	function handleCopyUuid() {
-		navigator.clipboard.writeText(`@lula ${mapping.uuid}`);
+		navigator.clipboard.writeText(`${mapping.uuid}`);
 	}
 
 	function handleEdit() {
