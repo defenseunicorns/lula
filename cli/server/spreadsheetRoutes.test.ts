@@ -22,13 +22,18 @@ import { getServerState } from './serverState';
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { glob } from 'glob';
 import * as yaml from 'js-yaml';
-import ExcelJS from 'exceljs';
+import * as XLSX from 'xlsx-republish';
 
 vi.mock('fs');
 vi.mock('glob');
 vi.mock('js-yaml');
 vi.mock('./serverState');
-vi.mock('exceljs');
+vi.mock('xlsx-republish', () => ({
+	read: vi.fn(),
+	utils: {
+		sheet_to_json: vi.fn()
+	}
+}));
 vi.mock('crypto', () => ({
 	default: {
 		randomUUID: vi.fn(() => 'test-uuid-123')
@@ -43,6 +48,8 @@ const mockGlob = vi.mocked(glob);
 const mockYamlLoad = vi.mocked(yaml.load);
 const mockYamlDump = vi.mocked(yaml.dump);
 const mockGetServerState = vi.mocked(getServerState);
+const mockXLSXRead = vi.mocked(XLSX.read);
+const mockXLSXSheetToJson = vi.mocked(XLSX.utils.sheet_to_json);
 
 describe('spreadsheetRoutes', () => {
 	beforeEach(() => {
@@ -472,6 +479,7 @@ describe('spreadsheetRoutes', () => {
 		});
 
 		it('should handle invalid field schema JSON gracefully', () => {
+			const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 			const reqBody = {
 				fieldSchema: 'invalid json'
 			};
@@ -479,6 +487,9 @@ describe('spreadsheetRoutes', () => {
 			const result = processImportParameters(reqBody);
 
 			expect(result.frontendFieldSchema).toBeNull();
+			expect(consoleSpy).toHaveBeenCalledWith('Failed to parse fieldSchema:', expect.any(Error));
+
+			consoleSpy.mockRestore();
 		});
 	});
 
@@ -500,37 +511,19 @@ describe('spreadsheetRoutes', () => {
 
 		it('should parse Excel files correctly', async () => {
 			const mockWorkbook = {
-				xlsx: {
-					load: vi.fn().mockResolvedValue(undefined)
-				},
-				worksheets: [
-					{
-						eachRow: vi.fn().mockImplementation((options, callback) => {
-							// Mock first row (headers)
-							const row1 = {
-								eachCell: vi.fn().mockImplementation((cellOptions, cellCallback) => {
-									cellCallback({ value: 'Name' }, 1);
-									cellCallback({ value: 'Age' }, 2);
-									cellCallback({ value: 'City' }, 3);
-								})
-							};
-							callback(row1, 1);
-
-							// Mock second row (data)
-							const row2 = {
-								eachCell: vi.fn().mockImplementation((cellOptions, cellCallback) => {
-									cellCallback({ value: 'John' }, 1);
-									cellCallback({ value: 30 }, 2);
-									cellCallback({ value: 'NYC' }, 3);
-								})
-							};
-							callback(row2, 2);
-						})
-					}
-				]
+				SheetNames: ['Sheet1'],
+				Sheets: {
+					Sheet1: {}
+				}
 			};
 
-			vi.mocked(ExcelJS.Workbook).mockImplementation(() => mockWorkbook as any);
+			const mockSheetData = [
+				['Name', 'Age', 'City'],
+				['John', 30, 'NYC']
+			];
+
+			mockXLSXRead.mockReturnValue(mockWorkbook as any);
+			mockXLSXSheetToJson.mockReturnValue(mockSheetData as any);
 
 			const mockFile = {
 				originalname: 'test.xlsx',
@@ -547,13 +540,11 @@ describe('spreadsheetRoutes', () => {
 
 		it('should throw error when Excel file has no worksheets', async () => {
 			const mockWorkbook = {
-				xlsx: {
-					load: vi.fn().mockResolvedValue(undefined)
-				},
-				worksheets: []
+				SheetNames: [],
+				Sheets: {}
 			};
 
-			vi.mocked(ExcelJS.Workbook).mockImplementation(() => mockWorkbook as any);
+			mockXLSXRead.mockReturnValue(mockWorkbook as any);
 
 			const mockFile = {
 				originalname: 'test.xlsx',

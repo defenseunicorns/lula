@@ -3,7 +3,7 @@
 
 import crypto from 'crypto';
 import { parse as parseCSVSync } from 'csv-parse/sync';
-import ExcelJS from 'exceljs';
+import * as XLSX from 'xlsx-republish';
 import express from 'express';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { glob } from 'glob';
@@ -172,24 +172,17 @@ export async function parseUploadedFile(file: any): Promise<any[][]> {
 		const csvContent = file.buffer.toString('utf-8');
 		rawData = parseCSV(csvContent);
 	} else {
-		// Parse Excel file with ExcelJS
-		const workbook = new ExcelJS.Workbook();
-		const buffer = Buffer.from(file.buffer);
-		await workbook.xlsx.load(buffer as any);
-		const worksheet = workbook.worksheets[0];
+		// Parse Excel file with xlsx-republish
+		const workbook = XLSX.read(file.buffer, { type: 'buffer' });
+		const worksheetName = workbook.SheetNames[0];
 
-		if (!worksheet) {
+		if (!worksheetName) {
 			throw new Error('No worksheet found in file');
 		}
 
-		// Convert to array format similar to XLSX
-		worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
-			const rowData: any[] = [];
-			row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-				rowData[colNumber - 1] = cell.value;
-			});
-			rawData[rowNumber - 1] = rowData;
-		});
+		const worksheet = workbook.Sheets[worksheetName];
+		// Convert to array format
+		rawData = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: null });
 	}
 
 	return rawData;
@@ -1217,55 +1210,30 @@ async function exportAsExcelWithMapping(
 		return exportControl;
 	});
 
-	// Create workbook and worksheet with ExcelJS
-	const wb = new ExcelJS.Workbook();
-	const ws = wb.addWorksheet('Controls');
+	// Create workbook and worksheet with xlsx-republish
+	const wb = XLSX.utils.book_new();
 
-	// Add headers and configure columns
-	const headers = Object.keys(worksheetData[0] || {});
-	ws.columns = headers.map((header) => ({
-		header: header,
-		key: header,
-		width: Math.min(
-			Math.max(
-				header.length,
-				...worksheetData.map((row: any) => String(row[header] || '').length)
-			) + 2,
-			50
-		) // Auto-size with max width of 50
-	}));
-
-	// Add data rows
-	worksheetData.forEach((row: any) => {
-		ws.addRow(row);
-	});
-
-	// Style the header row
-	ws.getRow(1).font = { bold: true };
-	ws.getRow(1).fill = {
-		type: 'pattern',
-		pattern: 'solid',
-		fgColor: { argb: 'FFE0E0E0' }
-	};
+	// Convert worksheetData to worksheet format
+	const ws = XLSX.utils.json_to_sheet(worksheetData);
+	XLSX.utils.book_append_sheet(wb, ws, 'Controls');
 
 	// Create metadata sheet if available
 	if (metadata) {
-		const metaSheet = wb.addWorksheet('Metadata');
 		const cleanMetadata = { ...metadata };
 		delete cleanMetadata.fieldSchema; // Remove large schema object
 
-		// Add metadata as key-value pairs
-		metaSheet.columns = [
-			{ header: 'Property', key: 'property', width: 30 },
-			{ header: 'Value', key: 'value', width: 50 }
-		];
-		Object.entries(cleanMetadata).forEach(([key, value]) => {
-			metaSheet.addRow({ property: key, value: String(value) });
-		});
+		// Convert metadata to array of objects for sheet creation
+		const metadataArray = Object.entries(cleanMetadata).map(([key, value]) => ({
+			Property: key,
+			Value: String(value)
+		}));
+
+		const metaSheet = XLSX.utils.json_to_sheet(metadataArray);
+		XLSX.utils.book_append_sheet(wb, metaSheet, 'Metadata');
 	}
 
 	// Generate Excel buffer
-	const buffer = await wb.xlsx.writeBuffer();
+	const buffer = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
 	const fileName = `${metadata?.name || 'controls'}_export_${Date.now()}.xlsx`;
 
 	res.setHeader(
@@ -1443,29 +1411,21 @@ router.post('/parse-excel', upload.single('file'), async (req, res) => {
 			rows = parseCSV(csvContent);
 			sheets = ['Sheet1']; // CSV files only have one "sheet"
 		} else {
-			// Parse Excel file with ExcelJS
-			const workbook = new ExcelJS.Workbook();
-			// Convert multer buffer to Node.js Buffer
-			const buffer = Buffer.from(req.file.buffer);
-			await workbook.xlsx.load(buffer as any);
+			// Parse Excel file with xlsx-republish
+			const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
 
 			// Get all sheet names
-			sheets = workbook.worksheets.map((ws) => ws.name);
+			sheets = workbook.SheetNames;
 
 			// Parse first sheet by default
-			const worksheet = workbook.worksheets[0];
-			if (!worksheet) {
+			const worksheetName = workbook.SheetNames[0];
+			if (!worksheetName) {
 				return res.status(400).json({ error: 'No worksheet found in file' });
 			}
 
+			const worksheet = workbook.Sheets[worksheetName];
 			// Get data from the worksheet
-			worksheet.eachRow({ includeEmpty: false }, (row: any, _rowNumber: number) => {
-				const rowData: any[] = [];
-				row.eachCell({ includeEmpty: true }, (cell: any, colNumber: number) => {
-					rowData[colNumber - 1] = cell.value;
-				});
-				rows.push(rowData);
-			});
+			rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: null });
 		}
 
 		// Find potential header rows (first 5 non-empty rows)
@@ -1510,26 +1470,18 @@ router.post('/parse-excel-sheet', upload.single('file'), async (req, res) => {
 			const csvContent = req.file.buffer.toString('utf-8');
 			rows = parseCSV(csvContent);
 		} else {
-			// Parse Excel file with ExcelJS
-			const workbook = new ExcelJS.Workbook();
-			// Convert multer buffer to Node.js Buffer
-			const buffer = Buffer.from(req.file.buffer);
-			await workbook.xlsx.load(buffer as any);
+			// Parse Excel file with xlsx-republish
+			const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
 
-			// Get specific sheet
-			const worksheet = workbook.getWorksheet(sheetName);
-			if (!worksheet) {
+			// Check if sheet exists
+			if (!workbook.SheetNames.includes(sheetName)) {
 				return res.status(400).json({ error: `Sheet "${sheetName}" not found` });
 			}
 
+			// Get specific sheet
+			const worksheet = workbook.Sheets[sheetName];
 			// Get data from the worksheet
-			worksheet.eachRow({ includeEmpty: false }, (row: any, _rowNumber: number) => {
-				const rowData: any[] = [];
-				row.eachCell({ includeEmpty: true }, (cell: any, colNumber: number) => {
-					rowData[colNumber - 1] = cell.value;
-				});
-				rows.push(rowData);
-			});
+			rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: null });
 		}
 
 		const headerRowIndex = parseInt(headerRow) - 1;
