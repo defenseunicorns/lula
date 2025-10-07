@@ -9,7 +9,8 @@
 		type FilterValue,
 		activeFilters,
 		FILTER_OPERATORS,
-		getOperatorLabel
+		getOperatorLabel,
+		MAPPING_STATUS_OPTIONS
 	} from '$stores/compliance';
 	import { appState } from '$lib/websocket';
 	import { Filter, Add, TrashCan, ChevronDown, ChevronUp } from 'carbon-icons-svelte';
@@ -37,12 +38,17 @@
 
 	// Get field type for the selected field
 	$: selectedFieldSchema = $fieldSchema[newFilterField] || null;
-	$: selectedFieldType = selectedFieldSchema?.type || 'string';
-	$: selectedFieldUiType = selectedFieldSchema?.ui_type || 'short_text';
+	$: selectedFieldType =
+		getMappingFieldType(newFilterField) || selectedFieldSchema?.type || 'string';
+	$: selectedFieldUiType =
+		getMappingFieldUiType(newFilterField) || selectedFieldSchema?.ui_type || 'short_text';
 	$: isSelectField = selectedFieldUiType === 'select';
-	$: fieldOptions = isSelectField ? selectedFieldSchema?.options || [] : [];
+	$: fieldOptions =
+		getMappingFieldOptions(newFilterField) ||
+		(isSelectField ? selectedFieldSchema?.options || [] : []);
 
-	// Force equals operator for select fields
+	// Force equals operator for select fields (but allow operators for mapping fields)
+	// Also force equals operator for has_mappings field
 	$: if (isSelectField) {
 		newFilterOperator = 'equals';
 	}
@@ -51,6 +57,7 @@
 	$: fieldsByTab = {
 		overview: [] as string[],
 		implementation: [] as string[],
+		mappings: [] as string[],
 		custom: [] as string[]
 	};
 
@@ -58,19 +65,25 @@
 		// Reset arrays before populating
 		fieldsByTab.overview = [];
 		fieldsByTab.implementation = [];
+		fieldsByTab.mappings = [];
 		fieldsByTab.custom = [];
 
 		// Group fields by tab
 		availableFields.forEach((field) => {
-			const schema = $fieldSchema[field];
-			if (schema) {
-				const tab = schema.tab || getDefaultTabForCategory(schema.category);
-				if (tab === 'overview') fieldsByTab.overview.push(field);
-				else if (tab === 'implementation') fieldsByTab.implementation.push(field);
-				else fieldsByTab.custom.push(field);
+			// Handle mapping-related fields specially
+			if (field === 'has_mappings' || field === 'mapping_status') {
+				fieldsByTab.mappings.push(field);
 			} else {
-				// If no schema, default to custom
-				fieldsByTab.custom.push(field);
+				const schema = $fieldSchema[field];
+				if (schema) {
+					const tab = schema.tab || getDefaultTabForCategory(schema.category);
+					if (tab === 'overview') fieldsByTab.overview.push(field);
+					else if (tab === 'implementation') fieldsByTab.implementation.push(field);
+					else fieldsByTab.custom.push(field);
+				} else {
+					// If no schema, default to custom
+					fieldsByTab.custom.push(field);
+				}
 			}
 		});
 	}
@@ -86,6 +99,11 @@
 		if (!newFilterField) return;
 
 		let value = newFilterValue;
+
+		// Extract value from dropdown objects if necessary
+		if (typeof value === 'object' && value !== null && 'value' in value) {
+			value = (value as any).value;
+		}
 
 		// Convert value based on field type
 		let processedValue: FilterValue = value;
@@ -125,8 +143,54 @@
 		}
 	}
 
+	// Centralized mapping field metadata
+	const mappingFieldConfig: Record<
+		string,
+		{
+			type: string;
+			ui_type: string;
+			options?: Array<{ value: string; label: string }>;
+		}
+	> = {
+		has_mappings: {
+			type: 'boolean',
+			ui_type: 'select',
+			options: [
+				{ value: 'true', label: 'Yes' },
+				{ value: 'false', label: 'No' }
+			]
+		},
+		mapping_status: {
+			type: 'string',
+			ui_type: 'select',
+			options: MAPPING_STATUS_OPTIONS
+		}
+	};
+
+	function getMappingFieldType(fieldName: string): string | null {
+		return mappingFieldConfig[fieldName]?.type ?? null;
+	}
+
+	function getMappingFieldUiType(fieldName: string): string | null {
+		return mappingFieldConfig[fieldName]?.ui_type ?? null;
+	}
+
+	function getMappingFieldOptions(
+		fieldName: string
+	): Array<{ value: string; label: string }> | null {
+		return mappingFieldConfig[fieldName]?.options ?? null;
+	}
+
 	// Get display name for a field
 	function getFieldDisplayName(fieldName: string): string {
+		// Handle mapping fields specially
+		switch (fieldName) {
+			case 'has_mappings':
+				return 'Has Mappings';
+			case 'mapping_status':
+				return 'Mapping Status';
+		}
+
 		const schema = $fieldSchema[fieldName];
 
 		// Use schema names if available
@@ -145,9 +209,27 @@
 		if (filter.operator === 'exists') return 'exists';
 		if (filter.operator === 'not_exists') return 'does not exist';
 
+		// Convert value to string, handling objects and arrays properly
+		let displayValue = '';
+		if (filter.value === null || filter.value === undefined) {
+			displayValue = '';
+		} else if (typeof filter.value === 'object') {
+			// Handle objects by converting to JSON or getting a meaningful representation
+			if (Array.isArray(filter.value)) {
+				displayValue = filter.value.join(', ');
+			} else if ('value' in filter.value) {
+				// Handle dropdown option objects
+				displayValue = String((filter.value as any).value);
+			} else {
+				displayValue = JSON.stringify(filter.value);
+			}
+		} else {
+			displayValue = String(filter.value);
+		}
+
 		// Use the shared getOperatorLabel function
 		const operatorText = getOperatorLabel(filter.operator).toLowerCase();
-		return `${operatorText} "${filter.value}"`;
+		return `${operatorText} "${displayValue}"`;
 	}
 
 	// Handle click outside to close the panel
@@ -306,6 +388,33 @@
 										{/each}
 									{/if}
 
+									<!-- Mapping fields -->
+									{#if fieldsByTab.mappings.length > 0}
+										<!-- Divider -->
+										<div class="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+										<div
+											class="px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/80"
+										>
+											Mapping Fields
+										</div>
+										{#each fieldsByTab.mappings as field (field)}
+											<button
+												class={twMerge(
+													'w-full text-left px-3 py-2 text-sm',
+													newFilterField === field
+														? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+														: 'hover:bg-gray-100 dark:hover:bg-gray-700/50'
+												)}
+												onclick={() => {
+													newFilterField = field;
+													showFieldDropdown = false;
+												}}
+											>
+												{getFieldDisplayName(field)}
+											</button>
+										{/each}
+									{/if}
+
 									<!-- Custom fields -->
 									{#if fieldsByTab.custom.length > 0}
 										<!-- Divider -->
@@ -343,8 +452,8 @@
 							>Operator</label
 						>
 
-						{#if isSelectField}
-							<!-- Disabled dropdown for select fields (always equals) -->
+						{#if (isSelectField && !['has_mappings', 'mapping_status'].includes(newFilterField)) || newFilterField === 'has_mappings' || newFilterField === 'mapping_status'}
+							<!-- Disabled dropdown for select fields and has_mappings (always equals) -->
 							<div
 								class="px-3 py-2 text-sm rounded-md border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400"
 							>
@@ -367,7 +476,30 @@
 							<label for="filter-value" class="block text-xs text-gray-600 dark:text-gray-400 mb-1"
 								>Value</label
 							>
-							{#if isSelectField}
+							{#if newFilterField === 'mapping_status'}
+								<!-- Special dropdown for mapping status -->
+								<select
+									id="filter-value"
+									bind:value={newFilterValue}
+									class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+								>
+									<option value="">Select status...</option>
+									{#each MAPPING_STATUS_OPTIONS as status}
+										<option value={status.value}>{status.label}</option>
+									{/each}
+								</select>
+							{:else if newFilterField === 'has_mappings'}
+								<!-- Special dropdown for has_mappings -->
+								<select
+									id="filter-value"
+									bind:value={newFilterValue}
+									class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+								>
+									<option value="">Select...</option>
+									<option value="true">Yes</option>
+									<option value="false">No</option>
+								</select>
+							{:else if isSelectField}
 								<!-- Custom dropdown for select fields -->
 								<CustomDropdown
 									bind:value={newFilterValue}
@@ -377,15 +509,15 @@
 								/>
 							{:else if selectedFieldType === 'boolean'}
 								<!-- Boolean field with CustomDropdown -->
-								<CustomDropdown
+								<select
+									id="filter-value"
 									bind:value={newFilterValue}
-									options={[
-										{ value: 'true', label: 'Yes' },
-										{ value: 'false', label: 'No' }
-									]}
-									placeholder="Select yes/no"
-									labelId="filter-value"
-								/>
+									class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm"
+								>
+									<option value="">Select...</option>
+									<option value="true">Yes</option>
+									<option value="false">No</option>
+								</select>
 							{:else}
 								<!-- Text input for other fields -->
 								<input

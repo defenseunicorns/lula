@@ -39,7 +39,7 @@
     "dev:full": "concurrently \"npm run dev:api\" \"npm run dev\"",
     "build": "npm run build:svelte && npm run build:cli && npm run postbuild:cli",
     "build:svelte": "vite build",
-    "build:cli": "esbuild index.ts cli/**/*.ts --bundle --platform=node --target=node22 --format=esm --outdir=dist --external:express --external:commander --external:js-yaml --external:yaml --external:isomorphic-git --external:glob --external:open --external:ws --external:cors --external:multer --external:@octokit/rest --external:undici --external:exceljs --external:csv-parse",
+    "build:cli": "esbuild index.ts cli/**/*.ts --bundle --platform=node --target=node22 --format=esm --outdir=dist --external:express --external:commander --external:js-yaml --external:yaml --external:isomorphic-git --external:glob --external:open --external:ws --external:cors --external:multer --external:@octokit/rest --external:undici --external:xlsx-republish --external:csv-parse",
     "postbuild:cli": "cp cli-wrapper.mjs dist/lula2 && chmod +x dist/lula2",
     "preview": "vite preview",
     "prepare": "svelte-kit sync || echo ''",
