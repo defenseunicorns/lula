@@ -13,6 +13,8 @@ import { dirname, join, relative } from 'path';
 import { debug } from '../utils/debug';
 import { getServerState, getCurrentControlSetPath } from './serverState';
 
+const MAX_HEADER_CANDIDATES = 5;
+const PREVIEW_COLUMNS = 4;
 // Type definitions
 interface SpreadsheetRow {
 	[key: string]: any;
@@ -1429,11 +1431,11 @@ router.post('/parse-excel', upload.single('file'), async (req, res) => {
 		}
 
 		// Find potential header rows (first 5 non-empty rows)
-		const headerCandidates = rows.slice(0, 5).map((row, index) => ({
+		const headerCandidates = rows.slice(0, MAX_HEADER_CANDIDATES).map((row, index) => ({
 			row: index + 1,
 			preview:
 				row
-					.slice(0, 4)
+					.slice(0, PREVIEW_COLUMNS)
 					.filter((v) => v !== null)
 					.filter((v) => v !== undefined)
 					.join(', ') + (row.length > 4 ? ', ...' : '')
@@ -1536,11 +1538,11 @@ router.post('/parse-excel-sheet-previews', upload.single('file'), async (req, re
 			rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: null });
 		}
 
-		const headerCandidates = rows.slice(0, 5).map((row, index) => ({
+		const headerCandidates = rows.slice(0, MAX_HEADER_CANDIDATES).map((row, index) => ({
 			row: index + 1,
 			preview:
 				row
-					.slice(0, 4)
+					.slice(0, PREVIEW_COLUMNS)
 					.filter((v) => v !== null)
 					.filter((v) => v !== undefined)
 					.join(', ') + (row.length > 4 ? ', ...' : '')
