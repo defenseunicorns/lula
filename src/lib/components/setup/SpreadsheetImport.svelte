@@ -434,7 +434,7 @@
 			// Add configuration
 			formData.append('controlIdField', controlIdField);
 			formData.append('startRow', headerRow.toString());
-			formData.append('sheetName', selectedSheet); // Add the selected sheet name
+			formData.append('sheetName', selectedSheet);
 			formData.append('namingConvention', 'kebab-case');
 			formData.append('skipEmpty', 'true');
 			formData.append('skipEmptyRows', 'true');
@@ -473,7 +473,6 @@
 				const result = await response.json();
 				successMessage = `Successfully imported ${result.controlCount} controls into ${result.families.length} families`;
 
-				// Dispatch event to parent
 				dispatch('created', { path: result.outputDir });
 			} catch (error) {
 				console.error('Error importing spreadsheet:', error);
