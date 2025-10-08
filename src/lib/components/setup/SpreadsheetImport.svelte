@@ -455,21 +455,25 @@
 				JSON.stringify(justificationFields.map((field) => cleanFieldName(field)))
 			);
 
-			const response = await fetch('/api/import-spreadsheet', {
-				method: 'POST',
-				body: formData
-			});
+			let response: Response;
+			try {
+				response = await fetch('/api/import-spreadsheet', {
+					method: 'POST',
+					body: formData
+				});
+				if (!response.ok) {
+					const error = await response.json();
+					throw new Error(error.error || 'Import failed');
+				}
 
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || 'Import failed');
+				const result = await response.json();
+				successMessage = `Successfully imported ${result.controlCount} controls into ${result.families.length} families`;
+
+				// Dispatch event to parent
+				dispatch('created', { path: result.outputDir });
+			} catch (error) {
+				console.error('Error importing spreadsheet:', error);
 			}
-
-			const result = await response.json();
-			successMessage = `Successfully imported ${result.controlCount} controls into ${result.families.length} families`;
-
-			// Dispatch event to parent
-			dispatch('created', { path: result.outputDir });
 		} catch (error) {
 			errorMessage = 'Error importing spreadsheet: ' + (error as Error).message;
 		} finally {
