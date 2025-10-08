@@ -1510,7 +1510,6 @@ router.post('/parse-excel-sheet', upload.single('file'), async (req, res) => {
 	}
 });
 
-// Get row previews for a specific sheet
 router.post('/parse-excel-sheet-previews', upload.single('file'), async (req, res) => {
 	try {
 		const { sheetName } = req.body;
