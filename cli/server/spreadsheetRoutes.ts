@@ -1510,4 +1510,51 @@ router.post('/parse-excel-sheet', upload.single('file'), async (req, res) => {
 	}
 });
 
+// Get row previews for a specific sheet
+router.post('/parse-excel-sheet-previews', upload.single('file'), async (req, res) => {
+	try {
+		const { sheetName } = req.body;
+
+		if (!req.file) {
+			return res.status(400).json({ error: 'No file uploaded' });
+		}
+
+		const fileName = req.file.originalname || '';
+		const isCSV = fileName.toLowerCase().endsWith('.csv');
+		let rows: any[][] = [];
+
+		if (isCSV) {
+			const csvContent = req.file.buffer.toString('utf-8');
+			rows = parseCSV(csvContent);
+		} else {
+			const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+
+			if (!workbook.SheetNames.includes(sheetName)) {
+				return res.status(400).json({ error: `Sheet "${sheetName}" not found` });
+			}
+
+			const worksheet = workbook.Sheets[sheetName];
+			rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: null });
+		}
+
+		const headerCandidates = rows.slice(0, 5).map((row, index) => ({
+			row: index + 1,
+			preview:
+				row
+					.slice(0, 4)
+					.filter((v) => v !== null)
+					.filter((v) => v !== undefined)
+					.join(', ') + (row.length > 4 ? ', ...' : '')
+		}));
+
+		res.json({
+			rowPreviews: headerCandidates,
+			totalRows: rows.length
+		});
+	} catch (error) {
+		console.error('Error getting sheet previews:', error);
+		res.status(500).json({ error: 'Failed to get sheet previews' });
+	}
+});
+
 export default router;

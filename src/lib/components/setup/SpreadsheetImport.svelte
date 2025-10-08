@@ -155,6 +155,24 @@
 		controlIdField = ''; // Reset control ID field selection
 
 		try {
+			const previewFormData = new FormData();
+			previewFormData.append('file', fileData);
+			previewFormData.append('sheetName', selectedSheet);
+
+			const previewResponse = await fetch('/api/parse-excel-sheet-previews', {
+				method: 'POST',
+				body: previewFormData
+			});
+
+			if (previewResponse.ok) {
+				const previewResult = await previewResponse.json();
+				rowPreviews = previewResult.rowPreviews || [];
+
+				if (rowPreviews.length > 0 && !rowPreviews.some((p) => p.row === headerRow)) {
+					headerRow = rowPreviews[0].row;
+				}
+			}
+
 			const formData = new FormData();
 			formData.append('file', fileData);
 			formData.append('sheetName', selectedSheet);
@@ -615,8 +633,8 @@
 					<select
 						id="sheet"
 						bind:value={selectedSheet}
-						on:change={() => {
-							loadSheetData();
+						on:change={async () => {
+							await loadSheetData();
 						}}
 						class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
 					>
