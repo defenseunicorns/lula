@@ -155,6 +155,27 @@
 		controlIdField = ''; // Reset control ID field selection
 
 		try {
+			const previewFormData = new FormData();
+			previewFormData.append('file', fileData);
+			previewFormData.append('sheetName', selectedSheet);
+
+			const previewResponse = await fetch('/api/parse-excel-sheet-previews', {
+				method: 'POST',
+				body: previewFormData
+			});
+
+			if (previewResponse.ok) {
+				const previewResult = await previewResponse.json();
+				rowPreviews = previewResult.rowPreviews || [];
+
+				if (rowPreviews.length > 0 && !rowPreviews.some((p) => p.row === headerRow)) {
+					headerRow = rowPreviews[0].row;
+				}
+			} else {
+				const error = await previewResponse.json();
+				throw new Error(error.error || 'Failed to load sheet previews');
+			}
+
 			const formData = new FormData();
 			formData.append('file', fileData);
 			formData.append('sheetName', selectedSheet);
@@ -413,6 +434,7 @@
 			// Add configuration
 			formData.append('controlIdField', controlIdField);
 			formData.append('startRow', headerRow.toString());
+			formData.append('sheetName', selectedSheet);
 			formData.append('namingConvention', 'kebab-case');
 			formData.append('skipEmpty', 'true');
 			formData.append('skipEmptyRows', 'true');
@@ -437,21 +459,24 @@
 				JSON.stringify(justificationFields.map((field) => cleanFieldName(field)))
 			);
 
-			const response = await fetch('/api/import-spreadsheet', {
-				method: 'POST',
-				body: formData
-			});
+			let response: Response;
+			try {
+				response = await fetch('/api/import-spreadsheet', {
+					method: 'POST',
+					body: formData
+				});
+				if (!response.ok) {
+					const error = await response.json();
+					throw new Error(error.error || 'Import failed');
+				}
 
-			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || 'Import failed');
+				const result = await response.json();
+				successMessage = `Successfully imported ${result.controlCount} controls into ${result.families.length} families`;
+
+				dispatch('created', { path: result.outputDir });
+			} catch (error) {
+				console.error('Error importing spreadsheet:', error);
 			}
-
-			const result = await response.json();
-			successMessage = `Successfully imported ${result.controlCount} controls into ${result.families.length} families`;
-
-			// Dispatch event to parent
-			dispatch('created', { path: result.outputDir });
 		} catch (error) {
 			errorMessage = 'Error importing spreadsheet: ' + (error as Error).message;
 		} finally {
@@ -615,8 +640,8 @@
 					<select
 						id="sheet"
 						bind:value={selectedSheet}
-						on:change={() => {
-							loadSheetData();
+						on:change={async () => {
+							await loadSheetData();
 						}}
 						class="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
 					>
