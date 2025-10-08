@@ -431,6 +431,7 @@
 			// Add configuration
 			formData.append('controlIdField', controlIdField);
 			formData.append('startRow', headerRow.toString());
+			formData.append('sheetName', selectedSheet); // Add the selected sheet name
 			formData.append('namingConvention', 'kebab-case');
 			formData.append('skipEmpty', 'true');
 			formData.append('skipEmptyRows', 'true');

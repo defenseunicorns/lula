@@ -164,7 +164,7 @@ export function processImportParameters(reqBody: any): ImportParameters {
 }
 
 // Parse uploaded file (CSV or Excel) into raw data
-export async function parseUploadedFile(file: any): Promise<any[][]> {
+export async function parseUploadedFile(file: any, sheetName?: string): Promise<any[][]> {
 	const fileName = file.originalname || '';
 	const isCSV = fileName.toLowerCase().endsWith('.csv');
 	let rawData: any[][] = [];
@@ -176,10 +176,17 @@ export async function parseUploadedFile(file: any): Promise<any[][]> {
 	} else {
 		// Parse Excel file with xlsx-republish
 		const workbook = XLSX.read(file.buffer, { type: 'buffer' });
-		const worksheetName = workbook.SheetNames[0];
+
+		// Use specified sheet name or default to first sheet
+		const worksheetName = sheetName || workbook.SheetNames[0];
 
 		if (!worksheetName) {
 			throw new Error('No worksheet found in file');
+		}
+
+		// Check if specified sheet exists
+		if (sheetName && !workbook.SheetNames.includes(sheetName)) {
+			throw new Error(`Sheet "${sheetName}" not found in workbook`);
 		}
 
 		const worksheet = workbook.Sheets[worksheetName];
@@ -198,7 +205,8 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 		}
 
 		const params = processImportParameters(req.body);
-		const rawData = await parseUploadedFile((req as any).file);
+		const sheetName = req.body.sheetName;
+		const rawData = await parseUploadedFile((req as any).file, sheetName);
 
 		const startRowIndex = parseInt(params.startRow) - 1;
 		if (rawData.length <= startRowIndex) {
