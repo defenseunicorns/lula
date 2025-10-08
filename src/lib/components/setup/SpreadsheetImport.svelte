@@ -171,6 +171,9 @@
 				if (rowPreviews.length > 0 && !rowPreviews.some((p) => p.row === headerRow)) {
 					headerRow = rowPreviews[0].row;
 				}
+			} else {
+				const error = await previewResponse.json();
+				throw new Error(error.error || 'Failed to load sheet previews');
 			}
 
 			const formData = new FormData();
