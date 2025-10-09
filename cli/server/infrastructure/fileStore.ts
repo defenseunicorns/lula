@@ -322,7 +322,7 @@ export class FileStore {
 				controlOrder = metadata?.controlOrder || null;
 			}
 		} catch (error) {
-			console.error('Failed to load lula.yaml for controlOrder:', error);
+			console.error(`Failed to load lula.yaml for controlOrder (path: ${lulaConfigPath}):`, error);
 		}
 
 		const entries = readdirSync(this.controlsDir);
