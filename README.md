@@ -143,7 +143,6 @@ Lula reviewed 2 files changed that affect compliance.
 Here is a workflow example for GitHub Actions:
 
 ```yaml
-
 # This workflow runs a Lula scan against the PR to see if compliance has changed
 
 name: Lula Scan
