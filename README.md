@@ -168,7 +168,6 @@ jobs:
 
       - name: Run Lula Scan
         run: |
-          # renovate: datasource=github-tags depName=defenseunicorns/lula versioning=semver
           npx --yes lula2@0.6.3 crawl
         shell: bash
         env:
