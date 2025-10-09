@@ -140,7 +140,7 @@ Lula reviewed 2 files changed that affect compliance.
 ```
 
 
-Here is an workflow example for GitHub Actions:
+Here is a workflow example for GitHub Actions:
 
 ```yaml
 # Copyright 2025 Defense Unicorns
