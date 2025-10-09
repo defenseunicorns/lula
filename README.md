@@ -139,6 +139,40 @@ Lula reviewed 2 files changed that affect compliance.
 <sub>**Tip:** Customize your compliance reviews with <a href="https://github.com/defenseunicorns/lula.git" class="Link--inTextBlock" target="_blank" rel="noopener noreferrer">Lula</a>.</sub>
 ```
 
+
+Here is a workflow example for GitHub Actions:
+
+```yaml
+# This workflow runs a Lula scan against the PR to see if compliance has changed
+
+name: Lula Scan
+on:
+  pull_request:
+    branches: ["main"]
+    types: [opened, reopened, synchronize]
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  scan-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+      - name: Use Node.js 22
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+
+      - name: Run Lula Scan
+        run: |
+          npx --yes lula2 crawl
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
 ### Version Command
 
 ```bash
