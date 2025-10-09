@@ -13,6 +13,8 @@ import { dirname, join, relative } from 'path';
 import { debug } from '../utils/debug';
 import { getServerState, getCurrentControlSetPath } from './serverState';
 
+const MAX_HEADER_CANDIDATES = 5;
+const PREVIEW_COLUMNS = 4;
 // Type definitions
 interface SpreadsheetRow {
 	[key: string]: any;
@@ -162,7 +164,7 @@ export function processImportParameters(reqBody: any): ImportParameters {
 }
 
 // Parse uploaded file (CSV or Excel) into raw data
-export async function parseUploadedFile(file: any): Promise<any[][]> {
+export async function parseUploadedFile(file: any, sheetName?: string): Promise<any[][]> {
 	const fileName = file.originalname || '';
 	const isCSV = fileName.toLowerCase().endsWith('.csv');
 	let rawData: any[][] = [];
@@ -174,10 +176,17 @@ export async function parseUploadedFile(file: any): Promise<any[][]> {
 	} else {
 		// Parse Excel file with xlsx-republish
 		const workbook = XLSX.read(file.buffer, { type: 'buffer' });
-		const worksheetName = workbook.SheetNames[0];
+
+		// Use specified sheet name or default to first sheet
+		const worksheetName = sheetName || workbook.SheetNames[0];
 
 		if (!worksheetName) {
 			throw new Error('No worksheet found in file');
+		}
+
+		// Check if specified sheet exists
+		if (sheetName && !workbook.SheetNames.includes(sheetName)) {
+			throw new Error(`Sheet "${sheetName}" not found in workbook`);
 		}
 
 		const worksheet = workbook.Sheets[worksheetName];
@@ -196,7 +205,8 @@ router.post('/import-spreadsheet', upload.single('file'), async (req, res) => {
 		}
 
 		const params = processImportParameters(req.body);
-		const rawData = await parseUploadedFile((req as any).file);
+		const sheetName = req.body.sheetName;
+		const rawData = await parseUploadedFile((req as any).file, sheetName);
 
 		const startRowIndex = parseInt(params.startRow) - 1;
 		if (rawData.length <= startRowIndex) {
@@ -1429,11 +1439,11 @@ router.post('/parse-excel', upload.single('file'), async (req, res) => {
 		}
 
 		// Find potential header rows (first 5 non-empty rows)
-		const headerCandidates = rows.slice(0, 5).map((row, index) => ({
+		const headerCandidates = rows.slice(0, MAX_HEADER_CANDIDATES).map((row, index) => ({
 			row: index + 1,
 			preview:
 				row
-					.slice(0, 4)
+					.slice(0, PREVIEW_COLUMNS)
 					.filter((v) => v !== null)
 					.filter((v) => v !== undefined)
 					.join(', ') + (row.length > 4 ? ', ...' : '')
@@ -1507,6 +1517,52 @@ router.post('/parse-excel-sheet', upload.single('file'), async (req, res) => {
 	} catch (error) {
 		console.error('Error parsing Excel sheet:', error);
 		res.status(500).json({ error: 'Failed to parse Excel sheet' });
+	}
+});
+
+router.post('/parse-excel-sheet-previews', upload.single('file'), async (req, res) => {
+	try {
+		const { sheetName } = req.body;
+
+		if (!req.file) {
+			return res.status(400).json({ error: 'No file uploaded' });
+		}
+
+		const fileName = req.file.originalname || '';
+		const isCSV = fileName.toLowerCase().endsWith('.csv');
+		let rows: any[][] = [];
+
+		if (isCSV) {
+			const csvContent = req.file.buffer.toString('utf-8');
+			rows = parseCSV(csvContent);
+		} else {
+			const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
+
+			if (!workbook.SheetNames.includes(sheetName)) {
+				return res.status(400).json({ error: `Sheet "${sheetName}" not found` });
+			}
+
+			const worksheet = workbook.Sheets[sheetName];
+			rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: null });
+		}
+
+		const headerCandidates = rows.slice(0, MAX_HEADER_CANDIDATES).map((row, index) => ({
+			row: index + 1,
+			preview:
+				row
+					.slice(0, PREVIEW_COLUMNS)
+					.filter((v) => v !== null)
+					.filter((v) => v !== undefined)
+					.join(', ') + (row.length > 4 ? ', ...' : '')
+		}));
+
+		res.json({
+			rowPreviews: headerCandidates,
+			totalRows: rows.length
+		});
+	} catch (error) {
+		console.error('Error getting sheet previews:', error);
+		res.status(500).json({ error: 'Failed to get sheet previews' });
 	}
 });
 
