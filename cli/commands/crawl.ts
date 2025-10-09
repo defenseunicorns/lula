@@ -10,6 +10,23 @@ type FileContentResponse = {
 	content: string;
 	encoding: 'base64' | string;
 };
+
+/**
+ * Interface for GitHub pull request file objects
+ */
+export interface PullRequestFile {
+	sha: string;
+	filename: string;
+	status: 'added' | 'removed' | 'modified' | 'renamed' | 'copied' | 'changed' | 'unchanged';
+	additions: number;
+	deletions: number;
+	changes: number;
+	blob_url: string;
+	raw_url: string;
+	contents_url: string;
+	patch?: string;
+	previous_filename?: string;
+}
 const closingBody = `\n\n---\n\n<sub>**Tip:** Customize your compliance reviews with <a href="https://github.com/defenseunicorns/lula.git" class="Link--inTextBlock" target="_blank" rel="noopener noreferrer">Lula</a>.</sub>`;
 export const LULA_SIGNATURE = '<!-- LULA_SIGNATURE:v1 -->';
 // Add a post mode union for future expansion
@@ -241,6 +258,226 @@ export function containsLulaAnnotations(text: string): boolean {
 }
 
 /**
+ * Interface for crawl analysis context
+ */
+export interface CrawlContext {
+	octokit: Octokit;
+	owner: string;
+	repo: string;
+	pull_number: number;
+	prBranch: string;
+	files: PullRequestFile[];
+}
+
+/**
+ * Interface for analysis results
+ */
+export interface AnalysisResult {
+	hasFindings: boolean;
+	commentBody: string;
+}
+
+/**
+ * Create the initial comment body for compliance overview.
+ */
+export function createInitialCommentBody(filesCount: number): string {
+	return (
+		`${LULA_SIGNATURE}\n` +
+		`## Lula Compliance Overview\n\n` +
+		`Please review the changes to ensure they meet compliance standards.\n\n` +
+		`### Reviewed Changes\n\n` +
+		`Lula reviewed ${filesCount} files changed that affect compliance.\n\n`
+	);
+}
+
+/**
+ * Check deleted files for Lula annotations and generate warning content.
+ */
+export async function analyzeDeletedFiles(context: CrawlContext): Promise<{
+	hasFindings: boolean;
+	warningContent: string;
+}> {
+	const { octokit, owner, repo, files } = context;
+	const deletedFilesWithAnnotations: string[] = [];
+
+	for (const file of files) {
+		if (file.status === 'removed') {
+			try {
+				const oldText = await fetchRawFileViaAPI({
+					octokit,
+					owner,
+					repo,
+					path: file.filename,
+					ref: 'main'
+				});
+
+				if (containsLulaAnnotations(oldText)) {
+					deletedFilesWithAnnotations.push(file.filename);
+				}
+			} catch (err) {
+				console.error(`Error checking deleted file ${file.filename}: ${err}`);
+			}
+		}
+	}
+
+	if (deletedFilesWithAnnotations.length === 0) {
+		return { hasFindings: false, warningContent: '' };
+	}
+
+	let warningContent = `\n\n**Compliance Warning: Files with Lula annotations were deleted**\n\n`;
+	warningContent += `The following files contained compliance annotations (\`@lulaStart\`/\`@lulaEnd\`) and were deleted in this PR. This may affect compliance coverage:\n\n`;
+
+	for (const filename of deletedFilesWithAnnotations) {
+		warningContent += `- \`${filename}\`\n`;
+	}
+
+	warningContent += `\nPlease review whether:\n`;
+	warningContent += `- The compliance coverage provided by these files is still needed\n`;
+	warningContent += `- Alternative compliance measures have been implemented\n`;
+	warningContent += `- The deletion is intentional and compliance-approved\n\n`;
+	warningContent += `---\n\n`;
+
+	return { hasFindings: true, warningContent };
+}
+
+/**
+ * Generate comment content for changed blocks in a file.
+ */
+export function generateChangedBlocksContent(
+	filename: string,
+	changedBlocks: { uuid: string; startLine: number; endLine: number }[],
+	newText: string
+): string {
+	let content = '';
+
+	for (const block of changedBlocks) {
+		console.log(`Commenting regarding \`${filename}\`.`);
+		content += `\n\n---\n| File | Lines Changed |\n` + `| ---- | ------------- |\n`;
+		const newBlockText = newText.split('\n').slice(block.startLine, block.endLine).join('\n');
+		const blockSha256 = createHash('sha256').update(newBlockText).digest('hex');
+		content += `| \`${filename}\` | \`${block.startLine + 1}–${block.endLine}\` |\n> **uuid**-\`${block.uuid}\`\n **sha256** \`${blockSha256}\`\n\n`;
+	}
+
+	return content;
+}
+
+/**
+ * Generate comment content for removed blocks in a file.
+ */
+export function generateRemovedBlocksContent(
+	filename: string,
+	removedBlocks: { uuid: string; startLine: number; endLine: number }[],
+	oldText: string
+): string {
+	if (removedBlocks.length === 0) {
+		return '';
+	}
+
+	console.log(`Found removed annotations in \`${filename}\`.`);
+	let content = `\n\n**Compliance Warning: Lula annotations were removed from \`${filename}\`**\n\n`;
+	content += `The following compliance annotation blocks were present in the original file but are missing in the updated version:\n\n`;
+
+	// Add table header once before listing all removed blocks
+	content += `| File | Original Lines | UUID |\n`;
+	content += `| ---- | -------------- | ---- |\n`;
+
+	for (const block of removedBlocks) {
+		const oldBlockText = oldText.split('\n').slice(block.startLine, block.endLine).join('\n');
+		const blockSha256 = createHash('sha256').update(oldBlockText).digest('hex');
+		content += `| \`${filename}\` | \`${block.startLine + 1}–${block.endLine}\` | \`${block.uuid}\` |\n`;
+		content += `> **sha256** \`${blockSha256}\`\n\n`;
+	}
+
+	content += `Please review whether:\n`;
+	content += `- The removal of these compliance annotations is intentional\n`;
+	content += `- Alternative compliance measures have been implemented\n`;
+	content += `- The compliance coverage is still adequate\n\n`;
+	content += `---\n\n`;
+
+	return content;
+}
+
+/**
+ * Analyze modified files for compliance changes.
+ */
+export async function analyzeModifiedFiles(context: CrawlContext): Promise<{
+	hasFindings: boolean;
+	changesContent: string;
+}> {
+	const { octokit, owner, repo, prBranch, files } = context;
+	let changesContent = '';
+	let hasFindings = false;
+
+	for (const file of files) {
+		if (file.status === 'added' || file.status === 'removed') continue;
+
+		try {
+			const [oldText, newText] = await Promise.all([
+				fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: 'main' }),
+				fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: prBranch })
+			]);
+
+			const changedBlocks = getChangedBlocks(oldText, newText);
+			const removedBlocks = getRemovedBlocks(oldText, newText);
+
+			// Handle changed blocks
+			if (changedBlocks.length > 0) {
+				hasFindings = true;
+				changesContent += generateChangedBlocksContent(file.filename, changedBlocks, newText);
+			}
+
+			// Handle removed annotations
+			if (removedBlocks.length > 0) {
+				hasFindings = true;
+				changesContent += generateRemovedBlocksContent(file.filename, removedBlocks, oldText);
+			}
+		} catch (err) {
+			console.error(`Error processing ${file.filename}: ${err}`);
+		}
+	}
+
+	return { hasFindings, changesContent };
+}
+
+/**
+ * Perform complete compliance analysis on a PR.
+ */
+export async function performComplianceAnalysis(context: CrawlContext): Promise<AnalysisResult> {
+	let commentBody = createInitialCommentBody(context.files.length);
+	let hasFindings = false;
+
+	// Analyze deleted files
+	const deletedAnalysis = await analyzeDeletedFiles(context);
+	if (deletedAnalysis.hasFindings) {
+		hasFindings = true;
+		commentBody += deletedAnalysis.warningContent;
+	}
+
+	// Analyze modified files
+	const modifiedAnalysis = await analyzeModifiedFiles(context);
+	if (modifiedAnalysis.hasFindings) {
+		hasFindings = true;
+		commentBody += modifiedAnalysis.changesContent;
+	}
+
+	return { hasFindings, commentBody };
+}
+
+/**
+ * Clean up old comments/reviews based on post mode.
+ */
+export async function cleanupOldPosts(context: CrawlContext, postMode: PostMode): Promise<void> {
+	const { octokit, owner, repo, pull_number } = context;
+
+	if (postMode === 'comment') {
+		await deleteOldIssueComments({ octokit, owner, repo, pull_number });
+	} else {
+		await dismissOldReviews({ octokit, owner, repo, pull_number });
+		await deleteOldReviewComments({ octokit, owner, repo, pull_number });
+	}
+}
+
+/**
  * Defines the "crawl" command for the CLI.
  *
  * @returns The configured Command instance.
@@ -255,133 +492,41 @@ export function crawlCommand(): Command {
 				.default('review')
 		)
 		.action(async (opts) => {
-			let leavePost = false;
 			const { owner, repo, pull_number } = getPRContext();
 			console.log(`Analyzing PR #${pull_number} in ${owner}/${repo} for compliance changes...`);
+
 			const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 			const pr = await octokit.pulls.get({ owner, repo, pull_number });
 			const prBranch = pr.data.head.ref;
-
 			const { data: files } = await octokit.pulls.listFiles({ owner, repo, pull_number });
 
-			let commentBody =
-				`${LULA_SIGNATURE}\n` +
-				`## Lula Compliance Overview\n\n` +
-				`Please review the changes to ensure they meet compliance standards.\n\n` +
-				`### Reviewed Changes\n\n` +
-				`Lula reviewed ${files.length} files changed that affect compliance.\n\n`;
+			const context: CrawlContext = {
+				octokit,
+				owner,
+				repo,
+				pull_number,
+				prBranch,
+				files
+			};
 
-			const deletedFilesWithAnnotations = [];
-			for (const file of files) {
-				if (file.status === 'removed') {
-					try {
-						const oldText = await fetchRawFileViaAPI({
-							octokit,
-							owner,
-							repo,
-							path: file.filename,
-							ref: 'main'
-						});
+			const analysisResult = await performComplianceAnalysis(context);
 
-						if (containsLulaAnnotations(oldText)) {
-							deletedFilesWithAnnotations.push(file.filename);
-						}
-					} catch (err) {
-						console.error(`Error checking deleted file ${file.filename}: ${err}`);
-					}
-				}
-			}
+			await cleanupOldPosts(context, opts.postMode);
 
-			// Add warning about deleted files with annotations
-			if (deletedFilesWithAnnotations.length > 0) {
-				leavePost = true;
-				commentBody += `\n\n**Compliance Warning: Files with Lula annotations were deleted**\n\n`;
-				commentBody += `The following files contained compliance annotations (\`@lulaStart\`/\`@lulaEnd\`) and were deleted in this PR. This may affect compliance coverage:\n\n`;
-
-				for (const filename of deletedFilesWithAnnotations) {
-					commentBody += `- \`${filename}\`\n`;
-				}
-
-				commentBody += `\nPlease review whether:\n`;
-				commentBody += `- The compliance coverage provided by these files is still needed\n`;
-				commentBody += `- Alternative compliance measures have been implemented\n`;
-				commentBody += `- The deletion is intentional and compliance-approved\n\n`;
-				commentBody += `---\n\n`;
-			}
-
-			for (const file of files) {
-				if (file.status === 'added' || file.status === 'removed') continue;
-				try {
-					const [oldText, newText] = await Promise.all([
-						fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: 'main' }),
-						fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: prBranch })
-					]);
-
-					const changedBlocks = getChangedBlocks(oldText, newText);
-					const removedBlocks = getRemovedBlocks(oldText, newText);
-
-					// Handle changed blocks
-					for (const block of changedBlocks) {
-						console.log(`Commenting regarding \`${file.filename}\`.`);
-						leavePost = true;
-						commentBody += `\n\n---\n| File | Lines Changed |\n` + `| ---- | ------------- |\n`;
-						const newBlockText = newText
-							.split('\n')
-							.slice(block.startLine, block.endLine)
-							.join('\n');
-
-						const blockSha256 = createHash('sha256').update(newBlockText).digest('hex');
-						commentBody += `| \`${file.filename}\` | \`${block.startLine + 1}–${block.endLine}\` |\n> **uuid**-\`${block.uuid}\`\n **sha256** \`${blockSha256}\`\n\n`;
-					}
-
-					// Handle removed annotations
-					if (removedBlocks.length > 0) {
-						leavePost = true;
-						console.log(`Found removed annotations in \`${file.filename}\`.`);
-						commentBody += `\n\n**Compliance Warning: Lula annotations were removed from \`${file.filename}\`**\n\n`;
-						commentBody += `The following compliance annotation blocks were present in the original file but are missing in the updated version:\n\n`;
-
-						// Add table header once before listing all removed blocks
-						commentBody += `| File | Original Lines | UUID |\n`;
-						commentBody += `| ---- | -------------- | ---- |\n`;
-						for (const block of removedBlocks) {
-							const oldBlockText = oldText
-								.split('\n')
-								.slice(block.startLine, block.endLine)
-								.join('\n');
-							const blockSha256 = createHash('sha256').update(oldBlockText).digest('hex');
-							commentBody += `| \`${file.filename}\` | \`${block.startLine + 1}–${block.endLine}\` | \`${block.uuid}\` |\n`;
-							commentBody += `> **sha256** \`${blockSha256}\`\n\n`;
-						}
-
-						commentBody += `Please review whether:\n`;
-						commentBody += `- The removal of these compliance annotations is intentional\n`;
-						commentBody += `- Alternative compliance measures have been implemented\n`;
-						commentBody += `- The compliance coverage is still adequate\n\n`;
-						commentBody += `---\n\n`;
-					}
-				} catch (err) {
-					console.error(`Error processing ${file.filename}: ${err}`);
-				}
-			}
-			if (opts.postMode === 'comment') {
-				await deleteOldIssueComments({ octokit, owner, repo, pull_number });
-			} else {
-				await dismissOldReviews({ octokit, owner, repo, pull_number });
-				await deleteOldReviewComments({ octokit, owner, repo, pull_number });
-			}
-			if (leavePost) {
+			if (analysisResult.hasFindings) {
+				const finalBody = analysisResult.commentBody + closingBody;
 				await postFinding({
 					octokit,
 					postMode: opts.postMode,
 					owner,
 					repo,
 					pull_number,
-					body: commentBody + closingBody
+					body: finalBody
 				});
+
 				const header = `Posted (${opts.postMode})`;
 				const underline = '-'.repeat(header.length);
-				console.log(`\n${header}\n${underline}\n\n${commentBody + closingBody}\n\n`);
+				console.log(`\n${header}\n${underline}\n\n${finalBody}\n\n`);
 			}
 		});
 }
