@@ -143,8 +143,6 @@ Lula reviewed 2 files changed that affect compliance.
 Here is a workflow example for GitHub Actions:
 
 ```yaml
-# Copyright 2025 Defense Unicorns
-# SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Defense-Unicorns-Commercial
 
 # This workflow runs a Lula scan against the PR to see if compliance has changed
 
