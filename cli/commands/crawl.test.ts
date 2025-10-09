@@ -794,3 +794,379 @@ describe('containsLulaAnnotations', () => {
 		expect(containsLulaAnnotations(text3)).toBe(true);
 	});
 });
+
+// Import the new functions for testing
+import {
+	createInitialCommentBody,
+	analyzeDeletedFiles,
+	generateChangedBlocksContent,
+	generateRemovedBlocksContent,
+	analyzeModifiedFiles,
+	performComplianceAnalysis,
+	cleanupOldPosts
+} from './crawl';
+import type { CrawlContext, PullRequestFile } from './crawl';
+
+// Helper function to create test file objects
+function createTestFile(
+	filename: string,
+	status: PullRequestFile['status'] = 'modified'
+): PullRequestFile {
+	return {
+		sha: 'abc123',
+		filename,
+		status,
+		additions: 1,
+		deletions: 0,
+		changes: 1,
+		blob_url: `https://github.com/test/repo/blob/main/${filename}`,
+		raw_url: `https://github.com/test/repo/raw/main/${filename}`,
+		contents_url: `https://api.github.com/repos/test/repo/contents/${filename}`
+	};
+}
+
+describe('Refactored crawl functions', () => {
+	const mockContext: CrawlContext = {
+		octokit: mockOctokitInstance as unknown as Octokit,
+		owner: 'testowner',
+		repo: 'testrepo',
+		pull_number: 123,
+		prBranch: 'feature-branch',
+		files: []
+	};
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+		errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+	});
+
+	afterEach(() => {
+		logSpy?.mockRestore();
+		errSpy?.mockRestore();
+	});
+
+	describe('createInitialCommentBody', () => {
+		it('should create initial comment body with correct format', () => {
+			const result = createInitialCommentBody(5);
+
+			expect(result).toContain(LULA_SIGNATURE);
+			expect(result).toContain('## Lula Compliance Overview');
+			expect(result).toContain('Lula reviewed 5 files changed');
+			expect(result).toContain('Please review the changes');
+		});
+
+		it('should handle zero files', () => {
+			const result = createInitialCommentBody(0);
+			expect(result).toContain('Lula reviewed 0 files changed');
+		});
+
+		it('should handle single file', () => {
+			const result = createInitialCommentBody(1);
+			expect(result).toContain('Lula reviewed 1 files changed');
+		});
+	});
+
+	describe('analyzeDeletedFiles', () => {
+		it('should return no findings when no files are deleted', async () => {
+			const context = {
+				...mockContext,
+				files: [createTestFile('test.js', 'modified'), createTestFile('new.js', 'added')]
+			};
+
+			const result = await analyzeDeletedFiles(context);
+
+			expect(result.hasFindings).toBe(false);
+			expect(result.warningContent).toBe('');
+		});
+
+		it('should return no findings when deleted files have no annotations', async () => {
+			const context = {
+				...mockContext,
+				files: [createTestFile('test.js', 'removed')]
+			};
+
+			reposGetContent.mockResolvedValue({
+				data: 'const x = 1;\nconsole.log(x);'
+			});
+
+			const result = await analyzeDeletedFiles(context);
+
+			expect(result.hasFindings).toBe(false);
+			expect(result.warningContent).toBe('');
+		});
+
+		it('should detect deleted files with Lula annotations', async () => {
+			const context = {
+				...mockContext,
+				files: [createTestFile('annotated.js', 'removed'), createTestFile('clean.js', 'removed')]
+			};
+
+			reposGetContent
+				.mockResolvedValueOnce({
+					data: 'const x = 1;\n// @lulaStart abc123\nconsole.log(x);\n// @lulaEnd abc123'
+				})
+				.mockResolvedValueOnce({
+					data: 'const y = 2;\nconsole.log(y);'
+				});
+
+			const result = await analyzeDeletedFiles(context);
+
+			expect(result.hasFindings).toBe(true);
+			expect(result.warningContent).toContain('Files with Lula annotations were deleted');
+			expect(result.warningContent).toContain('`annotated.js`');
+			expect(result.warningContent).not.toContain('`clean.js`');
+			expect(result.warningContent).toContain('compliance coverage provided by these files');
+		});
+
+		it('should handle API errors gracefully', async () => {
+			const context = {
+				...mockContext,
+				files: [createTestFile('error.js', 'removed')]
+			};
+
+			reposGetContent.mockRejectedValue(new Error('API Error'));
+
+			const result = await analyzeDeletedFiles(context);
+
+			expect(result.hasFindings).toBe(false);
+			expect(result.warningContent).toBe('');
+			expect(errSpy).toHaveBeenCalledWith('Error checking deleted file error.js: Error: API Error');
+		});
+	});
+
+	describe('generateChangedBlocksContent', () => {
+		it('should generate content for single changed block', () => {
+			const changedBlocks = [{ uuid: 'abc123', startLine: 5, endLine: 10 }];
+			const newText =
+				'line1\nline2\nline3\nline4\nline5\nchanged content\nline7\nline8\nline9\nline10\nline11';
+
+			const result = generateChangedBlocksContent('test.js', changedBlocks, newText);
+
+			expect(result).toContain('| File | Lines Changed |');
+			expect(result).toContain('| `test.js` | `6–10` |');
+			expect(result).toContain('**uuid**-`abc123`');
+			expect(result).toContain('**sha256**');
+			expect(logSpy).toHaveBeenCalledWith('Commenting regarding `test.js`.');
+		});
+
+		it('should generate content for multiple changed blocks', () => {
+			const changedBlocks = [
+				{ uuid: 'abc123', startLine: 0, endLine: 2 },
+				{ uuid: 'def456', startLine: 5, endLine: 7 }
+			];
+			const newText = 'line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8';
+
+			const result = generateChangedBlocksContent('test.js', changedBlocks, newText);
+
+			expect(result).toContain('| `test.js` | `1–2` |');
+			expect(result).toContain('**uuid**-`abc123`');
+			expect(result).toContain('| `test.js` | `6–7` |');
+			expect(result).toContain('**uuid**-`def456`');
+			expect(logSpy).toHaveBeenCalledTimes(2);
+		});
+
+		it('should return empty string for no changed blocks', () => {
+			const result = generateChangedBlocksContent('test.js', [], 'some text');
+			expect(result).toBe('');
+		});
+	});
+
+	describe('generateRemovedBlocksContent', () => {
+		it('should return empty string for no removed blocks', () => {
+			const result = generateRemovedBlocksContent('test.js', [], 'some text');
+			expect(result).toBe('');
+		});
+
+		it('should generate content for removed blocks', () => {
+			const removedBlocks = [
+				{ uuid: 'abc123', startLine: 0, endLine: 3 },
+				{ uuid: 'def456', startLine: 5, endLine: 8 }
+			];
+			const oldText = 'line1\nline2\nline3\nline4\nline5\nline6\nline7\nline8\nline9';
+
+			const result = generateRemovedBlocksContent('test.js', removedBlocks, oldText);
+
+			expect(result).toContain('Lula annotations were removed from `test.js`');
+			expect(result).toContain('| File | Original Lines | UUID |');
+			expect(result).toContain('| `test.js` | `1–3` | `abc123` |');
+			expect(result).toContain('| `test.js` | `6–8` | `def456` |');
+			expect(result).toContain('**sha256**');
+			expect(result).toContain('removal of these compliance annotations is intentional');
+			expect(logSpy).toHaveBeenCalledWith('Found removed annotations in `test.js`.');
+		});
+
+		it('should generate proper warning text', () => {
+			const removedBlocks = [{ uuid: 'abc123', startLine: 0, endLine: 2 }];
+			const oldText = 'line1\nline2';
+
+			const result = generateRemovedBlocksContent('test.js', removedBlocks, oldText);
+
+			expect(result).toContain('Please review whether:');
+			expect(result).toContain('- The removal of these compliance annotations is intentional');
+			expect(result).toContain('- Alternative compliance measures have been implemented');
+			expect(result).toContain('- The compliance coverage is still adequate');
+		});
+	});
+
+	describe('analyzeModifiedFiles', () => {
+		it('should return no findings for no modified files', async () => {
+			const context = {
+				...mockContext,
+				files: [createTestFile('new.js', 'added'), createTestFile('old.js', 'removed')]
+			};
+
+			const result = await analyzeModifiedFiles(context);
+
+			expect(result.hasFindings).toBe(false);
+			expect(result.changesContent).toBe('');
+		});
+
+		it('should analyze modified files with changes', async () => {
+			const context = {
+				...mockContext,
+				files: [createTestFile('test.js', 'modified')]
+			};
+
+			// Create test content with actual Lula annotations so the functions detect changes
+			const oldContent = `line1
+// @lulaStart abc123
+old annotation content
+// @lulaEnd abc123
+line5`;
+
+			const newContent = `line1
+// @lulaStart abc123
+new changed content
+// @lulaEnd abc123
+line5`;
+
+			reposGetContent
+				.mockResolvedValueOnce({ data: oldContent })
+				.mockResolvedValueOnce({ data: newContent });
+
+			const result = await analyzeModifiedFiles(context);
+
+			expect(result.hasFindings).toBe(true);
+			expect(result.changesContent).toContain('| File | Lines Changed |');
+		});
+
+		it('should analyze modified files with removed blocks', async () => {
+			const context = {
+				...mockContext,
+				files: [createTestFile('test.js', 'modified')]
+			};
+
+			// Create test content where old content has Lula annotations but new content doesn't
+			const oldContent = `line1
+// @lulaStart abc123
+annotation content that will be removed
+// @lulaEnd abc123
+line5`;
+
+			const newContent = `line1
+line5`;
+
+			reposGetContent
+				.mockResolvedValueOnce({ data: oldContent })
+				.mockResolvedValueOnce({ data: newContent });
+
+			const result = await analyzeModifiedFiles(context);
+
+			expect(result.hasFindings).toBe(true);
+			expect(result.changesContent).toContain('Lula annotations were removed from `test.js`');
+			expect(result.changesContent).toContain('| File | Original Lines | UUID |');
+		});
+
+		it('should handle API errors gracefully', async () => {
+			const context = {
+				...mockContext,
+				files: [createTestFile('error.js', 'modified')]
+			};
+
+			reposGetContent.mockRejectedValue(new Error('API Error'));
+
+			const result = await analyzeModifiedFiles(context);
+
+			expect(result.hasFindings).toBe(false);
+			expect(result.changesContent).toBe('');
+			expect(errSpy).toHaveBeenCalledWith('Error processing error.js: Error: API Error');
+		});
+	});
+
+	describe('performComplianceAnalysis', () => {
+		it('should combine results from deleted and modified file analysis', async () => {
+			const context = {
+				...mockContext,
+				files: [createTestFile('deleted.js', 'removed'), createTestFile('modified.js', 'modified')]
+			};
+
+			// Mock deleted file with annotations
+			reposGetContent.mockImplementation((params: { path: string }) => {
+				if (params.path === 'deleted.js') {
+					return Promise.resolve({ data: '// @lulaStart abc\ncontent\n// @lulaEnd abc' });
+				}
+				return Promise.resolve({ data: 'normal content' });
+			});
+
+			const result = await performComplianceAnalysis(context);
+
+			expect(result.hasFindings).toBe(true);
+			expect(result.commentBody).toContain(LULA_SIGNATURE);
+			expect(result.commentBody).toContain('Lula reviewed 2 files changed');
+			expect(result.commentBody).toContain('Files with Lula annotations were deleted');
+		});
+
+		it('should return no findings when no compliance issues found', async () => {
+			const context = {
+				...mockContext,
+				files: [createTestFile('clean.js', 'modified')]
+			};
+
+			reposGetContent.mockResolvedValue({ data: 'clean content' });
+
+			const result = await performComplianceAnalysis(context);
+
+			expect(result.hasFindings).toBe(false);
+			expect(result.commentBody).toContain(LULA_SIGNATURE);
+			expect(result.commentBody).toContain('Lula reviewed 1 files changed');
+		});
+	});
+
+	describe('cleanupOldPosts', () => {
+		it('should cleanup issue comments for comment mode', async () => {
+			await cleanupOldPosts(mockContext, 'comment');
+
+			expect(issuesListComments).toHaveBeenCalledWith({
+				owner: 'testowner',
+				repo: 'testrepo',
+				issue_number: 123,
+				per_page: 100,
+				page: 1
+			});
+		});
+
+		it('should cleanup reviews and review comments for review mode', async () => {
+			pullsListReviews.mockResolvedValue({ data: [] });
+			pullsListReviewComments.mockResolvedValue({ data: [] });
+
+			await cleanupOldPosts(mockContext, 'review');
+
+			expect(pullsListReviews).toHaveBeenCalledWith({
+				owner: 'testowner',
+				repo: 'testrepo',
+				pull_number: 123,
+				per_page: 100,
+				page: 1
+			});
+
+			expect(pullsListReviewComments).toHaveBeenCalledWith({
+				owner: 'testowner',
+				repo: 'testrepo',
+				pull_number: 123,
+				per_page: 100,
+				page: 1
+			});
+		});
+	});
+});
