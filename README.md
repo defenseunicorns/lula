@@ -168,7 +168,7 @@ jobs:
 
       - name: Run Lula Scan
         run: |
-          npx --yes lula2@0.6.3 crawl
+          npx --yes lula2 crawl
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
