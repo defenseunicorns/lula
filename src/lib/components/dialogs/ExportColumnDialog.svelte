@@ -63,7 +63,7 @@
 
 	function handleKeydown(event: KeyboardEvent) {
 		if (!isOpen) return;
-		
+
 		if (event.key === 'Escape') {
 			handleCancel();
 		} else if (event.key === 'Enter') {
