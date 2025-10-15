@@ -22,6 +22,9 @@ import type {
 	UnifiedHistory
 } from '../../src/lib/types';
 
+import type { GitBranchInfo, GitStatus } from './infrastructure/gitHistory';
+export type { GitBranchInfo, GitStatus };
+
 // Re-export for external use
 export type Control = FrontendControl;
 export type Mapping = FrontendMapping;

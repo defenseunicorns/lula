@@ -12,7 +12,7 @@ import * as fs from 'fs';
 import * as git from 'isomorphic-git';
 import { relative } from 'path';
 import { createYamlDiff, type YamlDiffResult } from './yamlDiff';
-
+import http from 'isomorphic-git/http/node';
 export interface GitCommit {
 	hash: string;
 	shortHash: string;
@@ -33,6 +33,25 @@ export interface GitFileHistory {
 	totalCommits: number;
 	firstCommit: GitCommit | null;
 	lastCommit: GitCommit | null;
+}
+
+export interface GitBranchInfo {
+	currentBranch: string;
+	isAhead: boolean;
+	isBehind: boolean;
+	aheadCount: number;
+	behindCount: number;
+	lastCommitDate: string | null;
+	lastCommitMessage: string | null;
+	hasUnpushedChanges: boolean;
+}
+
+export interface GitStatus {
+	isGitRepository: boolean;
+	currentBranch: string | null;
+	branchInfo: GitBranchInfo | null;
+	canPull: boolean;
+	canPush: boolean;
 }
 
 export class GitHistoryUtil {
@@ -442,6 +461,189 @@ export class GitHistoryUtil {
 				contributors: 0,
 				lastCommitDate: null,
 				firstCommitDate: null
+			};
+		}
+	}
+
+	/**
+	 * Get current branch name
+	 */
+	async getCurrentBranch(): Promise<string | null> {
+		try {
+			const isGitRepo = await this.isGitRepository();
+			if (!isGitRepo) {
+				return null;
+			}
+
+			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
+			const branch = await git.currentBranch({ fs, dir: gitRoot });
+			return branch || null;
+		} catch (error) {
+			console.error('Error getting current branch:', error);
+			return null;
+		}
+	}
+
+	/**
+	 * Get git status information
+	 */
+	async getGitStatus(): Promise<GitStatus> {
+		try {
+			const isGitRepo = await this.isGitRepository();
+			if (!isGitRepo) {
+				return {
+					isGitRepository: false,
+					currentBranch: null,
+					branchInfo: null,
+					canPull: false,
+					canPush: false
+				};
+			}
+
+			const currentBranch = await this.getCurrentBranch();
+			if (!currentBranch) {
+				return {
+					isGitRepository: true,
+					currentBranch: null,
+					branchInfo: null,
+					canPull: false,
+					canPush: false
+				};
+			}
+
+			const branchInfo = await this.getBranchInfo(currentBranch);
+
+			return {
+				isGitRepository: true,
+				currentBranch,
+				branchInfo,
+				canPull: branchInfo?.isBehind || false,
+				canPush: branchInfo?.isAhead || false
+			};
+		} catch (error) {
+			console.error('Error getting git status:', error);
+			return {
+				isGitRepository: false,
+				currentBranch: null,
+				branchInfo: null,
+				canPull: false,
+				canPush: false
+			};
+		}
+	}
+
+	/**
+	 * Get branch comparison information
+	 */
+	async getBranchInfo(branchName: string): Promise<GitBranchInfo | null> {
+		try {
+			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
+
+			// Get local commits
+			const localCommits = await git.log({ fs, dir: gitRoot, ref: branchName });
+
+			try {
+				// Common remote patterns
+				const possibleRemotes = [`origin/${branchName}`, `upstream/${branchName}`];
+				let remoteCommits: any[] = [];
+
+				for (const remote of possibleRemotes) {
+					try {
+						remoteCommits = await git.log({ fs, dir: gitRoot, ref: remote });
+						break;
+					} catch {
+						console.warn(`Could not fetch remote commits for ${remote}`);
+					}
+				}
+
+				if (remoteCommits.length === 0) {
+					const lastCommit = localCommits[0];
+					return {
+						currentBranch: branchName,
+						isAhead: false,
+						isBehind: false,
+						aheadCount: 0,
+						behindCount: 0,
+						lastCommitDate: lastCommit
+							? new Date(lastCommit.commit.author.timestamp * 1000).toISOString()
+							: null,
+						lastCommitMessage: lastCommit?.commit.message || null,
+						hasUnpushedChanges: false
+					};
+				}
+
+				const localHashes = new Set(localCommits.map((c) => c.oid));
+				const remoteHashes = new Set(remoteCommits.map((c) => c.oid));
+
+				const aheadCount = localCommits.filter((c) => !remoteHashes.has(c.oid)).length;
+				const behindCount = remoteCommits.filter((c) => !localHashes.has(c.oid)).length;
+
+				const lastCommit = localCommits[0];
+
+				return {
+					currentBranch: branchName,
+					isAhead: aheadCount > 0,
+					isBehind: behindCount > 0,
+					aheadCount,
+					behindCount,
+					lastCommitDate: lastCommit
+						? new Date(lastCommit.commit.author.timestamp * 1000).toISOString()
+						: null,
+					lastCommitMessage: lastCommit?.commit.message || null,
+					hasUnpushedChanges: aheadCount > 0
+				};
+			} catch {
+				const lastCommit = localCommits[0];
+				return {
+					currentBranch: branchName,
+					isAhead: false,
+					isBehind: false,
+					aheadCount: 0,
+					behindCount: 0,
+					lastCommitDate: lastCommit
+						? new Date(lastCommit.commit.author.timestamp * 1000).toISOString()
+						: null,
+					lastCommitMessage: lastCommit?.commit.message || null,
+					hasUnpushedChanges: false
+				};
+			}
+		} catch (error) {
+			console.error('Error getting branch info:', error);
+			return null;
+		}
+	}
+
+	/**
+	 * Pull changes from remote
+	 */
+	async pullChanges(): Promise<{ success: boolean; message: string }> {
+		try {
+			const isGitRepo = await this.isGitRepository();
+			if (!isGitRepo) {
+				return { success: false, message: 'Not a git repository' };
+			}
+
+			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
+			const currentBranch = await this.getCurrentBranch();
+
+			if (!currentBranch) {
+				return { success: false, message: 'No current branch found' };
+			}
+
+			await git.pull({
+				fs,
+				http,
+				dir: gitRoot,
+				ref: currentBranch,
+				singleBranch: true
+			});
+
+			return { success: true, message: 'Successfully pulled changes' };
+		} catch (error) {
+			console.error('Error pulling changes:', error);
+			return {
+				success: false,
+				message: error instanceof Error ? error.message : 'Unknown error occurred'
 			};
 		}
 	}

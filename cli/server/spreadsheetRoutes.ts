@@ -1566,4 +1566,36 @@ router.post('/parse-excel-sheet-previews', upload.single('file'), async (req, re
 	}
 });
 
+router.get('/git-status', async (req, res) => {
+	try {
+		const { GitHistoryUtil } = await import('./infrastructure/gitHistory');
+		const state = getServerState();
+		const gitUtil = new GitHistoryUtil(state.CONTROL_SET_DIR);
+
+		const gitStatus = await gitUtil.getGitStatus();
+		res.json(gitStatus);
+	} catch (error) {
+		console.error('Error getting git status:', error);
+		res.status(500).json({ error: 'Failed to get git status' });
+	}
+});
+
+router.post('/git-pull', async (req, res) => {
+	try {
+		const { GitHistoryUtil } = await import('./infrastructure/gitHistory');
+		const state = getServerState();
+		const gitUtil = new GitHistoryUtil(state.CONTROL_SET_DIR);
+
+		const result = await gitUtil.pullChanges();
+		if (result.success) {
+			res.json(result);
+		} else {
+			res.status(400).json(result);
+		}
+	} catch (error) {
+		console.error('Error pulling changes:', error);
+		res.status(500).json({ error: 'Failed to pull changes' });
+	}
+});
+
 export default router;
