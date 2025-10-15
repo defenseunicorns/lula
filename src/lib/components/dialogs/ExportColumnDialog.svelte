@@ -83,7 +83,7 @@
 {#if isOpen}
 	<!-- Modal Backdrop -->
 	<div
-		class="fixed inset-0 bg-gray-700 dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-75 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4"
+		class="fixed inset-0 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4"
 		role="dialog"
 		aria-modal="true"
 		tabindex="-1"
