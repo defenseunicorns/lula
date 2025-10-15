@@ -154,6 +154,11 @@
 		fieldConfigs = new Map(); // Force reactivity
 		controlIdField = ''; // Reset control ID field selection
 
+		justificationFields = [];
+		draggedField = null;
+		dragOverTab = null;
+		dragOverField = null;
+
 		try {
 			const previewFormData = new FormData();
 			previewFormData.append('file', fileData);
