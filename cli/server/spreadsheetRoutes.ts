@@ -367,6 +367,7 @@ export function processSpreadsheetData(
 			// Always extract family from control ID, ignore family field
 			const family = extractFamilyFromControlId(controlId);
 
+			control._originalRowIndex = i;
 			// Don't duplicate the field - just add family
 			control.family = family;
 			controls.push(control);
@@ -550,6 +551,10 @@ export async function createOutputStructure(
 		params.namingConvention
 	);
 
+	const controlOrder = controls
+		.sort((a: any, b: any) => (a._originalRowIndex || 0) - (b._originalRowIndex || 0))
+		.map((control: any) => control[controlIdFieldNameClean]);
+
 	const controlSetData = {
 		name: params.controlSetName,
 		description: params.controlSetDescription,
@@ -557,6 +562,7 @@ export async function createOutputStructure(
 		control_id_field: controlIdFieldNameClean,
 		controlCount: controls.length,
 		families: uniqueFamilies,
+		controlOrder: controlOrder,
 		fieldSchema: fieldSchema
 	};
 
@@ -566,7 +572,11 @@ export async function createOutputStructure(
 	const controlsDir = join(baseDir, 'controls');
 	const mappingsDir = join(baseDir, 'mappings');
 
-	families.forEach((familyControls: any, family: any) => {
+	const sortedFamilies = (Array.from(families.entries()) as [string, any[]][]).sort((a, b) =>
+		a[0].localeCompare(b[0])
+	);
+
+	sortedFamilies.forEach(([family, familyControls]) => {
 		// Create family directories for both controls and mappings
 		const familyDir = join(controlsDir, family);
 		const familyMappingsDir = join(mappingsDir, family);
@@ -579,7 +589,11 @@ export async function createOutputStructure(
 			mkdirSync(familyMappingsDir, { recursive: true });
 		}
 
-		familyControls.forEach((control: any) => {
+		const sortedFamilyControls = familyControls.sort(
+			(a: any, b: any) => (a._originalRowIndex || 0) - (b._originalRowIndex || 0)
+		);
+
+		sortedFamilyControls.forEach((control: any) => {
 			// Use the control ID field value for the filename
 			const controlId = control[controlIdFieldNameClean];
 
@@ -617,8 +631,7 @@ export async function createOutputStructure(
 
 			// Include fields that are in the frontend schema or in the fields metadata
 			Object.keys(control).forEach((fieldName) => {
-				// Skip family as it's already added
-				if (fieldName === 'family') return;
+				if (fieldName === 'family' || fieldName === '_originalRowIndex') return;
 
 				// Check if this field is in the justification fields list
 				if (
