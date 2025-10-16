@@ -83,7 +83,7 @@
 {#if isOpen}
 	<!-- Modal Backdrop -->
 	<div
-		class="fixed inset-0 overflow-y-auto h-full w-full z-50 flex items-center justify-center p-4"
+		class="fixed inset-0 bg-opacity-10 backdrop-blur-sm overflow-y-auto h-full w-full z-40 flex items-center justify-center p-4"
 		role="dialog"
 		aria-modal="true"
 		tabindex="-1"
@@ -94,7 +94,7 @@
 		<!-- svelte-ignore a11y_click_events_have_key_events -->
 		<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 		<div
-			class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-auto"
+			class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-auto relative z-70"
 			role="document"
 			onclick={(e) => e.stopPropagation()}
 		>
