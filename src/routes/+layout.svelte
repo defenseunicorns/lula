@@ -6,6 +6,7 @@
 	import { page } from '$app/stores';
 	import { ControlSetInfo } from '$components/control-sets';
 	import { ExportColumnDialog } from '$components/dialogs';
+	import { GitStatusDropdown } from '$components/git-status';
 	import { Dropdown } from '$components/ui';
 	import { appState, wsClient } from '$lib/websocket';
 	import { Code, DocumentExport, Download, LogoGithub } from 'carbon-icons-svelte';
@@ -246,6 +247,9 @@
 						>
 							<LogoGithub class="w-5 h-5" />
 						</a>
+
+						<!-- Git Status Dropdown -->
+						<GitStatusDropdown />
 					</div>
 				</div>
 			</div>
