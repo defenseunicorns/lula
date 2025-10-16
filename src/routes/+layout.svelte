@@ -173,7 +173,7 @@
 	{#if $page.url.pathname !== '/setup'}
 		<!-- Fixed Header -->
 		<header
-			class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 flex-shrink-0 relative z-60"
+			class="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-700 flex-shrink-0 relative z-40"
 		>
 			<div class="w-full px-6 lg:px-8">
 				<div class="flex justify-between items-center h-16">
