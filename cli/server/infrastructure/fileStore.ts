@@ -312,6 +312,19 @@ export class FileStore {
 			return [];
 		}
 
+		// Try to load metadata to get controlOrder if available
+		let controlOrder: string[] | null = null;
+		try {
+			const lulaConfigPath = join(this.baseDir, 'lula.yaml');
+			if (existsSync(lulaConfigPath)) {
+				const content = readFileSync(lulaConfigPath, 'utf8');
+				const metadata = yaml.load(content) as any;
+				controlOrder = metadata?.controlOrder || null;
+			}
+		} catch (error) {
+			console.error(`Failed to load lula.yaml for controlOrder (path: ${lulaConfigPath}):`, error);
+		}
+
 		const entries = readdirSync(this.controlsDir);
 
 		// Check for flat structure first (atomic controls)
@@ -335,7 +348,13 @@ export class FileStore {
 			});
 
 			const results = await Promise.all(promises);
-			return results.filter((c): c is Control => c !== null);
+			const controls = results.filter((c): c is Control => c !== null);
+
+			if (controlOrder && controlOrder.length > 0) {
+				return this.sortControlsByOrder(controls, controlOrder);
+			}
+
+			return controls;
 		}
 
 		// Fallback to family-based directory structure
@@ -368,7 +387,30 @@ export class FileStore {
 		}
 
 		const results = await Promise.all(allPromises);
-		return results.filter((c): c is Control => c !== null);
+		const controls = results.filter((c): c is Control => c !== null);
+
+		if (controlOrder && controlOrder.length > 0) {
+			return this.sortControlsByOrder(controls, controlOrder);
+		}
+
+		return controls;
+	}
+
+	/**
+	 * Sort controls based on the provided order array
+	 */
+	private sortControlsByOrder(controls: Control[], controlOrder: string[]): Control[] {
+		// Create a map of control ID to index in the order array
+		const orderMap = new Map<string, number>();
+		controlOrder.forEach((controlId, index) => {
+			orderMap.set(controlId, index);
+		});
+
+		return controls.sort((a, b) => {
+			const aIndex = orderMap.get(a.id) ?? Number.MAX_SAFE_INTEGER;
+			const bIndex = orderMap.get(b.id) ?? Number.MAX_SAFE_INTEGER;
+			return aIndex - bIndex;
+		});
 	}
 
 	/**
