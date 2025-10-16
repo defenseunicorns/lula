@@ -12,6 +12,7 @@ import multer from 'multer';
 import { dirname, join, relative } from 'path';
 import { debug } from '../utils/debug';
 import { getServerState, getCurrentControlSetPath } from './serverState';
+import { GitHistoryUtil } from './infrastructure/gitHistory';
 
 const MAX_HEADER_CANDIDATES = 5;
 const PREVIEW_COLUMNS = 4;
@@ -1581,7 +1582,6 @@ router.post('/parse-excel-sheet-previews', upload.single('file'), async (req, re
 
 router.get('/git-status', async (req, res) => {
 	try {
-		const { GitHistoryUtil } = await import('./infrastructure/gitHistory');
 		const state = getServerState();
 		const gitUtil = new GitHistoryUtil(state.CONTROL_SET_DIR);
 
@@ -1595,7 +1595,6 @@ router.get('/git-status', async (req, res) => {
 
 router.post('/git-pull', async (req, res) => {
 	try {
-		const { GitHistoryUtil } = await import('./infrastructure/gitHistory');
 		const state = getServerState();
 		const gitUtil = new GitHistoryUtil(state.CONTROL_SET_DIR);
 

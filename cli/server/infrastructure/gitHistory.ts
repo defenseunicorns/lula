@@ -538,13 +538,12 @@ export class GitHistoryUtil {
 	async getBranchInfo(branchName: string): Promise<GitBranchInfo | null> {
 		try {
 			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
-
-			// Get local commits
 			const localCommits = await git.log({ fs, dir: gitRoot, ref: branchName });
 
 			try {
-				// Common remote patterns
+				// Is there a better way to do this with https://isomorphic-git.org/docs/en/gitRemoteHTTP#gitremotehttpdiscover
 				const possibleRemotes = [`origin/${branchName}`, `upstream/${branchName}`];
+				// type this out
 				let remoteCommits: any[] = [];
 
 				for (const remote of possibleRemotes) {
