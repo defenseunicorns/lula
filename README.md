@@ -341,7 +341,7 @@ families:
 
 ### Prerequisites
 
-- Node.js 22+
+- Node.js 22.20.x or >= 24.x
 - Git (for version history features)
 - pnpm (recommended) or npm
 
