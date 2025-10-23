@@ -20,14 +20,12 @@ import {
 	LULA_SIGNATURE
 } from './crawl';
 
-// ---- fs mock ----
 vi.mock('fs', () => {
 	const readFileSync = vi.fn();
 	return { default: { readFileSync } };
 });
 const fsMock = fs as unknown as { readFileSync: ReturnType<typeof vi.fn> };
 
-// ---- Octokit mocks ----
 const pullsGet = vi.fn();
 const pullsListFiles = vi.fn();
 const pullsCreateReview = vi.fn();
@@ -61,11 +59,12 @@ const mockOctokitInstance = {
 };
 
 vi.mock('@octokit/rest', () => {
-	const Octokit = vi.fn().mockImplementation(() => mockOctokitInstance);
+	const Octokit = vi.fn(function Octokit(this: any, ..._args: any[]) {
+		return mockOctokitInstance as any;
+	});
 	return { Octokit };
 });
 
-// ---- env helpers ----
 const originalEnv = { ...process.env };
 const resetEnv = () => {
 	process.env = { ...originalEnv };
@@ -77,14 +76,13 @@ const resetEnv = () => {
 	delete process.env.GITHUB_TOKEN;
 };
 
-// ---- log mocks ----
 let logSpy: ReturnType<typeof vi.spyOn>;
 let errSpy: ReturnType<typeof vi.spyOn>;
+let stderrSpy: ReturnType<typeof vi.spyOn>;
 
 beforeEach(() => {
 	vi.clearAllMocks();
 
-	// defaults so loops terminate (intentionally no default for pullsListReviewComments)
 	issuesListComments.mockResolvedValue({ data: [] });
 	issuesDeleteComment.mockResolvedValue({});
 
@@ -97,9 +95,9 @@ beforeEach(() => {
 
 	reposGetContent.mockResolvedValue({ data: '' });
 
-	// silence console output during tests
 	logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 	errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+	stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true as any);
 
 	resetEnv();
 });
@@ -107,6 +105,7 @@ beforeEach(() => {
 afterEach(() => {
 	logSpy.mockRestore();
 	errSpy.mockRestore();
+	stderrSpy.mockRestore();
 	resetEnv();
 });
 
@@ -335,7 +334,6 @@ describe('getRemovedBlocks', () => {
 	});
 });
 
-// ---- cleanup helpers (unit tests) ----
 describe('cleanup helpers', () => {
 	it('deleteOldIssueComments deletes only the first signed comment per page', async () => {
 		const octokit = new Octokit();
@@ -347,7 +345,7 @@ describe('cleanup helpers', () => {
 					{ id: 3, body: `${LULA_SIGNATURE}\nSigned B` }
 				]
 			})
-			.mockResolvedValueOnce({ data: [] }); // end pages
+			.mockResolvedValueOnce({ data: [] });
 
 		await deleteOldIssueComments({ octokit, owner: 'o', repo: 'r', pull_number: 7 });
 
@@ -362,7 +360,6 @@ describe('cleanup helpers', () => {
 	it('deleteOldReviewComments deletes only the first signed review comment per page', async () => {
 		const octokit = new Octokit();
 
-		// two pages: one with data, one empty
 		pullsListReviewComments
 			.mockResolvedValueOnce({
 				data: [
@@ -409,7 +406,6 @@ describe('cleanup helpers', () => {
 	});
 });
 
-// ---- cleanup helpers (null/undefined body edge cases to cover ?? checks) ----
 describe('cleanup helpers (null/undefined body edge cases)', () => {
 	it('deleteOldIssueComments skips when body is null (covers (c.body ?? ""))', async () => {
 		const octokit = new Octokit();
@@ -518,7 +514,6 @@ describe('crawl command (integration)', () => {
 		process.env.PULL_NUMBER = '77';
 		process.env.GITHUB_TOKEN = 'test-token';
 
-		// PR + files
 		pullsGet.mockResolvedValueOnce({ data: { head: { ref: 'feature-branch' } } });
 		pullsListFiles.mockResolvedValueOnce({
 			data: [
@@ -528,7 +523,6 @@ describe('crawl command (integration)', () => {
 			]
 		});
 
-		// Old/LHS and New/RHS file bodies
 		const uuid = '123e4567-e89b-12d3-a456-426614174000';
 		const oldText = [
 			'header',
@@ -556,7 +550,6 @@ describe('crawl command (integration)', () => {
 			throw new Error(`Unexpected getContent call for ${path} @ ${ref}`);
 		});
 
-		// Cleanup: there is one signed old issue comment to delete
 		issuesListComments
 			.mockResolvedValueOnce({ data: [{ id: 99, body: `${LULA_SIGNATURE}\nold content` }] })
 			.mockResolvedValueOnce({ data: [] });
@@ -564,7 +557,6 @@ describe('crawl command (integration)', () => {
 		const command = crawlCommand();
 		await command.parseAsync(['--post-mode', 'comment'], { from: 'user' });
 
-		// Cleanup happened
 		expect(issuesDeleteComment).toHaveBeenCalledTimes(1);
 		expect(issuesDeleteComment).toHaveBeenCalledWith({
 			owner: 'octo-org',
@@ -744,39 +736,39 @@ describe('postFinding', () => {
 describe('containsLulaAnnotations', () => {
 	it('returns true when text contains @lulaStart', () => {
 		const text = `
-			Some code here
-			// @lulaStart 123e4567-e89b-12d3-a456-426614174000
-			const config = { secret: true };
-		`;
+      Some code here
+      // @lulaStart 123e4567-e89b-12d3-a456-426614174000
+      const config = { secret: true };
+    `;
 		expect(containsLulaAnnotations(text)).toBe(true);
 	});
 
 	it('returns true when text contains @lulaEnd', () => {
 		const text = `
-			const config = { secret: true };
-			// @lulaEnd 123e4567-e89b-12d3-a456-426614174000
-			Some other code here
-		`;
+      const config = { secret: true };
+      // @lulaEnd 123e4567-e89b-12d3-a456-426614174000
+      Some other code here
+    `;
 		expect(containsLulaAnnotations(text)).toBe(true);
 	});
 
 	it('returns true when text contains both @lulaStart and @lulaEnd', () => {
 		const text = `
-			Some code here
-			// @lulaStart 123e4567-e89b-12d3-a456-426614174000
-			const config = { secret: true };
-			// @lulaEnd 123e4567-e89b-12d3-a456-426614174000
-			Some other code here
-		`;
+      Some code here
+      // @lulaStart 123e4567-e89b-12d3-a456-426614174000
+      const config = { secret: true };
+      // @lulaEnd 123e4567-e89b-12d3-a456-426614174000
+      Some other code here
+    `;
 		expect(containsLulaAnnotations(text)).toBe(true);
 	});
 
 	it('returns false when text contains no Lula annotations', () => {
 		const text = `
-			Some regular code here
-			const config = { public: true };
-			// Just regular comments
-		`;
+      Some regular code here
+      const config = { public: true };
+      // Just regular comments
+    `;
 		expect(containsLulaAnnotations(text)).toBe(false);
 	});
 
@@ -795,7 +787,6 @@ describe('containsLulaAnnotations', () => {
 	});
 });
 
-// Import the new functions for testing
 import {
 	createInitialCommentBody,
 	analyzeDeletedFiles,
@@ -807,7 +798,6 @@ import {
 } from './crawl';
 import type { CrawlContext, PullRequestFile } from './crawl';
 
-// Helper function to create test file objects
 function createTestFile(
 	filename: string,
 	status: PullRequestFile['status'] = 'modified'
@@ -839,11 +829,13 @@ describe('Refactored crawl functions', () => {
 		vi.clearAllMocks();
 		logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 		errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+		stderrSpy = vi.spyOn(process.stderr, 'write').mockImplementation(() => true as any);
 	});
 
 	afterEach(() => {
 		logSpy?.mockRestore();
 		errSpy?.mockRestore();
+		stderrSpy?.mockRestore();
 	});
 
 	describe('createInitialCommentBody', () => {
@@ -1028,7 +1020,6 @@ describe('Refactored crawl functions', () => {
 				files: [createTestFile('test.js', 'modified')]
 			};
 
-			// Create test content with actual Lula annotations so the functions detect changes
 			const oldContent = `line1
 // @lulaStart abc123
 old annotation content
@@ -1057,7 +1048,6 @@ line5`;
 				files: [createTestFile('test.js', 'modified')]
 			};
 
-			// Create test content where old content has Lula annotations but new content doesn't
 			const oldContent = `line1
 // @lulaStart abc123
 annotation content that will be removed
@@ -1101,7 +1091,6 @@ line5`;
 				files: [createTestFile('deleted.js', 'removed'), createTestFile('modified.js', 'modified')]
 			};
 
-			// Mock deleted file with annotations
 			reposGetContent.mockImplementation((params: { path: string }) => {
 				if (params.path === 'deleted.js') {
 					return Promise.resolve({ data: '// @lulaStart abc\ncontent\n// @lulaEnd abc' });

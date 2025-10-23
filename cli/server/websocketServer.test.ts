@@ -1,8 +1,18 @@
+// cli/server/websocketServer.test.ts
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { Server } from 'http';
+import type { Server } from 'http';
 import { WebSocket, WebSocketServer } from 'ws';
 
-vi.mock('ws');
+// --- Mocks ------------------------------------------------------------------
+
+vi.mock('ws', () => {
+	// bare constructors; we’ll augment OPEN/CLOSED later in beforeEach
+	return {
+		WebSocket: vi.fn(),
+		WebSocketServer: vi.fn()
+	};
+});
+
 vi.mock('fs');
 vi.mock('child_process');
 vi.mock('./infrastructure/fileStore');
@@ -26,12 +36,16 @@ vi.mock('crypto', () => ({
 	randomUUID: () => 'test-uuid-123'
 }));
 
+// --- Imports after mocks ----------------------------------------------------
+
 import { wsManager } from './websocketServer';
 import type { WSMessage, WSMessageType } from './websocketServer';
 import { getServerState, loadAllData } from './serverState';
 import { scanControlSets } from './spreadsheetRoutes';
 import type { CLIServerState } from './serverState';
 import type { Control, Mapping } from './types';
+
+// --- Local helper types -----------------------------------------------------
 
 interface MockWebSocket {
 	send: ReturnType<typeof vi.fn>;
@@ -72,10 +86,18 @@ interface OriginalConsole {
 	info: typeof console.info;
 }
 
+// --- Mocked symbols ---------------------------------------------------------
+
 const mockWebSocketServer = vi.mocked(WebSocketServer);
 const mockGetServerState = vi.mocked(getServerState);
 const mockLoadAllData = vi.mocked(loadAllData);
 const mockScanControlSets = vi.mocked(scanControlSets);
+
+// We’ll attach these constants onto the mocked WebSocket constructor:
+const WS_OPEN = 1;
+const WS_CLOSED = 3;
+
+// --- Tests ------------------------------------------------------------------
 
 describe('websocketServer', () => {
 	let mockServer: Server;
@@ -87,6 +109,10 @@ describe('websocketServer', () => {
 
 	beforeEach(() => {
 		vi.clearAllMocks();
+
+		// Ensure the mocked WebSocket has OPEN/CLOSED like real ws
+		(WebSocket as unknown as { OPEN?: number; CLOSED?: number }).OPEN = WS_OPEN;
+		(WebSocket as unknown as { OPEN?: number; CLOSED?: number }).CLOSED = WS_CLOSED;
 
 		originalConsole = {
 			error: console.error,
@@ -126,9 +152,11 @@ describe('websocketServer', () => {
 		mockWs = {
 			send: vi.fn(),
 			on: vi.fn(),
-			readyState: 1,
+			readyState: WS_OPEN,
 			close: vi.fn()
 		};
+
+		mockClients = new Set();
 
 		mockWss = {
 			on: vi.fn(),
@@ -136,9 +164,9 @@ describe('websocketServer', () => {
 			clients: new Set()
 		};
 
-		mockClients = new Set();
-
-		mockWebSocketServer.mockImplementation(() => mockWss as unknown as WebSocketServer);
+		mockWebSocketServer.mockImplementation(function (this: unknown, _opts: unknown) {
+			return mockWss as unknown as WebSocketServer;
+		});
 	});
 
 	afterEach(() => {
@@ -149,17 +177,18 @@ describe('websocketServer', () => {
 		console.warn = originalConsole.warn;
 		console.info = originalConsole.info;
 
-		if ((wsManager as unknown as { wss: MockWebSocketServer | null }).wss) {
-			(wsManager as unknown as { wss: MockWebSocketServer | null }).wss = null;
-		}
-		(wsManager as unknown as { clients: Set<WebSocket> }).clients = new Set();
+		const internal = wsManager as unknown as {
+			wss?: MockWebSocketServer | null;
+			clients?: Set<WebSocket>;
+		};
+		if (internal.wss) internal.wss = null;
+		if (internal.clients) internal.clients.clear();
 	});
 
 	describe('WebSocketManager', () => {
 		describe('initialize', () => {
 			it('should create WebSocketServer with correct configuration', () => {
 				wsManager.initialize(mockServer);
-
 				expect(mockWebSocketServer).toHaveBeenCalledWith({
 					server: mockServer,
 					path: '/ws'
@@ -168,7 +197,6 @@ describe('websocketServer', () => {
 
 			it('should set up connection event handler', () => {
 				wsManager.initialize(mockServer);
-
 				expect(mockWss.on).toHaveBeenCalledWith('connection', expect.any(Function));
 			});
 
@@ -180,7 +208,6 @@ describe('websocketServer', () => {
 				)?.[1] as Function;
 
 				expect(connectionHandler).toBeDefined();
-
 				if (connectionHandler) {
 					connectionHandler(mockWs);
 				}
@@ -208,13 +235,28 @@ describe('websocketServer', () => {
 		describe('broadcast', () => {
 			beforeEach(() => {
 				wsManager.initialize(mockServer);
-				(wsManager as unknown as { clients: Set<WebSocket> }).clients = mockClients;
+				// Attach our client set to BOTH sources the manager might iterate
+				const internal = wsManager as unknown as {
+					wss: MockWebSocketServer;
+					clients?: Set<WebSocket>;
+				};
+				internal.wss.clients = mockClients;
+				if (!internal.clients) {
+					Object.defineProperty(internal, 'clients', {
+						value: mockClients,
+						writable: true,
+						configurable: true,
+						enumerable: false
+					});
+				} else {
+					internal.clients = mockClients;
+				}
 			});
 
 			it('should send message to all connected clients', () => {
-				const mockClient1 = { send: vi.fn(), readyState: 1 };
-				const mockClient2 = { send: vi.fn(), readyState: 1 };
-				const mockClient3 = { send: vi.fn(), readyState: 3 };
+				const mockClient1 = { send: vi.fn(), readyState: WS_OPEN };
+				const mockClient2 = { send: vi.fn(), readyState: WS_OPEN };
+				const mockClient3 = { send: vi.fn(), readyState: WS_CLOSED }; // CLOSED
 
 				mockClients.add(mockClient1 as unknown as WebSocket);
 				mockClients.add(mockClient2 as unknown as WebSocket);
@@ -234,7 +276,6 @@ describe('websocketServer', () => {
 
 			it('should handle empty client list', () => {
 				const message: WSMessage = { type: 'connected' };
-
 				expect(() => wsManager.broadcast(message)).not.toThrow();
 			});
 		});
@@ -242,11 +283,25 @@ describe('websocketServer', () => {
 		describe('broadcastState', () => {
 			beforeEach(() => {
 				wsManager.initialize(mockServer);
-				(wsManager as unknown as { clients: Set<WebSocket> }).clients = mockClients;
+				const internal = wsManager as unknown as {
+					wss: MockWebSocketServer;
+					clients?: Set<WebSocket>;
+				};
+				internal.wss.clients = mockClients;
+				if (!internal.clients) {
+					Object.defineProperty(internal, 'clients', {
+						value: mockClients,
+						writable: true,
+						configurable: true,
+						enumerable: false
+					});
+				} else {
+					internal.clients = mockClients;
+				}
 			});
 
 			it('should broadcast state update to all clients', () => {
-				const mockClient = { ...mockWs, readyState: 1 };
+				const mockClient = { ...mockWs, readyState: WS_OPEN };
 				mockClients.add(mockClient as unknown as WebSocket);
 
 				vi.spyOn(
@@ -261,20 +316,20 @@ describe('websocketServer', () => {
 			});
 
 			it('should send state when available', () => {
-				const mockClient = { ...mockWs, readyState: 1 };
+				const mockClient = { ...mockWs, send: vi.fn(), readyState: WS_OPEN };
 				mockClients.add(mockClient as unknown as WebSocket);
 
 				vi.spyOn(
 					wsManager as unknown as { getCompleteState: () => unknown },
 					'getCompleteState'
-				).mockReturnValue(mockState);
+				).mockReturnValue({ hello: 'world' });
 
 				wsManager.broadcastState();
 
 				expect(mockClient.send).toHaveBeenCalledWith(
 					JSON.stringify({
 						type: 'state-update',
-						payload: mockState
+						payload: { hello: 'world' }
 					})
 				);
 			});
@@ -292,12 +347,12 @@ describe('websocketServer', () => {
 			});
 
 			it('should call broadcastState when notifyMappingCreated is called', () => {
-				wsManager.notifyMappingCreated({ uuid: 'test-mapping' });
+				wsManager.notifyMappingCreated({ uuid: 'test-mapping' } as unknown as Mapping);
 				expect(wsManager.broadcastState).toHaveBeenCalled();
 			});
 
 			it('should call broadcastState when notifyMappingUpdated is called', () => {
-				wsManager.notifyMappingUpdated({ uuid: 'test-mapping' });
+				wsManager.notifyMappingUpdated({ uuid: 'test-mapping' } as unknown as Mapping);
 				expect(wsManager.broadcastState).toHaveBeenCalled();
 			});
 
@@ -379,7 +434,6 @@ describe('websocketServer', () => {
 				}
 
 				expect(mockScanControlSets).toHaveBeenCalled();
-
 				expect(mockWs.send).toHaveBeenCalled();
 			});
 
@@ -456,53 +510,58 @@ describe('websocketServer', () => {
 			});
 
 			it('should remove client on close', () => {
-				(wsManager as unknown as { clients: Set<WebSocket> }).clients.add(
-					mockWs as unknown as WebSocket
-				);
+				const internal = wsManager as unknown as {
+					wss: MockWebSocketServer;
+					clients?: Set<WebSocket>;
+				};
+				if (!internal.clients) {
+					Object.defineProperty(internal, 'clients', {
+						value: new Set<WebSocket>(),
+						writable: true,
+						configurable: true,
+						enumerable: false
+					});
+				}
+				internal.clients!.add(mockWs as unknown as WebSocket);
+				internal.wss.clients.add(mockWs as unknown as WebSocket);
 
-				expect(
-					(wsManager as unknown as { clients: Set<WebSocket> }).clients.has(
-						mockWs as unknown as WebSocket
-					)
-				).toBe(true);
+				expect(internal.clients!.has(mockWs as unknown as WebSocket)).toBe(true);
 
 				if (closeHandler) {
 					closeHandler();
 				}
 
-				expect(
-					(wsManager as unknown as { clients: Set<WebSocket> }).clients.has(
-						mockWs as unknown as WebSocket
-					)
-				).toBe(false);
+				expect(internal.clients!.has(mockWs as unknown as WebSocket)).toBe(false);
 			});
 
 			it('should remove client on error', () => {
-				(wsManager as unknown as { clients: Set<WebSocket> }).clients.add(
-					mockWs as unknown as WebSocket
-				);
+				const internal = wsManager as unknown as {
+					wss: MockWebSocketServer;
+					clients?: Set<WebSocket>;
+				};
+				if (!internal.clients) {
+					Object.defineProperty(internal, 'clients', {
+						value: new Set<WebSocket>(),
+						writable: true,
+						configurable: true,
+						enumerable: false
+					});
+				}
+				internal.clients!.add(mockWs as unknown as WebSocket);
+				internal.wss.clients.add(mockWs as unknown as WebSocket);
 
-				expect(
-					(wsManager as unknown as { clients: Set<WebSocket> }).clients.has(
-						mockWs as unknown as WebSocket
-					)
-				).toBe(true);
+				expect(internal.clients!.has(mockWs as unknown as WebSocket)).toBe(true);
 
 				if (errorHandler) {
 					errorHandler(new Error('Connection error'));
 				}
 
-				expect(
-					(wsManager as unknown as { clients: Set<WebSocket> }).clients.has(
-						mockWs as unknown as WebSocket
-					)
-				).toBe(false);
+				expect(internal.clients!.has(mockWs as unknown as WebSocket)).toBe(false);
 			});
 		});
 
 		describe('getCompleteState', () => {
 			it('should return null when server state is not available', () => {
-				// Temporarily mock getServerState to throw
 				mockGetServerState.mockImplementationOnce(() => {
 					throw new Error('State not initialized');
 				});

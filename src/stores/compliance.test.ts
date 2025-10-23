@@ -2,6 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
+vi.mock('$app/environment', () => ({
+	browser: true,
+	dev: true,
+	building: false,
+	version: 'test'
+}));
+
 import type { Control, Mapping } from '$lib/types';
 import { get } from 'svelte/store';
 import { beforeEach, describe, expect, it, vi, afterEach } from 'vitest';
@@ -16,11 +23,11 @@ import {
 
 // Mock console methods to avoid log output during tests
 let consoleSpies: {
-	log: ReturnType<typeof vi.spyOn>;
-	error: ReturnType<typeof vi.spyOn>;
-	warn: ReturnType<typeof vi.spyOn>;
-	info: ReturnType<typeof vi.spyOn>;
-	debug: ReturnType<typeof vi.spyOn>;
+	log: ReturnType<typeof vi.fn>;
+	error: ReturnType<typeof vi.fn>;
+	warn: ReturnType<typeof vi.fn>;
+	info: ReturnType<typeof vi.fn>;
+	debug: ReturnType<typeof vi.fn>;
 };
 
 describe('complianceStore', () => {
@@ -74,12 +81,18 @@ describe('complianceStore', () => {
 
 	beforeEach(() => {
 		consoleSpies = {
-			log: vi.spyOn(console, 'log').mockImplementation(() => {}),
-			error: vi.spyOn(console, 'error').mockImplementation(() => {}),
-			warn: vi.spyOn(console, 'warn').mockImplementation(() => {}),
-			info: vi.spyOn(console, 'info').mockImplementation(() => {}),
-			debug: vi.spyOn(console, 'debug').mockImplementation(() => {})
+			log: vi.fn(),
+			error: vi.fn(),
+			warn: vi.fn(),
+			info: vi.fn(),
+			debug: vi.fn()
 		};
+
+		vi.spyOn(console, 'log').mockImplementation(consoleSpies.log);
+		vi.spyOn(console, 'error').mockImplementation(consoleSpies.error);
+		vi.spyOn(console, 'warn').mockImplementation(consoleSpies.warn);
+		vi.spyOn(console, 'info').mockImplementation(consoleSpies.info);
+		vi.spyOn(console, 'debug').mockImplementation(consoleSpies.debug);
 
 		controls.set([]);
 		mappings.set([]);
