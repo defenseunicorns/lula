@@ -3,7 +3,6 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// Mock fs before importing the module
 const mockExistsSync = vi.fn();
 const mockReadFileSync = vi.fn();
 
