@@ -164,7 +164,6 @@ describe('websocketServer', () => {
 			clients: new Set()
 		};
 
-		// Make WebSocketServer constructible and return our mock instance
 		mockWebSocketServer.mockImplementation(function (this: unknown, _opts: unknown) {
 			return mockWss as unknown as WebSocketServer;
 		});
