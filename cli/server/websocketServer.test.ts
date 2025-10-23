@@ -178,7 +178,6 @@ describe('websocketServer', () => {
 		console.warn = originalConsole.warn;
 		console.info = originalConsole.info;
 
-		// reset singleton internals between tests
 		const internal = wsManager as unknown as {
 			wss?: MockWebSocketServer | null;
 			clients?: Set<WebSocket>;
