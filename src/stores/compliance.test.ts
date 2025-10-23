@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
-// Mock SvelteKit environment before any other imports
 vi.mock('$app/environment', () => ({
 	browser: true,
 	dev: true,
