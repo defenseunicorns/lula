@@ -660,8 +660,8 @@ export class GitHistoryUtil {
 				return { success: false, message: 'No current branch found' };
 			}
 
-			// Use fastForward instead of pull to avoid needing author configuration
-			// This performs the same operation but only works for fast-forward merges
+			// Use fastForward instead of pull
+			// https://github.com/isomorphic-git/isomorphic-git/issues/1073
 			await git.fastForward({
 				fs,
 				http,
