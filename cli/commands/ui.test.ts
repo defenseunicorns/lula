@@ -13,7 +13,10 @@ vi.mock('fs', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('fs')>();
 	return {
 		...actual,
-		existsSync: vi.fn()
+		existsSync: vi.fn(),
+		default: {
+			existsSync: vi.fn()
+		}
 	};
 });
 vi.mock('open', () => ({ default: vi.fn() }));
@@ -21,6 +24,9 @@ vi.mock('path', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('path')>();
 	return {
 		...actual,
+		default: {
+			join: (...parts: string[]) => parts.join('/')
+		},
 		join: (...parts: string[]) => parts.join('/')
 	};
 });

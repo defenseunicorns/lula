@@ -2,6 +2,96 @@
 // SPDX-FileCopyrightText: 2025-Present The Lula2 Authors
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
+const { mockReadFileSync, mockWriteFileSync, mockExistsSync, mockMkdirSync } = vi.hoisted(() => ({
+	mockReadFileSync: vi.fn(),
+	mockWriteFileSync: vi.fn(),
+	mockExistsSync: vi.fn(),
+	mockMkdirSync: vi.fn()
+}));
+
+vi.mock('node:fs', () => ({
+	readFileSync: mockReadFileSync,
+	writeFileSync: mockWriteFileSync,
+	existsSync: mockExistsSync,
+	mkdirSync: mockMkdirSync,
+	default: {
+		readFileSync: mockReadFileSync,
+		writeFileSync: mockWriteFileSync,
+		existsSync: mockExistsSync,
+		mkdirSync: mockMkdirSync
+	}
+}));
+
+vi.mock('fs', () => ({
+	readFileSync: mockReadFileSync,
+	writeFileSync: mockWriteFileSync,
+	existsSync: mockExistsSync,
+	mkdirSync: mockMkdirSync,
+	default: {
+		readFileSync: mockReadFileSync,
+		writeFileSync: mockWriteFileSync,
+		existsSync: mockExistsSync,
+		mkdirSync: mockMkdirSync
+	}
+}));
+
+const { mockGlob } = vi.hoisted(() => ({ mockGlob: vi.fn() }));
+vi.mock('glob', () => ({
+	glob: mockGlob,
+	default: { glob: mockGlob }
+}));
+
+const { mockGetServerState } = vi.hoisted(() => ({ mockGetServerState: vi.fn() }));
+vi.mock('./serverState', () => ({
+	getServerState: mockGetServerState
+}));
+
+const { mockXLSXRead, mockXLSXSheetToJson } = vi.hoisted(() => ({
+	mockXLSXRead: vi.fn(),
+	mockXLSXSheetToJson: vi.fn()
+}));
+
+vi.mock('xlsx-republish', () => ({
+	read: mockXLSXRead,
+	utils: {
+		sheet_to_json: mockXLSXSheetToJson
+	},
+	default: {
+		read: mockXLSXRead,
+		utils: { sheet_to_json: mockXLSXSheetToJson }
+	}
+}));
+
+vi.mock('crypto', () => ({
+	default: {
+		randomUUID: vi.fn(() => 'test-uuid-123')
+	}
+}));
+
+const { yamlFns } = vi.hoisted(() => ({
+	yamlFns: {
+		load: vi.fn(),
+		dump: vi.fn()
+	}
+}));
+vi.mock('js-yaml', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('js-yaml')>();
+
+	yamlFns.load.mockImplementation((...args: any[]) => (actual as any).load(...args));
+	yamlFns.dump.mockImplementation((...args: any[]) => (actual as any).dump(...args));
+	return {
+		...actual,
+		load: yamlFns.load,
+		dump: yamlFns.dump,
+		default: {
+			...actual,
+			load: yamlFns.load,
+			dump: yamlFns.dump
+		}
+	};
+});
+
 import {
 	scanControlSets,
 	processImportParameters,
@@ -19,41 +109,21 @@ import {
 } from './spreadsheetRoutes';
 import type { ImportParameters } from './spreadsheetRoutes';
 import { getServerState } from './serverState';
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
-import { glob } from 'glob';
 import * as yaml from 'js-yaml';
-import * as XLSX from 'xlsx-republish';
 
-vi.mock('fs');
-vi.mock('glob');
-vi.mock('js-yaml');
-vi.mock('./serverState');
-vi.mock('xlsx-republish', () => ({
-	read: vi.fn(),
-	utils: {
-		sheet_to_json: vi.fn()
-	}
-}));
-vi.mock('crypto', () => ({
-	default: {
-		randomUUID: vi.fn(() => 'test-uuid-123')
-	}
-}));
+const mockYamlLoad = yamlFns.load as ReturnType<typeof vi.fn>;
+const mockYamlDump = yamlFns.dump as ReturnType<typeof vi.fn>;
 
-const mockReadFileSync = vi.mocked(readFileSync);
-const mockWriteFileSync = vi.mocked(writeFileSync);
-const mockExistsSync = vi.mocked(existsSync);
-const mockMkdirSync = vi.mocked(mkdirSync);
-const mockGlob = vi.mocked(glob);
-const mockYamlLoad = vi.mocked(yaml.load);
-const mockYamlDump = vi.mocked(yaml.dump);
-const mockGetServerState = vi.mocked(getServerState);
-const mockXLSXRead = vi.mocked(XLSX.read);
-const mockXLSXSheetToJson = vi.mocked(XLSX.utils.sheet_to_json);
+// ---------------------------------------------------------------------------
+// Tests
+// ---------------------------------------------------------------------------
 
 describe('spreadsheetRoutes', () => {
 	beforeEach(() => {
-		vi.clearAllMocks();
+		vi.resetAllMocks();
+
+		mockYamlLoad.mockReset();
+		mockYamlDump.mockReset();
 
 		mockGetServerState.mockReturnValue({
 			CONTROL_SET_DIR: '/test/control-sets',
@@ -66,6 +136,8 @@ describe('spreadsheetRoutes', () => {
 			mappingsByFamily: new Map(),
 			mappingsByControl: new Map()
 		});
+
+		mockExistsSync.mockReturnValue(false);
 	});
 
 	afterEach(() => {
@@ -105,10 +177,12 @@ describe('spreadsheetRoutes', () => {
 			};
 
 			mockReadFileSync
-				.mockReturnValueOnce(yaml.dump(mockYamlContent1))
-				.mockReturnValueOnce(yaml.dump(mockYamlContent2));
+				.mockReturnValueOnce(yaml.dump(mockYamlContent1) as unknown as Buffer)
+				.mockReturnValueOnce(yaml.dump(mockYamlContent2) as unknown as Buffer);
 
-			mockYamlLoad.mockReturnValueOnce(mockYamlContent1).mockReturnValueOnce(mockYamlContent2);
+			mockYamlLoad
+				.mockReturnValueOnce(mockYamlContent1 as any)
+				.mockReturnValueOnce(mockYamlContent2 as any);
 
 			const result = await scanControlSets();
 
@@ -147,10 +221,12 @@ describe('spreadsheetRoutes', () => {
 			};
 
 			mockReadFileSync
-				.mockReturnValueOnce(yaml.dump(defaultYamlContent))
-				.mockReturnValueOnce(yaml.dump(validYamlContent));
+				.mockReturnValueOnce(yaml.dump(defaultYamlContent) as unknown as Buffer)
+				.mockReturnValueOnce(yaml.dump(validYamlContent) as unknown as Buffer);
 
-			mockYamlLoad.mockReturnValueOnce(defaultYamlContent).mockReturnValueOnce(validYamlContent);
+			mockYamlLoad
+				.mockReturnValueOnce(defaultYamlContent as any)
+				.mockReturnValueOnce(validYamlContent as any);
 
 			const result = await scanControlSets();
 
@@ -168,7 +244,7 @@ describe('spreadsheetRoutes', () => {
 			const mockFiles = ['invalid/lula.yaml'];
 			mockGlob.mockResolvedValue(mockFiles);
 
-			mockReadFileSync.mockReturnValue('invalid yaml content');
+			mockReadFileSync.mockReturnValue('invalid yaml content' as unknown as Buffer);
 			mockYamlLoad.mockImplementation(() => {
 				throw new Error('Invalid YAML');
 			});
@@ -196,8 +272,8 @@ describe('spreadsheetRoutes', () => {
 				controlCount: 8
 			};
 
-			mockReadFileSync.mockReturnValue(yaml.dump(mockYamlContent));
-			mockYamlLoad.mockReturnValue(mockYamlContent);
+			mockReadFileSync.mockReturnValue(yaml.dump(mockYamlContent) as unknown as Buffer);
+			mockYamlLoad.mockReturnValue(mockYamlContent as any);
 
 			const result = await scanControlSets();
 
@@ -220,8 +296,8 @@ describe('spreadsheetRoutes', () => {
 				// Missing name, description, controlCount
 			};
 
-			mockReadFileSync.mockReturnValue(yaml.dump(minimalYamlContent));
-			mockYamlLoad.mockReturnValue(minimalYamlContent);
+			mockReadFileSync.mockReturnValue(yaml.dump(minimalYamlContent) as unknown as Buffer);
+			mockYamlLoad.mockReturnValue(minimalYamlContent as any);
 
 			const result = await scanControlSets();
 
@@ -291,8 +367,8 @@ describe('spreadsheetRoutes', () => {
 				controlCount: 3
 			};
 
-			mockReadFileSync.mockReturnValue(yaml.dump(mockYamlContent));
-			mockYamlLoad.mockReturnValue(mockYamlContent);
+			mockReadFileSync.mockReturnValue(yaml.dump(mockYamlContent) as unknown as Buffer);
+			mockYamlLoad.mockReturnValue(mockYamlContent as any);
 
 			const result = await scanControlSets();
 
@@ -336,24 +412,23 @@ describe('spreadsheetRoutes', () => {
 			};
 
 			mockReadFileSync
-				.mockReturnValueOnce(yaml.dump(valid1Content))
-				.mockReturnValueOnce('invalid yaml')
-				.mockReturnValueOnce(yaml.dump(defaultContent))
-				.mockReturnValueOnce(yaml.dump(valid2Content));
+				.mockReturnValueOnce(yaml.dump(valid1Content) as unknown as Buffer)
+				.mockReturnValueOnce('invalid yaml' as unknown as Buffer)
+				.mockReturnValueOnce(yaml.dump(defaultContent) as unknown as Buffer)
+				.mockReturnValueOnce(yaml.dump(valid2Content) as unknown as Buffer);
 
 			mockYamlLoad
-				.mockReturnValueOnce(valid1Content)
+				.mockReturnValueOnce(valid1Content as any)
 				.mockImplementationOnce(() => {
 					throw new Error('Invalid YAML');
 				})
-				.mockReturnValueOnce(defaultContent)
-				.mockReturnValueOnce(valid2Content);
+				.mockReturnValueOnce(defaultContent as any)
+				.mockReturnValueOnce(valid2Content as any);
 
 			const result = await scanControlSets();
 
 			expect(result.controlSets).toHaveLength(3);
 
-			// Should include valid1
 			expect(result.controlSets[0]).toEqual({
 				path: 'valid1',
 				name: 'Valid Control Set 1',
@@ -362,7 +437,6 @@ describe('spreadsheetRoutes', () => {
 				file: 'valid1/lula.yaml'
 			});
 
-			// Should include invalid as error entry
 			expect(result.controlSets[1]).toEqual({
 				path: 'invalid',
 				name: 'Invalid lula.yaml',
@@ -371,7 +445,6 @@ describe('spreadsheetRoutes', () => {
 				file: 'invalid/lula.yaml'
 			});
 
-			// Should include valid2 (default should be skipped)
 			expect(result.controlSets[2]).toEqual({
 				path: 'valid2',
 				name: 'Valid Control Set 2',
@@ -385,7 +458,6 @@ describe('spreadsheetRoutes', () => {
 	describe('error handling', () => {
 		it('should handle glob errors gracefully', async () => {
 			mockGlob.mockRejectedValue(new Error('Glob error'));
-
 			await expect(scanControlSets()).rejects.toThrow('Glob error');
 		});
 
@@ -393,7 +465,6 @@ describe('spreadsheetRoutes', () => {
 			mockGetServerState.mockImplementation(() => {
 				throw new Error('Server state not initialized');
 			});
-
 			expect(() => getServerState()).toThrow('Server state not initialized');
 		});
 	});
@@ -500,7 +571,7 @@ describe('spreadsheetRoutes', () => {
 				buffer: Buffer.from('Name,Age,City\nJohn,30,NYC\nJane,25,LA')
 			};
 
-			const result = await parseUploadedFile(mockFile);
+			const result = await parseUploadedFile(mockFile as any);
 
 			expect(result).toEqual([
 				['Name', 'Age', 'City'],
@@ -530,7 +601,7 @@ describe('spreadsheetRoutes', () => {
 				buffer: Buffer.from('mock excel data')
 			};
 
-			const result = await parseUploadedFile(mockFile);
+			const result = await parseUploadedFile(mockFile as any);
 
 			expect(result).toEqual([
 				['Name', 'Age', 'City'],
@@ -551,7 +622,9 @@ describe('spreadsheetRoutes', () => {
 				buffer: Buffer.from('mock excel data')
 			};
 
-			await expect(parseUploadedFile(mockFile)).rejects.toThrow('No worksheet found in file');
+			await expect(parseUploadedFile(mockFile as any)).rejects.toThrow(
+				'No worksheet found in file'
+			);
 		});
 	});
 
@@ -602,7 +675,7 @@ describe('spreadsheetRoutes', () => {
 				['Control ID', 'Title'],
 				['AC-1', 'Valid Control'],
 				['', 'Invalid - No ID'],
-				[null, 'Invalid - Null ID'],
+				[null, 'Invalid - Null ID'] as any,
 				['AC-2', 'Another Valid Control']
 			];
 			const headers = rawData[0] as string[];
@@ -705,7 +778,12 @@ describe('spreadsheetRoutes', () => {
 				frontendFieldSchema: null
 			};
 
-			const result = buildFieldSchema(mockFieldMetadata, mockControls, mockParams, mockFamilies);
+			const result = buildFieldSchema(
+				mockFieldMetadata,
+				mockControls as any,
+				mockParams,
+				mockFamilies as any
+			);
 
 			expect(result.fields.family).toBeDefined();
 			expect(result.fields.family).toMatchObject({
@@ -762,7 +840,12 @@ describe('spreadsheetRoutes', () => {
 				]
 			};
 
-			const result = buildFieldSchema(mockFieldMetadata, mockControls, mockParams, mockFamilies);
+			const result = buildFieldSchema(
+				mockFieldMetadata,
+				mockControls as any,
+				mockParams,
+				mockFamilies as any
+			);
 
 			expect(result.fields['custom-field']).toMatchObject({
 				category: 'custom',
@@ -813,7 +896,12 @@ describe('spreadsheetRoutes', () => {
 				frontendFieldSchema: null
 			};
 
-			const result = buildFieldSchema(mockFieldMetadata, mockControls, mockParams, mockFamilies);
+			const result = buildFieldSchema(
+				mockFieldMetadata,
+				mockControls as any,
+				mockParams,
+				mockFamilies as any
+			);
 
 			expect(result.fields['long-description']).toMatchObject({
 				ui_type: 'textarea'
@@ -829,7 +917,7 @@ describe('spreadsheetRoutes', () => {
 	describe('createOutputStructure', () => {
 		beforeEach(() => {
 			mockExistsSync.mockReturnValue(false);
-			mockYamlDump.mockReturnValue('mocked yaml content');
+			mockYamlDump.mockReturnValue('mocked yaml content' as any);
 		});
 
 		it('should create directory structure and files correctly', async () => {
@@ -869,7 +957,11 @@ describe('spreadsheetRoutes', () => {
 				mappingsByControl: new Map()
 			});
 
-			const result = await createOutputStructure(mockProcessedData, mockFieldSchema, mockParams);
+			const result = await createOutputStructure(
+				mockProcessedData as any,
+				mockFieldSchema as any,
+				mockParams
+			);
 
 			expect(result.folderName).toBe('test-control-set');
 			expect(mockMkdirSync).toHaveBeenCalledWith('/test/control-sets/test-control-set', {
@@ -877,7 +969,9 @@ describe('spreadsheetRoutes', () => {
 			});
 			expect(mockMkdirSync).toHaveBeenCalledWith(
 				'/test/control-sets/test-control-set/controls/AC',
-				{ recursive: true }
+				{
+					recursive: true
+				}
 			);
 			expect(mockWriteFileSync).toHaveBeenCalledWith(
 				'/test/control-sets/test-control-set/lula.yaml',
@@ -942,7 +1036,7 @@ describe('spreadsheetRoutes', () => {
 				mappingsByControl: new Map()
 			});
 
-			await createOutputStructure(mockProcessedData, mockFieldSchema, mockParams);
+			await createOutputStructure(mockProcessedData as any, mockFieldSchema as any, mockParams);
 
 			// Should create a mapping file with justification
 			expect(mockWriteFileSync).toHaveBeenCalledWith(
@@ -985,7 +1079,7 @@ describe('spreadsheetRoutes', () => {
 				mappingsByControl: new Map()
 			});
 
-			await createOutputStructure(mockProcessedData, mockFieldSchema, mockParams);
+			await createOutputStructure(mockProcessedData as any, mockFieldSchema as any, mockParams);
 
 			expect(mockMkdirSync).not.toHaveBeenCalled();
 		});
@@ -1165,7 +1259,7 @@ describe('spreadsheetRoutes', () => {
 		it('should handle edge cases', () => {
 			expect(detectValueType('   ')).toBe('string'); // Whitespace only
 			expect(detectValueType('123abc')).toBe('string'); // Mixed alphanumeric
-			expect(detectValueType('2023-13-01')).toBe('date'); // This matches date pattern even if invalid
+			expect(detectValueType('2023-13-01')).toBe('date'); // Pattern match even if invalid
 			expect(detectValueType('maybe')).toBe('string'); // Non-boolean word
 		});
 

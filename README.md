@@ -160,10 +160,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
-      - name: Use Node.js 24
+      - name: Use Node.js 22
         uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
         with:
-          node-version: 24
+          node-version: 22
 
       - name: Run Lula Scan
         run: |
@@ -341,7 +341,7 @@ families:
 
 ### Prerequisites
 
-- Node.js 24+
+- Node.js 22.20.x or >= 24.x
 - Git (for version history features)
 - pnpm (recommended) or npm
 
