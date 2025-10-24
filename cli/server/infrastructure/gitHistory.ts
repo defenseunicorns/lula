@@ -1,18 +1,34 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
-/**
- * Git History Utilities
- *
- * Provides utilities for retrieving git history for control files
- * Now uses isomorphic-git for better reliability and cross-platform support
- */
-
 import * as fs from 'fs';
 import * as git from 'isomorphic-git';
 import { relative } from 'path';
 import { createYamlDiff, type YamlDiffResult } from './yamlDiff';
 import http from 'isomorphic-git/http/node';
+
+/**
+ * Raw commit object returned by isomorphic-git log function
+ */
+export interface GitLogCommit {
+	oid: string;
+	commit: {
+		author: {
+			name: string;
+			email: string;
+			timestamp: number;
+		};
+		committer: {
+			name: string;
+			email: string;
+			timestamp: number;
+		};
+		message: string;
+		tree: string;
+		parent: string[];
+	};
+}
+
 export interface GitCommit {
 	hash: string;
 	shortHash: string;
@@ -92,10 +108,8 @@ export class GitHistoryUtil {
 		try {
 			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
 			const relativePath = relative(gitRoot, filePath);
-			// Getting git history
 
-			// Get commit history using isomorphic-git
-			const commits = await git.log({
+			const commits: GitLogCommit[] = await git.log({
 				fs,
 				dir: gitRoot,
 				filepath: relativePath,
@@ -103,7 +117,6 @@ export class GitHistoryUtil {
 			});
 
 			if (!commits || commits.length === 0) {
-				// No git history found
 				return {
 					filePath,
 					commits: [],
@@ -114,7 +127,6 @@ export class GitHistoryUtil {
 			}
 
 			const gitCommits = await this.convertIsomorphicCommits(commits, relativePath, gitRoot);
-			// Parsed commits
 
 			return {
 				filePath,
@@ -161,7 +173,7 @@ export class GitHistoryUtil {
 		try {
 			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
 			const relativePath = relative(gitRoot, filePath);
-			const commits = await git.log({
+			const commits: GitLogCommit[] = await git.log({
 				fs,
 				dir: gitRoot,
 				filepath: relativePath
@@ -433,7 +445,7 @@ export class GitHistoryUtil {
 			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
 
 			// Get all commits
-			const commits = await git.log({ fs, dir: gitRoot });
+			const commits: GitLogCommit[] = await git.log({ fs, dir: gitRoot });
 
 			// Get unique contributors
 			const contributorEmails = new Set<string>();
@@ -538,13 +550,28 @@ export class GitHistoryUtil {
 	async getBranchInfo(branchName: string): Promise<GitBranchInfo | null> {
 		try {
 			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
-			const localCommits = await git.log({ fs, dir: gitRoot, ref: branchName });
+			const localCommits: GitLogCommit[] = await git.log({ fs, dir: gitRoot, ref: branchName });
 
 			try {
-				// Is there a better way to do this with https://isomorphic-git.org/docs/en/gitRemoteHTTP#gitremotehttpdiscover
-				const possibleRemotes = [`origin/${branchName}`, `upstream/${branchName}`];
-				// type this out
-				let remoteCommits: any[] = [];
+				const remotes = await git.listRemotes({ fs, dir: gitRoot });
+				const possibleRemotes = remotes.map((remote) => `${remote.remote}/${branchName}`);
+
+				for (const remote of remotes) {
+					try {
+						await git.fetch({
+							fs,
+							http,
+							dir: gitRoot,
+							remote: remote.remote,
+							singleBranch: true,
+							tags: false
+						});
+					} catch (fetchError) {
+						console.warn(`Could not fetch from remote ${remote.remote}:`, fetchError);
+					}
+				}
+
+				let remoteCommits: GitLogCommit[] = [];
 
 				for (const remote of possibleRemotes) {
 					try {
@@ -629,14 +656,15 @@ export class GitHistoryUtil {
 				return { success: false, message: 'No current branch found' };
 			}
 
-			await git.pull({
+			// Use fastForward instead of pull to avoid needing author configuration
+			// This performs the same operation but only works for fast-forward merges
+			await git.fastForward({
 				fs,
 				http,
 				dir: gitRoot,
 				ref: currentBranch,
 				singleBranch: true
 			});
-
 			return { success: true, message: 'Successfully pulled changes' };
 		} catch (error) {
 			console.error('Error pulling changes:', error);
