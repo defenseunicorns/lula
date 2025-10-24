@@ -119,8 +119,10 @@
 		>
 			<div class="p-4 space-y-4">
 				<div class="flex items-center gap-2 pb-2 border-b border-gray-200 dark:border-gray-700">
-					{@const StatusIcon = getStatusIcon()}
-					<StatusIcon class="w-4 h-4 {getStatusColor()}" />
+					{#if true}
+						{@const StatusIcon = getStatusIcon()}
+						<StatusIcon class="w-4 h-4 {getStatusColor()}" />
+					{/if}
 					<span class="text-sm font-medium text-gray-900 dark:text-white"> Git Status </span>
 				</div>
 

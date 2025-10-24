@@ -579,8 +579,8 @@ export class GitHistoryUtil {
 					try {
 						remoteCommits = await git.log({ fs, dir: gitRoot, ref: remote });
 						break;
-					} catch (error) {
-						console.warn(`Could not fetch remote commits for ${remote}:`, error);
+					} catch {
+						console.warn(`Could not fetch remote commits for ${remote}`);
 					}
 				}
 
