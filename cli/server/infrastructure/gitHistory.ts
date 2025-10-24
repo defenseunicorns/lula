@@ -96,7 +96,6 @@ export class GitHistoryUtil {
 	async getFileHistory(filePath: string, limit: number = 50): Promise<GitFileHistory> {
 		const isGitRepo = await this.isGitRepository();
 		if (!isGitRepo) {
-			// Not a git repository
 			return {
 				filePath,
 				commits: [],
@@ -556,8 +555,6 @@ export class GitHistoryUtil {
 
 			try {
 				const remotes = await git.listRemotes({ fs, dir: gitRoot });
-				const possibleRemotes = remotes.map((remote) => `${remote.remote}/${branchName}`);
-
 				for (const remote of remotes) {
 					try {
 						await git.fetch({
@@ -565,7 +562,6 @@ export class GitHistoryUtil {
 							http,
 							dir: gitRoot,
 							remote: remote.remote,
-							singleBranch: true,
 							tags: false
 						});
 					} catch (fetchError) {
@@ -574,17 +570,20 @@ export class GitHistoryUtil {
 				}
 
 				let remoteCommits: GitLogCommit[] = [];
+				let foundRemote = false;
 
-				for (const remote of possibleRemotes) {
+				for (const remote of remotes) {
+					const remoteBranchRef = `${remote.remote}/${branchName}`;
 					try {
-						remoteCommits = await git.log({ fs, dir: gitRoot, ref: remote });
+						remoteCommits = await git.log({ fs, dir: gitRoot, ref: remoteBranchRef });
+						foundRemote = true;
 						break;
-					} catch {
-						console.warn(`Could not fetch remote commits for ${remote}`);
+					} catch (error) {
+						console.warn(`Could not get commits for ${remoteBranchRef}: ${error}`);
 					}
 				}
 
-				if (remoteCommits.length === 0) {
+				if (!foundRemote || remoteCommits.length === 0) {
 					const lastCommit = localCommits[0];
 					return {
 						currentBranch: branchName,
