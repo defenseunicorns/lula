@@ -19,9 +19,8 @@
 	let error = $state<string | null>(null);
 	let isDropdownOpen = $state(false);
 
-	// Fetch fresh git status when dropdown is opened
 	$effect(() => {
-		if (isDropdownOpen && !gitStatus) {
+		if (isDropdownOpen) {
 			fetchGitStatus();
 		}
 	});
@@ -188,7 +187,7 @@
 											<Time class="w-3 h-3 mt-0.5 flex-shrink-0" />
 											<div>
 												<div>
-													Last commit: {formatTimestamp(gitStatus.branchInfo.lastCommitDate)}
+													Last commit (local): {formatTimestamp(gitStatus.branchInfo.lastCommitDate)}
 												</div>
 												{#if gitStatus?.branchInfo?.lastCommitMessage}
 													<div class="mt-1 text-gray-500 dark:text-gray-500 truncate max-w-60">
@@ -212,7 +211,6 @@
 									<div
 										class="w-4 h-4 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"
 									></div>
-									Refreshing...
 								{:else}
 									<Renew class="w-4 h-4" />
 									Refresh Status
@@ -229,7 +227,6 @@
 										<div
 											class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"
 										></div>
-										Pulling...
 									{:else}
 										<CloudDownload class="w-4 h-4" />
 										Pull Changes
