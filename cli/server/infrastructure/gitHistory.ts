@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
+/* eslint-disable class-methods-use-this */
 import * as fs from 'fs';
 import * as git from 'isomorphic-git';
 import { relative } from 'path';
