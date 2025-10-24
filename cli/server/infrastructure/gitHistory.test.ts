@@ -10,7 +10,11 @@ vi.mock('isomorphic-git', () => ({
 	findRoot: vi.fn(),
 	log: vi.fn(),
 	readBlob: vi.fn(),
-	readCommit: vi.fn()
+	readCommit: vi.fn(),
+	fastForward: vi.fn(),
+	currentBranch: vi.fn(),
+	listRemotes: vi.fn(),
+	fetch: vi.fn()
 }));
 
 vi.mock('./yamlDiff', () => ({
@@ -87,7 +91,7 @@ describe('GitHistoryUtil', () => {
 		it('should return true when in a git repository', async () => {
 			getMockFn(mockGit.findRoot).mockResolvedValue('/path/to/git/root');
 
-			const result = await gitHistoryUtil.isGitRepository();
+			const result = await GitHistoryUtil.isGitRepository();
 
 			expect(result).toBe(true);
 			expect(mockGit.findRoot).toHaveBeenCalledWith({
@@ -99,7 +103,7 @@ describe('GitHistoryUtil', () => {
 		it('should return false when not in a git repository', async () => {
 			getMockFn(mockGit.findRoot).mockRejectedValue(new Error('Not a git repository'));
 
-			const result = await gitHistoryUtil.isGitRepository();
+			const result = await GitHistoryUtil.isGitRepository();
 
 			expect(result).toBe(false);
 		});
@@ -109,7 +113,7 @@ describe('GitHistoryUtil', () => {
 				throw new Error('Permission denied');
 			});
 
-			const result = await gitHistoryUtil.isGitRepository();
+			const result = await GitHistoryUtil.isGitRepository();
 
 			expect(result).toBe(false);
 		});
@@ -924,7 +928,7 @@ describe('GitHistoryUtil', () => {
 		describe('getCurrentBranch', () => {
 			it('should return current branch name when in git repository', async () => {
 				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
-				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(GitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
 
 				const mockedGit = (await import('isomorphic-git')) as any;
 				mockedGit.findRoot.mockResolvedValue('/repo/root');
@@ -938,7 +942,7 @@ describe('GitHistoryUtil', () => {
 			it('should return null when not in git repository', async () => {
 				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
 
-				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(false);
+				vi.spyOn(GitHistoryUtil, 'isGitRepository').mockResolvedValue(false);
 
 				const result = await gitHistoryUtil.getCurrentBranch();
 
@@ -950,7 +954,7 @@ describe('GitHistoryUtil', () => {
 
 				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
 
-				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(GitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
 
 				const mockedGit = (await import('isomorphic-git')) as any;
 				mockedGit.findRoot.mockResolvedValue('/repo/root');
@@ -971,14 +975,11 @@ describe('GitHistoryUtil', () => {
 		describe('getBranchInfo', () => {
 			it('should return null when branch does not exist', async () => {
 				const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
-
 				const mockedGit = (await import('isomorphic-git')) as any;
 				mockedGit.findRoot.mockResolvedValue('/repo/root');
 				mockedGit.resolveRef = vi.fn().mockRejectedValue(new Error('Ref not found'));
 
-				const result = await gitHistoryUtil.getBranchInfo('nonexistent');
+				const result = await GitHistoryUtil.getBranchInfo('nonexistent');
 
 				expect(result).toBeNull();
 				expect(mockConsoleError).toHaveBeenCalledWith(
@@ -990,8 +991,6 @@ describe('GitHistoryUtil', () => {
 			});
 
 			it('should handle branch without remote tracking', async () => {
-				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
-
 				const mockedGit = (await import('isomorphic-git')) as any;
 				mockedGit.findRoot.mockResolvedValue('/repo/root');
 				mockedGit.resolveRef = vi
@@ -1008,7 +1007,7 @@ describe('GitHistoryUtil', () => {
 					}
 				]);
 
-				const result = await gitHistoryUtil.getBranchInfo('feature-branch');
+				const result = await GitHistoryUtil.getBranchInfo('feature-branch');
 
 				expect(result).toEqual({
 					currentBranch: 'feature-branch',
@@ -1038,9 +1037,9 @@ describe('GitHistoryUtil', () => {
 					hasUnpushedChanges: false
 				};
 
-				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(GitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
 				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockResolvedValue('main');
-				vi.spyOn(gitHistoryUtil, 'getBranchInfo').mockResolvedValue(mockBranchInfo);
+				vi.spyOn(GitHistoryUtil, 'getBranchInfo').mockResolvedValue(mockBranchInfo);
 
 				const result = await gitHistoryUtil.getGitStatus();
 
@@ -1056,7 +1055,7 @@ describe('GitHistoryUtil', () => {
 			it('should return non-repository status when not in git repo', async () => {
 				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
 
-				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(false);
+				vi.spyOn(GitHistoryUtil, 'isGitRepository').mockResolvedValue(false);
 
 				const result = await gitHistoryUtil.getGitStatus();
 
@@ -1074,7 +1073,7 @@ describe('GitHistoryUtil', () => {
 
 				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
 
-				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(GitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
 				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockRejectedValue(new Error('Git error'));
 
 				const result = await gitHistoryUtil.getGitStatus();
@@ -1099,7 +1098,7 @@ describe('GitHistoryUtil', () => {
 			it('should handle pull when not in git repository', async () => {
 				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
 
-				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(false);
+				vi.spyOn(GitHistoryUtil, 'isGitRepository').mockResolvedValue(false);
 
 				const result = await gitHistoryUtil.pullChanges();
 
@@ -1112,7 +1111,7 @@ describe('GitHistoryUtil', () => {
 			it('should handle missing current branch', async () => {
 				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
 
-				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(GitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
 				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockResolvedValue(null);
 
 				const result = await gitHistoryUtil.pullChanges();
@@ -1128,12 +1127,12 @@ describe('GitHistoryUtil', () => {
 
 				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
 
-				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(GitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
 				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockResolvedValue('main');
 
 				const mockedGit = (await import('isomorphic-git')) as any;
 				mockedGit.findRoot.mockResolvedValue('/repo/root');
-				mockedGit.pull = vi.fn().mockRejectedValue(new Error('Network error'));
+				mockedGit.fastForward = vi.fn().mockRejectedValue(new Error('Network error'));
 
 				const result = await gitHistoryUtil.pullChanges();
 
