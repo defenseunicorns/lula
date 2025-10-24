@@ -80,7 +80,7 @@ export class GitHistoryUtil {
 	/**
 	 * Check if the directory is a git repository
 	 */
-	static async isGitRepository(): Promise<boolean> {
+	async isGitRepository(): Promise<boolean> {
 		try {
 			const gitDir = await git.findRoot({ fs, filepath: process.cwd() });
 			return !!gitDir;
@@ -93,7 +93,7 @@ export class GitHistoryUtil {
 	 * Get git history for a specific file
 	 */
 	async getFileHistory(filePath: string, limit: number = 50): Promise<GitFileHistory> {
-		const isGitRepo = await GitHistoryUtil.isGitRepository();
+		const isGitRepo = await this.isGitRepository();
 		if (!isGitRepo) {
 			// Not a git repository
 			return {
@@ -165,7 +165,7 @@ export class GitHistoryUtil {
 	 * Get the total number of commits for a file
 	 */
 	async getFileCommitCount(filePath: string): Promise<number> {
-		const isGitRepo = await GitHistoryUtil.isGitRepository();
+		const isGitRepo = await this.isGitRepository();
 		if (!isGitRepo) {
 			return 0;
 		}
@@ -196,7 +196,7 @@ export class GitHistoryUtil {
 	 * Get file content at a specific commit (public method)
 	 */
 	async getFileContentAtCommit(filePath: string, commitHash: string): Promise<string | null> {
-		const isGitRepo = await GitHistoryUtil.isGitRepository();
+		const isGitRepo = await this.isGitRepository();
 		if (!isGitRepo) {
 			return null;
 		}
@@ -204,7 +204,7 @@ export class GitHistoryUtil {
 		try {
 			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
 			const relativePath = relative(gitRoot, filePath);
-			return await GitHistoryUtil.getFileAtCommit(commitHash, relativePath, gitRoot);
+			return await this.getFileAtCommit(commitHash, relativePath, gitRoot);
 		} catch (error) {
 			console.error(`Error getting file content at commit ${commitHash}:`, error);
 			return null;
@@ -286,11 +286,7 @@ export class GitHistoryUtil {
 
 			if (!parentOid) {
 				// This is the initial commit, compare against empty
-				const currentContent = await GitHistoryUtil.getFileAtCommit(
-					commitOid,
-					relativePath,
-					gitRoot
-				);
+				const currentContent = await this.getFileAtCommit(commitOid, relativePath, gitRoot);
 				if (currentContent) {
 					const lines = currentContent.split('\n');
 					// Check if this is a mapping file
@@ -308,8 +304,8 @@ export class GitHistoryUtil {
 			}
 
 			// Get file content from both commits
-			const currentContent = await GitHistoryUtil.getFileAtCommit(commitOid, relativePath, gitRoot);
-			const parentContent = await GitHistoryUtil.getFileAtCommit(parentOid, relativePath, gitRoot);
+			const currentContent = await this.getFileAtCommit(commitOid, relativePath, gitRoot);
+			const parentContent = await this.getFileAtCommit(parentOid, relativePath, gitRoot);
 
 			if (!currentContent && !parentContent) {
 				return { changes: { insertions: 0, deletions: 0, files: 1 } };
@@ -320,8 +316,8 @@ export class GitHistoryUtil {
 			const parentLines = parentContent ? parentContent.split('\n') : [];
 
 			// Basic line-based diff
-			const diff = GitHistoryUtil.createSimpleDiff(parentLines, currentLines, relativePath);
-			const { insertions, deletions } = GitHistoryUtil.countChanges(parentLines, currentLines);
+			const diff = await this.createSimpleDiff(parentLines, currentLines, relativePath);
+			const { insertions, deletions } = this.countChanges(parentLines, currentLines);
 
 			// Create intelligent YAML diff
 			// Check if this is a mapping file
@@ -342,7 +338,7 @@ export class GitHistoryUtil {
 	/**
 	 * Get file content at a specific commit
 	 */
-	static async getFileAtCommit(
+	async getFileAtCommit(
 		commitOid: string,
 		filepath: string,
 		gitRoot: string
@@ -364,7 +360,11 @@ export class GitHistoryUtil {
 	/**
 	 * Create a simple unified diff between two file versions
 	 */
-	static createSimpleDiff(oldLines: string[], newLines: string[], filepath: string): string {
+	async createSimpleDiff(
+		oldLines: string[],
+		newLines: string[],
+		filepath: string
+	): Promise<string> {
 		const diffLines: string[] = [];
 		diffLines.push(`--- a/${filepath}`);
 		diffLines.push(`+++ b/${filepath}`);
@@ -400,10 +400,7 @@ export class GitHistoryUtil {
 	/**
 	 * Count insertions and deletions between two file versions
 	 */
-	static countChanges(
-		oldLines: string[],
-		newLines: string[]
-	): { insertions: number; deletions: number } {
+	countChanges(oldLines: string[], newLines: string[]): { insertions: number; deletions: number } {
 		let insertions = 0;
 		let deletions = 0;
 
@@ -435,7 +432,7 @@ export class GitHistoryUtil {
 		lastCommitDate: string | null;
 		firstCommitDate: string | null;
 	}> {
-		const isGitRepo = await GitHistoryUtil.isGitRepository();
+		const isGitRepo = await this.isGitRepository();
 		if (!isGitRepo) {
 			return {
 				totalCommits: 0,
@@ -486,7 +483,7 @@ export class GitHistoryUtil {
 	 */
 	async getCurrentBranch(): Promise<string | null> {
 		try {
-			const isGitRepo = await GitHistoryUtil.isGitRepository();
+			const isGitRepo = await this.isGitRepository();
 			if (!isGitRepo) {
 				return null;
 			}
@@ -505,7 +502,7 @@ export class GitHistoryUtil {
 	 */
 	async getGitStatus(): Promise<GitStatus> {
 		try {
-			const isGitRepo = await GitHistoryUtil.isGitRepository();
+			const isGitRepo = await this.isGitRepository();
 			if (!isGitRepo) {
 				return {
 					isGitRepository: false,
@@ -527,7 +524,7 @@ export class GitHistoryUtil {
 				};
 			}
 
-			const branchInfo = await GitHistoryUtil.getBranchInfo(currentBranch);
+			const branchInfo = await this.getBranchInfo(currentBranch);
 
 			return {
 				isGitRepository: true,
@@ -551,7 +548,7 @@ export class GitHistoryUtil {
 	/**
 	 * Get branch comparison information
 	 */
-	static async getBranchInfo(branchName: string): Promise<GitBranchInfo | null> {
+	async getBranchInfo(branchName: string): Promise<GitBranchInfo | null> {
 		try {
 			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
 			const localCommits: GitLogCommit[] = await git.log({ fs, dir: gitRoot, ref: branchName });
@@ -648,7 +645,7 @@ export class GitHistoryUtil {
 	 */
 	async pullChanges(): Promise<{ success: boolean; message: string }> {
 		try {
-			const isGitRepo = await GitHistoryUtil.isGitRepository();
+			const isGitRepo = await this.isGitRepository();
 			if (!isGitRepo) {
 				return { success: false, message: 'Not a git repository' };
 			}
