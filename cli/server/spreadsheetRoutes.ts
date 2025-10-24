@@ -12,6 +12,7 @@ import multer from 'multer';
 import { dirname, join, relative } from 'path';
 import { debug } from '../utils/debug';
 import { getServerState, getCurrentControlSetPath } from './serverState';
+import { GitHistoryUtil } from './infrastructure/gitHistory';
 
 const MAX_HEADER_CANDIDATES = 5;
 const PREVIEW_COLUMNS = 4;
@@ -1576,6 +1577,36 @@ router.post('/parse-excel-sheet-previews', upload.single('file'), async (req, re
 	} catch (error) {
 		console.error('Error getting sheet previews:', error);
 		res.status(500).json({ error: 'Failed to get sheet previews' });
+	}
+});
+
+router.get('/git-status', async (req, res) => {
+	try {
+		const state = getServerState();
+		const gitUtil = new GitHistoryUtil(state.CONTROL_SET_DIR);
+
+		const gitStatus = await gitUtil.getGitStatus();
+		res.json(gitStatus);
+	} catch (error) {
+		console.error('Error getting git status:', error);
+		res.status(500).json({ error: 'Failed to get git status' });
+	}
+});
+
+router.post('/git-pull', async (req, res) => {
+	try {
+		const state = getServerState();
+		const gitUtil = new GitHistoryUtil(state.CONTROL_SET_DIR);
+
+		const result = await gitUtil.pullChanges();
+		if (result.success) {
+			res.json(result);
+		} else {
+			res.status(400).json(result);
+		}
+	} catch (error) {
+		console.error('Error pulling changes:', error);
+		res.status(500).json({ error: 'Failed to pull changes' });
 	}
 });
 

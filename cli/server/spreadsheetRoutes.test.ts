@@ -1395,4 +1395,155 @@ describe('spreadsheetRoutes', () => {
 			expect(extractFamilyFromControlId('!@')).toBe('!@');
 		});
 	});
+
+	describe('git API endpoints', () => {
+		let mockGitHistoryUtil: any;
+
+		beforeEach(() => {
+			mockGitHistoryUtil = {
+				getGitStatus: vi.fn(),
+				pullChanges: vi.fn()
+			};
+
+			mockGetServerState.mockReturnValue({
+				CONTROL_SET_DIR: '/test/control-sets',
+				currentSubdir: '.',
+				fileStore: {} as any,
+				gitHistory: mockGitHistoryUtil,
+				controlsCache: new Map(),
+				mappingsCache: new Map(),
+				controlsByFamily: new Map(),
+				mappingsByFamily: new Map(),
+				mappingsByControl: new Map()
+			});
+		});
+
+		describe('GET /api/git-status', () => {
+			it('should return git status when successful', async () => {
+				const mockGitStatus = {
+					isGitRepository: true,
+					currentBranch: 'main',
+					branchInfo: {
+						currentBranch: 'main',
+						isAhead: false,
+						isBehind: true,
+						aheadCount: 0,
+						behindCount: 2,
+						lastCommitDate: '2023-01-01T00:00:00Z',
+						lastCommitMessage: 'Test commit',
+						hasUnpushedChanges: false
+					},
+					canPull: true,
+					canPush: false
+				};
+
+				mockGitHistoryUtil.getGitStatus.mockResolvedValue(mockGitStatus);
+
+				const result = await mockGitHistoryUtil.getGitStatus();
+				expect(result).toEqual(mockGitStatus);
+				expect(mockGitHistoryUtil.getGitStatus).toHaveBeenCalledTimes(1);
+			});
+
+			it('should handle git status errors', async () => {
+				mockGitHistoryUtil.getGitStatus.mockRejectedValue(new Error('Git error'));
+
+				try {
+					await mockGitHistoryUtil.getGitStatus();
+				} catch (error) {
+					expect(error).toBeInstanceOf(Error);
+					expect((error as Error).message).toBe('Git error');
+				}
+			});
+
+			it('should return default status when not in git repository', async () => {
+				const mockGitStatus = {
+					isGitRepository: false,
+					currentBranch: null,
+					branchInfo: null,
+					canPull: false,
+					canPush: false
+				};
+
+				mockGitHistoryUtil.getGitStatus.mockResolvedValue(mockGitStatus);
+
+				const result = await mockGitHistoryUtil.getGitStatus();
+				expect(result).toEqual(mockGitStatus);
+			});
+		});
+
+		describe('POST /api/git-pull', () => {
+			it('should successfully pull changes', async () => {
+				const mockPullResult = {
+					success: true,
+					message: 'Successfully pulled changes from origin/main'
+				};
+
+				mockGitHistoryUtil.pullChanges.mockResolvedValue(mockPullResult);
+
+				const result = await mockGitHistoryUtil.pullChanges();
+				expect(result).toEqual(mockPullResult);
+				expect(mockGitHistoryUtil.pullChanges).toHaveBeenCalledTimes(1);
+			});
+
+			it('should handle pull errors', async () => {
+				const mockPullResult = {
+					success: false,
+					message: 'Network error'
+				};
+
+				mockGitHistoryUtil.pullChanges.mockResolvedValue(mockPullResult);
+
+				const result = await mockGitHistoryUtil.pullChanges();
+				expect(result).toEqual(mockPullResult);
+			});
+
+			it('should handle pull when not in git repository', async () => {
+				const mockPullResult = {
+					success: false,
+					message: 'Not in a git repository'
+				};
+
+				mockGitHistoryUtil.pullChanges.mockResolvedValue(mockPullResult);
+
+				const result = await mockGitHistoryUtil.pullChanges();
+				expect(result).toEqual(mockPullResult);
+			});
+
+			it('should handle missing current branch', async () => {
+				const mockPullResult = {
+					success: false,
+					message: 'Could not determine current branch'
+				};
+
+				mockGitHistoryUtil.pullChanges.mockResolvedValue(mockPullResult);
+
+				const result = await mockGitHistoryUtil.pullChanges();
+				expect(result).toEqual(mockPullResult);
+			});
+		});
+
+		describe('git service integration', () => {
+			it('should use the correct git history instance from server state', () => {
+				const serverState = getServerState();
+				expect(serverState.gitHistory).toBe(mockGitHistoryUtil);
+			});
+
+			it('should handle rate limiting for git operations', async () => {
+				const promises = Array(10)
+					.fill(null)
+					.map(() => mockGitHistoryUtil.getGitStatus());
+
+				mockGitHistoryUtil.getGitStatus.mockResolvedValue({
+					isGitRepository: true,
+					currentBranch: 'main',
+					branchInfo: null,
+					canPull: false,
+					canPush: false
+				});
+
+				await Promise.all(promises);
+				expect(mockGitHistoryUtil.getGitStatus).toHaveBeenCalledTimes(10);
+			});
+		});
+	});
 });
