@@ -90,7 +90,6 @@ beforeEach(() => {
 	pullsListReviews.mockResolvedValue({ data: [] });
 	pullsDismissReview.mockResolvedValue({});
 
-	// Default PR payload includes head.sha so SHA-based refs work by default
 	pullsGet.mockResolvedValue({
 		data: { head: { ref: 'main', sha: 'main-sha' }, base: { sha: 'base-sha-123' } }
 	});
