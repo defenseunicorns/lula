@@ -90,7 +90,10 @@ beforeEach(() => {
 	pullsListReviews.mockResolvedValue({ data: [] });
 	pullsDismissReview.mockResolvedValue({});
 
-	pullsGet.mockResolvedValue({ data: { head: { ref: 'main' } } });
+	// Default PR payload includes head.sha so SHA-based refs work by default
+	pullsGet.mockResolvedValue({
+		data: { head: { ref: 'main', sha: 'main-sha' }, base: { sha: 'base-sha-123' } }
+	});
 	pullsListFiles.mockResolvedValue({ data: [] });
 
 	reposGetContent.mockResolvedValue({ data: '' });
@@ -449,7 +452,9 @@ describe('crawl command (integration)', () => {
 		process.env.PULL_NUMBER = '88';
 		process.env.GITHUB_TOKEN = 'fake-token';
 
-		pullsGet.mockResolvedValue({ data: { head: { ref: 'feature-branch' } } });
+		pullsGet.mockResolvedValue({
+			data: { head: { ref: 'feature-branch', sha: 'head-sha-456' }, base: { sha: 'base-sha-456' } }
+		});
 
 		pullsListReviewComments.mockResolvedValue({ data: [] });
 		pullsListReviews.mockResolvedValue({ data: [] });
@@ -474,15 +479,16 @@ describe('crawl command (integration)', () => {
 		const regularFileNew = 'const x = 2;';
 
 		reposGetContent.mockImplementation(({ path, ref }) => {
-			if (path === 'config/secrets.yaml' && ref === 'main') {
+			if (path === 'config/secrets.yaml' && ref === 'base-sha-456') {
 				const content = Buffer.from(deletedFileContent, 'utf8').toString('base64');
 				return Promise.resolve({ data: { content } });
 			}
-			if (path === 'src/regular.txt' && ref === 'main') {
+			if (path === 'src/regular.txt' && ref === 'base-sha-456') {
 				const content = Buffer.from(regularFileOld, 'utf8').toString('base64');
 				return Promise.resolve({ data: { content } });
 			}
-			if (path === 'src/regular.txt' && ref === 'feature-branch') {
+			// New text should be fetched using HEAD SHA
+			if (path === 'src/regular.txt' && ref === 'head-sha-456') {
 				const content = Buffer.from(regularFileNew, 'utf8').toString('base64');
 				return Promise.resolve({ data: { content } });
 			}
@@ -514,7 +520,9 @@ describe('crawl command (integration)', () => {
 		process.env.PULL_NUMBER = '77';
 		process.env.GITHUB_TOKEN = 'test-token';
 
-		pullsGet.mockResolvedValueOnce({ data: { head: { ref: 'feature-branch' } } });
+		pullsGet.mockResolvedValueOnce({
+			data: { head: { ref: 'feat', sha: 'feat-sha' }, base: { sha: 'base-sha-abc' } }
+		});
 		pullsListFiles.mockResolvedValueOnce({
 			data: [
 				{ filename: 'src/file1.txt', status: 'modified' },
@@ -541,8 +549,9 @@ describe('crawl command (integration)', () => {
 		].join('\n');
 
 		reposGetContent.mockImplementation(({ path, ref }) => {
-			if (path === 'src/file1.txt' && ref === 'main') return Promise.resolve({ data: oldText });
-			if (path === 'src/file1.txt' && ref === 'feature-branch') {
+			if (path === 'src/file1.txt' && ref === 'base-sha-abc')
+				return Promise.resolve({ data: oldText });
+			if (path === 'src/file1.txt' && ref === 'feat-sha') {
 				const content = Buffer.from(newText, 'utf8').toString('base64');
 				return Promise.resolve({ data: { content } });
 			}
@@ -596,7 +605,9 @@ describe('crawl command (integration)', () => {
 		process.env.PULL_NUMBER = '88';
 		process.env.GITHUB_TOKEN = 'test-token';
 
-		pullsGet.mockResolvedValueOnce({ data: { head: { ref: 'feat' } } });
+		pullsGet.mockResolvedValueOnce({
+			data: { head: { ref: 'feat', sha: 'feat-sha' }, base: { sha: 'base-sha-abc' } }
+		});
 		pullsListFiles.mockResolvedValueOnce({ data: [{ filename: 'x.txt', status: 'modified' }] });
 
 		const uuid = 'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee';
@@ -604,8 +615,8 @@ describe('crawl command (integration)', () => {
 		const newText = ['a', `// @lulaStart ${uuid}`, 'new', `// @lulaEnd ${uuid}`, 'z'].join('\n');
 
 		reposGetContent.mockImplementation(({ path, ref }) => {
-			if (path === 'x.txt' && ref === 'main') return Promise.resolve({ data: oldText });
-			if (path === 'x.txt' && ref === 'feat') {
+			if (path === 'x.txt' && ref === 'base-sha-abc') return Promise.resolve({ data: oldText });
+			if (path === 'x.txt' && ref === 'feat-sha') {
 				const content = Buffer.from(newText, 'utf8').toString('base64');
 				return Promise.resolve({ data: { content } });
 			}
@@ -652,7 +663,9 @@ describe('crawl command (integration)', () => {
 		process.env.PULL_NUMBER = '99';
 		process.env.GITHUB_TOKEN = 'x';
 
-		pullsGet.mockResolvedValueOnce({ data: { head: { ref: 'same' } } });
+		pullsGet.mockResolvedValueOnce({
+			data: { head: { ref: 'same', sha: 'same-sha' }, base: { sha: 'base-sha-def' } }
+		});
 		pullsListFiles.mockResolvedValueOnce({ data: [{ filename: 'same.txt', status: 'modified' }] });
 
 		const txt = [
@@ -816,12 +829,15 @@ function createTestFile(
 }
 
 describe('Refactored crawl functions', () => {
+	// Include baseSha/headSha so types and runtime calls are satisfied
 	const mockContext: CrawlContext = {
 		octokit: mockOctokitInstance as unknown as Octokit,
 		owner: 'testowner',
 		repo: 'testrepo',
 		pull_number: 123,
 		prBranch: 'feature-branch',
+		baseSha: 'base-sha-ctx',
+		headSha: 'head-sha-ctx',
 		files: []
 	};
 
