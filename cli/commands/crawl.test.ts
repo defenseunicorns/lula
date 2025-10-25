@@ -486,7 +486,6 @@ describe('crawl command (integration)', () => {
 				const content = Buffer.from(regularFileOld, 'utf8').toString('base64');
 				return Promise.resolve({ data: { content } });
 			}
-			// New text should be fetched using HEAD SHA
 			if (path === 'src/regular.txt' && ref === 'head-sha-456') {
 				const content = Buffer.from(regularFileNew, 'utf8').toString('base64');
 				return Promise.resolve({ data: { content } });
