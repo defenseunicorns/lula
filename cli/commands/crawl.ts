@@ -266,6 +266,8 @@ export interface CrawlContext {
 	repo: string;
 	pull_number: number;
 	prBranch: string;
+	baseSha: string;
+	headSha: string;
 	files: PullRequestFile[];
 }
 
@@ -297,7 +299,7 @@ export async function analyzeDeletedFiles(context: CrawlContext): Promise<{
 	hasFindings: boolean;
 	warningContent: string;
 }> {
-	const { octokit, owner, repo, files } = context;
+	const { octokit, owner, repo, baseSha, files } = context;
 	const deletedFilesWithAnnotations: string[] = [];
 
 	for (const file of files) {
@@ -308,7 +310,7 @@ export async function analyzeDeletedFiles(context: CrawlContext): Promise<{
 					owner,
 					repo,
 					path: file.filename,
-					ref: 'main'
+					ref: baseSha
 				});
 
 				if (containsLulaAnnotations(oldText)) {
@@ -404,7 +406,7 @@ export async function analyzeModifiedFiles(context: CrawlContext): Promise<{
 	hasFindings: boolean;
 	changesContent: string;
 }> {
-	const { octokit, owner, repo, prBranch, files } = context;
+	const { octokit, owner, repo, baseSha, headSha, files } = context;
 	let changesContent = '';
 	let hasFindings = false;
 
@@ -412,9 +414,15 @@ export async function analyzeModifiedFiles(context: CrawlContext): Promise<{
 		if (file.status === 'added' || file.status === 'removed') continue;
 
 		try {
+			const oldPath =
+				file.status === 'renamed' && file.previous_filename
+					? file.previous_filename
+					: file.filename;
+			const newPath = file.filename;
+
 			const [oldText, newText] = await Promise.all([
-				fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: 'main' }),
-				fetchRawFileViaAPI({ octokit, owner, repo, path: file.filename, ref: prBranch })
+				fetchRawFileViaAPI({ octokit, owner, repo, path: oldPath, ref: baseSha }),
+				fetchRawFileViaAPI({ octokit, owner, repo, path: newPath, ref: headSha })
 			]);
 
 			const changedBlocks = getChangedBlocks(oldText, newText);
@@ -498,6 +506,8 @@ export function crawlCommand(): Command {
 			const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 			const pr = await octokit.pulls.get({ owner, repo, pull_number });
 			const prBranch = pr.data.head.ref;
+			const baseSha = pr.data.base.sha;
+			const headSha = pr.data.head.sha;
 			const { data: files } = await octokit.pulls.listFiles({ owner, repo, pull_number });
 
 			const context: CrawlContext = {
@@ -506,6 +516,8 @@ export function crawlCommand(): Command {
 				repo,
 				pull_number,
 				prBranch,
+				baseSha,
+				headSha,
 				files
 			};
 
