@@ -7,7 +7,14 @@ set -Eeuo pipefail
 trap 'echo "Error on line $LINENO (exit $?)" >&2' ERR
 set -x
 
-LATEST_VERSION=$(npx --yes lula2@latest --version 2>/dev/null)
+if LATEST_VERSION="$(npx --yes lula2@latest --version 2>&1)"; then
+  echo "LATEST_VERSION=${LATEST_VERSION}"
+else
+  echo "npx lula2@latest --version failed:"
+  echo "${LATEST_VERSION}" >&2
+  exit 1
+fi
+
 RAW_NIGHTLY_VERSION=$(npx --yes lula2@nightly --version 2>/dev/null || echo "none")
 
 if [[ "$RAW_NIGHTLY_VERSION" == "none" ]]; then
