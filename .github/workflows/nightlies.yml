@@ -40,7 +40,6 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
           registry-url: 'https://registry.npmjs.org'
-          always-auth: true
 
       - name: Ensure pnpm store exists
         run: pnpm store path | xargs -I{} mkdir -p "{}"
