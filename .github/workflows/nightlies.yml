@@ -36,11 +36,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
-          node-version: '22.20.x'
+          node-version: '24.x'
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
-          registry-url: 'https://registry.npmjs.org'
-          always-auth: true
 
       - name: Ensure pnpm store exists
         run: pnpm store path | xargs -I{} mkdir -p "{}"
@@ -54,4 +52,7 @@ jobs:
       - name: Publish to NPM
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: ./scripts/nightlies.sh
+        shell: bash
+        run: |
+          set -x
+          ./scripts/nightlies.sh
