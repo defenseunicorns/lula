@@ -39,7 +39,6 @@ jobs:
           node-version: '24.x'
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
-          registry-url: 'https://registry.npmjs.org'
 
       - name: Ensure pnpm store exists
         run: pnpm store path | xargs -I{} mkdir -p "{}"
