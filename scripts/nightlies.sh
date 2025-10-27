@@ -3,7 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
-set -e
+set -Eeuo pipefail
+trap 'echo "Error on line $LINENO (exit $?)" >&2' ERR
+set -x
 
 LATEST_VERSION=$(npx --yes lula2@latest --version 2>/dev/null)
 RAW_NIGHTLY_VERSION=$(npx --yes lula2@nightly --version 2>/dev/null || echo "none")
