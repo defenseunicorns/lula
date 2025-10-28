@@ -5,8 +5,8 @@
 import * as fs from 'fs';
 import * as git from 'isomorphic-git';
 import { relative } from 'path';
+import { execSync } from 'child_process';
 import { createYamlDiff, type YamlDiffResult } from './yamlDiff';
-import http from 'isomorphic-git/http/node';
 
 /**
  * Raw commit object returned by isomorphic-git log function
@@ -73,9 +73,35 @@ export interface GitStatus {
 
 export class GitHistoryUtil {
 	private baseDir: string;
+	private execSync: typeof execSync;
 
-	constructor(baseDir: string) {
+	constructor(baseDir: string, execSyncFn?: typeof execSync) {
 		this.baseDir = baseDir;
+		this.execSync = execSyncFn || execSync;
+	}
+
+	/**
+	 * Execute a git command using native git binary with credentials support
+	 */
+	private async executeGitCommand(
+		command: string,
+		cwd?: string
+	): Promise<{ success: boolean; output: string; error?: string }> {
+		try {
+			const workingDir = cwd || (await git.findRoot({ fs, filepath: process.cwd() }));
+			const output = this.execSync(command, {
+				cwd: workingDir,
+				encoding: 'utf8',
+				stdio: ['pipe', 'pipe', 'pipe']
+			});
+			return { success: true, output: output.toString() };
+		} catch (error: any) {
+			return {
+				success: false,
+				output: '',
+				error: error.stderr?.toString() || error.message
+			};
+		}
 	}
 
 	/**
@@ -555,15 +581,14 @@ export class GitHistoryUtil {
 
 			try {
 				const remotes = await git.listRemotes({ fs, dir: gitRoot });
+
+				// Try to fetch from each remote individually to handle auth issues gracefully
 				for (const remote of remotes) {
 					try {
-						await git.fetch({
-							fs,
-							http,
-							dir: gitRoot,
-							remote: remote.remote,
-							tags: false
-						});
+						const fetchResult = await this.executeGitCommand(`git fetch ${remote.remote}`, gitRoot);
+						if (!fetchResult.success) {
+							console.warn(`Could not fetch from remote ${remote.remote}:`, fetchResult.error);
+						}
 					} catch (fetchError) {
 						console.warn(`Could not fetch from remote ${remote.remote}:`, fetchError);
 					}
@@ -641,7 +666,59 @@ export class GitHistoryUtil {
 	}
 
 	/**
-	 * Pull changes from remote
+	 * Fetch updates from remote repositories using native git command
+	 */
+	async fetchFromRemotes(): Promise<{ success: boolean; message: string; details: string[] }> {
+		try {
+			const isGitRepo = await this.isGitRepository();
+			if (!isGitRepo) {
+				return { success: false, message: 'Not a git repository', details: [] };
+			}
+
+			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
+			const remotes = await git.listRemotes({ fs, dir: gitRoot });
+
+			if (remotes.length === 0) {
+				return { success: true, message: 'No remotes configured', details: [] };
+			}
+
+			const details: string[] = [];
+			let hasErrors = false;
+
+			for (const remote of remotes) {
+				try {
+					const fetchResult = await this.executeGitCommand(`git fetch ${remote.remote}`, gitRoot);
+					if (fetchResult.success) {
+						details.push(`Fetched from ${remote.remote}`);
+					} else {
+						details.push(`Failed to fetch from ${remote.remote}: ${fetchResult.error}`);
+						hasErrors = true;
+					}
+				} catch (error) {
+					details.push(`Error fetching from ${remote.remote}: ${error}`);
+					hasErrors = true;
+				}
+			}
+
+			return {
+				success: !hasErrors,
+				message: hasErrors
+					? 'Fetch completed with some errors'
+					: 'Successfully fetched from all remotes',
+				details
+			};
+		} catch (error) {
+			console.error('Error fetching from remotes:', error);
+			return {
+				success: false,
+				message: error instanceof Error ? error.message : 'Unknown error occurred',
+				details: []
+			};
+		}
+	}
+
+	/**
+	 * Pull changes from remote using native git command
 	 */
 	async pullChanges(): Promise<{ success: boolean; message: string }> {
 		try {
@@ -650,23 +727,33 @@ export class GitHistoryUtil {
 				return { success: false, message: 'Not a git repository' };
 			}
 
-			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
 			const currentBranch = await this.getCurrentBranch();
-
 			if (!currentBranch) {
 				return { success: false, message: 'No current branch found' };
 			}
 
-			// Use fastForward instead of pull
-			// https://github.com/isomorphic-git/isomorphic-git/issues/1073
-			await git.fastForward({
-				fs,
-				http,
-				dir: gitRoot,
-				ref: currentBranch,
-				singleBranch: true
-			});
-			return { success: true, message: 'Successfully pulled changes' };
+			const gitRoot = await git.findRoot({ fs, filepath: process.cwd() });
+			const remotes = await git.listRemotes({ fs, dir: gitRoot });
+
+			if (remotes.length === 0) {
+				return { success: false, message: 'No remotes configured' };
+			}
+			// pull from the first remote
+			const targetRemote = remotes[0].remote;
+			const pullCommand = `git pull ${targetRemote} ${currentBranch}`;
+			const pullResult = await this.executeGitCommand(pullCommand, gitRoot);
+
+			if (!pullResult.success) {
+				return {
+					success: false,
+					message: `Failed to pull changes: ${pullResult.error}`
+				};
+			}
+
+			return {
+				success: true,
+				message: pullResult.output || 'Successfully pulled changes'
+			};
 		} catch (error) {
 			console.error('Error pulling changes:', error);
 			return {

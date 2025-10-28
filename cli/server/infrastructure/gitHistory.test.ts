@@ -1121,10 +1121,32 @@ describe('GitHistoryUtil', () => {
 					message: 'No current branch found'
 				});
 			});
+			it('should pull successfully and return command output', async () => {
+				const outputExec = vi.fn(() => 'Already up to date.\n');
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root', outputExec);
 
-			it('should handle pull errors', async () => {
-				const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockResolvedValue('main');
 
+				const mockedGit = (await import('isomorphic-git')) as any;
+				mockedGit.findRoot.mockResolvedValue('/repo/root');
+				mockedGit.listRemotes = vi
+					.fn()
+					.mockResolvedValue([{ remote: 'origin', url: 'git@example:repo.git' }]);
+
+				const result = await gitHistoryUtil.pullChanges();
+
+				expect(result).toEqual({
+					success: true,
+					message: 'Already up to date.\n'
+				});
+				expect(outputExec).toHaveBeenCalledWith(
+					expect.stringMatching(/^git pull origin main$/),
+					expect.objectContaining({ cwd: '/repo/root', encoding: 'utf8' })
+				);
+			});
+
+			it('should return a helpful message when no remotes are configured', async () => {
 				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
 
 				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
@@ -1132,15 +1154,47 @@ describe('GitHistoryUtil', () => {
 
 				const mockedGit = (await import('isomorphic-git')) as any;
 				mockedGit.findRoot.mockResolvedValue('/repo/root');
-				mockedGit.fastForward = vi.fn().mockRejectedValue(new Error('Network error'));
+				mockedGit.listRemotes = vi.fn().mockResolvedValue([]);
 
 				const result = await gitHistoryUtil.pullChanges();
 
 				expect(result).toEqual({
 					success: false,
-					message: 'Network error'
+					message: 'No remotes configured'
 				});
-				expect(mockConsoleError).toHaveBeenCalledWith('Error pulling changes:', expect.any(Error));
+			});
+			it('should handle pull errors', async () => {
+				const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+				// execSync that simulates a failing `git pull`
+				const failingExec = vi.fn(() => {
+					const err: any = new Error('Network error');
+					err.stderr = Buffer.from('Network error');
+					throw err;
+				});
+
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root', failingExec);
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockResolvedValue('main');
+
+				const mockedGit = (await import('isomorphic-git')) as any;
+				mockedGit.findRoot.mockResolvedValue('/repo/root');
+				mockedGit.listRemotes = vi
+					.fn()
+					.mockResolvedValue([{ remote: 'origin', url: 'git@example:repo.git' }]);
+
+				const result = await gitHistoryUtil.pullChanges();
+
+				expect(result).toEqual({
+					success: false,
+					message: 'Failed to pull changes: Network error'
+				});
+				// Note: pullChanges handles the error internally, but we still verify no unexpected console spam
+				expect(mockConsoleError).not.toHaveBeenCalledWith(
+					'Error pulling changes:',
+					expect.any(Error)
+				);
 
 				mockConsoleError.mockRestore();
 			});
