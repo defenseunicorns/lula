@@ -14,6 +14,7 @@ import { WebSocket, WebSocketServer } from 'ws';
 import { debug } from '../utils/debug';
 import { getControlId } from './infrastructure/controlHelpers';
 import { getCurrentControlSetPath, getServerState } from './serverState';
+import { GitHistoryUtil } from './infrastructure/gitHistory';
 import type { Control, Mapping } from './types';
 
 /**
@@ -296,7 +297,6 @@ class WebSocketManager {
 								control.id = controlId;
 							}
 							// Get timeline data for this control
-							const { GitHistoryUtil } = await import('./infrastructure/gitHistory');
 							const { execSync } = await import('child_process');
 							let timeline: any = null;
 

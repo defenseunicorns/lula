@@ -10,7 +10,11 @@ vi.mock('isomorphic-git', () => ({
 	findRoot: vi.fn(),
 	log: vi.fn(),
 	readBlob: vi.fn(),
-	readCommit: vi.fn()
+	readCommit: vi.fn(),
+	fastForward: vi.fn(),
+	currentBranch: vi.fn(),
+	listRemotes: vi.fn(),
+	fetch: vi.fn()
 }));
 
 vi.mock('./yamlDiff', () => ({
@@ -917,6 +921,283 @@ describe('GitHistoryUtil', () => {
 			);
 
 			mockConsoleError.mockRestore();
+		});
+	});
+
+	describe('new git status methods', () => {
+		describe('getCurrentBranch', () => {
+			it('should return current branch name when in git repository', async () => {
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+
+				const mockedGit = (await import('isomorphic-git')) as any;
+				mockedGit.findRoot.mockResolvedValue('/repo/root');
+				mockedGit.currentBranch = vi.fn().mockResolvedValue('main');
+
+				const result = await gitHistoryUtil.getCurrentBranch();
+
+				expect(result).toBe('main');
+			});
+
+			it('should return null when not in git repository', async () => {
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(false);
+
+				const result = await gitHistoryUtil.getCurrentBranch();
+
+				expect(result).toBeNull();
+			});
+
+			it('should handle errors when getting current branch', async () => {
+				const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+
+				const mockedGit = (await import('isomorphic-git')) as any;
+				mockedGit.findRoot.mockResolvedValue('/repo/root');
+				mockedGit.currentBranch = vi.fn().mockRejectedValue(new Error('Failed to get branch'));
+
+				const result = await gitHistoryUtil.getCurrentBranch();
+
+				expect(result).toBeNull();
+				expect(mockConsoleError).toHaveBeenCalledWith(
+					'Error getting current branch:',
+					expect.any(Error)
+				);
+
+				mockConsoleError.mockRestore();
+			});
+		});
+
+		describe('getBranchInfo', () => {
+			it('should return null when branch does not exist', async () => {
+				const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+				const mockedGit = (await import('isomorphic-git')) as any;
+				mockedGit.findRoot.mockResolvedValue('/repo/root');
+				mockedGit.resolveRef = vi.fn().mockRejectedValue(new Error('Ref not found'));
+
+				const result = await gitHistoryUtil.getBranchInfo('nonexistent');
+
+				expect(result).toBeNull();
+				expect(mockConsoleError).toHaveBeenCalledWith(
+					'Error getting branch info:',
+					expect.any(Error)
+				);
+
+				mockConsoleError.mockRestore();
+			});
+
+			it('should handle branch without remote tracking', async () => {
+				const mockedGit = (await import('isomorphic-git')) as any;
+				mockedGit.findRoot.mockResolvedValue('/repo/root');
+				mockedGit.resolveRef = vi
+					.fn()
+					.mockResolvedValueOnce('abc123')
+					.mockRejectedValueOnce(new Error('Remote ref not found'));
+				mockedGit.log.mockResolvedValue([
+					{
+						oid: 'abc123',
+						commit: {
+							author: { name: 'Test User', email: 'test@example.com', timestamp: 1234567890 },
+							message: 'Local commit'
+						}
+					}
+				]);
+
+				const result = await gitHistoryUtil.getBranchInfo('feature-branch');
+
+				expect(result).toEqual({
+					currentBranch: 'feature-branch',
+					isAhead: false,
+					isBehind: false,
+					aheadCount: 0,
+					behindCount: 0,
+					lastCommitDate: new Date(1234567890 * 1000).toISOString(),
+					lastCommitMessage: 'Local commit',
+					hasUnpushedChanges: false
+				});
+			});
+		});
+
+		describe('getGitStatus', () => {
+			it('should return complete git status when in repository', async () => {
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
+
+				const mockBranchInfo = {
+					currentBranch: 'main',
+					isAhead: false,
+					isBehind: true,
+					aheadCount: 0,
+					behindCount: 2,
+					lastCommitDate: new Date().toISOString(),
+					lastCommitMessage: 'Test commit',
+					hasUnpushedChanges: false
+				};
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockResolvedValue('main');
+				vi.spyOn(gitHistoryUtil, 'getBranchInfo').mockResolvedValue(mockBranchInfo);
+
+				const result = await gitHistoryUtil.getGitStatus();
+
+				expect(result).toEqual({
+					isGitRepository: true,
+					currentBranch: 'main',
+					branchInfo: mockBranchInfo,
+					canPull: true,
+					canPush: false
+				});
+			});
+
+			it('should return non-repository status when not in git repo', async () => {
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(false);
+
+				const result = await gitHistoryUtil.getGitStatus();
+
+				expect(result).toEqual({
+					isGitRepository: false,
+					currentBranch: null,
+					branchInfo: null,
+					canPull: false,
+					canPush: false
+				});
+			});
+
+			it('should handle errors gracefully', async () => {
+				const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockRejectedValue(new Error('Git error'));
+
+				const result = await gitHistoryUtil.getGitStatus();
+
+				expect(result).toEqual({
+					isGitRepository: false,
+					currentBranch: null,
+					branchInfo: null,
+					canPull: false,
+					canPush: false
+				});
+				expect(mockConsoleError).toHaveBeenCalledWith(
+					'Error getting git status:',
+					expect.any(Error)
+				);
+
+				mockConsoleError.mockRestore();
+			});
+		});
+
+		describe('pullChanges', () => {
+			it('should handle pull when not in git repository', async () => {
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(false);
+
+				const result = await gitHistoryUtil.pullChanges();
+
+				expect(result).toEqual({
+					success: false,
+					message: 'Not a git repository'
+				});
+			});
+
+			it('should handle missing current branch', async () => {
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockResolvedValue(null);
+
+				const result = await gitHistoryUtil.pullChanges();
+
+				expect(result).toEqual({
+					success: false,
+					message: 'No current branch found'
+				});
+			});
+			it('should pull successfully and return command output', async () => {
+				const outputExec = vi.fn(() => 'Already up to date.\n');
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root', outputExec);
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockResolvedValue('main');
+
+				const mockedGit = (await import('isomorphic-git')) as any;
+				mockedGit.findRoot.mockResolvedValue('/repo/root');
+				mockedGit.listRemotes = vi
+					.fn()
+					.mockResolvedValue([{ remote: 'origin', url: 'git@example:repo.git' }]);
+
+				const result = await gitHistoryUtil.pullChanges();
+
+				expect(result).toEqual({
+					success: true,
+					message: 'Already up to date.\n'
+				});
+				expect(outputExec).toHaveBeenCalledWith(
+					expect.stringMatching(/^git pull origin main$/),
+					expect.objectContaining({ cwd: '/repo/root', encoding: 'utf8' })
+				);
+			});
+
+			it('should return a helpful message when no remotes are configured', async () => {
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root');
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockResolvedValue('main');
+
+				const mockedGit = (await import('isomorphic-git')) as any;
+				mockedGit.findRoot.mockResolvedValue('/repo/root');
+				mockedGit.listRemotes = vi.fn().mockResolvedValue([]);
+
+				const result = await gitHistoryUtil.pullChanges();
+
+				expect(result).toEqual({
+					success: false,
+					message: 'No remotes configured'
+				});
+			});
+			it('should handle pull errors', async () => {
+				const mockConsoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+				// execSync that simulates a failing `git pull`
+				const failingExec = vi.fn(() => {
+					const err: any = new Error('Network error');
+					err.stderr = Buffer.from('Network error');
+					throw err;
+				});
+
+				const gitHistoryUtil = new GitHistoryUtil('/repo/root', failingExec);
+
+				vi.spyOn(gitHistoryUtil, 'isGitRepository').mockResolvedValue(true);
+				vi.spyOn(gitHistoryUtil, 'getCurrentBranch').mockResolvedValue('main');
+
+				const mockedGit = (await import('isomorphic-git')) as any;
+				mockedGit.findRoot.mockResolvedValue('/repo/root');
+				mockedGit.listRemotes = vi
+					.fn()
+					.mockResolvedValue([{ remote: 'origin', url: 'git@example:repo.git' }]);
+
+				const result = await gitHistoryUtil.pullChanges();
+
+				expect(result).toEqual({
+					success: false,
+					message: 'Failed to pull changes: Network error'
+				});
+				// Note: pullChanges handles the error internally, but we still verify no unexpected console spam
+				expect(mockConsoleError).not.toHaveBeenCalledWith(
+					'Error pulling changes:',
+					expect.any(Error)
+				);
+
+				mockConsoleError.mockRestore();
+			});
 		});
 	});
 });

@@ -397,3 +397,4 @@ Apache-2.0 - See [LICENSE](LICENSE) for details.
 Developed by [The Lula Authors](https://github.com/defenseunicorns/lula2/graphs/contributors)
 
 Part of the Defense Unicorns ecosystem for secure, compliant software delivery.
+
