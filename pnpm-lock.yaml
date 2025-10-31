@@ -28,7 +28,7 @@ importers:
         version: 5.1.0
       express-rate-limit:
         specifier: ^8.1.0
-        version: 8.1.0(express@5.1.0)
+        version: 8.2.0(express@5.1.0)
       flowbite:
         specifier: ^3.1.2
         version: 3.1.2(rollup@4.52.5)
@@ -1950,8 +1950,8 @@ packages:
     resolution: {integrity: sha512-JhFGDVJ7tmDJItKhYgJCGLOWjuK9vPxiXoUFLwLDc99NlmklilbiQJwoctZtt13+xMw91MCk/REan6MWHqDjyA==}
     engines: {node: '>=12.0.0'}
 
-  express-rate-limit@8.1.0:
-    resolution: {integrity: sha512-4nLnATuKupnmwqiJc27b4dCFmB/T60ExgmtDD7waf4LdrbJ8CPZzZRHYErDYNhoz+ql8fUdYwM/opf90PoPAQA==}
+  express-rate-limit@8.2.0:
+    resolution: {integrity: sha512-zDLb8RsXoA09dui1mvm/bAqSYeUh/bj3+fcDeiNBebSbSjl9IEK5mbCSYSRk52Lrco9sj9Xjuzkot3TXuXEw0A==}
     engines: {node: '>= 16'}
     peerDependencies:
       express: '>= 4.11'
@@ -6015,7 +6015,7 @@ snapshots:
 
   expect-type@1.2.2: {}
 
-  express-rate-limit@8.1.0(express@5.1.0):
+  express-rate-limit@8.2.0(express@5.1.0):
     dependencies:
       express: 5.1.0
       ip-address: 10.0.1
