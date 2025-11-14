@@ -29,8 +29,17 @@ When(a.ConfigMap)
 /**
  * @lulaEnd 123e4567-e89b-12d3-a456-426614174000
  */
+
+/**
+ * This policy mutates ConfigMaps by setting a non=seen annotation when they are created in any namespace.
+ *
+ * @related https://docs.pepr.dev
+ *
+ * @lulaStart 987e4567-e89b-12d3-a456-426614174777
+ */
 When(a.ConfigMap)
   .IsCreated()
   .Mutate(function mutateNon(request) {
     request.SetAnnotation("non", "seen");
   });
+// @lulaEnd 987e4567-e89b-12d3-a456-426614174777
