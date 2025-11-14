@@ -381,7 +381,7 @@ export function generateChangedBlocksContent(
 	for (const block of changedBlocks) {
 		const newBlockText = newText.split('\n').slice(block.startLine, block.endLine).join('\n');
 		const blockSha256 = createHash('sha256').update(newBlockText).digest('hex');
-		content += `**Block \`${block.uuid}\` sha256:** \`${blockSha256}\`\n\n`;
+		content += `**UUID:** \`${block.uuid}\`\n**sha256:** \`${blockSha256}\`\n\n`;
 	}
 
 	return content;
@@ -417,7 +417,7 @@ export function generateRemovedBlocksContent(
 	for (const block of removedBlocks) {
 		const oldBlockText = oldText.split('\n').slice(block.startLine, block.endLine).join('\n');
 		const blockSha256 = createHash('sha256').update(oldBlockText).digest('hex');
-		content += `**Block \`${block.uuid}\` sha256:** \`${blockSha256}\`\n\n`;
+		content += `**UUID:** \`${block.uuid}\`\n**sha256:** \`${blockSha256}\`\n\n`;
 	}
 
 	content += `Please review whether:\n`;

@@ -1005,7 +1005,8 @@ describe('Refactored crawl functions', () => {
 
 			expect(result).toContain('| File | Lines Changed |');
 			expect(result).toContain('| `test.js` | `6–10` |');
-			expect(result).toContain('**Block `abc123` sha256:**');
+			expect(result).toContain('**UUID:** `abc123`');
+			expect(result).toContain('**sha256:**');
 			expect(logSpy).toHaveBeenCalledWith('Commenting regarding `test.js`.');
 		});
 
@@ -1026,9 +1027,10 @@ describe('Refactored crawl functions', () => {
 			expect(result).toContain('| `test.js` | `1–2` |');
 			expect(result).toContain('| `test.js` | `6–7` |');
 
-			// Should have separate sha256 blocks after the table
-			expect(result).toContain('**Block `abc123` sha256:**');
-			expect(result).toContain('**Block `def456` sha256:**');
+			// Should have separate block and sha256 entries after the table
+			expect(result).toContain('**UUID:** `abc123`');
+			expect(result).toContain('**UUID:** `def456`');
+			expect(result).toContain('**sha256:**');
 
 			// Should only log once per call to the function
 			expect(logSpy).toHaveBeenCalledWith('Commenting regarding `test.js`.');
@@ -1065,9 +1067,10 @@ describe('Refactored crawl functions', () => {
 			expect(result).toContain('| `test.js` | `1–3` | `abc123` |');
 			expect(result).toContain('| `test.js` | `6–8` | `def456` |');
 
-			// Should have separate sha256 blocks after the table
-			expect(result).toContain('**Block `abc123` sha256:**');
-			expect(result).toContain('**Block `def456` sha256:**');
+			// Should have separate block and sha256 entries after the table
+			expect(result).toContain('**UUID:** `abc123`');
+			expect(result).toContain('**UUID:** `def456`');
+			expect(result).toContain('**sha256:**');
 
 			expect(result).toContain('removal of these compliance annotations is intentional');
 			expect(logSpy).toHaveBeenCalledWith('Found removed annotations in `test.js`.');

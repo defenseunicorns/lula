@@ -44,21 +44,21 @@ describe('crawl', () => {
     }
   }, 120000);
 
-  // afterAll(async () => {
-  //   for (const comment_id of comment_ids) {
-  //     try {
-  //       await octokit.request(`DELETE /repos/${OWNER}/${REPO}/issues/comments/${comment_id}`, {
-  //         owner: OWNER,
-  //         repo: REPO,
-  //         comment_id,
-  //         headers: { 'X-GitHub-Api-Version': '2022-11-28' }
-  //       });
-  //       console.log(`Deleted comment ${comment_id}`);
-  //     } catch (error) {
-  //       console.error(`Failed to delete comment ${comment_id}:`, error);
-  //     }
-  //   }
-  // }, 120000);
+  afterAll(async () => {
+    for (const comment_id of comment_ids) {
+      try {
+        await octokit.request(`DELETE /repos/${OWNER}/${REPO}/issues/comments/${comment_id}`, {
+          owner: OWNER,
+          repo: REPO,
+          comment_id,
+          headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+        });
+        console.log(`Deleted comment ${comment_id}`);
+      } catch (error) {
+        console.error(`Failed to delete comment ${comment_id}:`, error);
+      }
+    }
+  }, 120000);
 
   it("should console log the Lula overview, table with lines changed, uuid and sha256sum when content changes between annotations", { timeout: 2 * 60 * 1000 }, () => {
     if (!command_output || command_output.length === 0) {
@@ -80,11 +80,13 @@ describe('crawl', () => {
     expect(command_output).toMatch(/`20–31`/);
     expect(command_output).toMatch(/`1–5`/);
 
-    // Expect uuid + sha256 sections (now in new block format)
+    // Expect uuid + sha256 sections (now in new block format with separate lines)
     // ex.ts blocks
-    expect(command_output).toContain("**Block `123e4567-e89b-12d3-a456-426614174000` sha256:** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`");
+    expect(command_output).toContain("**UUID:** `123e4567-e89b-12d3-a456-426614174000`");
+    expect(command_output).toContain("**sha256:** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`");
     // ex.yaml blocks
-    expect(command_output).toContain("**Block `123e4567-e89b-12d3-a456-426614174001` sha256:** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`");
+    expect(command_output).toContain("**UUID:** `123e4567-e89b-12d3-a456-426614174001`");
+    expect(command_output).toContain("**sha256:** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`");
   });
 
   it('posts a PR comment with the Lula overview and block metadata', { timeout: 2 * 60 * 1000 }, async () => {
@@ -128,7 +130,8 @@ describe('crawl', () => {
       expect(body).toMatch(/`20–31`/);
       expect(body).toMatch(/`1–5`/);
 
-      expect(body).toMatch(/\*\*Block \`[-a-f0-9]{36}\` sha256:\*\* \`[a-f0-9]{64}\`/);
+      expect(body).toMatch(/\*\*Block\*\* \`[-a-f0-9]{36}\`/);
+      expect(body).toMatch(/\*\*sha256:\*\* \`[a-f0-9]{64}\`/);
 
       const commentTime = new Date(c.created_at);
       const secs = (commentTime.getTime() - testStartTime.getTime()) / 1000;
@@ -275,9 +278,10 @@ describe('crawl', () => {
     expect(changedResult).toContain('| `src/keycloak/chart/values.yaml` | `57–65` |');
     expect(changedResult).toContain('| `src/keycloak/chart/values.yaml` | `416–424` |');
     
-    // SHA256 info should be separate from table (not breaking it)
-    expect(changedResult).toContain('**Block `96b7aa1b-b307-45c0-af40-8b57f3726693` sha256:**');
-    expect(changedResult).toContain('**Block `e4ea044c-75fc-4acc-a552-8bba2aab1b12` sha256:**');
+    // Block and SHA256 info should be separate from table (not breaking it)
+    expect(changedResult).toContain('**UUID:** `96b7aa1b-b307-45c0-af40-8b57f3726693`');
+    expect(changedResult).toContain('**UUID:** `e4ea044c-75fc-4acc-a552-8bba2aab1b12`');
+    expect(changedResult).toContain('**sha256:**');
     
     // multiple removed blocks
     const removedBlocks = [
@@ -296,9 +300,10 @@ describe('crawl', () => {
     expect(removedResult).toContain('| `src/keycloak/chart/values.yaml` | `57–65` | `96b7aa1b-b307-45c0-af40-8b57f3726693` |');
     expect(removedResult).toContain('| `src/keycloak/chart/values.yaml` | `416–424` | `e4ea044c-75fc-4acc-a552-8bba2aab1b12` |');
     
-    // SHA256 info should be separate from table (not breaking it)
-    expect(removedResult).toContain('**Block `96b7aa1b-b307-45c0-af40-8b57f3726693` sha256:**');
-    expect(removedResult).toContain('**Block `e4ea044c-75fc-4acc-a552-8bba2aab1b12` sha256:**');
+    // Block and SHA256 info should be separate from table (not breaking it)
+    expect(removedResult).toContain('**UUID:** `96b7aa1b-b307-45c0-af40-8b57f3726693`');
+    expect(removedResult).toContain('**UUID:** `e4ea044c-75fc-4acc-a552-8bba2aab1b12`');
+    expect(removedResult).toContain('**sha256:**');
     
     // Verify no broken table structure (no blockquotes inside table rows)
     const tableRows = removedResult.split('\n').filter(line => line.startsWith('| `'));
