@@ -253,6 +253,60 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 		const changed = getChangedBlocks(oldText, newText);
 		expect(changed).toHaveLength(0);
 	});
+
+	it('should not detect changes when lines are inserted above a block (line shift scenario)', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+		
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'unchanged content line 1',
+			'unchanged content line 2',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const newTextWithInsertionAbove = [
+			'header',
+			'NEWLY INSERTED LINE 1',
+			'NEWLY INSERTED LINE 2',
+			`// @lulaStart ${uuid}`,
+			'unchanged content line 1',
+			'unchanged content line 2',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const changed = getChangedBlocks(oldText, newTextWithInsertionAbove);
+		expect(changed).toHaveLength(0);
+	});
+
+	it('should detect actual content changes within a block even when line positions shift', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+		
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'original content line 1',
+			'original content line 2',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const newTextWithInsertionAndChange = [
+			'header',
+			'NEWLY INSERTED LINE',
+			`// @lulaStart ${uuid}`,
+			'CHANGED content line 1', 
+			'original content line 2',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const changed = getChangedBlocks(oldText, newTextWithInsertionAndChange);
+		expect(changed).toHaveLength(1);
+		expect(changed[0].uuid).toBe(uuid);
+	});
 });
 
 describe('getRemovedBlocks', () => {

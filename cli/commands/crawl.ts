@@ -15,7 +15,7 @@ type FileContentResponse = {
  * Interface for GitHub pull request file objects
  */
 export interface PullRequestFile {
-	sha: string;
+	sha: string | null;
 	filename: string;
 	status: 'added' | 'removed' | 'modified' | 'renamed' | 'copied' | 'changed' | 'unchanged';
 	additions: number;
@@ -201,19 +201,35 @@ export function getChangedBlocks(
 	const newBlocks = extractMapBlocks(newText);
 	const changed = [];
 
+	const oldLines = oldText.split('\n');
+	const newLines = newText.split('\n');
+
 	for (const newBlock of newBlocks) {
 		const oldMatch = oldBlocks.find((b) => b.uuid === newBlock.uuid);
 		if (!oldMatch) continue;
 
-		const oldSegment = oldText.split('\n').slice(oldMatch.startLine, oldMatch.endLine).join('\n');
-		const newSegment = newText.split('\n').slice(newBlock.startLine, newBlock.endLine).join('\n');
+		
+		const oldContent = extractBlockContent(oldLines, oldMatch.startLine, oldMatch.endLine);
+		const newContent = extractBlockContent(newLines, newBlock.startLine, newBlock.endLine);
 
-		if (oldSegment !== newSegment) {
+		if (oldContent !== newContent) {
 			changed.push(newBlock);
 		}
 	}
 
 	return changed;
+}
+
+/**
+ * Extract the content between @lulaStart and @lulaEnd
+ *
+ * @param lines The array of lines.
+ * @param startLine The line number of @lulaStart 
+ * @param endLine The line number of @lulaEnd 
+ * @returns The content between the annotations as a string.
+ */
+function extractBlockContent(lines: string[], startLine: number, endLine: number): string {
+	return lines.slice(startLine + 1, endLine - 1).join('\n');
 }
 
 /**
