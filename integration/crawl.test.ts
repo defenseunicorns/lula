@@ -80,13 +80,11 @@ describe('crawl', () => {
     expect(command_output).toMatch(/`20–31`/);
     expect(command_output).toMatch(/`1–5`/);
 
-    // Expect uuid + sha256 sections (blockquote for uuid line)
-    // ex.ts block
-    expect(command_output).toContain("> **uuid**-`123e4567-e89b-12d3-a456-426614174000`");
-    expect(command_output).toContain("**sha256** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`");
-    // ex.yaml block
-    expect(command_output).toContain("> **uuid**-`123e4567-e89b-12d3-a456-426614174001`");
-    expect(command_output).toContain("**sha256** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`");
+    // Expect uuid + sha256 sections (now in new block format)
+    // ex.ts blocks
+    expect(command_output).toContain("**Block `123e4567-e89b-12d3-a456-426614174000` sha256:** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`");
+    // ex.yaml blocks
+    expect(command_output).toContain("**Block `123e4567-e89b-12d3-a456-426614174001` sha256:** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`");
   });
 
   it('posts a PR comment with the Lula overview and block metadata', { timeout: 2 * 60 * 1000 }, async () => {
@@ -130,8 +128,7 @@ describe('crawl', () => {
       expect(body).toMatch(/`20–31`/);
       expect(body).toMatch(/`1–5`/);
 
-      expect(body).toMatch(/> \*\*uuid\*\*-\`[-a-f0-9]{36}\`/);
-      expect(body).toMatch(/\*\*sha256\*\* \`[a-f0-9]{64}\`/);
+      expect(body).toMatch(/\*\*Block \`[-a-f0-9]{36}\` sha256:\*\* \`[a-f0-9]{64}\`/);
 
       const commentTime = new Date(c.created_at);
       const secs = (commentTime.getTime() - testStartTime.getTime()) / 1000;
@@ -256,6 +253,59 @@ describe('crawl', () => {
     
     expect(changedBlocksInside).toHaveLength(1);
     expect(changedBlocksInside[0].uuid).toBe(uuid);
+  });
+
+  it('should generate properly formatted markdown tables for multiple blocks', { timeout: 2 * 60 * 1000 }, async () => {
+    
+    const { generateChangedBlocksContent, generateRemovedBlocksContent } = await import('../cli/commands/crawl.js');
+    
+    const changedBlocks = [
+      { uuid: '96b7aa1b-b307-45c0-af40-8b57f3726693', startLine: 56, endLine: 65 },
+      { uuid: 'e4ea044c-75fc-4acc-a552-8bba2aab1b12', startLine: 415, endLine: 424 }
+    ];
+    
+    const newText = Array(500).fill(0).map((_, i) => `line ${i + 1}`).join('\n');
+    const changedResult = generateChangedBlocksContent('src/keycloak/chart/values.yaml', changedBlocks, newText);
+    
+    // Should have ONE table header for changed blocks
+    const changedTableHeaders = changedResult.match(/\| File \| Lines Changed \|/g);
+    expect(changedTableHeaders).toHaveLength(1);
+    
+    // Should have both rows in the same table
+    expect(changedResult).toContain('| `src/keycloak/chart/values.yaml` | `57–65` |');
+    expect(changedResult).toContain('| `src/keycloak/chart/values.yaml` | `416–424` |');
+    
+    // SHA256 info should be separate from table (not breaking it)
+    expect(changedResult).toContain('**Block `96b7aa1b-b307-45c0-af40-8b57f3726693` sha256:**');
+    expect(changedResult).toContain('**Block `e4ea044c-75fc-4acc-a552-8bba2aab1b12` sha256:**');
+    
+    // multiple removed blocks
+    const removedBlocks = [
+      { uuid: '96b7aa1b-b307-45c0-af40-8b57f3726693', startLine: 56, endLine: 65 },
+      { uuid: 'e4ea044c-75fc-4acc-a552-8bba2aab1b12', startLine: 415, endLine: 424 }
+    ];
+    
+    const oldText = Array(500).fill(0).map((_, i) => `old line ${i + 1}`).join('\n');
+    const removedResult = generateRemovedBlocksContent('src/keycloak/chart/values.yaml', removedBlocks, oldText);
+    
+    // Should have exactly table header for removed blocks  
+    const removedTableHeaders = removedResult.match(/\| File \| Original Lines \| UUID \|/g);
+    expect(removedTableHeaders).toHaveLength(1);
+    
+    // Should have both rows in the same table
+    expect(removedResult).toContain('| `src/keycloak/chart/values.yaml` | `57–65` | `96b7aa1b-b307-45c0-af40-8b57f3726693` |');
+    expect(removedResult).toContain('| `src/keycloak/chart/values.yaml` | `416–424` | `e4ea044c-75fc-4acc-a552-8bba2aab1b12` |');
+    
+    // SHA256 info should be separate from table (not breaking it)
+    expect(removedResult).toContain('**Block `96b7aa1b-b307-45c0-af40-8b57f3726693` sha256:**');
+    expect(removedResult).toContain('**Block `e4ea044c-75fc-4acc-a552-8bba2aab1b12` sha256:**');
+    
+    // Verify no broken table structure (no blockquotes inside table rows)
+    const tableRows = removedResult.split('\n').filter(line => line.startsWith('| `'));
+    for (const row of tableRows) {
+      expect(row).not.toContain('>');
+      expect(row).not.toContain('**sha256**'); 
+    }
   });
 });
 

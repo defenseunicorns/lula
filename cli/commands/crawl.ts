@@ -365,14 +365,23 @@ export function generateChangedBlocksContent(
 	changedBlocks: { uuid: string; startLine: number; endLine: number }[],
 	newText: string
 ): string {
-	let content = '';
+	if (changedBlocks.length === 0) {
+		return '';
+	}
+
+	console.log(`Commenting regarding \`${filename}\`.`);
+
+	let content = `\n\n---\n| File | Lines Changed |\n| ---- | ------------- |\n`;
 
 	for (const block of changedBlocks) {
-		console.log(`Commenting regarding \`${filename}\`.`);
-		content += `\n\n---\n| File | Lines Changed |\n` + `| ---- | ------------- |\n`;
+		content += `| \`${filename}\` | \`${block.startLine + 1}–${block.endLine}\` |\n`;
+	}
+
+	content += `\n`;
+	for (const block of changedBlocks) {
 		const newBlockText = newText.split('\n').slice(block.startLine, block.endLine).join('\n');
 		const blockSha256 = createHash('sha256').update(newBlockText).digest('hex');
-		content += `| \`${filename}\` | \`${block.startLine + 1}–${block.endLine}\` |\n> **uuid**-\`${block.uuid}\`\n **sha256** \`${blockSha256}\`\n\n`;
+		content += `**Block \`${block.uuid}\` sha256:** \`${blockSha256}\`\n\n`;
 	}
 
 	return content;
@@ -398,11 +407,17 @@ export function generateRemovedBlocksContent(
 	content += `| File | Original Lines | UUID |\n`;
 	content += `| ---- | -------------- | ---- |\n`;
 
+	// First, generate all table rows
+	for (const block of removedBlocks) {
+		content += `| \`${filename}\` | \`${block.startLine + 1}–${block.endLine}\` | \`${block.uuid}\` |\n`;
+	}
+
+	// Then add sha256 information for each block after the table
+	content += `\n`;
 	for (const block of removedBlocks) {
 		const oldBlockText = oldText.split('\n').slice(block.startLine, block.endLine).join('\n');
 		const blockSha256 = createHash('sha256').update(oldBlockText).digest('hex');
-		content += `| \`${filename}\` | \`${block.startLine + 1}–${block.endLine}\` | \`${block.uuid}\` |\n`;
-		content += `> **sha256** \`${blockSha256}\`\n\n`;
+		content += `**Block \`${block.uuid}\` sha256:** \`${blockSha256}\`\n\n`;
 	}
 
 	content += `Please review whether:\n`;
