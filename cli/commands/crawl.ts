@@ -208,7 +208,6 @@ export function getChangedBlocks(
 		const oldMatch = oldBlocks.find((b) => b.uuid === newBlock.uuid);
 		if (!oldMatch) continue;
 
-		
 		const oldContent = extractBlockContent(oldLines, oldMatch.startLine, oldMatch.endLine);
 		const newContent = extractBlockContent(newLines, newBlock.startLine, newBlock.endLine);
 
@@ -224,8 +223,8 @@ export function getChangedBlocks(
  * Extract the content between @lulaStart and @lulaEnd
  *
  * @param lines The array of lines.
- * @param startLine The line number of @lulaStart 
- * @param endLine The line number of @lulaEnd 
+ * @param startLine The line number of @lulaStart
+ * @param endLine The line number of @lulaEnd
  * @returns The content between the annotations as a string.
  */
 function extractBlockContent(lines: string[], startLine: number, endLine: number): string {

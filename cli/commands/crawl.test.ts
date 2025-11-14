@@ -256,7 +256,7 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 
 	it('should not detect changes when lines are inserted above a block (line shift scenario)', () => {
 		const uuid = '123e4567-e89b-12d3-a456-426614174000';
-		
+
 		const oldText = [
 			'header',
 			`// @lulaStart ${uuid}`,
@@ -283,7 +283,7 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 
 	it('should detect actual content changes within a block even when line positions shift', () => {
 		const uuid = '123e4567-e89b-12d3-a456-426614174000';
-		
+
 		const oldText = [
 			'header',
 			`// @lulaStart ${uuid}`,
@@ -297,7 +297,7 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 			'header',
 			'NEWLY INSERTED LINE',
 			`// @lulaStart ${uuid}`,
-			'CHANGED content line 1', 
+			'CHANGED content line 1',
 			'original content line 2',
 			`// @lulaEnd ${uuid}`,
 			'footer'
