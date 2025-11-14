@@ -44,21 +44,21 @@ describe('crawl', () => {
     }
   }, 120000);
 
-  afterAll(async () => {
-    for (const comment_id of comment_ids) {
-      try {
-        await octokit.request(`DELETE /repos/${OWNER}/${REPO}/issues/comments/${comment_id}`, {
-          owner: OWNER,
-          repo: REPO,
-          comment_id,
-          headers: { 'X-GitHub-Api-Version': '2022-11-28' }
-        });
-        console.log(`Deleted comment ${comment_id}`);
-      } catch (error) {
-        console.error(`Failed to delete comment ${comment_id}:`, error);
-      }
-    }
-  }, 120000);
+  // afterAll(async () => {
+  //   for (const comment_id of comment_ids) {
+  //     try {
+  //       await octokit.request(`DELETE /repos/${OWNER}/${REPO}/issues/comments/${comment_id}`, {
+  //         owner: OWNER,
+  //         repo: REPO,
+  //         comment_id,
+  //         headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+  //       });
+  //       console.log(`Deleted comment ${comment_id}`);
+  //     } catch (error) {
+  //       console.error(`Failed to delete comment ${comment_id}:`, error);
+  //     }
+  //   }
+  // }, 120000);
 
   it("should console log the Lula overview, table with lines changed, uuid and sha256sum when content changes between annotations", { timeout: 2 * 60 * 1000 }, () => {
     if (!command_output || command_output.length === 0) {
@@ -143,9 +143,6 @@ describe('crawl', () => {
   });
 
   it('should detect when @lulaStart/@lulaEnd annotations are DELETED from an existing file', { timeout: 2 * 60 * 1000 }, async () => {
-    // Test scenario: A file exists with Lula annotations, then the annotations are removed but file remains
-    
-    // Create a mock scenario by testing the getRemovedBlocks function directly
     const { getRemovedBlocks } = await import('../cli/commands/crawl.js');
     
     const uuid = '123e4567-e89b-12d3-a456-426614174000';
@@ -170,16 +167,13 @@ describe('crawl', () => {
     
     expect(removedBlocks).toHaveLength(1);
     expect(removedBlocks[0].uuid).toBe(uuid);
-    expect(removedBlocks[0].startLine).toBe(1); // @lulaStart line
-    expect(removedBlocks[0].endLine).toBe(5); // @lulaEnd line + 1
+    expect(removedBlocks[0].startLine).toBe(1);
+    expect(removedBlocks[0].endLine).toBe(5); 
   });
 
-  it('should detect when a whole file with annotations is DELETED', { timeout: 2 * 60 * 1000 }, async () => {
-    // Test scenario: An entire file containing Lula annotations is deleted
-    
-    const { containsLulaAnnotations, analyzeDeletedFiles } = await import('../cli/commands/crawl.js');
-    
-    // Test the containsLulaAnnotations function
+  it('should detect when a whole file with annotations is DELETED', { timeout: 2 * 60 * 1000 }, async () => {    
+    const { containsLulaAnnotations } = await import('../cli/commands/crawl.js');
+
     const fileWithAnnotations = [
       'const config = {',
       '  // @lulaStart 123e4567-e89b-12d3-a456-426614174000',
@@ -197,7 +191,6 @@ describe('crawl', () => {
     expect(containsLulaAnnotations(fileWithAnnotations)).toBe(true);
     expect(containsLulaAnnotations(fileWithoutAnnotations)).toBe(false);
     
-    // Test with partial annotations (should still detect)
     const fileWithOnlyStart = [
       'const config = {',
       '  // @lulaStart 123e4567-e89b-12d3-a456-426614174000',
@@ -217,7 +210,6 @@ describe('crawl', () => {
   });
 
   it('should NOT detect changes when content above annotations changes but annotation content is unchanged', { timeout: 2 * 60 * 1000 }, async () => {
-    // Test scenario: Lines are added/changed above the UUID block, but content between markers is identical
     
     const { getChangedBlocks } = await import('../cli/commands/crawl.js');
     
@@ -235,18 +227,17 @@ describe('crawl', () => {
     
     const modifiedFileWithChangesAbove = [
       'function example() {',
-      '  console.log("MODIFIED header");', // This line changed
-      '  const newVariable = "added";',    // This line added
+      '  console.log("MODIFIED header");',
+      '  const newVariable = "added";',  
       `  // @lulaStart ${uuid}`,
-      '  const sensitiveData = "unchanged content";', // Content between markers is identical
-      '  return sensitiveData;',                      // Content between markers is identical
+      '  const sensitiveData = "unchanged content";',
+      '  return sensitiveData;',
       `  // @lulaEnd ${uuid}`,
       '}'
     ].join('\n');
     
     const changedBlocks = getChangedBlocks(originalFile, modifiedFileWithChangesAbove);
     
-    // Should be 0 because content between @lulaStart and @lulaEnd is identical
     expect(changedBlocks).toHaveLength(0);
     
     // Test the opposite case: content between markers actually changes
@@ -255,7 +246,7 @@ describe('crawl', () => {
       '  console.log("MODIFIED header");', 
       '  const newVariable = "added";',    
       `  // @lulaStart ${uuid}`,
-      '  const sensitiveData = "CHANGED content";', // This line changed inside the block
+      '  const sensitiveData = "CHANGED content";',
       '  return sensitiveData;',                    
       `  // @lulaEnd ${uuid}`,
       '}'
@@ -263,7 +254,6 @@ describe('crawl', () => {
     
     const changedBlocksInside = getChangedBlocks(originalFile, modifiedFileWithChangesInside);
     
-    // Should be 1 because content between @lulaStart and @lulaEnd actually changed
     expect(changedBlocksInside).toHaveLength(1);
     expect(changedBlocksInside[0].uuid).toBe(uuid);
   });
