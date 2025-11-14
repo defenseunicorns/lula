@@ -5,7 +5,10 @@ on:
       - main
 
 permissions:
-  contents: read # for checkout
+  contents: read 
+  id-token: write
+  issues: write
+  pull-requests: write
 
 jobs:
   test:
@@ -14,6 +17,8 @@ jobs:
     permissions:
       contents: read
       id-token: write   
+      issues: write         
+      pull-requests: write   
 
   release:
     name: Release
@@ -37,9 +42,9 @@ jobs:
           run_install: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
-          node-version: '22.x'
+          node-version: '22.20.x'
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
 

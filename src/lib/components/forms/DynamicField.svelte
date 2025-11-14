@@ -140,7 +140,7 @@
 			{#if !field.required}
 				<option value="">-- Select an option --</option>
 			{/if}
-			{#each field.options as option}
+			{#each field.options as option (option)}
 				<option value={option}>{option}</option>
 			{/each}
 		</select>
@@ -221,7 +221,7 @@
 					</button>
 				</div>
 			{:else}
-				{#each ensureArray() as item, index}
+				{#each ensureArray() as item, index (index)}
 					<div
 						class="group relative p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md transition-shadow"
 					>
@@ -349,7 +349,7 @@
 					</button>
 				</div>
 			{:else}
-				{#each ensureArray() as item, index}
+				{#each ensureArray() as item, index (index)}
 					<div
 						class="group relative bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200"
 					>
@@ -409,7 +409,7 @@
 						<div class="p-4">
 							{#if field.arraySchema}
 								<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-									{#each Object.entries(field.arraySchema) as [key, schemaObj]}
+									{#each Object.entries(field.arraySchema) as [key, schemaObj], index (index)}
 										{@const schema = schemaObj as any}
 										<div class="space-y-2">
 											<label

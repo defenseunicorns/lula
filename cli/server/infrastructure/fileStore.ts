@@ -66,9 +66,13 @@ export class FileStore {
 	 * Get simple filename from control ID
 	 */
 	private getControlFilename(controlId: string): string {
-		// Sanitize control ID for filename (replace invalid characters including dots)
-		// This ensures consistency with imported files that use underscores
-		const sanitized = controlId.replace(/[^\w\-]/g, '_');
+		// Sanitize control ID for filename, preserving the first dash
+		// AC-1.1 -> AC-1_1, AC-10.3 -> AC-10_3, but AC-1 stays AC-1
+
+		const sanitized = controlId.replace(/^([A-Z]+)-(.*)/, (match, prefix, suffix) => {
+			// Preserve the first dash, replace other non-word chars with underscores
+			return `${prefix}-${suffix.replace(/[^\w]/g, '_')}`;
+		});
 		return `${sanitized}.yaml`;
 	}
 
@@ -120,6 +124,7 @@ export class FileStore {
 		// We need to handle both cases
 
 		// Convert control ID to filename format (AC-1.1 -> AC-1_1)
+		// eslint-disable-next-line no-useless-escape
 		const sanitizedId = controlId.replace(/[^\w\-]/g, '_');
 
 		// Try flat structure first (atomic controls)
@@ -137,9 +142,12 @@ export class FileStore {
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
-						// If the filename has underscores, convert back to dots
-						// AC-10_3 -> AC-10.3, but leave AC-10 as-is
-						parsed.id = controlId.replace(/_(\d)/g, '.$1');
+						try {
+							parsed.id = getControlId(parsed, this.baseDir);
+						} catch {
+							// Fallback to the controlId parameter if getControlId fails
+							parsed.id = controlId;
+						}
 					}
 					return parsed as Control;
 				} catch (error) {
@@ -169,9 +177,12 @@ export class FileStore {
 					// Ensure the control has an 'id' field
 					// Always use the original control ID format (with dots, not underscores)
 					if (!parsed.id) {
-						// If the filename has underscores, convert back to dots
-						// AC-10_3 -> AC-10.3, but leave AC-10 as-is
-						parsed.id = controlId.replace(/_(\d)/g, '.$1');
+						try {
+							parsed.id = getControlId(parsed, this.baseDir);
+						} catch {
+							// Fallback to the controlId parameter if getControlId fails
+							parsed.id = controlId;
+						}
 					}
 					return parsed as Control;
 				} catch (error) {
@@ -301,6 +312,19 @@ export class FileStore {
 			return [];
 		}
 
+		// Try to load metadata to get controlOrder if available
+		let controlOrder: string[] | null = null;
+		try {
+			const lulaConfigPath = join(this.baseDir, 'lula.yaml');
+			if (existsSync(lulaConfigPath)) {
+				const content = readFileSync(lulaConfigPath, 'utf8');
+				const metadata = yaml.load(content) as any;
+				controlOrder = metadata?.controlOrder || null;
+			}
+		} catch (error) {
+			console.error(`Failed to load lula.yaml for controlOrder (path: ${lulaConfigPath}):`, error);
+		}
+
 		const entries = readdirSync(this.controlsDir);
 
 		// Check for flat structure first (atomic controls)
@@ -324,7 +348,13 @@ export class FileStore {
 			});
 
 			const results = await Promise.all(promises);
-			return results.filter((c): c is Control => c !== null);
+			const controls = results.filter((c): c is Control => c !== null);
+
+			if (controlOrder && controlOrder.length > 0) {
+				return this.sortControlsByOrder(controls, controlOrder);
+			}
+
+			return controls;
 		}
 
 		// Fallback to family-based directory structure
@@ -357,7 +387,30 @@ export class FileStore {
 		}
 
 		const results = await Promise.all(allPromises);
-		return results.filter((c): c is Control => c !== null);
+		const controls = results.filter((c): c is Control => c !== null);
+
+		if (controlOrder && controlOrder.length > 0) {
+			return this.sortControlsByOrder(controls, controlOrder);
+		}
+
+		return controls;
+	}
+
+	/**
+	 * Sort controls based on the provided order array
+	 */
+	private sortControlsByOrder(controls: Control[], controlOrder: string[]): Control[] {
+		// Create a map of control ID to index in the order array
+		const orderMap = new Map<string, number>();
+		controlOrder.forEach((controlId, index) => {
+			orderMap.set(controlId, index);
+		});
+
+		return controls.sort((a, b) => {
+			const aIndex = orderMap.get(a.id) ?? Number.MAX_SAFE_INTEGER;
+			const bIndex = orderMap.get(b.id) ?? Number.MAX_SAFE_INTEGER;
+			return aIndex - bIndex;
+		});
 	}
 
 	/**
@@ -410,7 +463,10 @@ export class FileStore {
 		const controlId = mapping.control_id;
 		const family = this.getControlFamily(controlId);
 		const familyDir = join(this.mappingsDir, family);
-		const mappingFile = join(familyDir, `${controlId}-mappings.yaml`);
+		const mappingFile = join(
+			familyDir,
+			`${controlId.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`
+		);
 
 		// Ensure family directory exists
 		if (!existsSync(familyDir)) {
@@ -456,7 +512,7 @@ export class FileStore {
 	/**
 	 * Delete a single mapping
 	 */
-	async deleteMapping(uuid: string): Promise<void> {
+	async deleteMapping(compositeKey: string): Promise<void> {
 		// Find the mapping in all mapping files
 		const mappingFiles = this.getAllMappingFiles();
 
@@ -466,7 +522,9 @@ export class FileStore {
 				let mappings: Mapping[] = (yaml.load(content) as Mapping[]) || [];
 
 				const originalLength = mappings.length;
-				mappings = mappings.filter((m) => m.uuid !== uuid);
+				mappings = mappings.filter((m) => {
+					return `${m.control_id}:${m.uuid}` !== compositeKey;
+				});
 
 				// If we removed a mapping, save the file
 				if (mappings.length < originalLength) {
@@ -543,7 +601,10 @@ export class FileStore {
 		for (const [controlId, controlMappings] of mappingsByControl) {
 			const family = this.getControlFamily(controlId);
 			const familyDir = join(this.mappingsDir, family);
-			const mappingFile = join(familyDir, `${controlId}-mappings.yaml`);
+			const mappingFile = join(
+				familyDir,
+				`${controlId.replace(/[^a-zA-Z0-9-]/g, '_')}-mappings.yaml`
+			);
 
 			// Ensure family directory exists
 			if (!existsSync(familyDir)) {

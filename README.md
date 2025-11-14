@@ -25,6 +25,14 @@ Run Lula directly with npx (no installation required):
 npx lula2
 ```
 
+**Import an eMASS Spreadsheet**
+
+The first step is to import an eMASS spreadsheet into Lula. A sample file is provided at: [samples/fake-controls.xlsx](samples/fake-controls.xlsx)
+
+**Continue with Lula Workflow**
+
+Once the spreadsheet is imported, you can proceed with the standard Lula workflow creating mappings to controls.
+
 ## Why GitOps for Compliance?
 
 - **Version Everything**: Every control change, ui change, mapping is tracked, reviewable, and revertable
@@ -90,21 +98,79 @@ By default, the web interface is launched as the root command, but if you need t
 Analyze pull requests for compliance impact:
 
 ```bash
-> OWNER=defenseunicorns REPO=lula  PULL_NUMBER=119 GITHUB_TOKEN=$(gh auth token) npx lula2 crawl
-Analyzing PR #119 in defenseunicorns/lula for compliance changes...
+> OWNER=defenseunicorns REPO=lula  PULL_NUMBER=126 GITHUB_TOKEN=$(gh auth token) npx lula2 crawl --post-mode=comment                   
+Analyzing PR #126 in defenseunicorns/lula for compliance changes...
+Commenting regarding `integration/test-files/ex.ts`.
+Commenting regarding `integration/test-files/ex.yaml`.
 
-Commenting on integration/test-files/ex.ts: **Compliance Alert**:`integration/test-files/ex.ts` changed between lines 20–31.
-UUID `123e4567-e89b-12d3-a456-426614174000` may be out of compliance.
-SHA-256 of block contents: `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`.
+Posted (comment)
+----------------
 
-Please review the changes to ensure they meet compliance standards.
-
-
-Commenting on integration/test-files/ex.yaml: **Compliance Alert**:`integration/test-files/ex.yaml` changed between lines 1–5.
-UUID `123e4567-e89b-12d3-a456-426614174001` may be out of compliance.
-SHA-256 of block contents: `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`.
+## Lula Compliance Overview
 
 Please review the changes to ensure they meet compliance standards.
+
+### Reviewed Changes
+
+Lula reviewed 2 files changed that affect compliance.
+
+
+
+---
+| File | Lines Changed |
+| ---- | ------------- |
+| `integration/test-files/ex.ts` | `20–31` |
+> **uuid**-`123e4567-e89b-12d3-a456-426614174000`
+ **sha256** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`
+
+
+
+---
+| File | Lines Changed |
+| ---- | ------------- |
+| `integration/test-files/ex.yaml` | `1–5` |
+> **uuid**-`123e4567-e89b-12d3-a456-426614174001`
+ **sha256** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`
+
+
+
+---
+
+<sub>**Tip:** Customize your compliance reviews with <a href="https://github.com/defenseunicorns/lula.git" class="Link--inTextBlock" target="_blank" rel="noopener noreferrer">Lula</a>.</sub>
+```
+
+
+Here is a workflow example for GitHub Actions:
+
+```yaml
+# This workflow runs a Lula scan against the PR to see if compliance has changed
+
+name: Lula Scan
+on:
+  pull_request:
+    branches: ["main"]
+    types: [opened, reopened, synchronize]
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  scan-pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@ff7abcd0c3c05ccf6adc123a8cd1fd4fb30fb493
+      - name: Use Node.js 22
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        with:
+          node-version: 22
+
+      - name: Run Lula Scan
+        run: |
+          npx --yes lula2 crawl
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Version Command
@@ -233,7 +299,7 @@ Link controls to actual implementations using a UUID:
 
 ## Configuration
 
-### lula.yaml
+### `lula.yaml`
 
 Managed by the UI for you, each control set includes a configuration file:
 
@@ -275,7 +341,7 @@ families:
 
 ### Prerequisites
 
-- Node.js 22+
+- Node.js 22.20.x or >= 24.x
 - Git (for version history features)
 - pnpm (recommended) or npm
 
@@ -331,3 +397,4 @@ Apache-2.0 - See [LICENSE](LICENSE) for details.
 Developed by [The Lula Authors](https://github.com/defenseunicorns/lula2/graphs/contributors)
 
 Part of the Defense Unicorns ecosystem for secure, compliant software delivery.
+

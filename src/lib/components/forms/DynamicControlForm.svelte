@@ -128,8 +128,8 @@
 {#if readonly}
 	<!-- View Mode: Clean minimal layout -->
 	<div class="space-y-6">
-		{#each Object.entries(fieldGroups) as [groupName, fields]}
-			{#each [fields] as fieldList}
+		{#each Object.entries(fieldGroups) as [_groupName, fields], index (index)}
+			{#each [fields] as fieldList, a (a)}
 				{@const importantFields = fieldList.filter((f) =>
 					['id', 'title', 'priority', 'status'].includes(f.id)
 				)}
@@ -147,7 +147,7 @@
 						{#if importantFields.length > 0}
 							<div class="pb-4 border-b border-gray-200 dark:border-gray-700">
 								<div class="flex flex-wrap items-center gap-6">
-									{#each importantFields as field}
+									{#each importantFields as field, index (index)}
 										{@const value = control[field.id]}
 										{#if value !== undefined && value !== null && value !== ''}
 											<div class="flex items-center space-x-3">
@@ -181,7 +181,7 @@
 						{/if}
 
 						<!-- Content sections -->
-						{#each contentFields as field}
+						{#each contentFields as field, index (index)}
 							{@const value = control[field.id]}
 
 							{#if field.type === 'textarea'}
@@ -206,7 +206,7 @@
 										</span>
 									</h3>
 									<div class="space-y-2">
-										{#each value as item}
+										{#each value as item, index (index)}
 											<div class="flex items-start space-x-3 py-2">
 												<div class="flex-shrink-0 w-1.5 h-1.5 bg-blue-600 rounded-full mt-2"></div>
 												<div class="text-gray-900 dark:text-white leading-relaxed">
@@ -226,13 +226,13 @@
 										</span>
 									</h3>
 									<div class="space-y-3">
-										{#each value as item, index}
+										{#each value as item, index (index)}
 											<div
 												class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-700"
 											>
 												{#if field.arraySchema}
 													<dl class="space-y-2">
-														{#each Object.entries(field.arraySchema) as [key, schema]}
+														{#each Object.entries(field.arraySchema) as [key, schema], index (index)}
 															{@const schemaObj = schema as any}
 															{#if item[key]}
 																<div class="flex justify-between">
@@ -281,7 +281,7 @@
 {:else}
 	<!-- Edit Mode: Enhanced form layout -->
 	<div class="space-y-10">
-		{#each Object.entries(fieldGroups) as [groupName, fields]}
+		{#each Object.entries(fieldGroups) as [groupName, fields], index (index)}
 			<section
 				class="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden"
 			>
@@ -300,7 +300,7 @@
 				<div class="p-8">
 					<!-- Improved grid layout for simple fields -->
 					<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-10">
-						{#each fields as field}
+						{#each fields as field, index (index)}
 							{#if !['textarea', 'string-array', 'object-array'].includes(field.type)}
 								<div class="space-y-2">
 									<DynamicField
@@ -317,7 +317,7 @@
 
 					<!-- Enhanced full-width fields with better spacing -->
 					<div class="space-y-10">
-						{#each fields as field}
+						{#each fields as field, index (index)}
 							{#if ['textarea', 'string-array', 'object-array'].includes(field.type)}
 								<div
 									class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700"

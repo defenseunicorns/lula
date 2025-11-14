@@ -169,8 +169,8 @@ describe('serverState', () => {
 		expect(state.controlsCache.get('AC-1')).toEqual(controls[0]);
 
 		expect(state.mappingsCache.size).toBe(2);
-		expect(state.mappingsCache.get('m-1')).toEqual(mappings[0]);
-		expect(state.mappingsCache.get('m-2')).toEqual(mappings[1]);
+		expect(state.mappingsCache.get('AC-1:m-1')).toEqual(mappings[0]);
+		expect(state.mappingsCache.get('CM-2:m-2')).toEqual(mappings[1]);
 
 		expect(state.controlsByFamily.get('AC')?.has('AC-1')).toBe(true);
 		expect(state.mappingsByControl.get('AC-1')?.has('m-1')).toBe(true);
@@ -203,8 +203,8 @@ describe('serverState', () => {
 
 		const m1 = makeMapping('u-1', 'AC-1');
 		const m2 = makeMapping('u-2', 'CM-2');
-		state.mappingsCache.set(m1.uuid, m1);
-		state.mappingsCache.set(m2.uuid, m2);
+		state.mappingsCache.set(`${m1.control_id}:${m1.uuid}`, m1);
+		state.mappingsCache.set(`${m2.control_id}:${m2.uuid}`, m2);
 
 		h.saveMappingsSpy.mockResolvedValueOnce(undefined);
 

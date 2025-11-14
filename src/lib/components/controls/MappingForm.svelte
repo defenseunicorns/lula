@@ -7,6 +7,7 @@
 	import FormField from '../forms/FormField.svelte';
 
 	interface MappingFormData {
+		uuid: string;
 		justification: string;
 		status: 'planned' | 'implemented' | 'verified';
 		source_entries: SourceEntry[];
@@ -29,6 +30,7 @@
 	}: Props = $props();
 
 	let formData = $state<MappingFormData>({
+		uuid: initialData.uuid || '',
 		justification: initialData.justification || '',
 		status: initialData.status || 'planned',
 		source_entries: initialData.source_entries || []
@@ -49,6 +51,7 @@
 	function handleCancel() {
 		// Reset form
 		formData = {
+			uuid: initialData.uuid || '',
 			justification: initialData.justification || '',
 			status: initialData.status || 'planned',
 			source_entries: initialData.source_entries || []
@@ -82,6 +85,14 @@
 		<!-- Main form fields -->
 		<div class="grid grid-cols-1 gap-8">
 			<FormField
+				id="mapping-uuid"
+				label="UUID"
+				type="text"
+				bind:value={formData.uuid}
+				placeholder="Enter mapping UUID (leave empty to auto-generate)"
+			/>
+
+			<FormField
 				id="mapping-justification"
 				label="Justification"
 				type="textarea"
@@ -110,7 +121,7 @@
 			<!-- Existing entries -->
 			{#if formData.source_entries.length > 0}
 				<div class="space-y-3">
-					{#each formData.source_entries as entry, index}
+					{#each formData.source_entries as entry, index (index)}
 						<div class="flex items-center gap-3 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm">
 							<div class="flex-1 min-w-0">
 								<div class="text-sm font-mono text-gray-900 dark:text-white break-all">

@@ -1,13 +1,20 @@
 #!/bin/bash
 
 # SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: 2023-Present The Pepr Authors
+# SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
-# Script to build and publish nightly versions of lula2.
+set -Eeuo pipefail
+trap 'echo "Error on line $LINENO (exit $?)" >&2' ERR
+set -x
 
-set -e
+if LATEST_VERSION="$(npx --yes lula2@latest --version 2>&1)"; then
+  echo "LATEST_VERSION=${LATEST_VERSION}"
+else
+  echo "npx lula2@latest --version failed:"
+  echo "${LATEST_VERSION}" >&2
+  exit 1
+fi
 
-LATEST_VERSION=$(npx --yes lula2@latest --version 2>/dev/null)
 RAW_NIGHTLY_VERSION=$(npx --yes lula2@nightly --version 2>/dev/null || echo "none")
 
 if [[ "$RAW_NIGHTLY_VERSION" == "none" ]]; then

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
+
 export interface Control {
 	id: string;
 	title: string;
@@ -177,4 +178,23 @@ export interface ControlCompleteData {
 	control: Control;
 	mappings: Mapping[];
 	unifiedHistory: UnifiedHistory;
+}
+
+export interface GitBranchInfo {
+	currentBranch: string;
+	isAhead: boolean;
+	isBehind: boolean;
+	aheadCount: number;
+	behindCount: number;
+	lastCommitDate: string | null;
+	lastCommitMessage: string | null;
+	hasUnpushedChanges: boolean;
+}
+
+export interface GitStatus {
+	isGitRepository: boolean;
+	currentBranch: string | null;
+	branchInfo: GitBranchInfo | null;
+	canPull: boolean;
+	canPush: boolean;
 }

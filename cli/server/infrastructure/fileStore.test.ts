@@ -4,8 +4,8 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { FileStore } from './fileStore';
 import type { Control, Mapping } from '../types';
+import { FileStore } from './fileStore';
 
 vi.mock('./controlHelpers', () => ({
 	getControlId: vi.fn((control: Partial<Control>) => {
@@ -488,7 +488,7 @@ control_id_field: id`;
 		});
 
 		it('should delete a specific mapping by UUID', async () => {
-			await fileStore.deleteMapping('uuid-1');
+			await fileStore.deleteMapping('AC-1:uuid-1');
 
 			const mappings = await fileStore.loadMappings();
 			expect(mappings).toHaveLength(1);
@@ -496,8 +496,8 @@ control_id_field: id`;
 		});
 
 		it('should delete the entire file when no mappings remain', async () => {
-			await fileStore.deleteMapping('uuid-1');
-			await fileStore.deleteMapping('uuid-2');
+			await fileStore.deleteMapping('AC-1:uuid-1');
+			await fileStore.deleteMapping('AC-1:uuid-2');
 
 			const expectedPath = join(tempDir, 'mappings', 'AC', 'AC-1-mappings.yaml');
 			expect(existsSync(expectedPath)).toBe(false);

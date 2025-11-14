@@ -15,7 +15,7 @@
 	let { mapping, onEdit, onDelete, showActions = false }: Props = $props();
 
 	function handleCopyUuid() {
-		navigator.clipboard.writeText(`@lula ${mapping.uuid}`);
+		navigator.clipboard.writeText(`${mapping.uuid}`);
 	}
 
 	function handleEdit() {
@@ -80,7 +80,7 @@
 			<div class="mb-4">
 				<h4 class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Source References</h4>
 				<div class="space-y-2">
-					{#each mapping.source_entries as entry}
+					{#each mapping.source_entries as entry (entry)}
 						<div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 border border-gray-200 dark:border-gray-700">
 							<div class="flex items-start justify-between">
 								<span class="text-xs font-mono text-blue-600 dark:text-blue-400 break-all">

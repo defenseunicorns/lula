@@ -44,7 +44,6 @@
 			if (control) {
 				selectedControl.set(control);
 			} else {
-				// Control not found, redirect to home
 				goto('/');
 			}
 		};

@@ -9,9 +9,27 @@ import * as server from '../server';
 import * as debug from '../utils/debug';
 import { UICommand } from './ui';
 
-vi.mock('fs', () => ({ existsSync: vi.fn() }));
+vi.mock('fs', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('fs')>();
+	return {
+		...actual,
+		existsSync: vi.fn(),
+		default: {
+			existsSync: vi.fn()
+		}
+	};
+});
 vi.mock('open', () => ({ default: vi.fn() }));
-vi.mock('path', () => ({ join: (...parts: string[]) => parts.join('/') }));
+vi.mock('path', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('path')>();
+	return {
+		...actual,
+		default: {
+			join: (...parts: string[]) => parts.join('/')
+		},
+		join: (...parts: string[]) => parts.join('/')
+	};
+});
 vi.mock('../server', () => ({ startServer: vi.fn() }));
 vi.mock('../utils/debug', () => ({ setDebugMode: vi.fn() }));
 
@@ -38,7 +56,7 @@ describe('UICommand', () => {
 		await program.parseAsync(['ui', '--dir', '/my/dir', '--port', '4000'], { from: 'user' });
 
 		expect(startServer).toHaveBeenCalledWith({ controlSetDir: '/my/dir', port: 4000 });
-		expect(openMock).toHaveBeenCalledWith('http://localhost:4000');
+		expect(openMock).toHaveBeenCalledWith('http://localhost:4000/setup');
 	});
 
 	it('runs with no lula.yaml and opens setup URL', async () => {

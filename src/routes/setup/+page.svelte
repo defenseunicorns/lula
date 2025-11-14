@@ -154,9 +154,10 @@
 				class="text-4xl font-extrabold text-gray-900 dark:text-white mb-4 flex items-center justify-center gap-3"
 			>
 				<img src="/lula.png" class="h-12 w-12" alt="Lula" />
-				<span>Lula</span>
+				<span id="title">Lula</span>
+				<!-- Application Title -->
 			</h1>
-			<p class="text-lg text-gray-600 dark:text-gray-400">
+			<p id="description" class="text-lg text-gray-600 dark:text-gray-400">
 				{#if currentControlSetPath}
 					You have an existing control set. You can continue using it or create a new one.
 				{:else if hasAnyControlSets}
@@ -174,6 +175,7 @@
 					class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 inline-flex"
 				>
 					<button
+						data-testid="tab-existing"
 						on:click={() => (activeTab = 'existing')}
 						class="px-6 py-3 rounded-l-lg font-medium transition-colors {activeTab === 'existing'
 							? 'bg-blue-600 text-white'
@@ -182,6 +184,7 @@
 						Select Existing Control Set
 					</button>
 					<button
+						data-testid="tab-import"
 						on:click={() => (activeTab = 'import')}
 						class="px-6 py-3 rounded-r-lg font-medium transition-colors {activeTab === 'import'
 							? 'bg-blue-600 text-white'
@@ -198,17 +201,22 @@
 			class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded-lg shadow-xl p-6 relative border border-gray-200 dark:border-gray-700"
 		>
 			{#if activeTab === 'import'}
-				<SpreadsheetImport on:created={handleControlSetCreated} />
+				<div data-testid="pane-import">
+					<SpreadsheetImport on:created={handleControlSetCreated} />
+				</div>
 			{:else}
-				<ExistingControlSets
-					{controlSets}
-					on:selected={handleControlSetSelected}
-					on:tab-change={handleTabChange}
-				/>
+				<div data-testid="pane-existing">
+					<ExistingControlSets
+						{controlSets}
+						on:selected={handleControlSetSelected}
+						on:tab-change={handleTabChange}
+					/>
+				</div>
 			{/if}
 
 			{#if isSwitching}
 				<div
+					data-testid="switch-overlay"
 					class="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center rounded-lg"
 				>
 					<div class="bg-white dark:bg-gray-700 rounded-lg p-6 text-center">

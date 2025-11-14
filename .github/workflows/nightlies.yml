@@ -19,7 +19,7 @@ jobs:
 
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@f4a75cfd619ee5ce8d5b864b0d183aff3c69b55a # v2.13.1
+        uses: step-security/harden-runner@95d9a5deda9de15063e7595e9719c11c38c90ae2 # v2.13.2
         with:
           egress-policy: audit
 
@@ -34,13 +34,11 @@ jobs:
           run_install: false
 
       - name: Setup Node.js
-        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
+        uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
         with:
-          node-version: '22.x'
+          node-version: '24.x'
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
-          registry-url: 'https://registry.npmjs.org'
-          always-auth: true
 
       - name: Ensure pnpm store exists
         run: pnpm store path | xargs -I{} mkdir -p "{}"
@@ -54,4 +52,7 @@ jobs:
       - name: Publish to NPM
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: ./scripts/nightlies.sh
+        shell: bash
+        run: |
+          set -x
+          ./scripts/nightlies.sh
