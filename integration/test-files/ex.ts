@@ -41,6 +41,7 @@ When(a.ConfigMap)
 When(a.ConfigMap)
   .IsCreated()
   .Mutate(function mutateNon(request) {
+    // change inserted here
     request.SetAnnotation("non", "seen");
   });
 // @lulaEnd 987e4567-e89b-12d3-a456-426614174777
