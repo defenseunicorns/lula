@@ -130,7 +130,7 @@ describe('crawl', () => {
       expect(body).toMatch(/`20–31`/);
       expect(body).toMatch(/`1–5`/);
 
-      expect(body).toMatch(/\*\*Block\*\* \`[-a-f0-9]{36}\`/);
+      expect(body).toMatch(/\*\*UUID:\*\* \`[-a-f0-9]{36}\`/);
       expect(body).toMatch(/\*\*sha256:\*\* \`[a-f0-9]{64}\`/);
 
       const commentTime = new Date(c.created_at);
