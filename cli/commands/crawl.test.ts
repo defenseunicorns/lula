@@ -253,6 +253,60 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 		const changed = getChangedBlocks(oldText, newText);
 		expect(changed).toHaveLength(0);
 	});
+
+	it('should not detect changes when lines are inserted above a block (line shift scenario)', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'unchanged content line 1',
+			'unchanged content line 2',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const newTextWithInsertionAbove = [
+			'header',
+			'NEWLY INSERTED LINE 1',
+			'NEWLY INSERTED LINE 2',
+			`// @lulaStart ${uuid}`,
+			'unchanged content line 1',
+			'unchanged content line 2',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const changed = getChangedBlocks(oldText, newTextWithInsertionAbove);
+		expect(changed).toHaveLength(0);
+	});
+
+	it('should detect actual content changes within a block even when line positions shift', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'original content line 1',
+			'original content line 2',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const newTextWithInsertionAndChange = [
+			'header',
+			'NEWLY INSERTED LINE',
+			`// @lulaStart ${uuid}`,
+			'CHANGED content line 1',
+			'original content line 2',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const changed = getChangedBlocks(oldText, newTextWithInsertionAndChange);
+		expect(changed).toHaveLength(1);
+		expect(changed[0].uuid).toBe(uuid);
+	});
 });
 
 describe('getRemovedBlocks', () => {
@@ -951,12 +1005,12 @@ describe('Refactored crawl functions', () => {
 
 			expect(result).toContain('| File | Lines Changed |');
 			expect(result).toContain('| `test.js` | `6–10` |');
-			expect(result).toContain('**uuid**-`abc123`');
-			expect(result).toContain('**sha256**');
+			expect(result).toContain('**UUID:** `abc123`');
+			expect(result).toContain('**sha256:**');
 			expect(logSpy).toHaveBeenCalledWith('Commenting regarding `test.js`.');
 		});
 
-		it('should generate content for multiple changed blocks', () => {
+		it('should generate content for multiple changed blocks with consolidated table', () => {
 			const changedBlocks = [
 				{ uuid: 'abc123', startLine: 0, endLine: 2 },
 				{ uuid: 'def456', startLine: 5, endLine: 7 }
@@ -965,11 +1019,21 @@ describe('Refactored crawl functions', () => {
 
 			const result = generateChangedBlocksContent('test.js', changedBlocks, newText);
 
+			// Should have one table header
+			const tableHeaderMatches = result.match(/\| File \| Lines Changed \|/g);
+			expect(tableHeaderMatches).toHaveLength(1);
+
+			// Should contain both rows in the same table
 			expect(result).toContain('| `test.js` | `1–2` |');
-			expect(result).toContain('**uuid**-`abc123`');
 			expect(result).toContain('| `test.js` | `6–7` |');
-			expect(result).toContain('**uuid**-`def456`');
-			expect(logSpy).toHaveBeenCalledTimes(2);
+
+			// Should have separate block and sha256 entries after the table
+			expect(result).toContain('**UUID:** `abc123`');
+			expect(result).toContain('**UUID:** `def456`');
+			expect(result).toContain('**sha256:**');
+
+			// Should only log once per call to the function
+			expect(logSpy).toHaveBeenCalledWith('Commenting regarding `test.js`.');
 		});
 
 		it('should return empty string for no changed blocks', () => {
@@ -984,7 +1048,7 @@ describe('Refactored crawl functions', () => {
 			expect(result).toBe('');
 		});
 
-		it('should generate content for removed blocks', () => {
+		it('should generate content for removed blocks with consolidated table', () => {
 			const removedBlocks = [
 				{ uuid: 'abc123', startLine: 0, endLine: 3 },
 				{ uuid: 'def456', startLine: 5, endLine: 8 }
@@ -994,10 +1058,20 @@ describe('Refactored crawl functions', () => {
 			const result = generateRemovedBlocksContent('test.js', removedBlocks, oldText);
 
 			expect(result).toContain('Lula annotations were removed from `test.js`');
-			expect(result).toContain('| File | Original Lines | UUID |');
+
+			// Should have one table header
+			const tableHeaderMatches = result.match(/\| File \| Original Lines \| UUID \|/g);
+			expect(tableHeaderMatches).toHaveLength(1);
+
+			// Should contain both rows in the same table
 			expect(result).toContain('| `test.js` | `1–3` | `abc123` |');
 			expect(result).toContain('| `test.js` | `6–8` | `def456` |');
-			expect(result).toContain('**sha256**');
+
+			// Should have separate block and sha256 entries after the table
+			expect(result).toContain('**UUID:** `abc123`');
+			expect(result).toContain('**UUID:** `def456`');
+			expect(result).toContain('**sha256:**');
+
 			expect(result).toContain('removal of these compliance annotations is intentional');
 			expect(logSpy).toHaveBeenCalledWith('Found removed annotations in `test.js`.');
 		});

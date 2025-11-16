@@ -106,6 +106,7 @@ Commenting regarding `integration/test-files/ex.yaml`.
 Posted (comment)
 ----------------
 
+<!-- LULA_SIGNATURE:v1 -->
 ## Lula Compliance Overview
 
 Please review the changes to ensure they meet compliance standards.
@@ -120,8 +121,13 @@ Lula reviewed 2 files changed that affect compliance.
 | File | Lines Changed |
 | ---- | ------------- |
 | `integration/test-files/ex.ts` | `20–31` |
-> **uuid**-`123e4567-e89b-12d3-a456-426614174000`
- **sha256** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`
+| `integration/test-files/ex.ts` | `39–47` |
+
+**UUID:** `123e4567-e89b-12d3-a456-426614174000`
+**sha256:** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`
+
+**UUID:** `987e4567-e89b-12d3-a456-426614174777`
+**sha256:** `72acd6ffeab63567b4fc38ffb1997d106d30c0cec4474d8046810dcbcbb1302b`
 
 
 
@@ -129,8 +135,13 @@ Lula reviewed 2 files changed that affect compliance.
 | File | Lines Changed |
 | ---- | ------------- |
 | `integration/test-files/ex.yaml` | `1–5` |
-> **uuid**-`123e4567-e89b-12d3-a456-426614174001`
- **sha256** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`
+| `integration/test-files/ex.yaml` | `8–14` |
+
+**UUID:** `123e4567-e89b-12d3-a456-426614174001`
+**sha256:** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`
+
+**UUID:** `987e4567-e89b-12d3-a456-426614174777`
+**sha256:** `ab0240ce74fa7aec548e671a24c5cdede388970a95eb1198b6eb7cb1c8635cef`
 
 
 
