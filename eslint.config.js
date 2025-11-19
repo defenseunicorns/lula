@@ -1,15 +1,16 @@
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
-import prettier from 'eslint-config-prettier';
-import { includeIgnoreFile } from '@eslint/compat';
-import svelte from 'eslint-plugin-svelte';
 import globals from 'globals';
-import ts from 'typescript-eslint';
+import js from '@eslint/js';
+import path from 'node:path';
+import prettier from 'eslint-config-prettier';
+import svelte from 'eslint-plugin-svelte';
 import svelteConfig from './svelte.config.js';
+import ts from 'typescript-eslint';
+import tsParser from '@typescript-eslint/parser';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import { FlatCompat } from '@eslint/eslintrc';
+import { fileURLToPath } from 'node:url';
+import { includeIgnoreFile } from '@eslint/compat';
+import { recommended } from '@defenseunicorns/eslint-config';
 
 const gitignorePath = fileURLToPath(new URL('./.gitignore', import.meta.url));
 const __filename = fileURLToPath(import.meta.url);
@@ -26,6 +27,7 @@ export default ts.config(
 	...svelte.configs.recommended,
 	prettier,
 	...svelte.configs.prettier,
+        ...recommended,
 	{
 		ignores: [
 			'**/*.yaml',
@@ -96,7 +98,6 @@ export default ts.config(
 		languageOptions: {
 			parser: tsParser,
 			parserOptions: {
-				project: path.resolve(__dirname, 'tsconfig.json'),
 				tsconfigRootDir: path.resolve(__dirname, './'),
 				sourceType: 'module'
 			},
