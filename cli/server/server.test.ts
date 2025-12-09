@@ -10,10 +10,12 @@ type RouteHandler = (
 	res: { sendFile: (file: string, opts: { root: string }) => void }
 ) => void;
 type GetRoute = (path: string, handler: RouteHandler) => void;
+type PostRoute = (path: string, handler: RouteHandler) => void;
 
 type ExpressAppMock = {
 	use: UseMiddleware;
 	get: GetRoute;
+	post: PostRoute;
 };
 
 type ExpressFactory = (() => ExpressAppMock) & {
@@ -39,6 +41,7 @@ const h = vi.hoisted(() => {
 
 		expressUse: vi.fn<UseMiddleware>(),
 		expressGet: vi.fn<GetRoute>(),
+		expressPost: vi.fn<PostRoute>(),
 		expressJson: vi.fn<(opts: { limit: string }) => unknown>(),
 		expressStatic: vi.fn<(dir: string) => unknown>(),
 
@@ -74,7 +77,7 @@ vi.mock('fs', async (importOriginal) => {
 });
 
 vi.mock('express', () => {
-	const app: ExpressAppMock = { use: h.expressUse, get: h.expressGet };
+	const app: ExpressAppMock = { use: h.expressUse, get: h.expressGet, post: h.expressPost };
 
 	const expressFn = vi.fn(() => app) as unknown as ExpressFactory;
 

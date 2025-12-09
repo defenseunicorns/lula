@@ -20,6 +20,7 @@ import * as yaml from 'js-yaml';
 import { join } from 'path';
 import type { Control, Mapping } from '../types';
 import { getControlId } from './controlHelpers';
+import { createHash } from 'crypto';
 
 export interface ControlMetadata {
 	controlId: string;
@@ -442,6 +443,12 @@ export class FileStore {
 					const parsed = yaml.load(content) as any;
 
 					if (Array.isArray(parsed)) {
+						parsed.forEach((mapping) => {
+							console.log('Load Mapping: ' + JSON.stringify(mapping));
+							mapping.hash = createHash('sha256').update(JSON.stringify(mapping)).digest('hex');
+							console.log('Load  Hash: ' + mapping.hash);
+							return mapping;
+						});
 						mappings.push(...parsed);
 					}
 				} catch (error) {
@@ -485,12 +492,16 @@ export class FileStore {
 			}
 		}
 
+		// Strip hash field before saving to disk
+		const cleanMapping = { ...mapping };
+		delete cleanMapping.hash;
+
 		// Update or add the mapping
-		const existingIndex = existingMappings.findIndex((m) => m.uuid === mapping.uuid);
+		const existingIndex = existingMappings.findIndex((m) => m.hash === mapping.hash);
 		if (existingIndex >= 0) {
-			existingMappings[existingIndex] = mapping;
+			existingMappings[existingIndex] = cleanMapping;
 		} else {
-			existingMappings.push(mapping);
+			existingMappings.push(cleanMapping);
 		}
 
 		// Save back to file
@@ -522,8 +533,12 @@ export class FileStore {
 				let mappings: Mapping[] = (yaml.load(content) as Mapping[]) || [];
 
 				const originalLength = mappings.length;
+				// we need to re-calculate the hash
 				mappings = mappings.filter((m) => {
-					return `${m.control_id}:${m.uuid}` !== compositeKey;
+					console.log('Delete Mapping: ' + JSON.stringify(m));
+					m.hash = createHash('sha256').update(JSON.stringify(m)).digest('hex');
+					console.log('Delete  Hash: ' + m.hash);
+					return `${m.control_id}:${m.hash}` !== compositeKey;
 				});
 
 				// If we removed a mapping, save the file
@@ -532,8 +547,14 @@ export class FileStore {
 						// Delete the file if no mappings remain
 						unlinkSync(file);
 					} else {
+						// Strip hash fields before saving
+						const cleanMappings = mappings.map((m) => {
+							const clean = { ...m };
+							delete clean.hash;
+							return clean;
+						});
 						// Save the remaining mappings
-						const yamlContent = yaml.dump(mappings, {
+						const yamlContent = yaml.dump(cleanMappings, {
 							indent: 2,
 							lineWidth: -1,
 							noRefs: true
@@ -611,8 +632,15 @@ export class FileStore {
 				mkdirSync(familyDir, { recursive: true });
 			}
 
+			// Strip hash fields before saving
+			const cleanMappings = controlMappings.map((m) => {
+				const clean = { ...m };
+				delete clean.hash;
+				return clean;
+			});
+
 			try {
-				const yamlContent = yaml.dump(controlMappings, {
+				const yamlContent = yaml.dump(cleanMappings, {
 					indent: 2,
 					lineWidth: -1,
 					noRefs: true

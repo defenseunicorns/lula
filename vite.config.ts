@@ -29,6 +29,11 @@ export default defineConfig({
 				target: 'http://localhost:3000',
 				changeOrigin: true,
 				secure: false
+			},
+			'/hash': {
+				target: 'http://localhost:3000',
+				changeOrigin: true,
+				secure: false
 			}
 		}
 	}

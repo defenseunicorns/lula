@@ -35,8 +35,17 @@
 				justification: data.justification,
 				status: data.status,
 				source_entries: data.source_entries,
-				uuid: data.uuid || '' // Use the UUID from form or empty for auto-generation
+				uuid: data.uuid || '', // Use the UUID from form or empty for auto-generation,
+			    hash: ''
 			};
+			const hash = await fetch('/hash', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(mappingData)
+			});
+			mappingData.hash = (await hash.json()).hash;
 
 			await wsClient.createMapping(mappingData);
 			resetMappingForm();
@@ -80,18 +89,13 @@
 				uuid: data.uuid || editingMapping.uuid, // Use form UUID or fallback to original
 				justification: data.justification,
 				status: data.status,
-				source_entries: data.source_entries
+				source_entries: data.source_entries,
 			};
 
-			const uuidChanged = updatedMapping.uuid !== editingMapping.uuid;
-			
-			if (uuidChanged) {
-				const compositeId = `${control.id}:${editingMapping.uuid}`;
-				await wsClient.deleteMapping(compositeId);
-				await wsClient.createMapping(updatedMapping);
-			} else {
-				await wsClient.updateMapping(updatedMapping);
-			}
+			// hashes change every time so we just delete an create
+			await wsClient.deleteMapping(editingMapping.hash!);
+			delete updatedMapping.hash;
+			await wsClient.createMapping(updatedMapping);
 
 			resetMappingForm();
 		} catch (error) {
@@ -99,10 +103,17 @@
 		}
 	}
 
-	async function handleDeleteMapping(uuid: string) {
+	async function handleDeleteMapping(hash: string) {
+		// Find the mapping by hash to get the UUID for backend deletion
+		const mappingToDelete = mappings.find(m => (m.hash === hash));
+		if (!mappingToDelete) {
+			console.error('Mapping not found for deletion');
+			return;
+		}
+
 		try {
-			const compositeId = `${control.id}:${uuid}`;
-			await wsClient.deleteMapping(compositeId);
+			// Backend expects UUID for file operations
+			await wsClient.deleteMapping(mappingToDelete.hash!);
 		} catch (error) {
 			console.error('Failed to delete mapping:', error);
 		}
@@ -113,8 +124,8 @@
 	<!-- Existing Mappings -->
 	{#if mappings.length > 0}
 		<div class="space-y-4">
-			{#each mappings as mapping (mapping.uuid)}
-				{#if editingMapping && editingMapping.uuid === mapping.uuid}
+			{#each mappings as mapping (mapping.hash)}
+				{#if editingMapping && editingMapping.hash === mapping.hash}
 					<!-- Edit Form in place of the mapping being edited -->
 					<div
 						class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"

@@ -2,6 +2,7 @@
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
 import { join } from 'path';
+import { createHash } from 'crypto';
 import { debug } from '../utils/debug';
 import { FileStore } from './infrastructure/fileStore';
 import { GitHistoryUtil } from './infrastructure/gitHistory';
@@ -79,13 +80,13 @@ export function addMappingToIndexes(mapping: Mapping): void {
 	if (!state.mappingsByFamily.has(family)) {
 		state.mappingsByFamily.set(family, new Set());
 	}
-	state.mappingsByFamily.get(family)!.add(mapping.uuid);
+	state.mappingsByFamily.get(family)!.add(mapping.hash!);
 
 	// Add to control index
 	if (!state.mappingsByControl.has(mapping.control_id)) {
 		state.mappingsByControl.set(mapping.control_id, new Set());
 	}
-	state.mappingsByControl.get(mapping.control_id)!.add(mapping.uuid);
+	state.mappingsByControl.get(mapping.control_id)!.add(mapping.hash!);
 }
 
 export async function loadAllData(): Promise<void> {
@@ -104,7 +105,10 @@ export async function loadAllData(): Promise<void> {
 		// Load mappings from mappings file
 		const mappings = await state.fileStore.loadMappings();
 		for (const mapping of mappings) {
-			const compositeKey = `${mapping.control_id}:${mapping.uuid}`;
+			if (!mapping.hash) {
+				mapping.hash = createHash('sha256').update(JSON.stringify(mapping)).digest('hex');
+			}
+			const compositeKey = `${mapping.control_id}:${mapping.hash}`;
 			state.mappingsCache.set(compositeKey, mapping);
 			addMappingToIndexes(mapping);
 		}

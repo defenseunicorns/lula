@@ -11,6 +11,7 @@ import { fileURLToPath } from 'url';
 import { initializeServerState, loadAllData, saveMappingsToFile } from './serverState';
 import spreadsheetRoutes from './spreadsheetRoutes';
 import { wsManager } from './websocketServer';
+import { createHash } from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -58,6 +59,13 @@ export async function createServer(options: ServerOptions): Promise<{
 	// Serve frontend for all other routes (SPA fallback)
 	app.get('/*splat', (req, res) => {
 		res.sendFile('index.html', { root: distPath });
+	});
+
+	// Frontend cannot create hash - webcrypto hash is not supported in all browsers
+	app.post('/hash', (req, res) => {
+		delete req.body.hash;
+		const hash = createHash('sha256').update(JSON.stringify(req.body)).digest('hex');
+		res.status(200).json({ hash });
 	});
 
 	// Create HTTP server for both Express and WebSocket
