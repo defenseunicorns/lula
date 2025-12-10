@@ -369,7 +369,7 @@ control_id_field: id`;
 			expect(content).toContain('test-uuid-2');
 		});
 
-		it('should update existing mapping with same UUID', async () => {
+		it('should save a new mapping - to update we delete and create based on the hash', async () => {
 			const mapping: Partial<Mapping> = {
 				uuid: 'test-uuid-1',
 				control_id: 'AC-1',
@@ -394,7 +394,7 @@ control_id_field: id`;
 			const content = readFileSync(expectedPath, 'utf8');
 			expect(content).toContain('Updated mapping');
 			expect(content).toContain('implemented');
-			expect(content).not.toContain('Original mapping');
+			expect(content).toContain('Original mapping');
 		});
 	});
 

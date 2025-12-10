@@ -205,52 +205,6 @@ class WebSocketManager {
 					break;
 				}
 
-				case 'update-mapping': {
-					// Update an existing mapping
-					const state = getServerState();
-					if (payload && payload.hash) {
-						const mapping = payload as unknown as Mapping;
-
-						// Save the mapping (files still use original UUID-based approach)
-						await state.fileStore.saveMapping(mapping);
-
-						// Find and remove old cache entry first
-						let oldCompositeKey = '';
-						for (const [key, value] of state.mappingsCache.entries()) {
-							console.log('Checking mapping in cache:', key);
-							if (value.hash === mapping.hash) {
-								oldCompositeKey = key;
-								break;
-							}
-						}
-						if (oldCompositeKey) {
-							state.mappingsCache.delete(oldCompositeKey);
-						}
-
-						// Add updated mapping with new checksum-based key
-						console.log(`${JSON.stringify(mapping)}`);
-						const mappingCheckSum = crypto
-							.createHash('sha256')
-							.update(JSON.stringify(mapping))
-							.digest('hex');
-						mapping.hash = mappingCheckSum;
-						const compositeKey = `${mapping.control_id}:${mappingCheckSum}`;
-						state.mappingsCache.set(compositeKey, mapping);
-
-						// Send success response
-						ws.send(
-							JSON.stringify({
-								type: 'mapping-updated',
-								payload: { uuid: mapping.uuid, success: true }
-							})
-						);
-
-						// Broadcast the updated state to all clients
-						this.broadcastState();
-					}
-					break;
-				}
-
 				case 'delete-mapping': {
 					// Delete a mapping
 					const state = getServerState();
