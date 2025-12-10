@@ -444,9 +444,7 @@ export class FileStore {
 
 					if (Array.isArray(parsed)) {
 						parsed.forEach((mapping) => {
-							console.log('Load Mapping: ' + JSON.stringify(mapping));
 							mapping.hash = createHash('sha256').update(JSON.stringify(mapping)).digest('hex');
-							console.log('Load  Hash: ' + mapping.hash);
 							return mapping;
 						});
 						mappings.push(...parsed);
@@ -496,13 +494,7 @@ export class FileStore {
 		const cleanMapping = { ...mapping };
 		delete cleanMapping.hash;
 
-		// Update or add the mapping
-		const existingIndex = existingMappings.findIndex((m) => m.hash === mapping.hash);
-		if (existingIndex >= 0) {
-			existingMappings[existingIndex] = cleanMapping;
-		} else {
-			existingMappings.push(cleanMapping);
-		}
+		existingMappings.push(cleanMapping);
 
 		// Save back to file
 		try {
@@ -535,10 +527,8 @@ export class FileStore {
 				const originalLength = mappings.length;
 				// we need to re-calculate the hash
 				mappings = mappings.filter((m) => {
-					console.log('Delete Mapping: ' + JSON.stringify(m));
-					m.hash = createHash('sha256').update(JSON.stringify(m)).digest('hex');
-					console.log('Delete  Hash: ' + m.hash);
-					return `${m.control_id}:${m.hash}` !== compositeKey;
+					const hash = createHash('sha256').update(JSON.stringify(m)).digest('hex');
+					return `${m.control_id}:${hash}` !== compositeKey;
 				});
 
 				// If we removed a mapping, save the file
@@ -547,14 +537,8 @@ export class FileStore {
 						// Delete the file if no mappings remain
 						unlinkSync(file);
 					} else {
-						// Strip hash fields before saving
-						const cleanMappings = mappings.map((m) => {
-							const clean = { ...m };
-							delete clean.hash;
-							return clean;
-						});
 						// Save the remaining mappings
-						const yamlContent = yaml.dump(cleanMappings, {
+						const yamlContent = yaml.dump(mappings, {
 							indent: 2,
 							lineWidth: -1,
 							noRefs: true

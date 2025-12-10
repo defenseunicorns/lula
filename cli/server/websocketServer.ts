@@ -254,34 +254,20 @@ class WebSocketManager {
 				case 'delete-mapping': {
 					// Delete a mapping
 					const state = getServerState();
-					if (payload && payload.hash) {
-						const hash = payload.hash as string;
-
-						// Find the mapping by uuid in the cache values
-						let mapping: any = null;
-						let compositeKeyToDelete = '';
-						for (const [key, value] of state.mappingsCache.entries()) {
-							// the hash that is getting sent is the UUID
-
-							if (value.hash === hash) {
-								console.log(`Key ${key}\n Value hash: ${value.hash}\n Looking for hash: ${hash}`);
-								mapping = value;
-								compositeKeyToDelete = key;
-								break;
-							}
-						}
-
+					if (payload && payload.composite_key) {
+						const composite_key = payload.composite_key as string;
+						const mapping = state.mappingsCache.get(composite_key);
 						if (mapping) {
 							// Delete the mapping file using original UUID-based key for file operations
-							await state.fileStore.deleteMapping(compositeKeyToDelete);
+							await state.fileStore.deleteMapping(composite_key);
 
 							// Remove from cache using the checksum-based composite key
-							state.mappingsCache.delete(compositeKeyToDelete);
+							state.mappingsCache.delete(composite_key);
 							// Remove from indexes
 							const family = mapping.control_id.split('-')[0];
 							// Use the resolved mapping.hash (string) rather than payload.hash (unknown) to satisfy Set.delete signature
-							state.mappingsByFamily.get(family)?.delete(mapping.hash);
-							state.mappingsByControl.get(mapping.control_id)?.delete(mapping.hash);
+							state.mappingsByFamily.get(family)?.delete(mapping.hash!);
+							state.mappingsByControl.get(mapping.control_id)?.delete(mapping.hash!);
 
 							// Send success response
 							ws.send(

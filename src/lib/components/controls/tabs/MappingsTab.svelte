@@ -91,9 +91,8 @@
 				status: data.status,
 				source_entries: data.source_entries,
 			};
-
 			// hashes change every time so we just delete an create
-			await wsClient.deleteMapping(editingMapping.hash!);
+			await wsClient.deleteMapping(`${editingMapping.control_id}:${editingMapping.hash!}`);
 			delete updatedMapping.hash;
 			await wsClient.createMapping(updatedMapping);
 
@@ -113,7 +112,7 @@
 
 		try {
 			// Backend expects UUID for file operations
-			await wsClient.deleteMapping(mappingToDelete.hash!);
+			await wsClient.deleteMapping(`${mappingToDelete.control_id}:${mappingToDelete.hash!}`);
 		} catch (error) {
 			console.error('Failed to delete mapping:', error);
 		}

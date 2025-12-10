@@ -23,8 +23,8 @@
 	}
 
 	function handleDelete() {
-		if (confirm('Are you sure you want to delete this mapping?'+ mapping.uuid  + '')) {
-			onDelete?.(mapping.hash || '');
+		if (confirm('Are you sure you want to delete this mapping? '+ mapping.uuid)) {
+			onDelete?.(mapping.hash!);
 		}
 	}
 </script>
