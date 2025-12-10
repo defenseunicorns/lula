@@ -3,6 +3,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { join } from 'path';
+import { createHash } from 'crypto';
 import type { Control, Mapping } from './types';
 
 import {
@@ -63,13 +64,19 @@ const makeControl = (id: string, family: string): Control => ({
 	family
 });
 
-const makeMapping = (uuid: string, control_id: string): Mapping => ({
-	uuid,
-	control_id,
-	justification: '',
-	source_entries: [],
-	status: 'planned'
-});
+const makeMapping = (uuid: string, control_id: string): Mapping => {
+	const mapping: Mapping = {
+		uuid,
+		control_id,
+		justification: '',
+		source_entries: [],
+		status: 'planned',
+		hash: ''
+	};
+
+	mapping.hash = createHash('sha256').update(JSON.stringify(mapping)).digest('hex');
+	return mapping;
+};
 
 describe('serverState', () => {
 	beforeEach(() => {
@@ -145,12 +152,12 @@ describe('serverState', () => {
 		expect(state.mappingsByFamily.has('CM')).toBe(true);
 		const fam = state.mappingsByFamily.get('CM');
 		expect(fam).toBeDefined();
-		expect(fam?.has('uuid-1')).toBe(true);
+		expect(fam?.has(m.hash!)).toBe(true);
 
 		expect(state.mappingsByControl.has('CM-2')).toBe(true);
 		const ctrl = state.mappingsByControl.get('CM-2');
 		expect(ctrl).toBeDefined();
-		expect(ctrl?.has('uuid-1')).toBe(true);
+		expect(ctrl?.has(m.hash!)).toBe(true);
 	});
 
 	it('loadAllData loads controls & mappings into caches and logs debug (success path)', async () => {
@@ -169,14 +176,23 @@ describe('serverState', () => {
 		expect(state.controlsCache.get('AC-1')).toEqual(controls[0]);
 
 		expect(state.mappingsCache.size).toBe(2);
-		expect(state.mappingsCache.get('AC-1:m-1')).toEqual(mappings[0]);
-		expect(state.mappingsCache.get('CM-2:m-2')).toEqual(mappings[1]);
+		// Test checksum-based composite keys
+		// The cache should contain the mappings with checksum-based keys
+		const cacheKeys = Array.from(state.mappingsCache.keys());
+		expect(cacheKeys).toHaveLength(2);
+		expect(cacheKeys[0]).toMatch(/^AC-1:/);
+		expect(cacheKeys[1]).toMatch(/^CM-2:/);
+
+		// Check that we can retrieve the mappings by iterating through cache
+		const cachedMapping1 = Array.from(state.mappingsCache.values()).find((m) => m.uuid === 'm-1');
+		const cachedMapping2 = Array.from(state.mappingsCache.values()).find((m) => m.uuid === 'm-2');
+		expect(cachedMapping1).toEqual(mappings[0]);
+		expect(cachedMapping2).toEqual(mappings[1]);
 
 		expect(state.controlsByFamily.get('AC')?.has('AC-1')).toBe(true);
-		expect(state.mappingsByControl.get('AC-1')?.has('m-1')).toBe(true);
-		expect(state.mappingsByFamily.get('AC')?.has('m-1')).toBe(true);
-		expect(state.mappingsByFamily.get('CM')?.has('m-2')).toBe(true);
-
+		expect(state.mappingsByControl.get('AC-1')?.has(mappings[0].hash!)).toBe(true);
+		expect(state.mappingsByFamily.get('AC')?.has(mappings[0].hash!)).toBe(true);
+		expect(state.mappingsByFamily.get('CM')?.has(mappings[1].hash!)).toBe(true);
 		const messages = h.debugSpy.mock.calls.map((c) => c[0]);
 		expect(messages).toContain('Loading data into memory...');
 		expect(messages).toContain('Loaded 1 controls from individual files');
@@ -203,8 +219,10 @@ describe('serverState', () => {
 
 		const m1 = makeMapping('u-1', 'AC-1');
 		const m2 = makeMapping('u-2', 'CM-2');
-		state.mappingsCache.set(`${m1.control_id}:${m1.uuid}`, m1);
-		state.mappingsCache.set(`${m2.control_id}:${m2.uuid}`, m2);
+		const m1CheckSum = createHash('sha256').update(JSON.stringify(m1)).digest('hex');
+		const m2CheckSum = createHash('sha256').update(JSON.stringify(m2)).digest('hex');
+		state.mappingsCache.set(`${m1.control_id}:${m1CheckSum}`, m1);
+		state.mappingsCache.set(`${m2.control_id}:${m2CheckSum}`, m2);
 
 		h.saveMappingsSpy.mockResolvedValueOnce(undefined);
 

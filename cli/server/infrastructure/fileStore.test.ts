@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
+import { createHash } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -346,7 +347,8 @@ control_id_field: id`;
 				control_id: 'AC-1',
 				justification: 'First mapping',
 				source_entries: [],
-				status: 'planned'
+				status: 'planned',
+				hash: 'abc123'
 			};
 
 			const mapping2: Partial<Mapping> = {
@@ -354,7 +356,8 @@ control_id_field: id`;
 				control_id: 'AC-1',
 				justification: 'Second mapping',
 				source_entries: [],
-				status: 'planned'
+				status: 'planned',
+				hash: 'abc1234'
 			};
 
 			await fileStore.saveMapping(mapping1 as Mapping);
@@ -366,7 +369,7 @@ control_id_field: id`;
 			expect(content).toContain('test-uuid-2');
 		});
 
-		it('should update existing mapping with same UUID', async () => {
+		it('should save a new mapping - to update we delete and create based on the hash', async () => {
 			const mapping: Partial<Mapping> = {
 				uuid: 'test-uuid-1',
 				control_id: 'AC-1',
@@ -391,7 +394,7 @@ control_id_field: id`;
 			const content = readFileSync(expectedPath, 'utf8');
 			expect(content).toContain('Updated mapping');
 			expect(content).toContain('implemented');
-			expect(content).not.toContain('Original mapping');
+			expect(content).toContain('Original mapping');
 		});
 	});
 
@@ -421,8 +424,11 @@ control_id_field: id`;
 				}
 			];
 
+			// Add hashes to mappings before saving
 			for (const mapping of mappings) {
-				await fileStore.saveMapping(mapping as Mapping);
+				const mappingWithHash = mapping as Mapping;
+				mappingWithHash.hash = createHash('sha256').update(JSON.stringify(mapping)).digest('hex');
+				await fileStore.saveMapping(mappingWithHash);
 			}
 		});
 
@@ -467,37 +473,52 @@ control_id_field: id`;
 		beforeEach(async () => {
 			const mappings: Partial<Mapping>[] = [
 				{
-					uuid: 'uuid-1',
+					uuid: 'delete-test-1',
 					control_id: 'AC-1',
-					justification: 'Mapping 1',
+					justification: 'Delete Test 1',
 					source_entries: [],
 					status: 'planned'
 				},
 				{
-					uuid: 'uuid-2',
+					uuid: 'delete-test-2',
 					control_id: 'AC-1',
-					justification: 'Mapping 2',
+					justification: 'Delete Test 2',
 					source_entries: [],
 					status: 'planned'
 				}
 			];
 
+			// Add hashes to mappings before saving
 			for (const mapping of mappings) {
-				await fileStore.saveMapping(mapping as Mapping);
+				const mappingWithHash = mapping as Mapping;
+				mappingWithHash.hash = createHash('sha256').update(JSON.stringify(mapping)).digest('hex');
+				await fileStore.saveMapping(mappingWithHash);
 			}
 		});
 
 		it('should delete a specific mapping by UUID', async () => {
-			await fileStore.deleteMapping('AC-1:uuid-1');
+			// First load mappings to get the hash
+			const allMappings = await fileStore.loadMappings();
+			const testMapping = allMappings.find((m) => m.uuid === 'delete-test-1');
+			expect(testMapping).toBeDefined();
+
+			await fileStore.deleteMapping(`AC-1:${testMapping!.hash}`);
 
 			const mappings = await fileStore.loadMappings();
-			expect(mappings).toHaveLength(1);
-			expect(mappings[0].uuid).toBe('uuid-2');
+			expect(mappings.find((m) => m.uuid === 'delete-test-1')).toBeUndefined();
+			expect(mappings.find((m) => m.uuid === 'delete-test-2')).toBeDefined();
 		});
 
 		it('should delete the entire file when no mappings remain', async () => {
-			await fileStore.deleteMapping('AC-1:uuid-1');
-			await fileStore.deleteMapping('AC-1:uuid-2');
+			// Load mappings to get their hashes
+			const allMappings = await fileStore.loadMappings();
+			const mapping1 = allMappings.find((m) => m.uuid === 'delete-test-1');
+			const mapping2 = allMappings.find((m) => m.uuid === 'delete-test-2');
+			expect(mapping1).toBeDefined();
+			expect(mapping2).toBeDefined();
+
+			await fileStore.deleteMapping(`AC-1:${mapping1!.hash}`);
+			await fileStore.deleteMapping(`AC-1:${mapping2!.hash}`);
 
 			const expectedPath = join(tempDir, 'mappings', 'AC', 'AC-1-mappings.yaml');
 			expect(existsSync(expectedPath)).toBe(false);

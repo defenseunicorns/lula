@@ -36,6 +36,8 @@ export interface Mapping {
 	justification: string;
 	source_entries: SourceEntry[];
 	status: 'planned' | 'implemented' | 'verified';
+	cci?: string;
+	hash?: string;
 	created_by?: string;
 }
 

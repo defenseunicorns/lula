@@ -2,6 +2,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { Server } from 'http';
 import { WebSocket, WebSocketServer } from 'ws';
+import { createHash } from 'crypto';
 
 // --- Mocks ------------------------------------------------------------------
 
@@ -33,7 +34,11 @@ vi.mock('./serverState', () => ({
 }));
 
 vi.mock('crypto', () => ({
-	randomUUID: () => 'test-uuid-123'
+	randomUUID: () => 'test-uuid-123',
+	createHash: vi.fn(() => ({
+		update: vi.fn().mockReturnThis(),
+		digest: vi.fn(() => 'test-checksum-abc123')
+	}))
 }));
 
 // --- Imports after mocks ----------------------------------------------------
@@ -578,14 +583,17 @@ describe('websocketServer', () => {
 					title: 'Test Control',
 					family: 'AC'
 				} as Control);
-				mockState.mappingsCache.set('uuid-1', {
+				const testMapping = {
 					uuid: 'uuid-1',
 					control_id: 'AC-1',
 					justification: 'Test justification',
 					source_entries: [],
 					status: 'planned'
-				} as Mapping);
-
+				} as Mapping;
+				const mappingCheckSum = createHash('sha256')
+					.update(JSON.stringify(testMapping))
+					.digest('hex');
+				mockState.mappingsCache.set(`AC-1:${mappingCheckSum}`, testMapping);
 				const result = (
 					wsManager as unknown as { getCompleteState: () => unknown }
 				).getCompleteState();

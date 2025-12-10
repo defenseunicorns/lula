@@ -20,6 +20,7 @@ import * as yaml from 'js-yaml';
 import { join } from 'path';
 import type { Control, Mapping } from '../types';
 import { getControlId } from './controlHelpers';
+import { createHash } from 'crypto';
 
 export interface ControlMetadata {
 	controlId: string;
@@ -442,6 +443,10 @@ export class FileStore {
 					const parsed = yaml.load(content) as any;
 
 					if (Array.isArray(parsed)) {
+						parsed.forEach((mapping) => {
+							mapping.hash = createHash('sha256').update(JSON.stringify(mapping)).digest('hex');
+							return mapping;
+						});
 						mappings.push(...parsed);
 					}
 				} catch (error) {
@@ -485,13 +490,11 @@ export class FileStore {
 			}
 		}
 
-		// Update or add the mapping
-		const existingIndex = existingMappings.findIndex((m) => m.uuid === mapping.uuid);
-		if (existingIndex >= 0) {
-			existingMappings[existingIndex] = mapping;
-		} else {
-			existingMappings.push(mapping);
-		}
+		// Strip hash field before saving to disk
+		const cleanMapping = { ...mapping };
+		delete cleanMapping.hash;
+
+		existingMappings.push(cleanMapping);
 
 		// Save back to file
 		try {
@@ -522,8 +525,10 @@ export class FileStore {
 				let mappings: Mapping[] = (yaml.load(content) as Mapping[]) || [];
 
 				const originalLength = mappings.length;
+				// we need to re-calculate the hash
 				mappings = mappings.filter((m) => {
-					return `${m.control_id}:${m.uuid}` !== compositeKey;
+					const hash = createHash('sha256').update(JSON.stringify(m)).digest('hex');
+					return `${m.control_id}:${hash}` !== compositeKey;
 				});
 
 				// If we removed a mapping, save the file
@@ -611,8 +616,15 @@ export class FileStore {
 				mkdirSync(familyDir, { recursive: true });
 			}
 
+			// Strip hash fields before saving
+			const cleanMappings = controlMappings.map((m) => {
+				const clean = { ...m };
+				delete clean.hash;
+				return clean;
+			});
+
 			try {
-				const yamlContent = yaml.dump(controlMappings, {
+				const yamlContent = yaml.dump(cleanMappings, {
 					indent: 2,
 					lineWidth: -1,
 					noRefs: true

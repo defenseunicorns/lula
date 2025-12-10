@@ -8,7 +8,7 @@
 	interface Props {
 		mapping: Mapping;
 		onEdit?: (mapping: Mapping) => void;
-		onDelete?: (uuid: string) => void;
+		onDelete?: (hash: string) => void;
 		showActions?: boolean;
 	}
 
@@ -23,8 +23,8 @@
 	}
 
 	function handleDelete() {
-		if (confirm('Are you sure you want to delete this mapping?')) {
-			onDelete?.(mapping.uuid);
+		if (confirm('Are you sure you want to delete this mapping? '+ mapping.uuid)) {
+			onDelete?.(mapping.hash!);
 		}
 	}
 </script>

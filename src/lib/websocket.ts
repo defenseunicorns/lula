@@ -355,12 +355,8 @@ class WebSocketClient {
 		return this.sendCommand('create-mapping', mapping);
 	}
 
-	async updateMapping(mapping: Mapping) {
-		return this.sendCommand('update-mapping', mapping);
-	}
-
-	async deleteMapping(uuid: string) {
-		return this.sendCommand('delete-mapping', { uuid });
+	async deleteMapping(composite_key: string) {
+		return this.sendCommand('delete-mapping', { composite_key });
 	}
 
 	async switchControlSet(path: string) {
