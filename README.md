@@ -394,7 +394,6 @@ Apache-2.0 - See [LICENSE](LICENSE) for details.
 
 ## Support
 
-- **Documentation**: [https://lula.dev/docs](https://lula.dev/docs)
 - **Issues**: [GitHub Issues](https://github.com/defenseunicorns/lula2/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/defenseunicorns/lula2/discussions)
 
