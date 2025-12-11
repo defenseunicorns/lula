@@ -3,7 +3,7 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { ControlDetailsPanel, ControlsList } from '$components/controls';
 	import { wsClient } from '$lib/websocket';
 	import { selectedControl } from '$stores/compliance';
@@ -16,7 +16,7 @@
 
 	// React to URL parameter changes and fetch control details
 	$effect(() => {
-		const controlId = $page.params.id;
+		const controlId = page.params.id;
 		if (!controlId) return;
 
 		const decodedControlId = decodeURIComponent(controlId);
