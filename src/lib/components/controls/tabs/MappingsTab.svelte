@@ -89,12 +89,22 @@
 				uuid: data.uuid || editingMapping.uuid, // Use form UUID or fallback to original
 				justification: data.justification,
 				status: data.status,
-				source_entries: data.source_entries,
+				source_entries: data.source_entries
 			};
-			// hashes change every time so we just delete an create
-			await wsClient.deleteMapping(`${editingMapping.control_id}:${editingMapping.hash!}`);
-			delete updatedMapping.hash;
-			await wsClient.createMapping(updatedMapping);
+
+			// Compute new hash for the updated mapping on the backend
+			const hashResponse = await fetch('/hash', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ ...updatedMapping, hash: '' })
+			});
+			const hashData = await hashResponse.json();
+			updatedMapping.hash = hashData.hash;
+
+			const oldCompositeKey = `${editingMapping.control_id}:${editingMapping.hash!}`;
+			await wsClient.updateMapping(oldCompositeKey, updatedMapping);
 
 			resetMappingForm();
 		} catch (error) {
