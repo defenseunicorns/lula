@@ -88,7 +88,7 @@
 		"@types/js-yaml": "^4.0.9",
 		"@types/jsdom": "^27.0.0",
 		"@types/multer": "^2.0.0",
-		"@types/node": "^24.4.0",
+		"@types/node": "^25.0.0",
 		"@typescript-eslint/eslint-plugin": "^8.42.0",
 		"@typescript-eslint/parser": "^8.42.0",
 		"@vitest/browser": "^4.0.1",
