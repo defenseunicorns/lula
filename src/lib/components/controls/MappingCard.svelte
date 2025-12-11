@@ -27,6 +27,7 @@
 			onDelete?.(mapping.hash!);
 		}
 	}
+
 </script>
 
 <div
@@ -75,7 +76,11 @@
 		<p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
 			{mapping.justification}
 		</p>
-		
+		{#if mapping.cci}
+			<div class="mb-4">
+				<h4 class="text-xs font-semibold text-gray-600 dark:text-gray-400 tracking-wider mb-2">CCIs:<span class="text-xs font-mono  text-gray-500 dark:text-gray-300 ml-2 break-all" title="CCis">{mapping.cci}</span></h4>
+			</div>
+		{/if}
 		{#if mapping.source_entries && mapping.source_entries.length > 0}
 			<div class="mb-4">
 				<h4 class="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Source References</h4>
