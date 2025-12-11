@@ -129,7 +129,7 @@
 			<FormField
 				id="mapping-cci"
 				label="Mapping CCI(s)"
-				type="multi-select"
+				type="multiselect"
 				bind:value={selectedCCIs}
 				options={cciOptions}
 			/>
