@@ -5,7 +5,7 @@
 	interface BaseProps {
 		id: string;
 		label: string;
-		type?: 'text' | 'textarea' | 'select' | 'multi-select';
+		type?: 'text' | 'textarea' | 'select' | 'multiselect';
 		options?: string[];
 		rows?: number;
 		placeholder?: string;
@@ -20,7 +20,7 @@
 	}
 
 	interface MultiSelectProps extends BaseProps {
-		type: 'multi-select';
+		type: 'multiselect';
 		value: string[];
 	}
 
@@ -66,7 +66,7 @@
 				</div>
 			{/if}
 		</div>
-	{:else if type === 'multi-select' && options.length > 0}
+	{:else if type === 'multiselect' && options.length > 0}
 		<div class="flex flex-wrap gap-2">
 			{#each options as option (option)}
 				{@const selected = (value as string[]).includes(option)}
