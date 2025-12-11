@@ -78,7 +78,7 @@
 		</p>
 		{#if mapping.cci}
 			<div class="mb-4">
-				<h4 class="text-xs font-semibold text-gray-600 dark:text-gray-400 tracking-wider mb-2">CCIs:<span class="text-xs font-mono  text-gray-500 dark:text-gray-300 ml-2 break-all" title="CCis">{mapping.cci}</span></h4>
+				<h4 class="text-xs font-semibold text-gray-600 dark:text-gray-400 tracking-wider mb-2">CCIs:<span class="text-xs font-mono  text-gray-500 dark:text-gray-300 ml-2 break-all" title="CCIs">{mapping.cci}</span></h4>
 			</div>
 		{/if}
 		{#if mapping.source_entries && mapping.source_entries.length > 0}
