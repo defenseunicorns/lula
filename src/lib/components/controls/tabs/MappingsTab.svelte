@@ -24,7 +24,8 @@
 		uuid: '',
 		justification: '',
 		status: 'planned' as 'planned' | 'implemented' | 'verified',
-		source_entries: [] as { location: string; shasum?: string }[]
+		source_entries: [] as { location: string; shasum?: string }[],
+		cci: ''
 	});
 
 	// Event handlers
@@ -36,18 +37,22 @@
 				status: data.status,
 				source_entries: data.source_entries,
 				uuid: data.uuid || '', // Use the UUID from form or empty for auto-generation,
-			    hash: ''
+			    hash: '',
 			};
+			const mappingForHash = data.cci !== ''
+			? { ...mappingData, cci: data.cci }
+			: { ...mappingData };
+
+			
 			const hash = await fetch('/hash', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify(mappingData)
+				body: JSON.stringify(mappingForHash)
 			});
-			mappingData.hash = (await hash.json()).hash;
-
-			await wsClient.createMapping(mappingData);
+			mappingForHash.hash = (await hash.json()).hash;
+			await wsClient.createMapping(mappingForHash);
 			resetMappingForm();
 		} catch (error) {
 			console.error('Failed to create mapping:', error);
@@ -63,7 +68,8 @@
 			uuid: '',
 			justification: '',
 			status: 'planned',
-			source_entries: []
+			source_entries: [],
+			cci: ''
 		};
 		showNewMappingForm = false;
 		editingMapping = null;
@@ -76,13 +82,14 @@
 			uuid: mapping.uuid,
 			justification: mapping.justification,
 			status: mapping.status,
-			source_entries: mapping.source_entries || []
+			source_entries: mapping.source_entries || [],
+			cci: mapping.cci || ''
 		};
 	}
 
 	async function handleUpdateMapping(data: typeof newMappingData) {
 		if (!editingMapping) return;
-
+	
 		try {
 			const updatedMapping = {
 				...editingMapping,
@@ -91,6 +98,11 @@
 				status: data.status,
 				source_entries: data.source_entries
 			};
+
+
+			if(data.cci !== undefined) {
+				updatedMapping.cci = data.cci;
+			}
 
 			// Compute new hash for the updated mapping on the backend
 			const hashResponse = await fetch('/hash', {
@@ -144,6 +156,7 @@
 							onSubmit={handleUpdateMapping}
 							onCancel={cancelNewMapping}
 							submitLabel="Update Mapping"
+							cci={control.cci}
 						/>
 					</div>
 				{:else}
@@ -168,6 +181,7 @@
 					onSubmit={handleCreateMapping}
 					onCancel={cancelNewMapping}
 					submitLabel="Create Mapping"
+					cci={control.cci}
 				/>
 			</div>
 		{:else if !editingMapping}
@@ -192,6 +206,7 @@
 					onSubmit={handleCreateMapping}
 					onCancel={cancelNewMapping}
 					submitLabel="Create Mapping"
+					cci={control.cci}
 				/>
 			</div>
 		{:else}

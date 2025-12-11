@@ -72,7 +72,8 @@ export interface FieldSchema {
 		| 'date'
 		| 'number'
 		| 'boolean'
-		| 'long_text';
+		| 'long_text'
+		| 'multiselect';
 	is_array: boolean;
 	max_length?: number;
 	usage_count?: number;
