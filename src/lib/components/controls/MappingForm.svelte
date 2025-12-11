@@ -55,7 +55,7 @@
 	);
 
 	
-	let selectedCCIs = $state<string[]>(
+	let selectedCCIs = $derived(
 		(formData.cci ?? '')
 			.split(';')
 			.map((s) => s.trim())
