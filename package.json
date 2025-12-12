@@ -48,6 +48,7 @@
 		"format": "prettier --write 'src/**/*.{ts,js,svelte}' 'cli/**/*.ts' 'index.ts' 'tests/**/*.ts'",
 		"format:check": "prettier --check 'src/**/*.{ts,js,svelte}' 'cli/**/*.ts' 'index.ts' 'tests/**/*.ts'",
 		"lint": "prettier --check 'src/**/*.{ts,js,svelte}' 'cli/**/*.ts' 'index.ts' 'tests/**/*.ts' && eslint src cli",
+        "semantic-release": "semantic-release",
 		"test": "npm run test:unit -- --run --coverage",
 		"test:integration": "vitest --config integration/vitest.config.integration.ts",
 		"test:unit": "vitest"
