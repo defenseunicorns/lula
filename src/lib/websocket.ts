@@ -355,6 +355,13 @@ class WebSocketClient {
 		return this.sendCommand('create-mapping', mapping);
 	}
 
+	async updateMapping(oldCompositeKey: string, mapping: Mapping) {
+		return this.sendCommand('update-mapping', {
+			old_composite_key: oldCompositeKey,
+			mapping
+		});
+	}
+
 	async deleteMapping(composite_key: string) {
 		return this.sendCommand('delete-mapping', { composite_key });
 	}

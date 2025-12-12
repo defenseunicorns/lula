@@ -2,14 +2,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // SPDX-FileCopyrightText: 2023-Present The Lula Authors
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('$app/environment', () => ({
 	browser: true
 }));
 
-import { appState, type AppState } from './websocket';
 import type { Control, Mapping, SourceEntry } from './types';
+import { appState, type AppState } from './websocket';
 
 class MockWebSocket {
 	url: string;
@@ -630,6 +630,31 @@ describe('WebSocket Client', () => {
 
 			expect(mockInstance?.send).toHaveBeenCalledWith(
 				JSON.stringify({ type: 'create-mapping', payload: mapping })
+			);
+		});
+
+		it('should send updateMapping command when connected', async () => {
+			const mapping: Mapping = {
+				uuid: 'mapping-1',
+				control_id: 'test-1',
+				justification: 'Updated justification',
+				source_entries: [{ location: 'test/location' }],
+				status: 'implemented',
+				hash: 'new-hash'
+			};
+
+			const oldCompositeKey = 'test-1:old-hash';
+
+			await wsClient.updateMapping(oldCompositeKey, mapping);
+
+			expect(mockInstance?.send).toHaveBeenCalledWith(
+				JSON.stringify({
+					type: 'update-mapping',
+					payload: {
+						old_composite_key: oldCompositeKey,
+						mapping
+					}
+				})
 			);
 		});
 

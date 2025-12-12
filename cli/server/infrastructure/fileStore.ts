@@ -6,6 +6,7 @@
  * Uses predictable filenames based on control IDs
  */
 
+import { createHash } from 'crypto';
 import {
 	existsSync,
 	promises as fs,
@@ -20,7 +21,6 @@ import * as yaml from 'js-yaml';
 import { join } from 'path';
 import type { Control, Mapping } from '../types';
 import { getControlId } from './controlHelpers';
-import { createHash } from 'crypto';
 
 export interface ControlMetadata {
 	controlId: string;
@@ -60,6 +60,46 @@ export class FileStore {
 		// Load control metadata if directories exist
 		if (existsSync(this.controlsDir)) {
 			this.refreshControlsCache();
+		}
+	}
+
+	/**
+	 * Update a single mapping in place, preserving file order
+	 */
+	async updateMapping(oldCompositeKey: string, updatedMapping: Mapping): Promise<void> {
+		// Find the mapping in all mapping files
+		const mappingFiles = this.getAllMappingFiles();
+
+		for (const file of mappingFiles) {
+			try {
+				const content = readFileSync(file, 'utf8');
+				let mappings: Mapping[] = (yaml.load(content) as Mapping[]) || [];
+
+				let changed = false;
+				mappings = mappings.map((m) => {
+					const hash = createHash('sha256').update(JSON.stringify(m)).digest('hex');
+					if (`${m.control_id}:${hash}` === oldCompositeKey) {
+						// Replace with updated mapping, stripping hash before saving
+						const clean = { ...updatedMapping } as Mapping;
+						delete (clean as any).hash;
+						changed = true;
+						return clean;
+					}
+					return m;
+				});
+
+				if (changed) {
+					const yamlContent = yaml.dump(mappings, {
+						indent: 2,
+						lineWidth: -1,
+						noRefs: true
+					});
+					writeFileSync(file, yamlContent, 'utf8');
+					return; // Updated mapping, we're done
+				}
+			} catch (error) {
+				console.error(`Error processing mapping file ${file}:`, error);
+			}
 		}
 	}
 
@@ -315,8 +355,8 @@ export class FileStore {
 
 		// Try to load metadata to get controlOrder if available
 		let controlOrder: string[] | null = null;
+		const lulaConfigPath = join(this.baseDir, 'lula.yaml');
 		try {
-			const lulaConfigPath = join(this.baseDir, 'lula.yaml');
 			if (existsSync(lulaConfigPath)) {
 				const content = readFileSync(lulaConfigPath, 'utf8');
 				const metadata = yaml.load(content) as any;
