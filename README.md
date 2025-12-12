@@ -241,7 +241,7 @@ properties:
 
 ### GitOps Workflow
 
-Manage compliance like code with full GitOps practices:
+Manage compliance like code with GitOps practices:
 
 ```bash
 # Create feature branch for control updates
