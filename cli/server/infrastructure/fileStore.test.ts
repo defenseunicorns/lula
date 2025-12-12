@@ -3,6 +3,7 @@
 
 import { createHash } from 'crypto';
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'fs';
+import * as yaml from 'js-yaml';
 import { join } from 'path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Control, Mapping } from '../types';
@@ -395,6 +396,85 @@ control_id_field: id`;
 			expect(content).toContain('Updated mapping');
 			expect(content).toContain('implemented');
 			expect(content).toContain('Original mapping');
+		});
+	});
+
+	describe('updateMapping', () => {
+		it('should update a mapping in place (preserving file order) and strip hash before saving', async () => {
+			const original1: Partial<Mapping> = {
+				uuid: 'update-test-1',
+				control_id: 'AC-1',
+				justification: 'Original 1',
+				source_entries: [],
+				status: 'planned'
+			};
+			const original2: Partial<Mapping> = {
+				uuid: 'update-test-2',
+				control_id: 'AC-1',
+				justification: 'Original 2',
+				source_entries: [],
+				status: 'planned'
+			};
+
+			await fileStore.saveMapping(original1 as Mapping);
+			await fileStore.saveMapping(original2 as Mapping);
+
+			const mappingFile = join(tempDir, 'mappings', 'AC', 'AC-1-mappings.yaml');
+			const originalContent = readFileSync(mappingFile, 'utf8');
+			const parsed = (yaml.load(originalContent) as Mapping[]) || [];
+			expect(parsed).toHaveLength(2);
+
+			const originalHash1 = createHash('sha256').update(JSON.stringify(parsed[0])).digest('hex');
+			const oldCompositeKey = `AC-1:${originalHash1}`;
+
+			const updated: Partial<Mapping> = {
+				...original1,
+				justification: 'Updated 1',
+				status: 'implemented',
+				hash: 'runtime-hash-should-not-be-saved'
+			};
+
+			await fileStore.updateMapping(oldCompositeKey, updated as Mapping);
+
+			const updatedContent = readFileSync(mappingFile, 'utf8');
+			expect(updatedContent).toContain('Updated 1');
+			expect(updatedContent).toContain('Original 2');
+			expect(updatedContent).not.toContain('runtime-hash-should-not-be-saved');
+			expect(updatedContent).not.toContain('hash:');
+
+			const updatedParsed = (yaml.load(updatedContent) as Mapping[]) || [];
+			expect(updatedParsed).toHaveLength(2);
+			expect(updatedParsed[0].uuid).toBe('update-test-1');
+			expect(updatedParsed[0].justification).toBe('Updated 1');
+			expect(updatedParsed[1].uuid).toBe('update-test-2');
+			expect(updatedParsed[1].justification).toBe('Original 2');
+		});
+
+		it('should be a no-op when the composite key does not match any mapping', async () => {
+			const original: Partial<Mapping> = {
+				uuid: 'update-miss-1',
+				control_id: 'AC-1',
+				justification: 'Original',
+				source_entries: [],
+				status: 'planned'
+			};
+
+			await fileStore.saveMapping(original as Mapping);
+
+			const mappingFile = join(tempDir, 'mappings', 'AC', 'AC-1-mappings.yaml');
+			const before = readFileSync(mappingFile, 'utf8');
+
+			const updated: Partial<Mapping> = {
+				...original,
+				justification: 'Should not be written'
+			};
+
+			await expect(
+				fileStore.updateMapping('AC-1:does-not-exist', updated as Mapping)
+			).resolves.not.toThrow();
+
+			const after = readFileSync(mappingFile, 'utf8');
+			expect(after).toBe(before);
 		});
 	});
 
