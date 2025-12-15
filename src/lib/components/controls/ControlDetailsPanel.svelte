@@ -49,52 +49,48 @@
 	
 	// Formatted control with CCI definitions properly split
 	const formattedControl = $derived.by(() => {
-		// Create a view model based on editedControl without mutating it
-		const viewModel = { ...editedControl };
-		
-		const cciDefinition = viewModel.cci_definition || viewModel['cci-definition'];
-		if (viewModel.cci && cciDefinition) {
-			// Split the CCI list, handling semicolon separation
-			const cciList = viewModel.cci
-				.split(';')
-				.map((cci: string) => cci.trim())
-				.filter((cci: string) => cci.length > 0);
-			
-			// Only format if there are multiple CCIs
-			if (cciList.length > 1) {
-				const definitions = cciDefinition;
-				const formattedDefinitions: string[] = [];
-				
-				// For each CCI in the list, try to extract its definition
-				for (const cci of cciList) {
-					const pattern = new RegExp(`${cci}:\\s*([^;]+)(?:;|$)`, 'i');
-					const match = definitions.match(pattern);
-					
-					if (match) {
-						const definition = match[1].trim();
-						// Remove any trailing period and add it back for consistency
-						const cleanDefinition = definition.replace(/\.$/, '');
-						formattedDefinitions.push(`${cci}: ${cleanDefinition}.`);
-					} else {
-						// If pattern matching fails, look for the CCI anywhere in the string
-						// and try to extract the text that follows it
-						const fallbackPattern = new RegExp(`${cci}[^;]*`, 'i');
-						const fallbackMatch = definitions.match(fallbackPattern);
-						if (fallbackMatch) {
-							formattedDefinitions.push(fallbackMatch[0].trim());
-						}
-					}
-				}
-				
-				if (formattedDefinitions.length > 0) {
-					viewModel.cci_definition = formattedDefinitions.join('\n\n');
-					viewModel['cci-definition'] = formattedDefinitions.join('\n\n');
-				}
-			}
-		}
-		
-		return viewModel;
-	});
+  const viewModel = { ...editedControl };
+
+  const cciRaw = viewModel.cci;
+  const defRaw = viewModel.cci_definition ?? viewModel["cci-definition"];
+
+  if (typeof cciRaw !== "string" || typeof defRaw !== "string") {
+    return viewModel;
+  }
+
+  const cciList = cciRaw
+    .split(";")
+    .map((c) => c.trim())
+    .filter(Boolean);
+
+  if (cciList.length < 2) return viewModel;
+
+  const text = defRaw;
+  const segments: string[] = [];
+
+  // Find start indexes of each CCI in the definition
+  const positions = cciList
+    .map((cci) => {
+      const idx = text.indexOf(`${cci}:`);
+      return idx >= 0 ? { cci, idx } : null;
+    })
+    .filter((v): v is { cci: string; idx: number } => Boolean(v))
+    .sort((a, b) => a.idx - b.idx);
+
+  for (let i = 0; i < positions.length; i++) {
+    const start = positions[i].idx;
+    const end = positions[i + 1]?.idx ?? text.length;
+    segments.push(text.slice(start, end).trim());
+  }
+
+  if (segments.length > 0) {
+    const formatted = segments.join("\n\n\n");
+    viewModel.cci_definition = formatted;
+    viewModel["cci-definition"] = formatted;
+  }
+
+  return viewModel;
+});
 	
 	// Check if tabs have any fields
 	const hasCustomFields = $derived(() => {

@@ -23,7 +23,7 @@
 		field && 
 		(field.ui_type === 'textarea' || field.ui_type === 'long_text') &&
 		typeof value === 'string' &&
-		value.includes('\n')
+		value.includes('\n') && !value.includes('\n\n\n')
 	);
 </script>
 
