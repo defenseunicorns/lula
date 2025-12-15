@@ -28,9 +28,9 @@
 
 	let { control }: Props = $props();
 
-	// Component state
-	let editedControl = $state({ ...control });
-	let originalControl = $state({ ...control });
+	// Component state - initialize with reactive derived values
+	let editedControl = $state<Control>({ ...control });
+	let originalControl = $state<Control>({ ...control });
 	let activeTab = $state<'details' | 'narrative' | 'custom' | 'mappings' | 'history'>('details');
 	let saveDebounceTimeout: ReturnType<typeof setTimeout> | null = null;
 	let isSaving = $state(false);
@@ -47,6 +47,55 @@
 		isSaving ? 'saving' : (hasChanges ? 'unsaved' : (showSavedMessage ? 'just-saved' : 'clean'))
 	);
 	
+	// Formatted control with CCI definitions properly split
+	const formattedControl = $derived.by(() => {
+		// Create a view model based on editedControl without mutating it
+		const viewModel = { ...editedControl };
+		
+		const cciDefinition = viewModel.cci_definition || viewModel['cci-definition'];
+		if (viewModel.cci && cciDefinition) {
+			// Split the CCI list, handling semicolon separation
+			const cciList = viewModel.cci
+				.split(';')
+				.map((cci: string) => cci.trim())
+				.filter((cci: string) => cci.length > 0);
+			
+			// Only format if there are multiple CCIs
+			if (cciList.length > 1) {
+				const definitions = cciDefinition;
+				const formattedDefinitions: string[] = [];
+				
+				// For each CCI in the list, try to extract its definition
+				for (const cci of cciList) {
+					const pattern = new RegExp(`${cci}:\\s*([^;]+)(?:;|$)`, 'i');
+					const match = definitions.match(pattern);
+					
+					if (match) {
+						const definition = match[1].trim();
+						// Remove any trailing period and add it back for consistency
+						const cleanDefinition = definition.replace(/\.$/, '');
+						formattedDefinitions.push(`${cci}: ${cleanDefinition}.`);
+					} else {
+						// If pattern matching fails, look for the CCI anywhere in the string
+						// and try to extract the text that follows it
+						const fallbackPattern = new RegExp(`${cci}[^;]*`, 'i');
+						const fallbackMatch = definitions.match(fallbackPattern);
+						if (fallbackMatch) {
+							formattedDefinitions.push(fallbackMatch[0].trim());
+						}
+					}
+				}
+				
+				if (formattedDefinitions.length > 0) {
+					viewModel.cci_definition = formattedDefinitions.join('\n\n');
+					viewModel['cci-definition'] = formattedDefinitions.join('\n\n');
+				}
+			}
+		}
+		
+		return viewModel;
+	});
+	
 	// Check if tabs have any fields
 	const hasCustomFields = $derived(() => {
 		if (!fieldSchema) return false;
@@ -60,12 +109,14 @@
 
 	// Watch for control changes - only reset when ID changes
 	$effect(() => {
-		if (control.id !== editedControl?.id) {
+		// Access control within the effect to properly track changes
+		const currentControl = control;
+		if (currentControl.id !== editedControl?.id) {
 			if (saveDebounceTimeout) {
 				clearTimeout(saveDebounceTimeout);
 			}
-			editedControl = { ...control };
-			originalControl = { ...control };
+			editedControl = { ...currentControl };
+			originalControl = { ...currentControl };
 			activeTab = 'details';
 		}
 	});
@@ -211,9 +262,9 @@
 <main class="flex-1 overflow-auto pt-4">
 	<div class="">
 		{#if activeTab === 'details'}
-			<OverviewTab control={editedControl} {fieldSchema} />
+			<OverviewTab control={formattedControl} {fieldSchema} />
 		{:else if activeTab === 'narrative'}
-			<ImplementationTab control={editedControl} {fieldSchema} />
+			<ImplementationTab control={formattedControl} {fieldSchema} />
 		{:else if activeTab === 'custom'}
 			<CustomFieldsTab 
 				control={editedControl} 
@@ -222,12 +273,11 @@
 			/>
 		{:else if activeTab === 'mappings'}
 			<MappingsTab 
-				{control} 
+				control={formattedControl} 
 				mappings={associatedMappings} 
 			/>
 		{:else if activeTab === 'history'}
 			<TimelineTab 
-				{control} 
 				timeline={control.timeline}
 			/>
 		{/if}
