@@ -28,9 +28,9 @@
 
 	let { control }: Props = $props();
 
-	// Component state
-	let editedControl = $state({ ...control });
-	let originalControl = $state({ ...control });
+	// Component state - initialize with reactive derived values
+	let editedControl = $state<Control>({ ...control });
+	let originalControl = $state<Control>({ ...control });
 	let activeTab = $state<'details' | 'narrative' | 'custom' | 'mappings' | 'history'>('details');
 	let saveDebounceTimeout: ReturnType<typeof setTimeout> | null = null;
 	let isSaving = $state(false);
@@ -47,6 +47,51 @@
 		isSaving ? 'saving' : (hasChanges ? 'unsaved' : (showSavedMessage ? 'just-saved' : 'clean'))
 	);
 	
+	// Formatted control with CCI definitions properly split
+	const formattedControl = $derived.by(() => {
+  const viewModel = { ...editedControl };
+
+  const cciRaw = viewModel.cci;
+  const defRaw = viewModel.cci_definition ?? viewModel["cci-definition"];
+
+  if (typeof cciRaw !== "string" || typeof defRaw !== "string") {
+    return viewModel;
+  }
+
+  const cciList = cciRaw
+    .split(";")
+    .map((c) => c.trim())
+    .filter(Boolean);
+
+  if (cciList.length < 2) return viewModel;
+
+  const text = defRaw;
+  const segments: string[] = [];
+
+  // Find start indexes of each CCI in the definition
+  const positions = cciList
+    .map((cci) => {
+      const idx = text.indexOf(`${cci}:`);
+      return idx >= 0 ? { cci, idx } : null;
+    })
+    .filter((v): v is { cci: string; idx: number } => Boolean(v))
+    .sort((a, b) => a.idx - b.idx);
+
+  for (let i = 0; i < positions.length; i++) {
+    const start = positions[i].idx;
+    const end = positions[i + 1]?.idx ?? text.length;
+    segments.push(text.slice(start, end).trim());
+  }
+
+  if (segments.length > 0) {
+    const formatted = segments.join("\n\n\n");
+    viewModel.cci_definition = formatted;
+    viewModel["cci-definition"] = formatted;
+  }
+
+  return viewModel;
+});
+	
 	// Check if tabs have any fields
 	const hasCustomFields = $derived(() => {
 		if (!fieldSchema) return false;
@@ -60,12 +105,14 @@
 
 	// Watch for control changes - only reset when ID changes
 	$effect(() => {
-		if (control.id !== editedControl?.id) {
+		// Access control within the effect to properly track changes
+		const currentControl = control;
+		if (currentControl.id !== editedControl?.id) {
 			if (saveDebounceTimeout) {
 				clearTimeout(saveDebounceTimeout);
 			}
-			editedControl = { ...control };
-			originalControl = { ...control };
+			editedControl = { ...currentControl };
+			originalControl = { ...currentControl };
 			activeTab = 'details';
 		}
 	});
@@ -211,9 +258,9 @@
 <main class="flex-1 overflow-auto pt-4">
 	<div class="">
 		{#if activeTab === 'details'}
-			<OverviewTab control={editedControl} {fieldSchema} />
+			<OverviewTab control={formattedControl} {fieldSchema} />
 		{:else if activeTab === 'narrative'}
-			<ImplementationTab control={editedControl} {fieldSchema} />
+			<ImplementationTab control={formattedControl} {fieldSchema} />
 		{:else if activeTab === 'custom'}
 			<CustomFieldsTab 
 				control={editedControl} 
@@ -222,12 +269,11 @@
 			/>
 		{:else if activeTab === 'mappings'}
 			<MappingsTab 
-				{control} 
+				control={formattedControl} 
 				mappings={associatedMappings} 
 			/>
 		{:else if activeTab === 'history'}
 			<TimelineTab 
-				{control} 
 				timeline={control.timeline}
 			/>
 		{/if}
