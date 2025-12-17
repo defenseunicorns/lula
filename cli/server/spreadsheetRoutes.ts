@@ -883,18 +883,14 @@ router.get('/export-controls', async (req, res) => {
 	}
 });
 
-// Helper function for consistent mapping formatting
 export function formatMappingEntry(mapping: any): string {
 	const justification = mapping.description || mapping.justification || '';
 	const status = mapping.status || 'Unknown';
 	const cci = mapping.cci || '';
 
-	// Use justification if available, otherwise use status in brackets
 	const finalJustification = justification.trim() !== '' ? justification : `[${status}]`;
-
-	// Add CCI prefix if CCI is available
 	if (cci.trim() !== '') {
-		return `CCI - ${cci}: ${finalJustification}`;
+		return `CCI ${cci}: ${finalJustification}`;
 	}
 
 	return finalJustification;

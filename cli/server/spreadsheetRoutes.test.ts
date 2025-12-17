@@ -149,21 +149,21 @@ describe('spreadsheetRoutes', () => {
 		it('should format entry with justification and CCI', () => {
 			const mapping = {
 				description: 'This is a test justification',
-				cci: '111',
+				cci: '000039',
 				status: 'Satisfied'
 			};
 			const result = formatMappingEntry(mapping);
-			expect(result).toBe('CCI - 111: This is a test justification');
+			expect(result).toBe('CCI 000039: This is a test justification');
 		});
 
 		it('should format entry with justification field instead of description and CCI', () => {
 			const mapping = {
 				justification: 'This is a justification field',
-				cci: '222',
+				cci: '000039',
 				status: 'Satisfied'
 			};
 			const result = formatMappingEntry(mapping);
-			expect(result).toBe('CCI - 222: This is a justification field');
+			expect(result).toBe('CCI 000039: This is a justification field');
 		});
 
 		it('should format entry with justification but no CCI', () => {
@@ -178,11 +178,11 @@ describe('spreadsheetRoutes', () => {
 		it('should use status when justification is empty', () => {
 			const mapping = {
 				description: '',
-				cci: '333',
+				cci: '000039',
 				status: 'Not Satisfied'
 			};
 			const result = formatMappingEntry(mapping);
-			expect(result).toBe('CCI - 333: [Not Satisfied]');
+			expect(result).toBe('CCI 000039: [Not Satisfied]');
 		});
 
 		it('should use status when justification is whitespace only', () => {
@@ -196,19 +196,19 @@ describe('spreadsheetRoutes', () => {
 
 		it('should use status when no justification fields are provided', () => {
 			const mapping = {
-				cci: '555',
+				cci: '000039',
 				status: 'Not Applicable'
 			};
 			const result = formatMappingEntry(mapping);
-			expect(result).toBe('CCI - 555: [Not Applicable]');
+			expect(result).toBe('CCI 000039: [Not Applicable]');
 		});
 
 		it('should handle missing status field', () => {
 			const mapping = {
-				cci: '666'
+				cci: '000039'
 			};
 			const result = formatMappingEntry(mapping);
-			expect(result).toBe('CCI - 666: [Unknown]');
+			expect(result).toBe('CCI 000039: [Unknown]');
 		});
 
 		it('should handle empty CCI field', () => {
@@ -225,11 +225,11 @@ describe('spreadsheetRoutes', () => {
 			const mapping = {
 				description: 'Description field',
 				justification: 'Justification field',
-				cci: '1234',
+				cci: '000039',
 				status: 'Satisfied'
 			};
 			const result = formatMappingEntry(mapping);
-			expect(result).toBe('CCI - 1234: Description field');
+			expect(result).toBe('CCI 000039: Description field');
 		});
 
 		it('should handle completely empty mapping object', () => {
