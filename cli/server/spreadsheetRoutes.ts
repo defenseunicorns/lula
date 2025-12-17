@@ -858,7 +858,8 @@ router.get('/export-controls', async (req, res) => {
 				mappings: controlMappings.map((m) => ({
 					uuid: m.uuid,
 					status: m.status,
-					description: m.justification || ''
+					description: m.justification || '',
+					cci: m.cci || ''
 				}))
 			};
 		});
@@ -1042,9 +1043,16 @@ function exportAsCSVWithMapping(
 					.map((m: any) => {
 						const justification = m.description || m.justification || '';
 						const status = m.status || 'Unknown';
-						return justification.trim() !== '' ? justification : `[${status}]`;
+						const finalJustification = justification.trim() !== '' ? justification : `[${status}]`;
+						const cci = m.cci || '';
+
+						if (cci.trim() !== '') {
+							return `CCI - ${cci}: ${finalJustification}`;
+						}
+
+						return finalJustification;
 					})
-					.join('\n');
+					.join('\n\n');
 				return `"${mappingsStr.replace(/"/g, '""')}"`;
 			}
 
@@ -1192,9 +1200,21 @@ async function exportAsExcelWithMapping(
 				if (Array.isArray(mappingsValue) && mappingsValue.length > 0) {
 					// Show mappings justification - collect all non-empty justifications
 					const mappingsStr = mappingsValue
-						.map((m: any) => m.description || m.justification || '')
+						.map((m: any) => {
+							const justification = m.description || m.justification || '';
+							const cci = m.cci || '';
+
+							if (justification.trim() !== '') {
+								// If we have CCI, prefix the justification
+								if (cci.trim() !== '') {
+									return `${cci}: ${justification}`;
+								}
+								return justification;
+							}
+							return '';
+						})
 						.filter((desc: string) => desc && desc.trim() !== '')
-						.join('\n');
+						.join('\n\n');
 
 					if (mappingsStr.trim() !== '') {
 						// We have justifications, use them
@@ -1218,9 +1238,18 @@ async function exportAsExcelWithMapping(
 					.map((m: any) => {
 						const justification = m.description || m.justification || '';
 						const status = m.status || 'Unknown';
-						return justification.trim() !== '' ? justification : `[${status}]`;
+						const cci = m.cci || '';
+
+						if (justification.trim() !== '') {
+							// If we have CCI, prefix the justification
+							if (cci.trim() !== '') {
+								return `${cci}: ${justification}`;
+							}
+							return justification;
+						}
+						return `[${status}]`;
 					})
-					.join('\n');
+					.join('\n\n');
 				exportControl[displayName] = mappingsStr;
 			} else if (Array.isArray(value)) {
 				exportControl[displayName] = value.join('; ');
@@ -1402,7 +1431,8 @@ router.post('/export-csv', async (req, res) => {
 				mappings: controlMappings.map((m) => ({
 					uuid: m.uuid,
 					status: m.status,
-					description: m.justification || ''
+					description: m.justification || '',
+					cci: m.cci || ''
 				}))
 			};
 		});
