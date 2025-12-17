@@ -1047,7 +1047,7 @@ function exportAsCSVWithMapping(
 						const cci = m.cci || '';
 
 						if (cci.trim() !== '') {
-							return `CCI - ${cci}: ${finalJustification}`;
+							return `${cci}: ${finalJustification}`;
 						}
 
 						return finalJustification;
