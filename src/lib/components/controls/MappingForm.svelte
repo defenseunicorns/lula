@@ -54,16 +54,28 @@
 			.filter(Boolean)
 	);
 
-	
-	let selectedCCIs = $derived(
-		(formData.cci ?? '')
+	function parseCciList(value: string | undefined | null): string[] {
+		return (value ?? '')
 			.split(';')
 			.map((s) => s.trim())
-			.filter(Boolean)
-	);
+			.filter(Boolean);
+	}
+	
+	let selectedCCIs = $state<string[]>(parseCciList(formData.cci));
 
 	$effect(() => {
-		formData.cci = selectedCCIs.join('; ');
+		const joined = selectedCCIs.join('; ');
+		if (formData.cci !== joined) {
+			formData.cci = joined;
+		}
+	});
+
+	$effect(() => {
+		const parsed = parseCciList(formData.cci);
+		// Keep the multiselect UI in sync if formData.cci changes externally (reset/edit)
+		if (parsed.join('; ') !== selectedCCIs.join('; ')) {
+			selectedCCIs = parsed;
+		}
 	});
 
 	function handleSubmit() {
@@ -80,6 +92,7 @@
 			source_entries: initialData.source_entries || [],
 			cci: initialData.cci ?? ''
 		};
+		selectedCCIs = parseCciList(formData.cci);
 		newLocation = '';
 		newShasum = '';
 		onCancel();
