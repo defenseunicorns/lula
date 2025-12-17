@@ -105,7 +105,8 @@ import {
 	toKebabCase,
 	detectValueType,
 	parseCSV,
-	extractFamilyFromControlId
+	extractFamilyFromControlId,
+	formatMappingEntry
 } from './spreadsheetRoutes';
 import type { ImportParameters } from './spreadsheetRoutes';
 import { getServerState } from './serverState';
@@ -142,6 +143,100 @@ describe('spreadsheetRoutes', () => {
 
 	afterEach(() => {
 		vi.restoreAllMocks();
+	});
+
+	describe('formatMappingEntry', () => {
+		it('should format entry with justification and CCI', () => {
+			const mapping = {
+				description: 'This is a test justification',
+				cci: '111',
+				status: 'Satisfied'
+			};
+			const result = formatMappingEntry(mapping);
+			expect(result).toBe('CCI - 111: This is a test justification');
+		});
+
+		it('should format entry with justification field instead of description and CCI', () => {
+			const mapping = {
+				justification: 'This is a justification field',
+				cci: '222',
+				status: 'Satisfied'
+			};
+			const result = formatMappingEntry(mapping);
+			expect(result).toBe('CCI - 222: This is a justification field');
+		});
+
+		it('should format entry with justification but no CCI', () => {
+			const mapping = {
+				description: 'This is a test justification without CCI',
+				status: 'Satisfied'
+			};
+			const result = formatMappingEntry(mapping);
+			expect(result).toBe('This is a test justification without CCI');
+		});
+
+		it('should use status when justification is empty', () => {
+			const mapping = {
+				description: '',
+				cci: '333',
+				status: 'Not Satisfied'
+			};
+			const result = formatMappingEntry(mapping);
+			expect(result).toBe('CCI - 333: [Not Satisfied]');
+		});
+
+		it('should use status when justification is whitespace only', () => {
+			const mapping = {
+				description: '   \t\n   ',
+				status: 'Partially Satisfied'
+			};
+			const result = formatMappingEntry(mapping);
+			expect(result).toBe('[Partially Satisfied]');
+		});
+
+		it('should use status when no justification fields are provided', () => {
+			const mapping = {
+				cci: '555',
+				status: 'Not Applicable'
+			};
+			const result = formatMappingEntry(mapping);
+			expect(result).toBe('CCI - 555: [Not Applicable]');
+		});
+
+		it('should handle missing status field', () => {
+			const mapping = {
+				cci: '666'
+			};
+			const result = formatMappingEntry(mapping);
+			expect(result).toBe('CCI - 666: [Unknown]');
+		});
+
+		it('should handle empty CCI field', () => {
+			const mapping = {
+				description: 'Test justification',
+				cci: '',
+				status: 'Satisfied'
+			};
+			const result = formatMappingEntry(mapping);
+			expect(result).toBe('Test justification');
+		});
+
+		it('should prioritize description over justification field', () => {
+			const mapping = {
+				description: 'Description field',
+				justification: 'Justification field',
+				cci: '1234',
+				status: 'Satisfied'
+			};
+			const result = formatMappingEntry(mapping);
+			expect(result).toBe('CCI - 1234: Description field');
+		});
+
+		it('should handle completely empty mapping object', () => {
+			const mapping = {};
+			const result = formatMappingEntry(mapping);
+			expect(result).toBe('[Unknown]');
+		});
 	});
 
 	describe('scanControlSets', () => {
