@@ -71,7 +71,7 @@
 			{#each options as option (option)}
 				{@const selected = (value as string[]).includes(option)}
 				<label
-					class={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm cursor-pointer transition-colors
+					class={`relative inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm cursor-pointer transition-colors
 						focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2
 						dark:focus-within:ring-offset-gray-900
 						${
