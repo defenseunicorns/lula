@@ -125,7 +125,7 @@ importers:
         version: 4.0.16(@vitest/browser@4.0.16(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.2))(vitest@4.0.16(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.2)))(vitest@4.0.16(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.2))
       carbon-icons-svelte:
         specifier: ^13.5.0
-        version: 13.7.0
+        version: 13.8.0
       carbon-preprocess-svelte:
         specifier: ^0.11.11
         version: 0.11.16
@@ -1498,8 +1498,8 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  carbon-icons-svelte@13.7.0:
-    resolution: {integrity: sha512-M0QmdcPs1IJ5QfdK+GxBdo83OWo6oj1Gmj1qTUmhyGGkUB3WCwuXCpBw1sWdeiyn91SYNNZyHpBRw7bI036LBg==}
+  carbon-icons-svelte@13.8.0:
+    resolution: {integrity: sha512-1sTbSOhiKjs7BXj2Ctk6tekSNX4DLUy9miNeYaQK/jeveM4x/+et09JH8xnrwRE1QseLdRd3sOoVwqPZEYsdkA==}
 
   carbon-preprocess-svelte@0.11.16:
     resolution: {integrity: sha512-3EkCVftIreBfh8CuJOv/VQXw0LIquMwJ1FgNj8uZXZ0cNnKHS8mci5I1hanfKd8N2mcQZAK1vMjebx6d3zj3EQ==}
@@ -5500,7 +5500,7 @@ snapshots:
 
   callsites@3.1.0: {}
 
-  carbon-icons-svelte@13.7.0: {}
+  carbon-icons-svelte@13.8.0: {}
 
   carbon-preprocess-svelte@0.11.16:
     dependencies:
