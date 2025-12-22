@@ -125,10 +125,10 @@ importers:
         version: 4.0.16(@vitest/browser@4.0.16(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.2))(vitest@4.0.16(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.2)))(vitest@4.0.16(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(lightningcss@1.30.2)(tsx@4.21.0)(yaml@2.8.2))
       carbon-icons-svelte:
         specifier: ^13.5.0
-        version: 13.7.0
+        version: 13.8.0
       carbon-preprocess-svelte:
         specifier: ^0.11.11
-        version: 0.11.16
+        version: 0.11.18
       concurrently:
         specifier: ^9.2.1
         version: 9.2.1
@@ -176,7 +176,7 @@ importers:
         version: 5.46.0
       svelte-check:
         specifier: ^4.3.1
-        version: 4.3.4(picomatch@4.0.3)(svelte@5.46.0)(typescript@5.9.3)
+        version: 4.3.5(picomatch@4.0.3)(svelte@5.46.0)(typescript@5.9.3)
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.4.0
@@ -1498,11 +1498,11 @@ packages:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
 
-  carbon-icons-svelte@13.7.0:
-    resolution: {integrity: sha512-M0QmdcPs1IJ5QfdK+GxBdo83OWo6oj1Gmj1qTUmhyGGkUB3WCwuXCpBw1sWdeiyn91SYNNZyHpBRw7bI036LBg==}
+  carbon-icons-svelte@13.8.0:
+    resolution: {integrity: sha512-1sTbSOhiKjs7BXj2Ctk6tekSNX4DLUy9miNeYaQK/jeveM4x/+et09JH8xnrwRE1QseLdRd3sOoVwqPZEYsdkA==}
 
-  carbon-preprocess-svelte@0.11.16:
-    resolution: {integrity: sha512-3EkCVftIreBfh8CuJOv/VQXw0LIquMwJ1FgNj8uZXZ0cNnKHS8mci5I1hanfKd8N2mcQZAK1vMjebx6d3zj3EQ==}
+  carbon-preprocess-svelte@0.11.18:
+    resolution: {integrity: sha512-Wzxnm5nM0KPic6p2At5MJDzb53gQZu0WjdJdD2SJRzXbhEw3fB3qL2vm8rccBo/HnBq4RmljzeVjiHHWGRaVDg==}
 
   chai@6.2.1:
     resolution: {integrity: sha512-p4Z49OGG5W/WBCPSS/dH3jQ73kD6tiMmUM+bckNK6Jr5JHMG3k9bg/BvKR8lKmtVBKmOiuVaV2ws8s9oSbwysg==}
@@ -3669,8 +3669,8 @@ packages:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
 
-  svelte-check@4.3.4:
-    resolution: {integrity: sha512-DVWvxhBrDsd+0hHWKfjP99lsSXASeOhHJYyuKOFYJcP7ThfSCKgjVarE8XfuMWpS5JV3AlDf+iK1YGGo2TACdw==}
+  svelte-check@4.3.5:
+    resolution: {integrity: sha512-e4VWZETyXaKGhpkxOXP+B/d0Fp/zKViZoJmneZWe/05Y2aqSKj3YN2nLfYPJBQ87WEiY4BQCQ9hWGu9mPT1a1Q==}
     engines: {node: '>= 18.0.0'}
     hasBin: true
     peerDependencies:
@@ -5500,9 +5500,9 @@ snapshots:
 
   callsites@3.1.0: {}
 
-  carbon-icons-svelte@13.7.0: {}
+  carbon-icons-svelte@13.8.0: {}
 
-  carbon-preprocess-svelte@0.11.16:
+  carbon-preprocess-svelte@0.11.18:
     dependencies:
       estree-walker: 2.0.2
       magic-string: 0.30.21
@@ -7656,7 +7656,7 @@ snapshots:
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
-  svelte-check@4.3.4(picomatch@4.0.3)(svelte@5.46.0)(typescript@5.9.3):
+  svelte-check@4.3.5(picomatch@4.0.3)(svelte@5.46.0)(typescript@5.9.3):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       chokidar: 4.0.3
