@@ -1,6 +1,7 @@
 // cli/server/websocketServer.test.ts
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { createHash } from 'crypto';
 import type { Server } from 'http';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { WebSocket, WebSocketServer } from 'ws';
 
 // --- Mocks ------------------------------------------------------------------
@@ -33,17 +34,21 @@ vi.mock('./serverState', () => ({
 }));
 
 vi.mock('crypto', () => ({
-	randomUUID: () => 'test-uuid-123'
+	randomUUID: () => 'test-uuid-123',
+	createHash: vi.fn(() => ({
+		update: vi.fn().mockReturnThis(),
+		digest: vi.fn(() => 'test-checksum-abc123')
+	}))
 }));
 
 // --- Imports after mocks ----------------------------------------------------
 
-import { wsManager } from './websocketServer';
-import type { WSMessage, WSMessageType } from './websocketServer';
+import type { CLIServerState } from './serverState';
 import { getServerState, loadAllData } from './serverState';
 import { scanControlSets } from './spreadsheetRoutes';
-import type { CLIServerState } from './serverState';
 import type { Control, Mapping } from './types';
+import type { WSMessage, WSMessageType } from './websocketServer';
+import { wsManager } from './websocketServer';
 
 // --- Local helper types -----------------------------------------------------
 
@@ -64,6 +69,7 @@ interface MockFileStore {
 	saveControl: ReturnType<typeof vi.fn>;
 	saveMapping: ReturnType<typeof vi.fn>;
 	deleteMapping: ReturnType<typeof vi.fn>;
+	updateMapping: ReturnType<typeof vi.fn>;
 	loadControl: ReturnType<typeof vi.fn>;
 }
 
@@ -132,6 +138,7 @@ describe('websocketServer', () => {
 				saveControl: vi.fn().mockResolvedValue(undefined),
 				saveMapping: vi.fn().mockResolvedValue(undefined),
 				deleteMapping: vi.fn().mockResolvedValue(undefined),
+				updateMapping: vi.fn().mockResolvedValue(undefined),
 				loadControl: vi.fn().mockResolvedValue(undefined)
 			},
 			gitHistory: {},
@@ -482,6 +489,64 @@ describe('websocketServer', () => {
 					})
 				);
 			});
+
+			it('should handle update-mapping command', async () => {
+				// Seed existing mapping in cache and indexes
+				const existingMapping: Mapping = {
+					uuid: 'mapping-1',
+					control_id: 'AC-1',
+					justification: 'Original justification',
+					source_entries: [],
+					status: 'planned',
+					hash: 'old-hash'
+				};
+				const oldCompositeKey = 'AC-1:old-hash';
+				mockState.mappingsCache.set(oldCompositeKey, existingMapping);
+				mockState.mappingsByFamily.set('AC', new Set(['old-hash']));
+				mockState.mappingsByControl.set('AC-1', new Set(['old-hash']));
+
+				const message = {
+					type: 'update-mapping',
+					payload: {
+						old_composite_key: oldCompositeKey,
+						mapping: {
+							control_id: 'AC-1',
+							justification: 'Updated justification',
+							status: 'implemented',
+							hash: 'new-hash'
+						}
+					}
+				};
+				const messageStr = JSON.stringify(message);
+
+				if (messageHandler) {
+					await messageHandler(messageStr);
+				}
+
+				// fileStore.updateMapping should be called with old key and updated mapping
+				expect(mockState.fileStore.updateMapping).toHaveBeenCalledWith(
+					oldCompositeKey,
+					expect.objectContaining({ justification: 'Updated justification' })
+				);
+
+				// Cache should now contain a single, updated mapping under a new key
+				const entries = Array.from(mockState.mappingsCache.entries());
+				expect(entries).toHaveLength(1);
+				const [newKey, newMapping] = entries[0];
+				expect(newKey).not.toBe(oldCompositeKey);
+				expect(newMapping.justification).toBe('Updated justification');
+				expect(newMapping.status).toBe('implemented');
+
+				// Indexes should be updated to remove old hash and include the new one
+				const familyIndex = mockState.mappingsByFamily.get('AC');
+				const controlIndex = mockState.mappingsByControl.get('AC-1');
+				expect(familyIndex).toBeDefined();
+				expect(controlIndex).toBeDefined();
+				expect(familyIndex!.has('old-hash')).toBe(false);
+				expect(controlIndex!.has('old-hash')).toBe(false);
+				expect(familyIndex!.size).toBe(1);
+				expect(controlIndex!.size).toBe(1);
+			});
 		});
 
 		describe('client connection lifecycle', () => {
@@ -578,14 +643,17 @@ describe('websocketServer', () => {
 					title: 'Test Control',
 					family: 'AC'
 				} as Control);
-				mockState.mappingsCache.set('uuid-1', {
+				const testMapping = {
 					uuid: 'uuid-1',
 					control_id: 'AC-1',
 					justification: 'Test justification',
 					source_entries: [],
 					status: 'planned'
-				} as Mapping);
-
+				} as Mapping;
+				const mappingCheckSum = createHash('sha256')
+					.update(JSON.stringify(testMapping))
+					.digest('hex');
+				mockState.mappingsCache.set(`AC-1:${mappingCheckSum}`, testMapping);
 				const result = (
 					wsManager as unknown as { getCompleteState: () => unknown }
 				).getCompleteState();

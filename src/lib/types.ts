@@ -36,6 +36,8 @@ export interface Mapping {
 	justification: string;
 	source_entries: SourceEntry[];
 	status: 'planned' | 'implemented' | 'verified';
+	cci?: string;
+	hash?: string;
 	created_by?: string;
 }
 
@@ -70,7 +72,8 @@ export interface FieldSchema {
 		| 'date'
 		| 'number'
 		| 'boolean'
-		| 'long_text';
+		| 'long_text'
+		| 'multiselect';
 	is_array: boolean;
 	max_length?: number;
 	usage_count?: number;

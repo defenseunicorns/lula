@@ -9,12 +9,13 @@
 import { readFileSync } from 'fs';
 import { Server } from 'http';
 import * as yaml from 'js-yaml';
+import crypto from 'node:crypto';
 import { join } from 'path';
 import { WebSocket, WebSocketServer } from 'ws';
 import { debug } from '../utils/debug';
 import { getControlId } from './infrastructure/controlHelpers';
-import { getCurrentControlSetPath, getServerState } from './serverState';
 import { GitHistoryUtil } from './infrastructure/gitHistory';
+import { getCurrentControlSetPath, getServerState } from './serverState';
 import type { Control, Mapping } from './types';
 
 /**
@@ -121,6 +122,85 @@ class WebSocketManager {
 					break;
 				}
 
+				case 'update-mapping': {
+					// Update an existing mapping while preserving ordering
+					const state = getServerState();
+					if (payload && payload.old_composite_key && payload.mapping) {
+						const oldCompositeKey = payload.old_composite_key as string;
+						const existing = state.mappingsCache.get(oldCompositeKey);
+						if (!existing) {
+							console.error('Mapping not found for update:', oldCompositeKey);
+							break;
+						}
+
+						const incoming = payload.mapping as unknown as Mapping;
+						// Merge incoming changes over existing mapping
+						const updated: Mapping = {
+							...existing,
+							...incoming,
+							control_id: (incoming.control_id || existing.control_id) as string,
+							uuid: (incoming.uuid || existing.uuid) as string
+						};
+
+						// Ensure hash exists; if not provided, compute it
+						if (!updated.hash || updated.hash === '') {
+							updated.hash = crypto
+								.createHash('sha256')
+								.update(JSON.stringify({ ...updated, hash: undefined }))
+								.digest('hex');
+						}
+
+						const oldHash = existing.hash!;
+						const oldControlId = existing.control_id;
+						const oldFamily = oldControlId.split('-')[0];
+						const newHash = updated.hash!;
+						const newControlId = updated.control_id;
+						const newFamily = newControlId.split('-')[0];
+						const newCompositeKey = `${newControlId}:${newHash}`;
+
+						// Persist the change to disk
+						await state.fileStore.updateMapping(oldCompositeKey, updated);
+
+						// Rebuild mappings cache to keep the updated mapping in the same relative position
+						const entries = Array.from(state.mappingsCache.entries());
+						const oldIndex = entries.findIndex(([key]) => key === oldCompositeKey);
+
+						if (oldIndex === -1) {
+							state.mappingsCache.delete(oldCompositeKey);
+							state.mappingsCache.set(newCompositeKey, updated);
+						} else {
+							entries[oldIndex] = [newCompositeKey, updated];
+							state.mappingsCache = new Map(entries);
+						}
+
+						// Update indexes
+						state.mappingsByFamily.get(oldFamily)?.delete(oldHash);
+						state.mappingsByControl.get(oldControlId)?.delete(oldHash);
+
+						if (!state.mappingsByFamily.has(newFamily)) {
+							state.mappingsByFamily.set(newFamily, new Set<string>());
+						}
+						state.mappingsByFamily.get(newFamily)!.add(newHash);
+
+						if (!state.mappingsByControl.has(newControlId)) {
+							state.mappingsByControl.set(newControlId, new Set<string>());
+						}
+						state.mappingsByControl.get(newControlId)!.add(newHash);
+
+						// Send success response
+						ws.send(
+							JSON.stringify({
+								type: 'mapping-updated',
+								payload: { uuid: updated.uuid, success: true }
+							})
+						);
+
+						// Broadcast the updated state to all clients
+						this.broadcastState();
+					}
+					break;
+				}
+
 				case 'refresh-controls': {
 					// Clear the controls cache and reload from disk
 					const state = getServerState();
@@ -164,10 +244,18 @@ class WebSocketManager {
 							mapping.uuid = crypto.randomUUID();
 						}
 
+						if (!mapping.hash || mapping.hash === '') {
+							mapping.hash = crypto
+								.createHash('sha256')
+								.update(JSON.stringify(mapping))
+								.digest('hex');
+						}
+
+						const compositeKey = `${mapping.control_id}:${mapping.hash}`;
+
 						// Save the mapping
 						await state.fileStore.saveMapping(mapping);
 
-						const compositeKey = `${mapping.control_id}:${mapping.uuid}`;
 						state.mappingsCache.set(compositeKey, mapping);
 
 						// Update indexes
@@ -175,12 +263,12 @@ class WebSocketManager {
 						if (!state.mappingsByFamily.has(family)) {
 							state.mappingsByFamily.set(family, new Set<string>());
 						}
-						state.mappingsByFamily.get(family)?.add(mapping.uuid);
+						state.mappingsByFamily.get(family)?.add(mapping.hash!);
 
 						if (!state.mappingsByControl.has(mapping.control_id)) {
 							state.mappingsByControl.set(mapping.control_id, new Set<string>());
 						}
-						state.mappingsByControl.get(mapping.control_id)?.add(mapping.uuid);
+						state.mappingsByControl.get(mapping.control_id)?.add(mapping.hash!);
 
 						// Send success response
 						ws.send(
@@ -196,57 +284,29 @@ class WebSocketManager {
 					break;
 				}
 
-				case 'update-mapping': {
-					// Update an existing mapping
-					const state = getServerState();
-					if (payload && payload.uuid) {
-						const mapping = payload as unknown as Mapping;
-
-						// Save the mapping
-						await state.fileStore.saveMapping(mapping);
-
-						const compositeKey = `${mapping.control_id}:${mapping.uuid}`;
-						state.mappingsCache.set(compositeKey, mapping);
-
-						// Send success response
-						ws.send(
-							JSON.stringify({
-								type: 'mapping-updated',
-								payload: { uuid: mapping.uuid, success: true }
-							})
-						);
-
-						// Broadcast the updated state to all clients
-						this.broadcastState();
-					}
-					break;
-				}
-
 				case 'delete-mapping': {
 					// Delete a mapping
 					const state = getServerState();
-					if (payload && payload.uuid) {
-						const uuid = payload.uuid as string;
-
-						const mapping = state.mappingsCache.get(uuid);
-
+					if (payload && payload.composite_key) {
+						const composite_key = payload.composite_key as string;
+						const mapping = state.mappingsCache.get(composite_key);
 						if (mapping) {
-							// Delete the mapping file
-							await state.fileStore.deleteMapping(uuid);
+							// Delete the mapping file using original UUID-based key for file operations
+							await state.fileStore.deleteMapping(composite_key);
 
-							// Remove from cache using the composite key
-							state.mappingsCache.delete(uuid);
-
+							// Remove from cache using the checksum-based composite key
+							state.mappingsCache.delete(composite_key);
 							// Remove from indexes
 							const family = mapping.control_id.split('-')[0];
-							state.mappingsByFamily.get(family)?.delete(uuid);
-							state.mappingsByControl.get(mapping.control_id)?.delete(uuid);
+							// Use the resolved mapping.hash (string) rather than payload.hash (unknown) to satisfy Set.delete signature
+							state.mappingsByFamily.get(family)?.delete(mapping.hash!);
+							state.mappingsByControl.get(mapping.control_id)?.delete(mapping.hash!);
 
 							// Send success response
 							ws.send(
 								JSON.stringify({
 									type: 'mapping-deleted',
-									payload: { uuid, success: true }
+									payload: { hash: mapping.hash, success: true }
 								})
 							);
 

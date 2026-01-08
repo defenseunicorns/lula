@@ -2,11 +2,10 @@
 <!-- SPDX-FileCopyrightText: 2023-Present The Lula Authors -->
 
 <script lang="ts">
-	interface Props {
+	interface BaseProps {
 		id: string;
 		label: string;
-		type?: 'text' | 'textarea' | 'select';
-		value: string;
+		type?: 'text' | 'textarea' | 'select' | 'multiselect';
 		options?: string[];
 		rows?: number;
 		placeholder?: string;
@@ -14,6 +13,18 @@
 		error?: string;
 		onChange?: () => void;
 	}
+
+	interface SingleValueProps extends BaseProps {
+		type?: 'text' | 'textarea' | 'select';
+		value: string;
+	}
+
+	interface MultiSelectProps extends BaseProps {
+		type: 'multiselect';
+		value: string[];
+	}
+
+	type Props = SingleValueProps | MultiSelectProps;
 
 	let {
 		id,
@@ -54,6 +65,57 @@
 					{value.length} characters
 				</div>
 			{/if}
+		</div>
+	{:else if type === 'multiselect' && options.length > 0}
+		<div class="flex flex-wrap gap-2">
+			{#each options as option (option)}
+				{@const selected = (value as string[]).includes(option)}
+				<label
+					class={`relative inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-sm cursor-pointer transition-colors
+						focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-offset-2
+						dark:focus-within:ring-offset-gray-900
+						${
+							selected
+								? 'bg-blue-50 border-blue-500 text-blue-700 dark:bg-blue-900/40 dark:border-blue-400 dark:text-blue-100'
+								: 'bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200'
+						}
+						${error ? 'border-red-400' : ''}
+					`}
+				>
+					<input
+						type="checkbox"
+						value={option}
+						checked={selected}
+						onchange={(e: Event) => {
+							const input = e.currentTarget as HTMLInputElement;
+							const current = value as string[];
+
+							if (input.checked) {
+								value = current.includes(option) ? current : [...current, option];
+							} else {
+								value = current.filter((v) => v !== option);
+							}
+
+							onChange?.();
+						}}
+						class="sr-only"
+					/>
+
+					<span
+						class={`inline-flex items-center justify-center w-4 h-4 rounded border text-[10px] font-bold
+							${
+								selected
+									? 'border-blue-500 bg-blue-500 text-white'
+									: 'border-gray-400 bg-transparent text-transparent'
+							}
+						`}
+					>
+						✓
+					</span>
+
+					<span>{option}</span>
+				</label>
+			{/each}
 		</div>
 	{:else if type === 'select' && options.length > 0}
 		<div class="relative">

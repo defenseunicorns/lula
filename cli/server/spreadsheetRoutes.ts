@@ -858,7 +858,8 @@ router.get('/export-controls', async (req, res) => {
 				mappings: controlMappings.map((m) => ({
 					uuid: m.uuid,
 					status: m.status,
-					description: m.justification || ''
+					description: m.justification || '',
+					cci: m.cci || ''
 				}))
 			};
 		});
@@ -881,6 +882,19 @@ router.get('/export-controls', async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 });
+
+export function formatMappingEntry(mapping: any): string {
+	const justification = mapping.description || mapping.justification || '';
+	const status = mapping.status || 'Unknown';
+	const cci = mapping.cci || '';
+
+	const finalJustification = justification.trim() !== '' ? justification : `[${status}]`;
+	if (cci.trim() !== '') {
+		return `CCI ${cci}: ${finalJustification}`;
+	}
+
+	return finalJustification;
+}
 
 // Export as CSV
 function exportAsCSV(
@@ -1038,13 +1052,7 @@ function exportAsCSVWithMapping(
 			// Special handling for mappings field when it's a dedicated mappings column
 			if (fieldName === 'mappings' && Array.isArray(value)) {
 				// Format mappings as a readable string with justifications
-				const mappingsStr = value
-					.map((m: any) => {
-						const justification = m.description || m.justification || '';
-						const status = m.status || 'Unknown';
-						return justification.trim() !== '' ? justification : `[${status}]`;
-					})
-					.join('\n');
+				const mappingsStr = value.map((m: any) => formatMappingEntry(m)).join('\n\n');
 				return `"${mappingsStr.replace(/"/g, '""')}"`;
 			}
 
@@ -1190,19 +1198,10 @@ async function exportAsExcelWithMapping(
 				// This column should show mappings data, fallback to original field if no mappings
 				const mappingsValue = control['mappings'];
 				if (Array.isArray(mappingsValue) && mappingsValue.length > 0) {
-					// Show mappings justification - collect all non-empty justifications
-					const mappingsStr = mappingsValue
-						.map((m: any) => m.description || m.justification || '')
-						.filter((desc: string) => desc && desc.trim() !== '')
-						.join('\n');
-
-					if (mappingsStr.trim() !== '') {
-						// We have justifications, use them
-						value = mappingsStr;
-					} else {
-						// No valid justifications, use original field value
-						value = control[fieldName];
-					}
+					// Show mappings justification using consistent formatting
+					const mappingsStr = mappingsValue.map((m: any) => formatMappingEntry(m)).join('\n\n');
+					// Use the formatted mappings string
+					value = mappingsStr;
 				} else {
 					// No mappings array, use original field value
 					value = control[fieldName];
@@ -1214,13 +1213,7 @@ async function exportAsExcelWithMapping(
 
 			// Special handling for mappings field when it's a dedicated mappings column
 			if (fieldName === 'mappings' && Array.isArray(value)) {
-				const mappingsStr = value
-					.map((m: any) => {
-						const justification = m.description || m.justification || '';
-						const status = m.status || 'Unknown';
-						return justification.trim() !== '' ? justification : `[${status}]`;
-					})
-					.join('\n');
+				const mappingsStr = value.map((m: any) => formatMappingEntry(m)).join('\n\n');
 				exportControl[displayName] = mappingsStr;
 			} else if (Array.isArray(value)) {
 				exportControl[displayName] = value.join('; ');
@@ -1402,7 +1395,8 @@ router.post('/export-csv', async (req, res) => {
 				mappings: controlMappings.map((m) => ({
 					uuid: m.uuid,
 					status: m.status,
-					description: m.justification || ''
+					description: m.justification || '',
+					cci: m.cci || ''
 				}))
 			};
 		});

@@ -24,7 +24,8 @@
 		uuid: '',
 		justification: '',
 		status: 'planned' as 'planned' | 'implemented' | 'verified',
-		source_entries: [] as { location: string; shasum?: string }[]
+		source_entries: [] as { location: string; shasum?: string }[],
+		cci: ''
 	});
 
 	// Event handlers
@@ -35,10 +36,23 @@
 				justification: data.justification,
 				status: data.status,
 				source_entries: data.source_entries,
-				uuid: data.uuid || '' // Use the UUID from form or empty for auto-generation
+				uuid: data.uuid || '', // Use the UUID from form or empty for auto-generation,
+			    hash: '',
 			};
+			const mappingForHash = data.cci !== ''
+			? { ...mappingData, cci: data.cci }
+			: { ...mappingData };
 
-			await wsClient.createMapping(mappingData);
+			
+			const hash = await fetch('/hash', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(mappingForHash)
+			});
+			mappingForHash.hash = (await hash.json()).hash;
+			await wsClient.createMapping(mappingForHash);
 			resetMappingForm();
 		} catch (error) {
 			console.error('Failed to create mapping:', error);
@@ -54,7 +68,8 @@
 			uuid: '',
 			justification: '',
 			status: 'planned',
-			source_entries: []
+			source_entries: [],
+			cci: ''
 		};
 		showNewMappingForm = false;
 		editingMapping = null;
@@ -67,13 +82,14 @@
 			uuid: mapping.uuid,
 			justification: mapping.justification,
 			status: mapping.status,
-			source_entries: mapping.source_entries || []
+			source_entries: mapping.source_entries || [],
+			cci: mapping.cci || ''
 		};
 	}
 
 	async function handleUpdateMapping(data: typeof newMappingData) {
 		if (!editingMapping) return;
-
+	
 		try {
 			const updatedMapping = {
 				...editingMapping,
@@ -83,15 +99,24 @@
 				source_entries: data.source_entries
 			};
 
-			const uuidChanged = updatedMapping.uuid !== editingMapping.uuid;
-			
-			if (uuidChanged) {
-				const compositeId = `${control.id}:${editingMapping.uuid}`;
-				await wsClient.deleteMapping(compositeId);
-				await wsClient.createMapping(updatedMapping);
-			} else {
-				await wsClient.updateMapping(updatedMapping);
+
+			if(data.cci !== undefined) {
+				updatedMapping.cci = data.cci;
 			}
+
+			// Compute new hash for the updated mapping on the backend
+			const hashResponse = await fetch('/hash', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ ...updatedMapping, hash: '' })
+			});
+			const hashData = await hashResponse.json();
+			updatedMapping.hash = hashData.hash;
+
+			const oldCompositeKey = `${editingMapping.control_id}:${editingMapping.hash!}`;
+			await wsClient.updateMapping(oldCompositeKey, updatedMapping);
 
 			resetMappingForm();
 		} catch (error) {
@@ -99,10 +124,17 @@
 		}
 	}
 
-	async function handleDeleteMapping(uuid: string) {
+	async function handleDeleteMapping(hash: string) {
+		// Find the mapping by hash to get the UUID for backend deletion
+		const mappingToDelete = mappings.find(m => (m.hash === hash));
+		if (!mappingToDelete) {
+			console.error('Mapping not found for deletion');
+			return;
+		}
+
 		try {
-			const compositeId = `${control.id}:${uuid}`;
-			await wsClient.deleteMapping(compositeId);
+			// Backend expects UUID for file operations
+			await wsClient.deleteMapping(`${mappingToDelete.control_id}:${mappingToDelete.hash!}`);
 		} catch (error) {
 			console.error('Failed to delete mapping:', error);
 		}
@@ -113,8 +145,8 @@
 	<!-- Existing Mappings -->
 	{#if mappings.length > 0}
 		<div class="space-y-4">
-			{#each mappings as mapping (mapping.uuid)}
-				{#if editingMapping && editingMapping.uuid === mapping.uuid}
+			{#each mappings as mapping (mapping.hash)}
+				{#if editingMapping && editingMapping.hash === mapping.hash}
 					<!-- Edit Form in place of the mapping being edited -->
 					<div
 						class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm"
@@ -124,6 +156,7 @@
 							onSubmit={handleUpdateMapping}
 							onCancel={cancelNewMapping}
 							submitLabel="Update Mapping"
+							cci={control.cci}
 						/>
 					</div>
 				{:else}
@@ -148,6 +181,7 @@
 					onSubmit={handleCreateMapping}
 					onCancel={cancelNewMapping}
 					submitLabel="Create Mapping"
+					cci={control.cci}
 				/>
 			</div>
 		{:else if !editingMapping}
@@ -172,6 +206,7 @@
 					onSubmit={handleCreateMapping}
 					onCancel={cancelNewMapping}
 					submitLabel="Create Mapping"
+					cci={control.cci}
 				/>
 			</div>
 		{:else}

@@ -6,6 +6,7 @@
  * Uses predictable filenames based on control IDs
  */
 
+import { createHash } from 'crypto';
 import {
 	existsSync,
 	promises as fs,
@@ -59,6 +60,46 @@ export class FileStore {
 		// Load control metadata if directories exist
 		if (existsSync(this.controlsDir)) {
 			this.refreshControlsCache();
+		}
+	}
+
+	/**
+	 * Update a single mapping in place, preserving file order
+	 */
+	async updateMapping(oldCompositeKey: string, updatedMapping: Mapping): Promise<void> {
+		// Find the mapping in all mapping files
+		const mappingFiles = this.getAllMappingFiles();
+
+		for (const file of mappingFiles) {
+			try {
+				const content = readFileSync(file, 'utf8');
+				let mappings: Mapping[] = (yaml.load(content) as Mapping[]) || [];
+
+				let changed = false;
+				mappings = mappings.map((m) => {
+					const hash = createHash('sha256').update(JSON.stringify(m)).digest('hex');
+					if (`${m.control_id}:${hash}` === oldCompositeKey) {
+						// Replace with updated mapping, stripping hash before saving
+						const clean = { ...updatedMapping } as Mapping;
+						delete (clean as any).hash;
+						changed = true;
+						return clean;
+					}
+					return m;
+				});
+
+				if (changed) {
+					const yamlContent = yaml.dump(mappings, {
+						indent: 2,
+						lineWidth: -1,
+						noRefs: true
+					});
+					writeFileSync(file, yamlContent, 'utf8');
+					return; // Updated mapping, we're done
+				}
+			} catch (error) {
+				console.error(`Error processing mapping file ${file}:`, error);
+			}
 		}
 	}
 
@@ -314,8 +355,8 @@ export class FileStore {
 
 		// Try to load metadata to get controlOrder if available
 		let controlOrder: string[] | null = null;
+		const lulaConfigPath = join(this.baseDir, 'lula.yaml');
 		try {
-			const lulaConfigPath = join(this.baseDir, 'lula.yaml');
 			if (existsSync(lulaConfigPath)) {
 				const content = readFileSync(lulaConfigPath, 'utf8');
 				const metadata = yaml.load(content) as any;
@@ -442,6 +483,10 @@ export class FileStore {
 					const parsed = yaml.load(content) as any;
 
 					if (Array.isArray(parsed)) {
+						parsed.forEach((mapping) => {
+							mapping.hash = createHash('sha256').update(JSON.stringify(mapping)).digest('hex');
+							return mapping;
+						});
 						mappings.push(...parsed);
 					}
 				} catch (error) {
@@ -485,13 +530,11 @@ export class FileStore {
 			}
 		}
 
-		// Update or add the mapping
-		const existingIndex = existingMappings.findIndex((m) => m.uuid === mapping.uuid);
-		if (existingIndex >= 0) {
-			existingMappings[existingIndex] = mapping;
-		} else {
-			existingMappings.push(mapping);
-		}
+		// Strip hash field before saving to disk
+		const cleanMapping = { ...mapping };
+		delete cleanMapping.hash;
+
+		existingMappings.push(cleanMapping);
 
 		// Save back to file
 		try {
@@ -522,8 +565,10 @@ export class FileStore {
 				let mappings: Mapping[] = (yaml.load(content) as Mapping[]) || [];
 
 				const originalLength = mappings.length;
+				// we need to re-calculate the hash
 				mappings = mappings.filter((m) => {
-					return `${m.control_id}:${m.uuid}` !== compositeKey;
+					const hash = createHash('sha256').update(JSON.stringify(m)).digest('hex');
+					return `${m.control_id}:${hash}` !== compositeKey;
 				});
 
 				// If we removed a mapping, save the file
@@ -611,8 +656,15 @@ export class FileStore {
 				mkdirSync(familyDir, { recursive: true });
 			}
 
+			// Strip hash fields before saving
+			const cleanMappings = controlMappings.map((m) => {
+				const clean = { ...m };
+				delete clean.hash;
+				return clean;
+			});
+
 			try {
-				const yamlContent = yaml.dump(controlMappings, {
+				const yamlContent = yaml.dump(cleanMappings, {
 					indent: 2,
 					lineWidth: -1,
 					noRefs: true

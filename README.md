@@ -15,7 +15,7 @@
 [![Npm package total downloads](https://badgen.net/npm/dt/lula-next)](https://npmjs.com/package/lula-next)
 [![codecov](https://codecov.io/gh/defenseunicorns/lula/graph/badge.svg?token=FZV3DSS8NF)](https://codecov.io/gh/defenseunicorns/lula)
 
-Bring GitOps principles to compliance management. Lula treats security controls as code, enabling teams to manage compliance frameworks (NIST 800-53, CIS, SOC2) through pull requests, code reviews, and automated workflows—just like your application code in a user-friendly web interface. Your data stays your data--Lula takes spreadsheet imports, lets you drag & drop the UI layout and version control the data as yaml automatically for you.
+Bring GitOps principles to compliance management. Lula treats security controls as code, enabling teams to manage compliance frameworks (NIST 800-53, CIS, SOC2) through pull requests, code reviews, and automated workflows — just like your application code in a user-friendly web interface. Your data stays your data--Lula takes spreadsheet imports, lets you drag & drop the UI layout and version control the data as yaml automatically for you.
 
 ## Quickstart
 
@@ -106,6 +106,7 @@ Commenting regarding `integration/test-files/ex.yaml`.
 Posted (comment)
 ----------------
 
+<!-- LULA_SIGNATURE:v1 -->
 ## Lula Compliance Overview
 
 Please review the changes to ensure they meet compliance standards.
@@ -120,8 +121,13 @@ Lula reviewed 2 files changed that affect compliance.
 | File | Lines Changed |
 | ---- | ------------- |
 | `integration/test-files/ex.ts` | `20–31` |
-> **uuid**-`123e4567-e89b-12d3-a456-426614174000`
- **sha256** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`
+| `integration/test-files/ex.ts` | `39–47` |
+
+**UUID:** `123e4567-e89b-12d3-a456-426614174000`
+**sha256:** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`
+
+**UUID:** `987e4567-e89b-12d3-a456-426614174777`
+**sha256:** `72acd6ffeab63567b4fc38ffb1997d106d30c0cec4474d8046810dcbcbb1302b`
 
 
 
@@ -129,8 +135,13 @@ Lula reviewed 2 files changed that affect compliance.
 | File | Lines Changed |
 | ---- | ------------- |
 | `integration/test-files/ex.yaml` | `1–5` |
-> **uuid**-`123e4567-e89b-12d3-a456-426614174001`
- **sha256** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`
+| `integration/test-files/ex.yaml` | `8–14` |
+
+**UUID:** `123e4567-e89b-12d3-a456-426614174001`
+**sha256:** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`
+
+**UUID:** `987e4567-e89b-12d3-a456-426614174777`
+**sha256:** `ab0240ce74fa7aec548e671a24c5cdede388970a95eb1198b6eb7cb1c8635cef`
 
 
 
@@ -230,7 +241,7 @@ properties:
 
 ### GitOps Workflow
 
-Manage compliance like code with full GitOps practices:
+Manage compliance like code with GitOps practices:
 
 ```bash
 # Create feature branch for control updates
@@ -383,7 +394,6 @@ Apache-2.0 - See [LICENSE](LICENSE) for details.
 
 ## Support
 
-- **Documentation**: [https://lula.dev/docs](https://lula.dev/docs)
 - **Issues**: [GitHub Issues](https://github.com/defenseunicorns/lula2/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/defenseunicorns/lula2/discussions)
 

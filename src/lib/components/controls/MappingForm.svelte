@@ -11,6 +11,7 @@
 		justification: string;
 		status: 'planned' | 'implemented' | 'verified';
 		source_entries: SourceEntry[];
+		cci: string;
 	}
 
 	interface Props {
@@ -19,6 +20,7 @@
 		onCancel: () => void;
 		loading?: boolean;
 		submitLabel?: string;
+		cci?: string;
 	}
 
 	let {
@@ -26,14 +28,16 @@
 		onSubmit,
 		onCancel,
 		loading = false,
-		submitLabel = 'Create Mapping'
+		submitLabel = 'Create Mapping',
+		cci
 	}: Props = $props();
 
 	let formData = $state<MappingFormData>({
 		uuid: initialData.uuid || '',
 		justification: initialData.justification || '',
 		status: initialData.status || 'planned',
-		source_entries: initialData.source_entries || []
+		source_entries: initialData.source_entries || [],
+		cci: initialData.cci ?? ''
 	});
 	
 	let newLocation = $state('');
@@ -42,6 +46,37 @@
 	const statusOptions = ['planned', 'implemented', 'verified'];
 
 	const isValid = $derived(formData.justification.trim().length > 0);
+	
+	const cciOptions = $derived(
+		(cci ?? '')
+			.split(';')
+			.map((s) => s.trim())
+			.filter(Boolean)
+	);
+
+	function parseCciList(value: string | undefined | null): string[] {
+		return (value ?? '')
+			.split(';')
+			.map((s) => s.trim())
+			.filter(Boolean);
+	}
+	
+	let selectedCCIs = $state<string[]>(parseCciList(formData.cci));
+
+	$effect(() => {
+		const joined = selectedCCIs.join('; ');
+		if (formData.cci !== joined) {
+			formData.cci = joined;
+		}
+	});
+
+	$effect(() => {
+		const parsed = parseCciList(formData.cci);
+		// Keep the multiselect UI in sync if formData.cci changes externally (reset/edit)
+		if (parsed.join('; ') !== selectedCCIs.join('; ')) {
+			selectedCCIs = parsed;
+		}
+	});
 
 	function handleSubmit() {
 		if (!isValid || loading) return;
@@ -54,8 +89,10 @@
 			uuid: initialData.uuid || '',
 			justification: initialData.justification || '',
 			status: initialData.status || 'planned',
-			source_entries: initialData.source_entries || []
+			source_entries: initialData.source_entries || [],
+			cci: initialData.cci ?? ''
 		};
+		selectedCCIs = parseCciList(formData.cci);
 		newLocation = '';
 		newShasum = '';
 		onCancel();
@@ -101,6 +138,15 @@
 				placeholder="Explain how this compliance artifact satisfies the control requirements..."
 				required
 			/>
+			{#if cci}
+			<FormField
+				id="mapping-cci"
+				label="Mapping CCI(s)"
+				type="multiselect"
+				bind:value={selectedCCIs}
+				options={cciOptions}
+			/>
+			{/if}
 
 			<FormField
 				id="mapping-status"

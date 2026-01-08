@@ -49,6 +49,7 @@
 		// Dropdowns and short fields can be side by side
 		if (
 			field.ui_type === 'select' ||
+			field.ui_type === 'multiselect' ||
 			field.ui_type === 'boolean' ||
 			field.ui_type === 'date' ||
 			field.ui_type === 'number' ||

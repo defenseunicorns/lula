@@ -60,7 +60,7 @@ describe('crawl', () => {
     }
   }, 120000);
 
-  it("should console log the Lula overview, table with lines changed, uuid and sha256", { timeout: 2 * 60 * 1000 }, () => {
+  it("should console log the Lula overview, table with lines changed, uuid and sha256sum when content changes between annotations", { timeout: 2 * 60 * 1000 }, () => {
     if (!command_output || command_output.length === 0) {
       throw new Error('No command output received - the crawl command may have failed or produced no output');
     }
@@ -80,13 +80,13 @@ describe('crawl', () => {
     expect(command_output).toMatch(/`20–31`/);
     expect(command_output).toMatch(/`1–5`/);
 
-    // Expect uuid + sha256 sections (blockquote for uuid line)
-    // ex.ts block
-    expect(command_output).toContain("> **uuid**-`123e4567-e89b-12d3-a456-426614174000`");
-    expect(command_output).toContain("**sha256** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`");
-    // ex.yaml block
-    expect(command_output).toContain("> **uuid**-`123e4567-e89b-12d3-a456-426614174001`");
-    expect(command_output).toContain("**sha256** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`");
+    // Expect uuid + sha256 sections (now in new block format with separate lines)
+    // ex.ts blocks
+    expect(command_output).toContain("**UUID:** `123e4567-e89b-12d3-a456-426614174000`");
+    expect(command_output).toContain("**sha256:** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`");
+    // ex.yaml blocks
+    expect(command_output).toContain("**UUID:** `123e4567-e89b-12d3-a456-426614174001`");
+    expect(command_output).toContain("**sha256:** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`");
   });
 
   it('posts a PR comment with the Lula overview and block metadata', { timeout: 2 * 60 * 1000 }, async () => {
@@ -103,11 +103,16 @@ describe('crawl', () => {
       }
     );
 
-    // Track created comments for cleanup and filter for our run
-    const relevantComments = comments.filter(comment => {
+    interface IssueComment {
+      id: number;
+      created_at: string;
+      body: string;
+      [key: string]: unknown;
+    }
+
+    const relevantComments: IssueComment[] = (comments as IssueComment[]).filter((comment: IssueComment) => {
       comment_ids.push(comment.id);
-      const created = new Date(comment.created_at);
-      // Look for the new Lula overview header
+      const created: Date = new Date(comment.created_at);
       return created >= testStartTime && comment.body.includes("## Lula Compliance Overview");
     });
 
@@ -116,22 +121,18 @@ describe('crawl', () => {
     for (const c of relevantComments) {
       const body = c.body;
 
-      // New structure checks
       expect(body).toContain("## Lula Compliance Overview");
       expect(body).toContain("Please review the changes to ensure they meet compliance standards.");
       expect(body).toMatch(/\| File \| Lines Changed \|\s*\n\| ---- \| ------------- \|/);
 
-      // Filenames & ranges
       expect(body).toContain("`integration/test-files/ex.ts`");
       expect(body).toContain("`integration/test-files/ex.yaml`");
       expect(body).toMatch(/`20–31`/);
       expect(body).toMatch(/`1–5`/);
 
-      // uuid + sha256 lines (format used in crawl.ts)
-      expect(body).toMatch(/> \*\*uuid\*\*-\`[-a-f0-9]{36}\`/);
-      expect(body).toMatch(/\*\*sha256\*\* \`[a-f0-9]{64}\`/);
+      expect(body).toMatch(/\*\*UUID:\*\* \`[-a-f0-9]{36}\`/);
+      expect(body).toMatch(/\*\*sha256:\*\* \`[a-f0-9]{64}\`/);
 
-      // Still enforce a reasonable creation window (allowing some slack)
       const commentTime = new Date(c.created_at);
       const secs = (commentTime.getTime() - testStartTime.getTime()) / 1000;
       expect(secs).toBeLessThanOrEqual(60);
@@ -139,6 +140,177 @@ describe('crawl', () => {
     }
 
     console.log(`Found ${relevantComments.length} relevant comments created by this test`);
+  });
+
+  it('should detect when @lulaStart/@lulaEnd annotations are DELETED from an existing file', { timeout: 2 * 60 * 1000 }, async () => {
+    const { getRemovedBlocks } = await import('../cli/commands/crawl.js');
+    
+    const uuid = '123e4567-e89b-12d3-a456-426614174000';
+    
+    const oldFileContent = [
+      'function example() {',
+      `  // @lulaStart ${uuid}`,
+      '  const data = "sensitive info";',
+      '  return data;',
+      `  // @lulaEnd ${uuid}`,
+      '}'
+    ].join('\n');
+    
+    const newFileContent = [
+      'function example() {',
+      '  const data = "sensitive info";',
+      '  return data;',
+      '}'
+    ].join('\n');
+    
+    const removedBlocks = getRemovedBlocks(oldFileContent, newFileContent);
+    
+    expect(removedBlocks).toHaveLength(1);
+    expect(removedBlocks[0].uuid).toBe(uuid);
+    expect(removedBlocks[0].startLine).toBe(1);
+    expect(removedBlocks[0].endLine).toBe(5); 
+  });
+
+  it('should detect when a whole file with annotations is DELETED', { timeout: 2 * 60 * 1000 }, async () => {    
+    const { containsLulaAnnotations } = await import('../cli/commands/crawl.js');
+
+    const fileWithAnnotations = [
+      'const config = {',
+      '  // @lulaStart 123e4567-e89b-12d3-a456-426614174000',
+      '  apiKey: "secret-key",',
+      '  // @lulaEnd 123e4567-e89b-12d3-a456-426614174000',
+      '};'
+    ].join('\n');
+    
+    const fileWithoutAnnotations = [
+      'const config = {',
+      '  apiKey: "secret-key",',
+      '};'
+    ].join('\n');
+    
+    expect(containsLulaAnnotations(fileWithAnnotations)).toBe(true);
+    expect(containsLulaAnnotations(fileWithoutAnnotations)).toBe(false);
+    
+    const fileWithOnlyStart = [
+      'const config = {',
+      '  // @lulaStart 123e4567-e89b-12d3-a456-426614174000',
+      '  apiKey: "secret-key",',
+      '};'
+    ].join('\n');
+    
+    const fileWithOnlyEnd = [
+      'const config = {',
+      '  apiKey: "secret-key",',
+      '  // @lulaEnd 123e4567-e89b-12d3-a456-426614174000',
+      '};'
+    ].join('\n');
+    
+    expect(containsLulaAnnotations(fileWithOnlyStart)).toBe(true);
+    expect(containsLulaAnnotations(fileWithOnlyEnd)).toBe(true);
+  });
+
+  it('should NOT detect changes when content above annotations changes but annotation content is unchanged', { timeout: 2 * 60 * 1000 }, async () => {
+    
+    const { getChangedBlocks } = await import('../cli/commands/crawl.js');
+    
+    const uuid = '123e4567-e89b-12d3-a456-426614174000';
+    
+    const originalFile = [
+      'function example() {',
+      '  console.log("original header");',
+      `  // @lulaStart ${uuid}`,
+      '  const sensitiveData = "unchanged content";',
+      '  return sensitiveData;',
+      `  // @lulaEnd ${uuid}`,
+      '}'
+    ].join('\n');
+    
+    const modifiedFileWithChangesAbove = [
+      'function example() {',
+      '  console.log("MODIFIED header");',
+      '  const newVariable = "added";',  
+      `  // @lulaStart ${uuid}`,
+      '  const sensitiveData = "unchanged content";',
+      '  return sensitiveData;',
+      `  // @lulaEnd ${uuid}`,
+      '}'
+    ].join('\n');
+    
+    const changedBlocks = getChangedBlocks(originalFile, modifiedFileWithChangesAbove);
+    
+    expect(changedBlocks).toHaveLength(0);
+    
+    // Test the opposite case: content between markers actually changes
+    const modifiedFileWithChangesInside = [
+      'function example() {',
+      '  console.log("MODIFIED header");', 
+      '  const newVariable = "added";',    
+      `  // @lulaStart ${uuid}`,
+      '  const sensitiveData = "CHANGED content";',
+      '  return sensitiveData;',                    
+      `  // @lulaEnd ${uuid}`,
+      '}'
+    ].join('\n');
+    
+    const changedBlocksInside = getChangedBlocks(originalFile, modifiedFileWithChangesInside);
+    
+    expect(changedBlocksInside).toHaveLength(1);
+    expect(changedBlocksInside[0].uuid).toBe(uuid);
+  });
+
+  it('should generate properly formatted markdown tables for multiple blocks', { timeout: 2 * 60 * 1000 }, async () => {
+    
+    const { generateChangedBlocksContent, generateRemovedBlocksContent } = await import('../cli/commands/crawl.js');
+    
+    const changedBlocks = [
+      { uuid: '96b7aa1b-b307-45c0-af40-8b57f3726693', startLine: 56, endLine: 65 },
+      { uuid: 'e4ea044c-75fc-4acc-a552-8bba2aab1b12', startLine: 415, endLine: 424 }
+    ];
+    
+    const newText = Array(500).fill(0).map((_, i) => `line ${i + 1}`).join('\n');
+    const changedResult = generateChangedBlocksContent('src/keycloak/chart/values.yaml', changedBlocks, newText);
+    
+    // Should have ONE table header for changed blocks
+    const changedTableHeaders = changedResult.match(/\| File \| Lines Changed \|/g);
+    expect(changedTableHeaders).toHaveLength(1);
+    
+    // Should have both rows in the same table
+    expect(changedResult).toContain('| `src/keycloak/chart/values.yaml` | `57–65` |');
+    expect(changedResult).toContain('| `src/keycloak/chart/values.yaml` | `416–424` |');
+    
+    // Block and SHA256 info should be separate from table (not breaking it)
+    expect(changedResult).toContain('**UUID:** `96b7aa1b-b307-45c0-af40-8b57f3726693`');
+    expect(changedResult).toContain('**UUID:** `e4ea044c-75fc-4acc-a552-8bba2aab1b12`');
+    expect(changedResult).toContain('**sha256:**');
+    
+    // multiple removed blocks
+    const removedBlocks = [
+      { uuid: '96b7aa1b-b307-45c0-af40-8b57f3726693', startLine: 56, endLine: 65 },
+      { uuid: 'e4ea044c-75fc-4acc-a552-8bba2aab1b12', startLine: 415, endLine: 424 }
+    ];
+    
+    const oldText = Array(500).fill(0).map((_, i) => `old line ${i + 1}`).join('\n');
+    const removedResult = generateRemovedBlocksContent('src/keycloak/chart/values.yaml', removedBlocks, oldText);
+    
+    // Should have exactly table header for removed blocks  
+    const removedTableHeaders = removedResult.match(/\| File \| Original Lines \| UUID \|/g);
+    expect(removedTableHeaders).toHaveLength(1);
+    
+    // Should have both rows in the same table
+    expect(removedResult).toContain('| `src/keycloak/chart/values.yaml` | `57–65` | `96b7aa1b-b307-45c0-af40-8b57f3726693` |');
+    expect(removedResult).toContain('| `src/keycloak/chart/values.yaml` | `416–424` | `e4ea044c-75fc-4acc-a552-8bba2aab1b12` |');
+    
+    // Block and SHA256 info should be separate from table (not breaking it)
+    expect(removedResult).toContain('**UUID:** `96b7aa1b-b307-45c0-af40-8b57f3726693`');
+    expect(removedResult).toContain('**UUID:** `e4ea044c-75fc-4acc-a552-8bba2aab1b12`');
+    expect(removedResult).toContain('**sha256:**');
+    
+    // Verify no broken table structure (no blockquotes inside table rows)
+    const tableRows = removedResult.split('\n').filter(line => line.startsWith('| `'));
+    for (const row of tableRows) {
+      expect(row).not.toContain('>');
+      expect(row).not.toContain('**sha256**'); 
+    }
   });
 });
 
