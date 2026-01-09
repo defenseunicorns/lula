@@ -697,7 +697,7 @@ describe('getChangedBlocks - unequal count scenarios', () => {
 			`// @lulaEnd ${uuid}`,
 			'',
 			`// @lulaStart ${uuid}`,
-			'old block B content', 
+			'old block B content',
 			`// @lulaEnd ${uuid}`,
 			'',
 			`// @lulaStart ${uuid}`,
@@ -724,7 +724,7 @@ describe('getChangedBlocks - unequal count scenarios', () => {
 		].join('\n');
 
 		const changedBlocks = getChangedBlocks(oldText, newText);
-		
+
 		// Should only report the single new block once, not three times
 		expect(changedBlocks).toHaveLength(1);
 		expect(changedBlocks[0].uuid).toBe(uuid);
@@ -766,7 +766,7 @@ describe('getChangedBlocks - unequal count scenarios', () => {
 		].join('\n');
 
 		const changedBlocks = getChangedBlocks(oldText, newText);
-		
+
 		// Should report 1 change: the modified A content (B is exact match, C is removed)
 		expect(changedBlocks).toHaveLength(1);
 		expect(changedBlocks[0].uuid).toBe(uuid);
@@ -808,11 +808,11 @@ describe('getChangedBlocks - unequal count scenarios', () => {
 		].join('\n');
 
 		const changedBlocks = getChangedBlocks(oldText, newText);
-		
+
 		// Should report 2 changes (the 2 modified blocks, not the new one)
 		expect(changedBlocks).toHaveLength(2);
-		
-		const changedPositions = changedBlocks.map(b => b.startLine).sort();
+
+		const changedPositions = changedBlocks.map((b) => b.startLine).sort();
 		expect(changedPositions).toEqual([1, 5]); // The two modified block positions
 	});
 
@@ -825,12 +825,12 @@ describe('getChangedBlocks - unequal count scenarios', () => {
 			'content A',
 			`// @lulaEnd ${uuid}`,
 			'',
-			`// @lulaStart ${uuid}`,  
+			`// @lulaStart ${uuid}`,
 			'content B',
 			`// @lulaEnd ${uuid}`,
 			'',
 			`// @lulaStart ${uuid}`,
-			'content C', 
+			'content C',
 			`// @lulaEnd ${uuid}`
 		].join('\n');
 
@@ -850,12 +850,12 @@ describe('getChangedBlocks - unequal count scenarios', () => {
 		].join('\n');
 
 		const changedBlocks = getChangedBlocks(oldText, newText);
-		
+
 		// Should report 2 changes maximum (can't report more new blocks than exist)
 		expect(changedBlocks.length).toBeLessThanOrEqual(2);
-		
+
 		// No duplicate blocks should be reported
-		const uniqueBlocks = new Set(changedBlocks.map(b => `${b.startLine}-${b.endLine}`));
+		const uniqueBlocks = new Set(changedBlocks.map((b) => `${b.startLine}-${b.endLine}`));
 		expect(uniqueBlocks.size).toBe(changedBlocks.length);
 	});
 });

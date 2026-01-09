@@ -263,9 +263,9 @@ export function getChangedBlocks(
 
 			for (const oldIndex of oldBlocksWithoutMatches) {
 				const oldBlock = oldUuidBlocks[oldIndex];
-				
+
 				// Find candidates from unmatched new blocks
-				const candidates: Array<{ index: number; block: typeof newUuidBlocks[0] }> = [];
+				const candidates: Array<{ index: number; block: (typeof newUuidBlocks)[0] }> = [];
 				for (let newIndex = 0; newIndex < newUuidBlocks.length; newIndex++) {
 					if (!usedNewBlocks.has(newIndex)) {
 						candidates.push({ index: newIndex, block: newUuidBlocks[newIndex] });
@@ -279,7 +279,7 @@ export function getChangedBlocks(
 						const candidateDistance = Math.abs(oldBlock.startLine - candidate.block.startLine);
 						return candidateDistance < bestDistance ? candidate : best;
 					});
-					
+
 					changed.push(closest.block);
 					usedNewBlocks.add(closest.index); // Mark as used to prevent duplicates
 				}
