@@ -17,6 +17,7 @@ import {
 	deleteOldReviewComments,
 	dismissOldReviews,
 	containsLulaAnnotations,
+	findOptimalPairings,
 	LULA_SIGNATURE
 } from './crawl';
 
@@ -306,6 +307,381 @@ describe('extractMapBlocks & getChangedBlocks', () => {
 		const changed = getChangedBlocks(oldText, newTextWithInsertionAndChange);
 		expect(changed).toHaveLength(1);
 		expect(changed[0].uuid).toBe(uuid);
+	});
+
+	it('should use weight-based optimal pairing for duplicate UUID blocks (UDS Core scenario)', () => {
+		const uuid = '643060b2-0ddf-4728-9582-ef38dca7447a';
+
+		// Original scenario: single block with UUID
+		const oldText = [
+			'# SPDX-License-Identifier: Apache-2.0',
+			'apiVersion: v1',
+			'kind: Service',
+			`# @lulaStart ${uuid}`,
+			'---',
+			'apiVersion: networking.istio.io/v1beta1',
+			'kind: VirtualService',
+			'metadata:',
+			'  name: uds-core-admin-app-vs',
+			'  namespace: uds-core-admin',
+			`# @lulaEnd ${uuid}`,
+			''
+		].join('\n');
+
+		// New scenario: original block unchanged + new block added with same UUID
+		const newText = [
+			'# SPDX-License-Identifier: Apache-2.0',
+			'apiVersion: v1',
+			'kind: Service',
+			`# @lulaStart ${uuid}`,
+			'---',
+			'apiVersion: networking.istio.io/v1beta1',
+			'kind: VirtualService',
+			'metadata:',
+			'  name: uds-core-admin-app-vs',
+			'  namespace: uds-core-admin',
+			`# @lulaEnd ${uuid}`,
+			'',
+			`# @lulaStart ${uuid}`,
+			'---',
+			'apiVersion: v1',
+			'kind: Service',
+			'metadata:',
+			'  name: new-service',
+			'  namespace: uds-core-admin',
+			`# @lulaEnd ${uuid}`,
+			''
+		].join('\n');
+
+		// Should detect NO changes because original content still exists unchanged
+		const changed = getChangedBlocks(oldText, newText);
+		expect(changed).toHaveLength(0);
+	});
+
+	it('should detect changes when duplicate UUID block content is actually modified', () => {
+		const uuid = '643060b2-0ddf-4728-9582-ef38dca7447a';
+
+		// Original: two blocks with same UUID
+		const oldText = [
+			`# @lulaStart ${uuid}`,
+			'original block 1 content',
+			'line 2 of block 1',
+			`# @lulaEnd ${uuid}`,
+			'',
+			`# @lulaStart ${uuid}`,
+			'original block 2 content',
+			'line 2 of block 2',
+			`# @lulaEnd ${uuid}`
+		].join('\n');
+
+		// Modified: one block moved and content changed, other block unchanged
+		const newText = [
+			`# @lulaStart ${uuid}`,
+			'MODIFIED block 2 content',
+			'line 2 of block 2 CHANGED',
+			`# @lulaEnd ${uuid}`,
+			'',
+			`# @lulaStart ${uuid}`,
+			'original block 1 content',
+			'line 2 of block 1',
+			`# @lulaEnd ${uuid}`
+		].join('\n');
+
+		const changed = getChangedBlocks(oldText, newText);
+		expect(changed).toHaveLength(1);
+		expect(changed[0].uuid).toBe(uuid);
+		// Should detect the first block (which contains the modified content)
+		expect(changed[0].startLine).toBe(0);
+		expect(changed[0].endLine).toBe(4);
+	});
+
+	it('should properly pair blocks based on content similarity over position', () => {
+		const uuid = '643060b2-0ddf-4728-9582-ef38dca7447a';
+
+		// Original: two distinct blocks
+		const oldText = [
+			`# @lulaStart ${uuid}`,
+			'block A content',
+			`# @lulaEnd ${uuid}`,
+			'',
+			`# @lulaStart ${uuid}`,
+			'block B content',
+			`# @lulaEnd ${uuid}`
+		].join('\n');
+
+		// New: blocks swapped positions, block B content modified
+		const newText = [
+			`# @lulaStart ${uuid}`,
+			'block B content MODIFIED',
+			`# @lulaEnd ${uuid}`,
+			'',
+			`# @lulaStart ${uuid}`,
+			'block A content',
+			`# @lulaEnd ${uuid}`
+		].join('\n');
+
+		const changed = getChangedBlocks(oldText, newText);
+		expect(changed).toHaveLength(1);
+		expect(changed[0].uuid).toBe(uuid);
+		// Should pair based on content similarity and detect the modified block B
+		// (even though it's now in first position)
+		expect(changed[0].startLine).toBe(0);
+		expect(changed[0].endLine).toBe(3);
+	});
+});
+
+describe('findOptimalPairings', () => {
+	const uuid = '123e4567-e89b-12d3-a456-426614174000';
+
+	it('should pair identical blocks correctly based on content similarity', () => {
+		const oldBlocks = [
+			{ uuid, startLine: 0, endLine: 3 },
+			{ uuid, startLine: 5, endLine: 8 }
+		];
+		const newBlocks = [
+			{ uuid, startLine: 10, endLine: 13 }, // moved but same content as second old block
+			{ uuid, startLine: 15, endLine: 18 } // moved but same content as first old block
+		];
+
+		const oldLines = [
+			'@lulaStart',
+			'block A content',
+			'line 2 of A',
+			'@lulaEnd',
+			'',
+			'@lulaStart',
+			'block B content',
+			'line 2 of B',
+			'@lulaEnd'
+		];
+
+		const newLines = [
+			'some other content',
+			'...',
+			'...',
+			'...',
+			'...',
+			'...',
+			'...',
+			'...',
+			'...',
+			'...',
+			'@lulaStart',
+			'block B content',
+			'line 2 of B',
+			'@lulaEnd',
+			'',
+			'@lulaStart',
+			'block A content',
+			'line 2 of A',
+			'@lulaEnd'
+		];
+
+		const pairings = findOptimalPairings(oldBlocks, newBlocks, oldLines, newLines);
+
+		expect(pairings).toHaveLength(2);
+
+		// Should pair based on content similarity, not position
+		// Old block 0 (A content) should pair with new block 1 (A content at lines 15-18)
+		// Old block 1 (B content) should pair with new block 0 (B content at lines 10-13)
+
+		const pairing1 = pairings.find((p) => p.oldBlock.startLine === 0);
+		const pairing2 = pairings.find((p) => p.oldBlock.startLine === 5);
+
+		expect(pairing1).toBeDefined();
+		expect(pairing2).toBeDefined();
+
+		// Block A (old index 0) should pair with new block at line 15 (content match)
+		expect(pairing1!.newBlock.startLine).toBe(15);
+
+		// Block B (old index 1) should pair with new block at line 10 (content match)
+		expect(pairing2!.newBlock.startLine).toBe(10);
+	});
+
+	it('should use positional similarity as tiebreaker when content is different', () => {
+		const oldBlocks = [
+			{ uuid, startLine: 0, endLine: 3 },
+			{ uuid, startLine: 5, endLine: 8 }
+		];
+		const newBlocks = [
+			{ uuid, startLine: 1, endLine: 4 }, // close to first old block position
+			{ uuid, startLine: 6, endLine: 9 } // close to second old block position
+		];
+
+		// All blocks have different content, so position should be the deciding factor
+		const oldLines = [
+			'@lulaStart',
+			'old block A content',
+			'@lulaEnd',
+			'',
+			'',
+			'@lulaStart',
+			'old block B content',
+			'@lulaEnd'
+		];
+
+		const newLines = [
+			'',
+			'@lulaStart',
+			'new block A content',
+			'@lulaEnd',
+			'',
+			'',
+			'@lulaStart',
+			'new block B content',
+			'@lulaEnd'
+		];
+
+		const pairings = findOptimalPairings(oldBlocks, newBlocks, oldLines, newLines);
+
+		expect(pairings).toHaveLength(2);
+
+		// Should pair based on position since no content matches
+		const pairing1 = pairings.find((p) => p.oldBlock.startLine === 0);
+		const pairing2 = pairings.find((p) => p.oldBlock.startLine === 5);
+
+		expect(pairing1).toBeDefined();
+		expect(pairing2).toBeDefined();
+
+		// First old block (line 0) should pair with first new block (line 1) - closest position
+		expect(pairing1!.newBlock.startLine).toBe(1);
+
+		// Second old block (line 5) should pair with second new block (line 6) - closest position
+		expect(pairing2!.newBlock.startLine).toBe(6);
+	});
+
+	it('should prioritize content similarity over positional proximity (80/20 weighting)', () => {
+		const oldBlocks = [
+			{ uuid, startLine: 0, endLine: 3 }, // block A
+			{ uuid, startLine: 5, endLine: 8 } // block B
+		];
+		const newBlocks = [
+			{ uuid, startLine: 100, endLine: 103 }, // block B content but far from original position
+			{ uuid, startLine: 2, endLine: 5 } // block A content close to original position
+		];
+
+		const oldLines = [
+			'@lulaStart',
+			'block A content',
+			'@lulaEnd',
+			'',
+			'',
+			'@lulaStart',
+			'block B content',
+			'@lulaEnd'
+		];
+
+		// New blocks: B content is far away (line 100), A content is close (line 2)
+		const newLines = Array(105)
+			.fill('')
+			.map((_, i) => {
+				if (i === 2) return '@lulaStart';
+				if (i === 3) return 'block A content';
+				if (i === 4) return '@lulaEnd';
+				if (i === 100) return '@lulaStart';
+				if (i === 101) return 'block B content';
+				if (i === 102) return '@lulaEnd';
+				return `line ${i}`;
+			});
+
+		const pairings = findOptimalPairings(oldBlocks, newBlocks, oldLines, newLines);
+
+		expect(pairings).toHaveLength(2);
+
+		const pairingA = pairings.find((p) => p.oldBlock.startLine === 0); // old block A
+		const pairingB = pairings.find((p) => p.oldBlock.startLine === 5); // old block B
+
+		expect(pairingA).toBeDefined();
+		expect(pairingB).toBeDefined();
+
+		// Content similarity should win: A pairs with A (line 2), B pairs with B (line 100)
+		// Even though B is far from its original position, content match is prioritized
+		expect(pairingA!.newBlock.startLine).toBe(2); // A content
+		expect(pairingB!.newBlock.startLine).toBe(100); // B content
+	});
+
+	it('should handle single block pairing', () => {
+		const oldBlocks = [{ uuid, startLine: 0, endLine: 3 }];
+		const newBlocks = [{ uuid, startLine: 5, endLine: 8 }];
+
+		const oldLines = ['@lulaStart', 'content', '@lulaEnd'];
+		const newLines = ['', '', '', '', '', '@lulaStart', 'content', '@lulaEnd'];
+
+		const pairings = findOptimalPairings(oldBlocks, newBlocks, oldLines, newLines);
+
+		expect(pairings).toHaveLength(1);
+		expect(pairings[0].oldBlock).toBe(oldBlocks[0]);
+		expect(pairings[0].newBlock).toBe(newBlocks[0]);
+	});
+
+	it('should handle empty input gracefully', () => {
+		const pairings = findOptimalPairings([], [], [], []);
+		expect(pairings).toHaveLength(0);
+	});
+
+	it('should ensure 1:1 pairing with no block used twice', () => {
+		const oldBlocks = [
+			{ uuid, startLine: 0, endLine: 3 },
+			{ uuid, startLine: 5, endLine: 8 },
+			{ uuid, startLine: 10, endLine: 13 }
+		];
+		const newBlocks = [
+			{ uuid, startLine: 20, endLine: 23 },
+			{ uuid, startLine: 25, endLine: 28 },
+			{ uuid, startLine: 30, endLine: 33 }
+		];
+
+		// Different content in all blocks to test position-based pairing
+		const oldLines = [
+			'@lulaStart',
+			'old A',
+			'@lulaEnd',
+			'',
+			'',
+			'@lulaStart',
+			'old B',
+			'@lulaEnd',
+			'',
+			'',
+			'@lulaStart',
+			'old C',
+			'@lulaEnd'
+		];
+		const newLines = Array(35)
+			.fill('')
+			.map((_, i) => {
+				if (i === 20) return '@lulaStart';
+				if (i === 21) return 'new A';
+				if (i === 22) return '@lulaEnd';
+				if (i === 25) return '@lulaStart';
+				if (i === 26) return 'new B';
+				if (i === 27) return '@lulaEnd';
+				if (i === 30) return '@lulaStart';
+				if (i === 31) return 'new C';
+				if (i === 32) return '@lulaEnd';
+				return `line ${i}`;
+			});
+
+		const pairings = findOptimalPairings(oldBlocks, newBlocks, oldLines, newLines);
+
+		expect(pairings).toHaveLength(3);
+
+		// Check that each old block and new block is used exactly once
+		const usedOldBlocks = pairings.map((p) => p.oldBlock);
+		const usedNewBlocks = pairings.map((p) => p.newBlock);
+
+		expect(new Set(usedOldBlocks)).toHaveProperty('size', 3);
+		expect(new Set(usedNewBlocks)).toHaveProperty('size', 3);
+
+		// Each original block should be represented
+		expect(usedOldBlocks).toContain(oldBlocks[0]);
+		expect(usedOldBlocks).toContain(oldBlocks[1]);
+		expect(usedOldBlocks).toContain(oldBlocks[2]);
+
+		// Each new block should be represented
+		expect(usedNewBlocks).toContain(newBlocks[0]);
+		expect(usedNewBlocks).toContain(newBlocks[1]);
+		expect(usedNewBlocks).toContain(newBlocks[2]);
 	});
 });
 

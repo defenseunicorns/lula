@@ -204,19 +204,149 @@ export function getChangedBlocks(
 	const oldLines = oldText.split('\n');
 	const newLines = newText.split('\n');
 
-	for (const newBlock of newBlocks) {
-		const oldMatch = oldBlocks.find((b) => b.uuid === newBlock.uuid);
-		if (!oldMatch) continue;
+	const oldBlocksByUuid = new Map<string, typeof oldBlocks>();
+	const newBlocksByUuid = new Map<string, typeof newBlocks>();
 
-		const oldContent = extractBlockContent(oldLines, oldMatch.startLine, oldMatch.endLine);
-		const newContent = extractBlockContent(newLines, newBlock.startLine, newBlock.endLine);
+	// Group blocks by UUID
+	oldBlocks.forEach((block) => {
+		if (!oldBlocksByUuid.has(block.uuid)) {
+			oldBlocksByUuid.set(block.uuid, []);
+		}
+		oldBlocksByUuid.get(block.uuid)!.push(block);
+	});
 
-		if (oldContent !== newContent) {
-			changed.push(newBlock);
+	newBlocks.forEach((block) => {
+		if (!newBlocksByUuid.has(block.uuid)) {
+			newBlocksByUuid.set(block.uuid, []);
+		}
+		newBlocksByUuid.get(block.uuid)!.push(block);
+	});
+
+	// Process each UUID group
+	for (const [uuid, newUuidBlocks] of newBlocksByUuid) {
+		const oldUuidBlocks = oldBlocksByUuid.get(uuid) || [];
+
+		// If no old blocks with this UUID, then this is a new mapping and there is no compliance change to report
+		if (oldUuidBlocks.length === 0) continue;
+
+		if (oldUuidBlocks.length !== newUuidBlocks.length) {
+			// Check each old block to see if its content still exists somewhere in the new blocks
+			for (const oldBlock of oldUuidBlocks) {
+				const oldContent = extractBlockContent(oldLines, oldBlock.startLine, oldBlock.endLine);
+
+				// Find if this content still exists in any new block
+				const stillExists = newUuidBlocks.some((newBlock) => {
+					const newContent = extractBlockContent(newLines, newBlock.startLine, newBlock.endLine);
+					return oldContent === newContent;
+				});
+
+				// If the old content doesn't exist anymore, we need to find what it became
+				if (!stillExists) {
+					// Find the most likely candidate (closest position that hasn't been matched)
+					const candidates = newUuidBlocks.filter((newBlock) => {
+						// Don't consider blocks that are exact matches to other old blocks
+						return !oldUuidBlocks.some((otherOldBlock) => {
+							if (otherOldBlock === oldBlock) return false;
+							const otherOldContent = extractBlockContent(
+								oldLines,
+								otherOldBlock.startLine,
+								otherOldBlock.endLine
+							);
+							const newContent = extractBlockContent(
+								newLines,
+								newBlock.startLine,
+								newBlock.endLine
+							);
+							return otherOldContent === newContent;
+						});
+					});
+
+					if (candidates.length > 0) {
+						// Choose the candidate with the closest position
+						const closest = candidates.reduce((best, candidate) => {
+							const bestDistance = Math.abs(oldBlock.startLine - best.startLine);
+							const candidateDistance = Math.abs(oldBlock.startLine - candidate.startLine);
+							return candidateDistance < bestDistance ? candidate : best;
+						});
+						changed.push(closest);
+					}
+				}
+			}
+			continue;
+		}
+
+		// Same count - do optimal 1:1 pairing based on content similarity and position
+		const pairings = findOptimalPairings(oldUuidBlocks, newUuidBlocks, oldLines, newLines);
+
+		// Check each pairing for content changes
+		for (const { oldBlock, newBlock } of pairings) {
+			const oldContent = extractBlockContent(oldLines, oldBlock.startLine, oldBlock.endLine);
+			const newContent = extractBlockContent(newLines, newBlock.startLine, newBlock.endLine);
+
+			if (oldContent !== newContent) {
+				changed.push(newBlock);
+			}
 		}
 	}
 
 	return changed;
+}
+
+/**
+ * Find optimal 1:1 pairings between old and new blocks with the same UUID.
+ * Uses a combination of content similarity and positional proximity.
+ */
+export function findOptimalPairings(
+	oldBlocks: Array<{ uuid: string; startLine: number; endLine: number }>,
+	newBlocks: Array<{ uuid: string; startLine: number; endLine: number }>,
+	oldLines: string[],
+	newLines: string[]
+): Array<{ oldBlock: (typeof oldBlocks)[0]; newBlock: (typeof newBlocks)[0] }> {
+	const pairings: Array<{ oldBlock: (typeof oldBlocks)[0]; newBlock: (typeof newBlocks)[0] }> = [];
+	const usedOldBlocks = new Set<number>();
+	const usedNewBlocks = new Set<number>();
+
+	// Calculate similarity matrix (content similarity + positional distance)
+	const similarities: Array<{ oldIndex: number; newIndex: number; score: number }> = [];
+
+	for (let oldIndex = 0; oldIndex < oldBlocks.length; oldIndex++) {
+		for (let newIndex = 0; newIndex < newBlocks.length; newIndex++) {
+			const oldBlock = oldBlocks[oldIndex];
+			const newBlock = newBlocks[newIndex];
+
+			const oldContent = extractBlockContent(oldLines, oldBlock.startLine, oldBlock.endLine);
+			const newContent = extractBlockContent(newLines, newBlock.startLine, newBlock.endLine);
+
+			// Content similarity (1.0 if identical, 0.0 if completely different)
+			const contentSimilarity = oldContent.trim() === newContent.trim() ? 1.0 : 0.0;
+
+			// Positional similarity (closer positions = higher score)
+			const positionDistance = Math.abs(oldBlock.startLine - newBlock.startLine);
+			const maxDistance = Math.max(oldBlocks.length, newBlocks.length) * 10; // Normalize
+			const positionSimilarity = 1.0 - Math.min(positionDistance / maxDistance, 1.0);
+
+			// Weighted combination: content similarity is more important than position
+			const score = contentSimilarity * 0.8 + positionSimilarity * 0.2;
+
+			similarities.push({ oldIndex, newIndex, score });
+		}
+	}
+
+	// Sort by score (highest first) and greedily assign pairings
+	similarities.sort((a, b) => b.score - a.score);
+
+	for (const { oldIndex, newIndex } of similarities) {
+		if (!usedOldBlocks.has(oldIndex) && !usedNewBlocks.has(newIndex)) {
+			pairings.push({
+				oldBlock: oldBlocks[oldIndex],
+				newBlock: newBlocks[newIndex]
+			});
+			usedOldBlocks.add(oldIndex);
+			usedNewBlocks.add(newIndex);
+		}
+	}
+
+	return pairings;
 }
 
 /**
@@ -458,16 +588,31 @@ export async function analyzeModifiedFiles(context: CrawlContext): Promise<{
 			const changedBlocks = getChangedBlocks(oldText, newText);
 			const removedBlocks = getRemovedBlocks(oldText, newText);
 
-			// Handle changed blocks
-			if (changedBlocks.length > 0) {
-				hasFindings = true;
-				changesContent += generateChangedBlocksContent(file.filename, changedBlocks, newText);
-			}
+			// Skip reporting if no existing compliance content was actually modified or removed
+			// This filters out cases where new Lula annotations are added but existing ones unchanged
+			const hasActualComplianceChanges = changedBlocks.length > 0 || removedBlocks.length > 0;
 
-			// Handle removed annotations
-			if (removedBlocks.length > 0) {
+			if (hasActualComplianceChanges) {
 				hasFindings = true;
-				changesContent += generateRemovedBlocksContent(file.filename, removedBlocks, oldText);
+
+				// Handle changed blocks
+				if (changedBlocks.length > 0) {
+					changesContent += generateChangedBlocksContent(file.filename, changedBlocks, newText);
+				}
+
+				// Handle removed annotations
+				if (removedBlocks.length > 0) {
+					changesContent += generateRemovedBlocksContent(file.filename, removedBlocks, oldText);
+				}
+			} else {
+				// Log when we skip files that only have new annotations added
+				const oldBlocks = extractMapBlocks(oldText);
+				const newBlocks = extractMapBlocks(newText);
+				if (newBlocks.length > oldBlocks.length) {
+					console.log(
+						`Skipping ${file.filename}: only new Lula annotations added, no existing compliance content modified`
+					);
+				}
 			}
 		} catch (err) {
 			console.error(`Error processing ${file.filename}: ${err}`);
