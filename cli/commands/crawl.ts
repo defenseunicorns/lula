@@ -204,10 +204,11 @@ export function getChangedBlocks(
 	const oldLines = oldText.split('\n');
 	const newLines = newText.split('\n');
 
+	// group the blocks by UUID
 	const oldBlocksByUuid = new Map<string, typeof oldBlocks>();
 	const newBlocksByUuid = new Map<string, typeof newBlocks>();
 
-	// Group blocks by UUID
+	// Populate the lists by UUID
 	oldBlocks.forEach((block) => {
 		if (!oldBlocksByUuid.has(block.uuid)) {
 			oldBlocksByUuid.set(block.uuid, []);
@@ -222,11 +223,10 @@ export function getChangedBlocks(
 		newBlocksByUuid.get(block.uuid)!.push(block);
 	});
 
-	// Process each UUID group
 	for (const [uuid, newUuidBlocks] of newBlocksByUuid) {
 		const oldUuidBlocks = oldBlocksByUuid.get(uuid) || [];
 
-		// If no old blocks with this UUID, then this is a new mapping and there is no compliance change to report
+		// If there is no old block with this UUID then skip it bc it is new
 		if (oldUuidBlocks.length === 0) continue;
 
 		if (oldUuidBlocks.length !== newUuidBlocks.length) {
@@ -240,7 +240,7 @@ export function getChangedBlocks(
 					return oldContent === newContent;
 				});
 
-				// If the old content doesn't exist anymore, we need to find what it became
+				// If the old content doesn't exist anymore, we need to find what it became in order to leave the PR comment for the line numbers
 				if (!stillExists) {
 					// Find the most likely candidate (closest position that hasn't been matched)
 					const candidates = newUuidBlocks.filter((newBlock) => {
