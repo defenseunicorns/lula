@@ -9,7 +9,7 @@ const REPO = "lula";
 const PULL_NUMBER = 126;
 let GITHUB_TOKEN: string;
 let octokit: Octokit;
-let comment_ids: number[] = [];
+const comment_ids: number[] = [];
 let command_output = "";
 let testStartTime: Date;
 
@@ -311,6 +311,51 @@ describe('crawl', () => {
       expect(row).not.toContain('>');
       expect(row).not.toContain('**sha256**'); 
     }
+  });
+
+  it('should NOT make any comments about the zarf.yaml file', { timeout: 2 * 60 * 1000 }, () => {
+    // Verify that zarf.yaml is not mentioned in the command output
+    expect(command_output).not.toContain("`integration/test-files/zarf.yaml`");
+    expect(command_output).not.toContain("zarf.yaml");
+    
+    // Also verify the UUID from zarf.yaml is not mentioned
+    expect(command_output).not.toContain("643060b2-0ddf-4728-9582-ef38dca7447a");
+  });
+
+  it('should NOT include zarf.yaml references in PR comments', { timeout: 2 * 60 * 1000 }, async () => {
+    // Give GitHub a moment to persist comments
+    await sleep(10);
+
+    const { data: comments } = await octokit.request(
+      `GET /repos/${OWNER}/${REPO}/issues/${PULL_NUMBER}/comments`,
+      {
+        owner: OWNER,
+        repo: REPO,
+        issue_number: PULL_NUMBER,
+        headers: { 'X-GitHub-Api-Version': '2022-11-28' }
+      }
+    );
+
+    interface IssueComment {
+      id: number;
+      created_at: string;
+      body: string;
+      [key: string]: unknown;
+    }
+
+    const relevantComments: IssueComment[] = (comments as IssueComment[]).filter((comment: IssueComment) => {
+      const created: Date = new Date(comment.created_at);
+      return created >= testStartTime && comment.body.includes("## Lula Compliance Overview");
+    });
+
+    // Verify no comments mention zarf.yaml
+    for (const comment of relevantComments) {
+      expect(comment.body).not.toContain("`integration/test-files/zarf.yaml`");
+      expect(comment.body).not.toContain("zarf.yaml");
+      expect(comment.body).not.toContain("643060b2-0ddf-4728-9582-ef38dca7447a");
+    }
+
+    console.log(`Verified ${relevantComments.length} comments do not mention zarf.yaml`);
   });
 });
 
