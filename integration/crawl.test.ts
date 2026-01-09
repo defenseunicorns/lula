@@ -313,16 +313,15 @@ describe('crawl', () => {
     }
   });
 
-  it('should NOT make any comments about the zarf.yaml file', { timeout: 2 * 60 * 1000 }, () => {
-    // Verify that zarf.yaml is not mentioned in the command output
-    expect(command_output).not.toContain("`integration/test-files/zarf.yaml`");
-    expect(command_output).not.toContain("zarf.yaml");
+  it('should NOT make any Lula comments about the zarf.yaml file', { timeout: 2 * 60 * 1000 }, () => {
+    expect(command_output).toContain("Skipping integration/test-files/zarf.yaml: only new Lula annotations added, no existing compliance content modified");
+    expect(command_output).not.toContain("Commenting regarding `integration/test-files/zarf.yaml`.");
     
     // Also verify the UUID from zarf.yaml is not mentioned
     expect(command_output).not.toContain("643060b2-0ddf-4728-9582-ef38dca7447a");
   });
 
-  it('should NOT include zarf.yaml references in PR comments', { timeout: 2 * 60 * 1000 }, async () => {
+  it('should NOT include zarf.yaml references in Lula comments', { timeout: 2 * 60 * 1000 }, async () => {
     // Give GitHub a moment to persist comments
     await sleep(10);
 

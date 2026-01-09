@@ -685,6 +685,181 @@ describe('findOptimalPairings', () => {
 	});
 });
 
+describe('getChangedBlocks - unequal count scenarios', () => {
+	it('should not report the same new block multiple times when multiple old blocks are missing matches', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+
+		// Old: 3 blocks with same UUID, all different content
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'old block A content',
+			`// @lulaEnd ${uuid}`,
+			'',
+			`// @lulaStart ${uuid}`,
+			'old block B content', 
+			`// @lulaEnd ${uuid}`,
+			'',
+			`// @lulaStart ${uuid}`,
+			'old block C content',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		// New: Only 1 block with same UUID, different content
+		const newText = [
+			'header',
+			'',
+			'',
+			'',
+			'',
+			`// @lulaStart ${uuid}`,
+			'new block content',
+			`// @lulaEnd ${uuid}`,
+			'',
+			'',
+			'',
+			'',
+			'footer'
+		].join('\n');
+
+		const changedBlocks = getChangedBlocks(oldText, newText);
+		
+		// Should only report the single new block once, not three times
+		expect(changedBlocks).toHaveLength(1);
+		expect(changedBlocks[0].uuid).toBe(uuid);
+		expect(changedBlocks[0].startLine).toBe(5);
+		expect(changedBlocks[0].endLine).toBe(8);
+	});
+
+	it('should correctly pair exact matches first, then assign remaining blocks by proximity', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+
+		// Old: 3 blocks - A, B, C
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'block A content',
+			`// @lulaEnd ${uuid}`,
+			'',
+			`// @lulaStart ${uuid}`,
+			'block B content',
+			`// @lulaEnd ${uuid}`,
+			'',
+			`// @lulaStart ${uuid}`,
+			'block C content',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		// New: 2 blocks - B (exact match) at line 20, and X (modified A) at line 2
+		const newText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'modified A content', // This should be paired with old A (closest position)
+			`// @lulaEnd ${uuid}`,
+			...Array(15).fill(''),
+			`// @lulaStart ${uuid}`,
+			'block B content', // This should be exact match with old B
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const changedBlocks = getChangedBlocks(oldText, newText);
+		
+		// Should report 1 change: the modified A content (B is exact match, C is removed)
+		expect(changedBlocks).toHaveLength(1);
+		expect(changedBlocks[0].uuid).toBe(uuid);
+		expect(changedBlocks[0].startLine).toBe(1); // The modified A block position
+		expect(changedBlocks[0].endLine).toBe(4);
+	});
+
+	it('should handle case where new blocks are added and old blocks are modified', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+
+		// Old: 2 blocks
+		const oldText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'old block 1 content',
+			`// @lulaEnd ${uuid}`,
+			'',
+			`// @lulaStart ${uuid}`,
+			'old block 2 content',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		// New: 3 blocks - 2 modified + 1 new
+		const newText = [
+			'header',
+			`// @lulaStart ${uuid}`,
+			'modified block 1 content',
+			`// @lulaEnd ${uuid}`,
+			'',
+			`// @lulaStart ${uuid}`,
+			'modified block 2 content',
+			`// @lulaEnd ${uuid}`,
+			'',
+			`// @lulaStart ${uuid}`,
+			'brand new block content',
+			`// @lulaEnd ${uuid}`,
+			'footer'
+		].join('\n');
+
+		const changedBlocks = getChangedBlocks(oldText, newText);
+		
+		// Should report 2 changes (the 2 modified blocks, not the new one)
+		expect(changedBlocks).toHaveLength(2);
+		
+		const changedPositions = changedBlocks.map(b => b.startLine).sort();
+		expect(changedPositions).toEqual([1, 5]); // The two modified block positions
+	});
+
+	it('should not assign the same new block to multiple old blocks via filtering logic', () => {
+		const uuid = '123e4567-e89b-12d3-a456-426614174000';
+
+		// Edge case: Old blocks with no exact matches, but filtering could incorrectly exclude valid candidates
+		const oldText = [
+			`// @lulaStart ${uuid}`,
+			'content A',
+			`// @lulaEnd ${uuid}`,
+			'',
+			`// @lulaStart ${uuid}`,  
+			'content B',
+			`// @lulaEnd ${uuid}`,
+			'',
+			`// @lulaStart ${uuid}`,
+			'content C', 
+			`// @lulaEnd ${uuid}`
+		].join('\n');
+
+		// New: 2 blocks with different content than old
+		const newText = [
+			`// @lulaStart ${uuid}`,
+			'new content X',
+			`// @lulaEnd ${uuid}`,
+			'',
+			'',
+			'',
+			'',
+			'',
+			`// @lulaStart ${uuid}`,
+			'new content Y',
+			`// @lulaEnd ${uuid}`
+		].join('\n');
+
+		const changedBlocks = getChangedBlocks(oldText, newText);
+		
+		// Should report 2 changes maximum (can't report more new blocks than exist)
+		expect(changedBlocks.length).toBeLessThanOrEqual(2);
+		
+		// No duplicate blocks should be reported
+		const uniqueBlocks = new Set(changedBlocks.map(b => `${b.startLine}-${b.endLine}`));
+		expect(uniqueBlocks.size).toBe(changedBlocks.length);
+	});
+});
+
 describe('getRemovedBlocks', () => {
 	it('detects blocks that exist in old text but not in new text', () => {
 		const uuid1 = '123e4567-e89b-12d3-a456-426614174000';

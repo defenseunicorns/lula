@@ -230,46 +230,58 @@ export function getChangedBlocks(
 		if (oldUuidBlocks.length === 0) continue;
 
 		if (oldUuidBlocks.length !== newUuidBlocks.length) {
-			// Check each old block to see if its content still exists somewhere in the new blocks
-			for (const oldBlock of oldUuidBlocks) {
+			// First, identify exact matches to prevent duplicate assignments
+			const exactMatches = new Set<number>(); // indices of new blocks that are exact matches
+			const oldBlocksWithoutMatches: number[] = []; // indices of old blocks without exact matches
+
+			// Find exact content matches first
+			for (let oldIndex = 0; oldIndex < oldUuidBlocks.length; oldIndex++) {
+				const oldBlock = oldUuidBlocks[oldIndex];
 				const oldContent = extractBlockContent(oldLines, oldBlock.startLine, oldBlock.endLine);
 
-				// Find if this content still exists in any new block
-				const stillExists = newUuidBlocks.some((newBlock) => {
+				let foundMatch = false;
+				for (let newIndex = 0; newIndex < newUuidBlocks.length; newIndex++) {
+					if (exactMatches.has(newIndex)) continue; // Skip already matched new blocks
+
+					const newBlock = newUuidBlocks[newIndex];
 					const newContent = extractBlockContent(newLines, newBlock.startLine, newBlock.endLine);
-					return oldContent === newContent;
-				});
 
-				// If the old content doesn't exist anymore, we need to find what it became in order to leave the PR comment for the line numbers
-				if (!stillExists) {
-					// Find the most likely candidate (closest position that hasn't been matched)
-					const candidates = newUuidBlocks.filter((newBlock) => {
-						// Don't consider blocks that are exact matches to other old blocks
-						return !oldUuidBlocks.some((otherOldBlock) => {
-							if (otherOldBlock === oldBlock) return false;
-							const otherOldContent = extractBlockContent(
-								oldLines,
-								otherOldBlock.startLine,
-								otherOldBlock.endLine
-							);
-							const newContent = extractBlockContent(
-								newLines,
-								newBlock.startLine,
-								newBlock.endLine
-							);
-							return otherOldContent === newContent;
-						});
-					});
-
-					if (candidates.length > 0) {
-						// Choose the candidate with the closest position
-						const closest = candidates.reduce((best, candidate) => {
-							const bestDistance = Math.abs(oldBlock.startLine - best.startLine);
-							const candidateDistance = Math.abs(oldBlock.startLine - candidate.startLine);
-							return candidateDistance < bestDistance ? candidate : best;
-						});
-						changed.push(closest);
+					if (oldContent === newContent) {
+						exactMatches.add(newIndex);
+						foundMatch = true;
+						break;
 					}
+				}
+
+				if (!foundMatch) {
+					oldBlocksWithoutMatches.push(oldIndex);
+				}
+			}
+
+			// For old blocks without exact matches, find closest unmatched new block
+			const usedNewBlocks = new Set<number>(exactMatches); // Start with exact matches
+
+			for (const oldIndex of oldBlocksWithoutMatches) {
+				const oldBlock = oldUuidBlocks[oldIndex];
+				
+				// Find candidates from unmatched new blocks
+				const candidates: Array<{ index: number; block: typeof newUuidBlocks[0] }> = [];
+				for (let newIndex = 0; newIndex < newUuidBlocks.length; newIndex++) {
+					if (!usedNewBlocks.has(newIndex)) {
+						candidates.push({ index: newIndex, block: newUuidBlocks[newIndex] });
+					}
+				}
+
+				if (candidates.length > 0) {
+					// Choose the candidate with the closest position
+					const closest = candidates.reduce((best, candidate) => {
+						const bestDistance = Math.abs(oldBlock.startLine - best.block.startLine);
+						const candidateDistance = Math.abs(oldBlock.startLine - candidate.block.startLine);
+						return candidateDistance < bestDistance ? candidate : best;
+					});
+					
+					changed.push(closest.block);
+					usedNewBlocks.add(closest.index); // Mark as used to prevent duplicates
 				}
 			}
 			continue;
@@ -318,7 +330,7 @@ export function findOptimalPairings(
 			const newContent = extractBlockContent(newLines, newBlock.startLine, newBlock.endLine);
 
 			// Content similarity (1.0 if identical, 0.0 if completely different)
-			const contentSimilarity = oldContent.trim() === newContent.trim() ? 1.0 : 0.0;
+			const contentSimilarity = oldContent === newContent ? 1.0 : 0.0;
 
 			// Positional similarity (closer positions = higher score)
 			const positionDistance = Math.abs(oldBlock.startLine - newBlock.startLine);
