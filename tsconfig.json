@@ -25,7 +25,8 @@
 		"src/**/*.ts",
 		"src/**/*.js",
 		"src/**/*.svelte",
-		"vite.config.ts"
+		"vite.config.ts",
+		"integration/*.test.ts"
 	],
 	"exclude": ["node_modules", "dist", "integration/test-files/*.ts"]
 }
