@@ -106,7 +106,7 @@
 		"husky": "^9.1.7",
 		"jsdom": "^27.0.0",
 		"playwright": "^1.55.0",
-		"prettier": "3.7.4",
+		"prettier": "3.8.0",
 		"prettier-plugin-svelte": "^3.4.0",
 		"semantic-release": "^25.0.1",
 		"shellcheck": "^4.1.0",
