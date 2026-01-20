@@ -2,13 +2,13 @@
 company:
   name: "Defense Unicorns"
   location: "Colorado Springs, CO"
-  industry: "Technology"
 # @lulaEnd 123e4567-e89b-12d3-a456-426614174001
 
 products:
   # @lulaStart 987e4567-e89b-12d3-a456-426614174777
   - name: "Lula"
     version: "1.0.0"
+    language: "TypeScript" # this is a change
     description: "A policy engine for Kubernetes"
     license: "Apache-2.0"
   # @lulaEnd 987e4567-e89b-12d3-a456-426614174777

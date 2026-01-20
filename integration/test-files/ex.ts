@@ -25,6 +25,7 @@ When(a.ConfigMap)
   .Mutate(function mutateNs(request) {
     // Set the ns=seen annotation
     request.SetAnnotation("ns", "seen");
+    // do something else here
   });
 /**
  * @lulaEnd 123e4567-e89b-12d3-a456-426614174000
@@ -40,6 +41,7 @@ When(a.ConfigMap)
 When(a.ConfigMap)
   .IsCreated()
   .Mutate(function mutateNon(request) {
+    // change inserted here
     request.SetAnnotation("non", "seen");
   });
 // @lulaEnd 987e4567-e89b-12d3-a456-426614174777
