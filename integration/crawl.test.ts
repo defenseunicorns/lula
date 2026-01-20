@@ -73,18 +73,18 @@ describe('crawl', () => {
     expect(command_output).toMatch(/\| File \| Lines Changed \|\s*\n\| ---- \| ------------- \|/);
 
     // Expect file rows for both example files (filenames in backticks in the table)
-    expect(command_output).toContain("`integration/test-files/ex.ts`");
-    expect(command_output).toContain("`integration/test-files/ex.yaml`");
+    expect(command_output).toContain("`integration/test-files/add.ts`");
+    expect(command_output).toContain("`integration/test-files/remove-and-add.yaml`");
 
     // Expect a backticked line range like `20–31` and `1–5` in the table
     expect(command_output).toMatch(/`20–31`/);
     expect(command_output).toMatch(/`1–5`/);
 
     // Expect uuid + sha256 sections (now in new block format with separate lines)
-    // ex.ts blocks
+    // add.ts blocks
     expect(command_output).toContain("**UUID:** `123e4567-e89b-12d3-a456-426614174000`");
     expect(command_output).toContain("**sha256:** `f889702fd3330d939fadb5f37087948e42a840d229646523989778e2b1586926`");
-    // ex.yaml blocks
+    // remove-and-add.yaml blocks
     expect(command_output).toContain("**UUID:** `123e4567-e89b-12d3-a456-426614174001`");
     expect(command_output).toContain("**sha256:** `f6b6f51335248062b003696623bfe21cea977ca7f4e4163b182b0036fa699eb4`");
   });
@@ -125,8 +125,8 @@ describe('crawl', () => {
       expect(body).toContain("Please review the changes to ensure they meet compliance standards.");
       expect(body).toMatch(/\| File \| Lines Changed \|\s*\n\| ---- \| ------------- \|/);
 
-      expect(body).toContain("`integration/test-files/ex.ts`");
-      expect(body).toContain("`integration/test-files/ex.yaml`");
+      expect(body).toContain("`integration/test-files/add.ts`");
+      expect(body).toContain("`integration/test-files/remove-and-add.yaml`");
       expect(body).toMatch(/`20–31`/);
       expect(body).toMatch(/`1–5`/);
 
@@ -313,15 +313,15 @@ describe('crawl', () => {
     }
   });
 
-  it('should NOT make any Lula comments about the zarf.yaml file', { timeout: 2 * 60 * 1000 }, () => {
-    expect(command_output).toContain("Skipping integration/test-files/zarf.yaml: only new Lula annotations added, no existing compliance content modified");
-    expect(command_output).not.toContain("Commenting regarding `integration/test-files/zarf.yaml`.");
+  it('should NOT make any Lula comments about the multiple-same-uuids.yaml file', { timeout: 2 * 60 * 1000 }, () => {
+    expect(command_output).toContain("Skipping integration/test-files/multiple-same-uuids.yaml: only new Lula annotations added, no existing compliance content modified");
+    expect(command_output).not.toContain("Commenting regarding `integration/test-files/multiple-same-uuids.yaml`.");
     
-    // Also verify the UUID from zarf.yaml is not mentioned
+    // Also verify the UUID from multiple-same-uuids.yaml is not mentioned
     expect(command_output).not.toContain("643060b2-0ddf-4728-9582-ef38dca7447a");
   });
 
-  it('should NOT include zarf.yaml references in Lula comments', { timeout: 2 * 60 * 1000 }, async () => {
+  it('should NOT include multiple-same-uuids.yaml references in Lula comments', { timeout: 2 * 60 * 1000 }, async () => {
     // Give GitHub a moment to persist comments
     await sleep(10);
 
@@ -347,14 +347,14 @@ describe('crawl', () => {
       return created >= testStartTime && comment.body.includes("## Lula Compliance Overview");
     });
 
-    // Verify no comments mention zarf.yaml
+    // Verify no comments mention multiple-same-uuids.yaml
     for (const comment of relevantComments) {
-      expect(comment.body).not.toContain("`integration/test-files/zarf.yaml`");
-      expect(comment.body).not.toContain("zarf.yaml");
+      expect(comment.body).not.toContain("`integration/test-files/multiple-same-uuids.yaml`");
+      expect(comment.body).not.toContain("multiple-same-uuids.yaml");
       expect(comment.body).not.toContain("643060b2-0ddf-4728-9582-ef38dca7447a");
     }
 
-    console.log(`Verified ${relevantComments.length} comments do not mention zarf.yaml`);
+    console.log(`Verified ${relevantComments.length} comments do not mention multiple-same-uuids.yaml`);
   });
 });
 

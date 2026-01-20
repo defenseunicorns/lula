@@ -4,7 +4,7 @@
 kind: ZarfPackageConfig
 metadata:
   name: uds-core-istio
-  description: "UDS Core Istio package deploys Istio with admin, tenant and passthrough gateways."
+  description: "Test npx lula2 crawl against a file with the same UUID in two or more blocks."
   url: https://istio.io/latest/
 
 variables:
