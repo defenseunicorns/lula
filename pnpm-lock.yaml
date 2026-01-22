@@ -48,8 +48,8 @@ importers:
         specifier: 11.0.0
         version: 11.0.0
       undici:
-        specifier: 7.18.2
-        version: 7.18.2
+        specifier: 7.19.0
+        version: 7.19.0
       ws:
         specifier: 8.19.0
         version: 8.19.0
@@ -3923,8 +3923,8 @@ packages:
     resolution: {integrity: sha512-raqeBD6NQK4SkWhQzeYKd1KmIG6dllBOTt55Rmkt4HtI9mwdWtJljnrXjAFUBLTSN67HWrOIZ3EPF4kjUw80Bg==}
     engines: {node: '>=14.0'}
 
-  undici@7.18.2:
-    resolution: {integrity: sha512-y+8YjDFzWdQlSE9N5nzKMT3g4a5UBX1HKowfdXh0uvAnTaqqwqB92Jt4UXBAeKekDs5IaDKyJFR4X1gYVCgXcw==}
+  undici@7.19.0:
+    resolution: {integrity: sha512-Heho1hJD81YChi+uS2RkSjcVO+EQLmLSyUlHyp7Y/wFbxQaGb4WXVKD073JytrjXJVkSZVzoE2MCSOKugFGtOQ==}
     engines: {node: '>=20.18.1'}
 
   unicode-emoji-modifier-base@1.0.0:
@@ -4831,7 +4831,7 @@ snapshots:
       p-filter: 4.1.0
       semantic-release: 25.0.2(typescript@5.9.3)
       tinyglobby: 0.2.15
-      undici: 7.18.2
+      undici: 7.19.0
       url-join: 5.0.0
     transitivePeerDependencies:
       - supports-color
@@ -7909,7 +7909,7 @@ snapshots:
     dependencies:
       '@fastify/busboy': 2.1.1
 
-  undici@7.18.2: {}
+  undici@7.19.0: {}
 
   unicode-emoji-modifier-base@1.0.0: {}
 
