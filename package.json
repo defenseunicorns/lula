@@ -57,7 +57,7 @@
 		"@octokit/rest": "22.0.1",
 		"@types/ws": "8.18.1",
 		"commander": "14.0.2",
-		"cors": "2.8.5",
+		"cors": "2.8.6",
 		"csv-parse": "6.1.0",
 		"express": "5.2.1",
 		"express-rate-limit": "8.2.1",
