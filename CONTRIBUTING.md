@@ -25,7 +25,7 @@ Please follow our [Code of Conduct](CODE_OF_CONDUCT.md) to maintain a respectful
 
 - **Repository**: [https://github.com/defenseunicorns/lula/](https://github.com/defenseunicorns/lula/)
 - **npm package**: [https://www.npmjs.com/package/lula2](https://www.npmjs.com/package/lula2)
-- **Required Node version**: `>=20.0.0`
+- **Required Node version**: `>=22.0.0`
 
 ### Setup
 
