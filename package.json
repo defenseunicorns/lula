@@ -51,7 +51,8 @@
         "semantic-release": "semantic-release",
 		"test": "npm run test:unit -- --run --coverage",
 		"test:integration": "vitest --config integration/vitest.config.integration.ts",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"test:playwright": "playwright test"
 	},
 	"dependencies": {
 		"@octokit/rest": "22.0.1",
