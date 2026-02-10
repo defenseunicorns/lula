@@ -98,7 +98,7 @@
 		"carbon-preprocess-svelte": "^0.11.11",
 		"concurrently": "^9.2.1",
 		"esbuild": "^0.27.0",
-		"eslint": "^10.0.0",
+		"eslint": "^9.0.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-jsdoc": "^62.0.0",
 		"eslint-plugin-svelte": "^3.12.2",
