@@ -88,3 +88,113 @@ test.describe('Setup Wizard', () => {
 		await expect(page.locator('#title')).toHaveText('Lula');
 	});
 });
+
+test.describe('Main Page', () => {
+		test('DIRECT: Test the main controls page (src/routes/+page.svelte)', async ({ page }) => {
+		await page.route('**/ws', (route) => route.abort());
+
+		await page.addInitScript(() => {
+			const mockControls = [
+				{
+					id: 'AC-1',
+					title: 'Access Control Policy',
+					description: 'The organization develops, documents, and disseminates an access control policy',
+					family: 'AC',
+					implementation_status: 'implemented',
+					narrative: 'Our organization has implemented comprehensive access control policies...'
+				},
+				{
+					id: 'AT-1', 
+					title: 'Security Awareness Training',
+					description: 'The organization provides security awareness training to users',
+					family: 'AT',
+					implementation_status: 'planned',
+					narrative: 'Security awareness training program is being developed...'
+				}
+			];
+
+			const mockAppState = {
+				id: 'test-control-set',
+				name: 'Test Control Set',
+				currentPath: '/test/path',
+				controls: mockControls,
+				mappings: [],
+				families: ['AC', 'AT'],
+				totalControls: 2,
+				totalMappings: 0,
+				isConnected: true,
+				isSwitchingControlSet: false,
+				fieldSchema: {
+					type: 'object',
+					properties: {
+						title: { type: 'string' },
+						description: { type: 'string' },
+						family: { type: 'string' },
+						implementation_status: { type: 'string' }
+					}
+				}
+			};
+
+			(window as unknown as { __testMockAppState: typeof mockAppState }).__testMockAppState = mockAppState;
+
+			class MockWebSocket {
+				onopen: ((event: Event) => void) | null = null;
+				onmessage: ((event: { data: string }) => void) | null = null;
+				
+				constructor(url: string) {
+					console.log('Mock WebSocket created for:', url);
+					setTimeout(() => {
+						if (this.onopen) this.onopen(new Event('open'));
+						if (this.onmessage) {
+							this.onmessage({
+								data: JSON.stringify({
+									type: 'state-update',
+									payload: mockAppState
+								})
+							});
+						}
+					}, 100);
+				}
+				
+				send() { console.log('Mock WebSocket send called'); }
+				close() { console.log('Mock WebSocket close called'); }
+			}
+
+			(window as unknown as { WebSocket: typeof MockWebSocket }).WebSocket = MockWebSocket;
+		});
+
+		// go to main page after state is set up
+		await page.goto(`${ORIGIN}/`);
+		await page.waitForLoadState('domcontentloaded');
+
+		// Wait for any state updates
+		await page.waitForTimeout(3000);
+
+		// Make sure data was loaded
+		const hasControls = await page.locator('text=AC-1').isVisible().catch(() => false);
+		expect(hasControls).toBe(true);
+		if (hasControls) {
+			// Make sure there are two columns
+			const columnCount = await page.locator('.w-1\\/2.flex.flex-col').count();
+			expect(columnCount).toBe(2);
+			
+			// Assert "No Control Selected" is on the page initially - right side
+			await expect(page.locator('text=No Control Selected')).toBeVisible();
+			
+			// Click on AC-1 control - just verify the interaction works - left side
+			await page.locator('text=AC-1').click();
+			await page.waitForTimeout(500);
+
+			const selectedControl = page.locator('[role="button"]').filter({ hasText: 'AC-1' });
+			const hasSelectionStyling = await selectedControl.evaluate((el) => {
+				return el.classList.contains('bg-blue-50') && 
+				       el.classList.contains('border-l-4') && 
+				       el.classList.contains('border-blue-500') &&
+				       el.classList.contains('shadow-sm');
+			});
+			
+			expect(hasSelectionStyling).toBe(true);
+			
+		} 
+	});
+});
