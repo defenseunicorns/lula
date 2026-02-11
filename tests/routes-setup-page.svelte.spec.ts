@@ -90,7 +90,7 @@ test.describe('Setup Wizard', () => {
 });
 
 test.describe('Main Page', () => {
-		test('DIRECT: Test the main controls page (src/routes/+page.svelte)', async ({ page }) => {
+	test('DIRECT: Test the main controls page (src/routes/+page.svelte)', async ({ page }) => {
 		await page.route('**/ws', (route) => route.abort());
 
 		await page.addInitScript(() => {
@@ -98,13 +98,14 @@ test.describe('Main Page', () => {
 				{
 					id: 'AC-1',
 					title: 'Access Control Policy',
-					description: 'The organization develops, documents, and disseminates an access control policy',
+					description:
+						'The organization develops, documents, and disseminates an access control policy',
 					family: 'AC',
 					implementation_status: 'implemented',
 					narrative: 'Our organization has implemented comprehensive access control policies...'
 				},
 				{
-					id: 'AT-1', 
+					id: 'AT-1',
 					title: 'Security Awareness Training',
 					description: 'The organization provides security awareness training to users',
 					family: 'AT',
@@ -135,12 +136,13 @@ test.describe('Main Page', () => {
 				}
 			};
 
-			(window as unknown as { __testMockAppState: typeof mockAppState }).__testMockAppState = mockAppState;
+			(window as unknown as { __testMockAppState: typeof mockAppState }).__testMockAppState =
+				mockAppState;
 
 			class MockWebSocket {
 				onopen: ((event: Event) => void) | null = null;
 				onmessage: ((event: { data: string }) => void) | null = null;
-				
+
 				constructor(url: string) {
 					console.log('Mock WebSocket created for:', url);
 					setTimeout(() => {
@@ -155,9 +157,13 @@ test.describe('Main Page', () => {
 						}
 					}, 100);
 				}
-				
-				send() { console.log('Mock WebSocket send called'); }
-				close() { console.log('Mock WebSocket close called'); }
+
+				send() {
+					console.log('Mock WebSocket send called');
+				}
+				close() {
+					console.log('Mock WebSocket close called');
+				}
 			}
 
 			(window as unknown as { WebSocket: typeof MockWebSocket }).WebSocket = MockWebSocket;
@@ -171,30 +177,34 @@ test.describe('Main Page', () => {
 		await page.waitForTimeout(3000);
 
 		// Make sure data was loaded
-		const hasControls = await page.locator('text=AC-1').isVisible().catch(() => false);
+		const hasControls = await page
+			.locator('text=AC-1')
+			.isVisible()
+			.catch(() => false);
 		expect(hasControls).toBe(true);
 		if (hasControls) {
 			// Make sure there are two columns
 			const columnCount = await page.locator('.w-1\\/2.flex.flex-col').count();
 			expect(columnCount).toBe(2);
-			
+
 			// Assert "No Control Selected" is on the page initially - right side
 			await expect(page.locator('text=No Control Selected')).toBeVisible();
-			
+
 			// Click on AC-1 control - just verify the interaction works - left side
 			await page.locator('text=AC-1').click();
 			await page.waitForTimeout(500);
 
 			const selectedControl = page.locator('[role="button"]').filter({ hasText: 'AC-1' });
 			const hasSelectionStyling = await selectedControl.evaluate((el) => {
-				return el.classList.contains('bg-blue-50') && 
-				       el.classList.contains('border-l-4') && 
-				       el.classList.contains('border-blue-500') &&
-				       el.classList.contains('shadow-sm');
+				return (
+					el.classList.contains('bg-blue-50') &&
+					el.classList.contains('border-l-4') &&
+					el.classList.contains('border-blue-500') &&
+					el.classList.contains('shadow-sm')
+				);
 			});
-			
+
 			expect(hasSelectionStyling).toBe(true);
-			
-		} 
+		}
 	});
 });
