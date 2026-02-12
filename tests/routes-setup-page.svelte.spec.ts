@@ -177,11 +177,9 @@ test.describe('Main Page', () => {
 		await page.waitForTimeout(3000);
 
 		// Make sure data was loaded
-		const hasControls = await page
-			.locator('text=AC-1')
-			.isVisible()
-			.catch(() => false);
-		expect(hasControls).toBe(true);
+        const hasControls = await page
+            .getByText('AC-1')
+            .isVisible();
 		if (hasControls) {
 			// Make sure there are two columns
 			const columnCount = await page.locator('.w-1\\/2.flex.flex-col').count();
