@@ -63,7 +63,7 @@
 		"express-rate-limit": "8.2.1",
 		"flowbite": "4.0.1",
 		"glob": "13.0.2",
-		"isomorphic-git": "1.36.3",
+		"isomorphic-git": "1.37.0",
 		"js-yaml": "4.1.1",
 		"multer": "2.0.2",
 		"open": "11.0.0",
