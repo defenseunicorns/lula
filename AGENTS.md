@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to coding agents when working with code in this repository.
 
 ## Project Overview
 
@@ -81,12 +81,12 @@ examples/nist-800-53-v4-moderate/
 ## Key Libraries and Frameworks
 
 - **SvelteKit 5**: Meta-framework with runes
-- **Express**: Backend API server
+- **Express**: Backend API server, embedded in CLI tool
 - **YAML**: Control and mapping file format
 - **isomorphic-git**: Git operations in Node.js
 - **Commander**: CLI interface
 - **TailwindCSS**: Utility-first CSS framework
-- **Vitest**: Testing framework
+- **Vitest**: Unit testing framework
 - **TypeScript**: Type safety throughout
 
 ## Development Patterns
@@ -126,7 +126,7 @@ examples/nist-800-53-v4-moderate/
 ## NPM Package Details
 
 - **Package name**: `lula2`
-- **Binary name**: `lula2` 
+- **Binary name**: `lula2`
 - **Minimum Node version**: 22.0.0
 - **Package type**: ESM module
 - **Distribution**: Built CLI in `dist/` directory
